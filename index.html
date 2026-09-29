@@ -432,6 +432,66 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
 html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst-em-negociacao{color:#93c5fd}html[data-theme="dark"] .cst-venda-fechada{color:#c4b5fd}html[data-theme="dark"] .cst-desistiu{color:#fca5a5}html[data-theme="dark"] .cst-vencida{color:#cbd5e1}
 .v-time span{display:block}
 
+.docs-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.doc-item{display:flex;align-items:center;gap:9px;border:1px solid var(--border);border-radius:11px;padding:9px 11px;font-size:13.5px;cursor:pointer;background:var(--card)}
+.doc-item input{width:17px;height:17px;accent-color:var(--ok);flex:none}
+.doc-item.ok{border-color:color-mix(in srgb,var(--ok) 45%,transparent);background:var(--ok-soft)}
+.docbar{height:6px;border-radius:99px;background:var(--card2);border:1px solid var(--border);overflow:hidden;width:70px;display:inline-block;vertical-align:middle;margin-left:4px}
+.docbar i{display:block;height:100%;background:var(--ok)}
+.mural{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.mural:empty{display:none}
+.aviso-card{display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:14px 16px;background:linear-gradient(135deg,var(--accent-soft),transparent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.aviso-card .ai{font-size:20px;line-height:1}
+.aviso-card .at{flex:1;min-width:0}
+.aviso-card .at p{margin:0;font-size:14.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+.aviso-card .at span{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+.atencao{display:flex;flex-direction:column}
+.at-row{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.at-row:last-child{border-bottom:0}
+.at-row .ati{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;font-size:17px}
+.at-row .att{flex:1;min-width:0}
+.at-row .att b{display:block;font-size:14px}
+.at-row .att span{font-size:12.5px;color:var(--muted)}
+.at-row .ata{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.at-row .snooze{display:inline-flex;align-items:center;gap:5px}.at-row .snooze svg{width:14px;height:14px}
+@media(max-width:820px){.docs-grid{grid-template-columns:1fr}.at-row{flex-wrap:wrap}.at-row .ata{width:100%;justify-content:flex-start;padding-left:48px}}
+
+.stat small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;font-weight:500}
+.p-rank{display:flex;align-items:center;gap:10px}
+.p-rank .med{font-size:24px;line-height:1}
+.p-rank b{display:block;font-size:14px}
+.p-rank span{font-size:11.5px;opacity:.85}
+.eq-row{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:6px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.eq-row:last-child{border-bottom:0}
+.eq-row.head{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-top:0}
+.eq-row b{font-size:15px;text-align:center}
+.eq-row .en{font-weight:700}
+.eq-row>span:not(.en){text-align:center}
+.top3{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.top3 div{display:flex;align-items:center;gap:10px;font-size:13.5px}
+.top3 .m{font-size:18px}
+.top3 .n{flex:1;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top3 .v{font-weight:800;color:var(--accent)}
+.busca-res{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 18px 40px rgba(2,6,23,.18);max-height:70vh;overflow-y:auto;z-index:20;padding:6px}
+.busca-res .bs{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:10px 10px 4px}
+.busca-res button{display:flex;gap:10px;align-items:center;width:100%;border:0;background:transparent;padding:9px 10px;border-radius:10px;text-align:left}
+.busca-res button:hover{background:var(--card2)}
+.busca-res .bi{font-size:16px;width:22px;text-align:center}
+.busca-res .bt{flex:1;min-width:0}
+.busca-res .bt b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.busca-res .bt span{font-size:12px;color:var(--muted)}
+.busca-res .nada{padding:16px;text-align:center;color:var(--muted);font-size:13.5px}
+.mais-opts{display:grid;gap:10px}
+.mais-opts button{display:flex;align-items:center;gap:14px;border:1px solid var(--border);background:var(--card);border-radius:16px;padding:16px;text-align:left}
+.mais-opts button:hover{border-color:var(--accent)}
+.mais-opts .mi2{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:22px;flex:none}
+.mais-opts b{display:block;font-size:15.5px}
+.mais-opts span{font-size:13px;color:var(--muted)}
+
+.offline{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:45;background:#0f172a;color:#fff;font-size:13px;font-weight:600;padding:9px 16px;border-radius:99px;box-shadow:0 10px 26px rgba(0,0,0,.25);display:flex;gap:8px;align-items:center;max-width:calc(100vw - 24px)}
+.offline i{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex:none}
+#confete{position:fixed;inset:0;pointer-events:none;z-index:60}
+
 /* Mobile */
 .mobilebar{display:none}
 .fab{display:none}
@@ -499,7 +559,8 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <div class="brand" data-brand></div>
       <h2 id="authTitle">Bem-vindo de volta</h2>
       <p class="sub" id="authSub">Entre para acessar sua agenda.</p>
-      <div class="field hide" id="campoNome"><label for="nome">Seu nome</label><input id="nome" autocomplete="name" placeholder="Como você quer ser chamado"></div>
+      <div class="field hide" id="campoNome"><label for="nome">Seu nome completo</label><input id="nome" autocomplete="name" placeholder="Ex.: Ana Flávia Souza"></div>
+      <div class="field hide" id="campoEquipe"><label for="equipeCad">Sua equipe</label><select id="equipeCad"><option value="">Carregando equipes…</option></select></div>
       <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
       <div class="field"><label for="senha">Senha</label>
         <div class="pass-wrap"><input id="senha" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter')entrar()"><button class="icon-btn" type="button" onclick="verSenha()" title="Mostrar senha" data-ic="eye"></button></div>
@@ -518,7 +579,8 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
     <div class="brand" data-brand></div>
     <div class="profile" onclick="setView('config')" title="Configurações do perfil">
       <div class="p-row"><div class="avatar" id="avatar">A</div><div class="p-info"><div class="p-name" id="pName"></div><div class="p-mail" id="pMail"></div><div class="p-role hide" id="pRole"></div></div></div>
-      <div class="p-foot"><div class="p-bar"><span id="pBar"></span></div><div class="p-legend"><span>Progresso de hoje</span><b id="pResumo">0/0</b></div></div>
+      <div class="p-foot" id="pFootTarefa"><div class="p-bar"><span id="pBar"></span></div><div class="p-legend"><span>Progresso de hoje</span><b id="pResumo">0/0</b></div></div>
+      <div class="p-foot hide" id="pFootRank"></div>
     </div>
     <nav class="nav">
       <div class="nav-title">Menu</div>
@@ -535,6 +597,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <button onclick="sair()"><i data-ic="logout"></i>Sair</button>
     </nav>
     <div class="side-foot">
+      <button class="btn btn-ghost btn-block instalar hide" onclick="instalarApp()">📲 Instalar aplicativo</button>
       <div class="side-card"><b>Dica rápida</b><span id="dica"></span></div>
     </div>
   </aside>
@@ -542,7 +605,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
   <main class="main">
     <header class="topbar">
       <div class="brand m-brand" data-brand></div>
-      <div class="search" id="searchBox"><i data-ic="search"></i><input id="busca" placeholder="Buscar tarefas, clientes, anotações..." oninput="buscar(this.value)"><kbd class="hide-m">/</kbd></div>
+      <div class="search" id="searchBox"><i data-ic="search"></i><input id="busca" placeholder="Buscar cliente, CPF, telefone, tarefa..." oninput="buscar(this.value)" autocomplete="off"><div class="busca-res hide" id="buscaRes"></div><kbd class="hide-m">/</kbd></div>
       <div class="top-actions">
         <button class="icon-btn m-only" id="btnBuscaM" onclick="abrirBuscaM()" title="Buscar" data-ic="search" style="display:none"></button>
         <button class="icon-btn" onclick="alternarTema()" title="Modo claro/escuro" id="btnTema"></button>
@@ -553,9 +616,11 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
     <div class="content">
       <!-- HOJE -->
       <section class="view" id="v-hoje">
-        <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div></div>
+        <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">📣 Publicar aviso</button></div>
         <div id="bannerHoje"></div>
-        <div class="stats">
+        <div class="mural" id="mural"></div>
+        <div class="stats hide" id="statsPapel"></div>
+        <div class="stats" id="statsTarefas">
           <div class="stat" onclick="setView('hoje')"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="cal"></div><div><b id="sHoje">0</b><span>Tarefas hoje</span></div></div>
           <div class="stat" onclick="irFiltro('concluidas')"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="check"></div><div><b id="sFeitas">0</b><span>Concluídas hoje</span></div></div>
           <div class="stat" onclick="irFiltro('pendentes')"><div class="stat-ic" style="background:var(--danger-soft);color:var(--danger)" data-ic="alert"></div><div><b id="sAtraso">0</b><span>Atrasadas</span></div></div>
@@ -563,6 +628,10 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
         </div>
         <div class="grid-home">
           <div class="col">
+          <div class="card hide" id="cardAtencao">
+            <div class="card-head"><h2>Precisa da sua atenção</h2><span class="muted" id="atencaoQt"></span></div>
+            <div class="atencao" id="atencaoLista"></div>
+          </div>
           <div class="card hide" id="cardVisHoje">
             <div class="card-head"><h2 id="visHojeTit">Visitas de hoje</h2><button class="link" onclick="setView('visitas')">Ver todas</button></div>
             <div id="visHoje"></div>
@@ -577,8 +646,12 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
           </div>
           </div>
           <div class="col">
+            <div class="card hide" id="cardEquipe">
+              <div class="card-head"><h2>Painel da equipe</h2><span class="muted">este mês</span></div>
+              <div id="painelEquipe"></div>
+            </div>
             <div class="card">
-              <div class="card-head"><h2>Seu progresso</h2></div>
+              <div class="card-head"><h2 id="tituloProgresso">Seu progresso</h2></div>
               <div class="ring-wrap">
                 <div class="ring"><svg width="112" height="112"><circle cx="56" cy="56" r="48" fill="none" stroke="var(--card2)" stroke-width="11"/><circle id="ringArc" cx="56" cy="56" r="48" fill="none" stroke="var(--accent)" stroke-width="11" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6" style="transition:stroke-dashoffset .6s"/></svg><div class="lbl"><div><b id="ringPct">0%</b><span>do dia</span></div></div></div>
                 <div class="ring-info"><div><b id="rFeitas">0</b> concluídas</div><div><b id="rFaltam">0</b> faltando</div><div>Sequência: <b id="rStreak">0 dias</b></div></div>
@@ -652,6 +725,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
                 <select id="vCorretor" onchange="vf('corretor',this.value)"></select>
               </div>
               <div class="janela" id="janelaVis"></div>
+              <div class="janela gest hide" style="justify-content:flex-end;margin-top:-6px"><button class="link" onclick="exportarVisitas()">⬇ Exportar para Excel</button></div>
               <div id="visLista"></div>
             </div>
           </div>
@@ -689,6 +763,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
               <select id="cEquipe" onchange="cf('equipe',this.value)"></select>
               <select id="cCorretor" onchange="cf('corretor',this.value)"></select>
             </div>
+            <div class="janela gest hide" style="justify-content:flex-end;margin-top:-6px"><button class="link" onclick="exportarCartas()">⬇ Exportar para Excel</button></div>
             <div id="cartasLista"></div>
           </div>
         </div>
@@ -786,7 +861,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
   </main>
 </div>
 
-<button class="fab hide" id="fab" onclick="acaoPrincipal()" title="Adicionar" data-ic="plus"></button>
+<button class="fab hide" id="fab" onclick="abrirMais()" title="Adicionar" data-ic="plus"></button>
 <nav class="mobilebar hide" id="mobilebar">
   <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
   <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas</button>
@@ -896,10 +971,37 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <div class="row2 fg"><div><label>Banco</label><select id="cmBanco"></select></div><div><label>Situação</label><select id="cmStatus"></select></div></div>
       <div class="fg"><label>Empreendimento de interesse (opcional)</label><input id="cmImovel" placeholder="Nome do empreendimento" list="listaImoveis2"><datalist id="listaImoveis2"></datalist></div>
       <div class="fg" id="cmCorWrap"><label>Corretor</label><select id="cmCorretor"></select></div>
+      <div class="fg"><label>Documentos recebidos <span class="muted" id="cmDocsQt" style="font-weight:500"></span></label><div class="docs-grid" id="cmDocs"></div></div>
       <div class="fg"><label>Observação</label><textarea id="cmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <button class="btn btn-danger btn-block" id="cmExcluir" onclick="excluirCarta(cartaAtualId(),true)">Excluir carta</button>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('cartaModal')">Cancelar</button><button class="btn btn-primary" id="cmSalvar" onclick="salvarCarta()">Salvar carta</button></div>
+  </div>
+</div>
+
+<!-- ================= MODAL DE AVISO ================= -->
+<div class="modal" id="avisoModal">
+  <div class="sheet" style="width:min(480px,100%)">
+    <div class="sheet-head"><h2>📣 Publicar aviso</h2><button class="icon-btn" onclick="fechar('avisoModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label>Mensagem</label><textarea id="avTexto" placeholder="Ex.: Reunião geral amanhã às 8h no escritório." style="min-height:100px" maxlength="500"></textarea></div>
+      <div class="row2 fg"><div><label>Para quem</label><select id="avDestino"></select></div>
+        <div><label>Mostrar por</label><select id="avDias"><option value="1">1 dia</option><option value="3">3 dias</option><option value="7" selected>7 dias</option><option value="30">30 dias</option></select></div></div>
+      <div id="avLista"></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('avisoModal')">Cancelar</button><button class="btn btn-primary" onclick="publicarAviso()">Publicar</button></div>
+  </div>
+</div>
+
+<!-- ================= MENU + (adicionar) ================= -->
+<div class="modal" id="maisModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><h2>O que você quer adicionar?</h2><button class="icon-btn" onclick="fechar('maisModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="mais-opts">
+      <button class="so-ativo" onclick="fechar('maisModal');novaVisita()"><div class="mi2" style="background:var(--accent-soft)">🏠</div><div><b>Nova visita</b><span>Agendar visita de um cliente</span></div></button>
+      <button class="so-ativo" onclick="fechar('maisModal');novaCarta()"><div class="mi2" style="background:var(--ok-soft)">📄</div><div><b>Nova carta aprovada</b><span>Registrar carta de crédito</span></div></button>
+      <button onclick="fechar('maisModal');novaTarefa()"><div class="mi2" style="background:color-mix(in srgb,var(--warn) 16%,transparent)">✅</div><div><b>Nova tarefa</b><span>Para a sua agenda pessoal</span></div></button>
+    </div></div>
   </div>
 </div>
 
@@ -919,18 +1021,21 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
+      <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><span style="width:20px;text-align:center">📲</span>Instalar aplicativo</button>
       <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
       <button onclick="fechar('menuModal');sair()"><i data-ic="logout"></i>Sair</button>
     </div>
   </div>
 </div>
 
+<div class="offline hide" id="offline"><i></i><span>Sem internet. O que você cadastrar será enviado quando a conexão voltar.</span></div>
+<canvas id="confete" class="hide"></canvas>
 <div class="toasts" id="toasts"></div>
 
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -943,7 +1048,10 @@ const firebaseConfig = {
 
 const fb = initializeApp(firebaseConfig);
 const auth = getAuth(fb);
-const db = getFirestore(fb);
+// Guarda os dados no aparelho: funciona sem internet e envia quando a conexão voltar
+let db;
+try { db = initializeFirestore(fb, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }); }
+catch(e) { db = getFirestore(fb); }
 
 // ================= Ícones =================
 const IC = {
@@ -1039,7 +1147,7 @@ function proxData(s, rep){
 function maiuscula(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 
-let nomeCadastro = '';
+let nomeCadastro = '', equipeCadastro = '', equipesPublicas = [];
 function estadoInicial(user){
   const nome = nomeCadastro || (user.email||'Usuário').split('@')[0].replace(/[._-]+/g,' ');
   const h = hojeISO(), id = Date.now();
@@ -1121,6 +1229,8 @@ window.entrar = async () => {
   if (modoCriar) {
     nomeCadastro = $('nome').value.trim().replace(/\s+/g,' ');
     if (!nomeCadastro) { msg('Digite o seu nome.'); $('nome').focus(); return; }
+    equipeCadastro = $('equipeCad').value;
+    if (equipesPublicas.length && !equipeCadastro) { msg('Escolha a sua equipe.'); $('equipeCad').focus(); return; }
   }
   msg(''); $('btnEntrar').disabled = true; $('btnEntrar').textContent = 'Aguarde...';
   try {
@@ -1138,9 +1248,18 @@ window.alternarModo = () => {
   $('switchBtn').textContent = modoCriar ? 'Entrar' : 'Criar minha conta';
   $('rowEsqueci').classList.toggle('hide', modoCriar);
   $('campoNome').classList.toggle('hide', !modoCriar);
+  if (modoCriar) carregarEquipesCadastro(); else $('campoEquipe').classList.add('hide');
   $('senha').autocomplete = modoCriar ? 'new-password' : 'current-password';
   msg('');
 };
+async function carregarEquipesCadastro(){
+  try {
+    const snap = await getDocs(collection(db,'equipes'));
+    equipesPublicas = snap.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.ordem||99)-(b.ordem||99) || a.nome.localeCompare(b.nome,'pt-BR'));
+  } catch(e) { equipesPublicas = []; }
+  $('equipeCad').innerHTML = '<option value="">Selecione a sua equipe</option>' + equipesPublicas.map(e => `<option value="${e.id}">${esc((e.icone||'') + ' ' + e.nome)}</option>`).join('');
+  $('campoEquipe').classList.toggle('hide', !equipesPublicas.length || !modoCriar);
+}
 window.verSenha = () => { const s = $('senha'); s.type = s.type === 'password' ? 'text' : 'password'; };
 window.esqueciSenha = async () => {
   const email = $('email').value.trim();
@@ -1187,7 +1306,7 @@ window.setView = v => {
   render();
 };
 window.irFiltro = f => { filtro = f; filtroCat = ''; setView('tarefas'); };
-window.buscar = v => { termo = v.trim().toLowerCase(); if (termo && view !== 'tarefas') { filtro = 'todas'; setView('tarefas'); } else render(); };
+window.buscar = v => { termo = v.trim().toLowerCase(); render(); buscaGlobal(v); };
 window.abrirBuscaM = () => { $('searchBox').classList.add('m-open'); $('busca').focus(); };
 $('busca').addEventListener('blur', () => { if (!$('busca').value) $('searchBox').classList.remove('m-open'); });
 function ajustaBuscaMobile(){ $('btnBuscaM').style.display = innerWidth <= 820 ? 'grid' : 'none'; }
@@ -1649,7 +1768,7 @@ function configurarAcesso(){
   const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto : 'sem';
   if (chave === chaveSubs) return;
   chaveSubs = chave;
-  subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = [];
+  subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -1667,8 +1786,17 @@ function configurarAcesso(){
 }
 
 // ---------- Cadastro / primeiro gerente ----------
+let autoCadFeito = false;
 function pedirCadastro(){
-  if (!state || !perfilOk || !instOk || perfil || cadDispensado || $('cadModal').classList.contains('open')) return;
+  if (!state || !perfilOk || !instOk || perfil) return;
+  if (instalacao && nomeCadastro && equipeCadastro && !autoCadFeito) {
+    autoCadFeito = true;
+    setDoc(doc(db,'perfis',uidAtual), { nome:nomeCadastro, email:emailAtual, papel:'corretor', status:'pendente', equipe:equipeCadastro, criadoEm:Date.now() })
+      .then(() => toast('Cadastro enviado! Aguarde a aprovação do gerente.'))
+      .catch(e => { autoCadFeito = false; equipeCadastro = ''; toast('Não foi possível enviar o cadastro: ' + e.message); pedirCadastro(); });
+    return;
+  }
+  if (autoCadFeito || cadDispensado || $('cadModal').classList.contains('open')) return;
   $('cadNome').value = state.profile.nameSet ? state.profile.name : (nomeCadastro || '');
   preencherCadEquipes();
   abrir('cadModal');
@@ -1699,7 +1827,7 @@ window.configurarGerente = async () => {
     const b = writeBatch(db);
     b.set(doc(db,'config','instalacao'), { gerenteUid:uidAtual, criadoEm:Date.now() });
     b.set(doc(db,'perfis',uidAtual), { nome, email:emailAtual, papel:'gerente', status:'ativo', equipe:'', criadoEm:Date.now() });
-    await b.commit();
+    await gravar(b.commit());
     for (const [id, e] of Object.entries(EQUIPES_PADRAO)) await setDoc(doc(db,'equipes',id), e);
     state.profile.name = nome; state.profile.nameSet = true; salvar();
     fechar('cadModal'); toast('Pronto! Você é o gerente do sistema.');
@@ -1739,6 +1867,7 @@ function cardVisita(v, compacto){
   if (v.telefone && AGUARDA_CONF.concat('Confirmada').includes(v.status)) acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
   if (v.status === 'Pendente' || v.status === 'Reagendada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">✓ Confirmada</button>`);
   if (v.status === 'Confirmada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Realizada')">✓ Realizada</button>`);
+  if (v.status === 'Realizada' && !cartas.some(c => c.visitaId === v.id)) acoes.push(`<button class="snooze" onclick="cartaDaVisita('${v.id}')">+ Carta aprovada</button>`);
   if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">✗ Não veio</button>`);
   if (!compacto) {
     acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitas.find(x=>x.id==='${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
@@ -1789,6 +1918,7 @@ function renderVisitasTudo(){
   if (view === 'cartas') renderCartas();
   const ban = bannerAcesso();
   $('bannerHoje').innerHTML = ban;
+  renderMural(); renderAtencao(); renderPainelPapel();
 
   // Hoje: card de visitas
   $('cardVisHoje').classList.toggle('hide', !ativo);
@@ -1842,6 +1972,7 @@ function renderListaVisitas(){
     return true;
   }).sort((a,b) => { const k = (a.date||'').localeCompare(b.date||'') || (a.time||'').localeCompare(b.time||''); return vFil.periodo === 'anteriores' ? -k : k; });
 
+  window._listaVis = lista;
   $('janelaVis').innerHTML = avisoJanela(souGerente() && ['anteriores','todas'].includes(vFil.periodo));
   $('vsTotal').textContent = lista.length;
   $('vsConf').textContent = lista.filter(v => v.status === 'Confirmada').length;
@@ -1953,7 +2084,7 @@ window.salvarVisita = async () => {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados);
     b.set(doc(db,'ranking',id), rankingDe(dados));
-    await b.commit();
+    await gravar(b.commit());
     fechar('visModal'); toast(vEditId ? 'Visita atualizada' : 'Visita cadastrada');
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('vmSalvar').disabled = false;
@@ -1964,7 +2095,7 @@ window.mudarStatus = async (id, st) => {
   try {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
-    await b.commit(); toast('Visita marcada como ' + st.toLowerCase());
+    await gravar(b.commit()); toast('Visita marcada como ' + st.toLowerCase());
   } catch(e) { toast('Erro ao atualizar: ' + e.message); }
 };
 window.excluirVisita = async (id, doModal) => {
@@ -1973,7 +2104,7 @@ window.excluirVisita = async (id, doModal) => {
   try {
     const b = writeBatch(db);
     b.delete(doc(db,'visitas',id)); b.delete(doc(db,'ranking',id));
-    await b.commit();
+    await gravar(b.commit());
     if (doModal) fechar('visModal');
     toast('Visita excluída');
   } catch(e) { toast('Erro ao excluir: ' + e.message); }
@@ -2087,7 +2218,7 @@ window.aprovar = async uid => {
     for (let i = 0; i < soltas.length; i += 200) {
       const b = writeBatch(db);
       soltas.slice(i, i+200).forEach(v => { const d = { ...v, corretorUid:uid }; delete d.id; b.set(doc(db,'visitas',v.id), d); b.set(doc(db,'ranking',v.id), rankingDe(d)); });
-      await b.commit();
+      await gravar(b.commit());
     }
     toast(`${primeiro(p.nome)} aprovado(a)` + (soltas.length ? ` · ${soltas.length} visita(s) antiga(s) vinculada(s)` : ''));
   } catch(e) { toast('Erro ao aprovar: ' + e.message); }
@@ -2192,7 +2323,7 @@ window.importarAntigo = async () => {
         const id = 'imp_' + col + '_' + d.id;
         b.set(doc(db,'visitas',id), v); b.set(doc(db,'ranking',id), rankingDe(v)); n++;
       });
-      await b.commit();
+      await gravar(b.commit());
     }
     msgEl.textContent = `✅ ${n} visita(s) importada(s) para ${eqNome(equipe)}.`;
     toast('Importação concluída');
@@ -2209,6 +2340,7 @@ window.importarAntigo = async () => {
 const C_STATUS = ['Aprovada','Em negociação','Venda fechada','Desistiu','Vencida'];
 const C_COR = { 'Aprovada':'#10b981', 'Em negociação':'#3b82f6', 'Venda fechada':'#8b5cf6', 'Desistiu':'#ef4444', 'Vencida':'#64748b' };
 const BANCOS = ['Caixa','Banco do Brasil','Outro'];
+let avisos = [];
 let cartas = [], rankingCartas = [], cEditId = null, cOrig = null;
 let cFil = { busca:'', periodo:'mes', status:'', equipe:'', corretor:'' };
 window.rankTipo = 'visitas';
@@ -2237,6 +2369,8 @@ function diasParaVencer(c){ return c.validade ? diffDias(c.validade) : null; }
 function cartasDoPerfil(p, de, ate){ return cartas.filter(c => c.corretorUid === p.uid && c.data >= de && c.data <= ate); }
 
 function assinarCartas(erro){
+  const qa = souGerente() ? collection(db,'avisos') : query(collection(db,'avisos'), where('equipe','in',['', perfil.equipe || '-']));
+  subsPapel.push(onSnapshot(qa, s => { avisos = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
   let qc;
   if (souGerente()) qc = collection(db,'cartas');
   else if (souCoord()) qc = query(collection(db,'cartas'), where('equipe','==',perfil.equipe||'-'));
@@ -2254,6 +2388,8 @@ function cardCarta(c){
   if (souGerente()) meta.push(`<span>${esc(eqNome(c.equipe))}</span>`);
   if (c.telefone) meta.push(`<span>📱 ${esc(c.telefone)}</span>`);
   if (c.cpf) meta.push(`<span title="Abra a carta para ver o CPF completo">🪪 ${cpfOculto(c.cpf)}</span>`);
+  const nd = docsOk(c);
+  meta.push(`<span title="Documentos recebidos" ${nd < DOCS.length && ['Aprovada','Em negociação'].includes(c.status) ? 'class="late"' : ''}>📄 ${nd}/${DOCS.length} docs<span class="docbar"><i style="width:${nd/DOCS.length*100}%"></i></span></span>`);
   let aviso = '';
   if (dv !== null && ['Aprovada','Em negociação'].includes(c.status)) {
     if (dv < 0) aviso = `<span class="late">⚠ venceu há ${-dv} dia${-dv!==1?'s':''}</span>`;
@@ -2299,6 +2435,7 @@ function renderCartas(){
     if (t && !norm([c.cliente, c.telefone, c.empreendimento, c.corretorNome, c.obs, c.banco].join(' ')).includes(t) && !(soDig(t).length >= 3 && soDig(c.cpf).includes(soDig(t)))) return false;
     return true;
   }).sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  window._listaCartas = lista;
   const ativas = cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status));
   const vencendo = ativas.filter(c => { const d = diasParaVencer(c); return d !== null && d <= 15; }).length;
   $('csQtd').textContent = lista.length;
@@ -2310,25 +2447,27 @@ function renderCartas(){
 window.cf = (k, v) => { cFil[k] = v; render(); };
 window.filtrarVencendo = () => { cFil.periodo = 'todas'; cFil.status = ''; render(); };
 
-function abrirFormCarta(c){
-  cEditId = c?.id || null; cOrig = c || null;
+let cPre = null, cDocs = {};
+function abrirFormCarta(c, pre){
+  cEditId = c?.id || null; cOrig = c || null; cPre = pre || null;
+  cDocs = { ...(c?.docs || {}) }; desenharDocs();
   $('cmTitulo').textContent = c ? 'Editar carta' : 'Nova carta aprovada';
-  $('cmCliente').value = c?.cliente || ''; $('cmFone').value = c?.telefone || '';
+  $('cmCliente').value = c?.cliente || pre?.cliente || ''; $('cmFone').value = c?.telefone || pre?.telefone || '';
   $('cmCpf').value = fmtCpf(c?.cpf || ''); $('cmCpfAviso').textContent = '';
   $('cmData').value = c?.data || hojeISO(); $('cmValidade').value = c?.validade || '';
   $('cmValor').value = fmtValorInput(c?.valor); $('cmSubsidio').value = fmtValorInput(c?.subsidio);
   $('cmBanco').innerHTML = BANCOS.map(b => `<option ${ (c?.banco||'Caixa')===b?'selected':''}>${b}</option>`).join('');
-  $('cmImovel').value = c?.empreendimento || ''; $('cmObs').value = c?.obs || '';
+  $('cmImovel').value = c?.empreendimento || pre?.empreendimento || ''; $('cmObs').value = c?.obs || '';
   $('cmStatus').innerHTML = C_STATUS.map(s => `<option ${ (c?.status||'Aprovada')===s?'selected':''}>${s}</option>`).join('');
   $('listaImoveis2').innerHTML = [...new Set([...visitas.map(x => x.empreendimento), ...cartas.map(x => x.empreendimento)].filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
   $('cmCorWrap').classList.toggle('hide', !podeGerir());
   if (podeGerir()) {
     $('cmCorretor').innerHTML = membrosSelecionaveis().map(p => `<option value="${p.uid}">${esc(p.nome)}${souGerente() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`).join('');
-    $('cmCorretor').value = c ? c.corretorUid : uidAtual;
+    $('cmCorretor').value = c ? c.corretorUid : (pre?.corretorUid || uidAtual);
   }
   $('cmExcluir').classList.toggle('hide', !c);
   abrir('cartaModal');
-  if (!c) setTimeout(() => $('cmCliente').focus(), 80);
+  if (!c) setTimeout(() => (pre ? $('cmValor') : $('cmCliente')).focus(), 80);
 }
 window.cartaAtualId = () => cEditId;
 window.visitaAtualId = () => vEditId;
@@ -2352,12 +2491,16 @@ window.salvarCarta = async () => {
     if (souCoord()) d.equipe = perfil.equipe;
   }
   const id = cEditId || doc(collection(db,'cartas')).id;
+  d.docs = { ...cDocs };
+  if (cOrig?.visitaId || cPre?.visitaId) d.visitaId = cOrig?.visitaId || cPre.visitaId;
+  aplicarPosVenda(d, cOrig);
   const dados = { ...d, criadoPor: cOrig?.criadoPor || uidAtual, criadoEm: cOrig?.criadoEm || Date.now(), atualizadoEm: Date.now() };
   $('cmSalvar').disabled = true;
   try {
     const b = writeBatch(db);
     b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados));
-    await b.commit();
+    await gravar(b.commit());
+    if (dados.status === 'Venda fechada' && cOrig?.status !== 'Venda fechada') soltarConfete();
     fechar('cartaModal'); toast(cEditId ? 'Carta atualizada' : 'Carta cadastrada 🎉');
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('cmSalvar').disabled = false;
@@ -2365,13 +2508,14 @@ window.salvarCarta = async () => {
 window.mudarStatusCarta = async (id, st) => {
   const c = cartas.find(x => x.id === id); if (!c) return;
   const dados = { ...c, status:st, atualizadoEm:Date.now() }; delete dados.id;
-  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await b.commit(); toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
+  aplicarPosVenda(dados, c);
+  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); if (st === 'Venda fechada') soltarConfete(); toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirCarta = async (id, doModal) => {
   const c = cartas.find(x => x.id === id); if (!c) return;
   if (!confirm(`Excluir a carta de ${c.cliente}?`)) return;
-  try { const b = writeBatch(db); b.delete(doc(db,'cartas',id)); b.delete(doc(db,'ranking_cartas',id)); await b.commit(); if (doModal) fechar('cartaModal'); toast('Carta excluída'); }
+  try { const b = writeBatch(db); b.delete(doc(db,'cartas',id)); b.delete(doc(db,'ranking_cartas',id)); await gravar(b.commit()); if (doModal) fechar('cartaModal'); toast('Carta excluída'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.toLocaleString('pt-BR') : ''; };
@@ -2399,6 +2543,271 @@ function renderRankingCartas(){
   }</tbody></table>`;
 }
 
+// =====================================================================
+// ====== DOCUMENTOS, PÓS-VENDA, MURAL, ATENÇÃO E EXPORTAÇÃO ===========
+// =====================================================================
+const DOCS = [
+  ['rg','RG e CPF'], ['renda','Comprovante de renda'], ['fgts','Extrato do FGTS'],
+  ['civil','Certidão de estado civil'], ['residencia','Comprovante de residência'], ['ctps','Carteira de trabalho']
+];
+const docsOk = c => DOCS.filter(([k]) => c?.docs?.[k]).length;
+function desenharDocs(){
+  $('cmDocs').innerHTML = DOCS.map(([k,n]) => `<label class="doc-item ${cDocs[k]?'ok':''}"><input type="checkbox" ${cDocs[k]?'checked':''} onchange="toggleDoc('${k}')">${n}</label>`).join('');
+  const ok = DOCS.filter(([k]) => cDocs[k]).length;
+  $('cmDocsQt').textContent = `(${ok} de ${DOCS.length})`;
+}
+window.toggleDoc = k => { cDocs[k] = !cDocs[k]; desenharDocs(); };
+
+// ---------- Pós-venda ----------
+function aplicarPosVenda(d, orig){
+  if (orig?.posVenda && !d.posVenda) { d.posVenda = orig.posVenda; d.vendaEm = orig.vendaEm; }
+  if (d.status === 'Venda fechada' && !d.posVenda) {
+    const h = hojeISO(), p = primeiro(d.cliente);
+    d.vendaEm = h;
+    d.posVenda = [
+      { id:'d7',  date:somaDias(h,7),   texto:`Ligar para ${p} e saber como foi a assinatura`, feito:false },
+      { id:'d30', date:somaDias(h,30),  texto:`Ligar para ${p} (30 dias) e pedir indicações`, feito:false },
+      { id:'a1',  date:somaDias(h,365), texto:`Parabenizar ${p} por 1 ano da compra`, feito:false }
+    ];
+  }
+}
+window.posVendaFeito = async (id, item) => {
+  const c = cartas.find(x => x.id === id); if (!c) return;
+  const posVenda = (c.posVenda || []).map(p => p.id === item ? { ...p, feito:true } : p);
+  try { await gravar(setDoc(doc(db,'cartas',id), { posVenda }, { merge:true })); toast('Pós-venda registrado ✓'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ---------- Visita → carta ----------
+window.cartaDaVisita = id => {
+  const v = visitas.find(x => x.id === id); if (!v) return;
+  if (!souAtivo()) return;
+  abrirFormCarta(null, { cliente:v.cliente, telefone:v.telefone, empreendimento:v.empreendimento, corretorUid:v.corretorUid, visitaId:v.id });
+  toast('Dados da visita preenchidos. Complete o valor aprovado.');
+};
+
+// ---------- Mural de avisos ----------
+const dispensados = (() => { try { return new Set(JSON.parse(localStorage.getItem('avisosLidos') || '[]')); } catch(e) { return new Set(); } })();
+const avisosAtivos = () => avisos.filter(a => (a.expiraEm || 0) > Date.now()).sort((a,b) => b.criadoEm - a.criadoEm);
+function podeApagarAviso(a){ return souGerente() || a.autorUid === uidAtual; }
+function renderMural(){
+  const lista = souAtivo() ? avisosAtivos().filter(a => !dispensados.has(a.id)) : [];
+  $('mural').innerHTML = lista.map(a => `<div class="aviso-card"><div class="ai">📣</div><div class="at"><p>${esc(a.texto)}</p>
+      <span>${esc(a.autorNome)} · ${a.equipe ? 'para ' + esc(eqNome(a.equipe)) : 'para todos'} · ${new Date(a.criadoEm).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span></div>
+      ${podeApagarAviso(a) ? `<button class="icon-btn del" onclick="excluirAviso('${a.id}')" title="Apagar para todos">${IC.trash}</button>` : ''}
+      <button class="icon-btn" onclick="dispensarAviso('${a.id}')" title="Ocultar para mim">${IC.x}</button></div>`).join('');
+}
+window.dispensarAviso = id => { dispensados.add(id); try { localStorage.setItem('avisosLidos', JSON.stringify([...dispensados])); } catch(e){} render(); };
+window.novoAviso = () => {
+  if (!podeGerir()) return;
+  $('avTexto').value = '';
+  $('avDestino').innerHTML = souGerente()
+    ? '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('')
+    : `<option value="${perfil.equipe}">${esc(eqNome(perfil.equipe))}</option>`;
+  const meus = avisosAtivos().filter(podeApagarAviso);
+  $('avLista').innerHTML = meus.length ? '<div class="rep-sec">Avisos no ar</div>' + meus.map(a => `<div class="at-row"><div class="att"><b style="font-weight:600">${esc(a.texto.slice(0,80))}${a.texto.length>80?'…':''}</b><span>${a.equipe ? esc(eqNome(a.equipe)) : 'Todos'} · até ${new Date(a.expiraEm).toLocaleDateString('pt-BR')}</span></div><button class="icon-btn del" onclick="excluirAviso('${a.id}')">${IC.trash}</button></div>`).join('') : '';
+  abrir('avisoModal'); setTimeout(() => $('avTexto').focus(), 80);
+};
+window.publicarAviso = async () => {
+  const texto = $('avTexto').value.trim(); if (!texto) { toast('Escreva a mensagem'); return; }
+  const equipe = souCoord() ? perfil.equipe : $('avDestino').value;
+  const dias = +$('avDias').value;
+  try {
+    await setDoc(doc(collection(db,'avisos')), { texto, equipe, autorUid:uidAtual, autorNome:perfil.nome, criadoEm:Date.now(), expiraEm:Date.now() + dias*864e5 });
+    fechar('avisoModal'); toast('Aviso publicado');
+  } catch(e) { toast('Erro ao publicar: ' + e.message); }
+};
+window.excluirAviso = async id => {
+  if (!confirm('Apagar este aviso para todos?')) return;
+  try { await deleteDoc(doc(db,'avisos',id)); toast('Aviso apagado'); if ($('avisoModal').classList.contains('open')) novoAviso(); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ---------- Precisa da sua atenção ----------
+function renderAtencao(){
+  if (!souAtivo()) { $('cardAtencao').classList.add('hide'); return; }
+  const h = hojeISO(), itens = [];
+  // pós-venda do próprio corretor
+  cartas.filter(c => c.corretorUid === uidAtual && c.status === 'Venda fechada').forEach(c => (c.posVenda || []).filter(p => !p.feito && p.date <= h).forEach(p => itens.push({ ord:0,
+    html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,#8b5cf6 14%,transparent)">🎁</div><div class="att"><b>${esc(p.texto)}</b><span>Pós-venda · ${esc(c.cliente)}</span></div>
+      <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="posVendaFeito('${c.id}','${p.id}')">✓ Feito</button></div></div>` })));
+  // cartas vencendo (no escopo de quem vê)
+  cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status) && c.validade).forEach(c => {
+    const d = diffDias(c.validade); if (d > 7) return;
+    itens.push({ ord:1, html:`<div class="at-row"><div class="ati" style="background:var(--danger-soft)">⏳</div><div class="att"><b>Carta de ${esc(c.cliente)} ${d < 0 ? `venceu há ${-d} dia${-d!==1?'s':''}` : d === 0 ? 'vence hoje' : `vence em ${d} dia${d!==1?'s':''}`}</b><span>${brl(c.valor)}${podeGerir() ? ' · ' + esc(c.corretorNome) : ''}</span></div>
+      <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="editarCarta('${c.id}')">Abrir</button></div></div>` });
+  });
+  // documentos faltando nas cartas do próprio corretor
+  cartas.filter(c => c.corretorUid === uidAtual && ['Aprovada','Em negociação'].includes(c.status) && docsOk(c) < DOCS.length).forEach(c => {
+    const falta = DOCS.length - docsOk(c);
+    itens.push({ ord:2, html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,var(--warn) 16%,transparent)">📄</div><div class="att"><b>Faltam ${falta} documento${falta!==1?'s':''} de ${esc(c.cliente)}</b><span>${DOCS.filter(([k]) => !c.docs?.[k]).map(([,n]) => n).slice(0,3).join(', ')}${falta>3?'…':''}</span></div>
+      <div class="ata"><button class="snooze" onclick="editarCarta('${c.id}')">Atualizar</button></div></div>` });
+  });
+  itens.sort((a,b) => a.ord - b.ord);
+  $('cardAtencao').classList.toggle('hide', !itens.length);
+  $('atencaoQt').textContent = itens.length ? itens.length + (itens.length > 1 ? ' itens' : ' item') : '';
+  $('atencaoLista').innerHTML = itens.slice(0,8).map(i => i.html).join('') + (itens.length > 8 ? `<div class="muted" style="font-size:12.5px;padding-top:8px">+${itens.length-8} itens. Veja em Cartas aprovadas.</div>` : '');
+}
+
+// ---------- Exportar para Excel (CSV) ----------
+function baixarCSV(nome, cab, linhas){
+  const cel = x => { const t = String(x ?? '').replace(/"/g,'""'); return /[;"\n]/.test(t) ? `"${t}"` : t; };
+  const txt = '﻿' + [cab, ...linhas].map(l => l.map(cel).join(';')).join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type:'text/csv;charset=utf-8' }));
+  a.download = `${nome}-${hojeISO()}.csv`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast(`${linhas.length} linha${linhas.length!==1?'s':''} exportada${linhas.length!==1?'s':''}`);
+}
+const dataBR = s => s ? parseISO(s).toLocaleDateString('pt-BR') : '';
+window.exportarVisitas = () => {
+  if (!podeGerir()) return;
+  const l = window._listaVis || [];
+  baixarCSV('visitas', ['Data','Horário','Cliente','Telefone','Empreendimento','Corretor','Equipe','Status','Observação'],
+    l.map(v => [dataBR(v.date), v.time, v.cliente, v.telefone, v.empreendimento, v.corretorNome, eqNome(v.equipe), v.status, v.obs]));
+};
+window.exportarCartas = () => {
+  if (!podeGerir()) return;
+  const l = window._listaCartas || [];
+  baixarCSV('cartas-aprovadas', ['Data da aprovação','Cliente','CPF','Telefone','Valor aprovado','Subsídio','Banco','Válida até','Empreendimento','Corretor','Equipe','Situação','Documentos','Faltando','Observação'],
+    l.map(c => [dataBR(c.data), c.cliente, c.cpf, c.telefone, c.valor||0, c.subsidio||0, c.banco, dataBR(c.validade), c.empreendimento, c.corretorNome, eqNome(c.equipe), c.status,
+      `${docsOk(c)}/${DOCS.length}`, DOCS.filter(([k]) => !c.docs?.[k]).map(([,n]) => n).join(', '), c.obs]));
+};
+
+// =====================================================================
+// ================= LAYOUT POR PERFIL, BUSCA E MENU + =================
+// =====================================================================
+const MEDALHA = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
+function rankingMes(filtroEquipe){
+  const [de, ate] = faixa('mes');
+  return agrupaRanking(rankingDocs.filter(r => r.date && r.date >= de && r.date <= ate && r.status !== 'Cancelada' && (!filtroEquipe || r.equipe === filtroEquipe)));
+}
+function statCard(ic, cor, fundo, valor, rot, sub, acao){
+  return `<div class="stat" onclick="${acao}"><div class="stat-ic" style="background:${fundo};color:${cor}">${IC[ic]}</div><div><b>${valor}</b><span>${rot}</span>${sub ? `<small>${sub}</small>` : ''}</div></div>`;
+}
+function renderPainelPapel(){
+  const ativo = souAtivo();
+  $('statsPapel').classList.toggle('hide', !ativo);
+  $('statsTarefas').classList.toggle('hide', ativo);
+  $('pFootRank').classList.toggle('hide', !ativo);
+  $('pFootTarefa').classList.toggle('hide', ativo);
+  $('cardEquipe').classList.toggle('hide', !podeGerir());
+  $('tituloProgresso').textContent = ativo ? 'Suas tarefas de hoje' : 'Seu progresso';
+  document.querySelectorAll('#maisModal .so-ativo').forEach(b => b.classList.toggle('hide', !ativo));
+  if (!ativo) return;
+  const h = hojeISO(), am = somaDias(h,1), [mi, mf] = faixa('mes');
+  const noMes = c => c.data >= mi && c.data <= mf;
+  const vendaNoMes = c => c.status === 'Venda fechada' && (c.vendaEm || c.data) >= mi && (c.vendaEm || c.data) <= mf;
+  const rk = rankingMes(''), pos = rk.findIndex(g => g.uid === uidAtual), eu = rk[pos];
+  // cartão do perfil
+  const minhasCartas = cartas.filter(c => c.corretorUid === uidAtual && noMes(c)).length;
+  const totMes = rankingDocs.filter(r => r.date >= mi && r.date <= mf && r.status !== 'Cancelada').length, cartasMes = cartas.filter(noMes).length;
+  $('pFootRank').innerHTML = souGerente()
+    ? `<div class="p-rank"><div class="med">📊</div><div><b>${totMes} visita${totMes!==1?'s':''} no mês</b><span>${cartasMes} carta${cartasMes!==1?'s':''} aprovada${cartasMes!==1?'s':''} · todas as equipes</span></div></div>`
+    : pos >= 0
+    ? `<div class="p-rank"><div class="med">${MEDALHA(pos)}</div><div><b>${pos+1}º no ranking do mês</b><span>${eu.total} visita${eu.total!==1?'s':''} · ${minhasCartas} carta${minhasCartas!==1?'s':''}</span></div></div>`
+    : `<div class="p-rank"><div class="med">🏁</div><div><b>Ainda fora do ranking</b><span>Marque a primeira visita do mês</span></div></div>`;
+
+  if (!podeGerir()) {
+    const vh = visitas.filter(v => v.corretorUid === uidAtual && v.date === h && v.status !== 'Cancelada');
+    const conf = vh.filter(v => v.status === 'Confirmada').length;
+    const vendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
+    $('statsPapel').innerHTML =
+      statCard('house','var(--accent)','var(--accent-soft)', vh.length, 'Visitas hoje', vh.length ? `${conf} confirmada${conf!==1?'s':''}` : '', "setView('visitas')") +
+      statCard('card','var(--ok)','var(--ok-soft)', minhasCartas, 'Cartas no mês', '', "setView('cartas')") +
+      statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', vendas, 'Vendas no mês', '', "cf('status','Venda fechada');setView('cartas')") +
+      statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', pos >= 0 ? (pos+1)+'º' : '–', 'No ranking', pos >= 0 ? `de ${rk.length} corretores` : 'sem visitas no mês', "setVisAba('ranking');setView('visitas')");
+    return;
+  }
+  // gestor (gerente ou coordenador)
+  const vh = visitas.filter(v => v.date === h && v.status !== 'Cancelada');
+  const conf = vh.filter(v => v.status === 'Confirmada').length;
+  const paraConf = visitas.filter(v => v.date === am && AGUARDA_CONF.includes(v.status)).length;
+  const cm = cartas.filter(noMes);
+  const pend = perfisLista.filter(p => p.status === 'pendente').length;
+  const vendas = cartas.filter(vendaNoMes).length;
+  $('statsPapel').innerHTML =
+    statCard('house','var(--accent)','var(--accent-soft)', vh.length, 'Visitas hoje', `${conf} confirmada${conf!==1?'s':''}`, "setView('visitas')") +
+    statCard('wa','#16a34a','color-mix(in srgb,#16a34a 12%,transparent)', paraConf, 'Confirmar amanhã', paraConf ? 'faltam confirmar' : 'tudo certo', "abrirConfirmar()") +
+    statCard('card','var(--ok)','var(--ok-soft)', cm.length, 'Cartas no mês', brl(cm.reduce((a,c) => a + (c.valor||0), 0)), "setView('cartas')") +
+    (souGerente()
+      ? statCard('users','var(--danger)','var(--danger-soft)', pend, 'Aguardando aprovação', pend ? 'clique para aprovar' : 'nenhum cadastro novo', "setView('corretores')")
+      : statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', vendas, 'Vendas no mês', '', "setView('cartas')"));
+  // painel da equipe
+  const eqs = souGerente() ? listaEquipes() : listaEquipes().filter(e => e.id === perfil.equipe);
+  const linhas = eqs.map(e => {
+    const vHoje = visitas.filter(v => v.equipe === e.id && v.date === h && v.status !== 'Cancelada').length;
+    const vMes = rankingDocs.filter(r => r.equipe === e.id && r.date >= mi && r.date <= mf && r.status !== 'Cancelada').length;
+    const cMes = cartas.filter(c => c.equipe === e.id && noMes(c)).length;
+    const vd = cartas.filter(c => c.equipe === e.id && vendaNoMes(c)).length;
+    return `<div class="eq-row"><span class="en">${esc(e.icone||'')} ${esc(e.nome)}</span><b>${vHoje}</b><b>${vMes}</b><b>${cMes}</b><b>${vd}</b></div>`;
+  }).join('');
+  const top = rankingMes(souCoord() ? perfil.equipe : '').slice(0,3);
+  $('painelEquipe').innerHTML = `<div class="eq-row head"><span>Equipe</span><span>Hoje</span><span>Visitas</span><span>Cartas</span><span>Vendas</span></div>${linhas}
+    <div class="rep-sec" style="margin-top:16px">Destaques do mês</div>
+    <div class="top3">${top.length ? top.map((g,i) => `<div><span class="m">${MEDALHA(i)}</span><span class="n">${esc(g.nome)}</span><span class="v">${g.total} visita${g.total!==1?'s':''}</span></div>`).join('') : '<span class="muted" style="font-size:13px">Sem visitas no mês ainda.</span>'}</div>`;
+}
+
+// ---------- Busca global ----------
+let buscaTimer = null;
+function buscaGlobal(v){
+  const t = norm(v), dig = soDig(v), box = $('buscaRes');
+  if (t.length < 2) { box.classList.add('hide'); return; }
+  const casaDig = x => dig.length >= 3 && soDig(x).includes(dig);
+  const vs = visitas.filter(x => norm([x.cliente, x.empreendimento, x.corretorNome].join(' ')).includes(t) || casaDig(x.telefone)).slice(0,5);
+  const cs = cartas.filter(x => norm([x.cliente, x.empreendimento, x.corretorNome].join(' ')).includes(t) || casaDig(x.telefone) || casaDig(x.cpf)).slice(0,5);
+  const ts = (state?.tasks || []).filter(x => norm([x.title, x.notes].join(' ')).includes(t) || casaDig(x.phone)).slice(0,5);
+  const item = (ic, tit, sub, fn) => `<button onmousedown="event.preventDefault()" onclick="${fn}"><span class="bi">${ic}</span><span class="bt"><b>${esc(tit)}</b><span>${esc(sub)}</span></span></button>`;
+  let html = '';
+  if (vs.length) html += '<div class="bs">Visitas</div>' + vs.map(x => item('🏠', x.cliente, `${dataBR(x.date)} ${x.time} · ${x.status}${podeGerir() ? ' · ' + x.corretorNome : ''}`, `fecharBusca();editarVisita('${x.id}')`)).join('');
+  if (cs.length) html += '<div class="bs">Cartas aprovadas</div>' + cs.map(x => item('📄', x.cliente, `${brl(x.valor)} · ${x.status}${x.cpf ? ' · ' + cpfOculto(x.cpf) : ''}`, `fecharBusca();editarCarta('${x.id}')`)).join('');
+  if (ts.length) html += '<div class="bs">Tarefas</div>' + ts.map(x => item(x.done ? '☑️' : '✅', x.title, x.date ? dataBR(x.date) + (x.time ? ' ' + x.time : '') : 'Sem data', `fecharBusca();editarTarefa(${x.id})`)).join('');
+  box.innerHTML = html || `<div class="nada">Nada encontrado para "${esc(v)}".</div>`;
+  box.classList.remove('hide');
+}
+window.fecharBusca = () => { $('buscaRes').classList.add('hide'); $('busca').blur(); };
+$('busca').addEventListener('focus', () => buscaGlobal($('busca').value));
+$('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classList.add('hide'), 150));
+
+// ---------- Botão + ----------
+window.abrirMais = () => { renderPainelPapel(); abrir('maisModal'); };
+
+// ================= Sem internet, instalar app e confete =================
+function gravar(p){
+  if (navigator.onLine) return p;
+  p.catch(e => toast('Erro ao sincronizar: ' + e.message));
+  toast('Salvo no aparelho. Vai para a nuvem quando a internet voltar.');
+  return Promise.resolve();
+}
+function atualizarConexao(){ $('offline').classList.toggle('hide', navigator.onLine); }
+addEventListener('offline', atualizarConexao);
+addEventListener('online', () => { atualizarConexao(); toast('Conexão restabelecida. Tudo sincronizado ✓'); });
+atualizarConexao();
+
+let pedidoInstalar = null;
+const ehIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const jaInstalado = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+function mostrarInstalar(sim){ document.querySelectorAll('.instalar').forEach(b => b.classList.toggle('hide', !sim)); }
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); pedidoInstalar = e; mostrarInstalar(true); });
+addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicativo instalado ✓'); });
+if (ehIOS && !jaInstalado) mostrarInstalar(true);
+window.instalarApp = async () => {
+  if (pedidoInstalar) { pedidoInstalar.prompt(); const r = await pedidoInstalar.userChoice; if (r.outcome === 'accepted') mostrarInstalar(false); pedidoInstalar = null; return; }
+  if (ehIOS) { alert('Para instalar no iPhone:\n\n1. Toque no botão Compartilhar (quadrado com a seta para cima)\n2. Escolha "Adicionar à Tela de Início"\n3. Toque em "Adicionar"'); return; }
+  alert('Para instalar: abra o menu do navegador (⋮) e escolha "Instalar aplicativo" ou "Adicionar à tela inicial".');
+};
+
+function soltarConfete(){
+  const cv = $('confete'), ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight; cv.classList.remove('hide');
+  const cores = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899'];
+  const ps = Array.from({ length:160 }, () => ({ x:innerWidth/2 + (Math.random()-.5)*200, y:innerHeight*.35, vx:(Math.random()-.5)*16, vy:-Math.random()*14-4, r:Math.random()*6+4, c:cores[Math.floor(Math.random()*cores.length)], a:Math.random()*6, va:(Math.random()-.5)*.3 }));
+  const ini = performance.now();
+  (function passo(t){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p => { p.vy += .35; p.x += p.vx; p.y += p.vy; p.vx *= .99; p.a += p.va; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillStyle = p.c; ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2); ctx.restore(); });
+    if (t - ini < 2600) requestAnimationFrame(passo); else { ctx.clearRect(0,0,cv.width,cv.height); cv.classList.add('hide'); }
+  })(ini);
+}
+
 // ================= Lembretes =================
 function checarLembretes(){
   if (!state || !state.profile.notif) return;
@@ -2424,13 +2833,13 @@ setInterval(() => { if (state) render(); }, 60000); // vira o dia sozinho
 // ================= Atalhos =================
 document.addEventListener('keydown', e => {
   const digitando = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-  if (e.key === 'Escape') { fecharModal(); ['visModal','relModal','menuModal','confModal','cartaModal'].forEach(fechar); return; }
+  if (e.key === 'Escape') { fecharModal(); ['visModal','relModal','menuModal','confModal','cartaModal','avisoModal','maisModal'].forEach(fechar); $('buscaRes').classList.add('hide'); return; }
   if (digitando || !state) return;
   if (e.key === 'n' || e.key === 'N') { e.preventDefault(); acaoPrincipal(); }
   if (e.key === '/') { e.preventDefault(); if (innerWidth <= 820) abrirBuscaM(); else $('busca').focus(); }
 });
 $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal')) fecharModal(); });
-['visModal','relModal','menuModal','confModal','cartaModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
+['visModal','relModal','menuModal','confModal','cartaModal','avisoModal','maisModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
 </script>
 </body>
 </html>
