@@ -640,6 +640,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <section class="view" id="v-hoje">
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">📣 Publicar aviso</button></div>
         <div id="bannerHoje"></div>
+        <div id="conviteNotif"></div>
         <div class="mural" id="mural"></div>
         <div class="stats hide" id="statsPapel"></div>
         <div class="stats" id="statsTarefas">
@@ -870,6 +871,10 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
           </div>
           <div class="card">
             <div class="card-head"><h2>Aparência e avisos</h2></div>
+            <div class="set-row"><div><b>🔔 Notificações no celular</b><span id="notifStatus">Receba avisos, visitas e lembretes mesmo com o app fechado</span></div>
+              <button class="btn btn-primary" id="btnNotif" onclick="ativarNotificacoes()">Ativar</button></div>
+            <div class="set-row hide" id="rowTesteNotif"><div><b>Testar notificação</b><span>Envia uma notificação para este aparelho</span></div>
+              <button class="btn btn-ghost" onclick="testarNotificacao()">Testar</button></div>
             <div class="set-row"><div><b>Tema</b><span>Claro, escuro ou igual ao aparelho</span></div>
               <div class="seg" id="segTema"></div></div>
             <div class="set-row"><div><b>Lembretes</b><span>Aviso antes das tarefas com horário (com o app aberto)</span></div>
@@ -1066,6 +1071,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
 
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDocFromServer, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -1309,7 +1315,9 @@ window.trocarSenha = async () => {
   try { await sendPasswordResetEmail(auth, emailAtual); toast('Link enviado para ' + emailAtual); }
   catch(e) { toast(traduzErro(e)); }
 };
-window.sair = () => { if (confirm('Deseja sair desta conta?')) { fecharModal(); signOut(auth); } };
+window.sair = async () => { if (!confirm('Deseja sair desta conta?')) return; fecharModal();
+  try { const t = localStorage.getItem('notifToken'); if (t) { await deleteDoc(doc(db,'tokens',t)); localStorage.removeItem('notifToken'); localStorage.removeItem('notifAtiva'); } } catch(e){}
+  signOut(auth); };
 
 // ================= Salvar =================
 let salvarTimer = null;
@@ -1837,7 +1845,7 @@ function pedirCadastro(){
   if (instalacao && contaRecemCriada && nomeCadastro && equipeCadastro && !autoCadFeito) {
     autoCadFeito = true;
     perfilNaoExiste().then(ok => ok && setDoc(doc(db,'perfis',uidAtual), { nome:nomeCadastro, email:emailAtual, papel:'corretor', status:'pendente', equipe:equipeCadastro, criadoEm:Date.now() })
-).then(r => r !== false && toast('Cadastro enviado! Aguarde a aprovação do gerente.'))
+).then(r => { if (r !== false) { toast('Cadastro enviado! Aguarde a aprovação do gerente.'); setTimeout(() => avisarCarteiro('cadastro', uidAtual), 1500); } })
       .catch(e => { autoCadFeito = false; equipeCadastro = ''; toast('Não foi possível enviar o cadastro: ' + e.message); pedirCadastro(); });
     return;
   }
@@ -1862,6 +1870,7 @@ window.enviarCadastro = async () => {
   try {
     if (!(await perfilNaoExiste())) { fechar('cadModal'); toast('Seu cadastro já existe.'); return; }
     await setDoc(doc(db,'perfis',uidAtual), { nome, email:emailAtual, papel:'corretor', status:'pendente', equipe, criadoEm:Date.now() });
+    setTimeout(() => avisarCarteiro('cadastro', uidAtual), 1500);
     state.profile.name = nome; state.profile.nameSet = true; salvar();
     fechar('cadModal'); toast('Cadastro enviado! Aguarde a aprovação do gerente.');
   } catch(e) { toast('Não foi possível enviar: ' + e.message); }
@@ -1964,7 +1973,7 @@ function renderVisitasTudo(){
   if (view === 'cartas') renderCartas();
   const ban = bannerAcesso();
   $('bannerHoje').innerHTML = ban;
-  renderMural(); renderAtencao(); renderPainelPapel();
+  renderMural(); renderAtencao(); renderPainelPapel(); renderNotif();
 
   // Hoje: card de visitas
   $('cardVisHoje').classList.toggle('hide', !ativo);
@@ -2131,6 +2140,8 @@ window.salvarVisita = async () => {
     b.set(doc(db,'visitas',id), dados);
     b.set(doc(db,'ranking',id), rankingDe(dados));
     await gravar(b.commit());
+    if (!vOrig) avisarCarteiro('visita', id, true); // visita nova: corretor (se foi outra pessoa), coordenador da equipe e gerentes
+    else if (dados.corretorUid !== uidAtual && (vOrig.corretorUid !== dados.corretorUid || vOrig.date !== dados.date || vOrig.time !== dados.time)) avisarCarteiro('visita', id, false);
     fechar('visModal'); toast(vEditId ? 'Visita atualizada' : 'Visita cadastrada');
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('vmSalvar').disabled = false;
@@ -2547,7 +2558,8 @@ window.salvarCarta = async () => {
     const b = writeBatch(db);
     b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados));
     await gravar(b.commit());
-    if (dados.status === 'Venda fechada' && cOrig?.status !== 'Venda fechada') soltarConfete();
+    if (dados.status === 'Venda fechada' && cOrig?.status !== 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); }
+    if (!cEditId) avisarCarteiro('carta', id, true);
     fechar('cartaModal'); toast(cEditId ? 'Carta atualizada' : 'Carta cadastrada 🎉');
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('cmSalvar').disabled = false;
@@ -2556,7 +2568,7 @@ window.mudarStatusCarta = async (id, st) => {
   const c = cartas.find(x => x.id === id); if (!c) return;
   const dados = { ...c, status:st, atualizadoEm:Date.now() }; delete dados.id;
   aplicarPosVenda(dados, c);
-  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); if (st === 'Venda fechada') soltarConfete(); toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
+  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); if (st === 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); } toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirCarta = async (id, doModal) => {
@@ -2660,8 +2672,9 @@ window.publicarAviso = async () => {
   const equipe = souCoord() ? perfil.equipe : $('avDestino').value;
   const dias = +$('avDias').value;
   try {
-    await setDoc(doc(collection(db,'avisos')), { texto, equipe, autorUid:uidAtual, autorNome:perfil.nome, criadoEm:Date.now(), expiraEm:Date.now() + dias*864e5 });
-    fechar('avisoModal'); toast('Aviso publicado');
+    const refAviso = doc(collection(db,'avisos'));
+    await setDoc(refAviso, { texto, equipe, autorUid:uidAtual, autorNome:perfil.nome, criadoEm:Date.now(), expiraEm:Date.now() + dias*864e5 });
+    avisarCarteiro('aviso', refAviso.id); fechar('avisoModal'); toast('Aviso publicado');
   } catch(e) { toast('Erro ao publicar: ' + e.message); }
 };
 window.excluirAviso = async id => {
@@ -2897,6 +2910,65 @@ async function salvarFoto(foto){
   state.profile.foto = foto; salvar();
   if (perfil) await gravar(setDoc(doc(db,'perfis',uidAtual), { foto }, { merge:true }));
 }
+
+// ================= Notificações (Firebase Cloud Messaging + carteiro no Cloudflare) =================
+// Preencha estes dois valores (passo a passo enviado na conversa):
+const VAPID_KEY = 'BB930zKxbviogSnCkZa8YuP0lsHdZPjhUyo1anT_lJHjnNs1wXXsF5vNiuGSoivdj3YIeSdQanqT5D2O96rddnQ';      // Firebase → Configurações do projeto → Cloud Messaging → Certificados push da Web
+const CARTEIRO_URL = 'https://carteiro-frade.allanvgron.workers.dev/';   // Cloudflare → endereço do Worker (ex.: https://carteiro-frade.seunome.workers.dev)
+const notifConfigurada = () => !!(VAPID_KEY && CARTEIRO_URL);
+let msgSuportado = false, messaging = null;
+isSupported().then(ok => { msgSuportado = ok; if (ok) { messaging = getMessaging(fb); onMessage(messaging, p => mostrarNotificacaoAberta(p)); } render(); }).catch(() => {});
+function mostrarNotificacaoAberta(p){
+  const t = p.notification?.title || p.data?.titulo || 'Frade Imóveis', b = p.notification?.body || p.data?.texto || '';
+  toast(t + (b ? ' · ' + b : ''));
+  navigator.serviceWorker?.ready.then(reg => reg.showNotification(t, { body:b, icon:'frade-icone-192.png', badge:'frade-icone-192.png' })).catch(() => {});
+}
+function estadoNotif(){
+  if (!notifConfigurada()) return 'nao-configurado';
+  if (ehIOS && !jaInstalado) return 'ios-instalar';
+  if (!('Notification' in window) || !msgSuportado) return 'sem-suporte';
+  if (Notification.permission === 'denied') return 'bloqueado';
+  if (Notification.permission === 'granted' && localStorage.getItem('notifAtiva') === uidAtual) return 'ativo';
+  return 'desligado';
+}
+function renderNotif(){
+  const st = estadoNotif();
+  const txt = { 'nao-configurado':'Ainda não configurado pelo gerente.', 'ios-instalar':'No iPhone, instale o app na Tela de Início para receber notificações.',
+    'sem-suporte':'Este navegador não recebe notificações. Use o Chrome (Android/computador) ou o app instalado no iPhone.',
+    'bloqueado':'Notificações bloqueadas. Libere nas configurações do navegador para este site.', 'ativo':'Ativas neste aparelho ✓', 'desligado':'Receba avisos, visitas e lembretes mesmo com o app fechado' }[st];
+  if ($('notifStatus')) {
+    $('notifStatus').textContent = txt;
+    $('btnNotif').classList.toggle('hide', st !== 'desligado');
+    $('rowTesteNotif').classList.toggle('hide', st !== 'ativo');
+  }
+  let dispensado = false; try { dispensado = localStorage.getItem('conviteNotif') === '1'; } catch(e){}
+  const mostrar = souAtivo() && !dispensado && (st === 'desligado' || st === 'ios-instalar');
+  $('conviteNotif').innerHTML = mostrar ? `<div class="banner" style="background:var(--accent-soft);color:var(--text);border-color:color-mix(in srgb,var(--accent) 30%,transparent)"><span style="font-size:20px">🔔</span><span style="flex:1">${st === 'ios-instalar' ? 'Instale o app na Tela de Início (Compartilhar → Adicionar à Tela de Início) para receber os avisos da equipe na hora.' : 'Ative as notificações para receber avisos, visitas marcadas e lembretes na hora, mesmo com o app fechado.'}</span>${st === 'desligado' ? '<button class="btn btn-primary" onclick="ativarNotificacoes()">Ativar</button>' : ''}<button class="icon-btn" onclick="dispensarConvite()" title="Agora não">${IC.x}</button></div>` : '';
+}
+window.dispensarConvite = () => { try { localStorage.setItem('conviteNotif','1'); } catch(e){} renderNotif(); };
+window.ativarNotificacoes = async () => {
+  if (!notifConfigurada() || !messaging) { toast('Notificações indisponíveis neste aparelho'); return; }
+  try {
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') { toast('Permissão negada. Libere as notificações nas configurações do navegador.'); renderNotif(); return; }
+    const reg = await navigator.serviceWorker.register('sw.js');
+    await navigator.serviceWorker.ready;
+    const token = await getToken(messaging, { vapidKey:VAPID_KEY, serviceWorkerRegistration:reg });
+    if (!token) throw new Error('não foi possível gerar o código do aparelho');
+    await setDoc(doc(db,'tokens',token), { uid:uidAtual, criadoEm:Date.now(), aparelho:navigator.userAgent.slice(0,120) });
+    try { localStorage.setItem('notifAtiva', uidAtual); localStorage.setItem('notifToken', token); } catch(e){}
+    toast('Notificações ativadas ✓'); renderNotif();
+  } catch(e) { toast('Erro ao ativar: ' + e.message); }
+};
+window.testarNotificacao = () => { avisarCarteiro('teste', ''); toast('Enviando notificação de teste…'); };
+async function avisarCarteiro(tipo, id, nova){
+  if (!CARTEIRO_URL || !navigator.onLine || !auth.currentUser) return;
+  try {
+    const t = await auth.currentUser.getIdToken();
+    await fetch(CARTEIRO_URL, { method:'POST', headers:{ Authorization:'Bearer ' + t, 'Content-Type':'application/json' }, body: JSON.stringify({ tipo, id, nova:!!nova }) });
+  } catch(e) { console.warn('carteiro', e); }
+}
+window.avisarCarteiro = avisarCarteiro;
 
 // ================= Lembretes =================
 function checarLembretes(){
