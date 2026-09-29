@@ -6,9 +6,9 @@
 <title>Minha Agenda · Frade Imóveis</title>
 <meta name="description" content="Minha Agenda: tarefas, compromissos e lembretes sincronizados em todos os seus aparelhos.">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="icon" type="image/png" href="frade-icone-192.png">
 <meta name="application-name" content="Frade Imóveis">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="frade-icone-180.png">
 <meta name="theme-color" content="#022C45">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Frade Imóveis">
@@ -851,6 +851,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
                 <div class="hint">Aparece no seu perfil e para os gestores da equipe.</div>
               </div>
               <input type="file" id="fotoArquivo" accept="image/*" class="hide" onchange="escolherFoto(this)">
+              <input type="file" id="fotoOutro" accept="image/*" class="hide" onchange="escolherFotoOutro(this)">
             </div>
             <div class="fg"><label>Seu nome</label><input id="cfgNome" placeholder="Como quer ser chamado" onchange="salvarNome()"></div>
             <div class="fg"><label>E-mail da conta</label><input id="cfgEmail" disabled></div>
@@ -2275,7 +2276,8 @@ window.abrirRelatorio = async uid => {
   const kpi = (n, t) => `<div class="kpi"><b>${n}</b><span>${t}</span></div>`;
   let gestao = '';
   if (souGerente() && uid !== uidAtual) {
-    gestao = `<div class="rep-sec">Acesso</div>
+    gestao = `<div class="rep-sec">Foto</div><div class="foto-box"><div class="foto-grande">${p.foto ? `<img src="${p.foto}" alt="">` : esc((p.nome||'?')[0].toUpperCase())}</div><div class="fb-acoes"><button class="btn btn-ghost" onclick="fotoDeOutro('${uid}')">📷 ${p.foto ? 'Trocar' : 'Adicionar'} foto</button>${p.foto ? `<button class="link" onclick="salvarFotoDe('${uid}','')">Remover foto</button>` : ''}</div></div>
+      <div class="rep-sec">Acesso</div>
       <div class="row2 fg"><div><label>Perfil</label><select id="gmPapel">${Object.entries(PAPEIS).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></div>
       <div><label>Equipe</label><select id="gmEquipe"><option value="">Sem equipe</option>${listaEquipes().map(e => `<option value="${e.id}" ${p.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select></div></div>
       <div class="row2"><select id="gmStatus"><option value="ativo" ${p.status==='ativo'?'selected':''}>Acesso liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>Acesso bloqueado</option></select>
@@ -2870,6 +2872,17 @@ window.escolherFoto = async input => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.removerFoto = async () => { if (confirm('Remover a sua foto?')) { await salvarFoto(''); toast('Foto removida'); } };
+let fotoAlvo = '';
+window.fotoDeOutro = uid => { fotoAlvo = uid; $('fotoOutro').click(); };
+window.escolherFotoOutro = async input => {
+  const f = input.files?.[0]; input.value = ''; if (!f || !fotoAlvo) return;
+  try { await salvarFotoDe(fotoAlvo, await reduzirFoto(f)); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.salvarFotoDe = async (uid, foto) => {
+  if (!souGerente()) return;
+  try { await gravar(setDoc(doc(db,'perfis',uid), { foto }, { merge:true })); toast(foto ? 'Foto salva ✓' : 'Foto removida'); fechar('relModal'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 async function salvarFoto(foto){
   state.profile.foto = foto; salvar();
   if (perfil) await gravar(setDoc(doc(db,'perfis',uidAtual), { foto }, { merge:true }));
@@ -2889,7 +2902,7 @@ function checarLembretes(){
       const texto = `${t.title} às ${t.time}`;
       toast('⏰ ' + texto);
       if ('Notification' in window && Notification.permission === 'granted') {
-        try { new Notification('Minha Agenda', { body: texto, icon: 'icon-192.png', tag: chave }); } catch(e){}
+        try { new Notification('Minha Agenda', { body: texto, icon: 'frade-icone-192.png', tag: chave }); } catch(e){}
       }
     }
   });
