@@ -1,5 +1,5 @@
 // Service worker da Minha Agenda: permite instalar como aplicativo e abrir mesmo sem internet
-const CACHE = 'minha-agenda-v2';
+const CACHE = 'minha-agenda-v3';
 const ARQUIVOS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './logo-frade.png'];
 
 self.addEventListener('install', e => {
@@ -19,7 +19,8 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return; // Firebase e fontes seguem direto
   e.respondWith(
-    fetch(req).then(res => {
+    // páginas e arquivos do app sempre conferem se há versão nova (sem usar cópia velha do navegador)
+    fetch(req, { cache:'no-cache' }).then(res => {
       const copia = res.clone();
       caches.open(CACHE).then(c => c.put(req, copia)).catch(() => {});
       return res;
