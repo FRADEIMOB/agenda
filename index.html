@@ -349,12 +349,14 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
 .v-actions .snooze{display:inline-flex;align-items:center;gap:5px}
 .v-actions .snooze svg{width:14px;height:14px}
 .vst{font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
-.st-Pendente{background:color-mix(in srgb,#f59e0b 16%,transparent);color:#b45309}
-.st-Confirmada{background:color-mix(in srgb,#10b981 16%,transparent);color:#047857}
-.st-Reagendada{background:color-mix(in srgb,#3b82f6 16%,transparent);color:#1d4ed8}
-.st-Cancelada{background:color-mix(in srgb,#ef4444 14%,transparent);color:#b91c1c}
-.st-Realizada{background:color-mix(in srgb,#8b5cf6 16%,transparent);color:#6d28d9}
-html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-Confirmada{color:#6ee7b7}html[data-theme="dark"] .st-Reagendada{color:#93c5fd}html[data-theme="dark"] .st-Cancelada{color:#fca5a5}html[data-theme="dark"] .st-Realizada{color:#c4b5fd}
+.st-pendente{background:color-mix(in srgb,#f59e0b 16%,transparent);color:#b45309}
+.st-confirmada{background:color-mix(in srgb,#10b981 16%,transparent);color:#047857}
+.st-reagendada{background:color-mix(in srgb,#3b82f6 16%,transparent);color:#1d4ed8}
+.st-cancelada{background:color-mix(in srgb,#ef4444 14%,transparent);color:#b91c1c}
+.st-realizada{background:color-mix(in srgb,#8b5cf6 16%,transparent);color:#6d28d9}
+.st-nao-compareceu{background:color-mix(in srgb,#64748b 18%,transparent);color:#475569}
+html[data-theme="dark"] .st-nao-compareceu{color:#cbd5e1}
+html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-confirmada{color:#6ee7b7}html[data-theme="dark"] .st-reagendada{color:#93c5fd}html[data-theme="dark"] .st-cancelada{color:#fca5a5}html[data-theme="dark"] .st-realizada{color:#c4b5fd}
 .dayhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 2px 10px}
 .dayhead:first-child{margin-top:4px}
 .dayhead.hoje{color:var(--accent)}
@@ -397,7 +399,17 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
 .team-row .emo{width:64px;flex:none;text-align:center}
 .menu-list button{display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;padding:15px 6px;font-weight:600;font-size:15px;border-bottom:1px solid var(--border);text-align:left}
 .menu-list button svg{width:20px;height:20px;color:var(--muted)}
-.rep-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.rep-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+.janela{font-size:12.5px;color:var(--muted);margin:-4px 2px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.conf-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.conf-row:last-child{border-bottom:0}
+.conf-row .ci{flex:1;min-width:0}
+.conf-row .ci b{display:block}
+.conf-row .ci span{font-size:12.5px;color:var(--muted)}
+.conf-row .ca{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.conf-row .snooze{display:inline-flex;align-items:center;gap:5px}.conf-row .snooze svg{width:14px;height:14px}
+.snooze.enviado{border-color:var(--ok);color:var(--ok)}
+@media(max-width:820px){.conf-row{flex-wrap:wrap}.conf-row .ca{width:100%;justify-content:flex-start}}
 .rep-sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px}
 @media(max-width:820px){.tb-grid{grid-template-columns:1fr 1fr}.tb-grid>:first-child{grid-column:1/-1}.vcard{flex-wrap:wrap}.v-actions{width:100%;justify-content:flex-start;padding-left:72px}.person .ps{display:none}.pend{grid-template-columns:1fr 1fr}.pend>div:first-child{grid-column:1/-1}.rep-kpis{grid-template-columns:repeat(2,1fr)}.rank .hide-m{display:none}}
 
@@ -545,7 +557,7 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
           <div class="card hide" id="cardVisHoje">
             <div class="card-head"><h2 id="visHojeTit">Visitas de hoje</h2><button class="link" onclick="setView('visitas')">Ver todas</button></div>
             <div id="visHoje"></div>
-            <button class="btn btn-ghost btn-block" onclick="novaVisita()">+ Nova visita</button>
+            <div class="row2"><button class="btn btn-ghost" onclick="novaVisita()">+ Nova visita</button><button class="btn btn-ghost wa" onclick="abrirConfirmar()"><i data-ic="wa" style="width:17px;height:17px;display:grid"></i><span class="txtConfAm">Confirmar amanhã</span></button></div>
           </div>
           <div class="card">
             <div class="card-head"><h2>Agenda de hoje</h2><span class="muted" id="hojeResumo"></span></div>
@@ -612,7 +624,7 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
       <!-- VISITAS -->
       <section class="view" id="v-visitas">
         <div class="page-head"><div><h1>Visitas</h1><div class="sub" id="visSub"></div></div>
-          <div style="display:flex;gap:10px;align-items:center"><div class="seg" id="segVis"></div><button class="btn btn-primary hide-m" id="btnNovaVisPag" onclick="novaVisita()">+ Nova visita</button></div></div>
+          <div style="display:flex;gap:10px;align-items:center"><button class="btn btn-ghost wa" id="btnConfPag" onclick="abrirConfirmar()"><i data-ic="wa" style="width:17px;height:17px;display:grid"></i><span class="txtConfAm">Confirmar amanhã</span></button><div class="seg" id="segVis"></div><button class="btn btn-primary hide-m" id="btnNovaVisPag" onclick="novaVisita()">+ Nova visita</button></div></div>
         <div id="bannerVis"></div>
         <div id="visConteudo">
           <div id="paneLista">
@@ -630,6 +642,7 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
                 <select id="vEquipe" onchange="vf('equipe',this.value)"></select>
                 <select id="vCorretor" onchange="vf('corretor',this.value)"></select>
               </div>
+              <div class="janela" id="janelaVis"></div>
               <div id="visLista"></div>
             </div>
           </div>
@@ -638,6 +651,7 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
               <select id="rPeriodo" onchange="rankPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option></select>
               <select id="rEquipe" onchange="rankEquipe=this.value;render()"></select>
             </div>
+            <div class="janela" id="janelaRank"></div>
             <div class="battle" id="battle"></div>
             <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2></div><div id="rankLista"></div>
               <div class="hint" style="margin-top:12px">Conta as visitas marcadas pela data da visita. Canceladas não entram.</div></div>
@@ -649,6 +663,7 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
       <section class="view" id="v-corretores">
         <div class="page-head"><div><h1>Corretores</h1><div class="sub" id="corSub"></div></div>
           <select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div>
+        <div class="janela" id="janelaCor"></div>
         <div class="card hide" id="cardPend" style="margin-bottom:20px">
           <div class="card-head"><h2>Aguardando aprovação</h2><span class="muted" id="pendQt"></span></div>
           <div id="pendLista"></div>
@@ -831,6 +846,14 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
   <div class="sheet" style="width:min(720px,100%)">
     <div class="sheet-head"><div><h2 id="rmNome">Corretor</h2><div class="muted" style="font-size:13px;margin-top:3px" id="rmInfo"></div></div><button class="icon-btn" onclick="fechar('relModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="rmCorpo"></div>
+  </div>
+</div>
+
+<!-- ================= CONFIRMAR AMANHÃ ================= -->
+<div class="modal" id="confModal">
+  <div class="sheet" style="width:min(640px,100%)">
+    <div class="sheet-head"><div><h2>Confirmar visitas de amanhã</h2><div class="muted" style="font-size:13px;margin-top:3px" id="confSub"></div></div><button class="icon-btn" onclick="fechar('confModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="hint" style="margin-top:0">Toque em <b>WhatsApp</b> para abrir a mensagem pronta. Quando o cliente responder, marque como <b>Confirmada</b>.</div><div id="confLista"></div></div>
   </div>
 </div>
 
@@ -1501,8 +1524,11 @@ window.limparAntigas = () => {
 // =====================================================================
 // ================= VISITAS, PERFIS E GESTÃO DE CORRETORES ============
 // =====================================================================
-const STATUS = ['Pendente','Confirmada','Reagendada','Cancelada','Realizada'];
-const ST_COR = { Pendente:'#f59e0b', Confirmada:'#10b981', Reagendada:'#3b82f6', Cancelada:'#ef4444', Realizada:'#8b5cf6' };
+const STATUS = ['Pendente','Confirmada','Reagendada','Realizada','Não compareceu','Cancelada'];
+const ST_COR = { Pendente:'#f59e0b', Confirmada:'#10b981', Reagendada:'#3b82f6', Cancelada:'#ef4444', Realizada:'#8b5cf6', 'Não compareceu':'#64748b' };
+const stCls = st => 'st-' + norm(st).replace(/[^a-z0-9]+/g,'-');
+const MESES_JANELA = 3; // carrega só os últimos 3 meses + visitas futuras (economiza o limite gratuito)
+let historicoCompleto = false, enviadosConf = new Set();
 const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor' };
 const EQUIPES_PADRAO = { raio:{ nome:'Tropa do Raio', icone:'⚡', ordem:1 }, tenda:{ nome:'Tropa Tenda', icone:'🏕️', ordem:2 } };
 // Sistema antigo (Central de Visitas) — usado só para importar
@@ -1556,19 +1582,27 @@ function iniciarVisitas(user){
     equipes = {}; snap.docs.forEach(d => equipes[d.id] = { id:d.id, ...d.data() }); preencherCadEquipes(); render();
   }, e => console.error(e)));
 }
+function inicioJanela(){ const d = new Date(); d.setMonth(d.getMonth() - MESES_JANELA); d.setDate(1); return iso(d); }
+window.carregarHistorico = () => { historicoCompleto = true; toast('Carregando o histórico completo…'); configurarAcesso(); render(); };
+function avisoJanela(precisa){
+  if (!precisa || historicoCompleto) return '';
+  const desde = parseISO(inicioJanela()).toLocaleDateString('pt-BR');
+  return `Mostrando dados a partir de ${desde}. <button class="link" onclick="carregarHistorico()">Carregar histórico completo</button>`;
+}
 function configurarAcesso(){
-  const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') : 'sem';
+  const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto : 'sem';
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = [];
   if (!souAtivo()) return;
-  const erro = e => { console.error(e); toast('Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
+  const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
-  if (souGerente()) qv = collection(db,'visitas');
+  if (souGerente()) qv = historicoCompleto ? collection(db,'visitas') : query(collection(db,'visitas'), where('date','>=',inicioJanela()));
   else if (souCoord()) qv = query(collection(db,'visitas'), where('equipe','==',perfil.equipe||'-'));
   else qv = query(collection(db,'visitas'), where('corretorUid','==',uidAtual));
   subsPapel.push(onSnapshot(qv, s => { visitas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
-  subsPapel.push(onSnapshot(collection(db,'ranking'), s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=',inicioJanela()));
+  subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
   let qp = null;
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
@@ -1628,6 +1662,7 @@ function faixa(p){
   return ['0000-01-01', '9999-12-31'];
 }
 const ROT_PERIODO = { mes:'deste mês', semana:'desta semana', proximas:'de hoje em diante', todas:'de todo o período' };
+const AGUARDA_CONF = ['Pendente','Reagendada'];
 function minhasVisitasCal(){ return souAtivo() ? visitas.filter(v => v.corretorUid === uidAtual) : []; }
 function visitasHojeEscopo(){ return visitas.filter(v => v.date === hojeISO()).sort((a,b) => (a.time||'').localeCompare(b.time||'')); }
 function quandoTxt(date){
@@ -1644,9 +1679,10 @@ function cardVisita(v, compacto){
   if (souGerente() && !compacto) meta.push(`<span>${esc(eqNome(v.equipe))}</span>`);
   if (v.telefone) meta.push(`<span>📱 ${esc(v.telefone)}</span>`);
   const acoes = [];
-  if (v.telefone && v.status !== 'Cancelada' && v.status !== 'Realizada') acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
+  if (v.telefone && AGUARDA_CONF.concat('Confirmada').includes(v.status)) acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
   if (v.status === 'Pendente' || v.status === 'Reagendada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">✓ Confirmada</button>`);
   if (v.status === 'Confirmada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Realizada')">✓ Realizada</button>`);
+  if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">✗ Não veio</button>`);
   if (!compacto) {
     acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitas.find(x=>x.id==='${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
     acoes.push(`<button class="icon-btn del" onclick="excluirVisita('${v.id}')" title="Excluir">${IC.trash}</button>`);
@@ -1654,7 +1690,7 @@ function cardVisita(v, compacto){
   return `<div class="vcard" style="--vc:${cor}">
     <div class="v-time"><b>${esc(v.time||'--:--')}</b></div>
     <div class="v-body" onclick="editarVisita('${v.id}')">
-      <div class="v-top"><b>${esc(v.cliente)}</b><span class="vst st-${esc(v.status)}">${esc(v.status)}</span></div>
+      <div class="v-top"><b>${esc(v.cliente)}</b><span class="vst ${stCls(v.status)}">${esc(v.status)}</span></div>
       <div class="v-meta">${meta.join('')}</div>
       ${v.obs && !compacto ? `<div class="v-obs">📝 ${esc(v.obs)}</div>` : ''}
     </div>
@@ -1708,6 +1744,10 @@ function renderVisitasTudo(){
   $('segVis').innerHTML = [['lista','Lista'],['ranking','Ranking']].map(([k,n]) => `<button class="${visAba===k?'on':''}" onclick="setVisAba('${k}')">${n}</button>`).join('');
   $('segVis').classList.toggle('hide', !ativo);
   $('btnNovaVisPag').classList.toggle('hide', !ativo);
+  $('btnConfPag').classList.toggle('hide', !ativo);
+  const nConf = paraConfirmar().length;
+  document.querySelectorAll('.txtConfAm').forEach(e => e.textContent = 'Confirmar amanhã' + (nConf ? ` (${nConf})` : ''));
+  if ($('confModal').classList.contains('open')) renderConfirmar();
   if (!ativo) { $('visSub').textContent = 'Cadastro e confirmação de visitas.'; }
   else {
     $('visSub').textContent = souGerente() ? 'Todas as equipes e corretores.' : souCoord() ? 'Visitas da ' + eqNome(perfil.equipe) + '.' : 'As suas visitas.';
@@ -1743,6 +1783,7 @@ function renderListaVisitas(){
     return true;
   }).sort((a,b) => { const k = (a.date||'').localeCompare(b.date||'') || (a.time||'').localeCompare(b.time||''); return vFil.periodo === 'anteriores' ? -k : k; });
 
+  $('janelaVis').innerHTML = avisoJanela(souGerente() && ['anteriores','todas'].includes(vFil.periodo));
   $('vsTotal').textContent = lista.length;
   $('vsConf').textContent = lista.filter(v => v.status === 'Confirmada').length;
   $('vsPend').textContent = lista.filter(v => v.status === 'Pendente').length;
@@ -1774,6 +1815,7 @@ function agrupaRanking(rows){
 function renderRanking(){
   $('rPeriodo').value = rankPeriodo;
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  $('janelaRank').innerHTML = avisoJanela(rankPeriodo === 'todas');
   const [de, ate] = faixa(rankPeriodo);
   const base = rankingDocs.filter(r => r.date && r.date >= de && r.date <= ate && r.status !== 'Cancelada');
   // disputa entre equipes
@@ -1881,17 +1923,34 @@ window.whatsConfirmar = id => {
   const txt = `Olá, ${primeiro(v.cliente)}! Tudo bem? Aqui é ${eu}, da Frade Imóveis. Passando para confirmar a sua visita ${quandoTxt(v.date)} às ${v.time}. Posso confirmar?`;
   window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(txt), '_blank');
 };
+function paraConfirmar(){ const am = somaDias(hojeISO(), 1); return visitas.filter(v => v.date === am && AGUARDA_CONF.includes(v.status)).sort((a,b) => (a.time||'').localeCompare(b.time||'')); }
+function renderConfirmar(){
+  const am = somaDias(hojeISO(), 1), lista = paraConfirmar();
+  const confirmadas = visitas.filter(v => v.date === am && v.status === 'Confirmada').length;
+  $('confSub').textContent = maiuscula(dataLonga(am)) + ` · ${lista.length} para confirmar · ${confirmadas} já confirmada${confirmadas!==1?'s':''}`;
+  $('confLista').innerHTML = lista.length ? lista.map(v => `<div class="conf-row">
+      <div class="v-time"><b>${esc(v.time)}</b></div>
+      <div class="ci"><b>${esc(v.cliente)} <span class="vst ${stCls(v.status)}">${esc(v.status)}</span></b><span>🏠 ${esc(v.empreendimento)}${podeGerir() ? ' · 👤 ' + esc(v.corretorNome) : ''}${v.telefone ? ' · 📱 ' + esc(v.telefone) : ' · sem telefone'}</span></div>
+      <div class="ca">
+        ${v.telefone ? `<button class="snooze wa ${enviadosConf.has(v.id)?'enviado':''}" onclick="enviarConf('${v.id}')">${IC.wa}${enviadosConf.has(v.id)?'Enviado ✓':'WhatsApp'}</button>` : ''}
+        <button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">✓ Confirmada</button>
+        <button class="snooze" onclick="fechar('confModal');editarVisita('${v.id}')">Reagendar</button>
+      </div></div>`).join('') : vazio('Tudo certo para amanhã 🎉', confirmadas ? 'Todas as visitas de amanhã já estão confirmadas.' : 'Não há visitas marcadas para amanhã.');
+}
+window.abrirConfirmar = () => { if (!souAtivo()) return; renderConfirmar(); abrir('confModal'); };
+window.enviarConf = id => { enviadosConf.add(id); whatsConfirmar(id); renderConfirmar(); };
 window.visitaComoTarefa = v => v ? ({ id:v.id, title:`Visita: ${v.cliente} · ${v.empreendimento}`, date:v.date, time:v.time, phone:v.telefone, notes:[v.obs, v.corretorNome ? 'Corretor: ' + v.corretorNome : ''].filter(Boolean).join('\n'), subtasks:[], repeat:'' }) : null;
 
 // ---------- Corretores (gestão) ----------
 function statsVisitas(lista){
   const n = s => lista.filter(v => v.status === s).length;
   const total = lista.filter(v => v.status !== 'Cancelada').length;
-  return { total, conf:n('Confirmada'), real:n('Realizada'), canc:n('Cancelada'), pend:n('Pendente'), taxa: total ? Math.round(n('Realizada')/total*100) : 0 };
+  return { total, conf:n('Confirmada'), real:n('Realizada'), canc:n('Cancelada'), pend:n('Pendente'), falta:n('Não compareceu'), taxa: total ? Math.round(n('Realizada')/total*100) : 0 };
 }
 function visitasDoPerfil(p, de, ate){ return visitas.filter(v => (v.corretorUid === p.uid || (!v.corretorUid && norm(v.corretorNome) === norm(p.nome))) && v.date >= de && v.date <= ate); }
 function renderCorretores(){
   $('corPeriodo').value = corPeriodo;
+  $('janelaCor').innerHTML = avisoJanela(souGerente() && corPeriodo === 'todas');
   const [de, ate] = faixa(corPeriodo);
   const pend = perfisLista.filter(p => p.status === 'pendente');
   $('cardPend').classList.toggle('hide', !souGerente() || !pend.length);
@@ -1996,7 +2055,7 @@ window.abrirRelatorio = async uid => {
   }
   $('rmCorpo').innerHTML = `
     <div class="rep-sec" style="margin-top:0">Visitas ${ROT_PERIODO[corPeriodo]}</div>
-    <div class="rep-kpis">${kpi(st.total,'Marcadas')}${kpi(st.conf,'Confirmadas')}${kpi(st.real,'Realizadas')}${kpi(st.taxa+'%','Taxa de realização')}</div>
+    <div class="rep-kpis">${kpi(st.total,'Marcadas')}${kpi(st.conf,'Confirmadas')}${kpi(st.real,'Realizadas')}${kpi(st.falta,'Não compareceram')}${kpi(st.taxa+'%','Taxa de realização')}</div>
     <div class="rep-sec">Próximas visitas</div>
     ${prox.length ? prox.map(v => `<div class="up"><div class="up-date"><b>${parseISO(v.date).getDate()}</b><span>${parseISO(v.date).toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</span></div><div style="min-width:0;flex:1"><div class="up-t">${esc(v.cliente)} · ${esc(v.empreendimento)}</div><div class="up-m">${esc(v.time)} · ${esc(v.status)}</div></div></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma visita futura.</div>'}
     <div class="rep-sec">Organização pessoal (tarefas)</div>
@@ -2105,13 +2164,13 @@ setInterval(() => { if (state) render(); }, 60000); // vira o dia sozinho
 // ================= Atalhos =================
 document.addEventListener('keydown', e => {
   const digitando = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-  if (e.key === 'Escape') { fecharModal(); ['visModal','relModal','menuModal'].forEach(fechar); return; }
+  if (e.key === 'Escape') { fecharModal(); ['visModal','relModal','menuModal','confModal'].forEach(fechar); return; }
   if (digitando || !state) return;
   if (e.key === 'n' || e.key === 'N') { e.preventDefault(); acaoPrincipal(); }
   if (e.key === '/') { e.preventDefault(); if (innerWidth <= 820) abrirBuscaM(); else $('busca').focus(); }
 });
 $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal')) fecharModal(); });
-['visModal','relModal','menuModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
+['visModal','relModal','menuModal','confModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
 </script>
 </body>
 </html>
