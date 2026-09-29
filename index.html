@@ -1056,7 +1056,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocFromServer, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -1169,7 +1169,7 @@ function proxData(s, rep){
 function maiuscula(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 
-let nomeCadastro = '', equipeCadastro = '', equipesPublicas = [];
+let nomeCadastro = '', equipeCadastro = '', equipesPublicas = [], contaRecemCriada = false;
 function estadoInicial(user){
   const nome = nomeCadastro || (user.email||'Usuário').split('@')[0].replace(/[._-]+/g,' ');
   const h = hojeISO(), id = Date.now();
@@ -1225,7 +1225,11 @@ onAuthStateChanged(auth, user => {
   emailAtual = user.email;
   docRef = doc(db, 'usuarios', user.uid);
   pararEscuta = onSnapshot(docRef, snap => {
-    if (!snap.exists()) { state = estadoInicial(user); salvar(); pedirCadastro(); return; }
+    if (!snap.exists()) {
+      if (snap.metadata.fromCache) return; // cópia local vazia: espera a resposta da nuvem antes de decidir
+      if (state) return;
+      state = estadoInicial(user); salvar(); pedirCadastro(); return;
+    }
     const d = snap.data();
     state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar) };
     render();
@@ -1257,9 +1261,9 @@ window.entrar = async () => {
   }
   msg(''); $('btnEntrar').disabled = true; $('btnEntrar').textContent = 'Aguarde...';
   try {
-    if (modoCriar) await createUserWithEmailAndPassword(auth, email, senha);
-    else await signInWithEmailAndPassword(auth, email, senha);
-  } catch(e) { msg(traduzErro(e)); }
+    if (modoCriar) { await createUserWithEmailAndPassword(auth, email, senha); contaRecemCriada = true; }
+    else { nomeCadastro = ''; equipeCadastro = ''; await signInWithEmailAndPassword(auth, email, senha); }
+  } catch(e) { msg(traduzErro(e)); if (modoCriar) { nomeCadastro = ''; equipeCadastro = ''; } }
   $('btnEntrar').disabled = false; $('btnEntrar').textContent = modoCriar ? 'Criar minha conta' : 'Entrar';
 };
 window.alternarModo = () => {
@@ -1772,6 +1776,7 @@ function pararTudoVisitas(){
 function iniciarVisitas(user){
   uidAtual = user.uid;
   subsBase.push(onSnapshot(doc(db,'perfis',user.uid), snap => {
+    if (!snap.exists() && snap.metadata.fromCache) return; // espera a nuvem confirmar
     perfil = snap.exists() ? { uid:user.uid, ...snap.data() } : null; perfilOk = true;
     configurarAcesso(); render(); pedirCadastro();
   }, e => { perfilOk = true; console.error(e); }));
@@ -1812,12 +1817,16 @@ function configurarAcesso(){
 
 // ---------- Cadastro / primeiro gerente ----------
 let autoCadFeito = false;
+async function perfilNaoExiste(){
+  try { const s = await getDocFromServer(doc(db,'perfis',uidAtual)); return !s.exists(); }
+  catch(e) { toast('Sem conexão para confirmar o cadastro. Tente de novo com internet.'); return false; }
+}
 function pedirCadastro(){
   if (!state || !perfilOk || !instOk || perfil) return;
-  if (instalacao && nomeCadastro && equipeCadastro && !autoCadFeito) {
+  if (instalacao && contaRecemCriada && nomeCadastro && equipeCadastro && !autoCadFeito) {
     autoCadFeito = true;
-    setDoc(doc(db,'perfis',uidAtual), { nome:nomeCadastro, email:emailAtual, papel:'corretor', status:'pendente', equipe:equipeCadastro, criadoEm:Date.now() })
-      .then(() => toast('Cadastro enviado! Aguarde a aprovação do gerente.'))
+    perfilNaoExiste().then(ok => ok && setDoc(doc(db,'perfis',uidAtual), { nome:nomeCadastro, email:emailAtual, papel:'corretor', status:'pendente', equipe:equipeCadastro, criadoEm:Date.now() })
+).then(r => r !== false && toast('Cadastro enviado! Aguarde a aprovação do gerente.'))
       .catch(e => { autoCadFeito = false; equipeCadastro = ''; toast('Não foi possível enviar o cadastro: ' + e.message); pedirCadastro(); });
     return;
   }
@@ -1840,6 +1849,7 @@ window.enviarCadastro = async () => {
   if (!nome) { toast('Digite o seu nome'); $('cadNome').focus(); return; }
   if (listaEquipes().length && !equipe) { toast('Escolha a sua equipe'); return; }
   try {
+    if (!(await perfilNaoExiste())) { fechar('cadModal'); toast('Seu cadastro já existe.'); return; }
     await setDoc(doc(db,'perfis',uidAtual), { nome, email:emailAtual, papel:'corretor', status:'pendente', equipe, criadoEm:Date.now() });
     state.profile.name = nome; state.profile.nameSet = true; salvar();
     fechar('cadModal'); toast('Cadastro enviado! Aguarde a aprovação do gerente.');
