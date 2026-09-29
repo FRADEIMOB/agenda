@@ -401,6 +401,17 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
 .rep-sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px}
 @media(max-width:820px){.tb-grid{grid-template-columns:1fr 1fr}.tb-grid>:first-child{grid-column:1/-1}.vcard{flex-wrap:wrap}.v-actions{width:100%;justify-content:flex-start;padding-left:72px}.person .ps{display:none}.pend{grid-template-columns:1fr 1fr}.pend>div:first-child{grid-column:1/-1}.rep-kpis{grid-template-columns:repeat(2,1fr)}.rank .hide-m{display:none}}
 
+.perm{width:100%;border-collapse:collapse;font-size:14px}
+.perm th{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:10px 8px;border-bottom:1px solid var(--border);font-weight:700}
+.perm td{padding:10px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.perm td b{display:block}.perm td span{font-size:12.5px;color:var(--muted)}
+.perm select{padding:8px 10px;font-size:13.5px}
+.perm tr.bloq td{opacity:.6}
+.leg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.leg div{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.leg b{display:block;color:var(--text);font-size:13.5px;margin-bottom:3px}
+@media(max-width:820px){.leg{grid-template-columns:1fr}.perm thead{display:none}.perm tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--border)}.perm td{border:0;padding:0}.perm td:first-child{grid-column:1/-1}.perm td:last-child{grid-column:1/-1}}
+
 /* Mobile */
 .mobilebar{display:none}
 .fab{display:none}
@@ -641,6 +652,15 @@ html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-C
         <div class="card hide" id="cardPend" style="margin-bottom:20px">
           <div class="card-head"><h2>Aguardando aprovação</h2><span class="muted" id="pendQt"></span></div>
           <div id="pendLista"></div>
+        </div>
+        <div class="card gerente-only hide" style="margin-bottom:20px" id="cardPerm">
+          <div class="card-head"><h2>Permissões de acesso</h2><span class="muted">As mudanças valem na hora</span></div>
+          <div class="leg">
+            <div><b>⭐ Gerente</b>Vê e edita tudo: todas as equipes, coordenadores e corretores. Aprova cadastros e define permissões.</div>
+            <div><b>🧭 Coordenador</b>Vê e edita as visitas da própria equipe e o relatório de cada corretor dela. Não vê gerentes nem outras equipes.</div>
+            <div><b>🏠 Corretor</b>Cadastra e vê só as próprias visitas. Tem a agenda pessoal e vê o ranking.</div>
+          </div>
+          <div style="overflow-x:auto"><table class="perm" id="permLista"></table></div>
         </div>
         <div class="card" style="margin-bottom:20px">
           <div class="card-head"><h2>Equipe</h2><span class="muted">Clique em um corretor para ver o relatório completo</span></div>
@@ -1906,12 +1926,33 @@ function renderCorretores(){
   }).join('') : vazio('Ninguém por aqui ainda', 'Quando os corretores se cadastrarem e forem aprovados, aparecem nesta lista.');
 
   if (souGerente()) {
+    const todos = perfisLista.filter(p => p.status !== 'pendente').sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
+    const opEqs = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+    $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th></tr></thead><tbody>' + todos.map(p => {
+      if (p.uid === uidAtual) return `<tr><td><b>${esc(p.nome)} (você)</b><span>${esc(p.email||'')}</span></td><td>⭐ Gerente</td><td>—</td><td>Liberado</td></tr>`;
+      return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
+        <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${Object.entries(PAPEIS).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${p.papel==='gerente'?'disabled':''}>${opEqs(p.equipe)}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td></tr>`;
+    }).join('') + '</tbody>';
     $('equipesLista').innerHTML = listaEquipes().map(e => `<div class="team-row"><input class="emo" value="${esc(e.icone||'')}" onchange="editarEquipe('${e.id}','icone',this.value)"><input value="${esc(e.nome)}" onchange="editarEquipe('${e.id}','nome',this.value)"><button class="icon-btn del" onclick="excluirEquipe('${e.id}')" title="Excluir equipe">${IC.trash}</button></div>`).join('') || '<div class="muted" style="font-size:13.5px">Nenhuma equipe cadastrada.</div>';
     const atual = $('impEquipe').value;
     $('impEquipe').innerHTML = listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('');
     if (atual) $('impEquipe').value = atual;
   }
 }
+window.mudarPermissao = async (uid, campo, valor, el) => {
+  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const dados = { [campo]: valor };
+  if (campo === 'papel' && valor === 'gerente') {
+    if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo, inclusive as permissões de todos.`)) { el.value = p.papel; return; }
+    dados.equipe = '';
+  }
+  if (campo === 'papel' && valor !== 'gerente' && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
+  if (campo === 'status' && valor === 'bloqueado' && !confirm(`Bloquear o acesso de ${p.nome} às visitas?`)) { el.value = p.status; return; }
+  try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Permissão de ' + primeiro(p.nome) + ' atualizada'); }
+  catch(e) { toast('Erro ao salvar: ' + e.message); el.value = p[campo]; }
+};
 window.setCorEq = k => { corEquipeFiltro = k; render(); };
 
 window.aprovar = async uid => {
