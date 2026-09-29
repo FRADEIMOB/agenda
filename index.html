@@ -330,6 +330,77 @@ html[data-theme="dark"] .toast{background:#e2e8f0;color:#0f172a}
 .toast button{background:none;border:0;color:#93c5fd;font-weight:700;padding:0}
 html[data-theme="dark"] .toast button{color:#1d4ed8}
 
+/* ---------- Visitas ---------- */
+.banner{display:flex;gap:12px;align-items:center;border-radius:14px;padding:14px 16px;margin-bottom:18px;font-size:14px;font-weight:600;background:color-mix(in srgb,var(--warn) 14%,transparent);color:color-mix(in srgb,var(--warn) 70%,var(--text));border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
+.banner.red{background:var(--danger-soft);color:var(--danger);border-color:color-mix(in srgb,var(--danger) 30%,transparent)}
+.banner svg{width:20px;height:20px;flex:none}
+.p-role{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:11px;font-weight:700;background:#ffffff26;border:1px solid #ffffff33;padding:3px 9px;border-radius:99px}
+.vcard{display:flex;gap:14px;align-items:flex-start;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--card);margin-bottom:10px;position:relative;overflow:hidden}
+.vcard:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--vc,#94a3b8)}
+.v-time{min-width:58px;text-align:center;padding-top:2px}
+.v-time b{display:block;font-size:19px;letter-spacing:-.02em}
+.v-time span{font-size:11px;color:var(--muted);font-weight:600}
+.v-body{flex:1;min-width:0;cursor:pointer}
+.v-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.v-top b{font-size:15px}
+.v-meta{font-size:12.5px;color:var(--muted);margin-top:5px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.v-obs{font-size:12.5px;color:var(--text2);margin-top:6px;background:var(--card2);border-radius:8px;padding:6px 9px}
+.v-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.v-actions .snooze{display:inline-flex;align-items:center;gap:5px}
+.v-actions .snooze svg{width:14px;height:14px}
+.vst{font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
+.st-Pendente{background:color-mix(in srgb,#f59e0b 16%,transparent);color:#b45309}
+.st-Confirmada{background:color-mix(in srgb,#10b981 16%,transparent);color:#047857}
+.st-Reagendada{background:color-mix(in srgb,#3b82f6 16%,transparent);color:#1d4ed8}
+.st-Cancelada{background:color-mix(in srgb,#ef4444 14%,transparent);color:#b91c1c}
+.st-Realizada{background:color-mix(in srgb,#8b5cf6 16%,transparent);color:#6d28d9}
+html[data-theme="dark"] .st-Pendente{color:#fcd34d}html[data-theme="dark"] .st-Confirmada{color:#6ee7b7}html[data-theme="dark"] .st-Reagendada{color:#93c5fd}html[data-theme="dark"] .st-Cancelada{color:#fca5a5}html[data-theme="dark"] .st-Realizada{color:#c4b5fd}
+.dayhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 2px 10px}
+.dayhead:first-child{margin-top:4px}
+.dayhead.hoje{color:var(--accent)}
+.dayhead span{font-weight:600;letter-spacing:0;text-transform:none}
+.tb-grid{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:10px;margin-bottom:16px}
+.tb-grid select,.tb-grid input{font-size:13.5px}
+.rank{width:100%;border-collapse:collapse;font-size:14px}
+.rank th{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:right;padding:10px 8px;border-bottom:1px solid var(--border);font-weight:700}
+.rank th:nth-child(-n+2){text-align:left}
+.rank td{padding:12px 8px;border-bottom:1px solid var(--border);text-align:right;font-variant-numeric:tabular-nums}
+.rank td:nth-child(-n+2){text-align:left}
+.rank tr.me td{background:var(--accent-soft)}
+.rank .pos{width:44px;font-weight:800;font-size:16px}
+.rank .nm{font-weight:700}
+.rank .eq{display:block;font-size:11.5px;color:var(--muted);font-weight:500;margin-top:2px}
+.rank .tot{font-size:18px;font-weight:800;color:var(--accent)}
+.battle{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.team-card{border:1px solid var(--border);border-radius:14px;padding:16px;background:var(--card2)}
+.team-card.lead{border-color:var(--accent);background:var(--accent-soft)}
+.team-card .ti{font-size:22px}
+.team-card b{display:block;font-size:26px;letter-spacing:-.02em;margin-top:6px}
+.team-card span{font-size:12.5px;color:var(--muted);font-weight:600}
+.people{display:flex;flex-direction:column}
+.person{display:flex;align-items:center;gap:12px;padding:12px 8px;border-radius:12px;cursor:pointer}
+.person:hover{background:var(--card2)}
+.person+.person{border-top:1px solid var(--border)}
+.person .av{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:800;flex:none}
+.person .pi{flex:1;min-width:0}
+.person .pi b{display:block;font-size:14.5px}
+.person .pi span{font-size:12.5px;color:var(--muted)}
+.person .ps{display:flex;gap:16px;text-align:center}
+.person .ps div b{display:block;font-size:17px}
+.person .ps div span{font-size:11px;color:var(--muted)}
+.pend{display:grid;grid-template-columns:1fr auto auto auto auto;gap:8px;align-items:center;padding:12px 0;border-top:1px solid var(--border)}
+.pend:first-of-type{border-top:0}
+.pend select{width:auto;padding:8px 10px;font-size:13px}
+.pend b{display:block}.pend span{font-size:12.5px;color:var(--muted)}
+.team-row{display:flex;gap:8px;align-items:center;padding:8px 0}
+.team-row input{flex:1}
+.team-row .emo{width:64px;flex:none;text-align:center}
+.menu-list button{display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;padding:15px 6px;font-weight:600;font-size:15px;border-bottom:1px solid var(--border);text-align:left}
+.menu-list button svg{width:20px;height:20px;color:var(--muted)}
+.rep-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.rep-sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px}
+@media(max-width:820px){.tb-grid{grid-template-columns:1fr 1fr}.tb-grid>:first-child{grid-column:1/-1}.vcard{flex-wrap:wrap}.v-actions{width:100%;justify-content:flex-start;padding-left:72px}.person .ps{display:none}.pend{grid-template-columns:1fr 1fr}.pend>div:first-child{grid-column:1/-1}.rep-kpis{grid-template-columns:repeat(2,1fr)}.rank .hide-m{display:none}}
+
 /* Mobile */
 .mobilebar{display:none}
 .fab{display:none}
@@ -386,8 +457,8 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
       <h1>Seu dia organizado, do celular ao computador.</h1>
       <p class="lead">Tarefas, compromissos e lembretes em um só lugar, sincronizados em tempo real em todos os seus aparelhos.</p>
       <div class="feat"><div class="feat-ic" data-ic="cal"></div><div><b>Agenda e calendário</b><span>Veja o dia, a semana e o mês de um jeito claro.</span></div></div>
-      <div class="feat"><div class="feat-ic" data-ic="repeat"></div><div><b>Tarefas que se repetem</b><span>Diárias, semanais ou mensais, sem precisar recriar.</span></div></div>
-      <div class="feat"><div class="feat-ic" data-ic="chart"></div><div><b>Relatórios de produtividade</b><span>Acompanhe o que foi feito e mantenha o ritmo.</span></div></div>
+      <div class="feat"><div class="feat-ic" data-ic="house"></div><div><b>Central de visitas</b><span>Cadastre visitas, confirme pelo WhatsApp e dispute o ranking.</span></div></div>
+      <div class="feat"><div class="feat-ic" data-ic="chart"></div><div><b>Relatórios por corretor</b><span>Gestores acompanham a equipe em tempo real.</span></div></div>
     </div>
     <div class="hero-foot">© <span id="ano"></span> Minha Agenda · Seus dados protegidos na nuvem</div>
     <div class="hero-deco"></div>
@@ -405,7 +476,7 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
       <div class="auth-row" id="rowEsqueci"><button class="link" onclick="esqueciSenha()">Esqueci minha senha</button></div>
       <button class="btn btn-primary btn-block" id="btnEntrar" onclick="entrar()" style="padding:13px">Entrar</button>
       <div class="msg" id="msg"></div>
-      <div class="switch-auth"><span id="switchTxt">Ainda não tem conta?</span> <button class="link" id="switchBtn" onclick="alternarModo()">Criar conta grátis</button></div>
+      <div class="switch-auth"><span id="switchTxt">Ainda não tem conta?</span> <button class="link" id="switchBtn" onclick="alternarModo()">Criar minha conta</button></div>
     </div>
   </div>
 </section>
@@ -415,15 +486,18 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
   <aside class="sidebar">
     <div class="brand" data-brand></div>
     <div class="profile" onclick="setView('config')" title="Configurações do perfil">
-      <div class="p-row"><div class="avatar" id="avatar">A</div><div class="p-info"><div class="p-name" id="pName"></div><div class="p-mail" id="pMail"></div></div></div>
+      <div class="p-row"><div class="avatar" id="avatar">A</div><div class="p-info"><div class="p-name" id="pName"></div><div class="p-mail" id="pMail"></div><div class="p-role hide" id="pRole"></div></div></div>
       <div class="p-foot"><div class="p-bar"><span id="pBar"></span></div><div class="p-legend"><span>Progresso de hoje</span><b id="pResumo">0/0</b></div></div>
     </div>
     <nav class="nav">
       <div class="nav-title">Menu</div>
       <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje<span class="count" id="cHoje">0</span></button>
       <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas<span class="count" id="cTarefas">0</span></button>
+      <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
+      <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
+      <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
       <button onclick="sair()"><i data-ic="logout"></i>Sair</button>
@@ -440,7 +514,7 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
       <div class="top-actions">
         <button class="icon-btn m-only" id="btnBuscaM" onclick="abrirBuscaM()" title="Buscar" data-ic="search" style="display:none"></button>
         <button class="icon-btn" onclick="alternarTema()" title="Modo claro/escuro" id="btnTema"></button>
-        <button class="btn btn-primary hide-m" onclick="novaTarefa()"><i data-ic="plus" style="width:17px;height:17px;display:grid"></i>Nova tarefa</button>
+        <button class="btn btn-primary hide-m" onclick="acaoPrincipal()"><i data-ic="plus" style="width:17px;height:17px;display:grid"></i><span id="btnNovoTxt">Nova tarefa</span></button>
       </div>
     </header>
 
@@ -448,6 +522,7 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
       <!-- HOJE -->
       <section class="view" id="v-hoje">
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div></div>
+        <div id="bannerHoje"></div>
         <div class="stats">
           <div class="stat" onclick="setView('hoje')"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="cal"></div><div><b id="sHoje">0</b><span>Tarefas hoje</span></div></div>
           <div class="stat" onclick="irFiltro('concluidas')"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="check"></div><div><b id="sFeitas">0</b><span>Concluídas hoje</span></div></div>
@@ -455,12 +530,19 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
           <div class="stat" onclick="setView('calendario')"><div class="stat-ic" style="background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)" data-ic="clock"></div><div><b id="sSemana">0</b><span>Próximos 7 dias</span></div></div>
         </div>
         <div class="grid-home">
+          <div class="col">
+          <div class="card hide" id="cardVisHoje">
+            <div class="card-head"><h2 id="visHojeTit">Visitas de hoje</h2><button class="link" onclick="setView('visitas')">Ver todas</button></div>
+            <div id="visHoje"></div>
+            <button class="btn btn-ghost btn-block" onclick="novaVisita()">+ Nova visita</button>
+          </div>
           <div class="card">
             <div class="card-head"><h2>Agenda de hoje</h2><span class="muted" id="hojeResumo"></span></div>
             <div id="alertaAtraso"></div>
             <div class="quick"><input id="quick" placeholder='Ex.: "Visita cliente amanhã 14h"' onkeydown="if(event.key==='Enter')addRapida()"><button class="btn btn-primary" onclick="addRapida()">Adicionar</button></div>
             <div class="hint">Dica: escreva "amanhã" e um horário (ex.: 9h, 14:30) que o app preenche sozinho.</div>
             <div class="tlist" id="listaHoje"></div>
+          </div>
           </div>
           <div class="col">
             <div class="card">
@@ -501,7 +583,7 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
 
       <!-- CALENDÁRIO -->
       <section class="view" id="v-calendario">
-        <div class="page-head"><div><h1>Calendário</h1><div class="sub">Clique em um dia para ver e adicionar tarefas.</div></div></div>
+        <div class="page-head"><div><h1>Calendário</h1><div class="sub">Suas tarefas e visitas. Clique em um dia para ver os detalhes.</div></div></div>
         <div class="cal-grid">
           <div class="card">
             <div class="cal-head"><h2 id="mesTitulo"></h2><button class="btn btn-ghost" onclick="irHojeCal()" style="padding:8px 12px">Hoje</button><button class="icon-btn" onclick="mudaMes(-1)" data-ic="left"></button><button class="icon-btn" onclick="mudaMes(1)" data-ic="right"></button></div>
@@ -509,8 +591,75 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
           </div>
           <div class="card">
             <div class="card-head"><h2 id="diaTitulo"></h2></div>
+            <div id="listaDiaVis"></div>
             <div class="tlist" id="listaDia"></div>
             <button class="btn btn-primary btn-block" style="margin-top:14px" onclick="novaTarefa(diaSel)">+ Adicionar neste dia</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VISITAS -->
+      <section class="view" id="v-visitas">
+        <div class="page-head"><div><h1>Visitas</h1><div class="sub" id="visSub"></div></div>
+          <div style="display:flex;gap:10px;align-items:center"><div class="seg" id="segVis"></div><button class="btn btn-primary hide-m" id="btnNovaVisPag" onclick="novaVisita()">+ Nova visita</button></div></div>
+        <div id="bannerVis"></div>
+        <div id="visConteudo">
+          <div id="paneLista">
+            <div class="stats">
+              <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="house"></div><div><b id="vsTotal">0</b><span>Visitas</span></div></div>
+              <div class="stat" onclick="filtrarStatus('Confirmada')"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="check"></div><div><b id="vsConf">0</b><span>Confirmadas</span></div></div>
+              <div class="stat" onclick="filtrarStatus('Pendente')"><div class="stat-ic" style="background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)" data-ic="clock"></div><div><b id="vsPend">0</b><span>Pendentes</span></div></div>
+              <div class="stat" onclick="filtrarStatus('Realizada')"><div class="stat-ic" style="background:color-mix(in srgb,#8b5cf6 14%,transparent);color:#8b5cf6" data-ic="star"></div><div><b id="vsReal">0</b><span>Realizadas</span></div></div>
+            </div>
+            <div class="card">
+              <div class="tb-grid">
+                <input id="vBusca" placeholder="Buscar cliente, empreendimento, telefone..." oninput="vf('busca',this.value)">
+                <select id="vPeriodo" onchange="vf('periodo',this.value)"><option value="proximas">Próximas</option><option value="hoje">Hoje</option><option value="semana">Esta semana</option><option value="mes">Este mês</option><option value="anteriores">Anteriores</option><option value="todas">Todas</option></select>
+                <select id="vStatus" onchange="vf('status',this.value)"><option value="">Todos os status</option></select>
+                <select id="vEquipe" onchange="vf('equipe',this.value)"></select>
+                <select id="vCorretor" onchange="vf('corretor',this.value)"></select>
+              </div>
+              <div id="visLista"></div>
+            </div>
+          </div>
+          <div id="paneRanking" class="hide">
+            <div class="toolbar">
+              <select id="rPeriodo" onchange="rankPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option></select>
+              <select id="rEquipe" onchange="rankEquipe=this.value;render()"></select>
+            </div>
+            <div class="battle" id="battle"></div>
+            <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2></div><div id="rankLista"></div>
+              <div class="hint" style="margin-top:12px">Conta as visitas marcadas pela data da visita. Canceladas não entram.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CORRETORES (gestão) -->
+      <section class="view" id="v-corretores">
+        <div class="page-head"><div><h1>Corretores</h1><div class="sub" id="corSub"></div></div>
+          <select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div>
+        <div class="card hide" id="cardPend" style="margin-bottom:20px">
+          <div class="card-head"><h2>Aguardando aprovação</h2><span class="muted" id="pendQt"></span></div>
+          <div id="pendLista"></div>
+        </div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-head"><h2>Equipe</h2><span class="muted">Clique em um corretor para ver o relatório completo</span></div>
+          <div class="chips" id="corEquipes" style="margin-bottom:10px"></div>
+          <div class="people" id="corLista"></div>
+        </div>
+        <div class="set-grid gerente-only hide">
+          <div class="card">
+            <div class="card-head"><h2>Equipes</h2></div>
+            <div id="equipesLista"></div>
+            <div class="team-row"><input class="emo" id="novaEqIcone" placeholder="⭐" maxlength="4"><input id="novaEqNome" placeholder="Nome da nova equipe"><button class="btn btn-ghost" onclick="criarEquipe()">Criar</button></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Importar do sistema antigo</h2></div>
+            <p class="muted" style="font-size:13.5px;margin-top:0">Traz as visitas da Central de Visitas antiga. Use o e-mail e a senha de acesso da equipe no sistema antigo. Pode repetir sem duplicar.</p>
+            <div class="row2 fg"><input id="impEmail" type="email" placeholder="E-mail do sistema antigo"><input id="impSenha" type="password" placeholder="Senha"></div>
+            <div class="fg"><label>Colocar as visitas na equipe</label><select id="impEquipe"></select></div>
+            <button class="btn btn-primary btn-block" id="btnImp" onclick="importarAntigo()">Importar visitas</button>
+            <div class="hint" id="impMsg" style="margin-top:8px"></div>
           </div>
         </div>
       </section>
@@ -567,13 +716,13 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
   </main>
 </div>
 
-<button class="fab hide" id="fab" onclick="novaTarefa()" title="Nova tarefa" data-ic="plus"></button>
+<button class="fab hide" id="fab" onclick="acaoPrincipal()" title="Adicionar" data-ic="plus"></button>
 <nav class="mobilebar hide" id="mobilebar">
   <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
-  <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
+  <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas</button>
   <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Agenda</button>
-  <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
-  <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Ajustes</button>
+  <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
+  <button onclick="abrir('menuModal')"><i data-ic="menu"></i>Menu</button>
 </nav>
 
 <!-- ================= MODAL DE TAREFA ================= -->
@@ -596,6 +745,14 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
       <div class="fg subs"><label>Checklist</label><div id="fSubs"></div>
         <div class="sub-add"><input id="fSubNovo" placeholder="Adicionar item" onkeydown="if(event.key==='Enter'){event.preventDefault();addSub()}"><button class="btn btn-ghost" type="button" onclick="addSub()">Adicionar</button></div>
       </div>
+      <div class="fg cal-box">
+        <label>Receber aviso no celular (grátis)</label>
+        <div class="row2">
+          <button class="btn btn-ghost" type="button" onclick="addGoogle(lerForm())"><i data-ic="calplus" style="width:17px;height:17px;display:grid"></i>Google Agenda</button>
+          <button class="btn btn-ghost" type="button" onclick="baixarICS(lerForm())"><i data-ic="calplus" style="width:17px;height:17px;display:grid"></i>iPhone / Outlook</button>
+        </div>
+        <div class="hint" style="margin-top:8px">O aviso chega pelo app de agenda do celular, mesmo com a Minha Agenda fechada.</div>
+      </div>
       <div class="row2" id="mExtras">
         <button class="btn btn-ghost" onclick="duplicar()">Duplicar</button>
         <button class="btn btn-danger" onclick="excluirDoModal()">Excluir</button>
@@ -605,25 +762,77 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
   </div>
 </div>
 
-<!-- ================= MODAL DE NOME ================= -->
-<div class="modal" id="nomeModal">
-  <div class="sheet" style="width:min(420px,100%)">
-    <div class="sheet-body" style="padding:28px 26px 8px;text-align:center">
-      <div class="brand-mark" style="width:56px;height:56px;border-radius:16px;margin:0 auto 16px" data-ic="logo"></div>
-      <h2 style="margin:0 0 6px;font-size:21px">Como quer ser chamado?</h2>
-      <p class="muted" style="margin:0 0 20px;font-size:14px">Esse nome aparece no seu perfil e na saudação. Você pode mudar depois em Configurações.</p>
-      <input id="nomeInicial" placeholder="Seu nome" style="text-align:center;font-size:16px;font-weight:600" onkeydown="if(event.key==='Enter')confirmarNome()">
+<!-- ================= MODAL DE CADASTRO ================= -->
+<div class="modal" id="cadModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-body" style="padding:28px 26px 10px">
+      <div style="text-align:center">
+        <div class="brand-mark" style="width:56px;height:56px;border-radius:16px;margin:0 auto 16px" data-ic="logo"></div>
+        <h2 style="margin:0 0 6px;font-size:21px">Complete seu cadastro</h2>
+        <p class="muted" style="margin:0 0 20px;font-size:14px">O gerente vai liberar o seu acesso às visitas. Enquanto isso, você já pode usar a sua agenda.</p>
+      </div>
+      <div class="fg"><label>Seu nome completo</label><input id="cadNome" placeholder="Ex.: Ana Flávia Souza"></div>
+      <div class="fg" id="cadEqWrap"><label>Sua equipe</label><select id="cadEquipe"></select></div>
+      <button class="btn btn-primary btn-block" onclick="enviarCadastro()" style="padding:13px">Enviar para aprovação</button>
+      <div id="cadGerente" class="hide" style="margin-top:18px;padding:14px;border:1px dashed var(--border);border-radius:14px;background:var(--card2)">
+        <b style="font-size:14px">Primeiro acesso ao sistema?</b>
+        <p class="muted" style="font-size:13px;margin:4px 0 10px">Se você é o gerente e está configurando agora, entre como gerente. Isso só pode ser feito uma vez.</p>
+        <button class="btn btn-ghost btn-block" onclick="configurarGerente()">Sou o gerente, configurar o sistema</button>
+      </div>
     </div>
-    <div class="sheet-foot" style="border-top:0"><button class="btn btn-primary" onclick="confirmarNome()">Continuar</button></div>
+    <div class="sheet-foot" style="border-top:0;padding-top:4px"><button class="btn btn-ghost" onclick="fechar('cadModal')">Depois</button></div>
+  </div>
+</div>
+
+<!-- ================= MODAL DE VISITA ================= -->
+<div class="modal" id="visModal">
+  <div class="sheet">
+    <div class="sheet-head"><h2 id="vmTitulo">Nova visita</h2><button class="icon-btn" onclick="fechar('visModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="row2 fg"><div><label>Data</label><input type="date" id="vmData"></div><div><label>Horário</label><input type="time" id="vmHora"></div></div>
+      <div class="row2 fg"><div><label>Cliente</label><input id="vmCliente" placeholder="Nome do cliente"></div><div><label>Telefone</label><input id="vmFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
+      <div class="fg"><label>Imóvel / empreendimento</label><input id="vmImovel" placeholder="Nome do empreendimento" list="listaImoveis"><datalist id="listaImoveis"></datalist></div>
+      <div class="row2 fg">
+        <div id="vmCorWrap"><label>Corretor</label><select id="vmCorretor"></select></div>
+        <div><label>Status</label><select id="vmStatus"></select></div>
+      </div>
+      <div class="fg"><label>Observação</label><textarea id="vmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
+      <div class="row2" id="vmExtras">
+        <button class="btn btn-ghost" onclick="addGoogle(visitaComoTarefa(lerVisita()))"><i data-ic="calplus" style="width:17px;height:17px;display:grid"></i>Google Agenda</button>
+        <button class="btn btn-danger" onclick="excluirVisita(vEditId,true)">Excluir</button>
+      </div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('visModal')">Cancelar</button><button class="btn btn-primary" id="vmSalvar" onclick="salvarVisita()">Salvar visita</button></div>
+  </div>
+</div>
+
+<!-- ================= MODAL RELATÓRIO DO CORRETOR ================= -->
+<div class="modal" id="relModal">
+  <div class="sheet" style="width:min(720px,100%)">
+    <div class="sheet-head"><div><h2 id="rmNome">Corretor</h2><div class="muted" style="font-size:13px;margin-top:3px" id="rmInfo"></div></div><button class="icon-btn" onclick="fechar('relModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="rmCorpo"></div>
+  </div>
+</div>
+
+<!-- ================= MENU (celular) ================= -->
+<div class="modal" id="menuModal">
+  <div class="sheet" style="width:min(420px,100%)">
+    <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
+    <div class="sheet-body menu-list">
+      <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
+      <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
+      <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
+      <button onclick="fechar('menuModal');sair()"><i data-ic="logout"></i>Sair</button>
+    </div>
   </div>
 </div>
 
 <div class="toasts" id="toasts"></div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -663,11 +872,16 @@ const IC = {
   sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
   moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
   eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  calplus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 10h18M12 13v5M9.5 15.5h5"/></svg>',
+  house:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M10 21v-5h4v5"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
+  menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
   emptyI:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="12" width="44" height="42" rx="8"/><path d="M22 6v10M42 6v10M10 26h44"/><path d="m24 40 6 6 11-12"/></svg>'
 };
 function pintarIcones(root=document){
   root.querySelectorAll('[data-ic]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = IC[el.dataset.ic] || ''; el.dataset.icDone = 1; } });
-  root.querySelectorAll('[data-brand]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = `<div class="brand-mark">${IC.logo}</div><div><div class="brand-name">Minha <span>Agenda</span></div><div class="brand-sub">Organize seu dia</div></div>`; el.dataset.icDone = 1; } });
+  root.querySelectorAll('[data-brand]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = `<div class="brand-mark">${IC.logo}</div><div><div class="brand-name">Minha <span>Agenda</span></div><div class="brand-sub">Frade Imóveis</div></div>`; el.dataset.icDone = 1; } });
 }
 pintarIcones();
 
@@ -768,6 +982,7 @@ $('ano').textContent = new Date().getFullYear();
 onAuthStateChanged(auth, user => {
   $('loading').classList.add('hide');
   if (pararEscuta) { pararEscuta(); pararEscuta = null; }
+  pararTudoVisitas();
   if (!user) {
     state = null;
     ['app','mobilebar','fab'].forEach(id => $(id).classList.add('hide'));
@@ -780,21 +995,16 @@ onAuthStateChanged(auth, user => {
   emailAtual = user.email;
   docRef = doc(db, 'usuarios', user.uid);
   pararEscuta = onSnapshot(docRef, snap => {
-    if (!snap.exists()) { state = estadoInicial(user); salvar(); pedirNome(); return; }
+    if (!snap.exists()) { state = estadoInicial(user); salvar(); pedirCadastro(); return; }
     const d = snap.data();
     state = { profile: Object.assign({ color:'#2563eb', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar) };
     render();
-    pedirNome();
+    pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
+  iniciarVisitas(user);
   setView(view);
 });
 
-function pedirNome(){
-  if (state && !state.profile.nameSet && !$('nomeModal').classList.contains('open')) {
-    $('nomeInicial').value = ''; $('nomeModal').classList.add('open');
-    setTimeout(() => $('nomeInicial').focus(), 80);
-  }
-}
 function traduzErro(e){
   const m = {
     'auth/invalid-email':'E-mail inválido.', 'auth/missing-password':'Digite a senha.',
@@ -823,10 +1033,10 @@ window.entrar = async () => {
 window.alternarModo = () => {
   modoCriar = !modoCriar;
   $('authTitle').textContent = modoCriar ? 'Crie sua conta' : 'Bem-vindo de volta';
-  $('authSub').textContent = modoCriar ? 'Leva menos de um minuto. É grátis.' : 'Entre para acessar sua agenda.';
+  $('authSub').textContent = modoCriar ? 'Depois do cadastro, o gerente libera o seu acesso.' : 'Entre para acessar sua agenda.';
   $('btnEntrar').textContent = modoCriar ? 'Criar minha conta' : 'Entrar';
   $('switchTxt').textContent = modoCriar ? 'Já tem conta?' : 'Ainda não tem conta?';
-  $('switchBtn').textContent = modoCriar ? 'Entrar' : 'Criar conta grátis';
+  $('switchBtn').textContent = modoCriar ? 'Entrar' : 'Criar minha conta';
   $('rowEsqueci').classList.toggle('hide', modoCriar);
   $('campoNome').classList.toggle('hide', !modoCriar);
   $('senha').autocomplete = modoCriar ? 'new-password' : 'current-password';
@@ -867,8 +1077,9 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações'};
+const TITULOS = {hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores'};
 window.setView = v => {
+  if (v === 'corretores' && !podeGerir()) v = 'hoje';
   view = v;
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-'+v));
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
@@ -906,6 +1117,7 @@ function linha(t, opts={}){
     <div class="t-actions">
       ${atrasada ? `<button class="snooze" onclick="adiar(${t.id},0)" title="Mover para hoje">Hoje</button>` : ''}
       ${!t.done ? `<button class="snooze" onclick="adiar(${t.id},1)" title="Adiar para amanhã">+1 dia</button>` : ''}
+      ${!t.done && t.date ? `<button class="icon-btn" onclick="addGoogle(acha(${t.id}))" title="Adicionar ao Google Agenda">${IC.calplus}</button>` : ''}
       ${t.phone ? `<button class="icon-btn wa" onclick="abrirWhats('${esc(t.phone)}')" title="WhatsApp">${IC.wa}</button>` : ''}
       <button class="icon-btn del" onclick="excluir(${t.id})" title="Excluir">${IC.trash}</button>
     </div>
@@ -943,6 +1155,7 @@ function render(){
 
   // Sidebar
   $('pName').textContent = p.name; $('pMail').textContent = emailAtual;
+  renderPapel();
   $('avatar').textContent = (p.name.trim()[0] || 'A').toUpperCase();
   $('pBar').style.width = pc + '%'; $('pResumo').textContent = feitas + '/' + deHoje.length;
   $('cHoje').textContent = deHoje.filter(t=>!t.done).length;
@@ -1016,15 +1229,24 @@ function render(){
   const semanas = Math.ceil((mesRef.getDay() + new Date(mesRef.getFullYear(), mesRef.getMonth()+1, 0).getDate()) / 7);
   for (let i = 0; i < semanas*7; i++) {
     const d = new Date(inicioGrade.getFullYear(), inicioGrade.getMonth(), inicioGrade.getDate()+i), s = iso(d);
+    const visDia = minhasVisitasCal().filter(v => v.date === s).sort((a,b) => (a.time||'').localeCompare(b.time||''));
     const doDia = ordenar(T.filter(t => t.date === s));
-    const evs = doDia.slice(0,3).map(t => { const c = CATS[t.cat]?.c || 'var(--accent)'; return `<div class="ev ${t.done?'done':''}" style="background:color-mix(in srgb,${c} 14%,transparent);color:${c}">${t.time?t.time+' ':''}${esc(t.title)}</div>`; }).join('');
-    const dots = doDia.slice(0,4).map(t => `<i style="background:${t.done?'var(--ok)':(CATS[t.cat]?.c||'var(--accent)')}"></i>`).join('');
-    cel += `<div class="md ${d.getMonth()!==mesRef.getMonth()?'out':''} ${s===h?'today':''} ${s===diaSel?'sel':''}" onclick="selDia('${s}')"><div class="n">${d.getDate()}</div>${evs}${doDia.length>3?`<div class="more">+${doDia.length-3} mais</div>`:''}<div class="mdots">${dots}</div></div>`;
+    const evsV = visDia.map(v => `<div class="ev ${v.status==='Cancelada'?'done':''}" style="background:color-mix(in srgb,${ST_COR[v.status]||'#64748b'} 16%,transparent);color:${ST_COR[v.status]||'#64748b'}">🏠 ${v.time||''} ${esc(v.cliente)}</div>`);
+    const evsT = doDia.map(t => { const c = CATS[t.cat]?.c || 'var(--accent)'; return `<div class="ev ${t.done?'done':''}" style="background:color-mix(in srgb,${c} 14%,transparent);color:${c}">${t.time?t.time+' ':''}${esc(t.title)}</div>`; });
+    const todos = [...evsV, ...evsT];
+    const evs = todos.slice(0,3).join('');
+    const dots = [...visDia.map(v => ST_COR[v.status]||'#64748b'), ...doDia.map(t => t.done?'var(--ok)':(CATS[t.cat]?.c||'var(--accent)'))].slice(0,4).map(c => `<i style="background:${c}"></i>`).join('');
+    cel += `<div class="md ${d.getMonth()!==mesRef.getMonth()?'out':''} ${s===h?'today':''} ${s===diaSel?'sel':''}" onclick="selDia('${s}')"><div class="n">${d.getDate()}</div>${evs}${todos.length>3?`<div class="more">+${todos.length-3} mais</div>`:''}<div class="mdots">${dots}</div></div>`;
   }
   $('mes').innerHTML = cel;
   $('diaTitulo').textContent = diaSel === h ? 'Hoje · ' + parseISO(diaSel).toLocaleDateString('pt-BR',{day:'numeric',month:'long'}) : maiuscula(dataLonga(diaSel));
   const doSel = T.filter(t => t.date === diaSel);
-  $('listaDia').innerHTML = doSel.length ? ordenar(doSel).map(t => linha(t,{data:false})).join('') : vazio('Dia livre', 'Nenhuma tarefa marcada.');
+  const visSel = minhasVisitasCal().filter(v => v.date === diaSel).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+  $('listaDiaVis').innerHTML = visSel.map(v => cardVisita(v, true)).join('');
+  $('listaDia').innerHTML = doSel.length ? ordenar(doSel).map(t => linha(t,{data:false})).join('') : (visSel.length ? '' : vazio('Dia livre', 'Nenhuma tarefa ou visita marcada.'));
+
+  // ----- VISITAS / CORRETORES -----
+  renderVisitasTudo();
 
   // ----- RELATÓRIOS -----
   if (view === 'relatorios') renderRelatorios(stk);
@@ -1074,6 +1296,7 @@ window.abrirDia = s => { window.diaSel = s; mesRef = inicioMes(parseISO(s)); set
 window.mudaMes = n => { mesRef = new Date(mesRef.getFullYear(), mesRef.getMonth()+n, 1); render(); };
 window.irHojeCal = () => { window.diaSel = hojeISO(); mesRef = inicioMes(new Date()); render(); };
 const acha = id => state.tasks.find(x => x.id === id);
+window.acha = acha;
 
 window.toggle = id => {
   const t = acha(id); if (!t) return;
@@ -1168,12 +1391,13 @@ function lerForm(){
   return { ...rascunho, title: $('fTitulo').value.trim(), date: $('fData').value, time: $('fHora').value,
     repeat: $('fRep').value, phone: $('fFone').value.trim(), notes: $('fNotas').value.trim() };
 }
+window.lerForm = lerForm;
 window.salvarTarefa = () => {
   const dados = lerForm();
   if (!dados.title) { $('fTitulo').focus(); toast('Dê um nome para a tarefa'); return; }
   if (dados.repeat && !dados.date) dados.date = hojeISO();
   if (editandoId) { const i = state.tasks.findIndex(x => x.id === editandoId); state.tasks[i] = { ...dados, id: editandoId }; toast('Tarefa atualizada'); }
-  else { state.tasks.push({ ...dados, id: Date.now() }); toast('Tarefa criada'); }
+  else { const nova = { ...dados, id: Date.now() }; state.tasks.push(nova); if (nova.date) toast('Tarefa criada', 'Pôr no Google Agenda', () => addGoogle(nova)); else toast('Tarefa criada'); }
   fecharModal(); salvar();
 };
 window.duplicar = () => {
@@ -1183,14 +1407,51 @@ window.duplicar = () => {
 };
 window.excluirDoModal = () => { const id = editandoId; fecharModal(); excluir(id); };
 
-// ================= Configurações =================
-window.salvarNome = () => { const n = $('cfgNome').value.trim().replace(/\s+/g,' '); if (!n) { $('cfgNome').value = state.profile.name; toast('O nome não pode ficar vazio'); return; } state.profile.name = n; state.profile.nameSet = true; salvar(); toast('Nome atualizado'); };
-window.confirmarNome = () => {
-  const n = $('nomeInicial').value.trim().replace(/\s+/g,' ');
-  if (!n) { $('nomeInicial').focus(); toast('Digite o seu nome'); return; }
-  state.profile.name = n; state.profile.nameSet = true;
-  $('nomeModal').classList.remove('open'); salvar(); toast('Prazer, ' + n.split(' ')[0] + '!');
+// ================= Google Agenda / iPhone =================
+const RRULE = { diaria:'FREQ=DAILY', uteis:'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR', semanal:'FREQ=WEEKLY', quinzenal:'FREQ=WEEKLY;INTERVAL=2', mensal:'FREQ=MONTHLY', anual:'FREQ=YEARLY' };
+function datasEvento(t){
+  const d = (t.date || hojeISO()).replace(/-/g,'');
+  if (!t.time) { const fim = somaDias(t.date || hojeISO(), 1).replace(/-/g,''); return { inicio:d, fim, diaTodo:true }; }
+  const [hh, mm] = t.time.split(':').map(Number);
+  const fimMin = hh*60 + mm + 60, fh = Math.min(23, Math.floor(fimMin/60)), fm = fimMin >= 24*60 ? 59 : fimMin % 60;
+  return { inicio: d+'T'+pad(hh)+pad(mm)+'00', fim: d+'T'+pad(fh)+pad(fm)+'00', diaTodo:false };
+}
+function descricao(t){
+  const partes = [];
+  if (t.phone) partes.push('Contato: ' + t.phone + ' (WhatsApp: https://wa.me/' + (t.phone.replace(/\D/g,'').length <= 11 ? '55' : '') + t.phone.replace(/\D/g,'') + ')');
+  if (t.notes) partes.push(t.notes);
+  if (t.subtasks?.length) partes.push('Checklist:\n' + t.subtasks.map(s => (s.d ? '✓ ' : '• ') + s.t).join('\n'));
+  partes.push('Criado pela Minha Agenda');
+  return partes.join('\n\n');
+}
+window.addGoogle = t => {
+  if (!t || !t.title) { toast('Dê um nome para a tarefa'); return; }
+  const e = datasEvento(t);
+  const p = new URLSearchParams({ action:'TEMPLATE', text:t.title, dates:e.inicio+'/'+e.fim, details:descricao(t), ctz:'America/Sao_Paulo' });
+  if (t.repeat && RRULE[t.repeat]) p.set('recur', 'RRULE:' + RRULE[t.repeat]);
+  window.open('https://calendar.google.com/calendar/render?' + p.toString(), '_blank');
 };
+window.baixarICS = t => {
+  if (!t || !t.title) { toast('Dê um nome para a tarefa'); return; }
+  const e = datasEvento(t), min = state?.profile?.notifMin || 15;
+  const escICS = s => String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
+  const agora = new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+  const linhas = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Minha Agenda//PT-BR','CALSCALE:GREGORIAN','BEGIN:VEVENT',
+    'UID:' + (t.id || Date.now()) + '@minha-agenda', 'DTSTAMP:' + agora,
+    e.diaTodo ? 'DTSTART;VALUE=DATE:' + e.inicio : 'DTSTART;TZID=America/Sao_Paulo:' + e.inicio,
+    e.diaTodo ? 'DTEND;VALUE=DATE:' + e.fim : 'DTEND;TZID=America/Sao_Paulo:' + e.fim,
+    'SUMMARY:' + escICS(t.title), 'DESCRIPTION:' + escICS(descricao(t))];
+  if (t.repeat && RRULE[t.repeat]) linhas.push('RRULE:' + RRULE[t.repeat]);
+  linhas.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:' + escICS(t.title), (e.diaTodo ? 'TRIGGER:PT9H' : 'TRIGGER:-PT' + min + 'M'),'END:VALARM','END:VEVENT','END:VCALENDAR');
+  const blob = new Blob([linhas.join('\r\n')], { type:'text/calendar;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = t.title.replace(/[^\w\sÀ-ú-]/g,'').trim().slice(0,40) + '.ics'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast('Abra o arquivo baixado para adicionar à agenda');
+};
+
+// ================= Configurações =================
+window.salvarNome = () => { const n = $('cfgNome').value.trim().replace(/\s+/g,' '); if (!n) { $('cfgNome').value = state.profile.name; toast('O nome não pode ficar vazio'); return; } state.profile.name = n; state.profile.nameSet = true; salvar(); if (perfil) setDoc(doc(db,'perfis',uidAtual), { nome:n }, { merge:true }).catch(()=>{}); toast('Nome atualizado'); };
 window.setCor = c => { state.profile.color = c; salvar(); };
 window.setTema = t => { state.profile.theme = t; salvar(); };
 window.salvarMin = v => { state.profile.notifMin = +v; salvar(); };
@@ -1215,6 +1476,567 @@ window.limparAntigas = () => {
   if (!confirm(`Apagar ${remover.length} tarefa(s) concluída(s) há mais de 30 dias?`)) return;
   state.tasks = state.tasks.filter(t => !remover.includes(t));
   salvar(); toast(`${antes - state.tasks.length} tarefa(s) removida(s)`);
+};
+
+// =====================================================================
+// ================= VISITAS, PERFIS E GESTÃO DE CORRETORES ============
+// =====================================================================
+const STATUS = ['Pendente','Confirmada','Reagendada','Cancelada','Realizada'];
+const ST_COR = { Pendente:'#f59e0b', Confirmada:'#10b981', Reagendada:'#3b82f6', Cancelada:'#ef4444', Realizada:'#8b5cf6' };
+const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor' };
+const EQUIPES_PADRAO = { raio:{ nome:'Tropa do Raio', icone:'⚡', ordem:1 }, tenda:{ nome:'Tropa Tenda', icone:'🏕️', ordem:2 } };
+// Sistema antigo (Central de Visitas) — usado só para importar
+const FIREBASE_ANTIGO = {
+  apiKey: "AIzaSyDKiS2qu2lmspOAkAlxQ16WzMggNYgL1-I",
+  authDomain: "equipe-trovao.firebaseapp.com",
+  projectId: "equipe-trovao",
+  storageBucket: "equipe-trovao.firebasestorage.app",
+  messagingSenderId: "26311375630",
+  appId: "1:26311375630:web:b7fa95614a6827fa42355f"
+};
+const EMAIL_ANTIGO_TENDA = 'tropatenda@fradeimoveis.com';
+
+let uidAtual = '', perfil = null, perfilOk = false, instalacao = null, instOk = false;
+let equipes = {}, visitas = [], rankingDocs = [], perfisLista = [];
+let subsBase = [], subsPapel = [], chaveSubs = '', cadDispensado = false;
+let visAba = 'lista', vFil = { busca:'', periodo:'proximas', status:'', equipe:'', corretor:'' };
+window.rankPeriodo = 'mes'; window.rankEquipe = ''; window.corPeriodo = 'mes';
+let corEquipeFiltro = '', vEditId = null, vOrig = null;
+
+const norm = x => String(x||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
+const souAtivo = () => perfil?.status === 'ativo';
+const souGerente = () => souAtivo() && perfil.papel === 'gerente';
+const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
+const podeGerir = () => souGerente() || souCoord();
+window.podeGerir = podeGerir;
+const eqNome = id => equipes[id] ? `${equipes[id].icone||''} ${equipes[id].nome}`.trim() : (id ? id : 'Sem equipe');
+const listaEquipes = () => Object.values(equipes).sort((a,b) => (a.ordem||99)-(b.ordem||99) || a.nome.localeCompare(b.nome,'pt-BR'));
+const primeiro = n => String(n||'').trim().split(' ')[0];
+window.render = render;
+window.abrir = id => { $(id).classList.add('open'); pintarIcones(); };
+window.fechar = id => $(id).classList.remove('open');
+
+// ---------- Conexão ----------
+function pararTudoVisitas(){
+  subsBase.forEach(u => u()); subsPapel.forEach(u => u());
+  subsBase = []; subsPapel = []; chaveSubs = '';
+  perfil = null; perfilOk = false; instalacao = null; instOk = false; cadDispensado = false;
+  equipes = {}; visitas = []; rankingDocs = []; perfisLista = [];
+}
+function iniciarVisitas(user){
+  uidAtual = user.uid;
+  subsBase.push(onSnapshot(doc(db,'perfis',user.uid), snap => {
+    perfil = snap.exists() ? { uid:user.uid, ...snap.data() } : null; perfilOk = true;
+    configurarAcesso(); render(); pedirCadastro();
+  }, e => { perfilOk = true; console.error(e); }));
+  subsBase.push(onSnapshot(doc(db,'config','instalacao'), snap => {
+    instalacao = snap.exists() ? snap.data() : null; instOk = true; preencherCadEquipes(); pedirCadastro(); render();
+  }, e => { instOk = true; console.error(e); }));
+  subsBase.push(onSnapshot(collection(db,'equipes'), snap => {
+    equipes = {}; snap.docs.forEach(d => equipes[d.id] = { id:d.id, ...d.data() }); preencherCadEquipes(); render();
+  }, e => console.error(e)));
+}
+function configurarAcesso(){
+  const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') : 'sem';
+  if (chave === chaveSubs) return;
+  chaveSubs = chave;
+  subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = [];
+  if (!souAtivo()) return;
+  const erro = e => { console.error(e); toast('Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
+  let qv;
+  if (souGerente()) qv = collection(db,'visitas');
+  else if (souCoord()) qv = query(collection(db,'visitas'), where('equipe','==',perfil.equipe||'-'));
+  else qv = query(collection(db,'visitas'), where('corretorUid','==',uidAtual));
+  subsPapel.push(onSnapshot(qv, s => { visitas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  subsPapel.push(onSnapshot(collection(db,'ranking'), s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  let qp = null;
+  if (souGerente()) qp = collection(db,'perfis');
+  else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisLista = s.docs.map(d => ({ uid:d.id, ...d.data() })); render(); }, erro));
+}
+
+// ---------- Cadastro / primeiro gerente ----------
+function pedirCadastro(){
+  if (!state || !perfilOk || !instOk || perfil || cadDispensado || $('cadModal').classList.contains('open')) return;
+  $('cadNome').value = state.profile.nameSet ? state.profile.name : (nomeCadastro || '');
+  preencherCadEquipes();
+  abrir('cadModal');
+}
+function preencherCadEquipes(){
+  const eqs = listaEquipes(), atual = $('cadEquipe').value;
+  $('cadEquipe').innerHTML = '<option value="">Selecione a sua equipe</option>' + eqs.map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('');
+  if (atual) $('cadEquipe').value = atual;
+  $('cadEqWrap').classList.toggle('hide', !eqs.length);
+  $('cadGerente').classList.toggle('hide', !!instalacao);
+}
+window.fecharCadastro = () => { cadDispensado = true; fechar('cadModal'); };
+window.enviarCadastro = async () => {
+  const nome = $('cadNome').value.trim().replace(/\s+/g,' ');
+  const equipe = $('cadEquipe').value;
+  if (!nome) { toast('Digite o seu nome'); $('cadNome').focus(); return; }
+  if (listaEquipes().length && !equipe) { toast('Escolha a sua equipe'); return; }
+  try {
+    await setDoc(doc(db,'perfis',uidAtual), { nome, email:emailAtual, papel:'corretor', status:'pendente', equipe, criadoEm:Date.now() });
+    state.profile.name = nome; state.profile.nameSet = true; salvar();
+    fechar('cadModal'); toast('Cadastro enviado! Aguarde a aprovação do gerente.');
+  } catch(e) { toast('Não foi possível enviar: ' + e.message); }
+};
+window.configurarGerente = async () => {
+  const nome = ($('cadNome').value.trim() || state.profile.name || 'Gerente').replace(/\s+/g,' ');
+  if (!confirm(`Configurar o sistema com ${nome} como gerente? Isso só pode ser feito uma vez.`)) return;
+  try {
+    const b = writeBatch(db);
+    b.set(doc(db,'config','instalacao'), { gerenteUid:uidAtual, criadoEm:Date.now() });
+    b.set(doc(db,'perfis',uidAtual), { nome, email:emailAtual, papel:'gerente', status:'ativo', equipe:'', criadoEm:Date.now() });
+    await b.commit();
+    for (const [id, e] of Object.entries(EQUIPES_PADRAO)) await setDoc(doc(db,'equipes',id), e);
+    state.profile.name = nome; state.profile.nameSet = true; salvar();
+    fechar('cadModal'); toast('Pronto! Você é o gerente do sistema.');
+  } catch(e) { toast('Não foi possível configurar: ' + e.message); }
+};
+$('cadModal').querySelector('.sheet-foot .btn').onclick = () => fecharCadastro();
+
+// ---------- Ações gerais ----------
+window.acaoPrincipal = () => (view === 'visitas' ? novaVisita() : novaTarefa());
+function faixa(p){
+  const h = hojeISO(), d = new Date();
+  if (p === 'hoje') return [h, h];
+  if (p === 'semana') { const a = new Date(d); a.setDate(d.getDate() - ((d.getDay()+6)%7)); return [iso(a), somaDias(iso(a), 6)]; }
+  if (p === 'mes') return [iso(new Date(d.getFullYear(), d.getMonth(), 1)), iso(new Date(d.getFullYear(), d.getMonth()+1, 0))];
+  if (p === 'proximas') return [h, '9999-12-31'];
+  if (p === 'anteriores') return ['0000-01-01', somaDias(h, -1)];
+  return ['0000-01-01', '9999-12-31'];
+}
+const ROT_PERIODO = { mes:'deste mês', semana:'desta semana', proximas:'de hoje em diante', todas:'de todo o período' };
+function minhasVisitasCal(){ return souAtivo() ? visitas.filter(v => v.corretorUid === uidAtual) : []; }
+function visitasHojeEscopo(){ return visitas.filter(v => v.date === hojeISO()).sort((a,b) => (a.time||'').localeCompare(b.time||'')); }
+function quandoTxt(date){
+  const d = diffDias(date);
+  if (d === 0) return 'hoje'; if (d === 1) return 'amanhã';
+  return parseISO(date).toLocaleDateString('pt-BR',{weekday:'long', day:'2-digit', month:'2-digit'});
+}
+
+// ---------- Cartão de visita ----------
+function cardVisita(v, compacto){
+  const cor = ST_COR[v.status] || '#64748b';
+  const meta = [`<span>🏠 ${esc(v.empreendimento)}</span>`];
+  if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(v.corretorNome||'Sem corretor')}</span>`);
+  if (souGerente() && !compacto) meta.push(`<span>${esc(eqNome(v.equipe))}</span>`);
+  if (v.telefone) meta.push(`<span>📱 ${esc(v.telefone)}</span>`);
+  const acoes = [];
+  if (v.telefone && v.status !== 'Cancelada' && v.status !== 'Realizada') acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
+  if (v.status === 'Pendente' || v.status === 'Reagendada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">✓ Confirmada</button>`);
+  if (v.status === 'Confirmada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Realizada')">✓ Realizada</button>`);
+  if (!compacto) {
+    acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitas.find(x=>x.id==='${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
+    acoes.push(`<button class="icon-btn del" onclick="excluirVisita('${v.id}')" title="Excluir">${IC.trash}</button>`);
+  }
+  return `<div class="vcard" style="--vc:${cor}">
+    <div class="v-time"><b>${esc(v.time||'--:--')}</b></div>
+    <div class="v-body" onclick="editarVisita('${v.id}')">
+      <div class="v-top"><b>${esc(v.cliente)}</b><span class="vst st-${esc(v.status)}">${esc(v.status)}</span></div>
+      <div class="v-meta">${meta.join('')}</div>
+      ${v.obs && !compacto ? `<div class="v-obs">📝 ${esc(v.obs)}</div>` : ''}
+    </div>
+    <div class="v-actions">${acoes.join('')}</div>
+  </div>`;
+}
+Object.defineProperty(window, 'visitas', { get: () => visitas });
+
+// ---------- Render geral ----------
+function renderPapel(){
+  const el = $('pRole');
+  if (!perfil) { el.classList.add('hide'); }
+  else {
+    el.classList.remove('hide');
+    if (perfil.status === 'pendente') el.textContent = '⏳ Aguardando aprovação';
+    else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
+    else el.textContent = (perfil.papel === 'gerente' ? '⭐ Gerente' : PAPEIS[perfil.papel] + (perfil.equipe ? ' · ' + eqNome(perfil.equipe) : ''));
+  }
+  document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir()));
+  document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
+}
+function bannerAcesso(){
+  if (!perfilOk || !instOk) return '';
+  if (!perfil) return `<div class="banner" style="cursor:pointer" onclick="cadDispensadoOff()">${IC.alert}<span>Complete o seu cadastro para acessar as visitas. <u>Clique aqui</u>.</span></div>`;
+  if (perfil.status === 'pendente') return `<div class="banner">${IC.clock}<span>Seu cadastro está aguardando aprovação do gerente. Assim que for liberado, as visitas aparecem aqui.</span></div>`;
+  if (perfil.status === 'bloqueado') return `<div class="banner red">${IC.alert}<span>Seu acesso às visitas está bloqueado. Fale com o gerente.</span></div>`;
+  return '';
+}
+window.cadDispensadoOff = () => { cadDispensado = false; pedirCadastro(); };
+
+function renderVisitasTudo(){
+  const h = hojeISO(), ativo = souAtivo();
+  const vh = visitasHojeEscopo();
+  $('cVisitas').textContent = vh.filter(v => v.status !== 'Cancelada').length;
+  const pendentes = souGerente() ? perfisLista.filter(p => p.status === 'pendente') : [];
+  $('cPend').textContent = pendentes.length; $('cPend').classList.toggle('hide', !pendentes.length);
+  $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : 'Nova tarefa';
+  const ban = bannerAcesso();
+  $('bannerHoje').innerHTML = ban;
+
+  // Hoje: card de visitas
+  $('cardVisHoje').classList.toggle('hide', !ativo);
+  if (ativo) {
+    $('visHojeTit').textContent = souGerente() ? 'Visitas de hoje · todas as equipes' : souCoord() ? 'Visitas de hoje · ' + eqNome(perfil.equipe) : 'Suas visitas de hoje';
+    $('visHoje').innerHTML = vh.length ? vh.map(v => cardVisita(v, true)).join('') : '<div class="muted" style="font-size:13.5px;padding:4px 2px 14px">Nenhuma visita marcada para hoje.</div>';
+  }
+
+  // Página Visitas
+  $('bannerVis').innerHTML = ban;
+  $('visConteudo').classList.toggle('hide', !ativo);
+  $('segVis').innerHTML = [['lista','Lista'],['ranking','Ranking']].map(([k,n]) => `<button class="${visAba===k?'on':''}" onclick="setVisAba('${k}')">${n}</button>`).join('');
+  $('segVis').classList.toggle('hide', !ativo);
+  $('btnNovaVisPag').classList.toggle('hide', !ativo);
+  if (!ativo) { $('visSub').textContent = 'Cadastro e confirmação de visitas.'; }
+  else {
+    $('visSub').textContent = souGerente() ? 'Todas as equipes e corretores.' : souCoord() ? 'Visitas da ' + eqNome(perfil.equipe) + '.' : 'As suas visitas.';
+    $('paneLista').classList.toggle('hide', visAba !== 'lista');
+    $('paneRanking').classList.toggle('hide', visAba !== 'ranking');
+    if (view === 'visitas' && visAba === 'lista') renderListaVisitas();
+    if (view === 'visitas' && visAba === 'ranking') renderRanking();
+  }
+  if (view === 'corretores' && podeGerir()) renderCorretores();
+}
+window.setVisAba = a => { visAba = a; render(); };
+window.vf = (k, v) => { vFil[k] = v; render(); };
+window.filtrarStatus = st => { vFil.status = vFil.status === st ? '' : st; $('vStatus').value = vFil.status; render(); };
+
+function renderListaVisitas(){
+  // filtros visíveis conforme o perfil
+  $('vStatus').innerHTML = '<option value="">Todos os status</option>' + STATUS.map(s => `<option ${vFil.status===s?'selected':''}>${s}</option>`).join('');
+  $('vEquipe').classList.toggle('hide', !souGerente());
+  $('vEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${vFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  $('vCorretor').classList.toggle('hide', !podeGerir());
+  const nomes = new Map();
+  visitas.forEach(v => { const k = v.corretorUid || 'n:' + norm(v.corretorNome); if (!nomes.has(k)) nomes.set(k, v.corretorNome || 'Sem corretor'); });
+  $('vCorretor').innerHTML = '<option value="">Todos os corretores</option>' + [...nomes].sort((a,b) => a[1].localeCompare(b[1],'pt-BR')).map(([k,n]) => `<option value="${esc(k)}" ${vFil.corretor===k?'selected':''}>${esc(n)}</option>`).join('');
+  $('vPeriodo').value = vFil.periodo;
+
+  const [de, ate] = faixa(vFil.periodo), t = norm(vFil.busca);
+  const lista = visitas.filter(v => {
+    if (!v.date || v.date < de || v.date > ate) return false;
+    if (vFil.status && v.status !== vFil.status) return false;
+    if (vFil.equipe && v.equipe !== vFil.equipe) return false;
+    if (vFil.corretor && (v.corretorUid || 'n:' + norm(v.corretorNome)) !== vFil.corretor) return false;
+    if (t && !norm([v.cliente, v.empreendimento, v.telefone, v.corretorNome, v.obs].join(' ')).includes(t)) return false;
+    return true;
+  }).sort((a,b) => { const k = (a.date||'').localeCompare(b.date||'') || (a.time||'').localeCompare(b.time||''); return vFil.periodo === 'anteriores' ? -k : k; });
+
+  $('vsTotal').textContent = lista.length;
+  $('vsConf').textContent = lista.filter(v => v.status === 'Confirmada').length;
+  $('vsPend').textContent = lista.filter(v => v.status === 'Pendente').length;
+  $('vsReal').textContent = lista.filter(v => v.status === 'Realizada').length;
+  if (!lista.length) { $('visLista').innerHTML = vazio('Nenhuma visita encontrada', 'Cadastre uma nova visita pelo botão "Nova visita".'); return; }
+  let html = '', ultimo = null; const h = hojeISO();
+  for (const v of lista) {
+    if (v.date !== ultimo) {
+      ultimo = v.date;
+      const n = lista.filter(x => x.date === v.date).length;
+      const rot = (v.date === h ? 'Hoje · ' : diffDias(v.date) === 1 ? 'Amanhã · ' : '') + parseISO(v.date).toLocaleDateString('pt-BR',{weekday:'long', day:'2-digit', month:'2-digit'});
+      html += `<div class="dayhead ${v.date===h?'hoje':''}">${esc(rot)}<span>${n} visita${n>1?'s':''}</span></div>`;
+    }
+    html += cardVisita(v, false);
+  }
+  $('visLista').innerHTML = html;
+}
+
+function agrupaRanking(rows){
+  const g = new Map();
+  for (const r of rows) {
+    const k = r.corretorUid || 'n:' + norm(r.corretorNome) + '|' + (r.equipe||'');
+    if (!g.has(k)) g.set(k, { nome:r.corretorNome || 'Sem nome', equipe:r.equipe, uid:r.corretorUid, total:0, conf:0, real:0 });
+    const x = g.get(k); x.total++; if (r.status === 'Confirmada') x.conf++; if (r.status === 'Realizada') x.real++;
+    if (r.corretorNome) x.nome = r.corretorNome;
+  }
+  return [...g.values()].sort((a,b) => b.total-a.total || b.real-a.real || b.conf-a.conf || a.nome.localeCompare(b.nome,'pt-BR'));
+}
+function renderRanking(){
+  $('rPeriodo').value = rankPeriodo;
+  $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  const [de, ate] = faixa(rankPeriodo);
+  const base = rankingDocs.filter(r => r.date && r.date >= de && r.date <= ate && r.status !== 'Cancelada');
+  // disputa entre equipes
+  const eqs = listaEquipes().map(e => ({ e, n: base.filter(r => r.equipe === e.id).length, real: base.filter(r => r.equipe === e.id && r.status === 'Realizada').length }));
+  const max = Math.max(0, ...eqs.map(x => x.n));
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>visitas · ${x.real} realizada${x.real!==1?'s':''}${x.n && x.n===max?' · 🏆 liderando':''}</span></div>`).join('');
+  const lista = agrupaRanking(base.filter(r => !rankEquipe || r.equipe === rankEquipe));
+  $('rankTit').textContent = 'Ranking de corretores ' + ROT_PERIODO[rankPeriodo];
+  if (!lista.length) { $('rankLista').innerHTML = vazio('Sem visitas no período', 'Assim que as visitas forem marcadas, o ranking aparece aqui.'); return; }
+  const med = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
+  let pos = 0, ant = null;
+  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Marcadas</th><th class="hide-m">Confirmadas</th><th>Realizadas</th></tr></thead><tbody>${
+    lista.map((g,i) => { if (!ant || g.total!==ant.total || g.real!==ant.real || g.conf!==ant.conf) pos = i; ant = g;
+      return `<tr class="${g.uid && g.uid===uidAtual?'me':''}"><td class="pos">${med(pos)}</td><td><span class="nm">${esc(g.nome)}</span><span class="eq">${esc(eqNome(g.equipe))}</span></td><td class="tot">${g.total}</td><td class="hide-m">${g.conf}</td><td>${g.real}</td></tr>`; }).join('')
+  }</tbody></table>`;
+}
+
+// ---------- Formulário de visita ----------
+function membrosSelecionaveis(){
+  const m = perfisLista.filter(p => p.status === 'ativo');
+  if (perfil && !m.some(p => p.uid === uidAtual)) m.push({ ...perfil, uid:uidAtual });
+  return m.sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
+}
+function abrirFormVisita(v, dataPadrao){
+  vEditId = v?.id || null; vOrig = v || null;
+  $('vmTitulo').textContent = v ? 'Editar visita' : 'Nova visita';
+  $('vmData').value = v?.date || dataPadrao || (view === 'calendario' ? diaSel : hojeISO());
+  $('vmHora').value = v?.time || '09:00';
+  $('vmCliente').value = v?.cliente || ''; $('vmFone').value = v?.telefone || '';
+  $('vmImovel').value = v?.empreendimento || ''; $('vmObs').value = v?.obs || '';
+  $('vmStatus').innerHTML = STATUS.map(s => `<option ${ (v?.status||'Pendente')===s?'selected':''}>${s}</option>`).join('');
+  $('listaImoveis').innerHTML = [...new Set(visitas.map(x => x.empreendimento).filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
+  $('vmCorWrap').classList.toggle('hide', !podeGerir());
+  if (podeGerir()) {
+    const ms = membrosSelecionaveis();
+    let ops = ms.map(p => `<option value="${p.uid}">${esc(p.nome)}${souGerente() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`);
+    if (v && !v.corretorUid) ops.unshift(`<option value="">${esc(v.corretorNome || 'Sem corretor')} (sem conta vinculada)</option>`);
+    $('vmCorretor').innerHTML = ops.join('');
+    $('vmCorretor').value = v ? (v.corretorUid || '') : uidAtual;
+  }
+  $('vmExtras').classList.toggle('hide', !v);
+  abrir('visModal');
+  if (!v) setTimeout(() => $('vmCliente').focus(), 80);
+}
+window.novaVisita = (data) => {
+  if (!souAtivo()) { toast(perfil ? 'Seu acesso às visitas ainda não foi liberado.' : 'Complete seu cadastro para cadastrar visitas.'); if (!perfil) cadDispensadoOff(); return; }
+  abrirFormVisita(null, data);
+};
+window.editarVisita = id => { const v = visitas.find(x => x.id === id); if (v) abrirFormVisita(v); };
+function lerVisita(){
+  const d = { date:$('vmData').value, time:$('vmHora').value, cliente:$('vmCliente').value.trim(), telefone:$('vmFone').value.trim(),
+    empreendimento:$('vmImovel').value.trim(), status:$('vmStatus').value, obs:$('vmObs').value.trim() };
+  if (!podeGerir()) { d.corretorUid = uidAtual; d.corretorNome = perfil.nome; d.equipe = perfil.equipe || ''; }
+  else {
+    const uid = $('vmCorretor').value;
+    if (!uid && vOrig) { d.corretorUid = ''; d.corretorNome = vOrig.corretorNome || ''; d.equipe = vOrig.equipe || ''; }
+    else { const p = membrosSelecionaveis().find(x => x.uid === uid) || { ...perfil, uid:uidAtual }; d.corretorUid = p.uid; d.corretorNome = p.nome; d.equipe = p.papel === 'gerente' ? '' : (p.equipe || ''); }
+    if (souCoord()) d.equipe = perfil.equipe;
+  }
+  return d;
+}
+window.lerVisita = lerVisita;
+function rankingDe(d){ return { equipe:d.equipe||'', corretorUid:d.corretorUid||'', corretorNome:d.corretorNome||'', date:d.date||'', status:d.status||'' }; }
+window.salvarVisita = async () => {
+  const d = lerVisita();
+  if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
+  if (!d.cliente) { toast('Informe o nome do cliente'); $('vmCliente').focus(); return; }
+  if (!d.empreendimento) { toast('Informe o imóvel ou empreendimento'); $('vmImovel').focus(); return; }
+  const id = vEditId || doc(collection(db,'visitas')).id;
+  const dados = { ...d, criadoPor: vOrig?.criadoPor || uidAtual, criadoEm: vOrig?.criadoEm || Date.now(), atualizadoEm: Date.now() };
+  $('vmSalvar').disabled = true;
+  try {
+    const b = writeBatch(db);
+    b.set(doc(db,'visitas',id), dados);
+    b.set(doc(db,'ranking',id), rankingDe(dados));
+    await b.commit();
+    fechar('visModal'); toast(vEditId ? 'Visita atualizada' : 'Visita cadastrada');
+  } catch(e) { toast('Não foi possível salvar: ' + e.message); }
+  $('vmSalvar').disabled = false;
+};
+window.mudarStatus = async (id, st) => {
+  const v = visitas.find(x => x.id === id); if (!v) return;
+  const dados = { ...v, status:st, atualizadoEm:Date.now() }; delete dados.id;
+  try {
+    const b = writeBatch(db);
+    b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
+    await b.commit(); toast('Visita marcada como ' + st.toLowerCase());
+  } catch(e) { toast('Erro ao atualizar: ' + e.message); }
+};
+window.excluirVisita = async (id, doModal) => {
+  const v = visitas.find(x => x.id === id); if (!v) return;
+  if (!confirm(`Excluir a visita de ${v.cliente}?`)) return;
+  try {
+    const b = writeBatch(db);
+    b.delete(doc(db,'visitas',id)); b.delete(doc(db,'ranking',id));
+    await b.commit();
+    if (doModal) fechar('visModal');
+    toast('Visita excluída');
+  } catch(e) { toast('Erro ao excluir: ' + e.message); }
+};
+window.whatsConfirmar = id => {
+  const v = visitas.find(x => x.id === id); if (!v) return;
+  let n = String(v.telefone||'').replace(/\D/g,''); if (n.length <= 11) n = '55' + n;
+  const eu = primeiro(perfil?.nome || state?.profile?.name || '');
+  const txt = `Olá, ${primeiro(v.cliente)}! Tudo bem? Aqui é ${eu}, da Frade Imóveis. Passando para confirmar a sua visita ${quandoTxt(v.date)} às ${v.time}. Posso confirmar?`;
+  window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(txt), '_blank');
+};
+window.visitaComoTarefa = v => v ? ({ id:v.id, title:`Visita: ${v.cliente} · ${v.empreendimento}`, date:v.date, time:v.time, phone:v.telefone, notes:[v.obs, v.corretorNome ? 'Corretor: ' + v.corretorNome : ''].filter(Boolean).join('\n'), subtasks:[], repeat:'' }) : null;
+
+// ---------- Corretores (gestão) ----------
+function statsVisitas(lista){
+  const n = s => lista.filter(v => v.status === s).length;
+  const total = lista.filter(v => v.status !== 'Cancelada').length;
+  return { total, conf:n('Confirmada'), real:n('Realizada'), canc:n('Cancelada'), pend:n('Pendente'), taxa: total ? Math.round(n('Realizada')/total*100) : 0 };
+}
+function visitasDoPerfil(p, de, ate){ return visitas.filter(v => (v.corretorUid === p.uid || (!v.corretorUid && norm(v.corretorNome) === norm(p.nome))) && v.date >= de && v.date <= ate); }
+function renderCorretores(){
+  $('corPeriodo').value = corPeriodo;
+  const [de, ate] = faixa(corPeriodo);
+  const pend = perfisLista.filter(p => p.status === 'pendente');
+  $('cardPend').classList.toggle('hide', !souGerente() || !pend.length);
+  $('pendQt').textContent = pend.length + (pend.length > 1 ? ' pessoas' : ' pessoa');
+  const opEq = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  $('pendLista').innerHTML = pend.map(p => `<div class="pend">
+      <div><b>${esc(p.nome)}</b><span>${esc(p.email||'')} · pediu: ${esc(eqNome(p.equipe))}</span></div>
+      <select id="pp_${p.uid}">${Object.entries(PAPEIS).map(([k,n]) => `<option value="${k}" ${k==='corretor'?'selected':''}>${n}</option>`).join('')}</select>
+      <select id="pe_${p.uid}">${opEq(p.equipe)}</select>
+      <button class="btn btn-primary" onclick="aprovar('${p.uid}')">Aprovar</button>
+      <button class="btn btn-danger" onclick="recusar('${p.uid}')">Recusar</button>
+    </div>`).join('');
+
+  let membros = perfisLista.filter(p => p.status !== 'pendente');
+  if (souGerente() && perfil && !membros.some(p => p.uid === uidAtual)) membros.push({ ...perfil, uid:uidAtual });
+  if (souGerente()) {
+    const eqs = [['','Todos'], ...listaEquipes().map(e => [e.id, eqNome(e.id)]), ['_ger','⭐ Gerentes']];
+    $('corEquipes').innerHTML = eqs.map(([k,n]) => `<button class="chip ${corEquipeFiltro===k?'on':''}" onclick="setCorEq('${k}')">${esc(n)}</button>`).join('');
+    if (corEquipeFiltro === '_ger') membros = membros.filter(p => p.papel === 'gerente');
+    else if (corEquipeFiltro) membros = membros.filter(p => p.equipe === corEquipeFiltro);
+  } else $('corEquipes').innerHTML = '';
+  const ordemPapel = { gerente:0, coordenador:1, corretor:2 };
+  membros.sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
+  const totalPer = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada').length;
+  $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
+  $('corLista').innerHTML = membros.length ? membros.map(p => {
+    const st = statsVisitas(visitasDoPerfil(p, de, ate));
+    const info = [PAPEIS[p.papel], p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.status === 'bloqueado' ? '🔒 bloqueado' : ''].filter(Boolean).join(' · ');
+    return `<div class="person" onclick="abrirRelatorio('${p.uid}')"><div class="av">${esc((p.nome||'?')[0].toUpperCase())}</div>
+      <div class="pi"><b>${esc(p.nome)}${p.uid===uidAtual?' (você)':''}</b><span>${esc(info)}</span></div>
+      <div class="ps"><div><b>${st.total}</b><span>marcadas</span></div><div><b>${st.conf}</b><span>confirm.</span></div><div><b>${st.real}</b><span>realizadas</span></div></div></div>`;
+  }).join('') : vazio('Ninguém por aqui ainda', 'Quando os corretores se cadastrarem e forem aprovados, aparecem nesta lista.');
+
+  if (souGerente()) {
+    $('equipesLista').innerHTML = listaEquipes().map(e => `<div class="team-row"><input class="emo" value="${esc(e.icone||'')}" onchange="editarEquipe('${e.id}','icone',this.value)"><input value="${esc(e.nome)}" onchange="editarEquipe('${e.id}','nome',this.value)"><button class="icon-btn del" onclick="excluirEquipe('${e.id}')" title="Excluir equipe">${IC.trash}</button></div>`).join('') || '<div class="muted" style="font-size:13.5px">Nenhuma equipe cadastrada.</div>';
+    const atual = $('impEquipe').value;
+    $('impEquipe').innerHTML = listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('');
+    if (atual) $('impEquipe').value = atual;
+  }
+}
+window.setCorEq = k => { corEquipeFiltro = k; render(); };
+
+window.aprovar = async uid => {
+  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const papel = $('pp_' + uid).value, equipe = papel === 'gerente' ? '' : $('pe_' + uid).value;
+  if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
+  try {
+    await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now() }, { merge:true });
+    // vincula visitas antigas que estão só com o nome desta pessoa
+    const soltas = visitas.filter(v => !v.corretorUid && norm(v.corretorNome) === norm(p.nome));
+    for (let i = 0; i < soltas.length; i += 200) {
+      const b = writeBatch(db);
+      soltas.slice(i, i+200).forEach(v => { const d = { ...v, corretorUid:uid }; delete d.id; b.set(doc(db,'visitas',v.id), d); b.set(doc(db,'ranking',v.id), rankingDe(d)); });
+      await b.commit();
+    }
+    toast(`${primeiro(p.nome)} aprovado(a)` + (soltas.length ? ` · ${soltas.length} visita(s) antiga(s) vinculada(s)` : ''));
+  } catch(e) { toast('Erro ao aprovar: ' + e.message); }
+};
+window.recusar = async uid => {
+  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  if (!confirm(`Recusar o cadastro de ${p.nome}?`)) return;
+  try { await deleteDoc(doc(db,'perfis',uid)); toast('Cadastro recusado'); } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ---------- Relatório individual ----------
+window.abrirRelatorio = async uid => {
+  const p = uid === uidAtual ? { ...perfil, uid } : perfisLista.find(x => x.uid === uid); if (!p) return;
+  const [de, ate] = faixa(corPeriodo), h = hojeISO();
+  const vs = visitasDoPerfil(p, de, ate), st = statsVisitas(vs);
+  const prox = visitas.filter(v => (v.corretorUid === uid) && v.date >= h && v.status !== 'Cancelada').sort((a,b) => (a.date+a.time).localeCompare(b.date+b.time)).slice(0,6);
+  $('rmNome').textContent = p.nome;
+  $('rmInfo').textContent = [PAPEIS[p.papel], p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.email].filter(Boolean).join(' · ');
+  const kpi = (n, t) => `<div class="kpi"><b>${n}</b><span>${t}</span></div>`;
+  let gestao = '';
+  if (souGerente() && uid !== uidAtual) {
+    gestao = `<div class="rep-sec">Acesso</div>
+      <div class="row2 fg"><div><label>Perfil</label><select id="gmPapel">${Object.entries(PAPEIS).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></div>
+      <div><label>Equipe</label><select id="gmEquipe"><option value="">Sem equipe</option>${listaEquipes().map(e => `<option value="${e.id}" ${p.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select></div></div>
+      <div class="row2"><select id="gmStatus"><option value="ativo" ${p.status==='ativo'?'selected':''}>Acesso liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>Acesso bloqueado</option></select>
+      <button class="btn btn-primary" onclick="salvarGestao('${uid}')">Salvar alterações</button></div>`;
+  }
+  $('rmCorpo').innerHTML = `
+    <div class="rep-sec" style="margin-top:0">Visitas ${ROT_PERIODO[corPeriodo]}</div>
+    <div class="rep-kpis">${kpi(st.total,'Marcadas')}${kpi(st.conf,'Confirmadas')}${kpi(st.real,'Realizadas')}${kpi(st.taxa+'%','Taxa de realização')}</div>
+    <div class="rep-sec">Próximas visitas</div>
+    ${prox.length ? prox.map(v => `<div class="up"><div class="up-date"><b>${parseISO(v.date).getDate()}</b><span>${parseISO(v.date).toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</span></div><div style="min-width:0;flex:1"><div class="up-t">${esc(v.cliente)} · ${esc(v.empreendimento)}</div><div class="up-m">${esc(v.time)} · ${esc(v.status)}</div></div></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma visita futura.</div>'}
+    <div class="rep-sec">Organização pessoal (tarefas)</div>
+    <div id="rmTarefas" class="muted" style="font-size:13.5px">Carregando…</div>
+    ${gestao}`;
+  abrir('relModal');
+  try {
+    const snap = await getDoc(doc(db,'usuarios',uid));
+    const T = snap.exists() ? (snap.data().tasks || []) : [];
+    const deHoje = T.filter(t => t.date === h), feitas = deHoje.filter(t => t.done).length;
+    const atras = T.filter(t => !t.done && t.date && t.date < h).length;
+    const sete = T.filter(t => t.done && t.doneAt && iso(new Date(t.doneAt)) >= somaDias(h,-6)).length;
+    const ult = T.filter(t => t.date && t.date >= somaDias(h,-29) && t.date <= h);
+    const taxa = ult.length ? Math.round(ult.filter(t => t.done).length / ult.length * 100) : 0;
+    $('rmTarefas').className = '';
+    $('rmTarefas').innerHTML = `<div class="rep-kpis">${kpi(feitas + '/' + deHoje.length,'Feitas hoje')}${kpi(atras,'Atrasadas')}${kpi(sete,'Concluídas em 7 dias')}${kpi(taxa+'%','Conclusão em 30 dias')}</div>` +
+      (deHoje.length ? deHoje.sort((a,b) => (a.time||'99').localeCompare(b.time||'99')).map(t => `<div class="task ${t.done?'done':''}" style="cursor:default"><span class="check" style="cursor:default">${IC.check}</span><div class="t-body" style="cursor:default"><div class="t-title">${esc(t.title)}</div><div class="t-meta">${t.time ? `<span class="mi">${IC.clock}${t.time}</span>` : ''}</div></div></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma tarefa para hoje.</div>');
+  } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
+};
+window.salvarGestao = async uid => {
+  const papel = $('gmPapel').value, equipe = papel === 'gerente' ? '' : $('gmEquipe').value, status = $('gmStatus').value;
+  if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe'); return; }
+  try { await setDoc(doc(db,'perfis',uid), { papel, equipe, status }, { merge:true }); toast('Alterações salvas'); fechar('relModal'); }
+  catch(e) { toast('Erro ao salvar: ' + e.message); }
+};
+
+// ---------- Equipes ----------
+window.criarEquipe = async () => {
+  const nome = $('novaEqNome').value.trim(), icone = $('novaEqIcone').value.trim() || '⭐';
+  if (!nome) { toast('Digite o nome da equipe'); return; }
+  const id = norm(nome).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || ('eq' + Date.now());
+  if (equipes[id]) { toast('Já existe uma equipe com esse nome'); return; }
+  try { await setDoc(doc(db,'equipes',id), { nome, icone, ordem: listaEquipes().length + 1 }); $('novaEqNome').value = ''; $('novaEqIcone').value = ''; toast('Equipe criada'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.editarEquipe = async (id, campo, valor) => {
+  valor = valor.trim(); if (!valor) return;
+  try { await setDoc(doc(db,'equipes',id), { [campo]: valor }, { merge:true }); toast('Equipe atualizada'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.excluirEquipe = async id => {
+  const n = perfisLista.filter(p => p.equipe === id && p.status !== 'pendente').length;
+  if (n) { toast(`A equipe tem ${n} pessoa(s). Mude todos de equipe antes de excluir.`); return; }
+  if (!confirm(`Excluir a equipe ${eqNome(id)}?`)) return;
+  try { await deleteDoc(doc(db,'equipes',id)); toast('Equipe excluída'); } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ---------- Importar do sistema antigo ----------
+window.importarAntigo = async () => {
+  const email = $('impEmail').value.trim(), senha = $('impSenha').value, equipe = $('impEquipe').value;
+  if (!email || !senha) { toast('Informe o e-mail e a senha do sistema antigo'); return; }
+  if (!equipe) { toast('Escolha a equipe de destino'); return; }
+  const msgEl = $('impMsg'); $('btnImp').disabled = true; msgEl.textContent = 'Conectando ao sistema antigo…';
+  let oAuth = null;
+  try {
+    const oApp = getApps().find(a => a.name === 'antigo') || initializeApp(FIREBASE_ANTIGO, 'antigo');
+    oAuth = getAuth(oApp); const oDb = getFirestore(oApp);
+    await signInWithEmailAndPassword(oAuth, email, senha);
+    const col = email.toLowerCase() === EMAIL_ANTIGO_TENDA ? 'visitas_tropa_tenda' : 'visits';
+    const snap = await getDocs(collection(oDb, col));
+    msgEl.textContent = `Encontradas ${snap.size} visitas. Copiando…`;
+    const porNome = new Map(perfisLista.filter(p => p.status === 'ativo').map(p => [norm(p.nome), p]));
+    const docs = snap.docs; let n = 0;
+    for (let i = 0; i < docs.length; i += 200) {
+      const b = writeBatch(db);
+      docs.slice(i, i+200).forEach(d => {
+        const o = d.data(), p = porNome.get(norm(o.broker));
+        const v = { date:o.date||'', time:o.time||'', cliente:o.client||'', telefone:o.phone||'', empreendimento:o.property||'',
+          corretorUid: p ? p.uid : '', corretorNome: p ? p.nome : (o.broker||''), equipe, status: STATUS.includes(o.status) ? o.status : 'Pendente',
+          obs:o.notes||'', criadoPor:uidAtual, criadoEm:Date.now(), atualizadoEm:Date.now(), importadoDe: col + '/' + d.id };
+        const id = 'imp_' + col + '_' + d.id;
+        b.set(doc(db,'visitas',id), v); b.set(doc(db,'ranking',id), rankingDe(v)); n++;
+      });
+      await b.commit();
+    }
+    msgEl.textContent = `✅ ${n} visita(s) importada(s) para ${eqNome(equipe)}.`;
+    toast('Importação concluída');
+  } catch(e) {
+    msgEl.textContent = '❌ ' + (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' ? 'E-mail ou senha do sistema antigo incorretos.' : e.message);
+  }
+  try { if (oAuth) await signOut(oAuth); } catch(e){}
+  $('btnImp').disabled = false; $('impSenha').value = '';
 };
 
 // ================= Lembretes =================
@@ -1242,12 +2064,13 @@ setInterval(() => { if (state) render(); }, 60000); // vira o dia sozinho
 // ================= Atalhos =================
 document.addEventListener('keydown', e => {
   const digitando = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-  if (e.key === 'Escape') { fecharModal(); return; }
+  if (e.key === 'Escape') { fecharModal(); ['visModal','relModal','menuModal'].forEach(fechar); return; }
   if (digitando || !state) return;
-  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); novaTarefa(); }
+  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); acaoPrincipal(); }
   if (e.key === '/') { e.preventDefault(); if (innerWidth <= 820) abrirBuscaM(); else $('busca').focus(); }
 });
 $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal')) fecharModal(); });
+['visModal','relModal','menuModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
 </script>
 </body>
 </html>

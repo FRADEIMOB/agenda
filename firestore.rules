@@ -1,0 +1,85 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Funções de apoio ----------
+    function logado() { return request.auth != null; }
+    function meuPerfilExiste() { return exists(/databases/$(database)/documents/perfis/$(request.auth.uid)); }
+    function meuPerfil() { return get(/databases/$(database)/documents/perfis/$(request.auth.uid)).data; }
+    function ativo() { return logado() && meuPerfilExiste() && meuPerfil().status == 'ativo'; }
+    function gerente() { return ativo() && meuPerfil().papel == 'gerente'; }
+    function coord() { return ativo() && meuPerfil().papel == 'coordenador'; }
+
+    // Quem pode VER uma visita (ou o resumo dela no ranking)
+    function podeVer(d) {
+      return gerente()
+        || (coord() && d.equipe == meuPerfil().equipe)
+        || (ativo() && d.corretorUid == request.auth.uid);
+    }
+    // Quem pode GRAVAR uma visita: corretor só a própria e na própria equipe
+    function podeGravar(d) {
+      return gerente()
+        || (coord() && d.equipe == meuPerfil().equipe)
+        || (ativo() && d.corretorUid == request.auth.uid && d.equipe == meuPerfil().equipe);
+    }
+
+    // ---------- Agenda pessoal (tarefas) ----------
+    // Dono lê e grava. Gerente lê de todos. Coordenador lê da própria equipe (menos gerentes).
+    match /usuarios/{uid} {
+      allow read: if logado() && (
+        request.auth.uid == uid
+        || gerente()
+        || (coord()
+            && get(/databases/$(database)/documents/perfis/$(uid)).data.equipe == meuPerfil().equipe
+            && get(/databases/$(database)/documents/perfis/$(uid)).data.papel != 'gerente'));
+      allow write: if logado() && request.auth.uid == uid;
+    }
+
+    // ---------- Instalação (define o primeiro gerente, uma única vez) ----------
+    match /config/instalacao {
+      allow read: if logado();
+      allow create: if logado()
+        && request.resource.data.gerenteUid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/perfis/$(request.auth.uid)).data.papel == 'gerente';
+    }
+
+    // ---------- Perfis (papel, equipe, status) ----------
+    match /perfis/{uid} {
+      allow read: if logado() && (
+        request.auth.uid == uid
+        || gerente()
+        || (coord() && resource.data.equipe == meuPerfil().equipe && resource.data.papel in ['corretor', 'coordenador']));
+      allow create: if logado() && request.auth.uid == uid && (
+        (request.resource.data.papel == 'corretor' && request.resource.data.status == 'pendente')
+        || (request.resource.data.papel == 'gerente' && request.resource.data.status == 'ativo'
+            && !exists(/databases/$(database)/documents/config/instalacao)
+            && getAfter(/databases/$(database)/documents/config/instalacao).data.gerenteUid == request.auth.uid));
+      allow update: if gerente()
+        || (logado() && request.auth.uid == uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nome']));
+      allow delete: if gerente();
+    }
+
+    // ---------- Equipes ----------
+    match /equipes/{id} {
+      allow read: if logado();
+      allow write: if gerente();
+    }
+
+    // ---------- Visitas ----------
+    match /visitas/{id} {
+      allow read: if podeVer(resource.data);
+      allow create: if podeGravar(request.resource.data);
+      allow update: if podeVer(resource.data) && podeGravar(request.resource.data);
+      allow delete: if podeVer(resource.data);
+    }
+
+    // ---------- Ranking (resumo sem dados do cliente, visível para todos os liberados) ----------
+    match /ranking/{id} {
+      allow read: if ativo();
+      allow create: if podeGravar(request.resource.data);
+      allow update: if podeVer(resource.data) && podeGravar(request.resource.data);
+      allow delete: if podeVer(resource.data);
+    }
+  }
+}
