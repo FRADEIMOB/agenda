@@ -424,6 +424,14 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
 .leg b{display:block;color:var(--text);font-size:13.5px;margin-bottom:3px}
 @media(max-width:820px){.leg{grid-template-columns:1fr}.perm thead{display:none}.perm tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--border)}.perm td{border:0;padding:0}.perm td:first-child{grid-column:1/-1}.perm td:last-child{grid-column:1/-1}}
 
+.cst-aprovada{background:color-mix(in srgb,#10b981 16%,transparent);color:#047857}
+.cst-em-negociacao{background:color-mix(in srgb,#3b82f6 16%,transparent);color:#1d4ed8}
+.cst-venda-fechada{background:color-mix(in srgb,#8b5cf6 16%,transparent);color:#6d28d9}
+.cst-desistiu{background:color-mix(in srgb,#ef4444 14%,transparent);color:#b91c1c}
+.cst-vencida{background:color-mix(in srgb,#64748b 18%,transparent);color:#475569}
+html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst-em-negociacao{color:#93c5fd}html[data-theme="dark"] .cst-venda-fechada{color:#c4b5fd}html[data-theme="dark"] .cst-desistiu{color:#fca5a5}html[data-theme="dark"] .cst-vencida{color:#cbd5e1}
+.v-time span{display:block}
+
 /* Mobile */
 .mobilebar{display:none}
 .fab{display:none}
@@ -517,6 +525,7 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
       <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje<span class="count" id="cHoje">0</span></button>
       <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas<span class="count" id="cTarefas">0</span></button>
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
+      <button data-view="cartas" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
@@ -648,13 +657,39 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
           </div>
           <div id="paneRanking" class="hide">
             <div class="toolbar">
+              <div class="seg" id="segRank"></div>
               <select id="rPeriodo" onchange="rankPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option></select>
               <select id="rEquipe" onchange="rankEquipe=this.value;render()"></select>
             </div>
             <div class="janela" id="janelaRank"></div>
             <div class="battle" id="battle"></div>
             <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2></div><div id="rankLista"></div>
-              <div class="hint" style="margin-top:12px">Conta as visitas marcadas pela data da visita. Canceladas não entram.</div></div>
+              <div class="hint" style="margin-top:12px" id="rankNota"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARTAS APROVADAS -->
+      <section class="view" id="v-cartas">
+        <div class="page-head"><div><h1>Cartas aprovadas</h1><div class="sub" id="cartasSub"></div></div>
+          <button class="btn btn-primary" id="btnNovaCartaPag" onclick="novaCarta()">+ Nova carta</button></div>
+        <div id="bannerCartas"></div>
+        <div id="cartasConteudo">
+          <div class="stats">
+            <div class="stat"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="card"></div><div><b id="csQtd">0</b><span>Cartas no período</span></div></div>
+            <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="csValor">R$ 0</b><span>Valor aprovado</span></div></div>
+            <div class="stat" onclick="cf('status','Venda fechada')"><div class="stat-ic" style="background:color-mix(in srgb,#8b5cf6 14%,transparent);color:#8b5cf6" data-ic="star"></div><div><b id="csVendas">0</b><span>Vendas fechadas</span></div></div>
+            <div class="stat" onclick="filtrarVencendo()"><div class="stat-ic" style="background:var(--danger-soft);color:var(--danger)" data-ic="alert"></div><div><b id="csVence">0</b><span>Vencendo em 15 dias</span></div></div>
+          </div>
+          <div class="card">
+            <div class="tb-grid">
+              <input id="cBusca" placeholder="Buscar cliente, CPF, telefone, empreendimento..." oninput="cf('busca',this.value)">
+              <select id="cPeriodo" onchange="cf('periodo',this.value)"><option value="mes">Aprovadas este mês</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
+              <select id="cStatus" onchange="cf('status',this.value)"></select>
+              <select id="cEquipe" onchange="cf('equipe',this.value)"></select>
+              <select id="cCorretor" onchange="cf('corretor',this.value)"></select>
+            </div>
+            <div id="cartasLista"></div>
           </div>
         </div>
       </section>
@@ -756,7 +791,7 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
   <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
   <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas</button>
   <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Agenda</button>
-  <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
+  <button data-view="cartas" onclick="setView('cartas')"><i data-ic="card"></i>Cartas</button>
   <button onclick="abrir('menuModal')"><i data-ic="menu"></i>Menu</button>
 </nav>
 
@@ -834,7 +869,7 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
       <div class="fg"><label>Observação</label><textarea id="vmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <div class="row2" id="vmExtras">
         <button class="btn btn-ghost" onclick="addGoogle(visitaComoTarefa(lerVisita()))"><i data-ic="calplus" style="width:17px;height:17px;display:grid"></i>Google Agenda</button>
-        <button class="btn btn-danger" onclick="excluirVisita(vEditId,true)">Excluir</button>
+        <button class="btn btn-danger" onclick="excluirVisita(visitaAtualId(),true)">Excluir</button>
       </div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('visModal')">Cancelar</button><button class="btn btn-primary" id="vmSalvar" onclick="salvarVisita()">Salvar visita</button></div>
@@ -846,6 +881,25 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
   <div class="sheet" style="width:min(720px,100%)">
     <div class="sheet-head"><div><h2 id="rmNome">Corretor</h2><div class="muted" style="font-size:13px;margin-top:3px" id="rmInfo"></div></div><button class="icon-btn" onclick="fechar('relModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="rmCorpo"></div>
+  </div>
+</div>
+
+<!-- ================= MODAL DE CARTA ================= -->
+<div class="modal" id="cartaModal">
+  <div class="sheet">
+    <div class="sheet-head"><h2 id="cmTitulo">Nova carta aprovada</h2><button class="icon-btn" onclick="fechar('cartaModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="row2 fg"><div><label>Cliente</label><input id="cmCliente" placeholder="Nome do cliente"></div><div><label>Telefone</label><input id="cmFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
+      <div class="fg"><label>CPF do cliente</label><input id="cmCpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCpf(this)"><div class="hint" id="cmCpfAviso" style="margin-top:6px"></div></div>
+      <div class="row2 fg"><div><label>Valor aprovado (R$)</label><input id="cmValor" inputmode="numeric" placeholder="Ex.: 180.000" onblur="formatarValor(this)"></div><div><label>Subsídio (R$, opcional)</label><input id="cmSubsidio" inputmode="numeric" placeholder="Ex.: 55.000" onblur="formatarValor(this)"></div></div>
+      <div class="row2 fg"><div><label>Data da aprovação</label><input type="date" id="cmData"></div><div><label>Válida até (opcional)</label><input type="date" id="cmValidade"></div></div>
+      <div class="row2 fg"><div><label>Banco</label><select id="cmBanco"></select></div><div><label>Situação</label><select id="cmStatus"></select></div></div>
+      <div class="fg"><label>Empreendimento de interesse (opcional)</label><input id="cmImovel" placeholder="Nome do empreendimento" list="listaImoveis2"><datalist id="listaImoveis2"></datalist></div>
+      <div class="fg" id="cmCorWrap"><label>Corretor</label><select id="cmCorretor"></select></div>
+      <div class="fg"><label>Observação</label><textarea id="cmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
+      <button class="btn btn-danger btn-block" id="cmExcluir" onclick="excluirCarta(cartaAtualId(),true)">Excluir carta</button>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('cartaModal')">Cancelar</button><button class="btn btn-primary" id="cmSalvar" onclick="salvarCarta()">Salvar carta</button></div>
   </div>
 </div>
 
@@ -862,6 +916,7 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
   <div class="sheet" style="width:min(420px,100%)">
     <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
     <div class="sheet-body menu-list">
+      <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -919,6 +974,7 @@ const IC = {
   house:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M10 21v-5h4v5"/></svg>',
   users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/></svg>',
   star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
+  card:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="m8.5 14.5 2 2 4.5-4.5"/></svg>',
   menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
   emptyI:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="12" width="44" height="42" rx="8"/><path d="M22 6v10M42 6v10M10 26h44"/><path d="m24 40 6 6 11-12"/></svg>'
 };
@@ -1120,7 +1176,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores'};
+const TITULOS = {hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   view = v;
@@ -1567,7 +1623,7 @@ function pararTudoVisitas(){
   subsBase.forEach(u => u()); subsPapel.forEach(u => u());
   subsBase = []; subsPapel = []; chaveSubs = '';
   perfil = null; perfilOk = false; instalacao = null; instOk = false; cadDispensado = false;
-  equipes = {}; visitas = []; rankingDocs = []; perfisLista = [];
+  equipes = {}; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = [];
 }
 function iniciarVisitas(user){
   uidAtual = user.uid;
@@ -1593,7 +1649,7 @@ function configurarAcesso(){
   const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto : 'sem';
   if (chave === chaveSubs) return;
   chaveSubs = chave;
-  subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = [];
+  subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = [];
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -1603,6 +1659,7 @@ function configurarAcesso(){
   subsPapel.push(onSnapshot(qv, s => { visitas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
   const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=',inicioJanela()));
   subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  assinarCartas(erro);
   let qp = null;
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
@@ -1651,7 +1708,7 @@ window.configurarGerente = async () => {
 $('cadModal').querySelector('.sheet-foot .btn').onclick = () => fecharCadastro();
 
 // ---------- Ações gerais ----------
-window.acaoPrincipal = () => (view === 'visitas' ? novaVisita() : novaTarefa());
+window.acaoPrincipal = () => (view === 'visitas' ? novaVisita() : view === 'cartas' ? novaCarta() : novaTarefa());
 function faixa(p){
   const h = hojeISO(), d = new Date();
   if (p === 'hoje') return [h, h];
@@ -1727,7 +1784,9 @@ function renderVisitasTudo(){
   $('cVisitas').textContent = vh.filter(v => v.status !== 'Cancelada').length;
   const pendentes = souGerente() ? perfisLista.filter(p => p.status === 'pendente') : [];
   $('cPend').textContent = pendentes.length; $('cPend').classList.toggle('hide', !pendentes.length);
-  $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : 'Nova tarefa';
+  $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : view === 'cartas' ? 'Nova carta' : 'Nova tarefa';
+  $('cCartas').textContent = cartas.filter(c => c.data && c.data >= faixa('mes')[0] && c.data <= faixa('mes')[1]).length;
+  if (view === 'cartas') renderCartas();
   const ban = bannerAcesso();
   $('bannerHoje').innerHTML = ban;
 
@@ -1815,6 +1874,9 @@ function agrupaRanking(rows){
 function renderRanking(){
   $('rPeriodo').value = rankPeriodo;
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  $('segRank').innerHTML = [['visitas','Visitas'],['cartas','Cartas aprovadas']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
+  if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
   $('janelaRank').innerHTML = avisoJanela(rankPeriodo === 'todas');
   const [de, ate] = faixa(rankPeriodo);
   const base = rankingDocs.filter(r => r.date && r.date >= de && r.date <= ate && r.status !== 'Cancelada');
@@ -1977,11 +2039,11 @@ function renderCorretores(){
   const totalPer = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada').length;
   $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
   $('corLista').innerHTML = membros.length ? membros.map(p => {
-    const st = statsVisitas(visitasDoPerfil(p, de, ate));
+    const st = statsVisitas(visitasDoPerfil(p, de, ate)), nCartas = cartasDoPerfil(p, de, ate).length;
     const info = [PAPEIS[p.papel], p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.status === 'bloqueado' ? '🔒 bloqueado' : ''].filter(Boolean).join(' · ');
     return `<div class="person" onclick="abrirRelatorio('${p.uid}')"><div class="av">${esc((p.nome||'?')[0].toUpperCase())}</div>
       <div class="pi"><b>${esc(p.nome)}${p.uid===uidAtual?' (você)':''}</b><span>${esc(info)}</span></div>
-      <div class="ps"><div><b>${st.total}</b><span>marcadas</span></div><div><b>${st.conf}</b><span>confirm.</span></div><div><b>${st.real}</b><span>realizadas</span></div></div></div>`;
+      <div class="ps"><div><b>${st.total}</b><span>marcadas</span></div><div><b>${st.conf}</b><span>confirm.</span></div><div><b>${st.real}</b><span>realizadas</span></div><div><b>${nCartas}</b><span>cartas</span></div></div></div>`;
   }).join('') : vazio('Ninguém por aqui ainda', 'Quando os corretores se cadastrarem e forem aprovados, aparecem nesta lista.');
 
   if (souGerente()) {
@@ -2056,6 +2118,8 @@ window.abrirRelatorio = async uid => {
   $('rmCorpo').innerHTML = `
     <div class="rep-sec" style="margin-top:0">Visitas ${ROT_PERIODO[corPeriodo]}</div>
     <div class="rep-kpis">${kpi(st.total,'Marcadas')}${kpi(st.conf,'Confirmadas')}${kpi(st.real,'Realizadas')}${kpi(st.falta,'Não compareceram')}${kpi(st.taxa+'%','Taxa de realização')}</div>
+    <div class="rep-sec">Cartas aprovadas ${ROT_PERIODO[corPeriodo]}</div>
+    ${(() => { const cs = cartasDoPerfil(p, de, ate); return `<div class="rep-kpis">${kpi(cs.length,'Cartas')}${kpi(brl(cs.reduce((a,c)=>a+(c.valor||0),0)),'Valor aprovado')}${kpi(cs.filter(c=>c.status==='Venda fechada').length,'Vendas fechadas')}</div>`; })()}
     <div class="rep-sec">Próximas visitas</div>
     ${prox.length ? prox.map(v => `<div class="up"><div class="up-date"><b>${parseISO(v.date).getDate()}</b><span>${parseISO(v.date).toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</span></div><div style="min-width:0;flex:1"><div class="up-t">${esc(v.cliente)} · ${esc(v.empreendimento)}</div><div class="up-m">${esc(v.time)} · ${esc(v.status)}</div></div></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma visita futura.</div>'}
     <div class="rep-sec">Organização pessoal (tarefas)</div>
@@ -2139,6 +2203,202 @@ window.importarAntigo = async () => {
   $('btnImp').disabled = false; $('impSenha').value = '';
 };
 
+// =====================================================================
+// ================= CARTAS DE CRÉDITO APROVADAS =======================
+// =====================================================================
+const C_STATUS = ['Aprovada','Em negociação','Venda fechada','Desistiu','Vencida'];
+const C_COR = { 'Aprovada':'#10b981', 'Em negociação':'#3b82f6', 'Venda fechada':'#8b5cf6', 'Desistiu':'#ef4444', 'Vencida':'#64748b' };
+const BANCOS = ['Caixa','Banco do Brasil','Outro'];
+let cartas = [], rankingCartas = [], cEditId = null, cOrig = null;
+let cFil = { busca:'', periodo:'mes', status:'', equipe:'', corretor:'' };
+window.rankTipo = 'visitas';
+const soDig = x => String(x||'').replace(/\D/g,'');
+const fmtCpf = x => { const d = soDig(x).slice(0,11); return d.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); };
+const cpfOculto = x => { const d = soDig(x); return d.length === 11 ? `***.${d.slice(3,6)}.${d.slice(6,9)}-**` : ''; };
+function cpfValido(x){
+  const d = soDig(x); if (d.length !== 11 || /^(\d)\1+$/.test(d)) return false;
+  const dv = n => { let s = 0; for (let i = 0; i < n; i++) s += +d[i] * (n + 1 - i); const r = (s * 10) % 11; return r === 10 ? 0 : r; };
+  return dv(9) === +d[9] && dv(10) === +d[10];
+}
+window.mascaraCpf = el => {
+  el.value = fmtCpf(el.value);
+  const d = soDig(el.value), av = $('cmCpfAviso');
+  if (d.length < 11) { av.textContent = ''; return; }
+  if (!cpfValido(d)) { av.innerHTML = '<span class="late">⚠ CPF inválido, confira os números.</span>'; return; }
+  const dup = cartas.find(c => soDig(c.cpf) === d && c.id !== cEditId);
+  av.innerHTML = dup ? `<span class="late">⚠ Já existe uma carta para esse CPF (${esc(dup.cliente)} · ${esc(dup.corretorNome||'')}).</span>` : '<span style="color:var(--ok)">✓ CPF válido</span>';
+};
+const brl = n => (Number(n)||0).toLocaleString('pt-BR', { style:'currency', currency:'BRL', maximumFractionDigits:0 });
+const lerValor = s => { const t = String(s||'').replace(/[^\d,]/g,'').replace(',','.'); return t ? Math.round(parseFloat(t)) : 0; };
+const fmtValorInput = n => n ? (Number(n)).toLocaleString('pt-BR') : '';
+function cStCls(st){ return 'cst-' + norm(st).replace(/[^a-z0-9]+/g,'-'); }
+function rankingCartaDe(c){ return { equipe:c.equipe||'', corretorUid:c.corretorUid||'', corretorNome:c.corretorNome||'', data:c.data||'', status:c.status||'', valor:c.valor||0 }; }
+function diasParaVencer(c){ return c.validade ? diffDias(c.validade) : null; }
+function cartasDoPerfil(p, de, ate){ return cartas.filter(c => c.corretorUid === p.uid && c.data >= de && c.data <= ate); }
+
+function assinarCartas(erro){
+  let qc;
+  if (souGerente()) qc = collection(db,'cartas');
+  else if (souCoord()) qc = query(collection(db,'cartas'), where('equipe','==',perfil.equipe||'-'));
+  else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
+  subsPapel.push(onSnapshot(qc, s => { cartas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  subsPapel.push(onSnapshot(collection(db,'ranking_cartas'), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+}
+
+function cardCarta(c){
+  const cor = C_COR[c.status] || '#64748b', dv = diasParaVencer(c);
+  const meta = [];
+  if (c.empreendimento) meta.push(`<span>🏠 ${esc(c.empreendimento)}</span>`);
+  meta.push(`<span>🏦 ${esc(c.banco||'Caixa')}</span>`);
+  if (podeGerir() || c.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(c.corretorNome||'')}</span>`);
+  if (souGerente()) meta.push(`<span>${esc(eqNome(c.equipe))}</span>`);
+  if (c.telefone) meta.push(`<span>📱 ${esc(c.telefone)}</span>`);
+  if (c.cpf) meta.push(`<span title="Abra a carta para ver o CPF completo">🪪 ${cpfOculto(c.cpf)}</span>`);
+  let aviso = '';
+  if (dv !== null && ['Aprovada','Em negociação'].includes(c.status)) {
+    if (dv < 0) aviso = `<span class="late">⚠ venceu há ${-dv} dia${-dv!==1?'s':''}</span>`;
+    else if (dv <= 15) aviso = `<span class="late">⏳ vence em ${dv} dia${dv!==1?'s':''}</span>`;
+    else aviso = `<span>válida até ${parseISO(c.validade).toLocaleDateString('pt-BR')}</span>`;
+  }
+  const acoes = [];
+  if (c.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')" title="Abrir conversa">${IC.wa}WhatsApp</button>`);
+  if (c.status === 'Aprovada' || c.status === 'Em negociação') acoes.push(`<button class="snooze" onclick="mudarStatusCarta('${c.id}','Venda fechada')">🎉 Venda fechada</button>`);
+  acoes.push(`<button class="icon-btn del" onclick="excluirCarta('${c.id}')" title="Excluir">${IC.trash}</button>`);
+  return `<div class="vcard" style="--vc:${cor}">
+    <div class="v-time"><b style="font-size:15px">${parseISO(c.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</b><span>aprovada</span></div>
+    <div class="v-body" onclick="editarCarta('${c.id}')">
+      <div class="v-top"><b>${esc(c.cliente)}</b><span class="vst ${cStCls(c.status)}">${esc(c.status)}</span></div>
+      <div class="v-meta"><span style="color:var(--text);font-weight:700">💰 ${brl(c.valor)}${c.subsidio ? ' · subsídio ' + brl(c.subsidio) : ''}</span>${meta.join('')}</div>
+      <div class="v-meta">${aviso}</div>
+      ${c.obs ? `<div class="v-obs">📝 ${esc(c.obs)}</div>` : ''}
+    </div>
+    <div class="v-actions">${acoes.join('')}</div>
+  </div>`;
+}
+
+function renderCartas(){
+  const ativo = souAtivo();
+  $('bannerCartas').innerHTML = bannerAcesso();
+  $('cartasConteudo').classList.toggle('hide', !ativo);
+  $('btnNovaCartaPag').classList.toggle('hide', !ativo);
+  if (!ativo) return;
+  $('cartasSub').textContent = souGerente() ? 'Cartas de todas as equipes.' : souCoord() ? 'Cartas da ' + eqNome(perfil.equipe) + '.' : 'As suas cartas de crédito aprovadas.';
+  $('cStatus').innerHTML = '<option value="">Todos os status</option>' + C_STATUS.map(s => `<option ${cFil.status===s?'selected':''}>${s}</option>`).join('');
+  $('cEquipe').classList.toggle('hide', !souGerente());
+  $('cEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${cFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  $('cCorretor').classList.toggle('hide', !podeGerir());
+  const nomes = new Map(); cartas.forEach(c => { if (!nomes.has(c.corretorUid)) nomes.set(c.corretorUid, c.corretorNome || 'Sem nome'); });
+  $('cCorretor').innerHTML = '<option value="">Todos os corretores</option>' + [...nomes].sort((a,b) => a[1].localeCompare(b[1],'pt-BR')).map(([k,n]) => `<option value="${esc(k)}" ${cFil.corretor===k?'selected':''}>${esc(n)}</option>`).join('');
+  $('cPeriodo').value = cFil.periodo;
+  const [de, ate] = cFil.periodo === 'todas' ? ['0000','9999'] : faixa(cFil.periodo), t = norm(cFil.busca);
+  const lista = cartas.filter(c => {
+    if (!c.data || c.data < de || c.data > ate) return false;
+    if (cFil.status && c.status !== cFil.status) return false;
+    if (cFil.equipe && c.equipe !== cFil.equipe) return false;
+    if (cFil.corretor && c.corretorUid !== cFil.corretor) return false;
+    if (t && !norm([c.cliente, c.telefone, c.empreendimento, c.corretorNome, c.obs, c.banco].join(' ')).includes(t) && !(soDig(t).length >= 3 && soDig(c.cpf).includes(soDig(t)))) return false;
+    return true;
+  }).sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  const ativas = cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status));
+  const vencendo = ativas.filter(c => { const d = diasParaVencer(c); return d !== null && d <= 15; }).length;
+  $('csQtd').textContent = lista.length;
+  $('csValor').textContent = brl(lista.reduce((s,c) => s + (c.valor||0), 0));
+  $('csVendas').textContent = lista.filter(c => c.status === 'Venda fechada').length;
+  $('csVence').textContent = vencendo;
+  $('cartasLista').innerHTML = lista.length ? lista.map(cardCarta).join('') : vazio('Nenhuma carta nesse filtro', 'Cadastre uma carta aprovada pelo botão "Nova carta".');
+}
+window.cf = (k, v) => { cFil[k] = v; render(); };
+window.filtrarVencendo = () => { cFil.periodo = 'todas'; cFil.status = ''; render(); };
+
+function abrirFormCarta(c){
+  cEditId = c?.id || null; cOrig = c || null;
+  $('cmTitulo').textContent = c ? 'Editar carta' : 'Nova carta aprovada';
+  $('cmCliente').value = c?.cliente || ''; $('cmFone').value = c?.telefone || '';
+  $('cmCpf').value = fmtCpf(c?.cpf || ''); $('cmCpfAviso').textContent = '';
+  $('cmData').value = c?.data || hojeISO(); $('cmValidade').value = c?.validade || '';
+  $('cmValor').value = fmtValorInput(c?.valor); $('cmSubsidio').value = fmtValorInput(c?.subsidio);
+  $('cmBanco').innerHTML = BANCOS.map(b => `<option ${ (c?.banco||'Caixa')===b?'selected':''}>${b}</option>`).join('');
+  $('cmImovel').value = c?.empreendimento || ''; $('cmObs').value = c?.obs || '';
+  $('cmStatus').innerHTML = C_STATUS.map(s => `<option ${ (c?.status||'Aprovada')===s?'selected':''}>${s}</option>`).join('');
+  $('listaImoveis2').innerHTML = [...new Set([...visitas.map(x => x.empreendimento), ...cartas.map(x => x.empreendimento)].filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
+  $('cmCorWrap').classList.toggle('hide', !podeGerir());
+  if (podeGerir()) {
+    $('cmCorretor').innerHTML = membrosSelecionaveis().map(p => `<option value="${p.uid}">${esc(p.nome)}${souGerente() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`).join('');
+    $('cmCorretor').value = c ? c.corretorUid : uidAtual;
+  }
+  $('cmExcluir').classList.toggle('hide', !c);
+  abrir('cartaModal');
+  if (!c) setTimeout(() => $('cmCliente').focus(), 80);
+}
+window.cartaAtualId = () => cEditId;
+window.visitaAtualId = () => vEditId;
+window.novaCarta = () => {
+  if (!souAtivo()) { toast(perfil ? 'Seu acesso ainda não foi liberado.' : 'Complete seu cadastro primeiro.'); if (!perfil) cadDispensadoOff(); return; }
+  abrirFormCarta(null);
+};
+window.editarCarta = id => { const c = cartas.find(x => x.id === id); if (c) abrirFormCarta(c); };
+window.salvarCarta = async () => {
+  const d = { cliente:$('cmCliente').value.trim(), telefone:$('cmFone').value.trim(), cpf:fmtCpf($('cmCpf').value), data:$('cmData').value, validade:$('cmValidade').value,
+    valor:lerValor($('cmValor').value), subsidio:lerValor($('cmSubsidio').value), banco:$('cmBanco').value,
+    empreendimento:$('cmImovel').value.trim(), status:$('cmStatus').value, obs:$('cmObs').value.trim() };
+  if (!d.cliente) { toast('Informe o nome do cliente'); $('cmCliente').focus(); return; }
+  if (!d.data) { toast('Informe a data da aprovação'); return; }
+  if (!d.valor) { toast('Informe o valor aprovado'); $('cmValor').focus(); return; }
+  if (d.cpf && !cpfValido(d.cpf) && !confirm('O CPF parece inválido. Salvar mesmo assim?')) return;
+  if (!podeGerir()) { d.corretorUid = uidAtual; d.corretorNome = perfil.nome; d.equipe = perfil.equipe || ''; }
+  else {
+    const p = membrosSelecionaveis().find(x => x.uid === $('cmCorretor').value) || { ...perfil, uid:uidAtual };
+    d.corretorUid = p.uid; d.corretorNome = p.nome; d.equipe = p.papel === 'gerente' ? '' : (p.equipe || '');
+    if (souCoord()) d.equipe = perfil.equipe;
+  }
+  const id = cEditId || doc(collection(db,'cartas')).id;
+  const dados = { ...d, criadoPor: cOrig?.criadoPor || uidAtual, criadoEm: cOrig?.criadoEm || Date.now(), atualizadoEm: Date.now() };
+  $('cmSalvar').disabled = true;
+  try {
+    const b = writeBatch(db);
+    b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados));
+    await b.commit();
+    fechar('cartaModal'); toast(cEditId ? 'Carta atualizada' : 'Carta cadastrada 🎉');
+  } catch(e) { toast('Não foi possível salvar: ' + e.message); }
+  $('cmSalvar').disabled = false;
+};
+window.mudarStatusCarta = async (id, st) => {
+  const c = cartas.find(x => x.id === id); if (!c) return;
+  const dados = { ...c, status:st, atualizadoEm:Date.now() }; delete dados.id;
+  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await b.commit(); toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.excluirCarta = async (id, doModal) => {
+  const c = cartas.find(x => x.id === id); if (!c) return;
+  if (!confirm(`Excluir a carta de ${c.cliente}?`)) return;
+  try { const b = writeBatch(db); b.delete(doc(db,'cartas',id)); b.delete(doc(db,'ranking_cartas',id)); await b.commit(); if (doModal) fechar('cartaModal'); toast('Carta excluída'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.toLocaleString('pt-BR') : ''; };
+
+function renderRankingCartas(){
+  const [de, ate] = rankPeriodo === 'todas' ? ['0000','9999'] : faixa(rankPeriodo);
+  const base = rankingCartas.filter(r => r.data && r.data >= de && r.data <= ate);
+  const eqs = listaEquipes().map(e => ({ e, n: base.filter(r => r.equipe === e.id).length, v: base.filter(r => r.equipe === e.id && r.status === 'Venda fechada').length }));
+  const max = Math.max(0, ...eqs.map(x => x.n));
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>cartas · ${x.v} venda${x.v!==1?'s':''}${x.n && x.n===max?' · 🏆 liderando':''}</span></div>`).join('');
+  const g = new Map();
+  base.filter(r => !rankEquipe || r.equipe === rankEquipe).forEach(r => {
+    const k = r.corretorUid || 'n:' + norm(r.corretorNome);
+    if (!g.has(k)) g.set(k, { nome:r.corretorNome, equipe:r.equipe, uid:r.corretorUid, total:0, vendas:0, valor:0 });
+    const x = g.get(k); x.total++; x.valor += r.valor || 0; if (r.status === 'Venda fechada') x.vendas++;
+  });
+  const lista = [...g.values()].sort((a,b) => b.total-a.total || b.vendas-a.vendas || b.valor-a.valor);
+  $('rankTit').textContent = 'Ranking de cartas aprovadas ' + ROT_PERIODO[rankPeriodo];
+  if (!lista.length) { $('rankLista').innerHTML = vazio('Nenhuma carta no período', 'Assim que as cartas forem cadastradas, o ranking aparece aqui.'); return; }
+  const med = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
+  let pos = 0, ant = null;
+  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Cartas</th><th class="hide-m">Valor aprovado</th><th>Vendas</th></tr></thead><tbody>${
+    lista.map((x,i) => { if (!ant || x.total!==ant.total || x.vendas!==ant.vendas) pos = i; ant = x;
+      return `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${med(pos)}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot">${x.total}</td><td class="hide-m">${brl(x.valor)}</td><td>${x.vendas}</td></tr>`; }).join('')
+  }</tbody></table>`;
+}
+
 // ================= Lembretes =================
 function checarLembretes(){
   if (!state || !state.profile.notif) return;
@@ -2164,13 +2424,13 @@ setInterval(() => { if (state) render(); }, 60000); // vira o dia sozinho
 // ================= Atalhos =================
 document.addEventListener('keydown', e => {
   const digitando = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-  if (e.key === 'Escape') { fecharModal(); ['visModal','relModal','menuModal','confModal'].forEach(fechar); return; }
+  if (e.key === 'Escape') { fecharModal(); ['visModal','relModal','menuModal','confModal','cartaModal'].forEach(fechar); return; }
   if (digitando || !state) return;
   if (e.key === 'n' || e.key === 'N') { e.preventDefault(); acaoPrincipal(); }
   if (e.key === '/') { e.preventDefault(); if (innerWidth <= 820) abrirBuscaM(); else $('busca').focus(); }
 });
 $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal')) fecharModal(); });
-['visModal','relModal','menuModal','confModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
+['visModal','relModal','menuModal','confModal','cartaModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
 </script>
 </body>
 </html>
