@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Minha Agenda · Organize seu dia</title>
+<title>Minha Agenda · Frade Imóveis</title>
 <meta name="description" content="Minha Agenda: tarefas, compromissos e lembretes sincronizados em todos os seus aparelhos.">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon-192.png">
+<meta name="application-name" content="Frade Imóveis">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#2563eb">
+<meta name="theme-color" content="#022C45">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Minha Agenda">
+<meta name="apple-mobile-web-app-title" content="Frade Imóveis">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --accent:#2563eb;--accent-soft:color-mix(in srgb,var(--accent) 12%,transparent);
+  --accent:#E65100;--marinho:#022C45;--accent-soft:color-mix(in srgb,var(--accent) 12%,transparent);
   --bg:#f4f6fb;--card:#ffffff;--card2:#f8fafc;--text:#0f172a;--text2:#334155;--muted:#64748b;--border:#e5e9f2;
   --side:#ffffff;--side-text:#475569;--side-hover:#f1f5f9;--shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
   --danger:#ef4444;--danger-soft:#fef2f2;--ok:#10b981;--ok-soft:#ecfdf5;--warn:#f59e0b;
@@ -41,6 +42,8 @@ label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin:0 0
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit}
 .brand-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%,#0f172a));display:grid;place-items:center;box-shadow:0 6px 14px color-mix(in srgb,var(--accent) 35%,transparent);flex:none}
 .brand-mark svg{width:21px;height:21px}
+.brand-mark.marca{background:#022C45;overflow:hidden;box-shadow:0 6px 14px rgba(2,44,69,.35)}
+.brand-mark.marca img{width:100%;height:100%;display:block}
 .brand-name{font-weight:800;font-size:17px;letter-spacing:-.02em;line-height:1.1}
 .brand-name span{color:var(--accent)}
 .brand-sub{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.02em}
@@ -60,7 +63,7 @@ label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin:0 0
 
 /* ---------- Login (estilo site) ---------- */
 .login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
-.hero{position:relative;overflow:hidden;background:radial-gradient(1200px 600px at -10% -10%,color-mix(in srgb,var(--accent) 60%,#fff) 0%,transparent 55%),linear-gradient(150deg,color-mix(in srgb,var(--accent) 85%,#0f172a),#0b1120 90%);color:#fff;padding:48px 56px;display:flex;flex-direction:column}
+.hero{position:relative;overflow:hidden;background:radial-gradient(900px 500px at 110% 110%,#E6510033 0%,transparent 60%),radial-gradient(900px 600px at -10% -10%,#0b4a73 0%,transparent 55%),#022C45;color:#fff;padding:48px 56px;display:flex;flex-direction:column}
 .hero .brand-name,.hero .brand-name span{color:#fff}
 .hero .brand-sub{color:#ffffffaa}
 .hero .brand-mark{background:#ffffff22;box-shadow:none;border:1px solid #ffffff33}
@@ -543,7 +546,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
 <!-- ================= LOGIN ================= -->
 <section class="login hide" id="login">
   <div class="hero">
-    <div class="brand" data-brand></div>
+    <img src="logo-frade.png" alt="Frade Imóveis" style="width:220px;max-width:60%;border-radius:10px">
     <div class="hero-body">
       <h1>Seu dia organizado, do celular ao computador.</h1>
       <p class="lead">Tarefas, compromissos e lembretes em um só lugar, sincronizados em tempo real em todos os seus aparelhos.</p>
@@ -551,7 +554,7 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <div class="feat"><div class="feat-ic" data-ic="house"></div><div><b>Central de visitas</b><span>Cadastre visitas, confirme pelo WhatsApp e dispute o ranking.</span></div></div>
       <div class="feat"><div class="feat-ic" data-ic="chart"></div><div><b>Relatórios por corretor</b><span>Gestores acompanham a equipe em tempo real.</span></div></div>
     </div>
-    <div class="hero-foot">© <span id="ano"></span> Minha Agenda · Seus dados protegidos na nuvem</div>
+    <div class="hero-foot">© <span id="ano"></span> Frade Imóveis · Seus dados protegidos na nuvem</div>
     <div class="hero-deco"></div>
   </div>
   <div class="auth">
@@ -1088,13 +1091,13 @@ const IC = {
 };
 function pintarIcones(root=document){
   root.querySelectorAll('[data-ic]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = IC[el.dataset.ic] || ''; el.dataset.icDone = 1; } });
-  root.querySelectorAll('[data-brand]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = `<div class="brand-mark">${IC.logo}</div><div><div class="brand-name">Minha <span>Agenda</span></div><div class="brand-sub">Frade Imóveis</div></div>`; el.dataset.icDone = 1; } });
+  root.querySelectorAll('[data-brand]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = `<div class="brand-mark marca"><img src="icon-192.png" alt=""></div><div><div class="brand-name">Frade <span>Imóveis</span></div><div class="brand-sub">Minha Agenda</div></div>`; el.dataset.icDone = 1; } });
 }
 pintarIcones();
 
 // ================= Constantes =================
 const $ = id => document.getElementById(id);
-const CORES = ['#2563eb','#4f46e5','#7c3aed','#db2777','#e11d48','#ea580c','#059669','#0d9488','#0f172a'];
+const CORES = ['#E65100','#022C45','#2563eb','#4f46e5','#7c3aed','#db2777','#e11d48','#ea580c','#059669','#0d9488','#0f172a'];
 const CATS = {
   visita:{n:'Visita',c:'#2563eb'}, cliente:{n:'Cliente',c:'#059669'}, equipe:{n:'Equipe',c:'#7c3aed'},
   reuniao:{n:'Reunião',c:'#ea580c'}, pessoal:{n:'Pessoal',c:'#db2777'}, outros:{n:'Outros',c:'#64748b'}
@@ -1152,7 +1155,7 @@ function estadoInicial(user){
   const nome = nomeCadastro || (user.email||'Usuário').split('@')[0].replace(/[._-]+/g,' ');
   const h = hojeISO(), id = Date.now();
   return {
-    profile:{ name: nome.charAt(0).toUpperCase()+nome.slice(1), nameSet: !!nomeCadastro, color:'#2563eb', theme:'auto', notif:false, notifMin:15 },
+    profile:{ name: nome.charAt(0).toUpperCase()+nome.slice(1), nameSet: !!nomeCadastro, color:'#E65100', theme:'auto', notif:false, notifMin:15 },
     tasks:[
       {id:id+1,title:'Organizar prioridades do dia',date:h,time:'08:00',done:false,priority:'alta',cat:'pessoal',repeat:'uteis',notes:'',phone:'',subtasks:[]},
       {id:id+2,title:'Responder mensagens importantes',date:h,time:'10:00',done:false,priority:'media',cat:'cliente',repeat:'',notes:'',phone:'',subtasks:[]},
@@ -1170,9 +1173,10 @@ function aplicarTema(){
   const pref = state?.profile?.theme || localStorage.getItem('tema') || 'auto';
   const escuro = pref === 'dark' || (pref === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = escuro ? 'dark' : 'light';
-  const cor = state?.profile?.color || localStorage.getItem('cor') || '#2563eb';
+  let cor = state?.profile?.color || localStorage.getItem('cor') || '#E65100';
+  if (cor === '#2563eb') cor = '#E65100'; // antiga cor padrão vira a cor da Frade
   document.documentElement.style.setProperty('--accent', cor);
-  document.querySelector('meta[name=theme-color]').content = cor;
+  document.querySelector('meta[name=theme-color]').content = '#022C45';
   $('btnTema').innerHTML = escuro ? IC.sun : IC.moon;
   try { localStorage.setItem('tema', pref); localStorage.setItem('cor', cor); } catch(e){}
 }
@@ -1204,7 +1208,7 @@ onAuthStateChanged(auth, user => {
   pararEscuta = onSnapshot(docRef, snap => {
     if (!snap.exists()) { state = estadoInicial(user); salvar(); pedirCadastro(); return; }
     const d = snap.data();
-    state = { profile: Object.assign({ color:'#2563eb', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar) };
+    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar) };
     render();
     pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
@@ -2788,17 +2792,19 @@ const jaInstalado = matchMedia('(display-mode: standalone)').matches || navigato
 function mostrarInstalar(sim){ document.querySelectorAll('.instalar').forEach(b => b.classList.toggle('hide', !sim)); }
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); pedidoInstalar = e; mostrarInstalar(true); });
 addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicativo instalado ✓'); });
-if (ehIOS && !jaInstalado) mostrarInstalar(true);
+// Mostra o botão em qualquer celular que ainda não instalou (se o Chrome não liberar a instalação direta, o botão ensina o caminho)
+if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 window.instalarApp = async () => {
   if (pedidoInstalar) { pedidoInstalar.prompt(); const r = await pedidoInstalar.userChoice; if (r.outcome === 'accepted') mostrarInstalar(false); pedidoInstalar = null; return; }
   if (ehIOS) { alert('Para instalar no iPhone:\n\n1. Toque no botão Compartilhar (quadrado com a seta para cima)\n2. Escolha "Adicionar à Tela de Início"\n3. Toque em "Adicionar"'); return; }
-  alert('Para instalar: abra o menu do navegador (⋮) e escolha "Instalar aplicativo" ou "Adicionar à tela inicial".');
+  alert('Para instalar no Android:\n\n1. Toque nos três pontinhos (⋮) no canto de cima do Chrome\n2. Toque em "Instalar app" ou "Adicionar à tela inicial"\n3. Confirme em "Instalar"\n\nSe não aparecer, recarregue a página uma vez e tente de novo.');
 };
 
 function soltarConfete(){
   const cv = $('confete'), ctx = cv.getContext('2d');
   cv.width = innerWidth; cv.height = innerHeight; cv.classList.remove('hide');
-  const cores = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899'];
+  const cores = ['#E65100','#FF6600','#022C45','#ffffff','#10b981','#f59e0b'];
   const ps = Array.from({ length:160 }, () => ({ x:innerWidth/2 + (Math.random()-.5)*200, y:innerHeight*.35, vx:(Math.random()-.5)*16, vy:-Math.random()*14-4, r:Math.random()*6+4, c:cores[Math.floor(Math.random()*cores.length)], a:Math.random()*6, va:(Math.random()-.5)*.3 }));
   const ini = performance.now();
   (function passo(t){

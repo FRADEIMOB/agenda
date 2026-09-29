@@ -1,15 +1,19 @@
 {
-  "name": "Minha Agenda",
-  "short_name": "Agenda",
-  "description": "Tarefas, compromissos e lembretes sincronizados em todos os seus aparelhos.",
+  "id": "./",
+  "name": "Frade Imóveis · Minha Agenda",
+  "short_name": "Frade Imóveis",
+  "description": "Agenda, visitas e cartas aprovadas da equipe Frade Imóveis.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f6fb",
-  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "background_color": "#022C45",
+  "theme_color": "#022C45",
   "lang": "pt-BR",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
