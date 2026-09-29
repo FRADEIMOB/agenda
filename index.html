@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minha Agenda</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<style>
+:root{--accent:#2563eb;--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#7b8497;--border:#e8ebf2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input{font:inherit}.app{min-height:100vh;display:none}.app.on{display:flex}
+.sidebar{width:250px;background:#111827;color:#fff;padding:24px;display:flex;flex-direction:column;gap:24px}
+.logo{font-size:22px;font-weight:800}.profile{background:#1f2937;border-radius:18px;padding:16px}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--accent);font-weight:800}.profile-row{display:flex;gap:12px;align-items:center}.small{font-size:12px;color:#aab2c1}
+.nav button{width:100%;background:transparent;border:0;color:#cbd5e1;text-align:left;padding:12px;border-radius:12px;cursor:pointer}.nav button.active,.nav button:hover{background:#253044;color:#fff}
+.main{flex:1;padding:28px;max-width:1200px;margin:auto;width:100%}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
+h1{margin:0;font-size:30px}.date{color:var(--muted);margin-top:5px}.actions{display:flex;gap:10px}.btn{border:0;border-radius:13px;padding:12px 16px;cursor:pointer}.primary{background:var(--accent);color:#fff}.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}.stat{background:var(--card);border:1px solid var(--border);padding:18px;border-radius:18px}.stat b{font-size:26px;display:block;margin-top:6px}.muted{color:var(--muted);font-size:13px}
+.content{display:grid;grid-template-columns:1fr 310px;gap:18px}.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px}.card h2{margin:0 0 16px;font-size:18px}
+.task{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}.task:last-child{border-bottom:0}.check{width:22px;height:22px;border:2px solid #c8ceda;border-radius:7px;cursor:pointer;flex:none}.task.done .check{background:var(--accent);border-color:var(--accent);position:relative}.task.done .check:after{content:"✓";color:white;position:absolute;font-size:14px;left:3px;top:-1px}.task.done .title{text-decoration:line-through;color:#9aa2b1}.task-info{flex:1}.title{font-weight:650}.time{font-size:12px;color:var(--muted);margin-top:3px}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:#eef3ff;color:var(--accent)}
+.progress{height:9px;background:#edf0f5;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{padding:9px 4px;text-align:center;border-radius:10px;font-size:12px}.day.today{background:var(--accent);color:#fff}.addbox{margin-top:16px;display:flex;gap:8px}.addbox input{flex:1;border:1px solid var(--border);border-radius:12px;padding:11px;background:#fff}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-box{background:white;border-radius:22px;padding:22px;width:min(440px,100%)}.modal-box input{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;margin:8px 0 14px}.colors{display:flex;gap:10px;flex-wrap:wrap}.color{width:34px;height:34px;border:3px solid white;outline:1px solid #ddd;border-radius:50%;cursor:pointer}.color.sel{outline:3px solid #111827}
+@media(max-width:800px){.sidebar{display:none}.main{padding:18px 14px 90px}.top{align-items:flex-start}.top .actions .secondary{display:none}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:13px}.stat b{font-size:21px}.content{grid-template-columns:1fr}.calendar-card{display:none}h1{font-size:25px}.mobilebar{display:flex!important}}
+.mobilebar{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:10px;justify-content:space-around;z-index:5}.mobilebar button{border:0;background:transparent;color:var(--muted)}.mobilebar button.active{color:var(--accent);font-weight:700}
+/* Tela de login */
+.login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}.login.off{display:none}
+.login-box{background:#fff;border:1px solid var(--border);border-radius:22px;padding:28px;width:min(400px,100%)}
+.login-box h2{margin:0 0 6px}.login-box input{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;margin:6px 0 12px}
+.login-box .btn{width:100%;margin-top:6px}.erro{color:#dc2626;font-size:13px;min-height:18px;margin-top:8px}
+.link{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;margin-top:14px;font-size:13px}
+.carregando{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="carregando" id="carregando">Carregando…</div>
+
+<!-- LOGIN -->
+<div class="login off" id="login"><div class="login-box">
+  <h2>✦ Minha Agenda</h2>
+  <p class="muted" id="loginSub">Entre com seu e-mail e senha</p>
+  <label>E-mail</label><input id="email" type="email" autocomplete="email" placeholder="voce@email.com">
+  <label>Senha</label><input id="senha" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter')entrar()">
+  <button class="btn primary" id="btnEntrar" onclick="entrar()">Entrar</button>
+  <div class="erro" id="erro"></div>
+  <button class="link" id="btnModo" onclick="alternarModo()">Não tem conta? Criar conta</button><br>
+  <button class="link" onclick="esqueciSenha()">Esqueci minha senha</button>
+</div></div>
+
+<div class="app" id="app">
+<aside class="sidebar">
+  <div class="logo">✦ Minha Agenda</div>
+  <div class="profile">
+    <div class="profile-row"><div class="avatar" id="avatar">A</div><div><b id="profileName"></b><div class="small" id="profileEmail">Meu perfil</div></div></div>
+  </div>
+  <div class="nav">
+    <button class="active">▦ Hoje</button><button>✓ Tarefas</button><button>◷ Calendário</button><button onclick="openSettings()">⚙ Personalizar</button>
+  </div>
+  <button class="btn secondary" onclick="sair()">Sair / Trocar perfil</button>
+</aside>
+<main class="main">
+  <div class="top">
+    <div><h1>Olá, <span id="hello"></span> 👋</h1><div class="date" id="date"></div></div>
+    <div class="actions"><button class="btn secondary" onclick="openSettings()">Personalizar</button><button class="btn primary" onclick="addTask()">+ Nova tarefa</button></div>
+  </div>
+  <section class="stats">
+    <div class="stat"><span class="muted">Hoje</span><b id="total">0</b><span class="muted">tarefas</span></div>
+    <div class="stat"><span class="muted">Concluídas</span><b id="done">0</b><span class="muted">finalizadas</span></div>
+    <div class="stat"><span class="muted">Progresso</span><b id="percent">0%</b><span class="muted">do dia</span></div>
+  </section>
+  <div class="content">
+    <section class="card">
+      <h2>Minha agenda de hoje</h2>
+      <div id="tasks"></div>
+      <div class="addbox"><input id="newTask" placeholder="Adicionar uma tarefa..." onkeydown="if(event.key==='Enter')addTask()"><button class="btn primary" onclick="addTask()">Adicionar</button></div>
+    </section>
+    <aside class="card calendar-card">
+      <h2>Seu dia</h2>
+      <div class="calendar" id="calendar"></div>
+      <div style="margin-top:20px"><div class="muted">Progresso</div><div class="progress" style="margin-top:8px"><span id="bar" style="width:0%"></span></div></div>
+      <div style="margin-top:22px;padding:14px;background:#f8f9fc;border-radius:15px"><b>Foco do dia</b><p class="muted">Organize suas prioridades e avance uma tarefa de cada vez.</p></div>
+    </aside>
+  </div>
+</main>
+</div>
+<div class="mobilebar" id="mobilebar" style="display:none"><button class="active">⌂<br>Hoje</button><button>✓<br>Tarefas</button><button onclick="sair()">⎋<br>Sair</button><button onclick="openSettings()">⚙<br>Perfil</button></div>
+
+<div class="modal" id="modal"><div class="modal-box">
+<h2>Personalizar perfil</h2>
+<label>Nome</label><input id="nameInput" placeholder="Seu nome">
+<label>Cor do aplicativo</label><div class="colors" id="colors"></div>
+<div style="display:flex;gap:10px;margin-top:22px"><button class="btn secondary" style="flex:1" onclick="closeSettings()">Cancelar</button><button class="btn primary" style="flex:1" onclick="saveProfile()">Salvar</button></div>
+</div></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ===== COLE AQUI A CONFIGURAÇÃO DO SEU PROJETO FIREBASE =====
+const firebaseConfig = {
+  apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
+  authDomain: "agenda-37236.firebaseapp.com",
+  projectId: "agenda-37236",
+  storageBucket: "agenda-37236.firebasestorage.app",
+  messagingSenderId: "920001274674",
+  appId: "1:920001274674:web:6e9451fcede374a3be6d2b"
+};
+// ============================================================
+
+const fb = initializeApp(firebaseConfig);
+const auth = getAuth(fb);
+const db = getFirestore(fb);
+
+const $ = id => document.getElementById(id);
+const CORES = ['#2563eb','#7c3aed','#db2777','#059669','#ea580c','#0f766e'];
+let state = null, docRef = null, pararEscuta = null, modoCriar = false, corEscolhida = null;
+
+function estadoInicial(user){
+  const nome = (user.email||'Usuário').split('@')[0];
+  return { profile:{ name: nome.charAt(0).toUpperCase()+nome.slice(1), color:'#2563eb' }, tasks:[
+    {id:1,title:'Organizar prioridades do dia',time:'08:00',done:false},
+    {id:2,title:'Responder mensagens importantes',time:'10:00',done:false},
+    {id:3,title:'Revisar compromissos de amanhã',time:'17:30',done:false}
+  ]};
+}
+
+// ---------- Login ----------
+onAuthStateChanged(auth, user => {
+  $('carregando').style.display = 'none';
+  if (pararEscuta) { pararEscuta(); pararEscuta = null; }
+  if (!user) {
+    state = null;
+    $('app').classList.remove('on'); $('mobilebar').style.display='none';
+    $('login').classList.remove('off');
+    return;
+  }
+  $('login').classList.add('off');
+  $('app').classList.add('on'); $('mobilebar').style.display='';
+  $('profileEmail').textContent = user.email;
+  docRef = doc(db, 'usuarios', user.uid);
+  // Escuta em tempo real: o que mudar no celular aparece no computador e vice-versa
+  pararEscuta = onSnapshot(docRef, snap => {
+    if (!snap.exists()) { state = estadoInicial(user); salvar(); return; }
+    state = snap.data();
+    render();
+  }, err => alert('Erro ao carregar seus dados: ' + err.message));
+});
+
+function traduzErro(e){
+  const m = {
+    'auth/invalid-email':'E-mail inválido.',
+    'auth/missing-password':'Digite a senha.',
+    'auth/weak-password':'A senha precisa ter pelo menos 6 caracteres.',
+    'auth/email-already-in-use':'Esse e-mail já tem conta. Use "Entrar".',
+    'auth/invalid-credential':'E-mail ou senha incorretos.',
+    'auth/user-not-found':'E-mail ou senha incorretos.',
+    'auth/wrong-password':'E-mail ou senha incorretos.',
+    'auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos.',
+    'auth/network-request-failed':'Sem conexão com a internet.'
+  };
+  return m[e.code] || ('Erro: ' + e.message);
+}
+
+window.entrar = async () => {
+  const email = $('email').value.trim(), senha = $('senha').value;
+  $('erro').textContent = '';
+  $('btnEntrar').disabled = true;
+  try {
+    if (modoCriar) await createUserWithEmailAndPassword(auth, email, senha);
+    else await signInWithEmailAndPassword(auth, email, senha);
+  } catch(e) { $('erro').textContent = traduzErro(e); }
+  $('btnEntrar').disabled = false;
+};
+window.alternarModo = () => {
+  modoCriar = !modoCriar;
+  $('btnEntrar').textContent = modoCriar ? 'Criar conta' : 'Entrar';
+  $('loginSub').textContent = modoCriar ? 'Crie sua conta com e-mail e senha' : 'Entre com seu e-mail e senha';
+  $('btnModo').textContent = modoCriar ? 'Já tem conta? Entrar' : 'Não tem conta? Criar conta';
+  $('erro').textContent = '';
+};
+window.esqueciSenha = async () => {
+  const email = $('email').value.trim();
+  if (!email) { $('erro').textContent = 'Digite seu e-mail acima primeiro.'; return; }
+  try { await sendPasswordResetEmail(auth, email); $('erro').textContent = 'Enviamos um link de redefinição para seu e-mail.'; }
+  catch(e) { $('erro').textContent = traduzErro(e); }
+};
+window.sair = () => { if (confirm('Deseja sair desta conta?')) signOut(auth); };
+
+// ---------- Dados ----------
+async function salvar(){
+  render();
+  try { await setDoc(docRef, state); }
+  catch(e) { alert('Não foi possível salvar: ' + e.message); }
+}
+
+function render(){
+  if (!state) return;
+  document.documentElement.style.setProperty('--accent', state.profile.color);
+  $('profileName').textContent = $('hello').textContent = state.profile.name;
+  $('avatar').textContent = state.profile.name[0]?.toUpperCase() || 'A';
+  $('date').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  const t = state.tasks || [];
+  $('total').textContent = t.length;
+  const d = t.filter(x=>x.done).length; $('done').textContent = d;
+  const p = t.length ? Math.round(d/t.length*100) : 0;
+  $('percent').textContent = p+'%'; $('bar').style.width = p+'%';
+  $('tasks').innerHTML = t.map(x=>`<div class="task ${x.done?'done':''}"><div class="check" onclick="toggle(${x.id})"></div><div class="task-info"><div class="title">${escapeHtml(x.title)}</div><div class="time">${x.time||'Sem horário'}</div></div><span class="tag">Hoje</span></div>`).join('');
+  const dias = ['D','S','T','Q','Q','S','S'], hoje = new Date().getDay();
+  $('calendar').innerHTML = dias.map((x,i)=>`<div class="day ${i===hoje?'today':''}"><b>${x}</b></div>`).join('');
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+window.toggle = id => { const t = state.tasks.find(x=>x.id===id); if(t){ t.done = !t.done; salvar(); } };
+window.addTask = () => {
+  const el = $('newTask'); let title = el.value.trim();
+  if (!title) title = prompt('Qual tarefa você quer adicionar?')?.trim();
+  if (title) {
+    state.tasks.push({id:Date.now(), title, time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}), done:false});
+    el.value = ''; salvar();
+  }
+};
+window.openSettings = () => {
+  $('nameInput').value = state.profile.name;
+  corEscolhida = state.profile.color;
+  $('colors').innerHTML = CORES.map(c=>`<div class="color ${c===corEscolhida?'sel':''}" style="background:${c}" onclick="setColor('${c}')"></div>`).join('');
+  $('modal').classList.add('open');
+};
+window.closeSettings = () => $('modal').classList.remove('open');
+window.setColor = c => {
+  corEscolhida = c;
+  document.querySelectorAll('.color').forEach(el=>el.classList.toggle('sel', el.style.background && el.getAttribute('onclick').includes(c)));
+};
+window.saveProfile = () => {
+  state.profile.name = $('nameInput').value.trim() || 'Usuário';
+  state.profile.color = corEscolhida || state.profile.color;
+  closeSettings(); salvar();
+};
+</script>
+</body></html>
