@@ -1026,6 +1026,11 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <div class="int-linha"><span class="muted" id="intUltSync"></span><button class="link" onclick="lerPlanilhaAgora()">🔄 Ler a planilha agora</button></div></div>
             <div class="int-bloco"><b>4. Quem é quem</b><span>Ligue cada aba da planilha e cada nome do CRM ao corretor certo do app.</span>
               <div id="intLigacoes"></div><button class="btn btn-primary" id="btnSalvarLig" style="margin-top:10px" onclick="salvarLigacoes()">Salvar ligações</button></div>
+            <div class="int-bloco"><b>6. Leads antigos (antes de ligar o CRM)</b><span>Baixe a planilha de oportunidades do CRM (Excel ou CSV) e envie aqui. O app mostra a prévia por corretor antes de gravar. Conta cada lead para o corretor que aparece como responsável na planilha.</span>
+              <div class="int-linha"><label style="font-size:13px">De <input type="date" id="impDe" value="2026-09-14" onchange="previaLeads()" style="width:auto"></label><label style="font-size:13px">até <input type="date" id="impAte" onchange="previaLeads()" style="width:auto"></label>
+                <button class="btn btn-ghost" onclick="document.getElementById('impLeadsArq').click()">📂 Escolher planilha</button><input type="file" id="impLeadsArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerArquivoLeads(this)"></div>
+              <div id="impLeadsCols"></div><div class="hint" id="impLeadsInfo" style="margin:6px 0"></div><div id="impLeadsPrev"></div>
+              <button class="btn btn-primary" id="btnImpLeads" disabled onclick="importarLeadsAgora()">Importar leads</button></div>
             <div class="int-bloco"><b>5. Planilha do app</b><span>A cada visita ou carta cadastrada ou alterada, a linha é atualizada sozinha. Use o botão uma vez para mandar o que já existe.</span>
               <div class="int-linha"><button class="btn btn-ghost" id="btnEnviarTudo" onclick="enviarTudoPlanilha()">Enviar tudo para a planilha do app</button></div></div>
           </div>
@@ -3848,6 +3853,7 @@ function renderIntegracoes(){
   $('btnSalvarLig').classList.toggle('hide', !(abas.length || crm.length));
   renderGruposAdm();
 }
+if (document.getElementById('impAte') && !document.getElementById('impAte').value) document.getElementById('impAte').value = somaDias(hojeISO(), -1);
 window.gerarChave = async () => {
   if (integ.chave && !confirm('Trocar a chave? Depois será preciso colar a chave nova no ajudante da planilha e o endereço novo no CRM.')) return;
   try { await gravar(setDoc(doc(db,'config','integracao'), { chave:novaChave(), chaveEm:Date.now() }, { merge:true })); integAssin = ''; toast('Chave gerada ✓'); }
@@ -3963,6 +3969,69 @@ function renderEtapa2(){
   if (view === 'config') renderIntegracoes();
   if (view === 'relatorios') { $('cardRelAuto').classList.toggle('hide', !souGerente()); renderRelAuto(); }
 }
+
+
+// ---------- importar leads antigos (planilha exportada do CRM) ----------
+let impLeads = null;
+function dataDeCelula(v){
+  if (v instanceof Date && !isNaN(v)) return iso(v);
+  const t = String(v || '').trim(); if (!t) return '';
+  let m = t.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+  m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/); if (m) { const a = m[3].length === 2 ? '20' + m[3] : m[3]; return `${a}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`; }
+  if (/^\d{5}(\.\d+)?$/.test(t)) { const d = new Date(Math.round((Number(t) - 25569) * 864e5)); return iso(new Date(d.getTime() + d.getTimezoneOffset() * 6e4)); }
+  const d = new Date(t.replace(/(\d)(st|nd|rd|th)/, '$1')); return isNaN(d) ? '' : iso(d);
+}
+window.lerArquivoLeads = async input => {
+  const f = input.files && input.files[0]; if (!f) return;
+  $('impLeadsInfo').textContent = 'Lendo o arquivo…';
+  try {
+    const X = await carregarXLSX();
+    const wb = X.read(await f.arrayBuffer(), { type:'array', cellDates:true });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const linhas = X.utils.sheet_to_json(ws, { header:1, raw:true, defval:'' });
+    let hi = linhas.findIndex(l => l.filter(c => String(c).trim()).length >= 3);
+    if (hi < 0) throw new Error('não achei o cabeçalho da planilha');
+    const cab = linhas[hi].map(c => String(c).trim());
+    const achar = res => { for (const r of res) { const i = cab.findIndex(c => r.test(norm(c))); if (i >= 0) return i; } return -1; };
+    impLeads = { cab, dados:linhas.slice(hi + 1).filter(l => l.some(c => String(c).trim())),
+      col:{ data:achar([/data de cria|criad|created|date added|adicionad/, /^data|date/]), corretor:achar([/atribu|assigned|responsav|proprietar|owner/, /usuario|user|corretor/]), contato:achar([/id do contato|contact id|contato id/, /telefone|phone|celular/, /^nome|contact name|name/]) } };
+    const op = sel => '<option value="-1">— escolha —</option>' + cab.map((c,i) => `<option value="${i}" ${impLeads.col[sel]===i?'selected':''}>${esc(c || 'coluna ' + (i+1))}</option>`).join('');
+    $('impLeadsCols').innerHTML = `<div class="pt-row"><span>📅 Data em que o lead chegou</span><select onchange="impLeads.col.data=+this.value;previaLeads()">${op('data')}</select></div>
+      <div class="pt-row"><span>👤 Corretor responsável</span><select onchange="impLeads.col.corretor=+this.value;previaLeads()">${op('corretor')}</select></div>
+      <div class="pt-row"><span>🔑 Contato (ID, telefone ou nome)</span><select onchange="impLeads.col.contato=+this.value;previaLeads()">${op('contato')}</select></div>`;
+    previaLeads();
+  } catch(e) { $('impLeadsInfo').textContent = 'Não consegui ler: ' + e.message; }
+};
+Object.defineProperty(window, 'impLeads', { get: () => impLeads });
+window.previaLeads = () => {
+  if (!impLeads) return;
+  const { col, dados } = impLeads, de = $('impDe').value, ate = $('impAte').value;
+  if (col.data < 0 || col.corretor < 0) { $('impLeadsInfo').textContent = 'Escolha a coluna da data e a do corretor.'; $('impLeadsPrev').innerHTML = ''; $('btnImpLeads').disabled = true; return; }
+  const ok = [], semData = [];
+  dados.forEach((l, i) => { const dia = dataDeCelula(l[col.data]), cor = String(l[col.corretor] || '').trim();
+    if (!dia) { semData.push(i); return; }
+    if (dia < de || dia > ate || !cor) return;
+    ok.push({ dia, corretor:cor, contato: col.contato >= 0 ? String(l[col.contato] || '').trim() : 'linha' + i }); });
+  const vistos = new Set(), unicos = ok.filter(x => { const k = x.dia + '|' + x.contato; if (vistos.has(k)) return false; vistos.add(k); return true; });
+  impLeads.prontas = unicos;
+  const g = {}; unicos.forEach(x => g[x.corretor] = (g[x.corretor] || 0) + 1);
+  const lista = Object.entries(g).sort((a,b) => b[1] - a[1]);
+  $('impLeadsInfo').innerHTML = `<b>${unicos.length} leads</b> de ${dataBR(de)} a ${dataBR(ate)}, de ${lista.length} corretor${lista.length!==1?'es':''}. ${semData.length ? `<span class="late">${semData.length} linha(s) sem data foram ignoradas.</span>` : ''}`;
+  $('impLeadsPrev').innerHTML = lista.slice(0, 40).map(([n, q]) => `<div class="pt-row"><span>👤 ${esc(n)}</span><b>${q}</b></div>`).join('');
+  $('btnImpLeads').disabled = !unicos.length;
+};
+window.importarLeadsAgora = async () => {
+  const l = impLeads?.prontas || []; if (!l.length) return;
+  if (!confirm(`Importar ${l.length} leads para os relatórios? Os dias desse período que já tinham leads importados serão substituídos.`)) return;
+  const btn = $('btnImpLeads'); btn.disabled = true; btn.textContent = 'Importando…';
+  try {
+    const r = await chamarCarteiro({ tipo:'importar_leads', linhas:l });
+    if (!r?.ok) throw new Error(r?.erro || 'sem resposta');
+    toast(`Pronto ✓ ${r.leads} leads em ${r.dias} dias. Confira os nomes em "Quem é quem".`);
+    integAssin = '';
+  } catch(e) { toast('Erro: ' + e.message); }
+  btn.disabled = false; btn.textContent = 'Importar leads';
+};
 
 </script>
 </body>
