@@ -11,11 +11,14 @@ self.addEventListener('notificationclick', e => {
   e.notification.close();
   const link = (e.notification.data && e.notification.data.FCM_MSG && e.notification.data.FCM_MSG.data && e.notification.data.FCM_MSG.data.link) || './';
   e.waitUntil(clients.matchAll({ type:'window', includeUncontrolled:true }).then(ws => {
-    for (const w of ws) if (w.url.includes('/agenda/') && 'focus' in w) return w.focus();
+    for (const w of ws) if (w.url.includes('/agenda/') && 'focus' in w) {
+      if (link.includes('#') && 'navigate' in w) return w.navigate(link).then(x => (x || w).focus());
+      return w.focus();
+    }
     return clients.openWindow(link);
   }));
 });
-const CACHE = 'minha-agenda-v13';
+const CACHE = 'minha-agenda-v17';
 const ARQUIVOS = ['./', './index.html', './manifest.json', './frade-icone-192.png', './frade-icone-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './frade-icone-180.png', './logo-frade.png'];
 
 self.addEventListener('install', e => {

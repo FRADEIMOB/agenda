@@ -717,6 +717,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
       <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="list"></i>Avaliações<span class="count" id="cAval"></span></button>
+      <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
@@ -911,6 +912,28 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="page-head"><div><h1>Painel do dono</h1><div class="sub" id="painelSub"></div></div>
           <div class="ph-acoes"><div class="seg" id="painelSeg"></div><button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia</button></div></div>
         <div id="painelConteudo"></div>
+      </section>
+
+      <!-- RESUMO DO DIA (SDR) -->
+      <section class="view" id="v-resumo">
+        <div class="page-head"><div><h1>📝 Resumo do dia</h1><div class="sub">Os mesmos dados da mensagem do grupo. Preencha todo dia o resumo de ontem.</div></div></div>
+        <div id="resAviso"></div>
+        <div class="card">
+      <div id="resForm">
+        <div class="fg"><label>Data de referência</label><input type="date" id="resData" onchange="preencherResumoDoDia()"></div>
+        <div class="res-grid">
+          <div class="res-cab"></div><div class="res-cab">Lead</div><div class="res-cab">Nº doc</div><div class="res-cab">Nº CPF</div>
+          <span>Leads novos · CRM</span><input id="res_novos_crm_lead" inputmode="numeric"><input id="res_novos_crm_doc" inputmode="numeric"><input id="res_novos_crm_cpf" inputmode="numeric">
+          <span>Leads novos · Instagram</span><input id="res_novos_insta_lead" inputmode="numeric"><input id="res_novos_insta_doc" inputmode="numeric"><input id="res_novos_insta_cpf" inputmode="numeric">
+          <span>Recuperados · CRM</span><input id="res_recuperados_crm_lead" inputmode="numeric"><input id="res_recuperados_crm_doc" inputmode="numeric"><input id="res_recuperados_crm_cpf" inputmode="numeric">
+          <span>Recuperados · Instagram</span><input id="res_recuperados_insta_lead" inputmode="numeric"><input id="res_recuperados_insta_doc" inputmode="numeric"><input id="res_recuperados_insta_cpf" inputmode="numeric">
+        </div>
+        <div class="row2 fg" style="margin-top:12px"><div><label>Aprovações do dia</label><input id="res_aprovDia" inputmode="numeric"></div><div><label>Aprovações em outro CCA</label><input id="res_aprovOutroCca" inputmode="numeric"></div></div>
+        <div class="row2"><button class="btn btn-ghost" onclick="salvarResumoSdr(false)">Salvar</button><button class="btn btn-primary" onclick="salvarResumoSdr(true)">Salvar e mandar no grupo</button></div>
+        <div style="margin-top:10px"><button class="link" onclick="abrirColarSdr()">📋 Ou cole a mensagem que você já mandou no grupo</button></div>
+              </div>
+        </div>
+        <div class="card"><div class="card-head"><h2>Meus resumos</h2><span class="muted">toque para abrir</span></div><div id="resLista"></div></div>
       </section>
 
       <!-- DESEMPENHO POR CORRETOR -->
@@ -1109,6 +1132,10 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="int-bloco"><b>4b. Abas que o app não lê</b><span>Uma aba por linha, com o nome igual ao da planilha. As avaliações dessas abas somem do app, do painel e dos relatórios (a planilha não é alterada e nada é apagado).</span>
               <textarea id="intIgnoradas" style="min-height:120px;margin-top:8px"></textarea>
               <button class="btn btn-primary" style="margin-top:8px" onclick="salvarAbasIgnoradas()">Salvar abas</button></div>
+            <div class="int-bloco"><b>7. Docs do WhatsApp</b><span>Envie o arquivo <b>docs-whatsapp.json</b> (preparado a partir das conversas com o correspondente). Entram só os clientes que não estão na planilha; se a administração lançar o cliente depois, o do WhatsApp some sozinho para não contar duas vezes.</span>
+              <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impWhatsArq').click()">📂 Escolher arquivo</button><input type="file" id="impWhatsArq" class="hide" accept=".json,application/json" onchange="lerDocsWhats(this)"></div>
+              <div id="impWhatsInfo" class="hint" style="margin:6px 0"></div>
+              <button class="btn btn-primary hide" id="btnImpWhats" onclick="importarDocsWhats()">Importar</button></div>
             <div class="int-bloco"><b>6. Leads antigos (antes de ligar o CRM)</b><span>Baixe a planilha de oportunidades do CRM (Excel ou CSV) e envie aqui. O app mostra a prévia por corretor antes de gravar. Conta cada lead para o corretor que aparece como responsável na planilha.</span>
               <div class="int-linha"><label style="font-size:13px">De <input type="date" id="impDe" value="2026-09-14" onchange="previaLeads()" style="width:auto"></label><label style="font-size:13px">até <input type="date" id="impAte" onchange="previaLeads()" style="width:auto"></label>
                 <button class="btn btn-ghost" onclick="document.getElementById('impLeadsArq').click()">📂 Escolher planilha</button><input type="file" id="impLeadsArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerArquivoLeads(this)"></div>
@@ -1154,6 +1181,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
   <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas</button>
   <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Agenda</button>
   <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas</button>
+  <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button onclick="abrir('menuModal')"><i data-ic="menu"></i>Menu</button>
 </nav>
 
@@ -1328,19 +1356,6 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
   <div class="sheet" style="width:min(640px,100%)">
     <div class="sheet-head"><div><h2>📝 Resumo do dia</h2><div class="muted" style="font-size:13px;margin-top:3px">Os mesmos campos da mensagem do grupo</div></div><button class="icon-btn" onclick="fechar('resModal')" data-ic="x"></button></div>
     <div class="sheet-body">
-      <div id="resForm">
-        <div class="fg"><label>Data de referência</label><input type="date" id="resData" onchange="preencherResumoDoDia()"></div>
-        <div class="res-grid">
-          <div class="res-cab"></div><div class="res-cab">Lead</div><div class="res-cab">Nº doc</div><div class="res-cab">Nº CPF</div>
-          <span>Leads novos · CRM</span><input id="res_novos_crm_lead" inputmode="numeric"><input id="res_novos_crm_doc" inputmode="numeric"><input id="res_novos_crm_cpf" inputmode="numeric">
-          <span>Leads novos · Instagram</span><input id="res_novos_insta_lead" inputmode="numeric"><input id="res_novos_insta_doc" inputmode="numeric"><input id="res_novos_insta_cpf" inputmode="numeric">
-          <span>Recuperados · CRM</span><input id="res_recuperados_crm_lead" inputmode="numeric"><input id="res_recuperados_crm_doc" inputmode="numeric"><input id="res_recuperados_crm_cpf" inputmode="numeric">
-          <span>Recuperados · Instagram</span><input id="res_recuperados_insta_lead" inputmode="numeric"><input id="res_recuperados_insta_doc" inputmode="numeric"><input id="res_recuperados_insta_cpf" inputmode="numeric">
-        </div>
-        <div class="row2 fg" style="margin-top:12px"><div><label>Aprovações do dia</label><input id="res_aprovDia" inputmode="numeric"></div><div><label>Aprovações em outro CCA</label><input id="res_aprovOutroCca" inputmode="numeric"></div></div>
-        <div class="row2"><button class="btn btn-ghost" onclick="salvarResumoSdr(false)">Salvar</button><button class="btn btn-primary" onclick="salvarResumoSdr(true)">Salvar e mandar no grupo</button></div>
-        <div class="rep-sec" style="margin:20px 0 8px">Ou cole a mensagem do grupo</div>
-      </div>
       <div class="hint" style="margin-top:0">Cole uma ou várias mensagens do grupo, ou envie a <b>conversa exportada</b> do WhatsApp (⋮ → Mais → Exportar conversa → Sem mídia). Só as mensagens com "DATA REFERENTE" são lidas.</div>
       <div class="int-linha" style="margin:8px 0"><label style="font-size:13px">De <input type="date" id="resDe" style="width:auto" onchange="lerColado()"></label><label style="font-size:13px">até <input type="date" id="resAte" style="width:auto" onchange="lerColado()"></label>
         <button class="btn btn-ghost" onclick="document.getElementById('resArq').click()">📂 Enviar conversa exportada</button><input type="file" id="resArq" class="hide" accept=".txt,.zip,text/plain" onchange="lerArquivoConversa(this)"></div>
@@ -1710,11 +1725,13 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {desempenho:'Desempenho', painel:'Painel do dono', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel do dono', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souGerente()) v = 'hoje';
   if (v === 'desempenho' && !podeGerir()) v = 'hoje';
+  if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
+  if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
   view = v;
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-'+v));
@@ -1890,7 +1907,10 @@ function render(){
   // ----- RELATÓRIOS -----
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
   if (view === 'config') renderAdm();
-  renderEtapa2(); renderEtapa3(); renderSdrHoje();
+  renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
+  // veio pela notificação do resumo: abre direto a aba
+  if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
+  if (souSdr()) { const ontem = somaDias(hojeISO(), -1); $('cResumo').classList.toggle('hide', sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem)); }
 
   // ----- CONFIG -----
   if (view === 'config') {
@@ -2353,6 +2373,7 @@ function renderPapel(){
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
+  document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr'));
 }
 function bannerAcesso(){
   if (!perfilOk || !instOk) return '';
@@ -3558,7 +3579,12 @@ const ABAS_IGNORADAS_PADRAO = ['HEYTOR','LETICIA','MARCELIA','WALISSON','VINICIU
 const chaveAba = n => norm(String(n || '')).toUpperCase().replace(/\s+/g, ' ').trim();
 const abasIgnoradas = () => new Set((appCfg.abasIgnoradas || ABAS_IGNORADAS_PADRAO).map(chaveAba));
 let avaliacoesTodas = [];
-function filtrarAvaliacoes(){ const ig = abasIgnoradas(); avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba))); }
+function filtrarAvaliacoes(){
+  const ig = abasIgnoradas(), naPlan = new Set();
+  // doc que veio do WhatsApp some sozinho quando a administração lança o mesmo cliente na planilha (não conta duas vezes)
+  avaliacoesTodas.forEach(a => { if (a.origem !== 'whatsapp') { if (a.cpfNorm) naPlan.add('c' + a.cpfNorm); if (a.telNorm) naPlan.add('t' + a.telNorm); } });
+  avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba)) && !(a.origem === 'whatsapp' && ((a.cpfNorm && naPlan.has('c' + a.cpfNorm)) || (a.telNorm && naPlan.has('t' + a.telNorm)))));
+}
 let appCfg = { ...JSON.parse(JSON.stringify(CFG_PADRAO)), mensagens:MSG_PADRAO }, repetidos = [], pontosMeses = {}, carregado = {};
 window.ptMesSel = ''; window.origPer = 'mes'; window.arqAba = 'visitas';
 const mesAtual = () => hojeISO().slice(0,7);
@@ -3608,7 +3634,7 @@ function pontosDoMes(m, val){
     if (!g.has(k)) g.set(k, { uid:r.corretorUid || '', nome:r.corretorNome || 'Sem nome', equipe:r.equipe || '', visitas:0, confirmadas:0, realizadas:0, faltas:0, cartas:0, docs:0, vendas:0, pontos:0 });
     const x = g.get(k); if (r.corretorNome) x.nome = r.corretorNome; if (r.equipe) x.equipe = r.equipe; return x;
   };
-  rankingDocs.filter(r => noMes(r.date) && !r.semPontos && !r.sdrUid && r.status !== 'Cancelada').forEach(r => {
+  rankingDocs.filter(r => noMes(r.date) && !r.semPontos && !visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
     const x = pega(r); x.visitas++;
     if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); }
     else if (r.status === 'Realizada') { x.realizadas++; x.pontos += n('vRealizada'); }
@@ -4045,7 +4071,7 @@ function cardAvaliacao(a){
   return `<div class="vcard" style="--vc:${inf.cor}">
     <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>${a.dataEstimada ? 'sem data' : 'doc'}</span></div>
     <div class="v-body" style="cursor:default">
-      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b>${a.dataEstimada ? '<span class="vst" style="background:color-mix(in srgb,#ca8a04 14%,transparent);color:#ca8a04" title="A linha está sem data na planilha; o app usou a data da linha de cima">data estimada</span>' : ''}<span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.cartaApp ? '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">carta no app</span>' : ''}${a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
+      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b>${a.dataEstimada ? '<span class="vst" style="background:color-mix(in srgb,#ca8a04 14%,transparent);color:#ca8a04" title="A linha está sem data na planilha; o app usou a data da linha de cima">data estimada</span>' : ''}<span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.cartaApp ? '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">carta no app</span>' : ''}${a.origem === 'whatsapp' ? '<span class="vst" style="background:color-mix(in srgb,#16a34a 14%,transparent);color:#16a34a" title="Tirado da conversa com o correspondente; ainda não está na planilha">do WhatsApp</span>' : a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
       <div class="v-meta">${meta.join('')}</div>
       ${hist ? `<div class="v-obs">🕘 ${hist}</div>` : ''}
     </div>
@@ -4328,6 +4354,36 @@ window.previaLeads = () => {
   $('impLeadsPrev').innerHTML = lista.slice(0, 40).map(([n, q]) => `<div class="pt-row"><span>👤 ${esc(n)}</span><b>${q}</b></div>`).join('');
   $('btnImpLeads').disabled = !unicos.length;
 };
+let impWhats = [];
+window.lerDocsWhats = async input => {
+  const f = input.files && input.files[0]; input.value = ''; if (!f) return;
+  try {
+    const j = JSON.parse(await f.text()); impWhats = (Array.isArray(j) ? j : j.avaliacoes || []).filter(a => a && a.id && a.aba);
+    const jaTem = new Set(avaliacoesTodas.filter(a => a.origem !== 'whatsapp').flatMap(a => [a.cpfNorm && 'c' + a.cpfNorm, a.telNorm && 't' + a.telNorm]).filter(Boolean));
+    const ck = a => { const c = soDig(a.cpf); return c.length === 11 ? 'c' + c : 't' + chaveTel(a.telefone); };
+    const novos = impWhats.filter(a => !jaTem.has(ck(a)));
+    const ap = novos.filter(a => infoStatus(a.status).g === 'aprovado').length;
+    const porMes = {}; novos.forEach(a => { const m = (a.data || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
+    $('impWhatsInfo').innerHTML = `${impWhats.length} clientes no arquivo · <b>${novos.length}</b> ainda não estão na planilha (${Object.entries(porMes).sort().map(([m,n]) => `${nomeMes(m)}: ${n}`).join(' · ')}) · <b>${ap}</b> aprovados.${impWhats.length > novos.length ? ` ${impWhats.length - novos.length} já foram lançados na planilha e ficam de fora.` : ''}`;
+    impWhats = novos;
+    $('btnImpWhats').classList.toggle('hide', !novos.length); $('btnImpWhats').textContent = `Importar ${novos.length} docs`;
+  } catch(e) { $('impWhatsInfo').textContent = 'Não consegui ler o arquivo: ' + e.message; }
+};
+window.importarDocsWhats = async () => {
+  if (!impWhats.length) return;
+  if (!confirm(`Colocar ${impWhats.length} docs do WhatsApp no app? Eles passam a contar nas avaliações, no Desempenho, no Painel e nos relatórios.`)) return;
+  const btn = $('btnImpWhats'); btn.disabled = true; btn.textContent = 'Importando…';
+  try {
+    let tot = 0;
+    for (let i = 0; i < impWhats.length; i += 200) {
+      const r = await chamarCarteiro({ tipo:'importar_avaliacoes', avaliacoes:impWhats.slice(i, i + 200) });
+      if (!r?.ok) throw new Error(r?.erro || 'sem resposta');
+      tot += r.recebidas || 0;
+    }
+    toast(`Pronto ✓ ${tot} docs do WhatsApp no app`); $('impWhatsInfo').textContent = `✓ ${tot} docs importados.`; btn.classList.add('hide'); impWhats = [];
+  } catch(e) { toast('Erro: ' + e.message); }
+  btn.disabled = false;
+};
 window.importarLeadsAgora = async () => {
   const l = impLeads?.prontas || []; if (!l.length) return;
   if (!confirm(`Importar ${l.length} leads para os relatórios? Os dias desse período que já tinham leads importados serão substituídos.`)) return;
@@ -4399,11 +4455,14 @@ window.marcarPresenca = async (uid, st) => {
 };
 
 // ---------- leads de hoje (ao vivo, do CRM) ----------
-const chaveNomeLead = n => norm(n).replace(/\(.*?\)/g, '').trim();
+// conserta letras estragadas que vêm do CRM (ex.: "GonÃ§alo" → "Gonçalo")
+const consertaTexto = x => { const t = String(x || ''); if (!/[ÃÂ][\u0080-ÿ]/.test(t)) return t; try { return decodeURIComponent(escape(t)); } catch (e) { return t; } };
+window.consertaTexto = consertaTexto;
+const chaveNomeLead = n => norm(consertaTexto(n)).replace(/\(.*?\)/g, '').trim();
 // leads de um dia por pessoa: eventos ao vivo (hoje) ou o fechamento do dia, com os ajustes do gerente por cima
 function leadsDoDia(dia){
   const g = new Map(), h = hojeISO();
-  const pega = (nome, uid, equipe) => { const k = chaveNomeLead(nome); if (!g.has(k)) g.set(k, { chave:k, uid:uid || '', nome:nome || '?', equipe:equipe || '', n:0, origens:{}, ultimo:0 }); const x = g.get(k); if (uid && !x.uid) { x.uid = uid; x.equipe = equipe || x.equipe; } return x; };
+  const pega = (nome, uid, equipe) => { nome = consertaTexto(nome); const k = chaveNomeLead(nome); if (!g.has(k)) g.set(k, { chave:k, uid:uid || '', nome:nome || '?', equipe:equipe || '', n:0, origens:{}, ultimo:0 }); const x = g.get(k); if (uid && !x.uid) { x.uid = uid; x.equipe = equipe || x.equipe; } return x; };
   if (dia === h) leadsHoje.filter(e => e.dia === h).forEach(e => { const x = pega(e.corretorCrm || e.corretorNome, e.corretorUid, e.equipe); x.n++; const o = e.origem || 'sem origem'; x.origens[o] = (x.origens[o] || 0) + 1; x.ultimo = Math.max(x.ultimo, e.em || 0); });
   else (leadsDias.find(d => d.dia === dia)?.linhas || []).forEach(l => { const x = pega(l.nome, l.uid, l.equipe); x.n += Number(l.leads) || 0; });
   Object.values(leadsAjustes[dia]?.itens || {}).forEach(a => { const x = pega(a.nome, a.uid, a.equipe); x.ajustado = true; x.original = x.n; x.n = Number(a.leads) || 0; });
@@ -4583,11 +4642,12 @@ function renderDesempenho(){
   if (!podeGerir()) { $('desConteudo').innerHTML = ''; return; }
   const [de, ate0] = faixaDes(desPer), h = hojeISO(), ate = ate0 > h ? h : ate0;
   const eqFiltro = souGerente() ? desEq : (perfil.equipe || '-');
-  $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desPer='${k}';render()">${n}</button>`).join('');
+  $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desSet('per','${k}')">${n}</button>`).join('');
   $('desSub').textContent = (de === ate ? dataBR(de) : `${dataBR(de)} a ${dataBR(ate)}`) + (ate === h ? ' · atualiza sozinho' : '') + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
   const linhas = new Map();
   const chaveDe = (uid, nome) => uid ? 'u' + uid : 'n' + chaveNomeLead(nome || '?');
   const pega = (uid, nome, equipe) => {
+    nome = consertaTexto(nome);
     if (!uid && nome) { const pf = perfisLista.find(p => p.status === 'ativo' && chaveNomeLead(p.nome) === chaveNomeLead(nome)); if (pf) uid = pf.uid; }
     const k = chaveDe(uid, nome);
     if (!linhas.has(k)) { const pf = uid ? perfisLista.find(p => p.uid === uid) : null;
@@ -4614,7 +4674,7 @@ function renderDesempenho(){
     media:(a,b) => (media(a) ?? 1e9) - (media(b) ?? 1e9), nome:(a,b) => a.nome.localeCompare(b.nome,'pt-BR') }[desOrdem];
   lista.sort((a,b) => ord(a,b) || b.leads - a.leads || a.nome.localeCompare(b.nome,'pt-BR'));
   const tot = lista.reduce((a,r) => ({ leads:a.leads + r.leads, docs:a.docs + r.docs, aprov:a.aprov + r.aprov, cond:a.cond + r.cond, reprov:a.reprov + r.reprov }), { leads:0, docs:0, aprov:0, cond:0, reprov:0 });
-  const th = (k, n, cls='') => `<th class="${cls}" style="cursor:pointer" onclick="desOrdem='${k}';render()">${n}${desOrdem===k?' ▾':''}</th>`;
+  const th = (k, n, cls='') => `<th class="${cls}" style="cursor:pointer" onclick="desSet('ordem','${k}')">${n}${desOrdem===k?' ▾':''}</th>`;
   const fmtM = r => { const x = media(r); return x === null ? (r.leads ? 'sem doc' : '–') : x.toLocaleString('pt-BR'); };
   const semLiga = lista.filter(r => !r.ligado && (r.leads || r.docs || r.aprov)).length;
   $('desConteudo').innerHTML = `
@@ -4626,8 +4686,8 @@ function renderDesempenho(){
     </div>
     <div class="card">
       <div class="tb-grid" style="margin-bottom:10px">
-        <input placeholder="Buscar corretor..." value="${esc(desBusca)}" oninput="desBusca=this.value;clearTimeout(window._desT);window._desT=setTimeout(render,250)">
-        ${souGerente() ? `<select onchange="desEq=this.value;render()"><option value="">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}" ${desEq===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select>` : ''}
+        <input placeholder="Buscar corretor..." value="${esc(desBusca)}" oninput="desSet('busca',this.value)">
+        ${souGerente() ? `<select onchange="desSet('eq',this.value)"><option value="">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}" ${desEq===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select>` : ''}
       </div>
       <div style="overflow-x:auto"><table class="rank"><thead><tr>${th('nome','Corretor')}${th('leads','Leads')}${th('docs','Docs')}${th('media','Média')}${th('aprov','Aprov.')}<th class="hide-m">Cond.</th><th class="hide-m">Reprov.</th></tr></thead><tbody>
       ${lista.map(r => `<tr><td><span class="nm">${esc(r.nome)}</span>${souGerente() && r.equipe ? `<small class="muted" style="display:block">${esc(eqNome(r.equipe))}</small>` : ''}${!r.ligado ? '<small class="late" style="display:block">nome do CRM/planilha sem ligação</small>' : ''}</td>
@@ -4638,6 +4698,11 @@ function renderDesempenho(){
     </div>`;
 }
 window.renderDesempenho = renderDesempenho;
+window.desSet = (k, v) => {
+  if (k === 'per') desPer = v; else if (k === 'ordem') desOrdem = v; else if (k === 'eq') desEq = v;
+  else if (k === 'busca') { desBusca = v; clearTimeout(window._desT); window._desT = setTimeout(() => { render(); const i = document.querySelector('#desConteudo input'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }, 300); return; }
+  render();
+};
 
 function renderEtapa3(){
   if (view === 'desempenho') renderDesempenho();
@@ -4713,11 +4778,18 @@ window.enviarSdrMsg = async () => {
 window.copiarSdrMsg = async () => { const t = $('sdrTxt').value; try { await navigator.clipboard.writeText(t); toast('Mensagem copiada ✓'); } catch(e) { prompt('Copie a mensagem:', t); } };
 
 // ---------- ranking das SDRs ----------
+// visita conta para a SDR só se quem marcou é SDR hoje (perfil trocado para corretor volta a contar como visita normal)
+function visitaDeSdr(r){
+  if (!r.sdrUid) return false;
+  const p = perfisLista.find(x => x.uid === r.sdrUid);
+  return !p || p.papel === 'sdr';
+}
+window.visitaDeSdr = visitaDeSdr;
 function rankingSdr(de, ate){
   const g = new Map();
   const pega = (uid, nome) => { const k = uid || 'n:' + norm(nome); if (!g.has(k)) g.set(k, { uid, nome:nome || 'SDR', visitas:0, confirmadas:0, realizadas:0, faltas:0, pontos:0, leads:0, docs:0, cpfs:0, recup:0, aprov:0, outroCca:0 }); return g.get(k); };
   const n = k => Number(appCfg.pontos[k]) || 0;
-  rankingDocs.filter(r => r.sdrUid && r.date >= de && r.date <= ate && r.status !== 'Cancelada' && !r.semPontos).forEach(r => {
+  rankingDocs.filter(r => visitaDeSdr(r) && r.date >= de && r.date <= ate && r.status !== 'Cancelada' && !r.semPontos).forEach(r => {
     const x = pega(r.sdrUid, r.sdrNome); x.visitas++;
     if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); }
     else if (r.status === 'Realizada') { x.realizadas++; x.pontos += n('vRealizada'); }
@@ -4736,8 +4808,8 @@ function tabelaSdr(de, ate){
   const l = rankingSdr(de, ate);
   if (!l.length) return '<div class="muted" style="font-size:13.5px">Nenhuma visita marcada por SDR e nenhum resumo do dia no período.</div>';
   const pos = posicoes(l);
-  return `<table class="rank"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th class="hide-m">Docs</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
-    l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td class="hide-m">${x.docs}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table>
+  return `<div style="overflow-x:auto"><table class="rank"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th class="hide-m">Docs</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
+    l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td class="hide-m">${x.docs}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
     <div class="hint" style="margin-top:8px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam.</div>`;
 }
 
@@ -4791,21 +4863,35 @@ function sdrDoAutor(autor){
   const a = norm(autor).replace(/\bsdr\b/g, '').trim(), pr = a.split(' ')[0];
   return sdrsAtivas().find(p => norm(p.nome) === a) || (sdrsAtivas().filter(p => norm(p.nome).split(' ')[0] === pr).length === 1 ? sdrsAtivas().find(p => norm(p.nome).split(' ')[0] === pr) : null);
 }
-window.abrirResumoSdr = () => {
-  window._resLidos = [];
-  const eu = souSdr();
-  $('resData').value = somaDias(hojeISO(), eu ? -1 : 0);
-  $('resForm').classList.toggle('hide', !eu);
-  $('resColar').value = ''; $('resPrevia').innerHTML = '';
-  if (!$('resAte').value) { $('resAte').value = hojeISO(); $('resDe').value = faixa('mes')[0]; }
+window.abrirResumoSdr = () => { if (souSdr()) { setView('resumo'); return; } abrirColarSdr(); };
+function abrirFormResumo(){
+  if (!souSdr()) return;
+  $('resData').value = somaDias(hojeISO(), -1);
   CAMPOS_RES.forEach(([s,c]) => ['lead','doc','cpf'].forEach(k => { const el = $(`res_${s}_${c}_${k}`); if (el) el.value = ''; }));
   $('res_aprovDia').value = ''; $('res_aprovOutroCca').value = '';
-  preencherResumoDoDia();
+  preencherResumoDoDia(); renderResumoView();
+}
+window.abrirFormResumo = abrirFormResumo;
+function renderResumoView(){
+  if (!souSdr() || view !== 'resumo') return;
+  const ontem = somaDias(hojeISO(), -1), feito = sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem);
+  $('resAviso').innerHTML = feito ? `<div class="hint" style="margin:0 0 12px;color:var(--ok)">✓ Resumo de ontem (${dataBR(ontem)}) enviado.</div>` : `<div class="hint late" style="margin:0 0 12px">Falta o resumo de ontem (${dataBR(ontem)}).</div>`;
+  const v = x => x === '' || x === undefined || x === null ? '–' : x, so = (o, k) => (Number(o?.crm?.[k]) || 0) + (Number(o?.insta?.[k]) || 0);
+  const meus = sdrResumos.filter(x => x.sdrUid === uidAtual).sort((a,b) => b.dia.localeCompare(a.dia)).slice(0, 31);
+  $('resLista').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc')} docs · ${so(r.novos,'cpf') + so(r.recuperados,'cpf')} CPFs · ${v(r.aprovDia)} aprov.</b></div>`).join('')
+    : '<div class="muted" style="font-size:13.5px">Nenhum resumo ainda.</div>';
+}
+window.abrirColarSdr = () => {
+  window._resLidos = [];
+  const eu = souSdr();
+  $('resColar').value = ''; $('resPrevia').innerHTML = '';
+  if (!$('resAte').value) { $('resAte').value = hojeISO(); $('resDe').value = faixa('mes')[0]; }
   abrir('resModal');
 };
 window.preencherResumoDoDia = () => {
   if (!souSdr()) return;
-  const r = sdrResumos.find(x => x.sdrUid === uidAtual && x.dia === $('resData').value); if (!r) return;
+  const r = sdrResumos.find(x => x.sdrUid === uidAtual && x.dia === $('resData').value);
+  if (!r) { CAMPOS_RES.forEach(([s,c]) => ['lead','doc','cpf'].forEach(k => { $(`res_${s}_${c}_${k}`).value = ''; })); $('res_aprovDia').value = ''; $('res_aprovOutroCca').value = ''; return; }
   CAMPOS_RES.forEach(([s,c]) => ['lead','doc','cpf'].forEach(k => { $(`res_${s}_${c}_${k}`).value = r[s]?.[c]?.[k] ?? ''; }));
   $('res_aprovDia').value = r.aprovDia ?? ''; $('res_aprovOutroCca').value = r.aprovOutroCca ?? '';
 };
@@ -4824,7 +4910,7 @@ window.salvarResumoSdr = async (mandar) => {
   try {
     await gravarResumo(r, { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe });
     if (mandar) { const t = textoResumo(r); try { await navigator.clipboard.writeText(t); } catch(e) {} window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank'); }
-    fechar('resModal'); toast(mandar ? 'Resumo salvo ✓ Escolha o grupo no WhatsApp' : 'Resumo salvo ✓');
+    toast(mandar ? 'Resumo salvo ✓ Escolha o grupo no WhatsApp' : 'Resumo salvo ✓'); renderResumoView();
   } catch(e) { toast('Erro: ' + e.message); }
 };
 window.lerArquivoConversa = async input => {
@@ -4856,9 +4942,9 @@ window.lerColado = () => {
     const nv = r.novos, rc = r.recuperados, v = x => x === '' || x === undefined ? '–' : x;
     return `<div class="msg-item"><b>📅 ${dataBR(r.dia)}${r.autor ? ` · de "${esc(r.autor)}"` : ''}</b>
       <div style="font-size:13px;color:var(--muted);margin:4px 0 8px">Novos CRM ${v(nv.crm.lead)} (doc ${v(nv.crm.doc)}, CPF ${v(nv.crm.cpf)}) · Novos Insta ${v(nv.insta.lead)} (doc ${v(nv.insta.doc)}, CPF ${v(nv.insta.cpf)}) · Recuperados CRM ${v(rc.crm.lead)} · Insta ${v(rc.insta.lead)} · Aprovações ${v(r.aprovDia)} · Outro CCA ${v(r.aprovOutroCca)}</div>
-      ${souSdr() ? '' : `<label style="font-size:13px">SDR: <select id="resSdr${i}" style="width:auto"><option value="">— escolha —</option>${ops}</select></label>`}</div>`;
+      ${souSdr() ? '' : `<label style="font-size:13px">SDR: <select id="resSdr${i}" style="width:auto"><option value="">— escolha —</option>${r.autor ? `<option value="__autor">Usar o nome do WhatsApp: ${esc(r.autor)}</option>` : ''}${ops}</select></label>`}</div>`;
   }).join('') + `<button class="btn btn-primary btn-block" onclick="salvarColados()">Salvar ${lidos.length} resumo${lidos.length!==1?'s':''}</button>`;
-  if (!souSdr()) lidos.forEach((r, i) => { const s = sdrDoAutor(r.autor); if (s) $('resSdr' + i).value = s.uid; });
+  if (!souSdr()) lidos.forEach((r, i) => { const s = sdrDoAutor(r.autor); if (s) $('resSdr' + i).value = s.uid; else if (r.autor) $('resSdr' + i).value = '__autor'; });
 };
 window.salvarColados = async () => {
   const lidos = window._resLidos || [], novosApelidos = {};
@@ -4867,7 +4953,12 @@ window.salvarColados = async () => {
       const r = lidos[i];
       let s;
       if (souSdr()) s = { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe };
-      else { const uid = $('resSdr' + i).value; if (!uid) { toast(`Escolha a SDR do resumo de ${dataBR(r.dia)}`); return; } s = sdrsAtivas().find(p => p.uid === uid); if (r.autor && !sdrDoAutor(r.autor)) novosApelidos[r.autor] = uid; }
+      else {
+        const uid = $('resSdr' + i).value; if (!uid) { toast(`Escolha a SDR do resumo de ${dataBR(r.dia)}`); return; }
+        // SDR ainda sem cadastro no app: guarda pelo nome do WhatsApp
+        if (uid === '__autor') s = { uid:'wa-' + norm(r.autor).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), nome:r.autor, equipe:'' };
+        else { s = sdrsAtivas().find(p => p.uid === uid); if (r.autor && !sdrDoAutor(r.autor)) novosApelidos[r.autor] = uid; }
+      }
       await gravarResumo(r, s);
     }
     if (souDono() && Object.keys(novosApelidos).length) await gravar(setDoc(doc(db,'config','app'), { apelidosSdr:{ ...(appCfg.apelidosSdr || {}), ...novosApelidos } }, { merge:true }));
