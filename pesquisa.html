@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Avalie o atendimento · Frade Imóveis</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="frade-icone-192.png">
+<style>
+:root{--marinho:#022C45;--laranja:#E65100;--txt:#0f172a;--mut:#64748b;--borda:#e2e8f0;--fundo:#f1f5f9}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--fundo);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;background:var(--marinho);color:#fff;padding:22px 16px 60px;text-align:center}
+header img{width:58px;height:58px;border-radius:16px;display:block;margin:0 auto 10px}
+header b{display:block;font-size:18px;letter-spacing:.02em}
+header span{font-size:13px;opacity:.8}
+main{width:min(520px,calc(100% - 32px));background:#fff;border-radius:20px;margin-top:-40px;padding:24px 20px;box-shadow:0 12px 34px #0f172a1a}
+h1{font-size:20px;margin:0 0 6px;line-height:1.3}
+p{margin:0 0 18px;color:var(--mut);font-size:15px;line-height:1.45}
+.notas{display:grid;grid-template-columns:repeat(11,1fr);gap:5px;margin-bottom:6px}
+.notas button{aspect-ratio:1;border:1px solid var(--borda);background:#fff;border-radius:10px;font-size:15px;font-weight:700;color:var(--txt);cursor:pointer;padding:0}
+.notas button.on{background:var(--laranja);border-color:var(--laranja);color:#fff}
+.legenda{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-bottom:18px}
+textarea{width:100%;min-height:90px;border:1px solid var(--borda);border-radius:12px;padding:12px;font:inherit;font-size:15px;resize:vertical}
+label.ok{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--mut);margin:12px 0 18px}
+label.ok input{margin-top:3px;width:18px;height:18px}
+.btn{width:100%;border:0;background:var(--laranja);color:#fff;font-size:16px;font-weight:700;padding:15px;border-radius:14px;cursor:pointer}
+.btn:disabled{opacity:.5}
+.fim{text-align:center;padding:10px 0}
+.fim div{font-size:52px}
+.erro{color:#b91c1c}
+footer{font-size:12px;color:var(--mut);padding:18px}
+@media(max-width:380px){.notas{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<header><img src="data:image/png;base64,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" alt=""><b>Frade Imóveis</b><span>Paraíba</span></header>
+<main id="caixa"><p>Carregando…</p></main>
+<footer>Sua resposta vai só para a equipe da Frade Imóveis.</footer>
+<script>
+const PROJETO = 'agenda-37236', CHAVE_API = 'AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g', CARTEIRO = 'https://carteiro-frade.allanvgron.workers.dev/pesquisa';
+const t = new URLSearchParams(location.search).get('t') || '';
+const URL_DOC = `https://firestore.googleapis.com/v1/projects/${PROJETO}/databases/(default)/documents/pesquisas/${encodeURIComponent(t)}`;
+const caixa = document.getElementById('caixa');
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+const primeiro = n => String(n || '').trim().split(' ')[0].toLowerCase().replace(/^./, c => c.toUpperCase());
+let nota = null;
+function obrigado(){ caixa.innerHTML = '<div class="fim"><div>🙏</div><h1>Muito obrigado!</h1><p>A sua opinião ajuda a gente a atender cada vez melhor.</p></div>'; }
+async function iniciar(){
+  if (!/^[A-Za-z0-9]{16,40}$/.test(t)) { caixa.innerHTML = '<p class="erro">Link inválido. Peça um novo link ao seu corretor.</p>'; return; }
+  try {
+    const r = await fetch(URL_DOC + '?key=' + CHAVE_API);
+    if (!r.ok) throw new Error();
+    const f = (await r.json()).fields || {};
+    if (f.respondida && f.respondida.booleanValue) { obrigado(); return; }
+    const cor = primeiro(f.corretorNome && f.corretorNome.stringValue), cli = primeiro(f.cliente && f.cliente.stringValue);
+    caixa.innerHTML = `<h1>${cli ? 'Oi, ' + esc(cli) + '! ' : ''}Como foi o seu atendimento${cor ? ' com ' + esc(cor) : ''}?</h1>
+      <p>De 0 a 10, quanto você recomendaria o nosso atendimento para um amigo?</p>
+      <div class="notas">${[...Array(11)].map((_, i) => `<button type="button" onclick="escolher(${i})" id="n${i}">${i}</button>`).join('')}</div>
+      <div class="legenda"><span>0 = nada</span><span>10 = com certeza</span></div>
+      <textarea id="com" maxlength="600" placeholder="Quer contar como foi? (opcional)"></textarea>
+      <label class="ok"><input type="checkbox" id="dep"> Autorizo a Frade Imóveis a usar meu comentário como depoimento, só com o meu primeiro nome.</label>
+      <button class="btn" id="env" disabled onclick="enviar()">Enviar avaliação</button>`;
+  } catch(e) { caixa.innerHTML = '<p class="erro">Não encontramos esta pesquisa. Peça um novo link ao seu corretor.</p>'; }
+}
+function escolher(i){ nota = i; document.querySelectorAll('.notas button').forEach((b, j) => b.classList.toggle('on', j === i)); document.getElementById('env').disabled = false; }
+async function enviar(){
+  if (nota === null) return;
+  const b = document.getElementById('env'); b.disabled = true; b.textContent = 'Enviando…';
+  const campos = { nota:{ integerValue:String(nota) }, comentario:{ stringValue:document.getElementById('com').value.trim().slice(0, 600) },
+    depoimento:{ booleanValue:document.getElementById('dep').checked }, respondida:{ booleanValue:true }, respondidaEm:{ integerValue:String(Date.now()) } };
+  const mascara = Object.keys(campos).map(k => 'updateMask.fieldPaths=' + k).join('&');
+  try {
+    const r = await fetch(`${URL_DOC}?key=${CHAVE_API}&${mascara}&currentDocument.exists=true`, { method:'PATCH', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ fields:campos }) });
+    if (!r.ok) throw new Error(await r.text());
+    fetch(CARTEIRO, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ t }) }).catch(() => {});
+    obrigado();
+  } catch(e) { b.disabled = false; b.textContent = 'Enviar avaliação'; alert('Não foi possível enviar agora. Confira a internet e tente de novo.'); }
+}
+iniciar();
+</script>
+</body>
+</html>
