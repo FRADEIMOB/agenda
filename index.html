@@ -661,6 +661,18 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
   .sheet{align-self:flex-end;border-radius:22px 22px 0 0;max-height:94vh}
   .modal{padding:0}
 }
+/* cartões recolhíveis: fechados até tocar no título */
+.dobra>.card-head{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.dobra>.card-head h2{display:flex;align-items:center;gap:8px}
+.dobra>.card-head h2::after{content:'';width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s;margin-left:2px;flex-shrink:0}
+.dobra.aberto>.card-head h2::after{transform:rotate(45deg) translateY(-2px)}
+.dobra:not(.aberto)>:not(.card-head){display:none!important}
+.dobra:not(.aberto)>.card-head{margin-bottom:0}
+.dobra:not(.aberto)>.card-head>:is(input,select,button,.btn,.link){display:none!important}
+.int-bloco.dobra-b>b{cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none}
+.int-bloco.dobra-b>b::after{content:'';width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s}
+.int-bloco.dobra-b.aberto>b::after{transform:rotate(45deg) translateY(-2px)}
+.int-bloco.dobra-b:not(.aberto)>:not(b){display:none!important}
 </style>
 </head>
 <body>
@@ -716,12 +728,13 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas<span class="count" id="cTarefas">0</span></button>
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
+      <button data-view="vendas" class="gerente-only hide" onclick="setView('vendas')"><i data-ic="star"></i>Vendas<span class="count" id="cVendas"></span></button>
       <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="list"></i>Avaliações<span class="count" id="cAval"></span></button>
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
-      <button data-view="painel" class="gerente-only hide" onclick="setView('painel')"><i data-ic="chart"></i>Painel do dono</button>
+      <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="chart"></i>Painel executivo</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="chart"></i>Desempenho</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
@@ -909,9 +922,28 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 
       <!-- PAINEL DO DONO -->
       <section class="view" id="v-painel">
-        <div class="page-head"><div><h1>Painel do dono</h1><div class="sub" id="painelSub"></div></div>
+        <div class="page-head"><div><h1>Painel executivo</h1><div class="sub" id="painelSub"></div></div>
           <div class="ph-acoes"><div class="seg" id="painelSeg"></div><button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia</button></div></div>
         <div id="painelConteudo"></div>
+      </section>
+
+      <!-- VENDAS (RESERVAS) -->
+      <section class="view" id="v-vendas">
+        <div class="page-head"><div><h1>🎉 Vendas</h1><div class="sub" id="vendSub">Reservas feitas. Cada reserva conta como venda.</div></div>
+          <button class="btn btn-primary gerente-only hide" onclick="editarReserva()">+ Nova reserva</button></div>
+        <div class="stats">
+          <div class="stat"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="star"></div><div><b id="vsQtd">0</b><span>Vendas no período</span></div></div>
+          <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="vsValor">R$ 0</b><span>Valor vendido</span></div></div>
+          <div class="stat" onclick="vSet('caidas',!vFil.caidas)"><div class="stat-ic" style="background:var(--danger-soft);color:var(--danger)" data-ic="alert"></div><div><b id="vsCaiu">0</b><span>Caíram no período</span></div></div>
+        </div>
+        <div class="card">
+          <div class="tb-grid">
+            <input id="vBusca" placeholder="Buscar cliente, CPF, corretor, empreendimento..." oninput="vSet('busca',this.value)">
+            <select id="vPeriodo" onchange="vSet('periodo',this.value)"><option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
+            <select id="vEquipe" onchange="vSet('equipe',this.value)"></select>
+          </div>
+          <div id="vendLista"></div>
+        </div>
       </section>
 
       <!-- RESUMO DO DIA (SDR) -->
@@ -990,7 +1022,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
           <div class="card-head"><h2>Permissões de acesso</h2><span class="muted">As mudanças valem na hora</span></div>
           <div class="leg">
             <div><b>👑 Dono</b>Tudo, e é o único que altera gerentes e as configurações do app.</div>
-            <div><b>🏢 CEO Frade</b>Vê tudo, como o gerente, inclusive o Painel do dono. Só o dono altera o perfil do CEO.</div>
+            <div><b>🏢 CEO Frade</b>Vê tudo, como o gerente, e é quem vê o Painel executivo (junto com o dono). Só o dono altera o perfil do CEO.</div>
             <div><b>⭐ Gerente</b>Vê e edita tudo: todas as equipes, coordenadores e corretores. Aprova cadastros e define permissões.</div>
             <div><b>🧭 Coordenador</b>Vê e edita as visitas da própria equipe e o relatório de cada corretor dela. Não vê gerentes nem outras equipes.</div>
             <div><b>📞 SDR</b>Marca visitas para os corretores da equipe dela e vê só as visitas que marcou. Não vê cartas nem avaliações. Manda o resumo do dia.</div>
@@ -1106,20 +1138,20 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <select id="cfgMin" style="width:auto" onchange="salvarMin(this.value)"><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hora</option></select></div>
           </div>
           <div class="card dono-only hide" id="cardAdmPontos">
-            <div class="card-head"><h2>🏆 Pontuação</h2><span class="muted">Só gerentes</span></div>
+            <div class="card-head"><h2>🏆 Pontuação</h2><span class="muted">Só o dono</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Quanto vale cada ação. Os pontos zeram todo dia 1º. Mudou um valor? Vale para o mês em andamento; os meses já fechados não mudam. Pode usar números negativos.</div>
             <div id="admPontos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarPontuacao()">Salvar pontuação</button>
           </div>
           <div class="card dono-only hide" id="cardAdmListas">
-            <div class="card-head"><h2>📋 Listas do app</h2><span class="muted">Só gerentes</span></div>
+            <div class="card-head"><h2>📋 Listas do app</h2><span class="muted">Só o dono</span></div>
             <div class="fg"><label>Origens do cliente <span class="muted" style="font-weight:500">(uma por linha)</span></label><textarea id="admOrigens" style="min-height:120px"></textarea></div>
             <div class="fg"><label>Motivos da perda <span class="muted" style="font-weight:500">(um por linha)</span></label><textarea id="admMotivos" style="min-height:120px"></textarea></div>
             <button class="btn btn-primary btn-block" onclick="salvarListas()">Salvar listas</button>
             <div class="set-row" style="margin-top:14px"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div>
           </div>
           <div class="card dono-only hide" id="cardInteg" style="grid-column:1/-1">
-            <div class="card-head"><h2>🔗 Integrações</h2><span class="muted">Só gerentes · CRM, planilha e e-mail</span></div>
+            <div class="card-head"><h2>🔗 Integrações</h2><span class="muted">Só o dono · CRM, planilha e e-mail</span></div>
             <div class="int-bloco"><b>1. Chave de segurança</b><span>Só quem tem esta chave consegue mandar dados para o app. Ela vai no ajudante da planilha e no endereço do CRM.</span>
               <div class="int-linha"><code id="intChave"></code><button class="btn btn-ghost" onclick="copiarTexto('intChave')">Copiar</button><button class="btn btn-ghost" id="btnGerarChave" onclick="gerarChave()">Gerar chave</button></div></div>
             <div class="int-bloco"><b>2. CRM (Dynamus)</b><span>Endereço para colar na ação <b>Webhook</b> do fluxo novo. O CRM só avisa o app; nada muda lá dentro.</span>
@@ -1129,30 +1161,34 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <div class="int-linha"><span class="muted" id="intUltSync"></span><button class="link" onclick="lerPlanilhaAgora()">🔄 Ler a planilha agora</button></div></div>
             <div class="int-bloco"><b>4. Quem é quem</b><span>Ligue cada aba da planilha e cada nome do CRM ao corretor certo do app.</span>
               <div id="intLigacoes"></div><button class="btn btn-primary" id="btnSalvarLig" style="margin-top:10px" onclick="salvarLigacoes()">Salvar ligações</button></div>
-            <div class="int-bloco"><b>4b. Abas que o app não lê</b><span>Uma aba por linha, com o nome igual ao da planilha. As avaliações dessas abas somem do app, do painel e dos relatórios (a planilha não é alterada e nada é apagado).</span>
+            <div class="int-bloco"><b>5. Abas que o app não lê</b><span>Uma aba por linha, com o nome igual ao da planilha. As avaliações dessas abas somem do app, do painel e dos relatórios (a planilha não é alterada e nada é apagado).</span>
               <textarea id="intIgnoradas" style="min-height:120px;margin-top:8px"></textarea>
               <button class="btn btn-primary" style="margin-top:8px" onclick="salvarAbasIgnoradas()">Salvar abas</button></div>
-            <div class="int-bloco"><b>7. Docs do WhatsApp</b><span>Envie o arquivo <b>docs-whatsapp.json</b> (preparado a partir das conversas com o correspondente). Entram só os clientes que não estão na planilha; se a administração lançar o cliente depois, o do WhatsApp some sozinho para não contar duas vezes.</span>
+            <div class="int-bloco"><b>6. Docs do WhatsApp</b><span>Envie o arquivo <b>docs-whatsapp.json</b> (preparado a partir das conversas com o correspondente). Entram só os clientes que não estão na planilha; se a administração lançar o cliente depois, o do WhatsApp some sozinho para não contar duas vezes.</span>
               <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impWhatsArq').click()">📂 Escolher arquivo</button><input type="file" id="impWhatsArq" class="hide" accept=".json,application/json" onchange="lerDocsWhats(this)"></div>
               <div id="impWhatsInfo" class="hint" style="margin:6px 0"></div>
               <button class="btn btn-primary hide" id="btnImpWhats" onclick="importarDocsWhats()">Importar</button></div>
-            <div class="int-bloco"><b>6. Leads antigos (antes de ligar o CRM)</b><span>Baixe a planilha de oportunidades do CRM (Excel ou CSV) e envie aqui. O app mostra a prévia por corretor antes de gravar. Conta cada lead para o corretor que aparece como responsável na planilha.</span>
+            <div class="int-bloco"><b>9. Reservas (vendas) do WhatsApp</b><span>Envie o arquivo <b>reservas-whatsapp.json</b> (tirado do grupo de reservas). Cada reserva conta como venda, sem repetir cliente. Pode enviar de novo depois: as que já existem só são atualizadas.</span>
+              <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impResArq').click()">📂 Escolher arquivo</button><input type="file" id="impResArq" class="hide" accept=".json,application/json" onchange="lerReservasArq(this)"></div>
+              <div id="impResInfo" class="hint" style="margin:6px 0"></div>
+              <button class="btn btn-primary hide" id="btnImpRes" onclick="importarReservas()">Importar</button></div>
+            <div class="int-bloco"><b>7. Leads antigos (antes de ligar o CRM)</b><span>Baixe a planilha de oportunidades do CRM (Excel ou CSV) e envie aqui. O app mostra a prévia por corretor antes de gravar. Conta cada lead para o corretor que aparece como responsável na planilha.</span>
               <div class="int-linha"><label style="font-size:13px">De <input type="date" id="impDe" value="2026-09-14" onchange="previaLeads()" style="width:auto"></label><label style="font-size:13px">até <input type="date" id="impAte" onchange="previaLeads()" style="width:auto"></label>
                 <button class="btn btn-ghost" onclick="document.getElementById('impLeadsArq').click()">📂 Escolher planilha</button><input type="file" id="impLeadsArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerArquivoLeads(this)"></div>
               <div id="impLeadsCols"></div><div class="hint" id="impLeadsInfo" style="margin:6px 0"></div><div id="impLeadsPrev"></div>
               <button class="btn btn-primary" id="btnImpLeads" disabled onclick="importarLeadsAgora()">Importar leads</button></div>
-            <div class="int-bloco"><b>5. Planilha do app</b><span>A cada visita ou carta cadastrada ou alterada, a linha é atualizada sozinha. Use o botão uma vez para mandar o que já existe.</span>
+            <div class="int-bloco"><b>8. Planilha do app</b><span>A cada visita ou carta cadastrada ou alterada, a linha é atualizada sozinha. Use o botão uma vez para mandar o que já existe.</span>
               <div class="int-linha"><button class="btn btn-ghost" id="btnEnviarTudo" onclick="enviarTudoPlanilha()">Enviar tudo para a planilha do app</button></div></div>
           </div>
           <div class="card dono-only hide" id="cardGrupos" style="grid-column:1/-1">
-            <div class="card-head"><h2>🗂️ Status da planilha de avaliações</h2><span class="muted">Só gerentes</span></div>
+            <div class="card-head"><h2>🗂️ Status da planilha de avaliações</h2><span class="muted">Só o dono</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Em que grupo cada status entra nos relatórios e depois de quantos dias o cliente volta para o corretor como <b>repescagem</b> (deixe em branco para não voltar; 0 = avisar na hora). Status novos que a administração criar aparecem aqui sozinhos.</div>
             <div class="grp-row grp-cab"><span>Status</span><span>Grupo</span><span>Repescagem (dias)</span></div>
             <div id="admGrupos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarGrupos()">Salvar status</button>
           </div>
           <div class="card dono-only hide" id="cardAdmMsgs" style="grid-column:1/-1">
-            <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só gerentes editam · valem para todos</span></div>
+            <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só o dono edita · valem para todos</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:10px">Escreva do jeito que quiser. Use os campos abaixo e o app troca pelo dado do cliente na hora de enviar:</div>
             <div class="chips" id="msgCampos" style="margin-bottom:14px"></div>
             <div id="admMsgs"></div>
@@ -1366,6 +1402,24 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 </div>
 
 <!-- ================= ALTERAR SENHA ================= -->
+<div class="modal" id="resvModal">
+  <div class="sheet" style="width:min(620px,100%)">
+    <div class="sheet-head"><h2 id="rvTitulo">Reserva</h2><button class="icon-btn" onclick="fechar('resvModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="row2 fg"><div><label>Data da reserva</label><input type="date" id="rvDia"></div><div><label>Corretor(es)</label><input id="rvCor" list="rvCorLista" placeholder="ex.: Priscilla / Luis"><datalist id="rvCorLista"></datalist></div></div>
+      <div class="fg"><label>Cliente</label><input id="rvCli"></div>
+      <div class="row2 fg"><div><label>CPF</label><input id="rvCpf" inputmode="numeric"></div><div><label>Telefone</label><input id="rvTel" inputmode="tel"></div></div>
+      <div class="row2 fg"><div><label>Empreendimento</label><input id="rvEmp"></div><div><label>Construtora</label><input id="rvConst"></div></div>
+      <div class="row2 fg"><div><label>Valor de venda</label><input id="rvValor" inputmode="decimal" placeholder="R$ 0,00"></div><div><label>Entrada</label><input id="rvEntrada"></div></div>
+      <div class="row2 fg"><div><label>Comissão total</label><input id="rvCom"></div><div><label>Percentual</label><input id="rvPerc"></div></div>
+      <div class="row2 fg"><div><label>Origem do lead</label><input id="rvOrig"></div><div><label>Previsão de assinatura</label><input id="rvPrev"></div></div>
+      <div class="fg"><label>Status do imóvel</label><input id="rvStImo"></div>
+      <div class="fg"><label>Observação</label><textarea id="rvObs" style="min-height:60px"></textarea></div>
+      <div class="row2"><button class="btn btn-ghost" id="rvCaiuBtn" onclick="vendaCaiu()">✖ Venda caiu</button><button class="btn btn-primary" onclick="salvarReserva()">Salvar</button></div>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="senhaModal">
   <div class="sheet" style="width:min(420px,100%)">
     <div class="sheet-head"><h2>🔑 Alterar senha</h2><button class="icon-btn" onclick="fechar('senhaModal')" data-ic="x"></button></div>
@@ -1405,9 +1459,10 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
     <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
     <div class="sheet-body menu-list">
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('vendas')"><span style="width:20px;text-align:center">🎉</span>Vendas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><span style="width:20px;text-align:center">📋</span>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
-      <button class="gerente-only hide" onclick="fechar('menuModal');setView('painel')"><span style="width:20px;text-align:center">📊</span>Painel do dono</button>
+      <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><span style="width:20px;text-align:center">📊</span>Painel executivo</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><span style="width:20px;text-align:center">📈</span>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><span style="width:20px;text-align:center">📲</span>Instalar aplicativo</button>
@@ -1725,11 +1780,12 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel do dono', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
-  if (v === 'painel' && !souGerente()) v = 'hoje';
+  if (v === 'painel' && !souDirecao()) v = 'hoje';
   if (v === 'desempenho' && !podeGerir()) v = 'hoje';
+  if (v === 'vendas' && !souGerente()) v = 'hoje';
   if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
@@ -2178,6 +2234,8 @@ const souAtivo = () => perfil?.status === 'ativo';
 const souGerente = () => souAtivo() && perfil.papel === 'gerente';
 // o dono do app: quem instalou o sistema ou a conta do Allan (reconhecida pelo e-mail)
 const EMAIL_DONO = 'allanvgron@gmail.com';
+// Painel executivo: o CEO (gerente com cargo "dono") e o dono do app
+const souDirecao = () => souGerente() && (souDono() || perfil.cargo === 'dono');
 const souDono = () => souGerente() && ((!!instalacao && instalacao.gerenteUid === uidAtual) || String(emailAtual || '').toLowerCase() === EMAIL_DONO);
 window.souDono = souDono;
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
@@ -2225,7 +2283,7 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
-  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; sdrResumos = []; leadsAjustes = {};
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -2371,6 +2429,7 @@ function renderPapel(){
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir()));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
+  document.querySelectorAll('.direcao-only').forEach(e => e.classList.toggle('hide', !souDirecao()));
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr'));
@@ -2902,6 +2961,7 @@ function assinarCartas(erro){
   else if (souCoord()) qc = query(collection(db,'cartas'), where('equipe','==',perfil.equipe||'-'));
   else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
   if (qc) subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
+  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('reservas:', e.code || e.message)));
   subsPapel.push(onSnapshot(collection(db,'ranking_cartas'), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
 }
 
@@ -4369,6 +4429,31 @@ window.lerDocsWhats = async input => {
     $('btnImpWhats').classList.toggle('hide', !novos.length); $('btnImpWhats').textContent = `Importar ${novos.length} docs`;
   } catch(e) { $('impWhatsInfo').textContent = 'Não consegui ler o arquivo: ' + e.message; }
 };
+let impRes = [];
+window.lerReservasArq = async input => {
+  const f = input.files && input.files[0]; input.value = ''; if (!f) return;
+  try {
+    const j = JSON.parse(await f.text()); impRes = (Array.isArray(j) ? j : j.reservas || []).filter(r => r && /^r[a-z0-9]{3,40}$/.test(r.id || '') && r.dia);
+    const porMes = {}; impRes.forEach(r => { const m = r.dia.slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
+    const semCor = impRes.filter(r => corretoresDaReserva(r.corretorTexto).every(c => !c.uid)).length;
+    $('impResInfo').innerHTML = `<b>${impRes.length}</b> reservas (${Object.entries(porMes).sort().map(([m,n]) => `${nomeMes(m)}: ${n}`).join(' · ')}) · ${brl(impRes.reduce((a,r) => a + (Number(r.valor) || 0), 0))} vendidos.${semCor ? ` ${semCor} ainda sem corretor cadastrado no app (ligam sozinhas quando a pessoa se cadastrar).` : ''}`;
+    $('btnImpRes').classList.toggle('hide', !impRes.length); $('btnImpRes').textContent = `Importar ${impRes.length} reservas`;
+  } catch(e) { $('impResInfo').textContent = 'Não consegui ler o arquivo: ' + e.message; }
+};
+window.importarReservas = async () => {
+  if (!impRes.length || !souDono()) return;
+  if (!confirm(`Colocar ${impRes.length} reservas no app como vendas?`)) return;
+  const btn = $('btnImpRes'); btn.disabled = true; btn.textContent = 'Importando…';
+  try {
+    for (let i = 0; i < impRes.length; i += 400) {
+      const b = writeBatch(db);
+      impRes.slice(i, i + 400).forEach(r => { const { id, ...d } = r; b.set(doc(db,'reservas',id), { ...d, valor:Number(d.valor) || 0, cpfNorm:soDig(d.cpf).length === 11 ? soDig(d.cpf) : '', telNorm:chaveTel(d.telefone), fonte:'whatsapp', importadoEm:Date.now(), por:perfil.nome }, { merge:true }); });
+      await gravar(b.commit());
+    }
+    toast(`Pronto ✓ ${impRes.length} reservas no app`); $('impResInfo').textContent = `✓ ${impRes.length} reservas importadas.`; btn.classList.add('hide'); impRes = [];
+  } catch(e) { toast('Erro: ' + e.message + ' (publicou as regras novas do Firebase?)'); }
+  btn.disabled = false;
+};
 window.importarDocsWhats = async () => {
   if (!impWhats.length) return;
   if (!confirm(`Colocar ${impWhats.length} docs do WhatsApp no app? Eles passam a contar nas avaliações, no Desempenho, no Painel e nos relatórios.`)) return;
@@ -4550,6 +4635,94 @@ function aprovSdr(de, ate){
   (typeof sdrResumos !== 'undefined' ? sdrResumos : []).filter(x => x.dia >= de && x.dia <= ate).forEach(x => { r.dia += Number(x.aprovDia) || 0; r.outro += Number(x.aprovOutroCca) || 0; r.n++; });
   return r;
 }
+// ---------- vendas = reservas do grupo + cartas marcadas "Venda fechada" (mesmo cliente não conta duas vezes) ----------
+let reservas = [], reservasTodas = [];
+window.vFil = { busca:'', periodo:'mes', equipe:'', caidas:false };
+window.vSet = (k, v) => { vFil[k] = v; if (k === 'busca') { clearTimeout(window._vT); window._vT = setTimeout(render, 250); } else render(); };
+function faixaVend(p){ return p === 'todas' ? ['0000-01-01','9999-12-31'] : p === 'passado' ? faixaMesRel(1) : faixa(p === 'semana' ? 'semana' : 'mes'); }
+function renderVendas(){
+  if (view !== 'vendas' || !souGerente()) return;
+  const [de, ate] = faixaVend(vFil.periodo), t = norm(vFil.busca), dig = soDig(vFil.busca);
+  const eqF = vFil.equipe;
+  $('vPeriodo').value = vFil.periodo;
+  $('vEquipe').classList.toggle('hide', !souGerente());
+  $('vEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${vFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  const comCor = reservasTodas.map(r => ({ ...r, cor:corretoresDaReserva(r.corretorTexto) }));
+  const noP = comCor.filter(r => r.dia >= de && r.dia <= ate && (!eqF || r.cor.some(c => c.equipe === eqF)));
+  const ativas = noP.filter(r => !r.caiu && !r.arquivado), caidas = noP.filter(r => r.caiu);
+  $('vsQtd').textContent = ativas.length; $('vsValor').textContent = brl(ativas.reduce((a,r) => a + (Number(r.valor) || 0), 0)); $('vsCaiu').textContent = caidas.length;
+  const l = (vFil.caidas ? caidas : ativas).filter(r => !t || norm([r.cliente, r.corretorTexto, r.empreendimento, r.construtora, r.cor.map(c => c.nome).join(' ')].join(' ')).includes(t) || (dig.length >= 3 && (soDig(r.cpf).includes(dig) || soDig(r.telefone).includes(dig))))
+    .sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
+  const g = souGerente();
+  $('vendLista').innerHTML = (vFil.caidas ? `<div class="hint" style="margin:0 0 10px">Mostrando as vendas que caíram. <button class="link" onclick="vSet('caidas',false)">Voltar para as vendas</button></div>` : '')
+    + (l.length ? l.map(r => `<div class="vcard" style="--vc:${r.caiu ? 'var(--danger)' : 'var(--ok)'}">
+      <div class="v-time"><b style="font-size:15px">${r.dia ? r.dia.slice(8,10) + '/' + r.dia.slice(5,7) : '--'}</b><span>${r.caiu ? 'caiu' : 'reserva'}</span></div>
+      <div class="v-body" ${g ? `onclick="editarReserva('${r.id}')"` : 'style="cursor:default"'}>
+        <div class="v-top"><b>${esc(nomeBonito(r.cliente) || 'Sem nome')}</b>${r.caiu ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">Venda caiu</span>' : '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">Vendida</span>'}</div>
+        <div class="v-meta">${r.valor ? `<span style="color:var(--text);font-weight:700">💰 ${brl(r.valor)}</span>` : ''}<span>👤 ${esc(r.cor.map(c => c.nome).join(' / ') || r.corretorTexto || '—')}</span>${r.empreendimento ? `<span>🏠 ${esc(r.empreendimento)}</span>` : ''}${r.construtora ? `<span>🏗️ ${esc(r.construtora)}</span>` : ''}${r.previsao ? `<span>✍️ ${esc(r.previsao)}</span>` : ''}${r.cpf ? `<span>🪪 ${cpfOculto(r.cpf)}</span>` : ''}</div>
+        ${r.caiu && r.motivoCaiu ? `<div class="v-obs">✖ ${esc(r.motivoCaiu)}</div>` : r.obs ? `<div class="v-obs">📝 ${esc(r.obs)}</div>` : ''}
+      </div>
+      <div class="v-actions">${r.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(r.telefone)}')">${IC.wa}WhatsApp</button>` : ''}${g ? (r.caiu ? `<button class="snooze" onclick="restaurarReserva('${r.id}')">↩ Voltar a contar</button>` : `<button class="snooze" onclick="editarReserva('${r.id}')">✏️ Editar</button>`) : ''}</div>
+    </div>`).join('') : vazio(vFil.caidas ? 'Nenhuma venda caiu nesse período' : 'Nenhuma venda nesse período', 'Mude o período ou cadastre pelo botão "Nova reserva".'));
+}
+let rvId = null;
+window.editarReserva = id => {
+  if (!souGerente()) return;
+  const r = id ? reservasTodas.find(x => x.id === id) : null; rvId = r ? r.id : null;
+  $('rvTitulo').textContent = r ? 'Editar reserva' : 'Nova reserva';
+  const v = (k, x) => { $(k).value = x ?? ''; };
+  v('rvDia', r?.dia || hojeISO()); v('rvCor', r?.corretorTexto); v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
+  v('rvEmp', r?.empreendimento); v('rvConst', r?.construtora); v('rvValor', r?.valor ? fmtValorInput(r.valor) : ''); v('rvEntrada', r?.entrada); v('rvCom', r?.comissao); v('rvPerc', r?.percentual);
+  v('rvOrig', r?.origem); v('rvPrev', r?.previsao); v('rvStImo', r?.statusImovel); v('rvObs', r?.obs);
+  $('rvCorLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','gerente'].includes(p.papel)).map(p => `<option value="${esc(p.nome)}">`).join('');
+  $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu);
+  abrir('resvModal');
+};
+window.salvarReserva = async () => {
+  const cli = $('rvCli').value.trim(), dia = $('rvDia').value;
+  if (!cli || !dia) { toast('Preencha a data e o cliente'); return; }
+  const cpf = soDig($('rvCpf').value), tel = $('rvTel').value.trim();
+  const d = { dia, cliente:cli, cpf:cpf.length === 11 ? cpf : '', cpfNorm:cpf.length === 11 ? cpf : '', telefone:tel, telNorm:chaveTel(tel), corretorTexto:$('rvCor').value.trim(),
+    empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), comissao:$('rvCom').value.trim(),
+    percentual:$('rvPerc').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(), statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
+  const id = rvId || ('r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36))));
+  if (!rvId && reservasTodas.some(x => x.id === id)) { if (!confirm('Já existe uma reserva desse cliente. Atualizar a que existe?')) return; }
+  try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.vendaCaiu = async () => {
+  if (!rvId) return;
+  const motivo = prompt('A venda caiu. Qual o motivo? (opcional)'); if (motivo === null) return;
+  try { await gravar(setDoc(doc(db,'reservas',rvId), { caiu:true, motivoCaiu:motivo.trim(), caiuEm:Date.now(), caiuPor:perfil.nome }, { merge:true })); fechar('resvModal'); toast('Marcada como venda que caiu. Ela sai das contas; dá para voltar em "Caíram no período".'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.restaurarReserva = async id => {
+  try { await gravar(setDoc(doc(db,'reservas',id), { caiu:false, motivoCaiu:'', voltouEm:Date.now() }, { merge:true })); toast('A venda voltou a contar ✓'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+const limpaNomeCor = n => norm(String(n || '').replace(/creci.*$/i, '').replace(/\d+/g, '').replace(/\b(novato|corretor|corretora|sdr)\b/gi, '')).trim();
+function corretoresDaReserva(txt){
+  const partes = String(txt || '').split(/\s*(?:\/|\+|,|\be\b)\s*/i).map(limpaNomeCor).filter(Boolean);
+  const ativos = perfisLista.filter(p => p.status === 'ativo');
+  return partes.map(n => {
+    const p = ativos.find(x => limpaNomeCor(x.nome) === n) || (() => { const pr = n.split(' ')[0], c = ativos.filter(x => limpaNomeCor(x.nome).split(' ')[0] === pr); return c.length === 1 ? c[0] : null; })();
+    return p ? { uid:p.uid, nome:p.nome, equipe:p.equipe || '' } : { uid:'', nome:nomeBonito(n), equipe:'' };
+  });
+}
+window.corretoresDaReserva = corretoresDaReserva;
+function vendasUnificadas(de, ate){
+  const m = new Map(), ck = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
+  reservas.filter(r => r.dia >= de && r.dia <= ate).forEach(r => {
+    const cor = corretoresDaReserva(r.corretorTexto);
+    m.set(ck(r.cpf, chaveTel(r.telefone), r.id), { dia:r.dia, cliente:r.cliente, valor:Number(r.valor) || 0, corretores:cor, equipe:cor[0]?.equipe || '', fonte:'reserva' });
+  });
+  cartas.filter(c => c.status === 'Venda fechada' && (c.vendaEm || c.data) >= de && (c.vendaEm || c.data) <= ate).forEach(c => {
+    const k = ck(c.cpf, c.telNorm || chaveTel(c.telefone), c.id);
+    if (!m.has(k)) m.set(k, { dia:c.vendaEm || c.data, cliente:c.cliente, valor:0, corretores:[{ uid:c.corretorUid, nome:c.corretorNome, equipe:c.equipe || '' }], equipe:c.equipe || '', fonte:'carta' });
+  });
+  return [...m.values()];
+}
+window.vendasUnificadas = vendasUnificadas;
 function numerosPeriodo(de, ate){
   const h = hojeISO(), noP = d => !!d && d >= de && d <= ate;
   const leadsLinhas = [];
@@ -4564,7 +4737,7 @@ function numerosPeriodo(de, ate){
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
     semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
-    sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoesUnificadas().filter(a => noP(a.data)), cs), vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
+    sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoesUnificadas().filter(a => noP(a.data)), cs), vendas:vendasUnificadas(de, ate).length, vendasL:vendasUnificadas(de, ate), valorVendido:vendasUnificadas(de, ate).reduce((a,v) => a + v.valor, 0), valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
 }
 function variacao(a, b){
@@ -4574,7 +4747,7 @@ function variacao(a, b){
   return `<small class="var ${p > 0 ? 'up' : p < 0 ? 'down' : ''}">${p > 0 ? '▲' : p < 0 ? '▼' : '='} ${Math.abs(p)}%</small>`;
 }
 function renderPainel(){
-  if (!souGerente()) { $('painelConteudo').innerHTML = ''; return; }
+  if (!souDirecao()) { $('painelConteudo').innerHTML = ''; return; }
   const atual = painelMes === 'atual', hoje = new Date();
   const [de, fimMes] = faixaMesRel(atual ? 0 : 1);
   const ate = atual ? hojeISO() : fimMes;
@@ -4597,7 +4770,7 @@ function renderPainel(){
     ${kpi('✅','Aprovações', A.unif.length, B.unif.length, `planilha + cartas do app, sem repetir cliente${A.semCarta ? ` · ${A.semCarta} ainda sem carta no app` : ''}`)}
     ${kpi('🎧','Aprovações das SDRs', A.sdr.dia, B.sdr.dia, `do resumo do WhatsApp${A.sdr.outro ? ` · ${A.sdr.outro} em outro CCA` : ''} · não soma no total`)}
     ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, 'planilha de avaliações')}
-    ${kpi('🎉','Vendas', A.vendas, B.vendas)}
+    ${kpi('🎉','Vendas', A.vendas, B.vendas, `reservas + cartas vendidas${A.valorVendido ? ' · ' + brl(A.valorVendido) : ''}`)}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
     <div class="pd-kpi"><span>⭐ Nota do atendimento</span><b>${(() => { const l = pesquisas.filter(p => p.respondida && typeof p.nota === 'number' && iso(new Date(p.respondidaEm || 0)) >= de && iso(new Date(p.respondidaEm || 0)) <= ate); return l.length ? mediaNotas(l).toLocaleString('pt-BR') : '–'; })()}</b><em>média das pesquisas após a visita</em></div>
     <div class="pd-kpi"><span>📍 Plantão</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
@@ -4606,7 +4779,7 @@ function renderPainel(){
   const eqs = listaEquipes().map(e => {
     const pts = pontosDoMes(de.slice(0,7)).filter(x => x.equipe === e.id).reduce((a,x) => a + x.pontos, 0);
     return { e, leads:A.leadsLinhas.filter(l => l.equipe === e.id).reduce((a,l) => a + (Number(l.leads) || 0), 0), docs:A.avs.filter(a => a.equipe === e.id).length,
-      aprov:A.cs.filter(c => c.equipe === e.id).length, aprovPlan:A.unif.filter(x => x.equipe === e.id).length, vendas:A.vds.filter(c => c.equipe === e.id).length, pts };
+      aprov:A.cs.filter(c => c.equipe === e.id).length, aprovPlan:A.unif.filter(x => x.equipe === e.id).length, vendas:A.vendasL.filter(v => v.equipe === e.id).length, pts };
   });
   const lider = eqs.slice().sort((a,b) => b.vendas - a.vendas || b.aprov - a.aprov || b.docs - a.docs)[0];
   html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>🏁 Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Aprovações</th><th class="hide-m">Cartas no app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
@@ -4651,7 +4824,7 @@ function renderDesempenho(){
     if (!uid && nome) { const pf = perfisLista.find(p => p.status === 'ativo' && chaveNomeLead(p.nome) === chaveNomeLead(nome)); if (pf) uid = pf.uid; }
     const k = chaveDe(uid, nome);
     if (!linhas.has(k)) { const pf = uid ? perfisLista.find(p => p.uid === uid) : null;
-      linhas.set(k, { uid:uid || '', nome:pf?.nome || nomeBonito(nome) || '?', equipe:pf?.equipe || equipe || '', ligado:!!uid, leads:0, docs:0, aprov:0, cond:0, reprov:0 }); }
+      linhas.set(k, { uid:uid || '', nome:pf?.nome || nomeBonito(nome) || '?', equipe:pf?.equipe || equipe || '', ligado:!!uid, leads:0, docs:0, aprov:0, cond:0, reprov:0, vendas:0 }); }
     return linhas.get(k);
   };
   // todos os corretores e coordenadores ativos aparecem, mesmo com zero
@@ -4666,14 +4839,18 @@ function renderDesempenho(){
   avaliacoesUnificadas().filter(a => a.data >= de && a.data <= ate && infoStatus(a.status).g === 'aprovado').forEach(a => { const k = chaveCli(a.cpfNorm || a.cpf, a.telNorm, a.id); if (!m.has(k)) m.set(k, [a.corretorUid, a.corretorNome || a.aba, a.equipe]); });
   cartas.filter(c => c.data >= de && c.data <= ate).forEach(c => { const k = chaveCli(c.cpfNorm || c.cpf, c.telNorm || chaveTel(c.telefone), c.id); m.set(k, [c.corretorUid, c.corretorNome, c.equipe]); });
   m.forEach(([uid, nome, eq]) => { pega(uid, nome, eq).aprov++; });
+  // vendas (reservas): em parceria, conta para cada corretor da reserva; no total conta uma vez
+  const vendasP = vendasUnificadas(de, ate);
+  vendasP.forEach(v => (v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor' }]).forEach(c => { pega(c.uid, c.nome, c.equipe).vendas++; }));
   const media = r => r.docs ? Math.round(r.leads / r.docs * 100) / 100 : null;
   const corM = r => { const x = media(r); return x === null ? (r.leads ? 'var(--danger)' : 'var(--muted)') : x <= 5 ? 'var(--ok)' : x <= 10 ? '#ca8a04' : 'var(--danger)'; };
   const t = norm(desBusca);
   let lista = [...linhas.values()].filter(r => (!eqFiltro || r.equipe === eqFiltro) && (!t || norm(r.nome).includes(t)));
-  const ord = { leads:(a,b) => b.leads - a.leads, docs:(a,b) => b.docs - a.docs, aprov:(a,b) => b.aprov - a.aprov,
+  const ord = { leads:(a,b) => b.leads - a.leads, docs:(a,b) => b.docs - a.docs, aprov:(a,b) => b.aprov - a.aprov, vendas:(a,b) => b.vendas - a.vendas,
     media:(a,b) => (media(a) ?? 1e9) - (media(b) ?? 1e9), nome:(a,b) => a.nome.localeCompare(b.nome,'pt-BR') }[desOrdem];
   lista.sort((a,b) => ord(a,b) || b.leads - a.leads || a.nome.localeCompare(b.nome,'pt-BR'));
   const tot = lista.reduce((a,r) => ({ leads:a.leads + r.leads, docs:a.docs + r.docs, aprov:a.aprov + r.aprov, cond:a.cond + r.cond, reprov:a.reprov + r.reprov }), { leads:0, docs:0, aprov:0, cond:0, reprov:0 });
+  tot.vendas = eqFiltro ? vendasP.filter(v => v.corretores.some(c => c.equipe === eqFiltro)).length : vendasP.length;
   const th = (k, n, cls='') => `<th class="${cls}" style="cursor:pointer" onclick="desSet('ordem','${k}')">${n}${desOrdem===k?' ▾':''}</th>`;
   const fmtM = r => { const x = media(r); return x === null ? (r.leads ? 'sem doc' : '–') : x.toLocaleString('pt-BR'); };
   const semLiga = lista.filter(r => !r.ligado && (r.leads || r.docs || r.aprov)).length;
@@ -4683,21 +4860,49 @@ function renderDesempenho(){
       <div class="pd-kpi"><span>🗂️ Docs</span><b>${tot.docs}</b><em>planilha de avaliações</em></div>
       <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(tot)}">${fmtM(tot)}</b><em>quanto menor, melhor</em></div>
       <div class="pd-kpi"><span>✅ Aprovações</span><b>${tot.aprov}</b><em>planilha + cartas do app, sem repetir</em></div>
+      ${souGerente() ? '' : '<!--'}<div class="pd-kpi"><span>🎉 Vendas</span><b>${tot.vendas}</b><em>reservas + cartas vendidas${(() => { const v = vendasP.reduce((a,x) => a + x.valor, 0); return v ? ' · ' + brl(v) : ''; })()}</em></div>${souGerente() ? '' : '-->'}
     </div>
     <div class="card">
       <div class="tb-grid" style="margin-bottom:10px">
         <input placeholder="Buscar corretor..." value="${esc(desBusca)}" oninput="desSet('busca',this.value)">
         ${souGerente() ? `<select onchange="desSet('eq',this.value)"><option value="">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}" ${desEq===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select>` : ''}
       </div>
-      <div style="overflow-x:auto"><table class="rank"><thead><tr>${th('nome','Corretor')}${th('leads','Leads')}${th('docs','Docs')}${th('media','Média')}${th('aprov','Aprov.')}<th class="hide-m">Cond.</th><th class="hide-m">Reprov.</th></tr></thead><tbody>
+      <div style="overflow-x:auto"><table class="rank"><thead><tr>${th('nome','Corretor')}${th('leads','Leads')}${th('docs','Docs')}${th('media','Média')}${th('aprov','Aprov.')}${souGerente() ? th('vendas','Vendas') : ''}<th class="hide-m">Cond.</th><th class="hide-m">Reprov.</th></tr></thead><tbody>
       ${lista.map(r => `<tr><td><span class="nm">${esc(r.nome)}</span>${souGerente() && r.equipe ? `<small class="muted" style="display:block">${esc(eqNome(r.equipe))}</small>` : ''}${!r.ligado ? '<small class="late" style="display:block">nome do CRM/planilha sem ligação</small>' : ''}</td>
-        <td class="tot">${r.leads}</td><td>${r.docs}</td><td style="color:${corM(r)};font-weight:700">${fmtM(r)}</td><td>${r.aprov}</td><td class="hide-m">${r.cond}</td><td class="hide-m">${r.reprov}</td></tr>`).join('') || '<tr><td colspan="7" class="muted">Ninguém nesse filtro.</td></tr>'}
-      <tr style="font-weight:800;background:var(--soft,rgba(0,0,0,.03))"><td>Total</td><td>${tot.leads}</td><td>${tot.docs}</td><td style="color:${corM(tot)}">${fmtM(tot)}</td><td>${tot.aprov}</td><td class="hide-m">${tot.cond}</td><td class="hide-m">${tot.reprov}</td></tr>
+        <td class="tot">${r.leads}</td><td>${r.docs}</td><td style="color:${corM(r)};font-weight:700">${fmtM(r)}</td><td>${r.aprov}</td>${souGerente() ? `<td>${r.vendas}</td>` : ''}<td class="hide-m">${r.cond}</td><td class="hide-m">${r.reprov}</td></tr>`).join('') || '<tr><td colspan="8" class="muted">Ninguém nesse filtro.</td></tr>'}
+      <tr style="font-weight:800;background:var(--soft,rgba(0,0,0,.03))"><td>Total</td><td>${tot.leads}</td><td>${tot.docs}</td><td style="color:${corM(tot)}">${fmtM(tot)}</td><td>${tot.aprov}</td>${souGerente() ? `<td>${tot.vendas}</td>` : ''}<td class="hide-m">${tot.cond}</td><td class="hide-m">${tot.reprov}</td></tr>
       </tbody></table></div>
-      <div class="muted" style="font-size:12.5px;margin-top:10px">Média: verde até 5 · amarelo de 5 a 10 · vermelho acima de 10 ou sem doc. Toque no título da coluna para ordenar.${semLiga ? ` · ${semLiga} nome${semLiga!==1?'s':''} ainda sem ligação com um corretor do app (aparecem separados até ligar).` : ''}${souCoord() ? ' · Os leads de hoje entram no fim do dia.' : ''}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">Média: verde até 5 · amarelo de 5 a 10 · vermelho acima de 10 ou sem doc. Toque no título da coluna para ordenar.${souGerente() ? ' Venda em parceria conta para cada corretor da reserva e uma vez só no total.' : ''}${semLiga ? ` · ${semLiga} nome${semLiga!==1?'s':''} ainda sem ligação com um corretor do app (aparecem separados até ligar).` : ''}${souCoord() ? ' · Os leads de hoje entram no fim do dia.' : ''}</div>
     </div>`;
 }
 window.renderDesempenho = renderDesempenho;
+
+// ---------- cartões recolhíveis (menos poluição: abre só quando tocar) ----------
+function lerDobras(){ try { return JSON.parse(localStorage.getItem('dobras') || '{}'); } catch(e) { return {}; } }
+function gravarDobra(k, aberto){ try { const d = lerDobras(); if (aberto) d[k] = 1; else delete d[k]; localStorage.setItem('dobras', JSON.stringify(d)); } catch(e) {} }
+function prepararDobras(){
+  const abertos = lerDobras();
+  const cards = [...document.querySelectorAll('#v-config .card, #v-corretores .card, #v-relatorios .card, #cardAtencao')].filter(c => c.querySelector(':scope > .card-head h2'));
+  cards.forEach((c, i) => {
+    if (c.classList.contains('dobra')) return;
+    const k = (c.closest('.view')?.id || 'x') + ':' + (c.id || c.querySelector(':scope > .card-head h2').textContent.trim());
+    c.classList.add('dobra'); c.dataset.dobra = k;
+    if (abertos[k]) c.classList.add('aberto');
+    c.querySelector(':scope > .card-head').addEventListener('click', ev => {
+      if (ev.target.closest('input,select,button,a,label,textarea')) return;
+      const ab = c.classList.toggle('aberto'); gravarDobra(k, ab);
+    });
+  });
+  document.querySelectorAll('#cardInteg .int-bloco').forEach(b => {
+    if (b.classList.contains('dobra-b')) return;
+    const t = b.querySelector(':scope > b'); if (!t) return;
+    const k = 'integ:' + t.textContent.trim().slice(0, 30);
+    b.classList.add('dobra-b'); if (abertos[k]) b.classList.add('aberto');
+    t.addEventListener('click', () => { const ab = b.classList.toggle('aberto'); gravarDobra(k, ab); });
+  });
+}
+window.prepararDobras = prepararDobras;
+setTimeout(prepararDobras, 0);
 window.desSet = (k, v) => {
   if (k === 'per') desPer = v; else if (k === 'ordem') desOrdem = v; else if (k === 'eq') desEq = v;
   else if (k === 'busca') { desBusca = v; clearTimeout(window._desT); window._desT = setTimeout(() => { render(); const i = document.querySelector('#desConteudo input'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }, 300); return; }
@@ -4706,6 +4911,8 @@ window.desSet = (k, v) => {
 
 function renderEtapa3(){
   if (view === 'desempenho') renderDesempenho();
+  renderVendas();
+  if ($('cVendas')) { const [mi, mf] = faixa('mes'); const n = reservas.filter(r => r.dia >= mi && r.dia <= mf).length; $('cVendas').textContent = n || ''; }
   if (view === 'painel') renderPainel();
   if (view === 'corretores') renderPresenca();
 }
