@@ -3874,8 +3874,12 @@ window.testarAjudante = async () => {
 window.salvarLigacoes = async () => {
   const mapaAbas = { ...(integ.mapaAbas || {}) }, mapaCrm = { ...(integ.mapaCrm || {}) };
   document.querySelectorAll('#intLigacoes select').forEach(s => { const m = s.dataset.tipo === 'aba' ? mapaAbas : mapaCrm; if (s.value) m[s.dataset.nome] = s.value; else delete m[s.dataset.nome]; });
-  try { await gravar(setDoc(doc(db,'config','integracao'), { mapaAbas, mapaCrm }, { merge:true })); integAssin = ''; toast('Ligações salvas. Valem a partir da próxima leitura.'); }
-  catch(e) { toast('Erro: ' + e.message); }
+  try {
+    await gravar(setDoc(doc(db,'config','integracao'), { mapaAbas, mapaCrm }, { merge:true })); integAssin = '';
+    toast('Ligações salvas. Passando os clientes antigos para os corretores certos…');
+    const r = await chamarCarteiro({ tipo:'ajudante', acao:'sincronizar', completo:true });
+    toast(r?.ok ? 'Pronto ✓ Todas as avaliações foram conferidas.' : 'Ligações salvas. Os clientes antigos passam na conferência da madrugada.');
+  } catch(e) { toast('Erro: ' + e.message); }
 };
 window.enviarTudoPlanilha = async () => {
   if (!confirm('Enviar todas as visitas e cartas já cadastradas para a planilha do app? Pode levar alguns minutos. Deixe esta tela aberta.')) return;
