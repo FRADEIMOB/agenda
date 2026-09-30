@@ -343,7 +343,10 @@ html[data-theme="dark"] .toast button{color:#1d4ed8}
 .v-time{min-width:58px;text-align:center;padding-top:2px}
 .v-time b{display:block;font-size:19px;letter-spacing:-.02em}
 .v-time span{font-size:11px;color:var(--muted);font-weight:600}
-.v-body{flex:1;min-width:0;cursor:pointer}
+.v-body{flex:1 1 240px;min-width:0;cursor:pointer}
+.vcard{flex-wrap:wrap}
+.v-actions{margin-left:auto;max-width:100%}
+@media(max-width:820px){.v-body{flex:1 1 0}}
 .v-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .v-top b{font-size:15px}
 .v-meta{font-size:12.5px;color:var(--muted);margin-top:5px;display:flex;flex-wrap:wrap;gap:4px 12px}
@@ -538,7 +541,11 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
 .msg-item .snooze{display:inline-flex;align-items:center;gap:6px}
 .msg-item .snooze svg{width:16px;height:16px;flex:none}
 .msg-item p{margin:0 0 10px;white-space:pre-wrap;font-size:13.5px;color:var(--muted);line-height:1.45}
+.msg-item .msg-txt{width:100%;min-height:70px;font-size:13.5px;line-height:1.45;margin-bottom:10px;resize:vertical}
 .rep-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--danger-soft);color:var(--danger);margin-left:6px;white-space:nowrap}
+.pt-head{flex-wrap:wrap;gap:10px}
+.pt-head select{width:auto;max-width:100%}
+@media(max-width:820px){.pt-head select{width:100%}#relGestao table.rank th,#relGestao table.rank td,#rankLista table.rank th,#rankLista table.rank td{padding-left:4px;padding-right:4px}#relGestao table.rank,#rankLista table.rank{font-size:13px}#relGestao table.rank th,#rankLista table.rank th{font-size:9.5px;letter-spacing:0}#relGestao .eq,#rankLista .eq{font-size:11px}}
 .pt-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
 .pt-row:last-child{border-bottom:0}
 .pt-row input{width:90px;text-align:center}
@@ -876,7 +883,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="page-head"><div><h1>Relatórios</h1><div class="sub" id="relSub">Como anda a sua produtividade.</div></div></div>
         <div id="relGestao" class="gest hide">
           <div class="card" style="margin-bottom:20px">
-            <div class="card-head"><h2>🏆 Pontos</h2><div class="ph-acoes"><select id="ptMes" style="width:auto" onchange="ptMesSel=this.value;render()"></select></div></div>
+            <div class="card-head pt-head"><h2>🏆 Pontos</h2><select id="ptMes" onchange="ptMesSel=this.value;render()"></select></div>
             <div class="janela" id="ptInfo"></div>
             <div id="ptTabela" style="overflow-x:auto"></div>
             <div class="janela" style="justify-content:flex-end;gap:14px;flex-wrap:wrap;margin-top:10px">
@@ -891,7 +898,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="janela" style="justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px"><span class="hint" style="margin:0" id="repInfo"></span><button class="link" id="btnVerifHist" onclick="verificarHistorico()">🔍 Verificar todo o histórico</button></div>
           </div>
           <div class="rep-grid" style="margin-bottom:20px">
-            <div class="card"><div class="card-head"><h2>📣 Origem dos clientes</h2><select id="origPer" style="width:auto" onchange="origPer=this.value;render()"><option value="mes">Este mês</option><option value="3m">Últimos 3 meses</option></select></div><div id="origTabela"></div></div>
+            <div class="card"><div class="card-head pt-head"><h2>📣 Origem dos clientes</h2><select id="origPer" onchange="origPer=this.value;render()"><option value="mes">Este mês</option><option value="3m">Últimos 3 meses</option></select></div><div id="origTabela"></div></div>
             <div class="card"><div class="card-head"><h2>❌ Motivos da perda</h2><span class="muted" id="motPerTxt">este mês</span></div><div id="motTabela"></div></div>
           </div>
           <div class="rep-sec" style="margin:4px 0 14px">Sua agenda pessoal</div>
@@ -955,6 +962,14 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="fg"><label>Motivos da perda <span class="muted" style="font-weight:500">(um por linha)</span></label><textarea id="admMotivos" style="min-height:120px"></textarea></div>
             <button class="btn btn-primary btn-block" onclick="salvarListas()">Salvar listas</button>
             <div class="set-row" style="margin-top:14px"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div>
+          </div>
+          <div class="card gerente-only hide" id="cardAdmMsgs" style="grid-column:1/-1">
+            <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só gerentes editam · valem para todos</span></div>
+            <div class="hint" style="margin-top:0;margin-bottom:10px">Escreva do jeito que quiser. Use os campos abaixo e o app troca pelo dado do cliente na hora de enviar:</div>
+            <div class="chips" id="msgCampos" style="margin-bottom:14px"></div>
+            <div id="admMsgs"></div>
+            <div class="row2" style="margin-top:12px"><button class="btn btn-ghost" onclick="novoModelo()">+ Nova mensagem</button><button class="btn btn-primary" onclick="salvarModelos()">Salvar mensagens</button></div>
+            <div style="margin-top:10px;text-align:right"><button class="link" onclick="restaurarModelos()">Voltar para as mensagens originais</button></div>
           </div>
           <div class="card">
             <div class="card-head"><h2>Seus dados</h2></div>
@@ -2289,7 +2304,8 @@ window.whatsConfirmar = id => {
   const v = visitas.find(x => x.id === id); if (!v) return;
   let n = String(v.telefone||'').replace(/\D/g,''); if (n.length <= 11) n = '55' + n;
   const eu = primeiro(perfil?.nome || state?.profile?.name || '');
-  const txt = `Olá, ${primeiro(v.cliente)}! Tudo bem? Aqui é ${eu}, da Frade Imóveis. Passando para confirmar a sua visita ${quandoTxt(v.date)} às ${v.time}. Posso confirmar?`;
+  const mod = (appCfg.mensagens || MSG_PADRAO).find(m => m.id === 'confirmar') || MSG_PADRAO[0];
+  const txt = preencherModelo(mod.texto, 'v', v) || `Olá, ${primeiro(v.cliente)}! Tudo bem? Aqui é ${eu}, da Frade Imóveis. Passando para confirmar a sua visita ${quandoTxt(v.date)} às ${v.time}. Posso confirmar?`;
   window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(txt), '_blank');
 };
 function paraConfirmar(){ const am = somaDias(hojeISO(), 1); return visitas.filter(v => v.date === am && AGUARDA_CONF.includes(v.status)).sort((a,b) => (a.time||'').localeCompare(b.time||'')); }
@@ -3149,7 +3165,31 @@ const PONTOS_ITENS = [
   ['docs','🗂️ Documentação completa'],
   ['venda','🎉 Venda fechada']
 ];
-let appCfg = JSON.parse(JSON.stringify(CFG_PADRAO)), repetidos = [], pontosMeses = {}, carregado = {};
+const MSG_PADRAO = [
+  { id:'confirmar', tipo:'visita', titulo:'✅ Confirmar a visita', texto:'Olá, {cliente}! Tudo bem? Aqui é {corretor}, da Frade Imóveis. Passando para confirmar a sua visita {dia} às {hora} no {empreendimento}. Posso confirmar?' },
+  { id:'lembrete', tipo:'visita', titulo:'⏰ Lembrete no dia', texto:'Bom dia, {cliente}! Aqui é {corretor}, da Frade Imóveis. Só lembrando da nossa visita hoje às {hora} no {empreendimento}. Estou te esperando! 😊' },
+  { id:'posvisita', tipo:'visita', titulo:'🙏 Depois da visita', texto:'Oi, {cliente}! Obrigado pela visita no {empreendimento}. O que você achou? Fico à disposição para tirar qualquer dúvida e darmos o próximo passo.' },
+  { id:'docs', tipo:'visita', titulo:'📄 Pedir documentos', texto:'Oi, {cliente}! Para fazermos a sua análise de crédito, preciso destes documentos:\n{documentos}\n\nPode me mandar as fotos por aqui mesmo. 😊' },
+  { id:'remarcar', tipo:'visita', titulo:'🔁 Remarcar', texto:'Oi, {cliente}! Aqui é {corretor}, da Frade Imóveis. Sentimos a sua falta na visita. Vamos remarcar? Me diga o melhor dia e horário para você.' },
+  { id:'parabens', tipo:'carta', titulo:'🎉 Parabéns pela aprovação', texto:'Parabéns, {cliente}! 🎉 A sua carta de crédito foi aprovada no valor de {valor}. Vamos marcar para escolher o seu imóvel?' },
+  { id:'faltam', tipo:'carta', titulo:'📄 Documentos que faltam', texto:'Oi, {cliente}! Para seguirmos com o seu processo, ainda faltam:\n{faltam}\n\nPode me mandar as fotos por aqui mesmo. 😊' },
+  { id:'vencendo', tipo:'carta', titulo:'⏳ Carta perto de vencer', texto:'Oi, {cliente}! A sua carta de crédito vale até {validade}. Vamos garantir o seu imóvel antes disso?' },
+  { id:'indicacao', tipo:'carta', titulo:'🤝 Pedir indicação', texto:'Oi, {cliente}! Tudo bem? Se você conhece alguém que também sonha com a casa própria, me indica? Vou cuidar com o mesmo carinho. 😊' }
+];
+const CAMPOS_MSG = [['{cliente}','primeiro nome do cliente'],['{corretor}','seu primeiro nome'],['{dia}','dia da visita (hoje, amanhã…)'],['{hora}','horário da visita'],['{empreendimento}','imóvel ou empreendimento'],['{documentos}','lista de todos os documentos'],['{valor}','valor aprovado da carta'],['{faltam}','documentos que faltam na carta'],['{validade}','validade da carta']];
+// "PAULINHA" → "Paulinha" (nomes digitados em maiúsculas ficam bonitos na mensagem)
+const nomeBonito = n => String(n || '').trim().toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase());
+// preenche os campos do modelo; devolve '' quando o modelo precisa de uma informação que o cliente não tem
+function preencherModelo(texto, t, x){
+  const faltam = t === 'c' ? DOCS.filter(([k]) => !x.docs?.[k]).map(([,n]) => '• ' + n) : [];
+  if (/\{faltam\}/.test(texto) && (t !== 'c' || !faltam.length)) return '';
+  if (/\{validade\}/.test(texto) && !x.validade) return '';
+  if (/\{valor\}/.test(texto) && !x.valor) return '';
+  const v = { cliente:nomeBonito(primeiro(x.cliente)), corretor:nomeBonito(primeiro(perfil?.nome || state?.profile?.name || '')), dia:x.date ? quandoTxt(x.date) : '', hora:x.time || '',
+    empreendimento:x.empreendimento || 'empreendimento', documentos:DOCS.map(([,n]) => '• ' + n).join('\n'), valor:x.valor ? brl(x.valor) : '', faltam:faltam.join('\n'), validade:x.validade ? dataBR(x.validade) : '' };
+  return texto.replace(/\{(\w+)\}/g, (m, k) => k in v ? v[k] : m);
+}
+let appCfg = { ...JSON.parse(JSON.stringify(CFG_PADRAO)), mensagens:MSG_PADRAO }, repetidos = [], pontosMeses = {}, carregado = {};
 window.ptMesSel = ''; window.origPer = 'mes'; window.arqAba = 'visitas';
 const mesAtual = () => hojeISO().slice(0,7);
 function mesAnterior(n){ const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - n); return iso(d).slice(0,7); }
@@ -3172,7 +3212,8 @@ function assinarEtapa1(){
     const d = s.exists() ? s.data() : {};
     appCfg = { pontos:{ ...CFG_PADRAO.pontos, ...(d.pontos || {}) },
       origens: d.origens?.length ? d.origens : CFG_PADRAO.origens,
-      motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos };
+      motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
+      mensagens: d.mensagens?.length ? d.mensagens : MSG_PADRAO };
     carregado.cfg = true; render(); fecharMesesPendentes();
   }, e => { carregado.cfg = true; silencio(e); }));
   subsPapel.push(onSnapshot(collection(db,'pontos_meses'), s => {
@@ -3253,8 +3294,8 @@ function renderRankingPontos(){
   $('rankTit').textContent = 'Ranking de pontos · ' + nomeMes(m);
   if (!lista.length) { $('rankLista').innerHTML = vazio('Ninguém pontuou ainda neste mês', 'Visitas, cartas e vendas geram pontos. O ranking aparece aqui.'); return; }
   const pos = posicoes(lista);
-  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Pontos</th><th class="hide-m">Visitas</th><th>Cartas</th><th>Vendas</th></tr></thead><tbody>${
-    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td></tr>`).join('')
+  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th></tr></thead><tbody>${
+    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td></tr>`).join('')
   }</tbody><tfoot></tfoot></table>
   <div class="hint" style="margin-top:10px">Valem: ${PONTOS_ITENS.map(([k,n]) => `${n.replace(/^\S+\s/,'').toLowerCase()} <b>${appCfg.pontos[k]}</b>`).join(' · ')}</div>`;
 }
@@ -3263,8 +3304,8 @@ function renderRankingPontos(){
 function tabelaPontos(linhas){
   if (!linhas.length) return vazio('Sem pontos neste mês', 'Assim que houver visitas, cartas ou vendas, a tabela aparece aqui.');
   const pos = posicoes(linhas);
-  return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th class="hide-m">Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th>Pontos</th></tr></thead><tbody>${
-    linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="hide-m">${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
+  return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th>Pontos</th></tr></thead><tbody>${
+    linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
   }</tbody></table>`;
 }
 function faixaOrig(){ const [mi, mf] = faixa('mes'); return origPer === '3m' ? [somaDias(hojeISO(), -89), mf] : [mi, mf]; }
@@ -3422,30 +3463,22 @@ window.abrirMensagens = (t, id) => {
   const x = t === 'v' ? visitas.find(v => v.id === id) : cartas.find(c => c.id === id);
   if (!x) return;
   if (!x.telefone) { toast('Esse cliente está sem telefone.'); return; }
-  const p = primeiro(x.cliente), eu = primeiro(perfil?.nome || state?.profile?.name || ''), no = x.empreendimento ? ' no ' + x.empreendimento : '';
-  const itens = [];
-  if (t === 'v') {
-    itens.push(['✅ Confirmar a visita', `Olá, ${p}! Tudo bem? Aqui é ${eu}, da Frade Imóveis. Passando para confirmar a sua visita ${quandoTxt(x.date)} às ${x.time}${no}. Posso confirmar?`]);
-    itens.push(['⏰ Lembrete no dia', `Bom dia, ${p}! Aqui é ${eu}, da Frade Imóveis. Só lembrando da nossa visita hoje às ${x.time}${no}. Estou te esperando! 😊`]);
-    itens.push(['🙏 Depois da visita', `Oi, ${p}! Obrigado pela visita${no}. O que você achou? Fico à disposição para tirar qualquer dúvida e darmos o próximo passo.`]);
-    itens.push(['📄 Pedir documentos', `Oi, ${p}! Para fazermos a sua análise de crédito, preciso destes documentos:\n${DOCS.map(([,n]) => '• ' + n).join('\n')}\n\nPode me mandar as fotos por aqui mesmo. 😊`]);
-    itens.push(['🔁 Remarcar', `Oi, ${p}! Aqui é ${eu}, da Frade Imóveis. Sentimos a sua falta na visita. Vamos remarcar? Me diga o melhor dia e horário para você.`]);
-  } else {
-    const falta = DOCS.filter(([k]) => !x.docs?.[k]).map(([,n]) => n);
-    itens.push(['🎉 Parabéns pela aprovação', `Parabéns, ${p}! 🎉 A sua carta de crédito foi aprovada no valor de ${brl(x.valor)}. Vamos marcar para escolher o seu imóvel?`]);
-    if (falta.length) itens.push(['📄 Documentos que faltam', `Oi, ${p}! Para seguirmos com o seu processo, ainda faltam:\n${falta.map(n => '• ' + n).join('\n')}\n\nPode me mandar as fotos por aqui mesmo. 😊`]);
-    if (x.validade) itens.push(['⏳ Carta perto de vencer', `Oi, ${p}! A sua carta de crédito vale até ${dataBR(x.validade)}. Vamos garantir o seu imóvel antes disso?`]);
-    itens.push(['🤝 Pedir indicação', `Oi, ${p}! Tudo bem? Se você conhece alguém que também sonha com a casa própria, me indica? Vou cuidar com o mesmo carinho. 😊`]);
-  }
-  window._msgs = itens.map(([, txt]) => ({ tel:x.telefone, txt }));
+  const tipo = t === 'v' ? 'visita' : 'carta';
+  const itens = (appCfg.mensagens || MSG_PADRAO).filter(m => m.tipo === tipo || m.tipo === 'ambos')
+    .map(m => ({ titulo:m.titulo, txt:preencherModelo(m.texto, t, x) })).filter(m => m.txt);
+  window._msgs = itens.map(m => ({ tel:x.telefone }));
   $('msgSub').textContent = `${x.cliente} · 📱 ${x.telefone}`;
-  $('msgLista').innerHTML = itens.map(([tit, txt], i) => `<div class="msg-item"><b>${tit}</b><p>${esc(txt)}</p><button class="snooze wa" onclick="enviarMsg(${i})">${IC.wa}Enviar no WhatsApp</button></div>`).join('');
+  $('msgLista').innerHTML = (itens.length ? '<div class="hint" style="margin:0 0 12px">Você pode ajustar o texto antes de enviar.</div>' : '<div class="muted">Nenhuma mensagem pronta para este caso.</div>')
+    + itens.map((m, i) => `<div class="msg-item"><b>${esc(m.titulo)}</b><textarea id="msgTxt${i}" class="msg-txt">${esc(m.txt)}</textarea><button class="snooze wa" onclick="enviarMsg(${i})">${IC.wa}Enviar no WhatsApp</button></div>`).join('')
+    + (souGerente() ? '<div style="margin-top:6px"><button class="link" onclick="fechar(\'msgModal\');setView(\'config\');setTimeout(()=>document.getElementById(\'cardAdmMsgs\').scrollIntoView({behavior:\'smooth\'}),150)">✏️ Editar os modelos de mensagem</button></div>' : '');
   abrir('msgModal');
+  document.querySelectorAll('#msgLista .msg-txt').forEach(el => { el.style.height = 'auto'; el.style.height = (el.scrollHeight + 4) + 'px'; });
 };
 window.enviarMsg = i => {
   const m = window._msgs[i]; if (!m) return;
+  const txt = $('msgTxt' + i).value.trim(); if (!txt) return;
   let n = soDig(m.tel); if (n.length <= 11) n = '55' + n;
-  window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(m.txt), '_blank');
+  window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(txt), '_blank');
 };
 
 // ---------- arquivados (gerente) ----------
@@ -3486,12 +3519,34 @@ function renderAdm(){
   if (!souGerente()) return;
   const ass = JSON.stringify(appCfg);
   const ativoEl = document.activeElement;
-  if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas')))) return;
+  if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
   admAssin = ass;
   $('admPontos').innerHTML = PONTOS_ITENS.map(([k,n]) => `<div class="pt-row"><span>${n}</span><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}"></div>`).join('');
   $('admOrigens').value = appCfg.origens.join('\n');
+  rascMsgs = JSON.parse(JSON.stringify(appCfg.mensagens || MSG_PADRAO)); desenharModelos();
   $('admMotivos').value = appCfg.motivos.join('\n');
 }
+let rascMsgs = [];
+function desenharModelos(){
+  $('msgCampos').innerHTML = CAMPOS_MSG.map(([c,d]) => `<span class="chip" title="${d}" style="cursor:default"><b>${c}</b>&nbsp;${d}</span>`).join('');
+  $('admMsgs').innerHTML = rascMsgs.map((m, i) => `<div class="msg-item">
+    <div class="row2" style="margin-bottom:8px"><input value="${esc(m.titulo)}" placeholder="Título (ex.: ✅ Confirmar a visita)" oninput="rascMsgs[${i}].titulo=this.value">
+      <div style="display:flex;gap:8px"><select onchange="rascMsgs[${i}].tipo=this.value" style="flex:1">
+        <option value="visita" ${m.tipo==='visita'?'selected':''}>Aparece na visita</option><option value="carta" ${m.tipo==='carta'?'selected':''}>Aparece na carta</option><option value="ambos" ${m.tipo==='ambos'?'selected':''}>Nas duas</option></select>
+        <button class="icon-btn del" title="Apagar esta mensagem" onclick="rascMsgs.splice(${i},1);desenharModelos()">🗑️</button></div></div>
+    <textarea class="msg-txt" style="min-height:90px" oninput="rascMsgs[${i}].texto=this.value">${esc(m.texto)}</textarea></div>`).join('') || '<div class="muted">Nenhuma mensagem. Toque em “+ Nova mensagem”.</div>';
+}
+window.rascMsgs = rascMsgs;
+Object.defineProperty(window, 'rascMsgs', { get: () => rascMsgs });
+window.desenharModelos = desenharModelos;
+window.novoModelo = () => { rascMsgs.push({ id:'m' + Date.now(), tipo:'visita', titulo:'💬 Nova mensagem', texto:'Oi, {cliente}! ' }); desenharModelos(); };
+window.restaurarModelos = () => { if (!confirm('Voltar todas as mensagens para o texto original? As suas mudanças não salvas serão perdidas.')) return; rascMsgs = JSON.parse(JSON.stringify(MSG_PADRAO)); desenharModelos(); toast('Toque em “Salvar mensagens” para confirmar'); };
+window.salvarModelos = async () => {
+  const mensagens = rascMsgs.map(m => ({ id:m.id || 'm' + Date.now(), tipo:m.tipo || 'visita', titulo:(m.titulo || '').trim() || 'Mensagem', texto:(m.texto || '').trim() })).filter(m => m.texto);
+  if (!mensagens.length) { toast('Deixe pelo menos uma mensagem'); return; }
+  try { await gravar(setDoc(doc(db,'config','app'), { mensagens, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Mensagens salvas. Já valem para todos.'); }
+  catch(e) { toast('Erro ao salvar: ' + e.message); }
+};
 window.salvarPontuacao = async () => {
   const pontos = {}; PONTOS_ITENS.forEach(([k]) => pontos[k] = Math.round(Number($('pt_' + k).value) || 0));
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
