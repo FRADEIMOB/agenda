@@ -560,6 +560,23 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .arq-row .ai{flex:1;min-width:0}
 .arq-row .ai b{display:block;font-size:14.5px}
 
+/* Etapa 2 */
+.aval-stats{grid-template-columns:repeat(5,1fr)}
+@media(max-width:1100px){.aval-stats{grid-template-columns:repeat(2,1fr)}}
+.int-bloco{padding:12px 0;border-bottom:1px solid var(--border);display:grid;gap:6px}
+.int-bloco:last-child{border-bottom:0}
+.int-bloco>b{font-size:14.5px}
+.int-bloco>span{font-size:13px;color:var(--muted)}
+.int-linha{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.int-linha input{flex:1;min-width:220px}
+.int-linha code{flex:1;min-width:0;overflow-wrap:anywhere;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12.5px}
+.grp-row{display:grid;grid-template-columns:1.4fr 1.2fr 130px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.grp-row span{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.grp-row i{width:10px;height:10px;border-radius:50%;flex:none}
+.grp-cab span{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.rel-botoes{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+@media(max-width:820px){.grp-row{grid-template-columns:1fr 1fr}.grp-row input{grid-column:1/-1}.grp-cab{display:none}}
+
 /* Mobile */
 .mobilebar{display:none}
 .fab{display:none}
@@ -656,6 +673,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas<span class="count" id="cTarefas">0</span></button>
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="cartas" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
+      <button data-view="avaliacoes" onclick="setView('avaliacoes')"><i data-ic="list"></i>Avaliações<span class="count" id="cAval"></span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
@@ -838,6 +856,33 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         </div>
       </section>
 
+      <!-- AVALIAÇÕES DE CRÉDITO -->
+      <section class="view" id="v-avaliacoes">
+        <div class="page-head"><div><h1>Avaliações de crédito</h1><div class="sub" id="avalSub"></div></div>
+          <button class="btn btn-ghost hide" id="btnAvalSync" onclick="lerPlanilhaAgora()">🔄 Ler a planilha agora</button></div>
+        <div id="bannerAval"></div>
+        <div id="avalConteudo">
+          <div class="stats aval-stats">
+            <div class="stat" onclick="af('grupo','')"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="list"></div><div><b id="asTotal">0</b><span>Documentações</span></div></div>
+            <div class="stat" onclick="af('grupo','analise')"><div class="stat-ic" style="background:color-mix(in srgb,#3b82f6 14%,transparent);color:#3b82f6" data-ic="clock"></div><div><b id="asAnalise">0</b><span>Em análise</span></div></div>
+            <div class="stat" onclick="af('grupo','condicionado')"><div class="stat-ic" style="background:color-mix(in srgb,#1d4ed8 14%,transparent);color:#1d4ed8" data-ic="star"></div><div><b id="asCond">0</b><span>Condicionados</span></div></div>
+            <div class="stat" onclick="af('grupo','aprovado')"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="check"></div><div><b id="asAprov">0</b><span>Aprovados</span></div></div>
+            <div class="stat" onclick="af('grupo','reprovado')"><div class="stat-ic" style="background:var(--danger-soft);color:var(--danger)" data-ic="alert"></div><div><b id="asReprov">0</b><span>Reprovados / restrição</span></div></div>
+          </div>
+          <div class="card">
+            <div class="tb-grid">
+              <input id="aBusca" placeholder="Buscar cliente, CPF, telefone, status..." oninput="af('busca',this.value)">
+              <select id="aPeriodo" onchange="af('periodo',this.value)"><option value="mes">Documentação deste mês</option><option value="semana">Esta semana</option><option value="3m">Últimos 3 meses</option><option value="todas">Todas</option></select>
+              <select id="aGrupo" onchange="af('grupo',this.value)"></select>
+              <select id="aCorretor" onchange="af('corretor',this.value)"></select>
+            </div>
+            <div class="janela" id="janelaAval"></div>
+            <div class="hint" style="margin:-4px 0 12px">Os status vêm da planilha da administração e atualizam sozinhos a cada 15 minutos. Aqui é só para acompanhar: nada é alterado na planilha.</div>
+            <div id="avalLista"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- CORRETORES (gestão) -->
       <section class="view" id="v-corretores">
         <div class="page-head"><div><h1>Corretores</h1><div class="sub" id="corSub"></div></div>
@@ -896,6 +941,13 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="card-head"><h2>⚠ Clientes repetidos</h2><span class="muted">Só os gerentes veem</span></div>
             <div id="repLista"></div>
             <div class="janela" style="justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px"><span class="hint" style="margin:0" id="repInfo"></span><button class="link" id="btnVerifHist" onclick="verificarHistorico()">🔍 Verificar todo o histórico</button></div>
+          </div>
+          <div class="card hide" id="cardRelAuto" style="margin-bottom:20px">
+            <div class="card-head"><h2>📊 Relatórios de desempenho</h2><span class="muted">Leads · docs · condicionados · aprovações · média</span></div>
+            <div class="hint" style="margin-top:0">Saem sozinhos: <b>toda segunda às 8h</b> (semana completa, de segunda a domingo) e <b>todo dia 1º às 8h</b> (mês completo). Chegam no e-mail dos gerentes e ficam guardados aqui.</div>
+            <div class="rel-botoes"><button class="btn btn-ghost" onclick="gerarRelatorioAgora('semana_atual')">Esta semana (até hoje)</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('semana_passada')">Semana passada</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('mes_atual')">Este mês (até hoje)</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('mes_passado')">Mês passado</button></div>
+            <label class="muted" style="display:flex;gap:8px;align-items:center;font-size:13px;margin:4px 0 12px"><input type="checkbox" id="relEnviar" style="width:auto"> Enviar também por e-mail para os gerentes</label>
+            <div id="relAutoLista"></div>
           </div>
           <div class="rep-grid" style="margin-bottom:20px">
             <div class="card"><div class="card-head pt-head"><h2>📣 Origem dos clientes</h2><select id="origPer" onchange="origPer=this.value;render()"><option value="mes">Este mês</option><option value="3m">Últimos 3 meses</option></select></div><div id="origTabela"></div></div>
@@ -962,6 +1014,27 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="fg"><label>Motivos da perda <span class="muted" style="font-weight:500">(um por linha)</span></label><textarea id="admMotivos" style="min-height:120px"></textarea></div>
             <button class="btn btn-primary btn-block" onclick="salvarListas()">Salvar listas</button>
             <div class="set-row" style="margin-top:14px"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div>
+          </div>
+          <div class="card gerente-only hide" id="cardInteg" style="grid-column:1/-1">
+            <div class="card-head"><h2>🔗 Integrações</h2><span class="muted">Só gerentes · CRM, planilha e e-mail</span></div>
+            <div class="int-bloco"><b>1. Chave de segurança</b><span>Só quem tem esta chave consegue mandar dados para o app. Ela vai no ajudante da planilha e no endereço do CRM.</span>
+              <div class="int-linha"><code id="intChave"></code><button class="btn btn-ghost" onclick="copiarTexto('intChave')">Copiar</button><button class="btn btn-ghost" id="btnGerarChave" onclick="gerarChave()">Gerar chave</button></div></div>
+            <div class="int-bloco"><b>2. CRM (Dynamus)</b><span>Endereço para colar na ação <b>Webhook</b> do fluxo novo. O CRM só avisa o app; nada muda lá dentro.</span>
+              <div class="int-linha"><code id="intCrmUrl"></code><button class="btn btn-ghost" onclick="copiarTexto('intCrmUrl')">Copiar</button></div><span class="muted" id="intUltLead"></span></div>
+            <div class="int-bloco"><b>3. Ajudante da planilha (Google)</b><span>Endereço que o Google mostra depois de implantar o ajudante. Ele lê a planilha de avaliações, mantém a planilha do app e envia os e-mails.</span>
+              <div class="int-linha"><input id="intScript" placeholder="https://script.google.com/macros/s/.../exec"><button class="btn btn-ghost" onclick="salvarScript()">Salvar</button><button class="btn btn-ghost" onclick="testarAjudante()">Testar</button></div>
+              <div class="int-linha"><span class="muted" id="intUltSync"></span><button class="link" onclick="lerPlanilhaAgora()">🔄 Ler a planilha agora</button></div></div>
+            <div class="int-bloco"><b>4. Quem é quem</b><span>Ligue cada aba da planilha e cada nome do CRM ao corretor certo do app.</span>
+              <div id="intLigacoes"></div><button class="btn btn-primary" id="btnSalvarLig" style="margin-top:10px" onclick="salvarLigacoes()">Salvar ligações</button></div>
+            <div class="int-bloco"><b>5. Planilha do app</b><span>A cada visita ou carta cadastrada ou alterada, a linha é atualizada sozinha. Use o botão uma vez para mandar o que já existe.</span>
+              <div class="int-linha"><button class="btn btn-ghost" id="btnEnviarTudo" onclick="enviarTudoPlanilha()">Enviar tudo para a planilha do app</button></div></div>
+          </div>
+          <div class="card gerente-only hide" id="cardGrupos" style="grid-column:1/-1">
+            <div class="card-head"><h2>🗂️ Status da planilha de avaliações</h2><span class="muted">Só gerentes</span></div>
+            <div class="hint" style="margin-top:0;margin-bottom:12px">Em que grupo cada status entra nos relatórios e depois de quantos dias o cliente volta para o corretor como <b>repescagem</b> (deixe em branco para não voltar; 0 = avisar na hora). Status novos que a administração criar aparecem aqui sozinhos.</div>
+            <div class="grp-row grp-cab"><span>Status</span><span>Grupo</span><span>Repescagem (dias)</span></div>
+            <div id="admGrupos"></div>
+            <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarGrupos()">Salvar status</button>
           </div>
           <div class="card gerente-only hide" id="cardAdmMsgs" style="grid-column:1/-1">
             <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só gerentes editam · valem para todos</span></div>
@@ -1150,6 +1223,14 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
   </div>
 </div>
 
+<!-- ================= RELATÓRIO AUTOMÁTICO ================= -->
+<div class="modal" id="repModal">
+  <div class="sheet" style="width:min(1200px,100%)">
+    <div class="sheet-head"><div><h2 id="repTit">Relatório</h2></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" onclick="excelRelatorio(window._repAtual)">⬇ Excel</button><button class="icon-btn" onclick="fechar('repModal')" data-ic="x"></button></div></div>
+    <div class="sheet-body" style="padding:0"><iframe id="repFrame" style="width:100%;height:70vh;border:0;background:#fff"></iframe></div>
+  </div>
+</div>
+
 <!-- ================= MENU + (adicionar) ================= -->
 <div class="modal" id="maisModal">
   <div class="sheet" style="width:min(440px,100%)">
@@ -1176,6 +1257,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
     <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
     <div class="sheet-body menu-list">
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
+      <button onclick="fechar('menuModal');setView('avaliacoes')"><span style="width:20px;text-align:center">📋</span>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><span style="width:20px;text-align:center">📲</span>Instalar aplicativo</button>
@@ -1368,7 +1450,7 @@ onAuthStateChanged(auth, user => {
       state = estadoInicial(user); salvar(); pedirCadastro(); return;
     }
     const d = snap.data();
-    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar) };
+    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {} };
     render();
     pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
@@ -1461,7 +1543,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   view = v;
@@ -1637,6 +1719,7 @@ function render(){
   // ----- RELATÓRIOS -----
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
   if (view === 'config') renderAdm();
+  renderEtapa2();
 
   // ----- CONFIG -----
   if (view === 'config') {
@@ -1918,6 +2001,7 @@ function iniciarVisitas(user){
   subsBase.push(onSnapshot(doc(db,'perfis',user.uid), snap => {
     if (!snap.exists() && snap.metadata.fromCache) return; // espera a nuvem confirmar
     perfil = snap.exists() ? { uid:user.uid, ...snap.data() } : null; perfilOk = true;
+    if (perfil && user.email && perfil.email !== user.email) setDoc(doc(db,'perfis',user.uid), { email:user.email }, { merge:true }).catch(() => {});
     configurarAcesso(); render(); pedirCadastro();
   }, e => { perfilOk = true; console.error(e); }));
   subsBase.push(onSnapshot(doc(db,'config','instalacao'), snap => {
@@ -1939,7 +2023,7 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
-  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {};
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; integ = {}; leadsDias = []; relatoriosLista = null;
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -1949,7 +2033,7 @@ function configurarAcesso(){
   subsPapel.push(onSnapshot(qv, s => { visitasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); visitas = visitasBrutas.filter(x => !x.arquivado); render(); }, erro));
   const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=',inicioJanela()));
   subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.ranking = true; render(); fecharMesesPendentes(); }, erro));
-  assinarEtapa1(erro);
+  assinarEtapa1(erro); assinarEtapa2();
   assinarCartas(erro);
   let qp = null;
   if (souGerente()) qp = collection(db,'perfis');
@@ -2275,6 +2359,7 @@ window.salvarVisita = async () => {
     await gravar(b.commit());
     if (!vOrig) avisarCarteiro('visita', id, true); // visita nova: corretor (se foi outra pessoa), coordenador da equipe e gerentes
     else if (dados.corretorUid !== uidAtual && (vOrig.corretorUid !== dados.corretorUid || vOrig.date !== dados.date || vOrig.time !== dados.time)) avisarCarteiro('visita', id, false);
+    syncPlanilha('visitas', id);
     fechar('visModal'); toast(vEditId ? 'Visita atualizada' : 'Visita cadastrada');
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('vmSalvar').disabled = false;
@@ -2286,7 +2371,7 @@ window.mudarStatus = async (id, st, motivo) => {
   try {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
-    await gravar(b.commit()); toast('Visita marcada como ' + st.toLowerCase());
+    await gravar(b.commit()); syncPlanilha('visitas', id); toast('Visita marcada como ' + st.toLowerCase());
   } catch(e) { toast('Erro ao atualizar: ' + e.message); }
 };
 window.excluirVisita = async (id, doModal) => {
@@ -2296,6 +2381,7 @@ window.excluirVisita = async (id, doModal) => {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), marcaArquivo(), { merge:true }); b.set(doc(db,'ranking',id), { arquivado:true }, { merge:true });
     await gravar(b.commit());
+    syncPlanilha('visitas', id);
     if (doModal) fechar('visModal');
     toast('Visita arquivada');
   } catch(e) { toast('Erro ao arquivar: ' + e.message); }
@@ -2648,7 +2734,7 @@ function abrirFormCarta(c, pre){
   cDocs = { ...(c?.docs || {}) }; desenharDocs();
   $('cmTitulo').textContent = c ? 'Editar carta' : 'Nova carta aprovada';
   $('cmCliente').value = c?.cliente || pre?.cliente || ''; $('cmFone').value = c?.telefone || pre?.telefone || '';
-  $('cmCpf').value = fmtCpf(c?.cpf || ''); $('cmCpfAviso').textContent = '';
+  $('cmCpf').value = fmtCpf(c?.cpf || pre?.cpf || ''); $('cmCpfAviso').textContent = '';
   $('cmData').value = c?.data || hojeISO(); $('cmValidade').value = c?.validade || '';
   $('cmValor').value = fmtValorInput(c?.valor); $('cmSubsidio').value = fmtValorInput(c?.subsidio);
   $('cmBanco').innerHTML = BANCOS.map(b => `<option ${ (c?.banco||'Caixa')===b?'selected':''}>${b}</option>`).join('');
@@ -2701,6 +2787,7 @@ window.salvarCarta = async () => {
     await gravar(b.commit());
     if (dados.status === 'Venda fechada' && cOrig?.status !== 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); }
     if (!cEditId) avisarCarteiro('carta', id, true);
+    syncPlanilha('cartas', id);
     fechar('cartaModal'); toast(cEditId ? 'Carta atualizada' : 'Carta cadastrada 🎉');
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('cmSalvar').disabled = false;
@@ -2710,13 +2797,13 @@ window.mudarStatusCarta = async (id, st, motivo) => {
   if (PERDA_C.includes(st) && !motivo) { pedirMotivo('c', id, st); return; }
   const dados = { ...c, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_C.includes(st) ? motivo : '' }; delete dados.id;
   aplicarPosVenda(dados, c);
-  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); if (st === 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); } toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
+  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); syncPlanilha('cartas', id); if (st === 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); } toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirCarta = async (id, doModal) => {
   const c = cartas.find(x => x.id === id); if (!c) return;
   if (!confirm(`Arquivar a carta de ${c.cliente}?\n\nEla sai da lista, mas continua guardada na nuvem. O gerente pode restaurar quando quiser.`)) return;
-  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), marcaArquivo(), { merge:true }); b.set(doc(db,'ranking_cartas',id), { arquivado:true }, { merge:true }); await gravar(b.commit()); if (doModal) fechar('cartaModal'); toast('Carta arquivada'); }
+  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), marcaArquivo(), { merge:true }); b.set(doc(db,'ranking_cartas',id), { arquivado:true }, { merge:true }); await gravar(b.commit()); syncPlanilha('cartas', id); if (doModal) fechar('cartaModal'); toast('Carta arquivada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.toLocaleString('pt-BR') : ''; };
@@ -2845,6 +2932,7 @@ function renderAtencao(){
     itens.push({ ord:2, html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,var(--warn) 16%,transparent)">📄</div><div class="att"><b>Faltam ${falta} documento${falta!==1?'s':''} de ${esc(c.cliente)}</b><span>${DOCS.filter(([k]) => !c.docs?.[k]).map(([,n]) => n).slice(0,3).join(', ')}${falta>3?'…':''}</span></div>
       <div class="ata"><button class="snooze" onclick="editarCarta('${c.id}')">Atualizar</button></div></div>` });
   });
+  itensEtapa2().forEach(i => itens.push({ ...i, ord:i.ord + 0.5 }));
   itens.sort((a,b) => a.ord - b.ord);
   $('cardAtencao').classList.toggle('hide', !itens.length);
   $('atencaoQt').textContent = itens.length ? itens.length + (itens.length > 1 ? ' itens' : ' item') : '';
@@ -3104,11 +3192,11 @@ window.ativarNotificacoes = async () => {
   } catch(e) { toast('Erro ao ativar: ' + e.message); }
 };
 window.testarNotificacao = () => { avisarCarteiro('teste', ''); toast('Enviando notificação de teste…'); };
-async function avisarCarteiro(tipo, id, nova){
+async function avisarCarteiro(tipo, id, nova, extra){
   if (!CARTEIRO_URL || !navigator.onLine || !auth.currentUser) return;
   try {
     const t = await auth.currentUser.getIdToken();
-    await fetch(CARTEIRO_URL, { method:'POST', headers:{ Authorization:'Bearer ' + t, 'Content-Type':'application/json' }, body: JSON.stringify({ tipo, id, nova:!!nova }) });
+    await fetch(CARTEIRO_URL, { method:'POST', headers:{ Authorization:'Bearer ' + t, 'Content-Type':'application/json' }, body: JSON.stringify({ ...(extra || {}), tipo, id, nova:!!nova }) });
   } catch(e) { console.warn('carteiro', e); }
 }
 window.avisarCarteiro = avisarCarteiro;
@@ -3380,13 +3468,12 @@ function renderRepetidos(){
 }
 window.resolverRepetido = async (id, status) => {
   const r = repetidos.find(x => x.id === id); if (!r || !souGerente()) return;
-  const col = r.tipo === 'carta' ? 'cartas' : 'visitas', rk = r.tipo === 'carta' ? 'ranking_cartas' : 'ranking';
+  const col = r.tipo === 'carta' ? 'cartas' : 'visitas', rk = r.tipo === 'carta' ? 'ranking_cartas' : 'ranking', soAviso = r.tipo === 'avaliacao';
   const semPontos = status === 'anulado';
   try {
     const b = writeBatch(db);
     b.set(doc(db,'repetidos',id), { status, resolvidoPor:perfil.nome, resolvidoEm:Date.now() }, { merge:true });
-    b.set(doc(db,col,r.refId), { semPontos }, { merge:true });
-    b.set(doc(db,rk,r.refId), { semPontos }, { merge:true });
+    if (!soAviso) { b.set(doc(db,col,r.refId), { semPontos }, { merge:true }); b.set(doc(db,rk,r.refId), { semPontos }, { merge:true }); }
     await gravar(b.commit());
     toast(status === 'anulado' ? 'Pontos desse cadastro anulados' : status === 'mantido' ? 'Cadastro mantido com os pontos' : 'Voltou para análise');
   } catch(e) { toast('Erro: ' + e.message); }
@@ -3509,6 +3596,7 @@ window.restaurar = async (tipo, id) => {
     b.set(doc(db,tipo,id), { arquivado:false, restauradoPor:perfil.nome, restauradoEm:Date.now() }, { merge:true });
     b.set(doc(db,rk,id), { arquivado:false }, { merge:true });
     await gravar(b.commit());
+    syncPlanilha(tipo, id);
     arqDados[tipo] = arqDados[tipo].filter(x => x.id !== id); renderArquivados(); toast('Restaurado ✓');
   } catch(e) { toast('Erro: ' + e.message); }
 };
@@ -3591,6 +3679,286 @@ window.exportarPontos = async (todos) => {
     baixarCSV('pontos-' + m, CAB_PONTOS, linhasPlanilha(m));
   }
 };
+
+
+// =====================================================================
+// ===== ETAPA 2: AVALIAÇÕES, INTEGRAÇÕES, REPESCAGEM, RELATÓRIOS ======
+// =====================================================================
+const GRUPOS_V = {
+  analise:{ n:'Em análise', c:'#3b82f6' }, condicionado:{ n:'Condicionado', c:'#1d4ed8' }, aprovado:{ n:'Aprovado', c:'#10b981' },
+  reprovado:{ n:'Reprovado / restrição', c:'#ef4444' }, outro:{ n:'Outro correspondente', c:'#8b5cf6' }, encerrado:{ n:'Encerrado', c:'#64748b' },
+  troca:{ n:'Troca de corretor', c:'#0ea5e9' }, '':{ n:'Sem grupo', c:'#94a3b8' }
+};
+const GRUPOS_STATUS = {
+  'AVALIAÇÃO':'analise', 'DOC PENDENTE':'analise', 'VERIFICAR CPF':'analise', 'RECEITA FEDERAL':'analise', 'ACOMPANHANDO':'analise', 'STAND BY':'analise',
+  'CONDICIONADO':'condicionado',
+  'APROVADO':'aprovado', 'APROVADO/BACEN':'aprovado', 'APROVADO/OUTRO CCA':'aprovado',
+  'REPROVADO':'reprovado', 'REPROVADO/BACEN':'reprovado', 'RESTRIÇÕES':'reprovado', 'RESTRIÇÃO CAIXA':'reprovado', 'RESTRIÇÃO (BAIXA)':'reprovado', 'POSSUI IMÓVEL':'reprovado', 'SEM ENTRADA':'reprovado',
+  'OUTRO CCA':'outro', 'CARTA EM OUTRO CCA':'outro', 'CONSTA CARTA':'outro',
+  'CANCELAMENTO':'encerrado', 'CARTA DE CANCELAMENTO':'encerrado', 'DISTRATO':'encerrado', 'EXCLUIDO':'encerrado',
+  'TROCA DE CORRETOR':'troca'
+};
+// dias até o cliente voltar como tarefa de repescagem (vazio = não volta)
+const REPESCA_PADRAO = { 'RESTRIÇÕES':90, 'RESTRIÇÃO CAIXA':90, 'SEM ENTRADA':60, 'RECEITA FEDERAL':30, 'STAND BY':30, 'RESTRIÇÃO (BAIXA)':0 };
+function infoStatus(st){
+  const s = String(st || '').trim().toUpperCase(), cfg = appCfg.grupos?.[s];
+  const g = cfg ? (typeof cfg === 'string' ? cfg : cfg.g || '') : (GRUPOS_STATUS[s] ?? '');
+  let dias = cfg && typeof cfg === 'object' && 'dias' in cfg ? cfg.dias : REPESCA_PADRAO[s];
+  dias = dias === '' || dias === null || dias === undefined ? null : Number(dias);
+  return { g, dias, cor:(GRUPOS_V[g] || GRUPOS_V['']).c, nome:(GRUPOS_V[g] || GRUPOS_V['']).n };
+}
+let avaliacoes = [], integ = {}, leadsDias = [], relatoriosLista = null;
+window.aFil = { busca:'', periodo:'mes', grupo:'', corretor:'' };
+
+function assinarEtapa2(){
+  const silencio = e => console.warn('Etapa 2:', e.code || e.message);
+  let qa;
+  if (souGerente()) qa = historicoCompleto ? collection(db,'avaliacoes') : query(collection(db,'avaliacoes'), where('data','>=',inicioJanela()));
+  else if (souCoord()) qa = query(collection(db,'avaliacoes'), where('equipe','==',perfil.equipe || '-'));
+  else qa = query(collection(db,'avaliacoes'), where('corretorUid','==',uidAtual));
+  subsPapel.push(onSnapshot(qa, s => { avaliacoes = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  if (souGerente()) subsPapel.push(onSnapshot(doc(db,'config','integracao'), s => { integ = s.exists() ? s.data() : {}; render(); }, silencio));
+  if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'leads_dia'), where('dia','>=',inicioJanela())), s => { leadsDias = s.docs.map(d => d.data()); render(); }, silencio));
+}
+Object.defineProperty(window, 'avaliacoes', { get: () => avaliacoes });
+
+// ---------- carteiro com resposta ----------
+async function chamarCarteiro(corpo){
+  if (!auth.currentUser) throw new Error('faça login de novo');
+  const t = await auth.currentUser.getIdToken();
+  const r = await fetch(CARTEIRO_URL, { method:'POST', headers:{ Authorization:'Bearer ' + t, 'Content-Type':'application/json' }, body: JSON.stringify(corpo) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.erro || 'o carteiro respondeu ' + r.status);
+  return j.enviados;
+}
+// mantém a planilha do app em dia (não trava nada se falhar)
+const syncPlanilha = (col, id) => avisarCarteiro('planilha', id, false, { col });
+
+// ---------- página Avaliações ----------
+function faixaAval(p){
+  const h = hojeISO();
+  if (p === '3m') return [somaDias(h, -89), '9999-12-31'];
+  if (p === 'todas') return ['0000-01-01', '9999-12-31'];
+  return faixa(p);
+}
+function cartaDoCliente(a){ return cartas.find(c => (a.cpfNorm && c.cpfNorm === a.cpfNorm) || (a.cpfNorm && soDig(c.cpf) === a.cpfNorm) || (a.telNorm && c.telNorm === a.telNorm)); }
+function cardAvaliacao(a){
+  const inf = infoStatus(a.status), meta = [];
+  if (podeGerir()) meta.push(`<span>👤 ${esc(a.corretorNome || a.aba || '')}${!a.corretorUid ? ' <span class="late">(aba sem ligação)</span>' : ''}</span>`);
+  if (a.cpf) meta.push(`<span title="${esc(a.cpf)}">🪪 ${esc(a.cpf)}</span>`);
+  if (a.telefone) meta.push(`<span>📱 ${esc(a.telefone)}</span>`);
+  if (a.renda) meta.push(`<span>💰 renda ${esc(a.renda)}</span>`);
+  if (a.parcela) meta.push(`<span>parcela ${esc(a.parcela)}</span>`);
+  const hist = (a.historico || []).slice(-4).map(x => `${esc(x.status)} <span class="muted">${new Date(x.em).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span>`).join(' → ');
+  const acoes = [];
+  if (a.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
+  if (inf.g === 'aprovado' && !cartaDoCliente(a) && (a.corretorUid === uidAtual || podeGerir())) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
+  return `<div class="vcard" style="--vc:${inf.cor}">
+    <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>doc</span></div>
+    <div class="v-body" style="cursor:default">
+      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b><span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
+      <div class="v-meta">${meta.join('')}</div>
+      ${hist ? `<div class="v-obs">🕘 ${hist}</div>` : ''}
+    </div>
+    <div class="v-actions">${acoes.join('')}</div>
+  </div>`;
+}
+window.cartaDaAvaliacao = id => {
+  const a = avaliacoes.find(x => x.id === id); if (!a) return;
+  abrirFormCarta(null, { cliente:nomeBonito(a.nome), telefone:a.telefone, cpf:a.cpf, corretorUid:a.corretorUid || uidAtual });
+  toast('Dados da avaliação preenchidos. Complete o valor aprovado.');
+};
+window.af = (k, v) => { aFil[k] = v; render(); };
+function renderAvaliacoes(){
+  const ativo = souAtivo();
+  $('bannerAval').innerHTML = bannerAcesso();
+  $('avalConteudo').classList.toggle('hide', !ativo);
+  if (!ativo) return;
+  $('avalSub').textContent = souGerente() ? 'Avaliações de crédito de todas as equipes, vindas da planilha da administração.' : souCoord() ? 'Avaliações da ' + eqNome(perfil.equipe) + '.' : 'As avaliações de crédito dos seus clientes. Atualiza sozinho a cada 15 minutos.';
+  $('btnAvalSync').classList.toggle('hide', !souGerente());
+  $('aGrupo').innerHTML = '<option value="">Todos os grupos</option>' + Object.entries(GRUPOS_V).filter(([k]) => k).map(([k,g]) => `<option value="${k}" ${aFil.grupo===k?'selected':''}>${g.n}</option>`).join('');
+  $('aCorretor').classList.toggle('hide', !podeGerir());
+  const nomes = [...new Set(avaliacoes.map(a => a.corretorNome || a.aba).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
+  $('aCorretor').innerHTML = '<option value="">Todos os corretores</option>' + nomes.map(n => `<option ${aFil.corretor===n?'selected':''}>${esc(n)}</option>`).join('');
+  $('aPeriodo').value = aFil.periodo;
+  const [de, ate] = faixaAval(aFil.periodo), t = norm(aFil.busca), dig = soDig(aFil.busca);
+  const noPer = avaliacoes.filter(a => (a.data || '') >= de && (a.data || '') <= ate);
+  const conta = g => noPer.filter(a => infoStatus(a.status).g === g).length;
+  $('asTotal').textContent = noPer.length; $('asAnalise').textContent = conta('analise'); $('asCond').textContent = conta('condicionado');
+  $('asAprov').textContent = conta('aprovado'); $('asReprov').textContent = conta('reprovado');
+  const l = noPer.filter(a => (!aFil.grupo || infoStatus(a.status).g === aFil.grupo) && (!aFil.corretor || (a.corretorNome || a.aba) === aFil.corretor)
+    && (!t || norm([a.nome, a.status, a.corretorNome, a.aba].join(' ')).includes(t) || (dig.length >= 3 && (soDig(a.cpf).includes(dig) || soDig(a.telefone).includes(dig)))))
+    .sort((a,b) => (b.statusEm || 0) - (a.statusEm || 0) || (b.data || '').localeCompare(a.data || ''));
+  $('janelaAval').innerHTML = souGerente() ? avisoJanela(aFil.periodo === 'todas') : '';
+  $('avalLista').innerHTML = l.length ? l.slice(0, 300).map(cardAvaliacao).join('') + (l.length > 300 ? `<div class="muted" style="padding:8px">Mostrando 300 de ${l.length}. Use a busca ou os filtros.</div>` : '')
+    : vazio(avaliacoes.length ? 'Nenhuma avaliação com esses filtros' : 'Nenhuma avaliação ainda', avaliacoes.length ? 'Mude o período ou o grupo.' : 'Assim que a planilha da administração for ligada ao app, as avaliações aparecem aqui.');
+}
+window.lerPlanilhaAgora = async () => {
+  toast('Lendo a planilha de avaliações…');
+  try { const r = await chamarCarteiro({ tipo:'ajudante', acao:'sincronizar' }); toast(r?.ok ? `Planilha lida ✓ ${r.enviadas ? r.enviadas + ' novidade' + (r.enviadas !== 1 ? 's' : '') : 'sem novidades'}` : 'Não deu certo: ' + (r?.erro || 'sem resposta')); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ---------- itens de atenção (repescagem e aprovados sem carta) ----------
+function itensEtapa2(){
+  const itens = [], agora = Date.now(), rep = state?.repescagem || {};
+  avaliacoes.filter(a => a.corretorUid === uidAtual && a.naPlanilha !== false).forEach(a => {
+    const inf = infoStatus(a.status);
+    if (inf.dias === null || isNaN(inf.dias)) return;
+    const feito = rep[a.id] || 0, base = Math.max(a.statusEm || 0, feito);
+    const prazo = feito ? (inf.dias || 15) : inf.dias;
+    if (agora < base + prazo * 864e5) return;
+    const baixa = /BAIXA/.test(a.status);
+    itens.push({ ord:0, html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,#f59e0b 16%,transparent)">🔁</div><div class="att"><b>Repescagem: ${esc(nomeBonito(a.nome))}</b><span>${baixa ? 'Restrição fácil de pagar: oriente o cliente a quitar e reenviar a documentação' : `${esc(a.status)} desde ${new Date(a.statusEm).toLocaleDateString('pt-BR')} · vale falar de novo`}</span></div>
+      <div class="ata">${a.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="repescado('${a.id}')">✓ Falei</button></div></div>` });
+  });
+  const limite = agora - 45 * 864e5;
+  avaliacoes.filter(a => infoStatus(a.status).g === 'aprovado' && (a.statusEm || 0) >= limite && (a.corretorUid === uidAtual || souGerente()) && !cartaDoCliente(a)).forEach(a => {
+    itens.push({ ord:1, html:`<div class="at-row"><div class="ati" style="background:var(--ok-soft)">✅</div><div class="att"><b>${esc(nomeBonito(a.nome))} foi aprovado na planilha</b><span>${a.corretorUid === uidAtual ? 'Cadastre a carta aprovada para ganhar os pontos' : 'Carta ainda não cadastrada por ' + esc(primeiro(a.corretorNome || a.aba))}</span></div>
+      <div class="ata"><button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Carta</button></div></div>` });
+  });
+  return itens;
+}
+window.repescado = id => { state.repescagem = { ...(state.repescagem || {}), [id]:Date.now() }; salvar(); toast('Anotado. O app lembra de novo mais para frente.'); };
+
+// ---------- Configurações: integrações e grupos (só gerente) ----------
+const novaChave = () => [...crypto.getRandomValues(new Uint8Array(18))].map(b => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 56]).join('');
+const urlCrm = () => CARTEIRO_URL.replace(/\/$/, '') + '/crm?chave=' + (integ.chave || '');
+let integAssin = '';
+function renderIntegracoes(){
+  if (!souGerente()) return;
+  const ativoEl = document.activeElement;
+  const ass = JSON.stringify([integ, perfisLista.length]);
+  if (ass === integAssin || (ativoEl && ativoEl.closest?.('#cardInteg'))) return;
+  integAssin = ass;
+  const tem = !!integ.chave;
+  $('intChave').textContent = tem ? integ.chave : 'ainda não gerada';
+  $('btnGerarChave').textContent = tem ? 'Trocar chave' : 'Gerar chave';
+  $('intCrmUrl').textContent = tem ? urlCrm() : 'Gere a chave primeiro';
+  $('intUltLead').textContent = integ.ultimoLead ? 'Último aviso do CRM: ' + new Date(integ.ultimoLead).toLocaleString('pt-BR') : 'Nenhum aviso do CRM recebido ainda.';
+  $('intScript').value = integ.scriptUrl || '';
+  $('intUltSync').textContent = integ.ultimaSync ? 'Última leitura da planilha: ' + new Date(integ.ultimaSync).toLocaleString('pt-BR') : 'A planilha de avaliações ainda não foi lida.';
+  const pessoas = perfisLista.filter(p => p.status === 'ativo').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
+  const sel = (tipo, nome, atual) => `<select data-tipo="${tipo}" data-nome="${esc(nome)}"><option value="">— sem ligação —</option>${pessoas.map(p => `<option value="${p.uid}" ${atual===p.uid?'selected':''}>${esc(p.nome)}</option>`).join('')}</select>`;
+  const abas = Object.entries(integ.abas || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
+  const crm = Object.entries(integ.crmVistos || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
+  $('intLigacoes').innerHTML = (abas.length ? `<div class="rep-sec" style="margin:6px 0 8px">Abas da planilha de avaliações</div>${abas.map(([n,u]) => `<div class="pt-row"><span>📄 ${esc(n)}</span>${sel('aba', n, (integ.mapaAbas || {})[n] || u)}</div>`).join('')}` : '')
+    + (crm.length ? `<div class="rep-sec" style="margin:14px 0 8px">Nomes que vieram do CRM</div>${crm.map(([n,u]) => `<div class="pt-row"><span>👤 ${esc(n)}</span>${sel('crm', n, (integ.mapaCrm || {})[n] || u)}</div>`).join('')}` : '')
+    || '<div class="muted" style="font-size:13.5px">Os nomes aparecem aqui depois da primeira leitura da planilha e do primeiro lead do CRM. O app liga sozinho quando o nome bate; você só ajusta os que ficarem sem ligação.</div>';
+  $('btnSalvarLig').classList.toggle('hide', !(abas.length || crm.length));
+  renderGruposAdm();
+}
+window.gerarChave = async () => {
+  if (integ.chave && !confirm('Trocar a chave? Depois será preciso colar a chave nova no ajudante da planilha e o endereço novo no CRM.')) return;
+  try { await gravar(setDoc(doc(db,'config','integracao'), { chave:novaChave(), chaveEm:Date.now() }, { merge:true })); integAssin = ''; toast('Chave gerada ✓'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.copiarTexto = async (id) => {
+  const t = $(id).textContent.trim();
+  try { await navigator.clipboard.writeText(t); toast('Copiado ✓'); } catch(e) { prompt('Copie o texto:', t); }
+};
+window.salvarScript = async () => {
+  const u = $('intScript').value.trim();
+  if (u && !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(u)) { toast('O endereço do ajudante deve começar com https://script.google.com/macros/s/ e terminar com /exec'); return; }
+  try { await gravar(setDoc(doc(db,'config','integracao'), { scriptUrl:u }, { merge:true })); integAssin = ''; toast('Endereço salvo ✓'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.testarAjudante = async () => {
+  toast('Testando o ajudante da planilha…');
+  try {
+    const r = await chamarCarteiro({ tipo:'ajudante', acao:'teste' });
+    if (r?.ok) toast(`Funcionando ✓ Planilha: ${r.planilha}${r.avaliacoes ? ' · avaliações: ' + r.avaliacoes : ''}`);
+    else toast('Não funcionou: ' + (r?.erro || 'sem resposta'));
+  } catch(e) { toast('Erro: ' + e.message); }
+};
+window.salvarLigacoes = async () => {
+  const mapaAbas = { ...(integ.mapaAbas || {}) }, mapaCrm = { ...(integ.mapaCrm || {}) };
+  document.querySelectorAll('#intLigacoes select').forEach(s => { const m = s.dataset.tipo === 'aba' ? mapaAbas : mapaCrm; if (s.value) m[s.dataset.nome] = s.value; else delete m[s.dataset.nome]; });
+  try { await gravar(setDoc(doc(db,'config','integracao'), { mapaAbas, mapaCrm }, { merge:true })); integAssin = ''; toast('Ligações salvas. Valem a partir da próxima leitura.'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.enviarTudoPlanilha = async () => {
+  if (!confirm('Enviar todas as visitas e cartas já cadastradas para a planilha do app? Pode levar alguns minutos. Deixe esta tela aberta.')) return;
+  const btn = $('btnEnviarTudo'); btn.disabled = true;
+  try {
+    for (const col of ['visitas','cartas']) {
+      const ids = (await getDocs(collection(db,col))).docs.map(d => d.id);
+      for (let i = 0; i < ids.length; i += 150) {
+        btn.textContent = `Enviando ${col}… ${Math.min(i + 150, ids.length)} de ${ids.length}`;
+        await chamarCarteiro({ tipo:'planilha_lote', col, ids:ids.slice(i, i + 150) });
+      }
+    }
+    toast('Tudo enviado para a planilha ✓');
+  } catch(e) { toast('Parou no meio: ' + e.message + '. Pode tentar de novo, não duplica.'); }
+  btn.disabled = false; btn.textContent = 'Enviar tudo para a planilha do app';
+};
+let gruposAssin = '';
+function renderGruposAdm(){
+  const vistos = new Set([...Object.keys(GRUPOS_STATUS), ...Object.keys(appCfg.grupos || {}), ...avaliacoes.map(a => String(a.status || '').trim().toUpperCase()).filter(Boolean)]);
+  const ass = JSON.stringify([[...vistos], appCfg.grupos || {}]);
+  if (ass === gruposAssin) return; gruposAssin = ass;
+  $('admGrupos').innerHTML = [...vistos].sort((a,b) => a.localeCompare(b,'pt-BR')).map(st => {
+    const inf = infoStatus(st);
+    return `<div class="grp-row" data-st="${esc(st)}"><span><i style="background:${inf.cor}"></i>${esc(st)}</span>
+      <select>${Object.entries(GRUPOS_V).map(([k,g]) => `<option value="${k}" ${inf.g===k?'selected':''}>${g.n}</option>`).join('')}</select>
+      <input type="number" min="0" step="1" placeholder="não volta" value="${inf.dias === null || isNaN(inf.dias) ? '' : inf.dias}" title="Dias até voltar como repescagem"></div>`;
+  }).join('');
+}
+window.salvarGrupos = async () => {
+  const grupos = {};
+  document.querySelectorAll('#admGrupos .grp-row').forEach(r => { const d = r.querySelector('input').value; grupos[r.dataset.st] = { g:r.querySelector('select').value, dias: d === '' ? null : Math.max(0, Math.round(Number(d))) }; });
+  try { await gravar(setDoc(doc(db,'config','app'), { grupos, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); gruposAssin = ''; toast('Grupos salvos ✓'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ---------- Relatórios automáticos (só gerente) ----------
+async function carregarRelatorios(forcar){
+  if (!souGerente() || (relatoriosLista && !forcar)) return;
+  relatoriosLista = relatoriosLista || [];
+  try { const s = await getDocs(collection(db,'relatorios')); relatoriosLista = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (b.criadoEm||0) - (a.criadoEm||0)); }
+  catch(e) { console.warn('relatorios', e.message); }
+  renderRelAuto();
+}
+function renderRelAuto(){
+  if (!souGerente()) return;
+  carregarRelatorios();
+  const l = relatoriosLista || [];
+  $('relAutoLista').innerHTML = l.length ? l.slice(0, 20).map(r => `<div class="arq-row"><div class="ai"><b>${r.tipo === 'mes' ? '📅' : '🗓️'} ${esc(r.titulo.replace('Desempenho individual · ', ''))}</b>
+      <span class="muted" style="font-size:12.5px">Gerado em ${new Date(r.criadoEm).toLocaleString('pt-BR')}${r.enviado ? ' · enviado por e-mail' : ''}</span></div>
+      <button class="snooze" onclick="verRelatorio('${r.id}')">Ver</button><button class="snooze" onclick="excelRelatorio('${r.id}')">⬇ Excel</button></div>`).join('')
+    : '<div class="muted" style="font-size:13.5px">Nenhum relatório ainda. O semanal sai toda segunda às 8h e o mensal todo dia 1º às 8h. Você também pode gerar agora.</div>';
+}
+window.gerarRelatorioAgora = async (periodo) => {
+  const enviar = $('relEnviar').checked;
+  toast('Gerando o relatório…');
+  try { const r = await chamarCarteiro({ tipo:'relatorio', periodo, enviar }); if (!r?.ok) throw new Error(r?.erro || 'sem resposta'); await carregarRelatorios(true); verRelatorio(r.id); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.verRelatorio = id => {
+  const r = (relatoriosLista || []).find(x => x.id === id); if (!r) return;
+  $('repTit').textContent = r.titulo;
+  $('repFrame').srcdoc = '<!doctype html><meta charset="utf-8"><body style="margin:12px;background:#fff">' + r.html + '</body>';
+  window._repAtual = id;
+  abrir('repModal');
+};
+window.excelRelatorio = async id => {
+  const r = (relatoriosLista || []).find(x => x.id === id || x.id === window._repAtual); if (!r) return;
+  const tab = JSON.parse(r.tabelaJson || '[]');
+  try {
+    const X = await carregarXLSX(), wb = X.utils.book_new(), ws = X.utils.aoa_to_sheet(tab);
+    ws['!cols'] = [{ wch:24 }, ...Array(Math.max(0, (tab[1] || []).length - 1)).fill({ wch:8 })];
+    X.utils.book_append_sheet(wb, ws, r.tipo === 'mes' ? 'Mensal' : 'Semanal');
+    X.writeFile(wb, `relatorio-${r.tipo}-${r.de}.xlsx`);
+  } catch(e) { baixarCSV('relatorio-' + r.tipo + '-' + r.de, tab[1] || [], tab.slice(2)); }
+};
+
+function renderEtapa2(){
+  const nAval = avaliacoes.filter(a => (a.statusEm || 0) >= Date.now() - 7 * 864e5 && a.corretorUid === uidAtual).length;
+  $('cAval').textContent = nAval; $('cAval').classList.toggle('hide', !nAval);
+  if (view === 'avaliacoes') renderAvaliacoes();
+  if (view === 'config') renderIntegracoes();
+  if (view === 'relatorios') { $('cardRelAuto').classList.toggle('hide', !souGerente()); renderRelAuto(); }
+}
 
 </script>
 </body>
