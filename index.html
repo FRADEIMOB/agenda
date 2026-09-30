@@ -4292,6 +4292,14 @@ window.pedirNota = id => {
 
 // ---------- painel do dono ----------
 function faixaMesRel(n){ const d = new Date(); const a = new Date(d.getFullYear(), d.getMonth() - n, 1), b = new Date(d.getFullYear(), d.getMonth() - n + 1, 0); return [iso(a), iso(b)]; }
+// aprovações unificadas: planilha da administração + cartas do app, sem contar o mesmo cliente duas vezes
+function aprovUnificadas(avs, cs){
+  const m = new Map();
+  const chave = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
+  avs.filter(a => infoStatus(a.status).g === 'aprovado').forEach(a => { const k = chave(a.cpfNorm || a.cpf, a.telNorm, a.id); if (!m.has(k)) m.set(k, { equipe:a.equipe || '', uid:a.corretorUid || '', plan:true, app:false }); else m.get(k).plan = true; });
+  cs.forEach(c => { const k = chave(c.cpfNorm || c.cpf, c.telNorm || chaveTel(c.telefone), c.id); if (!m.has(k)) m.set(k, { equipe:c.equipe || '', uid:c.corretorUid || '', plan:false, app:true }); else m.get(k).app = true; });
+  return [...m.values()];
+}
 function numerosPeriodo(de, ate){
   const h = hojeISO(), noP = d => !!d && d >= de && d <= ate;
   const leadsLinhas = [];
@@ -4305,7 +4313,8 @@ function numerosPeriodo(de, ate){
   return { leads:leadsLinhas.reduce((a,l) => a + (Number(l.leads) || 0), 0), leadsLinhas, docs:avs.length, avs,
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
-    semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length, vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
+    semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
+    unif:aprovUnificadas(avs, cs), vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
 }
 function variacao(a, b){
@@ -4335,10 +4344,10 @@ function renderPainel(){
     ${kpi('🗂️','Docs', A.docs, B.docs, 'planilha de avaliações')}
     <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
     ${kpi('🔷','Condicionados', A.cond, B.cond)}
-    ${kpi('✅','Aprovados na planilha', A.aprovPlan, B.aprovPlan, A.semCarta ? `${A.semCarta} ainda sem carta no app` : 'todos com carta no app')}
+    ${kpi('✅','Aprovações', A.unif.length, B.unif.length, `${A.unif.filter(x => x.plan).length} na planilha · ${A.unif.filter(x => x.app).length} cartas no app · ${A.unif.filter(x => x.plan && x.app).length} nas duas`)}
+    ${kpi('⏳','Aprovados sem carta no app', A.semCarta, B.semCarta, 'aprovados na planilha que o corretor ainda não cadastrou')}
     ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, 'planilha de avaliações')}
-    ${kpi('📄','Cartas aprovadas no app', A.aprov, B.aprov, brl(A.valor))}
-    ${kpi('🎉','Vendas', A.vendas, B.vendas)}
+    ${kpi('🎉','Vendas', A.vendas, B.vendas, A.valor ? brl(A.valor) + ' em cartas no app' : '')}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
     <div class="pd-kpi"><span>📍 Plantão</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
   </div>`;
@@ -4346,10 +4355,10 @@ function renderPainel(){
   const eqs = listaEquipes().map(e => {
     const pts = pontosDoMes(de.slice(0,7)).filter(x => x.equipe === e.id).reduce((a,x) => a + x.pontos, 0);
     return { e, leads:A.leadsLinhas.filter(l => l.equipe === e.id).reduce((a,l) => a + (Number(l.leads) || 0), 0), docs:A.avs.filter(a => a.equipe === e.id).length,
-      aprov:A.cs.filter(c => c.equipe === e.id).length, aprovPlan:A.avs.filter(a => a.equipe === e.id && infoStatus(a.status).g === 'aprovado').length, vendas:A.vds.filter(c => c.equipe === e.id).length, pts };
+      aprov:A.cs.filter(c => c.equipe === e.id).length, aprovPlan:A.unif.filter(x => x.equipe === e.id).length, vendas:A.vds.filter(c => c.equipe === e.id).length, pts };
   });
   const lider = eqs.slice().sort((a,b) => b.vendas - a.vendas || b.aprov - a.aprov || b.docs - a.docs)[0];
-  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>🏁 Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Aprov. planilha</th><th class="hide-m">Cartas app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
+  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>🏁 Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Aprovações</th><th class="hide-m">Cartas no app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
     eqs.map(x => { const m = media(x.leads, x.docs); return `<tr class="${lider && x === lider && (x.vendas || x.aprov) ? 'me' : ''}"><td><span class="nm">${esc(x.e.icone || '')} ${esc(x.e.nome)}</span></td><td class="tot">${x.leads}</td><td>${x.docs}</td><td class="hide-m" style="color:${corM(m)};font-weight:700">${m === null ? '–' : m.toLocaleString('pt-BR')}</td><td>${x.aprovPlan}</td><td class="hide-m">${x.aprov}</td><td>${x.vendas}</td><td class="hide-m">${x.pts}</td></tr>`; }).join('')
   }</tbody></table></div>`;
   // destaques
