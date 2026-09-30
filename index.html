@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="Frade Imóveis">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Saira+Condensed:wght@700;800&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --accent:#E65100;--marinho:#022C45;--accent-soft:color-mix(in srgb,var(--accent) 12%,transparent);
@@ -661,6 +661,74 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
   .sheet{align-self:flex-end;border-radius:22px 22px 0 0;max-height:94vh}
   .modal{padding:0}
 }
+/* apresentação da reunião (estilo Frade) */
+.apresent{position:fixed;inset:0;z-index:300;background:#0b1220;display:none;flex-direction:column}
+.apresent.open{display:flex}
+.ap-barra{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0f172a;flex-wrap:wrap}
+.ap-barra .btn{padding:8px 12px;font-size:13px}
+.ap-bts{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.ap-pag{color:#cbd5e1;font-size:13px}
+.ap-palco{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ap-slide{width:1280px;height:720px;flex-shrink:0;position:relative;transform-origin:center center;overflow:hidden}
+.ap-nav{position:absolute;left:0;right:0;top:50%;display:flex;justify-content:space-between;pointer-events:none;padding:0 6px}
+.ap-nav button{pointer-events:auto;width:44px;height:64px;border-radius:12px;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:34px;cursor:pointer}
+.ap-s{position:absolute;inset:0;background-size:100% 100%;font-family:'Saira',system-ui,sans-serif;color:#fff}
+.ap-s.clr{color:#1C5F8E}
+.ap-capa-t{position:absolute;left:695px;top:150px;width:560px}
+.ap-capa-t .c1{font:800 58px/1.1 'Saira Condensed',sans-serif;color:#fff}
+.ap-capa-t .c2{font:800 66px/1.15 'Saira Condensed',sans-serif;color:#F5841F}
+.ap-capa-t .c3{font:500 17px/1.6 'Saira',sans-serif;color:#F5841F;letter-spacing:.28em;margin-top:18px}
+.ap-vert{position:absolute;left:322px;top:650px;transform:rotate(-90deg);transform-origin:left top;font:500 12px 'Saira',sans-serif;letter-spacing:.3em;color:#F5841F}
+.ap-t-faixa{position:absolute;left:60px;top:40px;height:130px;display:flex;align-items:center;font:800 40px/1 'Saira Condensed',sans-serif;color:#fff;letter-spacing:.01em}
+.ap-t-seta{position:absolute;left:110px;top:90px;font:800 64px/1 'Saira Condensed',sans-serif;color:#F5841F}
+.ap-corpo{position:absolute;left:60px;right:60px;top:215px;bottom:60px}
+.ap-corpo.seta{left:110px;right:270px;top:220px}
+.ap-mk{position:absolute;left:60px;bottom:22px;font:500 12px 'Saira',sans-serif;letter-spacing:.3em;opacity:.8}
+.ap-s.esc .ap-mk{color:#BFE3F7}
+.ap-tl{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.ap-tl>div{background:#fff;border:1px solid #E6DED6;border-radius:18px;padding:18px 22px;display:flex;flex-direction:column;gap:2px;height:190px;box-sizing:border-box}
+.ap-tl span{font:800 19px 'Saira Condensed',sans-serif;color:#1C5F8E;text-transform:uppercase}
+.ap-tl b{font:800 52px/1.2 'Saira Condensed',sans-serif;color:#F5841F;white-space:nowrap}
+.ap-tl em{font-style:normal;font-size:15px;color:#64748b;margin-top:auto}.ap-tl em.b{color:#16a34a}.ap-tl em.r{color:#dc2626}
+.ap-fn{display:flex;flex-direction:column;gap:22px}
+.ap-fn .l{display:grid;grid-template-columns:230px 1fr;column-gap:20px;align-items:center}
+.ap-fn .l>span{font:800 30px 'Saira Condensed',sans-serif}
+.ap-fn .b{display:flex;align-items:center;gap:14px}.ap-fn .b i{display:block;height:46px;border-radius:10px;background:#2AAAE1;max-width:700px}
+.ap-fn .b b{font:800 32px 'Saira Condensed',sans-serif}
+.ap-fn em{grid-column:2;font-style:normal;font-size:16px;color:#BFE3F7;margin-top:2px}
+.ap-rk>div{display:grid;grid-template-columns:560px 1fr;height:72px;align-items:center}
+.ap-rk span{font:800 40px 'Saira Condensed',sans-serif;color:#BFE3F7}.ap-rk b{font:800 40px 'Saira Condensed',sans-serif;color:#F5841F}
+.ap-nt{position:absolute;left:0;right:0;bottom:30px;font-size:22px;line-height:1.4}
+.ap-gr{font-size:36px;margin-top:40px}
+.ap-tb{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;color:#1C5F8E}
+.ap-tb th{background:#F5841F;color:#fff;text-align:left;padding:8px 14px;font:800 20px 'Saira Condensed',sans-serif}
+.ap-tb td{padding:7px 14px;font-size:17px;border-bottom:1px solid #D6E4EF}.ap-tb tr:nth-child(even) td{background:#EAF4FB}
+.ap-cl{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+.ap-cl>div{background:#fff;border:1px solid #E6DED6;border-radius:18px;padding:22px 26px;height:380px;box-sizing:border-box}
+.ap-cl h3{margin:0 0 22px;font:800 28px 'Saira Condensed',sans-serif;color:#F5841F}
+.ap-cl p{display:flex;justify-content:space-between;margin:0;height:80px;align-items:center;border-bottom:1px solid #F0E8E0}
+.ap-cl p span,.ap-cl p b{font:800 30px 'Saira Condensed',sans-serif}.ap-cl p b{color:#F5841F}
+.ap-dir{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.ap-dir h3{margin:0;font:800 40px 'Saira Condensed',sans-serif;color:#F5841F;padding-bottom:12px;border-bottom:2px solid #F5841F}
+.ap-dir .ed{margin-top:18px;min-height:300px;font-size:24px;line-height:1.5;outline:none;border-radius:10px;padding:6px}
+.ap-dir .ed:empty::before{content:attr(data-dica);color:#BFE3F7;opacity:.7}
+@media print{.apresent{display:none!important}}
+/* aba Apresentação e Assistente */
+.ap-escolha{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.ap-op{border:1px solid var(--border);background:var(--card);border-radius:18px;padding:18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;text-align:left;font:inherit;color:inherit}
+.ap-op:hover{border-color:var(--accent)}.ap-op b{font-size:17px}.ap-op span{font-size:13px;color:var(--muted)}.ap-op em{font-style:normal;margin-top:8px;font-weight:700;color:var(--accent);font-size:14px}
+.ap-op .ic{font-size:26px}
+.ass-card{display:flex;flex-direction:column;min-height:60vh}
+.ass-msgs{flex:1;display:flex;flex-direction:column;gap:12px;overflow:auto;max-height:62vh;padding:4px}
+.ass-m{max-width:88%;padding:12px 14px;border-radius:16px;font-size:14.5px;line-height:1.55;white-space:normal;word-wrap:break-word}
+.ass-m.eu{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.ass-m.ele{align-self:flex-start;background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:4px}
+.ass-m.ele p{margin:0 0 8px}.ass-m.ele p:last-child{margin:0}.ass-m.ele ul{margin:4px 0 8px;padding-left:20px}
+.ass-m.ele .copiar{display:inline-block;margin-top:8px;font-size:12.5px}
+.ass-sug{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.ass-sug button{border:1px solid var(--border);background:var(--card);border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer;color:inherit}
+.ass-in{display:flex;gap:8px;align-items:flex-end;border-top:1px solid var(--border);padding-top:12px}
+.ass-in textarea{flex:1;resize:none;min-height:46px}
 /* cartões recolhíveis: fechados até tocar no título */
 .dobra>.card-head{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 .dobra>.card-head h2{display:flex;align-items:center;gap:8px}
@@ -688,7 +756,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <p class="lead">Tarefas, compromissos e lembretes em um só lugar, sincronizados em tempo real em todos os seus aparelhos.</p>
       <div class="feat"><div class="feat-ic" data-ic="cal"></div><div><b>Agenda e calendário</b><span>Veja o dia, a semana e o mês de um jeito claro.</span></div></div>
       <div class="feat"><div class="feat-ic" data-ic="house"></div><div><b>Central de visitas</b><span>Cadastre visitas, confirme pelo WhatsApp e dispute o ranking.</span></div></div>
-      <div class="feat"><div class="feat-ic" data-ic="chart"></div><div><b>Relatórios por corretor</b><span>Gestores acompanham a equipe em tempo real.</span></div></div>
+      <div class="feat"><div class="feat-ic" data-ic="chart"></div><div><b>Relatórios por corretor</b><span>Gerentes e coordenadores acompanham a equipe em tempo real.</span></div></div>
     </div>
     <div class="hero-foot">© <span id="ano"></span> Frade Imóveis · Seus dados protegidos na nuvem</div>
     <div class="hero-deco"></div>
@@ -736,6 +804,8 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
       <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="chart"></i>Painel executivo</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="chart"></i>Desempenho</button>
+      <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="card"></i>Apresentação</button>
+      <button data-view="assistente" class="gerente-only hide" onclick="setView('assistente')"><i data-ic="star"></i>Assistente</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -923,8 +993,26 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <!-- PAINEL DO DONO -->
       <section class="view" id="v-painel">
         <div class="page-head"><div><h1>Painel executivo</h1><div class="sub" id="painelSub"></div></div>
-          <div class="ph-acoes"><div class="seg" id="painelSeg"></div><button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia</button></div></div>
+          <div class="ph-acoes"><div class="seg" id="painelSeg"></div><button class="btn btn-primary" onclick="abrirApresentacao()">📑 Apresentação da reunião</button><button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia</button></div></div>
         <div id="painelConteudo"></div>
+      </section>
+
+      <!-- APRESENTAÇÃO DA REUNIÃO -->
+      <section class="view" id="v-apresentacao">
+        <div class="page-head"><div><h1>📑 Apresentação</h1><div class="sub">Escolha o período e o app monta todos os slides no estilo da Frade, com os números do app.</div></div></div>
+        <div class="ap-escolha" id="apEscolha"></div>
+        <div class="card" style="margin-top:18px"><div class="hint" style="margin:0">Na apresentação: passe com as setas (ou arrastando no celular), use <b>📺 Tela cheia</b> na TV, <b>🖨️ PDF</b> para salvar e <b>⬇ PowerPoint</b> para editar. O último slide tem espaço para escrever os direcionamentos na hora da reunião.</div></div>
+      </section>
+
+      <!-- ASSISTENTE (CLAUDE) -->
+      <section class="view" id="v-assistente">
+        <div class="page-head"><div><h1>🤖 Assistente</h1><div class="sub">Pergunte sobre os números do app. Ele vê leads, docs, aprovações, vendas e visitas por corretor e equipe (sem CPF nem telefone de clientes).</div></div>
+          <button class="btn btn-ghost" onclick="assLimpar()">Nova conversa</button></div>
+        <div class="card ass-card">
+          <div id="assMsgs" class="ass-msgs"></div>
+          <div id="assSug" class="ass-sug"></div>
+          <div class="ass-in"><textarea id="assTxt" rows="2" placeholder="Ex.: quem precisa de atenção esta semana?" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();assEnviar()}"></textarea><button class="btn btn-primary" id="assBtn" onclick="assEnviar()">Enviar</button></div>
+        </div>
       </section>
 
       <!-- VENDAS (RESERVAS) -->
@@ -1021,12 +1109,12 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="card gerente-only hide" style="margin-bottom:20px" id="cardPerm">
           <div class="card-head"><h2>Permissões de acesso</h2><span class="muted">As mudanças valem na hora</span></div>
           <div class="leg">
-            <div><b>👑 Dono</b>Tudo, e é o único que altera gerentes e as configurações do app.</div>
-            <div><b>🏢 CEO Frade</b>Vê tudo, como o gerente, e é quem vê o Painel executivo (junto com o dono). Só o dono altera o perfil do CEO.</div>
+            <div><b>🏢 CEO</b>Vê tudo, como o gerente, e é quem vê o Painel executivo (junto com o gestor). Só o gestor altera o perfil do CEO.</div>
+            <div><b>👑 Gestor</b>Tudo, e é o único que altera gerentes e as configurações do app.</div>
             <div><b>⭐ Gerente</b>Vê e edita tudo: todas as equipes, coordenadores e corretores. Aprova cadastros e define permissões.</div>
             <div><b>🧭 Coordenador</b>Vê e edita as visitas da própria equipe e o relatório de cada corretor dela. Não vê gerentes nem outras equipes.</div>
-            <div><b>📞 SDR</b>Marca visitas para os corretores da equipe dela e vê só as visitas que marcou. Não vê cartas nem avaliações. Manda o resumo do dia.</div>
             <div><b>🏠 Corretor</b>Cadastra e vê só as próprias visitas. Tem a agenda pessoal e vê o ranking.</div>
+            <div><b>📞 SDR</b>Marca visitas para os corretores da equipe dela e vê só as visitas que marcou. Não vê cartas nem avaliações. Manda o resumo do dia.</div>
           </div>
           <div style="overflow-x:auto"><table class="perm" id="permLista"></table></div>
         </div>
@@ -1113,7 +1201,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <div class="fb-acoes">
                 <button class="btn btn-primary" onclick="document.getElementById('fotoArquivo').click()">📷 Escolher foto</button>
                 <button class="link hide" id="btnTirarFoto" onclick="removerFoto()">Remover foto</button>
-                <div class="hint">Aparece no seu perfil e para os gestores da equipe.</div>
+                <div class="hint">Aparece no seu perfil e para o coordenador e os gerentes.</div>
               </div>
               <input type="file" id="fotoArquivo" accept="image/*" class="hide" onchange="escolherFoto(this)">
               <input type="file" id="fotoOutro" accept="image/*" class="hide" onchange="escolherFotoOutro(this)">
@@ -1138,20 +1226,20 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <select id="cfgMin" style="width:auto" onchange="salvarMin(this.value)"><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hora</option></select></div>
           </div>
           <div class="card dono-only hide" id="cardAdmPontos">
-            <div class="card-head"><h2>🏆 Pontuação</h2><span class="muted">Só o dono</span></div>
+            <div class="card-head"><h2>🏆 Pontuação</h2><span class="muted">Só o gestor</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Quanto vale cada ação. Os pontos zeram todo dia 1º. Mudou um valor? Vale para o mês em andamento; os meses já fechados não mudam. Pode usar números negativos.</div>
             <div id="admPontos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarPontuacao()">Salvar pontuação</button>
           </div>
           <div class="card dono-only hide" id="cardAdmListas">
-            <div class="card-head"><h2>📋 Listas do app</h2><span class="muted">Só o dono</span></div>
+            <div class="card-head"><h2>📋 Listas do app</h2><span class="muted">Só o gestor</span></div>
             <div class="fg"><label>Origens do cliente <span class="muted" style="font-weight:500">(uma por linha)</span></label><textarea id="admOrigens" style="min-height:120px"></textarea></div>
             <div class="fg"><label>Motivos da perda <span class="muted" style="font-weight:500">(um por linha)</span></label><textarea id="admMotivos" style="min-height:120px"></textarea></div>
             <button class="btn btn-primary btn-block" onclick="salvarListas()">Salvar listas</button>
             <div class="set-row" style="margin-top:14px"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div>
           </div>
           <div class="card dono-only hide" id="cardInteg" style="grid-column:1/-1">
-            <div class="card-head"><h2>🔗 Integrações</h2><span class="muted">Só o dono · CRM, planilha e e-mail</span></div>
+            <div class="card-head"><h2>🔗 Integrações</h2><span class="muted">Só o gestor · CRM, planilha e e-mail</span></div>
             <div class="int-bloco"><b>1. Chave de segurança</b><span>Só quem tem esta chave consegue mandar dados para o app. Ela vai no ajudante da planilha e no endereço do CRM.</span>
               <div class="int-linha"><code id="intChave"></code><button class="btn btn-ghost" onclick="copiarTexto('intChave')">Copiar</button><button class="btn btn-ghost" id="btnGerarChave" onclick="gerarChave()">Gerar chave</button></div></div>
             <div class="int-bloco"><b>2. CRM (Dynamus)</b><span>Endereço para colar na ação <b>Webhook</b> do fluxo novo. O CRM só avisa o app; nada muda lá dentro.</span>
@@ -1181,14 +1269,14 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <div class="int-linha"><button class="btn btn-ghost" id="btnEnviarTudo" onclick="enviarTudoPlanilha()">Enviar tudo para a planilha do app</button></div></div>
           </div>
           <div class="card dono-only hide" id="cardGrupos" style="grid-column:1/-1">
-            <div class="card-head"><h2>🗂️ Status da planilha de avaliações</h2><span class="muted">Só o dono</span></div>
+            <div class="card-head"><h2>🗂️ Status da planilha de avaliações</h2><span class="muted">Só o gestor</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Em que grupo cada status entra nos relatórios e depois de quantos dias o cliente volta para o corretor como <b>repescagem</b> (deixe em branco para não voltar; 0 = avisar na hora). Status novos que a administração criar aparecem aqui sozinhos.</div>
             <div class="grp-row grp-cab"><span>Status</span><span>Grupo</span><span>Repescagem (dias)</span></div>
             <div id="admGrupos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarGrupos()">Salvar status</button>
           </div>
           <div class="card dono-only hide" id="cardAdmMsgs" style="grid-column:1/-1">
-            <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só o dono edita · valem para todos</span></div>
+            <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só o gestor edita · valem para todos</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:10px">Escreva do jeito que quiser. Use os campos abaixo e o app troca pelo dado do cliente na hora de enviar:</div>
             <div class="chips" id="msgCampos" style="margin-bottom:14px"></div>
             <div id="admMsgs"></div>
@@ -1402,6 +1490,16 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 </div>
 
 <!-- ================= ALTERAR SENHA ================= -->
+<div id="apresent" class="apresent">
+  <div class="ap-barra">
+    <select id="apMesSel" onchange="abrirApresentacao(this.value)" style="width:auto"><option value="mes_passado">Mês passado</option><option value="mes_atual">Este mês (até hoje)</option><option value="sem_passada">Semana passada</option><option value="sem_atual">Esta semana (até hoje)</option></select>
+    <span id="apPag" class="ap-pag"></span>
+    <div class="ap-bts"><button class="btn btn-ghost" onclick="apTelaCheia()">📺 Tela cheia</button><button class="btn btn-ghost" onclick="apPdf()">🖨️ PDF</button><button class="btn btn-ghost" onclick="apPptx()">⬇ PowerPoint</button><button class="btn btn-ghost" onclick="fecharApresentacao()">✕</button></div>
+  </div>
+  <div class="ap-palco" id="apPalco"></div>
+  <div class="ap-nav"><button onclick="apIr(-1)" aria-label="Anterior">‹</button><button onclick="apIr(1)" aria-label="Próximo">›</button></div>
+</div>
+
 <div class="modal" id="resvModal">
   <div class="sheet" style="width:min(620px,100%)">
     <div class="sheet-head"><h2 id="rvTitulo">Reserva</h2><button class="icon-btn" onclick="fechar('resvModal')" data-ic="x"></button></div>
@@ -1463,6 +1561,8 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><span style="width:20px;text-align:center">📋</span>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><span style="width:20px;text-align:center">📊</span>Painel executivo</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><span style="width:20px;text-align:center">📑</span>Apresentação</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('assistente')"><span style="width:20px;text-align:center">🤖</span>Assistente</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><span style="width:20px;text-align:center">📈</span>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><span style="width:20px;text-align:center">📲</span>Instalar aplicativo</button>
@@ -1780,12 +1880,13 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
   if (v === 'desempenho' && !podeGerir()) v = 'hoje';
   if (v === 'vendas' && !souGerente()) v = 'hoje';
+  if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
   if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
@@ -2425,7 +2526,7 @@ function renderPapel(){
     el.classList.remove('hide');
     if (perfil.status === 'pendente') el.textContent = '⏳ Aguardando aprovação';
     else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
-    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Dono' : perfil.cargo === 'dono' ? '🏢 CEO Frade' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
+    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Gestor' : perfil.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir()));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
@@ -2748,10 +2849,10 @@ function renderCorretores(){
     $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th></tr></thead><tbody>' + todos.map(p => {
       const ehDono = (instalacao && p.uid === instalacao.gerenteUid) || String(p.email || '').toLowerCase() === EMAIL_DONO;
       if (p.papel === 'gerente' && souDono() && !ehDono && p.uid !== uidAtual) return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
-        <td><select onchange="mudarCargo('${p.uid}',this.value,this)"><option value="gerente" ${p.cargo!=='dono'?'selected':''}>⭐ Gerente</option><option value="dono" ${p.cargo==='dono'?'selected':''}>🏢 CEO Frade</option>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente').map(([k,n]) => `<option value="papel:${k}">Mudar para ${n}</option>`).join('')}</select></td>
+        <td><select onchange="mudarCargo('${p.uid}',this.value,this)"><option value="gerente" ${p.cargo!=='dono'?'selected':''}>⭐ Gerente</option><option value="dono" ${p.cargo==='dono'?'selected':''}>🏢 CEO</option>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente').map(([k,n]) => `<option value="papel:${k}">Mudar para ${n}</option>`).join('')}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td></tr>`;
-      if (p.uid === uidAtual || ehDono || (p.papel === 'gerente' && !souDono())) return `<tr><td><b>${esc(p.nome)}${p.uid === uidAtual ? ' (você)' : ''}</b><span>${esc(p.email||'')}</span></td><td>${ehDono ? '👑 Dono' : p.cargo === 'dono' ? '🏢 CEO Frade' : '⭐ Gerente'}</td><td>${p.equipe ? esc(eqNome(p.equipe)) : '—'}${p.uid === uidAtual && souGerente() ? ` <select style="width:auto;margin-left:6px" onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${souDono() ? '' : 'disabled'}>${opEqs(p.equipe)}</select>` : ''}</td><td>${p.status === 'bloqueado' ? '🔒 Bloqueado' : 'Liberado'}${p.papel === 'gerente' && !souDono() && !ehDono && p.uid !== uidAtual ? '<br><small class="muted">só o dono altera gerentes</small>' : ''}</td></tr>`;
+      if (p.uid === uidAtual || ehDono || (p.papel === 'gerente' && !souDono())) return `<tr><td><b>${esc(p.nome)}${p.uid === uidAtual ? ' (você)' : ''}</b><span>${esc(p.email||'')}</span></td><td>${ehDono ? '👑 Gestor' : p.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente'}</td><td>${p.equipe ? esc(eqNome(p.equipe)) : '—'}${p.uid === uidAtual && souGerente() ? ` <select style="width:auto;margin-left:6px" onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${souDono() ? '' : 'disabled'}>${opEqs(p.equipe)}</select>` : ''}</td><td>${p.status === 'bloqueado' ? '🔒 Bloqueado' : 'Liberado'}${p.papel === 'gerente' && !souDono() && !ehDono && p.uid !== uidAtual ? '<br><small class="muted">só o gestor altera gerentes</small>' : ''}</td></tr>`;
       return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
         <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono()).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
@@ -2767,7 +2868,7 @@ window.mudarPermissao = async (uid, campo, valor, el) => {
   const p = perfisLista.find(x => x.uid === uid); if (!p) return;
   const dados = { [campo]: valor };
   if (campo === 'papel' && valor === 'gerente') {
-    if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo (menos os outros gerentes, que só o dono altera).`)) { el.value = p.papel; return; }
+    if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo (menos os outros gerentes, que só o gestor altera).`)) { el.value = p.papel; return; }
   }
   if (campo === 'papel' && valor !== 'gerente' && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
   if (uid === uidAtual) { try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Equipe atualizada'); } catch(e) { toast('Erro: ' + e.message); } return; }
@@ -2778,7 +2879,7 @@ window.mudarPermissao = async (uid, campo, valor, el) => {
 window.mudarCargo = async (uid, v, el) => {
   const p = perfisLista.find(x => x.uid === uid); if (!p || !souDono()) return;
   if (v.startsWith('papel:')) { el.value = p.cargo === 'dono' ? 'dono' : 'gerente'; return mudarPermissao(uid, 'papel', v.slice(6), { value:v.slice(6) }); }
-  try { await setDoc(doc(db,'perfis',uid), { cargo: v === 'dono' ? 'dono' : '' }, { merge:true }); toast(`${primeiro(p.nome)} agora é ${v === 'dono' ? 'CEO Frade' : 'Gerente'}`); }
+  try { await setDoc(doc(db,'perfis',uid), { cargo: v === 'dono' ? 'dono' : '' }, { merge:true }); toast(`${primeiro(p.nome)} agora é ${v === 'dono' ? 'CEO' : 'Gerente'}`); }
   catch(e) { toast('Erro: ' + e.message); el.value = p.cargo === 'dono' ? 'dono' : 'gerente'; }
 };
 window.setCorEq = k => { corEquipeFiltro = k; render(); };
@@ -3333,12 +3434,14 @@ function renderPainelPapel(){
   const rk = rankingMes(''), pos = rk.findIndex(g => g.uid === uidAtual), eu = rk[pos];
   const rkP = pontosDoMes(mesAtual()), pPos = rkP.findIndex(g => g.uid === uidAtual), pEu = rkP[pPos];
   // cartão do perfil
-  const minhasCartas = cartas.filter(c => c.corretorUid === uidAtual && noMes(c)).length;
+  // aprovações = planilha + cartas do app, sem repetir cliente; vendas = reservas + cartas vendidas
+  const aprovMes = aprovUnificadas(avaliacoesUnificadas().filter(a => a.data >= mi && a.data <= mf), cartas.filter(noMes));
+  const minhasCartas = aprovMes.filter(x => x.uid === uidAtual).length;
   const totMes = rankingDocs.filter(r => r.date >= mi && r.date <= mf && r.status !== 'Cancelada').length, cartasMes = cartas.filter(noMes).length;
-  const vendasMes = cartas.filter(vendaNoMes).length, minhasVendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
+  const vendasMes = souGerente() ? vendasUnificadas(mi, mf).length : cartas.filter(vendaNoMes).length, minhasVendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
   const caixa = itens => `<div class="p-stats">${itens.map(([v,r]) => `<div><b>${v}</b><span>${r}</span></div>`).join('')}</div>`;
   $('pFootRank').innerHTML = souGerente()
-    ? caixa([[totMes,'visitas'],[cartasMes,'cartas'],[vendasMes,'vendas']])
+    ? caixa([[totMes,'visitas'],[aprovMes.length,'aprovações'],[vendasMes,'vendas']])
     : caixa([[pPos >= 0 ? (pPos > 2 ? (pPos+1) + 'º' : MEDALHA(pPos) + ' ' + (pPos+1) + 'º') : '–','ranking'],[pEu ? pEu.pontos : 0,'pontos'],[minhasCartas,'cartas']]);
 
   if (souSdr()) {
@@ -3358,7 +3461,7 @@ function renderPainelPapel(){
     const vendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
     $('statsPapel').innerHTML =
       statCard('house','var(--accent)','var(--accent-soft)', vh.length, 'Visitas hoje', vh.length ? `${conf} confirmada${conf!==1?'s':''}` : '', "setView('visitas')") +
-      statCard('card','var(--ok)','var(--ok-soft)', minhasCartas, 'Cartas no mês', '', "setView('cartas')") +
+      statCard('card','var(--ok)','var(--ok-soft)', minhasCartas, 'Aprovações no mês', 'planilha + cartas', "setView('cartas')") +
       statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', vendas, 'Vendas no mês', '', "cf('status','Venda fechada');setView('cartas')") +
       statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', pPos >= 0 ? (pPos+1)+'º' : '–', 'No ranking', pPos >= 0 ? `${pEu.pontos} pontos · de ${rkP.length}` : 'sem pontos no mês', "rankTipo='pontos';setVisAba('ranking');setView('visitas')");
     return;
@@ -3369,11 +3472,12 @@ function renderPainelPapel(){
   const paraConf = visitas.filter(v => v.date === am && AGUARDA_CONF.includes(v.status)).length;
   const cm = cartas.filter(noMes);
   const pend = perfisLista.filter(p => p.status === 'pendente').length;
-  const vendas = cartas.filter(vendaNoMes).length;
+  const vendas = souGerente() ? vendasMes : cartas.filter(vendaNoMes).length;
+  const aprovEq = souGerente() ? aprovMes.length : aprovMes.filter(x => x.equipe === perfil.equipe).length;
   $('statsPapel').innerHTML =
     statCard('house','var(--accent)','var(--accent-soft)', vh.length, 'Visitas hoje', `${conf} confirmada${conf!==1?'s':''}`, "setView('visitas')") +
     statCard('wa','#16a34a','color-mix(in srgb,#16a34a 12%,transparent)', paraConf, 'Confirmar amanhã', paraConf ? 'faltam confirmar' : 'tudo certo', "abrirConfirmar()") +
-    statCard('card','var(--ok)','var(--ok-soft)', cm.length, 'Cartas no mês', brl(cm.reduce((a,c) => a + (c.valor||0), 0)), "setView('cartas')") +
+    statCard('card','var(--ok)','var(--ok-soft)', aprovEq, 'Aprovações no mês', 'planilha + cartas, sem repetir', "setView('cartas')") +
     (souGerente()
       ? statCard('users','var(--danger)','var(--danger-soft)', pend, 'Aguardando aprovação', pend ? 'clique para aprovar' : 'nenhum cadastro novo', "setView('corretores')")
       : statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', vendas, 'Vendas no mês', '', "setView('cartas')"));
@@ -4811,12 +4915,8 @@ function faixaDes(p){
   if (p === 'passado') return faixaMesRel(1);
   return faixa('semana');
 }
-function renderDesempenho(){
-  if (!podeGerir()) { $('desConteudo').innerHTML = ''; return; }
-  const [de, ate0] = faixaDes(desPer), h = hojeISO(), ate = ate0 > h ? h : ate0;
-  const eqFiltro = souGerente() ? desEq : (perfil.equipe || '-');
-  $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desSet('per','${k}')">${n}</button>`).join('');
-  $('desSub').textContent = (de === ate ? dataBR(de) : `${dataBR(de)} a ${dataBR(ate)}`) + (ate === h ? ' · atualiza sozinho' : '') + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
+// números por corretor num período (usado no Desempenho e na apresentação da reunião)
+function calcDesempenho(de, ate){
   const linhas = new Map();
   const chaveDe = (uid, nome) => uid ? 'u' + uid : 'n' + chaveNomeLead(nome || '?');
   const pega = (uid, nome, equipe) => {
@@ -4842,6 +4942,15 @@ function renderDesempenho(){
   // vendas (reservas): em parceria, conta para cada corretor da reserva; no total conta uma vez
   const vendasP = vendasUnificadas(de, ate);
   vendasP.forEach(v => (v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor' }]).forEach(c => { pega(c.uid, c.nome, c.equipe).vendas++; }));
+  return { linhas, vendasP };
+}
+function renderDesempenho(){
+  if (!podeGerir()) { $('desConteudo').innerHTML = ''; return; }
+  const [de, ate0] = faixaDes(desPer), h = hojeISO(), ate = ate0 > h ? h : ate0;
+  const eqFiltro = souGerente() ? desEq : (perfil.equipe || '-');
+  $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desSet('per','${k}')">${n}</button>`).join('');
+  $('desSub').textContent = (de === ate ? dataBR(de) : `${dataBR(de)} a ${dataBR(ate)}`) + (ate === h ? ' · atualiza sozinho' : '') + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
+  const { linhas, vendasP } = calcDesempenho(de, ate);
   const media = r => r.docs ? Math.round(r.leads / r.docs * 100) / 100 : null;
   const corM = r => { const x = media(r); return x === null ? (r.leads ? 'var(--danger)' : 'var(--muted)') : x <= 5 ? 'var(--ok)' : x <= 10 ? '#ca8a04' : 'var(--danger)'; };
   const t = norm(desBusca);
@@ -4877,6 +4986,308 @@ function renderDesempenho(){
 }
 window.renderDesempenho = renderDesempenho;
 
+// ---------- aba Apresentação ----------
+function renderApEscolha(){
+  if (view !== 'apresentacao' || !souGerente()) return;
+  const op = (q, ic, t, d) => { const P = periodoReuniao(q); return `<button class="ap-op" onclick="abrirApresentacao('${q}')"><span class="ic">${ic}</span><b>${t}</b><span>${P.rotulo}${P.atual ? ' · até hoje' : ''}</span><span>${d}</span><em>▶ Gerar apresentação</em></button>`; };
+  $('apEscolha').innerHTML = op('mes_passado','🗓️','Mensal · mês passado','Para a reunião de fim de mês.') + op('mes_atual','📆','Mensal · este mês','Parcial, até hoje.')
+    + op('sem_passada','📅','Semanal · semana passada','Segunda a domingo da semana anterior.') + op('sem_atual','⏱️','Semanal · esta semana','Parcial, até hoje.');
+}
+
+// ---------- aba Assistente (Claude pelo carteiro) ----------
+let assHist = [];
+const ASS_SUG = ['Analise o mês e me dê os pontos para a reunião', 'Quem precisa de atenção esta semana?', 'Compare este mês com o mês passado', 'Qual equipe está melhor e por quê?', 'Escreva uma mensagem para o grupo com os destaques da semana', 'Quais corretores têm muitos leads e poucos docs?'];
+function contextoAssistente(){
+  const bloco = q => { const D = dadosReuniao(q), A = D.A;
+    return { periodo:D.rotulo + (D.atual ? ' (parcial até hoje)' : ''), de:D.de, ate:D.ate,
+      totais:{ leads:A.leads, docs:A.docs, media_lead_doc:A.docs ? +(A.leads / A.docs).toFixed(2) : null, aprovacoes:A.unif.length, condicionados:A.cond, reprovados:A.reprovPlan, vendas:A.vendas, valor_vendido:Math.round(A.valorVendido), visitas_marcadas:A.visitas, visitas_realizadas:A.realizadas },
+      equipes:D.eqs.map(e => ({ equipe:e.nome, leads:e.leads, docs:e.docs, aprovacoes:e.aprov, vendas:e.vendas, valor_vendido:Math.round(e.valor) })),
+      corretores:D.pessoas.map(r => ({ nome:r.nome, equipe:eqNome(r.equipe), leads:r.leads, docs:r.docs, media:r.docs ? +(r.leads / r.docs).toFixed(2) : null, aprovacoes:r.aprov, condicionados:r.cond, reprovados:r.reprov, vendas:r.vendas })),
+      vendas:D.vendas.map(v => ({ dia:v.dia, corretores:v.corretores.map(c => c.nome).join(' / '), valor:Math.round(v.valor) })),
+      sdrs:D.sdr.map(x => ({ nome:x.nome, visitas:x.visitas, realizadas:x.realizadas, leads:x.leads, docs:x.docs, aprovacoes:x.aprov })) }; };
+  return { hoje:hojeISO(), empresa:'Frade Imóveis (imobiliária de Minha Casa Minha Vida)',
+    regras:'LEAD = lead que ficou com o corretor no fim do dia. DOC = cada documentação na planilha de avaliações. Média = leads ÷ docs (verde até 5, amarelo 5 a 10, vermelho acima de 10 ou sem doc; quanto menor, melhor). Aprovações = planilha + cartas do app sem repetir cliente. Venda = reserva feita.',
+    este_mes:bloco('mes_atual'), mes_passado:bloco('mes_passado'), esta_semana:bloco('sem_atual'), semana_passada:bloco('sem_passada') };
+}
+function mdSimples(t){
+  let h = esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const linhas = h.split('\n'), out = []; let lista = false;
+  linhas.forEach(l => { const m = l.match(/^\s*(?:[-•*]|\d+[.)])\s+(.*)/);
+    if (m) { if (!lista) { out.push('<ul>'); lista = true; } out.push(`<li>${m[1]}</li>`); }
+    else { if (lista) { out.push('</ul>'); lista = false; } if (l.trim()) out.push(`<p>${l.replace(/^#+\s*/, '')}</p>`); } });
+  if (lista) out.push('</ul>');
+  return out.join('');
+}
+function renderAssistente(){
+  if (view !== 'assistente' || !souGerente()) return;
+  if ($('assMsgs').dataset.n === String(assHist.length) && $('assMsgs').dataset.p === String(!!window._assPensando)) return;
+  $('assMsgs').dataset.n = assHist.length; $('assMsgs').dataset.p = !!window._assPensando;
+  $('assMsgs').innerHTML = (assHist.length ? '' : `<div class="ass-m ele"><p>Oi! Sou o assistente da Frade. Posso analisar os números do mês e da semana, comparar equipes e corretores, apontar quem precisa de atenção e escrever mensagens para a equipe. O que você quer saber?</p></div>`)
+    + assHist.map((m, i) => m.role === 'user' ? `<div class="ass-m eu">${esc(m.content)}</div>` : `<div class="ass-m ele">${mdSimples(m.content)}<button class="link copiar" onclick="assCopiar(${i})">📋 Copiar</button></div>`).join('')
+    + (window._assPensando ? '<div class="ass-m ele"><p class="muted">Pensando…</p></div>' : '');
+  $('assSug').innerHTML = assHist.length ? '' : ASS_SUG.map(t => `<button onclick="assEnviar(${JSON.stringify(t).replace(/"/g, '&quot;')})">${esc(t)}</button>`).join('');
+  $('assMsgs').scrollTop = $('assMsgs').scrollHeight;
+}
+window.assCopiar = async i => { try { await navigator.clipboard.writeText(assHist[i].content); toast('Copiado ✓'); } catch(e) { toast('Não consegui copiar'); } };
+window.assLimpar = () => { assHist = []; $('assMsgs').dataset.n = ''; renderAssistente(); };
+window.assEnviar = async (texto) => {
+  const t = (texto || $('assTxt').value).trim(); if (!t || window._assPensando) return;
+  $('assTxt').value = ''; assHist.push({ role:'user', content:t }); window._assPensando = true; renderAssistente(); $('assBtn').disabled = true;
+  try {
+    const r = await chamarCarteiro({ tipo:'assistente', mensagens:assHist.slice(-12), contexto:contextoAssistente() });
+    if (!r?.ok) throw new Error(r?.erro || 'sem resposta');
+    assHist.push({ role:'assistant', content:r.texto });
+  } catch(e) { assHist.push({ role:'assistant', content:'⚠ ' + (e.message || 'não consegui responder agora') }); }
+  window._assPensando = false; $('assBtn').disabled = false; $('assMsgs').dataset.n = ''; renderAssistente();
+};
+// =====================================================================
+// ================ APRESENTAÇÃO DA REUNIÃO MENSAL =====================
+// =====================================================================
+let apMes = 'mes_passado', apSlides = [], apIdx = 0, apDados = null;
+const AP_AZ = '#022C45', AP_LJ = '#E65100';
+// períodos da apresentação: mes_atual, mes_passado, sem_atual, sem_passada
+function periodoReuniao(qual){
+  if (qual === 'atual') qual = 'mes_atual'; if (qual === 'passado') qual = 'mes_passado';
+  const h = hojeISO(), hoje = new Date(), semana = qual.startsWith('sem'), atual = qual.endsWith('atual');
+  let de, ate, dePrev, atePrev;
+  if (semana) {
+    const [s0] = faixa('semana'); de = atual ? s0 : somaDias(s0, -7); ate = atual ? h : somaDias(de, 6);
+    dePrev = somaDias(de, -7); atePrev = somaDias(ate, -7);
+  } else {
+    const [m0, fimMes] = faixaMesRel(atual ? 0 : 1); de = m0; ate = atual ? h : fimMes;
+    const [p0, fimPrev] = faixaMesRel(atual ? 1 : 2); dePrev = p0;
+    atePrev = atual ? somaDias(p0, Math.min(hoje.getDate(), Number(fimPrev.slice(8,10))) - 1) : fimPrev;
+  }
+  const dm = d => d.slice(8,10) + '/' + d.slice(5,7);
+  const r = { qual, semana, atual, de, ate, dePrev, atePrev, ano:de.slice(0, 4) };
+  if (semana) Object.assign(r, { rotulo:`Semana de ${dm(de)} a ${dm(ate)}`, rotUp:`${dm(de)} A ${dm(ate)}`, capa1:'REUNIÃO SEMANAL', capa2:'SEMANA', prevCurto:'semana anterior', doPer:'DA SEMANA', doPerMin:'da semana', noPer:'na semana', proxRot:'PRÓXIMA SEMANA' });
+  else { const mn = nomeMes(de.slice(0,7)); Object.assign(r, { rotulo:mn, rotUp:mn.split(' ')[0].toUpperCase(), capa1:'REUNIÃO MENSAL', capa2:mn.split(' ')[0].toUpperCase(), prevCurto:nomeMes(dePrev.slice(0,7)).split(' ')[0].toLowerCase(), doPer:'DO MÊS', doPerMin:'do mês', noPer:'no mês',
+    proxRot:nomeMes(somaDias(ate.slice(0, 7) + '-28', 7).slice(0, 7)).split(' ')[0].toUpperCase() }); }
+  return r;
+}
+function dadosReuniao(qual){
+  const PR = periodoReuniao(qual), { de, ate, dePrev, atePrev, atual } = PR;
+  const A = numerosPeriodo(de, ate), B = numerosPeriodo(dePrev, atePrev);
+  const { linhas } = calcDesempenho(de, ate);
+  const pessoas = [...linhas.values()].filter(r => r.leads || r.docs || r.aprov || r.vendas);
+  const media = r => r.docs ? r.leads / r.docs : null;
+  const eqs = listaEquipes().map(e => {
+    const ls = pessoas.filter(r => r.equipe === e.id);
+    const x = { nome:`${e.icone || ''} ${e.nome}`.trim(), leads:0, docs:0, aprov:0, vendas:A.vendasL.filter(v => v.equipe === e.id).length, valor:A.vendasL.filter(v => v.equipe === e.id).reduce((a,v) => a + v.valor, 0) };
+    ls.forEach(r => { x.leads += r.leads; x.docs += r.docs; x.aprov += r.aprov; });
+    return x;
+  });
+  return { ...PR, A, B, pessoas, media, eqs,
+    mesNome:PR.rotulo, prevNome:PR.prevCurto,
+    vendas:A.vendasL.slice().sort((a,b) => (b.dia || '').localeCompare(a.dia || '')),
+    sdr:rankingSdr(de, ate) };
+}
+const apFmt = n => (Number(n) || 0).toLocaleString('pt-BR');
+const apMedia = (l, d) => d ? (Math.round(l / d * 100) / 100).toLocaleString('pt-BR') : '–';
+function apVar(a, b, menorMelhor){
+  if (!b) return a ? '<span class="ap-var">novo</span>' : '';
+  const p = Math.round((a - b) / b * 100); if (!p) return '<span class="ap-var">igual</span>';
+  const bom = menorMelhor ? p < 0 : p > 0;
+  return `<span class="ap-var ${bom ? 'bom' : 'ruim'}">${p > 0 ? '▲' : '▼'} ${Math.abs(p)}%</span>`;
+}
+// ---- estilo da Frade (baseado na apresentação do 1º semestre) ----
+const APC = { az:'#1C5F8E', azEsc:'#154A73', azCl:'#2AAAE1', azMed:'#2E8FCF', lj:'#F5841F', cr:'#F8F2EE', txtCl:'#BFE3F7' };
+const AP_FUNDOS = {
+  capa:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720"><defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E8FCF"/><stop offset="1" stop-color="#154A73"/></linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2AAAE1"/><stop offset="1" stop-color="#1C6FAE"/></linearGradient></defs>
+    <rect width="1280" height="720" fill="#F8F2EE"/>
+    <path d="M0 100 H20 A270 270 0 0 1 290 370 V720 H0 Z" fill="#154A73"/>
+    <path d="M0 165 H10 A280 280 0 0 1 290 445 V720 H0 Z" fill="#1C5F8E"/>
+    <path d="M0 238 H10 A280 280 0 0 1 290 518 V720 H0 Z" fill="#2E8FCF"/>
+    <circle cx="36" cy="493" r="160" fill="#F5841F"/>
+    <path d="M385 720 V520 A420 420 0 0 1 805 100 H1280 V720 Z" fill="url(#g1)"/>
+    <path d="M385 720 V474 H780 A260 260 0 0 1 1000 540 L1280 720 Z" fill="#1E74B3" opacity=".75"/>
+    <path d="M385 720 V525 H850 A320 320 0 0 1 1170 720 Z" fill="url(#g2)"/>
+    <circle cx="920" cy="780" r="180" fill="#F5841F"/></svg>`,
+  faixa:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720"><defs>
+    <linearGradient id="b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2AAAE1"/><stop offset="1" stop-color="#1F7EC4"/></linearGradient></defs>
+    <rect width="1280" height="720" fill="#1C5F8E"/>
+    <polygon points="760,0 1280,0 1280,330" fill="#F5841F"/>
+    <polygon points="700,0 760,0 1280,330 1280,395" fill="#F8F2EE"/>
+    <path d="M0 40 H860 A65 65 0 0 1 860 170 H0 Z" fill="url(#b)"/></svg>`,
+  seta:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+    <rect width="1280" height="720" fill="#1C5F8E"/>
+    <g stroke-linejoin="round" stroke-width="70">
+    <polygon points="1170,130 1330,130 1330,590 1170,590 1045,360" fill="#154A73" stroke="#154A73"/>
+    <polygon points="1240,105 1340,105 1340,575 1240,575 1110,340" fill="#2AAAE1" stroke="#2AAAE1"/>
+    <polygon points="1300,150 1340,150 1340,560 1300,560 1195,355" fill="#F5841F" stroke="#F5841F"/></g></svg>`,
+  creme:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720"><defs>
+    <linearGradient id="b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2AAAE1"/><stop offset="1" stop-color="#1F7EC4"/></linearGradient></defs>
+    <rect width="1280" height="720" fill="#F8F2EE"/>
+    <path d="M0 40 H860 A65 65 0 0 1 860 170 H0 Z" fill="url(#b)"/>
+    <polygon points="1130,720 1280,560 1280,720" fill="#F5841F"/></svg>`
+};
+const apUrlFundo = k => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(AP_FUNDOS[k]).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29');
+// cada slide é descrito uma vez e desenhado duas vezes: na tela e no PowerPoint
+function modeloSlides(D){
+  const A = D.A, B = D.B, mA = A.docs ? A.leads / A.docs : 0, mB = B.docs ? B.leads / B.docs : 0;
+  const varTxt = (a, b, menor) => { if (!b) return a ? { t:'novo', c:'n' } : { t:'', c:'n' }; const p = Math.round((a - b) / b * 100); if (!p) return { t:'igual', c:'n' }; return { t:`${p > 0 ? '▲' : '▼'} ${Math.abs(p)}% vs ${D.prevCurto}`, c:(menor ? p < 0 : p > 0) ? 'b' : 'r' }; };
+  const ano = D.ano;
+  const S = [];
+  S.push({ fundo:'capa', tipo:'capa', l1:D.capa1, l2:D.semana ? D.rotUp : D.capa2, l3:ano, sub:D.atual ? `PARCIAL ATÉ ${dataBR(D.ate)} · RESULTADOS E PLANEJAMENTO` : 'RESULTADOS, ANÁLISE COMERCIAL E PLANEJAMENTO' });
+  S.push({ fundo:'creme', titulo:`RESULTADO GERAL — ${D.semana ? 'SEMANA ' + D.rotUp : D.rotUp + ' ' + ano}`, blocos:[{ tipo:'tiles', itens:[
+    { r:'Leads', v:apFmt(A.leads), x:varTxt(A.leads, B.leads) }, { r:'Docs', v:apFmt(A.docs), x:varTxt(A.docs, B.docs) },
+    { r:'Média lead/doc', v:apMedia(A.leads, A.docs), x:varTxt(mA, mB, true) }, { r:'Aprovações', v:apFmt(A.unif.length), x:varTxt(A.unif.length, B.unif.length) },
+    { r:'Vendas (reservas)', v:apFmt(A.vendas), x:varTxt(A.vendas, B.vendas) }, { r:'Valor vendido', v:brl(A.valorVendido), x:varTxt(A.valorVendido, B.valorVendido) },
+    { r:'Visitas realizadas', v:apFmt(A.realizadas), x:varTxt(A.realizadas, B.realizadas) }, { r:'Condicionados', v:apFmt(A.cond), x:varTxt(A.cond, B.cond) } ] }] });
+  const fun = [['LEADS', A.leads], ['DOCS', A.docs], ['APROVAÇÕES', A.unif.length], ['VENDAS', A.vendas]];
+  S.push({ fundo:'faixa', titulo:'DO LEAD À VENDA', blocos:[{ tipo:'funil', itens:fun.map((f, i) => ({ r:f[0], v:f[1], o:i && fun[i-1][1] ? `${(Math.round(f[1] / fun[i-1][1] * 1000) / 10).toLocaleString('pt-BR')}% da etapa anterior` : '' })) }] });
+  const rk = (arr, campo) => arr.filter(r => r[campo]).sort((a,b) => b[campo] - a[campo]).slice(0, 5);
+  const rv = rk(D.pessoas, 'vendas');
+  S.push({ fundo:'seta', titulo:'RANKING DE VENDAS', tituloCor:'lj', blocos:[{ tipo:'ranking', itens:rv.map(r => ({ n:r.nome.split(' ')[0].toUpperCase(), v:`${r.vendas} ${r.vendas === 1 ? 'VENDA' : 'VENDAS'}` })) },
+    { tipo:'nota', t:`Total ${D.doPerMin}: ${A.vendas} venda${A.vendas!==1?'s':''} · ${brl(A.valorVendido)} vendidos pela equipe comercial.` }] });
+  const ra = rk(D.pessoas, 'aprov');
+  S.push({ fundo:'seta', titulo:'RANKING DE APROVAÇÕES', tituloCor:'lj', blocos:[{ tipo:'ranking', itens:ra.map(r => ({ n:r.nome.split(' ')[0].toUpperCase(), v:`${r.aprov} ${r.aprov === 1 ? 'APROVAÇÃO' : 'APROVAÇÕES'}` })) },
+    { tipo:'nota', t:`Total ${D.doPerMin}: ${A.unif.length} aprovações (planilha + cartas do app, sem repetir cliente).` }] });
+  S.push({ fundo:'faixa', titulo:'EQUIPES', blocos:[{ tipo:'tabela', cab:['Equipe','Leads','Docs','Média','Aprovações','Vendas','Valor vendido'], linhas:D.eqs.map(e => [e.nome, apFmt(e.leads), apFmt(e.docs), apMedia(e.leads, e.docs), e.aprov, e.vendas, e.valor ? brl(e.valor) : '–']) }] });
+  const top = (arr, f) => arr.slice().sort(f).slice(0, 3);
+  S.push({ fundo:'creme', titulo:`DESTAQUES ${D.doPer}`, blocos:[{ tipo:'colunas', itens:[
+    { t:'MELHOR MÉDIA', l:top(D.pessoas.filter(r => r.leads >= 5 && r.docs), (a,b) => a.leads / a.docs - b.leads / b.docs).map(r => [r.nome, apMedia(r.leads, r.docs)]) },
+    { t:'MAIS APROVAÇÕES', l:top(D.pessoas.filter(r => r.aprov), (a,b) => b.aprov - a.aprov).map(r => [r.nome, r.aprov]) },
+    { t:'MAIS VENDAS', l:top(D.pessoas.filter(r => r.vendas), (a,b) => b.vendas - a.vendas).map(r => [r.nome, r.vendas]) } ] }] });
+  const aten = D.pessoas.filter(r => r.leads >= 5 && (!r.docs || r.leads / r.docs > 10)).sort((a,b) => (b.docs ? b.leads / b.docs : 1e9) - (a.docs ? a.leads / a.docs : 1e9)).slice(0, 9);
+  S.push({ fundo:'faixa', titulo:'PONTOS DE ATENÇÃO', blocos:aten.length ? [{ tipo:'tabela', cab:['Corretor','Leads','Docs','Média'], linhas:aten.map(r => [r.nome, r.leads, r.docs, r.docs ? apMedia(r.leads, r.docs) : 'sem doc']) }, { tipo:'nota', t:'Média acima de 10 leads por doc, ou leads sem nenhum doc (mínimo de 5 leads).' }] : [{ tipo:'grande', t:'Ninguém com a média no vermelho. 👏' }] });
+  const vl = D.vendas.slice(0, 10);
+  S.push({ fundo:'faixa', titulo:`VENDAS ${D.doPer}`, blocos:vl.length ? [{ tipo:'tabela', cab:['Data','Cliente','Corretor','Valor'], linhas:vl.map(v => [v.dia ? v.dia.slice(8,10) + '/' + v.dia.slice(5,7) : '', nomeBonito(v.cliente), v.corretores.map(c => primeiro(c.nome)).join(' / '), v.valor ? brl(v.valor) : '–']) }, ...(D.vendas.length > 10 ? [{ tipo:'nota', t:`+ ${D.vendas.length - 10} vendas ${D.noPer}.` }] : [])] : [{ tipo:'grande', t:`Nenhuma venda registrada ${D.noPer}.` }] });
+  if (D.sdr.length) S.push({ fundo:'faixa', titulo:'SDRS', blocos:[{ tipo:'tabela', cab:['SDR','Visitas','Realizadas','Leads','Docs','Aprovações'], linhas:D.sdr.map(x => [x.nome, x.visitas, x.realizadas, x.leads, x.docs, x.aprov]) }] });
+  S.push({ fundo:'faixa', titulo:`DIRECIONAMENTOS — ${D.proxRot}`, blocos:[{ tipo:'notas', itens:[{ t:'Foco e ação', id:'n1', d:'Toque para escrever' }, { t:'Metas', id:'n2', d:'Toque para escrever' }] }] });
+  return S;
+}
+let apNotasTxt = {};
+function slideHtml(s){
+  const fundo = `background-image:url('${apUrlFundo(s.fundo)}')`;
+  if (s.tipo === 'capa') return `<div class="ap-s" style="${fundo}"><div class="ap-capa-t"><div class="c1">${esc(s.l1)}</div><div class="c2">${esc(s.l2)}</div><div class="c2">${esc(s.l3)}</div><div class="c3">${esc(s.sub)}</div></div><div class="ap-vert">FRADE IMÓVEIS</div></div>`;
+  const escuro = s.fundo !== 'creme';
+  const tit = s.fundo === 'seta' ? `<div class="ap-t-seta">${esc(s.titulo)}</div>` : `<div class="ap-t-faixa">${esc(s.titulo)}</div>`;
+  const b = s.blocos.map(k => {
+    if (k.tipo === 'tiles') return `<div class="ap-tl ${escuro ? '' : 'cr'}">${k.itens.map(t => `<div><span>${esc(t.r)}</span><b>${esc(t.v)}</b><em class="${t.x.c}">${esc(t.x.t)}</em></div>`).join('')}</div>`;
+    if (k.tipo === 'funil') { const mx = Math.max(1, ...k.itens.map(i => i.v)); return `<div class="ap-fn">${k.itens.map((i, n) => `<div class="l"><span>${i.r}</span><div class="b"><i style="width:${Math.max(2, i.v / mx * 100)}%;${n === 3 ? 'background:' + APC.lj : ''}"></i><b>${apFmt(i.v)}</b></div><em>${esc(i.o)}</em></div>`).join('')}</div>`; }
+    if (k.tipo === 'ranking') return k.itens.length ? `<div class="ap-rk">${k.itens.map((i, n) => `<div><span>${n < 3 ? ['🥇','🥈','🥉'][n] : (n + 1) + 'º'} ${esc(i.n)}</span><b>${esc(i.v)}</b></div>`).join('')}</div>` : `<div class="ap-gr">Nada registrado ${apDados?.noPer || 'no período'}.</div>`;
+    if (k.tipo === 'tabela') return `<table class="ap-tb"><thead><tr>${k.cab.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${k.linhas.map(l => `<tr>${l.map(c => `<td>${esc(String(c))}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    if (k.tipo === 'colunas') return `<div class="ap-cl">${k.itens.map(c => `<div><h3>${esc(c.t)}</h3>${c.l.length ? c.l.map((r, n) => `<p><span>${['🥇','🥈','🥉'][n]} ${esc(primeiro(r[0]))}</span><b>${esc(String(r[1]))}</b></p>`).join('') : '<p><span>—</span></p>'}</div>`).join('')}</div>`;
+    if (k.tipo === 'nota') return `<div class="ap-nt">${esc(k.t)}</div>`;
+    if (k.tipo === 'grande') return `<div class="ap-gr">${esc(k.t)}</div>`;
+    if (k.tipo === 'notas') return `<div class="ap-dir">${k.itens.map(c => `<div><h3>${esc(c.t)}</h3><div class="ed" contenteditable="true" data-nota="${c.id}" data-dica="${esc(c.d)}">${apNotasTxt[c.id] || ''}</div></div>`).join('')}</div>`;
+    return '';
+  }).join('');
+  return `<div class="ap-s ${escuro ? 'esc' : 'clr'}" style="${fundo}">${tit}<div class="ap-corpo ${s.fundo === 'seta' ? 'seta' : ''}">${b}</div><div class="ap-mk">FRADE IMÓVEIS</div></div>`;
+}
+function montarSlides(D){ apModelo = modeloSlides(D); return apModelo.map(slideHtml); }
+let apModelo = [];
+document.addEventListener('input', e => { const n = e.target.closest?.('[data-nota]'); if (n) apNotasTxt[n.dataset.nota] = n.innerHTML; });
+
+function apDesenhar(){
+  const n = apSlides.length;
+  $('apPalco').innerHTML = `<div class="ap-slide">${apModelo[apIdx] ? slideHtml(apModelo[apIdx]) : apSlides[apIdx]}</div>`;
+  $('apPag').textContent = `${apIdx + 1} / ${n}`;
+  apEscala();
+}
+function apEscala(){
+  const pal = $('apPalco'), sl = pal?.querySelector('.ap-slide'); if (!sl) return;
+  const k = Math.min(pal.clientWidth / 1280, pal.clientHeight / 720);
+  sl.style.transform = `scale(${k})`;
+}
+window.abrirApresentacao = (qual) => {
+  if (!souGerente()) return;
+  apMes = qual === 'atual' ? 'mes_atual' : qual === 'passado' ? 'mes_passado' : (qual || apMes);
+  apDados = dadosReuniao(apMes); apSlides = montarSlides(apDados); apIdx = 0;
+  $('apMesSel').value = apMes;
+  $('apresent').classList.add('open'); document.body.style.overflow = 'hidden';
+  apDesenhar();
+};
+window.fecharApresentacao = () => { $('apresent').classList.remove('open'); document.body.style.overflow = ''; if (document.fullscreenElement) document.exitFullscreen?.(); };
+window.apIr = d => { apIdx = Math.max(0, Math.min(apSlides.length - 1, apIdx + d)); apDesenhar(); };
+window.apTelaCheia = () => { const el = $('apresent'); if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el); else document.exitFullscreen?.(); setTimeout(apEscala, 300); };
+window.addEventListener('resize', () => { if ($('apresent')?.classList.contains('open')) apEscala(); });
+document.addEventListener('keydown', e => {
+  if (!$('apresent')?.classList.contains('open') || e.target.closest?.('[contenteditable]')) return;
+  if (['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); apIr(1); }
+  if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); apIr(-1); }
+  if (e.key === 'Escape' && !document.fullscreenElement) fecharApresentacao();
+});
+(() => { let x0 = null; document.addEventListener('touchstart', e => { if ($('apresent')?.classList.contains('open')) x0 = e.touches[0].clientX; }, { passive:true });
+  document.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 50) apIr(dx < 0 ? 1 : -1); }, { passive:true }); })();
+// imprimir / salvar em PDF: todos os slides, um por página (com o que foi escrito nas notas)
+window.apPdf = () => {
+  const w = window.open('', '_blank'); if (!w) { toast('Libere as janelas pop-up para salvar em PDF'); return; }
+  const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n');
+  const fontes = [...document.querySelectorAll('link[href*="fonts.googleapis.com/css"]')].map(l => l.outerHTML).join('');
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Reunião ${apDados.mesNome}</title>${fontes}<style>${css}
+    @page{size:1280px 720px;margin:0} html,body{margin:0;background:#fff} .ap-slide{transform:none!important;position:relative;page-break-after:always;break-after:page} .ap-s{-webkit-print-color-adjust:exact;print-color-adjust:exact} .ed:empty::before{content:''!important}</style></head>
+    <body>${apModelo.map(m => `<div class="ap-slide">${slideHtml(m).replace(/contenteditable="true"/g, '')}</div>`).join('')}
+    <script>document.fonts.ready.then(()=>setTimeout(()=>print(),400))<\/script></body></html>`);
+  w.document.close();
+};
+// PowerPoint (.pptx) no mesmo estilo, montado no próprio celular/computador
+window.apPptx = async () => {
+  try {
+    if (!window.PptxGenJS) await new Promise((ok, erro) => { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js'; sc.onload = ok; sc.onerror = () => erro(new Error('sem internet para baixar o gerador')); document.head.appendChild(sc); });
+    // os mesmos fundos da tela, virando imagem
+    const png = {};
+    for (const k of Object.keys(AP_FUNDOS)) png[k] = await new Promise((ok, erro) => { const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = 1920; c.height = 1080; c.getContext('2d').drawImage(im, 0, 0, 1920, 1080); ok(c.toDataURL('image/png')); }; im.onerror = () => erro(new Error('fundo')); im.src = apUrlFundo(k); });
+    const pp = new PptxGenJS(); pp.layout = 'LAYOUT_WIDE';
+    const I = px => px / 96, P = px => Math.round(px * 0.75), TF = 'Saira Condensed', BF = 'Saira';
+    const H = c => c.replace('#', '');
+    const tx = (s, t, x, y, w, h, o = {}) => s.addText(t, { x:I(x), y:I(y), w:I(w), h:I(h), fontFace:BF, margin:0, valign:'middle', ...(o.fontFace === TF ? { fit:'shrink', wrap:false } : {}), ...o });
+    apModelo.forEach(m => {
+      const s = pp.addSlide(); s.background = { data:png[m.fundo] };
+      if (m.tipo === 'capa') {
+        tx(s, m.l1, 695, 150, 580, 70, { fontFace:TF, bold:true, fontSize:P(50), color:'FFFFFF' });
+        tx(s, m.l2, 695, 225, 560, 80, { fontFace:TF, bold:true, fontSize:P(66), color:H(APC.lj) });
+        tx(s, m.l3, 695, 305, 560, 80, { fontFace:TF, bold:true, fontSize:P(66), color:H(APC.lj) });
+        tx(s, m.sub, 695, 390, 560, 60, { fontSize:P(17), color:H(APC.lj), charSpacing:3 });
+        tx(s, 'FRADE IMÓVEIS', 300, 560, 160, 20, { fontSize:P(11), color:H(APC.lj), rotate:270, charSpacing:3 });
+        return;
+      }
+      const esc_ = m.fundo !== 'creme', corT = esc_ ? 'FFFFFF' : H(APC.az);
+      if (m.fundo === 'seta') tx(s, m.titulo, 110, 90, 920, 90, { fontFace:TF, bold:true, fontSize:P(56), color:H(APC.lj) });
+      else tx(s, m.titulo, 60, 60, 800, 90, { fontFace:TF, bold:true, fontSize:P(40), color:'FFFFFF' });
+      tx(s, 'FRADE IMÓVEIS', 60, 680, 300, 20, { fontSize:P(11), color:esc_ ? H(APC.txtCl) : H(APC.az), charSpacing:3 });
+      let y = m.fundo === 'seta' ? 220 : 215; const x0 = m.fundo === 'seta' ? 110 : 60, W = m.fundo === 'seta' ? 900 : 1160;
+      m.blocos.forEach(k => {
+        if (k.tipo === 'tiles') { k.itens.forEach((t, i) => { const w = 272, h = 190, x = x0 + (i % 4) * (w + 24), yy = y + Math.floor(i / 4) * (h + 24);
+            s.addShape(pp.ShapeType.roundRect, { x:I(x), y:I(yy), w:I(w), h:I(h), fill:{ color:'FFFFFF' }, line:{ color:'E6DED6' }, rectRadius:0.12 });
+            tx(s, t.r.toUpperCase(), x + 22, yy + 18, w - 40, 28, { fontFace:TF, bold:true, fontSize:P(19), color:H(APC.az) });
+            tx(s, t.v, x + 22, yy + 55, w - 40, 75, { fontFace:TF, bold:true, fontSize:P(t.v.length > 9 ? 36 : 52), color:H(APC.lj) });
+            tx(s, t.x.t, x + 22, yy + 138, w - 40, 30, { fontSize:P(15), color:t.x.c === 'b' ? '16A34A' : t.x.c === 'r' ? 'DC2626' : '64748B' }); }); y += 430; }
+        if (k.tipo === 'funil') { const mx = Math.max(1, ...k.itens.map(i => i.v)); k.itens.forEach((f, i) => { const yy = y + i * 105;
+            tx(s, f.r, x0, yy, 240, 60, { fontFace:TF, bold:true, fontSize:P(26), color:'FFFFFF' });
+            s.addShape(pp.ShapeType.roundRect, { x:I(x0 + 250), y:I(yy + 8), w:I(Math.max(12, f.v / mx * 700)), h:I(46), fill:{ color:i === 3 ? H(APC.lj) : H(APC.azCl) }, rectRadius:0.08 });
+            tx(s, apFmt(f.v), x0 + 260 + Math.max(12, f.v / mx * 700), yy, 200, 60, { fontFace:TF, bold:true, fontSize:P(32), color:'FFFFFF' });
+            if (f.o) tx(s, f.o, x0 + 250, yy + 60, 600, 28, { fontSize:P(16), color:H(APC.txtCl) }); }); y += 440; }
+        if (k.tipo === 'ranking') { if (!k.itens.length) { tx(s, `Nada registrado ${apDados.noPer}.`, x0, y, W, 80, { fontSize:P(30), color:'FFFFFF' }); y += 100; }
+          k.itens.forEach((r, i) => { const yy = y + i * 72;
+            tx(s, `${i < 3 ? ['🥇','🥈','🥉'][i] : (i + 1) + 'º'}  ${r.n}`, x0, yy, 520, 60, { fontFace:TF, bold:true, fontSize:P(40), color:H(APC.txtCl) });
+            tx(s, r.v, x0 + 560, yy, 400, 60, { fontFace:TF, bold:true, fontSize:P(40), color:H(APC.lj) }); }); y += k.itens.length * 72 + 20; }
+        if (k.tipo === 'tabela') { const rows = [k.cab.map(c => ({ text:String(c), options:{ bold:true, color:'FFFFFF', fill:{ color:H(APC.lj) }, fontFace:TF, fontSize:P(20) } })), ...k.linhas.map((l, n) => l.map(c => ({ text:String(c), options:{ color:H(APC.az), fill:{ color:n % 2 ? 'EAF4FB' : 'FFFFFF' }, fontSize:P(17) } })))];
+          s.addTable(rows, { x:I(x0), y:I(y), w:I(W), fontFace:BF, border:{ type:'solid', color:'D6E4EF', pt:0.5 }, rowH:I(40) }); y += (k.linhas.length + 1) * 40 + 20; }
+        if (k.tipo === 'colunas') { k.itens.forEach((c, i) => { const w = 360, x = x0 + i * (w + 30);
+            s.addShape(pp.ShapeType.roundRect, { x:I(x), y:I(y), w:I(w), h:I(380), fill:{ color:'FFFFFF' }, line:{ color:'E6DED6' }, rectRadius:0.12 });
+            tx(s, c.t, x + 26, y + 22, w - 50, 44, { fontFace:TF, bold:true, fontSize:P(28), color:H(APC.lj) });
+            (c.l.length ? c.l : [['—', '']]).forEach((r, n) => { tx(s, `${c.l.length ? ['🥇','🥈','🥉'][n] + ' ' : ''}${primeiro(r[0])}`, x + 26, y + 90 + n * 80, w - 150, 50, { fontFace:TF, bold:true, fontSize:P(30), color:H(APC.az) });
+              tx(s, String(r[1]), x + w - 120, y + 90 + n * 80, 95, 50, { fontFace:TF, bold:true, fontSize:P(30), color:H(APC.lj), align:'right' }); }); }); y += 400; }
+        if (k.tipo === 'nota') { tx(s, k.t, x0, Math.max(y, 560), W, 60, { fontSize:P(22), color:esc_ ? 'FFFFFF' : H(APC.az) }); y += 70; }
+        if (k.tipo === 'grande') { tx(s, k.t, x0, y + 40, W, 100, { fontSize:P(36), color:corT }); y += 150; }
+        if (k.tipo === 'notas') { k.itens.forEach((c, i) => { const w = 540, x = x0 + i * (w + 60);
+            tx(s, c.t, x, y, w, 60, { fontFace:TF, bold:true, fontSize:P(40), color:H(APC.lj) });
+            s.addShape(pp.ShapeType.line, { x:I(x), y:I(y + 70), w:I(w), h:0, line:{ color:H(APC.lj), width:1.5 } });
+            const tmp = document.createElement('div'); tmp.innerHTML = apNotasTxt[c.id] || '';
+            tx(s, tmp.innerText.trim() || ' ', x, y + 90, w, 330, { fontSize:P(24), color:'FFFFFF', valign:'top' }); }); y += 440; }
+      });
+    });
+    await pp.writeFile({ fileName:`Reunião ${apDados.mesNome}.pptx` });
+    toast('PowerPoint baixado ✓');
+  } catch(e) { toast('Não consegui gerar o PowerPoint: ' + e.message); }
+};
+
+
+
 // ---------- cartões recolhíveis (menos poluição: abre só quando tocar) ----------
 function lerDobras(){ try { return JSON.parse(localStorage.getItem('dobras') || '{}'); } catch(e) { return {}; } }
 function gravarDobra(k, aberto){ try { const d = lerDobras(); if (aberto) d[k] = 1; else delete d[k]; localStorage.setItem('dobras', JSON.stringify(d)); } catch(e) {} }
@@ -4911,7 +5322,7 @@ window.desSet = (k, v) => {
 
 function renderEtapa3(){
   if (view === 'desempenho') renderDesempenho();
-  renderVendas();
+  renderVendas(); renderApEscolha(); renderAssistente();
   if ($('cVendas')) { const [mi, mf] = faixa('mes'); const n = reservas.filter(r => r.dia >= mi && r.dia <= mf).length; $('cVendas').textContent = n || ''; }
   if (view === 'painel') renderPainel();
   if (view === 'corretores') renderPresenca();
