@@ -561,7 +561,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .arq-row .ai b{display:block;font-size:14.5px}
 
 /* Painel do dono, presença, leads de hoje */
-.pd-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.pd-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}
 .pd-kpi{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;display:grid;gap:4px;box-shadow:var(--shadow, none)}
 .pd-kpi span{font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .pd-kpi b{font-size:30px;letter-spacing:-.03em;line-height:1.1}
@@ -569,6 +569,8 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .var{font-size:12.5px;font-weight:700;color:var(--muted)}
 .var.up{color:var(--ok)} .var.down{color:var(--danger)}
 .pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+#painelConteudo table.rank .nm{white-space:nowrap}
+#painelConteudo table.rank th{white-space:normal}
 .ao-vivo{font-size:11px;font-weight:700;color:#fff;background:var(--danger);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle;animation:pisca 2s infinite}
 @keyframes pisca{50%{opacity:.55}}
 .lh-top{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}.lh-top b{font-size:28px}.lh-top span{color:var(--muted);font-size:13px}
@@ -4301,7 +4303,9 @@ function numerosPeriodo(de, ate){
   const presD = Object.keys(presencas).filter(noP);
   const presTot = presD.reduce((a,d) => a + Object.values(presencas[d].marcados || {}).filter(x => x.status === 'presente').length, 0);
   return { leads:leadsLinhas.reduce((a,l) => a + (Number(l.leads) || 0), 0), leadsLinhas, docs:avs.length, avs,
-    cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length, vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
+    cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
+    aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
+    semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length, vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
 }
 function variacao(a, b){
@@ -4331,7 +4335,9 @@ function renderPainel(){
     ${kpi('🗂️','Docs', A.docs, B.docs, 'planilha de avaliações')}
     <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
     ${kpi('🔷','Condicionados', A.cond, B.cond)}
-    ${kpi('📄','Cartas aprovadas', A.aprov, B.aprov, brl(A.valor))}
+    ${kpi('✅','Aprovados na planilha', A.aprovPlan, B.aprovPlan, A.semCarta ? `${A.semCarta} ainda sem carta no app` : 'todos com carta no app')}
+    ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, 'planilha de avaliações')}
+    ${kpi('📄','Cartas aprovadas no app', A.aprov, B.aprov, brl(A.valor))}
     ${kpi('🎉','Vendas', A.vendas, B.vendas)}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
     <div class="pd-kpi"><span>📍 Plantão</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
@@ -4340,11 +4346,11 @@ function renderPainel(){
   const eqs = listaEquipes().map(e => {
     const pts = pontosDoMes(de.slice(0,7)).filter(x => x.equipe === e.id).reduce((a,x) => a + x.pontos, 0);
     return { e, leads:A.leadsLinhas.filter(l => l.equipe === e.id).reduce((a,l) => a + (Number(l.leads) || 0), 0), docs:A.avs.filter(a => a.equipe === e.id).length,
-      aprov:A.cs.filter(c => c.equipe === e.id).length, vendas:A.vds.filter(c => c.equipe === e.id).length, pts };
+      aprov:A.cs.filter(c => c.equipe === e.id).length, aprovPlan:A.avs.filter(a => a.equipe === e.id && infoStatus(a.status).g === 'aprovado').length, vendas:A.vds.filter(c => c.equipe === e.id).length, pts };
   });
   const lider = eqs.slice().sort((a,b) => b.vendas - a.vendas || b.aprov - a.aprov || b.docs - a.docs)[0];
-  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>🏁 Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
-    eqs.map(x => { const m = media(x.leads, x.docs); return `<tr class="${lider && x === lider && (x.vendas || x.aprov) ? 'me' : ''}"><td><span class="nm">${esc(x.e.icone || '')} ${esc(x.e.nome)}</span></td><td class="tot">${x.leads}</td><td>${x.docs}</td><td class="hide-m" style="color:${corM(m)};font-weight:700">${m === null ? '–' : m.toLocaleString('pt-BR')}</td><td>${x.aprov}</td><td>${x.vendas}</td><td class="hide-m">${x.pts}</td></tr>`; }).join('')
+  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>🏁 Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Aprov. planilha</th><th class="hide-m">Cartas app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
+    eqs.map(x => { const m = media(x.leads, x.docs); return `<tr class="${lider && x === lider && (x.vendas || x.aprov) ? 'me' : ''}"><td><span class="nm">${esc(x.e.icone || '')} ${esc(x.e.nome)}</span></td><td class="tot">${x.leads}</td><td>${x.docs}</td><td class="hide-m" style="color:${corM(m)};font-weight:700">${m === null ? '–' : m.toLocaleString('pt-BR')}</td><td>${x.aprovPlan}</td><td class="hide-m">${x.aprov}</td><td>${x.vendas}</td><td class="hide-m">${x.pts}</td></tr>`; }).join('')
   }</tbody></table></div>`;
   // destaques
   const top = pontosDoMes(de.slice(0,7)).slice(0, 5);
