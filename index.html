@@ -2142,7 +2142,9 @@ let corEquipeFiltro = '', vEditId = null, vOrig = null;
 const norm = x => String(x||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
 const souAtivo = () => perfil?.status === 'ativo';
 const souGerente = () => souAtivo() && perfil.papel === 'gerente';
-const souDono = () => souGerente() && !!instalacao && instalacao.gerenteUid === uidAtual;
+// o dono do app: quem instalou o sistema ou a conta do Allan (reconhecida pelo e-mail)
+const EMAIL_DONO = 'allanvgron@gmail.com';
+const souDono = () => souGerente() && ((!!instalacao && instalacao.gerenteUid === uidAtual) || String(emailAtual || '').toLowerCase() === EMAIL_DONO);
 window.souDono = souDono;
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
@@ -2650,7 +2652,7 @@ function renderCorretores(){
     const todos = perfisLista.filter(p => p.status !== 'pendente').sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
     const opEqs = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
     $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th></tr></thead><tbody>' + todos.map(p => {
-      const ehDono = instalacao && p.uid === instalacao.gerenteUid;
+      const ehDono = (instalacao && p.uid === instalacao.gerenteUid) || String(p.email || '').toLowerCase() === EMAIL_DONO;
       if (p.papel === 'gerente' && souDono() && !ehDono && p.uid !== uidAtual) return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
         <td><select onchange="mudarCargo('${p.uid}',this.value,this)"><option value="gerente" ${p.cargo!=='dono'?'selected':''}>⭐ Gerente</option><option value="dono" ${p.cargo==='dono'?'selected':''}>🏢 CEO Frade</option>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente').map(([k,n]) => `<option value="papel:${k}">Mudar para ${n}</option>`).join('')}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
