@@ -721,6 +721,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
       <button data-view="painel" class="gerente-only hide" onclick="setView('painel')"><i data-ic="chart"></i>Painel do dono</button>
+      <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="chart"></i>Desempenho</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -885,9 +886,10 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div id="bannerCartas"></div>
         <div id="cartasConteudo">
           <div class="stats">
-            <div class="stat"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="card"></div><div><b id="csQtd">0</b><span>Cartas no período</span></div></div>
+            <div class="stat"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="card"></div><div><b id="csQtd">0</b><span id="csQtdSub">Aprovações no período</span></div></div>
             <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="csValor">0</b><span>Com documentação completa</span></div></div>
             <div class="stat" onclick="cf('status','Venda fechada')"><div class="stat-ic" style="background:color-mix(in srgb,#8b5cf6 14%,transparent);color:#8b5cf6" data-ic="star"></div><div><b id="csVendas">0</b><span>Vendas fechadas</span></div></div>
+            <div class="stat gest hide" id="csSdrBox"><div class="stat-ic" style="background:color-mix(in srgb,#0ea5e9 14%,transparent);color:#0ea5e9" data-ic="star"></div><div><b id="csSdr">0</b><span id="csSdrSub">Aprovações das SDRs</span></div></div>
             <div class="stat" onclick="filtrarVencendo()"><div class="stat-ic" style="background:var(--danger-soft);color:var(--danger)" data-ic="alert"></div><div><b id="csVence">0</b><span>Vencendo em 15 dias</span></div></div>
           </div>
           <div class="card">
@@ -909,6 +911,13 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="page-head"><div><h1>Painel do dono</h1><div class="sub" id="painelSub"></div></div>
           <div class="ph-acoes"><div class="seg" id="painelSeg"></div><button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia</button></div></div>
         <div id="painelConteudo"></div>
+      </section>
+
+      <!-- DESEMPENHO POR CORRETOR -->
+      <section class="view" id="v-desempenho">
+        <div class="page-head"><div><h1>Desempenho</h1><div class="sub" id="desSub"></div></div>
+          <div class="ph-acoes"><div class="seg" id="desSeg"></div></div></div>
+        <div id="desConteudo"></div>
       </section>
 
       <!-- AVALIAÇÕES DE CRÉDITO -->
@@ -1097,6 +1106,9 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <div class="int-linha"><span class="muted" id="intUltSync"></span><button class="link" onclick="lerPlanilhaAgora()">🔄 Ler a planilha agora</button></div></div>
             <div class="int-bloco"><b>4. Quem é quem</b><span>Ligue cada aba da planilha e cada nome do CRM ao corretor certo do app.</span>
               <div id="intLigacoes"></div><button class="btn btn-primary" id="btnSalvarLig" style="margin-top:10px" onclick="salvarLigacoes()">Salvar ligações</button></div>
+            <div class="int-bloco"><b>4b. Abas que o app não lê</b><span>Uma aba por linha, com o nome igual ao da planilha. As avaliações dessas abas somem do app, do painel e dos relatórios (a planilha não é alterada e nada é apagado).</span>
+              <textarea id="intIgnoradas" style="min-height:120px;margin-top:8px"></textarea>
+              <button class="btn btn-primary" style="margin-top:8px" onclick="salvarAbasIgnoradas()">Salvar abas</button></div>
             <div class="int-bloco"><b>6. Leads antigos (antes de ligar o CRM)</b><span>Baixe a planilha de oportunidades do CRM (Excel ou CSV) e envie aqui. O app mostra a prévia por corretor antes de gravar. Conta cada lead para o corretor que aparece como responsável na planilha.</span>
               <div class="int-linha"><label style="font-size:13px">De <input type="date" id="impDe" value="2026-09-14" onchange="previaLeads()" style="width:auto"></label><label style="font-size:13px">até <input type="date" id="impAte" onchange="previaLeads()" style="width:auto"></label>
                 <button class="btn btn-ghost" onclick="document.getElementById('impLeadsArq').click()">📂 Escolher planilha</button><input type="file" id="impLeadsArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerArquivoLeads(this)"></div>
@@ -1381,6 +1393,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><span style="width:20px;text-align:center">📋</span>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('painel')"><span style="width:20px;text-align:center">📊</span>Painel do dono</button>
+      <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><span style="width:20px;text-align:center">📈</span>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><span style="width:20px;text-align:center">📲</span>Instalar aplicativo</button>
       <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -1697,10 +1710,11 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {painel:'Painel do dono', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {desempenho:'Desempenho', painel:'Painel do dono', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souGerente()) v = 'hoje';
+  if (v === 'desempenho' && !podeGerir()) v = 'hoje';
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
   view = v;
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-'+v));
@@ -2191,7 +2205,7 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
-  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; sdrResumos = []; leadsAjustes = {};
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; sdrResumos = []; leadsAjustes = {};
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -2904,18 +2918,42 @@ function cardCarta(c){
   </div>`;
 }
 
+// aprovado na planilha da administração, ainda sem carta cadastrada no app
+function cardAprovPlanilha(a){
+  const meta = [];
+  if (podeGerir() || a.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(a.corretorNome || a.aba || '')}</span>`);
+  if (souGerente() && a.equipe) meta.push(`<span>${esc(eqNome(a.equipe))}</span>`);
+  if (a.telefone) meta.push(`<span>📱 ${esc(a.telefone)}</span>`);
+  if (a.cpf) meta.push(`<span>🪪 ${cpfOculto(a.cpf)}</span>`);
+  if (a.renda) meta.push(`<span>renda ${esc(a.renda)}</span>`);
+  const acoes = [];
+  if (a.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
+  if (a.corretorUid === uidAtual || podeGerir()) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
+  return `<div class="vcard" style="--vc:#10b981">
+    <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>aprovada</span></div>
+    <div class="v-body" style="cursor:default">
+      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b><span class="vst" style="background:var(--ok-soft);color:var(--ok)">Aprovada</span><span class="vst" style="background:var(--accent-soft);color:var(--accent)">da planilha</span></div>
+      <div class="v-meta">${meta.join('')}</div>
+      <div class="v-meta"><span class="muted">Ainda sem carta no app</span></div>
+    </div>
+    <div class="v-actions">${acoes.join('')}</div>
+  </div>`;
+}
 function renderCartas(){
   const ativo = souAtivo();
   $('bannerCartas').innerHTML = bannerAcesso();
   $('cartasConteudo').classList.toggle('hide', !ativo);
   $('btnNovaCartaPag').classList.toggle('hide', !ativo);
   if (!ativo) return;
-  $('cartasSub').textContent = souGerente() ? 'Cartas de todas as equipes.' : souCoord() ? 'Cartas da ' + eqNome(perfil.equipe) + '.' : 'As suas cartas de crédito aprovadas.';
+  $('cartasSub').textContent = souGerente() ? 'Aprovações de todas as equipes: cartas do app + planilha, sem repetir cliente.' : souCoord() ? 'Cartas da ' + eqNome(perfil.equipe) + '.' : 'As suas cartas de crédito aprovadas.';
   $('cStatus').innerHTML = '<option value="">Todos os status</option>' + C_STATUS.map(s => `<option ${cFil.status===s?'selected':''}>${s}</option>`).join('');
   $('cEquipe').classList.toggle('hide', !souGerente());
   $('cEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${cFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   $('cCorretor').classList.toggle('hide', !podeGerir());
+  // aprovações da planilha que ainda não têm carta no app (mesmo cliente por CPF ou telefone não repete)
+  const planAprov = souSdr() ? [] : avaliacoesUnificadas().filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a));
   const nomes = new Map(); cartas.forEach(c => { if (!nomes.has(c.corretorUid)) nomes.set(c.corretorUid, c.corretorNome || 'Sem nome'); });
+  planAprov.forEach(a => { if (a.corretorUid && !nomes.has(a.corretorUid)) nomes.set(a.corretorUid, a.corretorNome || a.aba || 'Sem nome'); });
   $('cCorretor').innerHTML = '<option value="">Todos os corretores</option>' + [...nomes].sort((a,b) => a[1].localeCompare(b[1],'pt-BR')).map(([k,n]) => `<option value="${esc(k)}" ${cFil.corretor===k?'selected':''}>${esc(n)}</option>`).join('');
   $('cPeriodo').value = cFil.periodo;
   const [de, ate] = cFil.periodo === 'todas' ? ['0000','9999'] : faixa(cFil.periodo), t = norm(cFil.busca);
@@ -2928,13 +2966,25 @@ function renderCartas(){
     return true;
   }).sort((a,b) => (b.data||'').localeCompare(a.data||''));
   window._listaCartas = lista;
+  const listaPlan = (cFil.status && cFil.status !== 'Aprovada') ? [] : planAprov.filter(a => {
+    if (!a.data || a.data < de || a.data > ate) return false;
+    if (cFil.equipe && a.equipe !== cFil.equipe) return false;
+    if (cFil.corretor && a.corretorUid !== cFil.corretor) return false;
+    if (t && !norm([a.nome, a.telefone, a.corretorNome, a.aba].join(' ')).includes(t) && !(soDig(t).length >= 3 && (soDig(a.cpf).includes(soDig(t)) || soDig(a.telefone).includes(soDig(t))))) return false;
+    return true;
+  });
+  const juntos = [...lista.map(c => ({ d:c.data, h:cardCarta(c) })), ...listaPlan.map(a => ({ d:a.data, h:cardAprovPlanilha(a) }))].sort((a,b) => (b.d||'').localeCompare(a.d||''));
   const ativas = cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status));
   const vencendo = ativas.filter(c => { const d = diasParaVencer(c); return d !== null && d <= 15; }).length;
-  $('csQtd').textContent = lista.length;
+  $('csQtd').textContent = lista.length + listaPlan.length;
+  $('csQtdSub').textContent = listaPlan.length ? `${lista.length} no app + ${listaPlan.length} da planilha` : 'Aprovações no período';
   $('csValor').textContent = lista.filter(c => docsOk(c) === DOCS.length).length;
   $('csVendas').textContent = lista.filter(c => c.status === 'Venda fechada').length;
   $('csVence').textContent = vencendo;
-  $('cartasLista').innerHTML = lista.length ? lista.map(cardCarta).join('') : vazio('Nenhuma carta nesse filtro', 'Cadastre uma carta aprovada pelo botão "Nova carta".');
+  $('csSdrBox').classList.toggle('hide', !podeGerir());
+  if (podeGerir()) { const [sd, sa] = cFil.periodo === 'todas' ? ['0000','9999'] : faixa(cFil.periodo), q = aprovSdr(sd, sa);
+    $('csSdr').textContent = q.dia; $('csSdrSub').textContent = 'Aprovações das SDRs (WhatsApp)' + (q.outro ? ` · ${q.outro} em outro CCA` : ''); }
+  $('cartasLista').innerHTML = juntos.length ? juntos.map(x => x.h).join('') : vazio('Nenhuma aprovação nesse filtro', 'Cadastre uma carta aprovada pelo botão "Nova carta".');
 }
 window.cf = (k, v) => { cFil[k] = v; render(); };
 window.filtrarVencendo = () => { cFil.periodo = 'todas'; cFil.status = ''; render(); };
@@ -3503,6 +3553,12 @@ function preencherModelo(texto, t, x){
   if (/\{link_pesquisa\}/.test(texto)) { if (t !== 'v') return ''; v.link_pesquisa = linkPesquisa(tokenPesquisa(x, false)); }
   return texto.replace(/\{(\w+)\}/g, (m, k) => k in v ? v[k] : m);
 }
+// abas da planilha de avaliações que o app não lê (ex-corretores); o dono muda em Configurações → Integrações
+const ABAS_IGNORADAS_PADRAO = ['HEYTOR','LETICIA','MARCELIA','WALISSON','VINICIUS','VICENTE NETO','EDUARDO','FREITAS','GUILHERME','MARCO','NANDO','VANESSA','RENATA','LUCIANA'];
+const chaveAba = n => norm(String(n || '')).toUpperCase().replace(/\s+/g, ' ').trim();
+const abasIgnoradas = () => new Set((appCfg.abasIgnoradas || ABAS_IGNORADAS_PADRAO).map(chaveAba));
+let avaliacoesTodas = [];
+function filtrarAvaliacoes(){ const ig = abasIgnoradas(); avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba))); }
 let appCfg = { ...JSON.parse(JSON.stringify(CFG_PADRAO)), mensagens:MSG_PADRAO }, repetidos = [], pontosMeses = {}, carregado = {};
 window.ptMesSel = ''; window.origPer = 'mes'; window.arqAba = 'visitas';
 const mesAtual = () => hojeISO().slice(0,7);
@@ -3527,7 +3583,9 @@ function assinarEtapa1(){
     appCfg = { pontos:{ ...CFG_PADRAO.pontos, ...(d.pontos || {}) },
       origens: d.origens?.length ? (d.origens.includes('CRM') ? d.origens : ['CRM', ...d.origens]) : CFG_PADRAO.origens,
       motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
+      abasIgnoradas: Array.isArray(d.abasIgnoradas) ? d.abasIgnoradas : ABAS_IGNORADAS_PADRAO,
       mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO };
+    if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     carregado.cfg = true; render(); fecharMesesPendentes();
   }, e => { carregado.cfg = true; silencio(e); }));
   subsPapel.push(onSnapshot(collection(db,'pontos_meses'), s => {
@@ -3946,7 +4004,8 @@ function assinarEtapa2(){
   if (souGerente()) qa = historicoCompleto ? collection(db,'avaliacoes') : query(collection(db,'avaliacoes'), where('data','>=',inicioJanela()));
   else if (souCoord()) qa = query(collection(db,'avaliacoes'), where('equipe','==',perfil.equipe || '-'));
   else if (perfil.papel !== 'sdr') qa = query(collection(db,'avaliacoes'), where('corretorUid','==',uidAtual));
-  if (qa) subsPapel.push(onSnapshot(qa, s => { avaliacoes = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  const limpa = x => { if (typeof x.aba === 'string') x.aba = x.aba.trim(); if (typeof x.corretorNome === 'string') x.corretorNome = x.corretorNome.trim(); return x; };
+  if (qa) subsPapel.push(onSnapshot(qa, s => { avaliacoesTodas = s.docs.map(d => limpa({ id:d.id, ...d.data() })); filtrarAvaliacoes(); render(); }, silencio));
   if (souDono()) subsPapel.push(onSnapshot(doc(db,'config','integracao'), s => { integ = s.exists() ? s.data() : {}; render(); }, silencio));
   if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'leads_dia'), where('dia','>=',inicioJanela())), s => { leadsDias = s.docs.map(d => d.data()); render(); }, silencio));
 }
@@ -3984,9 +4043,9 @@ function cardAvaliacao(a){
   if (a.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
   if (inf.g === 'aprovado' && !cartaDoCliente(a) && (a.corretorUid === uidAtual || podeGerir())) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
   return `<div class="vcard" style="--vc:${inf.cor}">
-    <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>doc</span></div>
+    <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>${a.dataEstimada ? 'sem data' : 'doc'}</span></div>
     <div class="v-body" style="cursor:default">
-      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b><span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.cartaApp ? '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">carta no app</span>' : ''}${a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
+      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b>${a.dataEstimada ? '<span class="vst" style="background:color-mix(in srgb,#ca8a04 14%,transparent);color:#ca8a04" title="A linha está sem data na planilha; o app usou a data da linha de cima">data estimada</span>' : ''}<span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.cartaApp ? '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">carta no app</span>' : ''}${a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
       <div class="v-meta">${meta.join('')}</div>
       ${hist ? `<div class="v-obs">🕘 ${hist}</div>` : ''}
     </div>
@@ -4004,7 +4063,9 @@ function avaliacoesUnificadas(){
   const chave = a => a.cpfNorm ? 'c' + a.cpfNorm : (soDig(a.cpf).length === 11 ? 'c' + soDig(a.cpf) : (a.telNorm ? 't' + a.telNorm : 'i' + a.id));
   const quando = a => a.statusEm || a.atualizadoEm || Date.parse((a.data || '') + 'T12:00:00') || 0;
   const m = new Map();
-  avaliacoes.forEach(a => { const k = chave(a), atual = m.get(k); if (!atual || quando(a) > quando(atual)) m.set(k, a); });
+  // linha sem status (ex.: repetida sem data na planilha) nunca esconde a que tem status
+  const tem = a => String(a.status || '').trim() ? 1 : 0;
+  avaliacoes.forEach(a => { const k = chave(a), atual = m.get(k); if (!atual || tem(a) > tem(atual) || (tem(a) === tem(atual) && quando(a) > quando(atual))) m.set(k, a); });
   return [...m.values()].map(a => {
     const c = cartaDoCliente(a);
     if (!c) return a;
@@ -4023,7 +4084,7 @@ function renderAvaliacoes(){
   $('aGrupo').innerHTML = '<option value="">Todos os grupos</option>' + Object.entries(GRUPOS_V).filter(([k]) => k).map(([k,g]) => `<option value="${k}" ${aFil.grupo===k?'selected':''}>${g.n}</option>`).join('');
   $('aCorretor').classList.toggle('hide', !podeGerir());
   const nomes = [...new Set(avaliacoes.map(a => a.corretorNome || a.aba).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
-  $('aCorretor').innerHTML = '<option value="">Todos os corretores</option>' + nomes.map(n => `<option ${aFil.corretor===n?'selected':''}>${esc(n)}</option>`).join('');
+  $('aCorretor').innerHTML = '<option value="">Todos os corretores</option>' + nomes.map(n => `<option value="${esc(n)}" ${aFil.corretor===n?'selected':''}>${esc(n)}</option>`).join('');
   $('aPeriodo').value = aFil.periodo;
   const [de, ate] = faixaAval(aFil.periodo), t = norm(aFil.busca), dig = soDig(aFil.busca);
   const unif = avaliacoesUnificadas(), ocultos = avaliacoes.length - unif.length;
@@ -4088,10 +4149,11 @@ function renderIntegracoes(){
   const sel = (tipo, nome, atual) => `<select data-tipo="${tipo}" data-nome="${esc(nome)}"><option value="">— sem ligação —</option>${pessoas.map(p => `<option value="${p.uid}" ${atual===p.uid?'selected':''}>${esc(p.nome)}</option>`).join('')}</select>`;
   const abas = Object.entries(integ.abas || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
   const crm = Object.entries(integ.crmVistos || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
-  $('intLigacoes').innerHTML = (abas.length ? `<div class="rep-sec" style="margin:6px 0 8px">Abas da planilha de avaliações</div>${abas.map(([n,u]) => `<div class="pt-row"><span>📄 ${esc(n)}</span>${sel('aba', n, (integ.mapaAbas || {})[n] || u)}</div>`).join('')}` : '')
+  $('intLigacoes').innerHTML = (abas.length ? `<div class="rep-sec" style="margin:6px 0 8px">Abas da planilha de avaliações</div>${abas.filter(([n]) => !abasIgnoradas().has(chaveAba(n))).map(([n,u]) => `<div class="pt-row"><span>📄 ${esc(n)}</span>${sel('aba', n, (integ.mapaAbas || {})[n] || u)}</div>`).join('')}` : '')
     + (crm.length ? `<div class="rep-sec" style="margin:14px 0 8px">Nomes que vieram do CRM</div>${crm.map(([n,u]) => `<div class="pt-row"><span>👤 ${esc(n)}</span>${sel('crm', n, (integ.mapaCrm || {})[n] || u)}</div>`).join('')}` : '')
     || '<div class="muted" style="font-size:13.5px">Os nomes aparecem aqui depois da primeira leitura da planilha e do primeiro lead do CRM. O app liga sozinho quando o nome bate; você só ajusta os que ficarem sem ligação.</div>';
   $('btnSalvarLig').classList.toggle('hide', !(abas.length || crm.length));
+  if (document.activeElement !== $('intIgnoradas')) $('intIgnoradas').value = (appCfg.abasIgnoradas || ABAS_IGNORADAS_PADRAO).join('\n');
   renderGruposAdm();
 }
 if (document.getElementById('impAte') && !document.getElementById('impAte').value) document.getElementById('impAte').value = somaDias(hojeISO(), -1);
@@ -4117,6 +4179,11 @@ window.testarAjudante = async () => {
     if (r?.ok) toast(`Funcionando ✓ Planilha: ${r.planilha}${r.avaliacoes ? ' · avaliações: ' + r.avaliacoes : ''}`);
     else toast('Não funcionou: ' + (r?.erro || 'sem resposta'));
   } catch(e) { toast('Erro: ' + e.message); }
+};
+window.salvarAbasIgnoradas = async () => {
+  const l = [...new Set($('intIgnoradas').value.split('\n').map(x => x.trim().toUpperCase()).filter(Boolean))];
+  try { await gravar(setDoc(doc(db,'config','app'), { abasIgnoradas:l }, { merge:true })); integAssin = ''; toast(l.length ? `Pronto ✓ ${l.length} aba${l.length!==1?'s':''} fora do app` : 'Pronto ✓ O app lê todas as abas'); }
+  catch(e) { toast('Erro: ' + e.message); }
 };
 window.salvarLigacoes = async () => {
   const mapaAbas = { ...(integ.mapaAbas || {}) }, mapaCrm = { ...(integ.mapaCrm || {}) };
@@ -4418,6 +4485,12 @@ function aprovUnificadas(avs, cs){
   cs.forEach(c => { const k = chave(c.cpfNorm || c.cpf, c.telNorm || chaveTel(c.telefone), c.id); if (!m.has(k)) m.set(k, { equipe:c.equipe || '', uid:c.corretorUid || '', plan:false, app:true }); else m.get(k).app = true; });
   return [...m.values()];
 }
+// aprovações que as SDRs informam no resumo do WhatsApp (caixa separada, não entra no total unificado)
+function aprovSdr(de, ate){
+  const r = { dia:0, outro:0, n:0 };
+  (typeof sdrResumos !== 'undefined' ? sdrResumos : []).filter(x => x.dia >= de && x.dia <= ate).forEach(x => { r.dia += Number(x.aprovDia) || 0; r.outro += Number(x.aprovOutroCca) || 0; r.n++; });
+  return r;
+}
 function numerosPeriodo(de, ate){
   const h = hojeISO(), noP = d => !!d && d >= de && d <= ate;
   const leadsLinhas = [];
@@ -4432,7 +4505,7 @@ function numerosPeriodo(de, ate){
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
     semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
-    unif:aprovUnificadas(avaliacoesUnificadas().filter(a => noP(a.data)), cs), vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
+    sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoesUnificadas().filter(a => noP(a.data)), cs), vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
 }
 function variacao(a, b){
@@ -4463,6 +4536,7 @@ function renderPainel(){
     <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
     ${kpi('🔷','Condicionados', A.cond, B.cond)}
     ${kpi('✅','Aprovações', A.unif.length, B.unif.length, `planilha + cartas do app, sem repetir cliente${A.semCarta ? ` · ${A.semCarta} ainda sem carta no app` : ''}`)}
+    ${kpi('🎧','Aprovações das SDRs', A.sdr.dia, B.sdr.dia, `do resumo do WhatsApp${A.sdr.outro ? ` · ${A.sdr.outro} em outro CCA` : ''} · não soma no total`)}
     ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, 'planilha de avaliações')}
     ${kpi('🎉','Vendas', A.vendas, B.vendas)}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
@@ -4495,7 +4569,78 @@ window.telaCheiaPainel = () => {
   else document.exitFullscreen?.();
 };
 
+// ---------- Desempenho: leads, docs e aprovações de cada corretor ----------
+let desPer = 'semana', desEq = '', desOrdem = 'leads', desBusca = '';
+function faixaDes(p){
+  const h = hojeISO();
+  if (p === 'hoje') return [h, h];
+  if (p === 'semana') return faixa('semana');
+  if (p === 'mes') return faixa('mes');
+  if (p === 'passado') return faixaMesRel(1);
+  return faixa('semana');
+}
+function renderDesempenho(){
+  if (!podeGerir()) { $('desConteudo').innerHTML = ''; return; }
+  const [de, ate0] = faixaDes(desPer), h = hojeISO(), ate = ate0 > h ? h : ate0;
+  const eqFiltro = souGerente() ? desEq : (perfil.equipe || '-');
+  $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desPer='${k}';render()">${n}</button>`).join('');
+  $('desSub').textContent = (de === ate ? dataBR(de) : `${dataBR(de)} a ${dataBR(ate)}`) + (ate === h ? ' · atualiza sozinho' : '') + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
+  const linhas = new Map();
+  const chaveDe = (uid, nome) => uid ? 'u' + uid : 'n' + chaveNomeLead(nome || '?');
+  const pega = (uid, nome, equipe) => {
+    if (!uid && nome) { const pf = perfisLista.find(p => p.status === 'ativo' && chaveNomeLead(p.nome) === chaveNomeLead(nome)); if (pf) uid = pf.uid; }
+    const k = chaveDe(uid, nome);
+    if (!linhas.has(k)) { const pf = uid ? perfisLista.find(p => p.uid === uid) : null;
+      linhas.set(k, { uid:uid || '', nome:pf?.nome || nomeBonito(nome) || '?', equipe:pf?.equipe || equipe || '', ligado:!!uid, leads:0, docs:0, aprov:0, cond:0, reprov:0 }); }
+    return linhas.get(k);
+  };
+  // todos os corretores e coordenadores ativos aparecem, mesmo com zero
+  perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).forEach(p => pega(p.uid, p.nome, p.equipe));
+  // leads: o que ficou com o corretor no fim de cada dia (hoje: ao vivo)
+  for (let d = de; d <= ate; d = somaDias(d, 1)) leadsDoDia(d).forEach(x => { pega(x.uid, x.nome, x.equipe).leads += Number(x.n) || 0; });
+  // docs: cada linha da planilha de avaliações, pela data
+  const avs = avaliacoes.filter(a => a.data && a.data >= de && a.data <= ate);
+  avs.forEach(a => { const r = pega(a.corretorUid, a.corretorNome || a.aba, a.equipe); r.docs++; const g = infoStatus(a.status).g; if (g === 'condicionado') r.cond++; if (g === 'reprovado') r.reprov++; });
+  // aprovações: planilha + cartas do app, sem repetir cliente
+  const m = new Map(), chaveCli = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
+  avaliacoesUnificadas().filter(a => a.data >= de && a.data <= ate && infoStatus(a.status).g === 'aprovado').forEach(a => { const k = chaveCli(a.cpfNorm || a.cpf, a.telNorm, a.id); if (!m.has(k)) m.set(k, [a.corretorUid, a.corretorNome || a.aba, a.equipe]); });
+  cartas.filter(c => c.data >= de && c.data <= ate).forEach(c => { const k = chaveCli(c.cpfNorm || c.cpf, c.telNorm || chaveTel(c.telefone), c.id); m.set(k, [c.corretorUid, c.corretorNome, c.equipe]); });
+  m.forEach(([uid, nome, eq]) => { pega(uid, nome, eq).aprov++; });
+  const media = r => r.docs ? Math.round(r.leads / r.docs * 100) / 100 : null;
+  const corM = r => { const x = media(r); return x === null ? (r.leads ? 'var(--danger)' : 'var(--muted)') : x <= 5 ? 'var(--ok)' : x <= 10 ? '#ca8a04' : 'var(--danger)'; };
+  const t = norm(desBusca);
+  let lista = [...linhas.values()].filter(r => (!eqFiltro || r.equipe === eqFiltro) && (!t || norm(r.nome).includes(t)));
+  const ord = { leads:(a,b) => b.leads - a.leads, docs:(a,b) => b.docs - a.docs, aprov:(a,b) => b.aprov - a.aprov,
+    media:(a,b) => (media(a) ?? 1e9) - (media(b) ?? 1e9), nome:(a,b) => a.nome.localeCompare(b.nome,'pt-BR') }[desOrdem];
+  lista.sort((a,b) => ord(a,b) || b.leads - a.leads || a.nome.localeCompare(b.nome,'pt-BR'));
+  const tot = lista.reduce((a,r) => ({ leads:a.leads + r.leads, docs:a.docs + r.docs, aprov:a.aprov + r.aprov, cond:a.cond + r.cond, reprov:a.reprov + r.reprov }), { leads:0, docs:0, aprov:0, cond:0, reprov:0 });
+  const th = (k, n, cls='') => `<th class="${cls}" style="cursor:pointer" onclick="desOrdem='${k}';render()">${n}${desOrdem===k?' ▾':''}</th>`;
+  const fmtM = r => { const x = media(r); return x === null ? (r.leads ? 'sem doc' : '–') : x.toLocaleString('pt-BR'); };
+  const semLiga = lista.filter(r => !r.ligado && (r.leads || r.docs || r.aprov)).length;
+  $('desConteudo').innerHTML = `
+    <div class="pd-kpis">
+      <div class="pd-kpi"><span>📥 Leads</span><b>${tot.leads}</b><em>ficaram com o corretor no fim do dia${ate === h ? ' · hoje ao vivo' : ''}</em></div>
+      <div class="pd-kpi"><span>🗂️ Docs</span><b>${tot.docs}</b><em>planilha de avaliações</em></div>
+      <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(tot)}">${fmtM(tot)}</b><em>quanto menor, melhor</em></div>
+      <div class="pd-kpi"><span>✅ Aprovações</span><b>${tot.aprov}</b><em>planilha + cartas do app, sem repetir</em></div>
+    </div>
+    <div class="card">
+      <div class="tb-grid" style="margin-bottom:10px">
+        <input placeholder="Buscar corretor..." value="${esc(desBusca)}" oninput="desBusca=this.value;clearTimeout(window._desT);window._desT=setTimeout(render,250)">
+        ${souGerente() ? `<select onchange="desEq=this.value;render()"><option value="">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}" ${desEq===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select>` : ''}
+      </div>
+      <div style="overflow-x:auto"><table class="rank"><thead><tr>${th('nome','Corretor')}${th('leads','Leads')}${th('docs','Docs')}${th('media','Média')}${th('aprov','Aprov.')}<th class="hide-m">Cond.</th><th class="hide-m">Reprov.</th></tr></thead><tbody>
+      ${lista.map(r => `<tr><td><span class="nm">${esc(r.nome)}</span>${souGerente() && r.equipe ? `<small class="muted" style="display:block">${esc(eqNome(r.equipe))}</small>` : ''}${!r.ligado ? '<small class="late" style="display:block">nome do CRM/planilha sem ligação</small>' : ''}</td>
+        <td class="tot">${r.leads}</td><td>${r.docs}</td><td style="color:${corM(r)};font-weight:700">${fmtM(r)}</td><td>${r.aprov}</td><td class="hide-m">${r.cond}</td><td class="hide-m">${r.reprov}</td></tr>`).join('') || '<tr><td colspan="7" class="muted">Ninguém nesse filtro.</td></tr>'}
+      <tr style="font-weight:800;background:var(--soft,rgba(0,0,0,.03))"><td>Total</td><td>${tot.leads}</td><td>${tot.docs}</td><td style="color:${corM(tot)}">${fmtM(tot)}</td><td>${tot.aprov}</td><td class="hide-m">${tot.cond}</td><td class="hide-m">${tot.reprov}</td></tr>
+      </tbody></table></div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">Média: verde até 5 · amarelo de 5 a 10 · vermelho acima de 10 ou sem doc. Toque no título da coluna para ordenar.${semLiga ? ` · ${semLiga} nome${semLiga!==1?'s':''} ainda sem ligação com um corretor do app (aparecem separados até ligar).` : ''}${souCoord() ? ' · Os leads de hoje entram no fim do dia.' : ''}</div>
+    </div>`;
+}
+window.renderDesempenho = renderDesempenho;
+
 function renderEtapa3(){
+  if (view === 'desempenho') renderDesempenho();
   if (view === 'painel') renderPainel();
   if (view === 'corretores') renderPresenca();
 }
