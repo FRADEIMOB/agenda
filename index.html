@@ -100,6 +100,8 @@ label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin:0 0
 .app{display:flex;min-height:100vh}
 .sidebar{width:268px;flex:none;background:var(--side);border-right:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sidebar .brand{padding:0 8px}
+.sidebar>*{flex-shrink:0}
+@media(max-height:860px){.sidebar{gap:14px;padding-top:16px}.sidebar .nav button{padding-top:9px;padding-bottom:9px}}
 .profile{position:relative;overflow:hidden;border-radius:18px;padding:16px;background:linear-gradient(140deg,var(--accent),color-mix(in srgb,var(--accent) 50%,#0f172a));color:#fff;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 10px 24px color-mix(in srgb,var(--accent) 28%,transparent)}
 .profile:hover{transform:translateY(-2px)}
 .profile:before{content:"";position:absolute;right:-30px;top:-40px;width:130px;height:130px;border-radius:50%;background:#ffffff1a}
@@ -590,6 +592,9 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 @media(max-width:1100px){.pd-kpis{grid-template-columns:repeat(2,1fr)}.pd-grid{grid-template-columns:1fr}}
 @media(max-width:820px){.pres-op{width:100%;margin-left:44px}.pd-kpi b{font-size:24px}}
 
+/* ajustes */
+.venc-auto{border:1px solid var(--border);border-radius:12px;padding:11px 12px;font-weight:700;background:var(--bg);min-height:44px}
+.sdr-envio{display:grid;gap:10px;margin-top:4px}
 /* SDR */
 .res-grid{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:8px;align-items:center}
 .res-grid span{font-size:13px;font-weight:600}
@@ -881,7 +886,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div id="cartasConteudo">
           <div class="stats">
             <div class="stat"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="card"></div><div><b id="csQtd">0</b><span>Cartas no período</span></div></div>
-            <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="csValor">R$ 0</b><span>Valor aprovado</span></div></div>
+            <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="csValor">0</b><span>Com documentação completa</span></div></div>
             <div class="stat" onclick="cf('status','Venda fechada')"><div class="stat-ic" style="background:color-mix(in srgb,#8b5cf6 14%,transparent);color:#8b5cf6" data-ic="star"></div><div><b id="csVendas">0</b><span>Vendas fechadas</span></div></div>
             <div class="stat" onclick="filtrarVencendo()"><div class="stat-ic" style="background:var(--danger-soft);color:var(--danger)" data-ic="alert"></div><div><b id="csVence">0</b><span>Vencendo em 15 dias</span></div></div>
           </div>
@@ -952,6 +957,8 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="card gerente-only hide" style="margin-bottom:20px" id="cardPerm">
           <div class="card-head"><h2>Permissões de acesso</h2><span class="muted">As mudanças valem na hora</span></div>
           <div class="leg">
+            <div><b>👑 Dono</b>Tudo, e é o único que altera gerentes e as configurações do app.</div>
+            <div><b>🏢 CEO Frade</b>Vê tudo, como o gerente, inclusive o Painel do dono. Só o dono altera o perfil do CEO.</div>
             <div><b>⭐ Gerente</b>Vê e edita tudo: todas as equipes, coordenadores e corretores. Aprova cadastros e define permissões.</div>
             <div><b>🧭 Coordenador</b>Vê e edita as visitas da própria equipe e o relatório de cada corretor dela. Não vê gerentes nem outras equipes.</div>
             <div><b>📞 SDR</b>Marca visitas para os corretores da equipe dela e vê só as visitas que marcou. Não vê cartas nem avaliações. Manda o resumo do dia.</div>
@@ -964,6 +971,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
           <div class="chips" id="corEquipes" style="margin-bottom:10px"></div>
           <div class="people" id="corLista"></div>
         </div>
+        <div class="card gerente-only hide" style="margin-bottom:20px"><div class="set-row" style="border:0;padding:0"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado e dá para restaurar.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div></div>
         <div class="set-grid gerente-only hide">
           <div class="card">
             <div class="card-head"><h2>Equipes</h2></div>
@@ -1065,20 +1073,20 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="set-row"><div><b>Avisar com antecedência de</b><span>Minutos antes do horário</span></div>
               <select id="cfgMin" style="width:auto" onchange="salvarMin(this.value)"><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hora</option></select></div>
           </div>
-          <div class="card gerente-only hide" id="cardAdmPontos">
+          <div class="card dono-only hide" id="cardAdmPontos">
             <div class="card-head"><h2>🏆 Pontuação</h2><span class="muted">Só gerentes</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Quanto vale cada ação. Os pontos zeram todo dia 1º. Mudou um valor? Vale para o mês em andamento; os meses já fechados não mudam. Pode usar números negativos.</div>
             <div id="admPontos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarPontuacao()">Salvar pontuação</button>
           </div>
-          <div class="card gerente-only hide" id="cardAdmListas">
+          <div class="card dono-only hide" id="cardAdmListas">
             <div class="card-head"><h2>📋 Listas do app</h2><span class="muted">Só gerentes</span></div>
             <div class="fg"><label>Origens do cliente <span class="muted" style="font-weight:500">(uma por linha)</span></label><textarea id="admOrigens" style="min-height:120px"></textarea></div>
             <div class="fg"><label>Motivos da perda <span class="muted" style="font-weight:500">(um por linha)</span></label><textarea id="admMotivos" style="min-height:120px"></textarea></div>
             <button class="btn btn-primary btn-block" onclick="salvarListas()">Salvar listas</button>
             <div class="set-row" style="margin-top:14px"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div>
           </div>
-          <div class="card gerente-only hide" id="cardInteg" style="grid-column:1/-1">
+          <div class="card dono-only hide" id="cardInteg" style="grid-column:1/-1">
             <div class="card-head"><h2>🔗 Integrações</h2><span class="muted">Só gerentes · CRM, planilha e e-mail</span></div>
             <div class="int-bloco"><b>1. Chave de segurança</b><span>Só quem tem esta chave consegue mandar dados para o app. Ela vai no ajudante da planilha e no endereço do CRM.</span>
               <div class="int-linha"><code id="intChave"></code><button class="btn btn-ghost" onclick="copiarTexto('intChave')">Copiar</button><button class="btn btn-ghost" id="btnGerarChave" onclick="gerarChave()">Gerar chave</button></div></div>
@@ -1097,14 +1105,14 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="int-bloco"><b>5. Planilha do app</b><span>A cada visita ou carta cadastrada ou alterada, a linha é atualizada sozinha. Use o botão uma vez para mandar o que já existe.</span>
               <div class="int-linha"><button class="btn btn-ghost" id="btnEnviarTudo" onclick="enviarTudoPlanilha()">Enviar tudo para a planilha do app</button></div></div>
           </div>
-          <div class="card gerente-only hide" id="cardGrupos" style="grid-column:1/-1">
+          <div class="card dono-only hide" id="cardGrupos" style="grid-column:1/-1">
             <div class="card-head"><h2>🗂️ Status da planilha de avaliações</h2><span class="muted">Só gerentes</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Em que grupo cada status entra nos relatórios e depois de quantos dias o cliente volta para o corretor como <b>repescagem</b> (deixe em branco para não voltar; 0 = avisar na hora). Status novos que a administração criar aparecem aqui sozinhos.</div>
             <div class="grp-row grp-cab"><span>Status</span><span>Grupo</span><span>Repescagem (dias)</span></div>
             <div id="admGrupos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarGrupos()">Salvar status</button>
           </div>
-          <div class="card gerente-only hide" id="cardAdmMsgs" style="grid-column:1/-1">
+          <div class="card dono-only hide" id="cardAdmMsgs" style="grid-column:1/-1">
             <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só gerentes editam · valem para todos</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:10px">Escreva do jeito que quiser. Use os campos abaixo e o app troca pelo dado do cliente na hora de enviar:</div>
             <div class="chips" id="msgCampos" style="margin-bottom:14px"></div>
@@ -1119,7 +1127,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
           </div>
           <div class="card">
             <div class="card-head"><h2>Conta</h2></div>
-            <div class="set-row"><div><b>Alterar senha</b><span>Enviamos um link para o seu e-mail</span></div><button class="btn btn-ghost" onclick="trocarSenha()">Enviar link</button></div>
+            <div class="set-row"><div><b>Alterar senha</b><span>Troque aqui mesmo, sem precisar de e-mail</span></div><button class="btn btn-ghost" onclick="trocarSenha()">Alterar</button></div>
             <div class="set-row"><div><b>Sair da conta</b><span>Para entrar com outro perfil</span></div><button class="btn btn-danger" onclick="sair()">Sair</button></div>
           </div>
         </div>
@@ -1184,7 +1192,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <p class="muted" style="margin:0 0 20px;font-size:14px">O gerente vai liberar o seu acesso às visitas. Enquanto isso, você já pode usar a sua agenda.</p>
       </div>
       <div class="fg"><label>Seu nome completo</label><input id="cadNome" placeholder="Ex.: Ana Flávia Souza"></div>
-      <div class="fg"><label>Seu WhatsApp</label><input id="cadFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div>
+      <div class="fg" id="cadFoneWrap"><label>Seu WhatsApp</label><input id="cadFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div>
       <div class="fg" id="cadEqWrap"><label>Sua equipe</label><select id="cadEquipe"></select></div>
       <button class="btn btn-primary btn-block" onclick="enviarCadastro()" style="padding:13px">Enviar para aprovação</button>
       <div id="cadGerente" class="hide" style="margin-top:18px;padding:14px;border:1px dashed var(--border);border-radius:14px;background:var(--card2)">
@@ -1204,13 +1212,14 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
     <div class="sheet-body">
       <div class="row2 fg"><div><label>Data</label><input type="date" id="vmData"></div><div><label>Horário</label><input type="time" id="vmHora"></div></div>
       <div class="row2 fg"><div><label>Cliente</label><input id="vmCliente" placeholder="Nome do cliente"></div><div><label>Telefone</label><input id="vmFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
-      <div class="fg"><label>Imóvel / empreendimento</label><input id="vmImovel" placeholder="Nome do empreendimento" list="listaImoveis"><datalist id="listaImoveis"></datalist></div>
+      <div class="fg hide"><label>Imóvel / empreendimento</label><input id="vmImovel" placeholder="Nome do empreendimento" list="listaImoveis"><datalist id="listaImoveis"></datalist></div>
       <div class="row2 fg">
-        <div id="vmCorWrap"><label>Corretor</label><select id="vmCorretor"></select></div>
+        <div id="vmCorWrap"><label>Corretor</label><select id="vmCorretor" onchange="vmMostrarLivre()"></select><input id="vmCorLivre" class="hide" placeholder="Nome de quem vai atender" style="margin-top:8px"></div>
         <div><label>Status</label><select id="vmStatus" onchange="vmMostrarMotivo()"></select></div>
       </div>
       <div class="row2 fg"><div><label>Origem do cliente</label><select id="vmOrigem" onchange="vmMostrarIndicado()"></select></div>
-        <div id="vmIndWrap" class="hide"><label>Indicado por</label><input id="vmIndicado" placeholder="Quem indicou?"></div></div>
+        <div id="vmIndWrap" class="hide"><label>Indicado por</label><input id="vmIndicado" placeholder="Quem indicou?"></div>
+        <div id="vmOutroWrap" class="hide"><label>Qual foi a origem?</label><input id="vmOrigemOutro" placeholder="Ex.: carro de som, placa na obra…"></div></div>
       <div class="fg"><label>Avaliação de crédito <span class="muted" style="font-weight:500">(opcional)</span></label><input id="vmAval" list="listaAval" placeholder="Ex.: aprovado outro cca"><datalist id="listaAval"></datalist></div>
       <div class="fg hide" id="vmMotivoWrap"><label>Motivo da perda</label><select id="vmMotivo"></select></div>
       <div class="fg"><label>Observação</label><textarea id="vmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
@@ -1241,11 +1250,12 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
     <div class="sheet-body">
       <div class="row2 fg"><div><label>Cliente</label><input id="cmCliente" placeholder="Nome do cliente"></div><div><label>Telefone</label><input id="cmFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
       <div class="fg"><label>CPF do cliente</label><input id="cmCpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCpf(this)"><div class="hint" id="cmCpfAviso" style="margin-top:6px"></div></div>
-      <div class="row2 fg"><div><label>Valor aprovado (R$)</label><input id="cmValor" inputmode="numeric" placeholder="Ex.: 180.000" onblur="formatarValor(this)"></div><div><label>Subsídio (R$, opcional)</label><input id="cmSubsidio" inputmode="numeric" placeholder="Ex.: 55.000" onblur="formatarValor(this)"></div></div>
-      <div class="row2 fg"><div><label>Data da aprovação</label><input type="date" id="cmData"></div><div><label>Válida até (opcional)</label><input type="date" id="cmValidade"></div></div>
+      <div class="row2 fg"><div><label>Renda do cliente (R$)</label><input id="cmRenda" inputmode="numeric" placeholder="Ex.: 2.550" onblur="formatarValor(this)"></div><div><label>Valor aprovado (R$)</label><input id="cmValor" inputmode="numeric" placeholder="Ex.: 180.000" onblur="formatarValor(this)"></div></div>
+      <input id="cmSubsidio" class="hide">
+      <div class="row2 fg"><div><label>Data da aprovação</label><input type="date" id="cmData" oninput="mostrarVencimento()"></div><div><label>Vence em</label><div class="venc-auto" id="cmVenc">—</div><input type="date" id="cmValidade" class="hide"></div></div>
       <div class="row2 fg"><div><label>Banco</label><select id="cmBanco"></select></div><div><label>Situação</label><select id="cmStatus" onchange="cmMostrarMotivo()"></select></div></div>
       <div class="fg hide" id="cmMotivoWrap"><label>Motivo da perda</label><select id="cmMotivo"></select></div>
-      <div class="fg"><label>Empreendimento de interesse (opcional)</label><input id="cmImovel" placeholder="Nome do empreendimento" list="listaImoveis2"><datalist id="listaImoveis2"></datalist></div>
+      <div class="fg hide"><label>Empreendimento de interesse (opcional)</label><input id="cmImovel" placeholder="Nome do empreendimento" list="listaImoveis2"><datalist id="listaImoveis2"></datalist></div>
       <div class="fg" id="cmCorWrap"><label>Corretor</label><select id="cmCorretor"></select></div>
       <div class="fg"><label>Documentos recebidos <span class="muted" id="cmDocsQt" style="font-weight:500"></span></label><div class="docs-grid" id="cmDocs"></div></div>
       <div class="fg"><label>Observação</label><textarea id="cmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
@@ -1328,6 +1338,20 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
   </div>
 </div>
 
+<!-- ================= ALTERAR SENHA ================= -->
+<div class="modal" id="senhaModal">
+  <div class="sheet" style="width:min(420px,100%)">
+    <div class="sheet-head"><h2>🔑 Alterar senha</h2><button class="icon-btn" onclick="fechar('senhaModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label>Senha atual</label><input type="password" id="snAtual" autocomplete="current-password"></div>
+      <div class="fg"><label>Nova senha</label><input type="password" id="snNova" autocomplete="new-password" placeholder="Mínimo de 6 caracteres"></div>
+      <div class="fg"><label>Repita a nova senha</label><input type="password" id="snNova2" autocomplete="new-password"></div>
+      <button class="btn btn-primary btn-block" id="btnSalvarSenha" onclick="salvarNovaSenha()">Salvar nova senha</button>
+      <div style="text-align:center;margin-top:12px"><button class="link" onclick="linkSenhaEmail()">Não lembro a senha atual: mandar um link para o meu e-mail</button></div>
+    </div>
+  </div>
+</div>
+
 <!-- ================= MENU + (adicionar) ================= -->
 <div class="modal" id="maisModal">
   <div class="sheet" style="width:min(440px,100%)">
@@ -1372,7 +1396,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDocFromServer, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -1605,15 +1629,47 @@ async function carregarEquipesCadastro(){
   $('campoEquipe').classList.toggle('hide', !equipesPublicas.length || !modoCriar);
 }
 window.verSenha = () => { const s = $('senha'); s.type = s.type === 'password' ? 'text' : 'password'; };
+// o link de nova senha sai pelo Gmail da Frade (chega na caixa de entrada); se falhar, usa o e-mail do Firebase
+async function enviarLinkSenha(email){
+  try {
+    const r = await fetch(CARTEIRO_URL.replace(/\/$/, '') + '/senha', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ email }) });
+    const j = await r.json().catch(() => ({}));
+    if (j.ok) return 'frade';
+  } catch(e) {}
+  auth.languageCode = 'pt-BR';
+  await sendPasswordResetEmail(auth, email);
+  return 'firebase';
+}
 window.esqueciSenha = async () => {
   const email = $('email').value.trim();
   if (!email) { msg('Digite seu e-mail acima primeiro.'); return; }
-  try { await sendPasswordResetEmail(auth, email); msg('Enviamos um link de redefinição para o seu e-mail.', true); }
+  try { const via = await enviarLinkSenha(email); msg(via === 'frade' ? 'Enviamos um link para criar uma nova senha no seu e-mail (remetente: Frade Imóveis). Confira também o spam.' : 'Enviamos um link de redefinição para o seu e-mail. Se não aparecer em alguns minutos, olhe a pasta de spam.', true); }
   catch(e) { msg(traduzErro(e)); }
 };
-window.trocarSenha = async () => {
-  try { await sendPasswordResetEmail(auth, emailAtual); toast('Link enviado para ' + emailAtual); }
+window.trocarSenha = () => { $('snAtual').value = ''; $('snNova').value = ''; $('snNova2').value = ''; abrir('senhaModal'); setTimeout(() => $('snAtual').focus(), 80); };
+window.salvarNovaSenha = async () => {
+  const atual = $('snAtual').value, nova = $('snNova').value, nova2 = $('snNova2').value;
+  if (nova.length < 6) { toast('A nova senha precisa ter pelo menos 6 caracteres'); return; }
+  if (nova !== nova2) { toast('As duas senhas novas não são iguais'); return; }
+  const btn = $('btnSalvarSenha'); btn.disabled = true;
+  try {
+    await reauthenticateWithCredential(auth.currentUser, EmailAuthProvider.credential(emailAtual, atual));
+    await updatePassword(auth.currentUser, nova);
+    fechar('senhaModal'); toast('Senha alterada ✓');
+  } catch(e) { toast(e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' ? 'A senha atual está errada' : traduzErro(e)); }
+  btn.disabled = false;
+};
+window.linkSenhaEmail = async () => {
+  try { const via = await enviarLinkSenha(emailAtual); toast(via === 'frade' ? 'Link enviado para ' + emailAtual + ' (remetente: Frade Imóveis)' : 'Link enviado para ' + emailAtual + '. Confira o spam.'); fechar('senhaModal'); }
   catch(e) { toast(traduzErro(e)); }
+};
+window.senhaProvisoria = async uid => {
+  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const s = prompt(`Senha provisória para ${p.nome} (mínimo 6 caracteres):`, 'frade' + Math.floor(1000 + Math.random() * 9000));
+  if (!s) return;
+  if (s.length < 6) { toast('A senha precisa ter pelo menos 6 caracteres'); return; }
+  try { const r = await chamarCarteiro({ tipo:'senha', uid, senha:s }); if (!r?.ok) throw new Error(r?.erro || 'não foi possível'); toast(`Senha de ${primeiro(p.nome)} definida: ${s}`); }
+  catch(e) { toast('Erro: ' + e.message); }
 };
 window.sair = async () => { if (!confirm('Deseja sair desta conta?')) return; fecharModal();
   try { const t = localStorage.getItem('notifToken'); if (t) { await deleteDoc(doc(db,'tokens',t)); localStorage.removeItem('notifToken'); localStorage.removeItem('notifAtiva'); } } catch(e){}
@@ -2086,6 +2142,8 @@ let corEquipeFiltro = '', vEditId = null, vOrig = null;
 const norm = x => String(x||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
 const souAtivo = () => perfil?.status === 'ativo';
 const souGerente = () => souAtivo() && perfil.papel === 'gerente';
+const souDono = () => souGerente() && !!instalacao && instalacao.gerenteUid === uidAtual;
+window.souDono = souDono;
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
 window.podeGerir = podeGerir;
@@ -2112,6 +2170,7 @@ function iniciarVisitas(user){
     configurarAcesso(); render(); pedirCadastro();
   }, e => { perfilOk = true; console.error(e); }));
   subsBase.push(onSnapshot(doc(db,'config','instalacao'), snap => {
+    if (!snap.exists() && snap.metadata.fromCache) return; // espera a nuvem: sem isso, conta nova achava que o sistema não estava instalado
     instalacao = snap.exists() ? snap.data() : null; instOk = true; preencherCadEquipes(); pedirCadastro(); render();
   }, e => { instOk = true; console.error(e); }));
   subsBase.push(onSnapshot(collection(db,'equipes'), snap => {
@@ -2130,7 +2189,7 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
-  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; sdrResumos = [];
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; sdrResumos = []; leadsAjustes = {};
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -2159,7 +2218,7 @@ async function perfilNaoExiste(){
 function pedirCadastro(){
   if (!state || !perfilOk || !instOk || perfil) return;
   if (instalacao && contaRecemCriada && nomeCadastro && equipeCadastro && !autoCadFeito) {
-    autoCadFeito = true;
+    autoCadFeito = true; fechar('cadModal');
     perfilNaoExiste().then(ok => ok && setDoc(doc(db,'perfis',uidAtual), { nome:nomeCadastro, email:emailAtual, telefone:foneCadastro, papel:'corretor', status:'pendente', equipe:equipeCadastro, criadoEm:Date.now() })
 ).then(r => { if (r !== false) { toast('Cadastro enviado! Aguarde a aprovação do gerente.'); setTimeout(() => avisarCarteiro('cadastro', uidAtual), 1500); } })
       .catch(e => { autoCadFeito = false; equipeCadastro = ''; toast('Não foi possível enviar o cadastro: ' + e.message); pedirCadastro(); });
@@ -2167,6 +2226,9 @@ function pedirCadastro(){
   }
   if (autoCadFeito || cadDispensado || $('cadModal').classList.contains('open')) return;
   $('cadNome').value = state.profile.nameSet ? state.profile.name : (nomeCadastro || '');
+  if (!$('cadFone').value) $('cadFone').value = foneCadastro || '';
+  $('cadFoneWrap').classList.toggle('hide', !!foneCadastro);
+  if (equipeCadastro) setTimeout(() => { $('cadEquipe').value = equipeCadastro; }, 0);
   preencherCadEquipes();
   abrir('cadModal');
 }
@@ -2230,7 +2292,7 @@ function quandoTxt(date){
 // ---------- Cartão de visita ----------
 function cardVisita(v, compacto){
   const cor = ST_COR[v.status] || '#64748b';
-  const meta = [`<span>🏠 ${esc(v.empreendimento)}</span>`];
+  const meta = v.empreendimento ? [`<span>🏠 ${esc(v.empreendimento)}</span>`] : [];
   if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(v.corretorNome||'Sem corretor')}</span>`);
   if (v.sdrNome && !souSdr()) meta.push(`<span>📞 SDR ${esc(primeiro(v.sdrNome))}</span>`);
   if (v.avaliacao) meta.push(`<span>📋 ${esc(v.avaliacao)}</span>`);
@@ -2269,10 +2331,11 @@ function renderPapel(){
     el.classList.remove('hide');
     if (perfil.status === 'pendente') el.textContent = '⏳ Aguardando aprovação';
     else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
-    else { el.textContent = perfil.papel === 'gerente' ? '⭐ Gerente' : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
+    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Dono' : perfil.cargo === 'dono' ? '🏢 CEO Frade' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir()));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
+  document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
 }
 function bannerAcesso(){
@@ -2425,11 +2488,13 @@ function abrirFormVisita(v, dataPadrao){
   if (podeGerir() || souSdr()) {
     const ms = membrosSelecionaveis();
     let ops = ms.map(p => `<option value="${p.uid}">${esc(p.nome)}${p.papel === 'coordenador' ? ' (coordenador)' : ''}${souGerente() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`);
-    if (souSdr()) ops.unshift('<option value="">— sem corretor (o coordenador distribui) —</option>');
+    if (souSdr()) { ops.unshift('<option value="">— sem corretor (o coordenador distribui) —</option>'); ops.push('<option value="__livre">✍️ Outra pessoa (digitar o nome)</option>'); }
     else if (v && !v.corretorUid) ops.unshift(`<option value="">${esc(v.corretorNome || 'Sem corretor')} (sem conta vinculada)</option>`);
     $('vmCorretor').innerHTML = ops.join('');
-    $('vmCorretor').value = v ? (v.corretorUid || '') : (souSdr() ? '' : uidAtual);
+    $('vmCorretor').value = v ? (v.corretorUid || (souSdr() && v.corretorNome ? '__livre' : '')) : (souSdr() ? '' : uidAtual);
   }
+  $('vmCorLivre').value = v && !v.corretorUid ? (v.corretorNome || '') : '';
+  vmMostrarLivre();
   $('vmExtras').classList.toggle('hide', !v); $('vmExtras2').classList.toggle('hide', !v);
   preencherOrigemMotivo(v);
   $('listaAval').innerHTML = Object.keys(GRUPOS_STATUS).map(x => `<option value="${esc(x.toLowerCase())}">`).join('');
@@ -2445,12 +2510,13 @@ function lerVisita(){
   const d = { date:$('vmData').value, time:$('vmHora').value, cliente:$('vmCliente').value.trim(), telefone:$('vmFone').value.trim(),
     empreendimento:$('vmImovel').value.trim(), status:$('vmStatus').value, obs:$('vmObs').value.trim(),
     origem:$('vmOrigem').value, indicadoPor:$('vmOrigem').value === 'Indicação' ? $('vmIndicado').value.trim() : '',
+    origemDetalhe:$('vmOrigem').value === 'Outro' ? $('vmOrigemOutro').value.trim() : '',
     motivoPerda: PERDA_V.includes($('vmStatus').value) ? $('vmMotivo').value : '' };
   d.telNorm = chaveTel(d.telefone);
   d.avaliacao = $('vmAval').value.trim();
   if (souSdr()) {
-    const uid = $('vmCorretor').value, p = uid ? membrosSelecionaveis().find(x => x.uid === uid) : null;
-    d.corretorUid = p ? p.uid : ''; d.corretorNome = p ? p.nome : ''; d.equipe = perfil.equipe || '';
+    const uid = $('vmCorretor').value, p = uid && uid !== '__livre' ? membrosSelecionaveis().find(x => x.uid === uid) : null;
+    d.corretorUid = p ? p.uid : ''; d.corretorNome = p ? p.nome : (uid === '__livre' ? $('vmCorLivre').value.trim() : ''); d.equipe = perfil.equipe || '';
   }
   else if (!podeGerir()) { d.corretorUid = uidAtual; d.corretorNome = perfil.nome; d.equipe = perfil.equipe || ''; }
   else {
@@ -2468,8 +2534,8 @@ window.salvarVisita = async () => {
   const d = lerVisita();
   if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
   if (!d.cliente) { toast('Informe o nome do cliente'); $('vmCliente').focus(); return; }
-  if (!d.empreendimento) { toast('Informe o imóvel ou empreendimento'); $('vmImovel').focus(); return; }
   if (!d.origem && !vOrig) { toast('Escolha a origem do cliente'); $('vmOrigem').focus(); return; }
+  if (d.origem === 'Outro' && !d.origemDetalhe) { toast('Digite qual foi a origem'); $('vmOrigemOutro').focus(); return; }
   if (PERDA_V.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('vmMotivo').focus(); return; }
   const id = vEditId || doc(collection(db,'visitas')).id;
   const dados = { ...d, criadoPor: vOrig?.criadoPor || uidAtual, criadoEm: vOrig?.criadoEm || Date.now(), atualizadoEm: Date.now(), semPontos: !!vOrig?.semPontos,
@@ -2554,7 +2620,7 @@ function renderCorretores(){
   const opEq = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   $('pendLista').innerHTML = pend.map(p => `<div class="pend">
       <div><b>${esc(p.nome)}</b><span>${esc(p.email||'')} · pediu: ${esc(eqNome(p.equipe))}</span></div>
-      <select id="pp_${p.uid}">${Object.entries(PAPEIS).map(([k,n]) => `<option value="${k}" ${k==='corretor'?'selected':''}>${n}</option>`).join('')}</select>
+      <select id="pp_${p.uid}">${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono()).map(([k,n]) => `<option value="${k}" ${k==='corretor'?'selected':''}>${n}</option>`).join('')}</select>
       <select id="pe_${p.uid}">${opEq(p.equipe)}</select>
       <button class="btn btn-primary" onclick="aprovar('${p.uid}')">Aprovar</button>
       <button class="btn btn-danger" onclick="recusar('${p.uid}')">Recusar</button>
@@ -2584,10 +2650,15 @@ function renderCorretores(){
     const todos = perfisLista.filter(p => p.status !== 'pendente').sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
     const opEqs = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
     $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th></tr></thead><tbody>' + todos.map(p => {
-      if (p.uid === uidAtual) return `<tr><td><b>${esc(p.nome)} (você)</b><span>${esc(p.email||'')}</span></td><td>⭐ Gerente</td><td>—</td><td>Liberado</td></tr>`;
+      const ehDono = instalacao && p.uid === instalacao.gerenteUid;
+      if (p.papel === 'gerente' && souDono() && !ehDono && p.uid !== uidAtual) return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
+        <td><select onchange="mudarCargo('${p.uid}',this.value,this)"><option value="gerente" ${p.cargo!=='dono'?'selected':''}>⭐ Gerente</option><option value="dono" ${p.cargo==='dono'?'selected':''}>🏢 CEO Frade</option>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente').map(([k,n]) => `<option value="papel:${k}">Mudar para ${n}</option>`).join('')}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td></tr>`;
+      if (p.uid === uidAtual || ehDono || (p.papel === 'gerente' && !souDono())) return `<tr><td><b>${esc(p.nome)}${p.uid === uidAtual ? ' (você)' : ''}</b><span>${esc(p.email||'')}</span></td><td>${ehDono ? '👑 Dono' : p.cargo === 'dono' ? '🏢 CEO Frade' : '⭐ Gerente'}</td><td>${p.equipe ? esc(eqNome(p.equipe)) : '—'}${p.uid === uidAtual && souGerente() ? ` <select style="width:auto;margin-left:6px" onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${souDono() ? '' : 'disabled'}>${opEqs(p.equipe)}</select>` : ''}</td><td>${p.status === 'bloqueado' ? '🔒 Bloqueado' : 'Liberado'}${p.papel === 'gerente' && !souDono() && !ehDono && p.uid !== uidAtual ? '<br><small class="muted">só o dono altera gerentes</small>' : ''}</td></tr>`;
       return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
-        <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${Object.entries(PAPEIS).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></td>
-        <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${p.papel==='gerente'?'disabled':''}>${opEqs(p.equipe)}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono()).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td></tr>`;
     }).join('') + '</tbody>';
     $('equipesLista').innerHTML = listaEquipes().map(e => `<div class="team-row"><input class="emo" value="${esc(e.icone||'')}" onchange="editarEquipe('${e.id}','icone',this.value)"><input value="${esc(e.nome)}" onchange="editarEquipe('${e.id}','nome',this.value)"><button class="icon-btn del" onclick="excluirEquipe('${e.id}')" title="Excluir equipe">${IC.trash}</button></div>`).join('') || '<div class="muted" style="font-size:13.5px">Nenhuma equipe cadastrada.</div>';
@@ -2600,19 +2671,25 @@ window.mudarPermissao = async (uid, campo, valor, el) => {
   const p = perfisLista.find(x => x.uid === uid); if (!p) return;
   const dados = { [campo]: valor };
   if (campo === 'papel' && valor === 'gerente') {
-    if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo, inclusive as permissões de todos.`)) { el.value = p.papel; return; }
-    dados.equipe = '';
+    if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo (menos os outros gerentes, que só o dono altera).`)) { el.value = p.papel; return; }
   }
   if (campo === 'papel' && valor !== 'gerente' && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
+  if (uid === uidAtual) { try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Equipe atualizada'); } catch(e) { toast('Erro: ' + e.message); } return; }
   if (campo === 'status' && valor === 'bloqueado' && !confirm(`Bloquear o acesso de ${p.nome} às visitas?`)) { el.value = p.status; return; }
   try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Permissão de ' + primeiro(p.nome) + ' atualizada'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); el.value = p[campo]; }
+};
+window.mudarCargo = async (uid, v, el) => {
+  const p = perfisLista.find(x => x.uid === uid); if (!p || !souDono()) return;
+  if (v.startsWith('papel:')) { el.value = p.cargo === 'dono' ? 'dono' : 'gerente'; return mudarPermissao(uid, 'papel', v.slice(6), { value:v.slice(6) }); }
+  try { await setDoc(doc(db,'perfis',uid), { cargo: v === 'dono' ? 'dono' : '' }, { merge:true }); toast(`${primeiro(p.nome)} agora é ${v === 'dono' ? 'CEO Frade' : 'Gerente'}`); }
+  catch(e) { toast('Erro: ' + e.message); el.value = p.cargo === 'dono' ? 'dono' : 'gerente'; }
 };
 window.setCorEq = k => { corEquipeFiltro = k; render(); };
 
 window.aprovar = async uid => {
   const p = perfisLista.find(x => x.uid === uid); if (!p) return;
-  const papel = $('pp_' + uid).value, equipe = papel === 'gerente' ? '' : $('pe_' + uid).value;
+  const papel = $('pp_' + uid).value, equipe = $('pe_' + uid).value;
   if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
   try {
     await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now() }, { merge:true });
@@ -2642,19 +2719,21 @@ window.abrirRelatorio = async uid => {
   $('rmInfo').textContent = [PAPEIS[p.papel], p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.email].filter(Boolean).join(' · ');
   const kpi = (n, t) => `<div class="kpi"><b>${n}</b><span>${t}</span></div>`;
   let gestao = '';
-  if (souGerente() && uid !== uidAtual) {
+  if (souGerente() && uid !== uidAtual && (p.papel !== 'gerente' || souDono()) && !(instalacao && uid === instalacao.gerenteUid)) {
     gestao = `<div class="rep-sec">Foto</div><div class="foto-box"><div class="foto-grande">${p.foto ? `<img src="${p.foto}" alt="">` : esc((p.nome||'?')[0].toUpperCase())}</div><div class="fb-acoes"><button class="btn btn-ghost" onclick="fotoDeOutro('${uid}')">📷 ${p.foto ? 'Trocar' : 'Adicionar'} foto</button>${p.foto ? `<button class="link" onclick="salvarFotoDe('${uid}','')">Remover foto</button>` : ''}</div></div>
       <div class="rep-sec">Acesso</div>
-      <div class="row2 fg"><div><label>Perfil</label><select id="gmPapel">${Object.entries(PAPEIS).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></div>
+      <div class="row2 fg"><div><label>Perfil</label><select id="gmPapel" ${p.papel === 'gerente' && !souDono() ? 'disabled' : ''}>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono() || p.papel === 'gerente').map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></div>
       <div><label>Equipe</label><select id="gmEquipe"><option value="">Sem equipe</option>${listaEquipes().map(e => `<option value="${e.id}" ${p.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select></div></div>
       <div class="row2"><select id="gmStatus"><option value="ativo" ${p.status==='ativo'?'selected':''}>Acesso liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>Acesso bloqueado</option></select>
-      <button class="btn btn-primary" onclick="salvarGestao('${uid}')">Salvar alterações</button></div>`;
+      <button class="btn btn-primary" onclick="salvarGestao('${uid}')">Salvar alterações</button></div>
+      <div class="rep-sec">Senha</div>
+      <div class="set-row" style="border:0;padding-top:0"><div><b>🔑 Senha provisória</b><span>Para quem esqueceu a senha. A pessoa entra com ela e troca depois em Configurações.</span></div><button class="btn btn-ghost" onclick="senhaProvisoria('${uid}')">Definir</button></div>`;
   }
   $('rmCorpo').innerHTML = `
     <div class="rep-sec" style="margin-top:0">Visitas ${ROT_PERIODO[corPeriodo]}</div>
     <div class="rep-kpis">${kpi(st.total,'Marcadas')}${kpi(st.conf,'Confirmadas')}${kpi(st.real,'Realizadas')}${kpi(st.falta,'Não compareceram')}${kpi(st.taxa+'%','Taxa de realização')}</div>
     <div class="rep-sec">Cartas aprovadas ${ROT_PERIODO[corPeriodo]}</div>
-    ${(() => { const cs = cartasDoPerfil(p, de, ate); return `<div class="rep-kpis">${kpi(cs.length,'Cartas')}${kpi(brl(cs.reduce((a,c)=>a+(c.valor||0),0)),'Valor aprovado')}${kpi(cs.filter(c=>c.status==='Venda fechada').length,'Vendas fechadas')}</div>`; })()}
+    ${(() => { const cs = cartasDoPerfil(p, de, ate); return `<div class="rep-kpis">${kpi(cs.length,'Cartas')}${kpi(cs.filter(c => docsOk(c) === DOCS.length).length,'Docs completos')}${kpi(cs.filter(c=>c.status==='Venda fechada').length,'Vendas fechadas')}</div>`; })()}
     <div class="rep-sec">Próximas visitas</div>
     ${prox.length ? prox.map(v => `<div class="up"><div class="up-date"><b>${parseISO(v.date).getDate()}</b><span>${parseISO(v.date).toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</span></div><div style="min-width:0;flex:1"><div class="up-t">${esc(v.cliente)} · ${esc(v.empreendimento)}</div><div class="up-m">${esc(v.time)} · ${esc(v.status)}</div></div></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma visita futura.</div>'}
     <div class="rep-sec">Organização pessoal (tarefas)</div>
@@ -2675,7 +2754,7 @@ window.abrirRelatorio = async uid => {
   } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
 };
 window.salvarGestao = async uid => {
-  const papel = $('gmPapel').value, equipe = papel === 'gerente' ? '' : $('gmEquipe').value, status = $('gmStatus').value;
+  const papel = $('gmPapel').value, equipe = $('gmEquipe').value, status = $('gmStatus').value;
   if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe'); return; }
   try { await setDoc(doc(db,'perfis',uid), { papel, equipe, status }, { merge:true }); toast('Alterações salvas'); fechar('relModal'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
@@ -2770,7 +2849,11 @@ const fmtValorInput = n => n ? (Number(n)).toLocaleString('pt-BR') : '';
 function cStCls(st){ return 'cst-' + norm(st).replace(/[^a-z0-9]+/g,'-'); }
 function rankingCartaDe(c){ return { equipe:c.equipe||'', corretorUid:c.corretorUid||'', corretorNome:c.corretorNome||'', data:c.data||'', status:c.status||'', valor:c.valor||0,
   vendaEm:c.vendaEm||'', docsCompletos: docsOk(c) === DOCS.length, semPontos:!!c.semPontos }; }
-function diasParaVencer(c){ return c.validade ? diffDias(c.validade) : null; }
+// a carta vale 6 meses a partir da aprovação
+function somaMeses(isoD, n){ if (!isoD) return ''; const [a, m, d] = isoD.split('-').map(Number); const x = new Date(a, m - 1 + n, d); if (x.getDate() !== d) x.setDate(0); return iso(x); }
+const validadeDe = c => c.validade || somaMeses(c.data, 6);
+window.mostrarVencimento = () => { const v = somaMeses($('cmData').value, 6); $('cmVenc').textContent = v ? dataBR(v) + ' (6 meses)' : '—'; };
+function diasParaVencer(c){ const v = validadeDe(c); return v ? diffDias(v) : null; }
 function cartasDoPerfil(p, de, ate){ return cartas.filter(c => c.corretorUid === p.uid && c.data >= de && c.data <= ate); }
 
 function assinarCartas(erro){
@@ -2800,7 +2883,7 @@ function cardCarta(c){
   if (dv !== null && ['Aprovada','Em negociação'].includes(c.status)) {
     if (dv < 0) aviso = `<span class="late">⚠ venceu há ${-dv} dia${-dv!==1?'s':''}</span>`;
     else if (dv <= 15) aviso = `<span class="late">⏳ vence em ${dv} dia${dv!==1?'s':''}</span>`;
-    else aviso = `<span>válida até ${parseISO(c.validade).toLocaleDateString('pt-BR')}</span>`;
+    else aviso = `<span>vence em ${parseISO(validadeDe(c)).toLocaleDateString('pt-BR')}</span>`;
   }
   const acoes = [];
   if (c.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')" title="Abrir conversa">${IC.wa}WhatsApp</button>`);
@@ -2811,7 +2894,7 @@ function cardCarta(c){
     <div class="v-time"><b style="font-size:15px">${parseISO(c.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</b><span>aprovada</span></div>
     <div class="v-body" onclick="editarCarta('${c.id}')">
       <div class="v-top"><b>${esc(c.cliente)}${seloRepetido('carta', c.id)}</b><span class="vst ${cStCls(c.status)}">${esc(c.status)}</span></div>
-      <div class="v-meta"><span style="color:var(--text);font-weight:700">💰 ${brl(c.valor)}${c.subsidio ? ' · subsídio ' + brl(c.subsidio) : ''}</span>${meta.join('')}</div>
+      <div class="v-meta">${c.valor ? `<span style="color:var(--text);font-weight:700">💰 ${brl(c.valor)}</span>` : ''}${c.renda ? `<span>renda ${brl(c.renda)}</span>` : ''}${meta.join('')}</div>
       <div class="v-meta">${aviso}</div>
       ${c.obs ? `<div class="v-obs">📝 ${esc(c.obs)}</div>` : ''}
     </div>
@@ -2846,7 +2929,7 @@ function renderCartas(){
   const ativas = cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status));
   const vencendo = ativas.filter(c => { const d = diasParaVencer(c); return d !== null && d <= 15; }).length;
   $('csQtd').textContent = lista.length;
-  $('csValor').textContent = brl(lista.reduce((s,c) => s + (c.valor||0), 0));
+  $('csValor').textContent = lista.filter(c => docsOk(c) === DOCS.length).length;
   $('csVendas').textContent = lista.filter(c => c.status === 'Venda fechada').length;
   $('csVence').textContent = vencendo;
   $('cartasLista').innerHTML = lista.length ? lista.map(cardCarta).join('') : vazio('Nenhuma carta nesse filtro', 'Cadastre uma carta aprovada pelo botão "Nova carta".');
@@ -2861,8 +2944,9 @@ function abrirFormCarta(c, pre){
   $('cmTitulo').textContent = c ? 'Editar carta' : 'Nova carta aprovada';
   $('cmCliente').value = c?.cliente || pre?.cliente || ''; $('cmFone').value = c?.telefone || pre?.telefone || '';
   $('cmCpf').value = fmtCpf(c?.cpf || pre?.cpf || ''); $('cmCpfAviso').textContent = '';
+  setTimeout(mostrarVencimento, 0);
   $('cmData').value = c?.data || hojeISO(); $('cmValidade').value = c?.validade || '';
-  $('cmValor').value = fmtValorInput(c?.valor); $('cmSubsidio').value = fmtValorInput(c?.subsidio);
+  $('cmValor').value = fmtValorInput(c?.valor); $('cmSubsidio').value = fmtValorInput(c?.subsidio); $('cmRenda').value = fmtValorInput(c?.renda || lerValor(pre?.renda || ''));
   $('cmBanco').innerHTML = BANCOS.map(b => `<option ${ (c?.banco||'Caixa')===b?'selected':''}>${b}</option>`).join('');
   $('cmImovel').value = c?.empreendimento || pre?.empreendimento || ''; $('cmObs').value = c?.obs || '';
   $('cmStatus').innerHTML = C_STATUS.map(s => `<option ${ (c?.status||'Aprovada')===s?'selected':''}>${s}</option>`).join('');
@@ -2886,14 +2970,14 @@ window.novaCarta = () => {
 window.editarCarta = id => { const c = cartas.find(x => x.id === id); if (c) abrirFormCarta(c); };
 window.salvarCarta = async () => {
   const d = { cliente:$('cmCliente').value.trim(), telefone:$('cmFone').value.trim(), cpf:fmtCpf($('cmCpf').value), data:$('cmData').value, validade:$('cmValidade').value,
-    valor:lerValor($('cmValor').value), subsidio:lerValor($('cmSubsidio').value), banco:$('cmBanco').value,
+    valor:lerValor($('cmValor').value), subsidio:lerValor($('cmSubsidio').value), renda:lerValor($('cmRenda').value), banco:$('cmBanco').value,
     empreendimento:$('cmImovel').value.trim(), status:$('cmStatus').value, obs:$('cmObs').value.trim(),
     motivoPerda: PERDA_C.includes($('cmStatus').value) ? $('cmMotivo').value : '' };
   d.telNorm = chaveTel(d.telefone); d.cpfNorm = soDig(d.cpf).length === 11 ? soDig(d.cpf) : '';
   if (PERDA_C.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('cmMotivo').focus(); return; }
   if (!d.cliente) { toast('Informe o nome do cliente'); $('cmCliente').focus(); return; }
   if (!d.data) { toast('Informe a data da aprovação'); return; }
-  if (!d.valor) { toast('Informe o valor aprovado'); $('cmValor').focus(); return; }
+  d.validade = somaMeses(d.data, 6);
   if (d.cpf && !cpfValido(d.cpf) && !confirm('O CPF parece inválido. Salvar mesmo assim?')) return;
   if (!podeGerir()) { d.corretorUid = uidAtual; d.corretorNome = perfil.nome; d.equipe = perfil.equipe || ''; }
   else {
@@ -2951,9 +3035,9 @@ function renderRankingCartas(){
   if (!lista.length) { $('rankLista').innerHTML = vazio('Nenhuma carta no período', 'Assim que as cartas forem cadastradas, o ranking aparece aqui.'); return; }
   const med = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
   let pos = 0, ant = null;
-  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Cartas</th><th class="hide-m">Valor aprovado</th><th>Vendas</th></tr></thead><tbody>${
+  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Cartas</th><th>Vendas</th></tr></thead><tbody>${
     lista.map((x,i) => { if (!ant || x.total!==ant.total || x.vendas!==ant.vendas) pos = i; ant = x;
-      return `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${med(pos)}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot">${x.total}</td><td class="hide-m">${brl(x.valor)}</td><td>${x.vendas}</td></tr>`; }).join('')
+      return `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${med(pos)}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot">${x.total}</td><td>${x.vendas}</td></tr>`; }).join('')
   }</tbody></table>`;
 }
 
@@ -3047,8 +3131,8 @@ function renderAtencao(){
     html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,#8b5cf6 14%,transparent)">🎁</div><div class="att"><b>${esc(p.texto)}</b><span>Pós-venda · ${esc(c.cliente)}</span></div>
       <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="posVendaFeito('${c.id}','${p.id}')">✓ Feito</button></div></div>` })));
   // cartas vencendo (no escopo de quem vê)
-  cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status) && c.validade).forEach(c => {
-    const d = diffDias(c.validade); if (d > 7) return;
+  cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status) && validadeDe(c)).forEach(c => {
+    const d = diffDias(validadeDe(c)); if (d > 7) return;
     itens.push({ ord:1, html:`<div class="at-row"><div class="ati" style="background:var(--danger-soft)">⏳</div><div class="att"><b>Carta de ${esc(c.cliente)} ${d < 0 ? `venceu há ${-d} dia${-d!==1?'s':''}` : d === 0 ? 'vence hoje' : `vence em ${d} dia${d!==1?'s':''}`}</b><span>${brl(c.valor)}${podeGerir() ? ' · ' + esc(c.corretorNome) : ''}</span></div>
       <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="editarCarta('${c.id}')">Abrir</button></div></div>` });
   });
@@ -3084,8 +3168,8 @@ window.exportarVisitas = () => {
 window.exportarCartas = () => {
   if (!podeGerir()) return;
   const l = window._listaCartas || [];
-  baixarCSV('cartas-aprovadas', ['Data da aprovação','Cliente','CPF','Telefone','Valor aprovado','Subsídio','Banco','Válida até','Empreendimento','Corretor','Equipe','Situação','Documentos','Faltando','Observação'],
-    l.map(c => [dataBR(c.data), c.cliente, c.cpf, c.telefone, c.valor||0, c.subsidio||0, c.banco, dataBR(c.validade), c.empreendimento, c.corretorNome, eqNome(c.equipe), c.status,
+  baixarCSV('cartas-aprovadas', ['Data da aprovação','Cliente','CPF','Telefone','Valor aprovado','Renda','Banco','Válida até','Empreendimento','Corretor','Equipe','Situação','Documentos','Faltando','Observação'],
+    l.map(c => [dataBR(c.data), c.cliente, c.cpf, c.telefone, c.valor||0, c.renda||0, c.banco, dataBR(validadeDe(c)), c.empreendimento, c.corretorNome, eqNome(c.equipe), c.status,
       `${docsOk(c)}/${DOCS.length}`, DOCS.filter(([k]) => !c.docs?.[k]).map(([,n]) => n).join(', '), c.obs]));
 };
 
@@ -3379,7 +3463,7 @@ const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
   pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30 },
-  origens:['Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
+  origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
 const PONTOS_ITENS = [
@@ -3392,12 +3476,12 @@ const PONTOS_ITENS = [
   ['venda','🎉 Venda fechada']
 ];
 const MSG_PADRAO = [
-  { id:'confirmar', tipo:'visita', titulo:'✅ Confirmar a visita', texto:'Olá, {cliente}! Tudo bem? Aqui é {corretor}, da Frade Imóveis. Passando para confirmar a sua visita {dia} às {hora} no {empreendimento}. Posso confirmar?' },
-  { id:'lembrete', tipo:'visita', titulo:'⏰ Lembrete no dia', texto:'Bom dia, {cliente}! Aqui é {corretor}, da Frade Imóveis. Só lembrando da nossa visita hoje às {hora} no {empreendimento}. Estou te esperando! 😊' },
-  { id:'posvisita', tipo:'visita', titulo:'🙏 Depois da visita', texto:'Oi, {cliente}! Obrigado pela visita no {empreendimento}. O que você achou? Fico à disposição para tirar qualquer dúvida e darmos o próximo passo.' },
+  { id:'confirmar', tipo:'visita', titulo:'✅ Confirmar a visita', texto:'Olá, {cliente}! Tudo bem? Aqui é {corretor}, da Frade Imóveis. Passando para confirmar a sua visita {dia} às {hora}. Posso confirmar?' },
+  { id:'lembrete', tipo:'visita', titulo:'⏰ Lembrete no dia', texto:'Bom dia, {cliente}! Aqui é {corretor}, da Frade Imóveis. Só lembrando da nossa visita hoje às {hora}. Estou te esperando! 😊' },
+  { id:'posvisita', tipo:'visita', titulo:'🙏 Depois da visita', texto:'Oi, {cliente}! Obrigado pela visita. O que você achou? Fico à disposição para tirar qualquer dúvida e darmos o próximo passo.' },
   { id:'docs', tipo:'visita', titulo:'📄 Pedir documentos', texto:'Oi, {cliente}! Para fazermos a sua análise de crédito, preciso destes documentos:\n{documentos}\n\nPode me mandar as fotos por aqui mesmo. 😊' },
   { id:'remarcar', tipo:'visita', titulo:'🔁 Remarcar', texto:'Oi, {cliente}! Aqui é {corretor}, da Frade Imóveis. Sentimos a sua falta na visita. Vamos remarcar? Me diga o melhor dia e horário para você.' },
-  { id:'parabens', tipo:'carta', titulo:'🎉 Parabéns pela aprovação', texto:'Parabéns, {cliente}! 🎉 A sua carta de crédito foi aprovada no valor de {valor}. Vamos marcar para escolher o seu imóvel?' },
+  { id:'parabens', tipo:'carta', titulo:'🎉 Parabéns pela aprovação', texto:'Parabéns, {cliente}! 🎉 A sua carta de crédito foi aprovada. Vamos marcar para escolher o seu imóvel?' },
   { id:'faltam', tipo:'carta', titulo:'📄 Documentos que faltam', texto:'Oi, {cliente}! Para seguirmos com o seu processo, ainda faltam:\n{faltam}\n\nPode me mandar as fotos por aqui mesmo. 😊' },
   { id:'vencendo', tipo:'carta', titulo:'⏳ Carta perto de vencer', texto:'Oi, {cliente}! A sua carta de crédito vale até {validade}. Vamos garantir o seu imóvel antes disso?' },
   { id:'pesquisa', tipo:'visita', titulo:'⭐ Avaliar o atendimento', texto:'Oi, {cliente}! Obrigado pela visita. Você pode dar uma nota rapidinha para o meu atendimento? Leva 10 segundos: {link_pesquisa}' },
@@ -3410,10 +3494,10 @@ const nomeBonito = n => String(n || '').trim().toLowerCase().replace(/(^|\s)\S/g
 function preencherModelo(texto, t, x){
   const faltam = t === 'c' ? DOCS.filter(([k]) => !x.docs?.[k]).map(([,n]) => '• ' + n) : [];
   if (/\{faltam\}/.test(texto) && (t !== 'c' || !faltam.length)) return '';
-  if (/\{validade\}/.test(texto) && !x.validade) return '';
+  if (/\{validade\}/.test(texto) && t !== 'c') return '';
   if (/\{valor\}/.test(texto) && !x.valor) return '';
   const v = { cliente:nomeBonito(primeiro(x.cliente)), corretor:nomeBonito(primeiro(perfil?.nome || state?.profile?.name || '')), dia:x.date ? quandoTxt(x.date) : '', hora:x.time || '',
-    empreendimento:x.empreendimento || 'empreendimento', documentos:DOCS.map(([,n]) => '• ' + n).join('\n'), valor:x.valor ? brl(x.valor) : '', faltam:faltam.join('\n'), validade:x.validade ? dataBR(x.validade) : '' };
+    empreendimento:x.empreendimento || '', documentos:DOCS.map(([,n]) => '• ' + n).join('\n'), valor:x.valor ? brl(x.valor) : '', faltam:faltam.join('\n'), validade: t === 'c' ? dataBR(validadeDe(x)) : '' };
   if (/\{link_pesquisa\}/.test(texto)) { if (t !== 'v') return ''; v.link_pesquisa = linkPesquisa(tokenPesquisa(x, false)); }
   return texto.replace(/\{(\w+)\}/g, (m, k) => k in v ? v[k] : m);
 }
@@ -3439,7 +3523,7 @@ function assinarEtapa1(){
   subsPapel.push(onSnapshot(doc(db,'config','app'), s => {
     const d = s.exists() ? s.data() : {};
     appCfg = { pontos:{ ...CFG_PADRAO.pontos, ...(d.pontos || {}) },
-      origens: d.origens?.length ? d.origens : CFG_PADRAO.origens,
+      origens: d.origens?.length ? (d.origens.includes('CRM') ? d.origens : ['CRM', ...d.origens]) : CFG_PADRAO.origens,
       motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
       mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO };
     carregado.cfg = true; render(); fecharMesesPendentes();
@@ -3559,7 +3643,7 @@ function renderRelGestao(){
   const vs = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada');
   const g = new Map();
   vs.forEach(v => {
-    const k = v.origem || 'Não informada';
+    const k = v.origem === 'Outro' && v.origemDetalhe ? 'Outro: ' + v.origemDetalhe : (v.origem || 'Não informada');
     if (!g.has(k)) g.set(k, { n:0, real:0, cartas:0, vendas:0 });
     const x = g.get(k); x.n++; if (v.status === 'Realizada') x.real++;
     const c = cartas.find(c => c.visitaId === v.id || (v.telNorm && c.telNorm === v.telNorm));
@@ -3661,11 +3745,12 @@ window.verificarHistorico = async () => {
 const opcoes = (lista, atual, vazio) => (vazio ? `<option value="">${vazio}</option>` : '') + [...lista, ...(atual && !lista.includes(atual) ? [atual] : [])].map(o => `<option ${o===atual?'selected':''}>${esc(o)}</option>`).join('');
 function preencherOrigemMotivo(v){
   $('vmOrigem').innerHTML = opcoes(appCfg.origens, v?.origem || '', 'Escolha a origem…');
-  $('vmIndicado').value = v?.indicadoPor || '';
+  $('vmIndicado').value = v?.indicadoPor || ''; $('vmOrigemOutro').value = v?.origemDetalhe || '';
   $('vmMotivo').innerHTML = opcoes(appCfg.motivos, v?.motivoPerda || '', 'Escolha o motivo…');
   vmMostrarIndicado(); vmMostrarMotivo();
 }
-window.vmMostrarIndicado = () => $('vmIndWrap').classList.toggle('hide', $('vmOrigem').value !== 'Indicação');
+window.vmMostrarLivre = () => $('vmCorLivre').classList.toggle('hide', $('vmCorretor').value !== '__livre');
+window.vmMostrarIndicado = () => { $('vmIndWrap').classList.toggle('hide', $('vmOrigem').value !== 'Indicação'); $('vmOutroWrap').classList.toggle('hide', $('vmOrigem').value !== 'Outro'); };
 window.vmMostrarMotivo = () => $('vmMotivoWrap').classList.toggle('hide', !PERDA_V.includes($('vmStatus').value));
 function preencherMotivoCarta(c){
   $('cmMotivo').innerHTML = opcoes(appCfg.motivos, c?.motivoPerda || '', 'Escolha o motivo…');
@@ -3747,7 +3832,7 @@ window.restaurar = async (tipo, id) => {
 // ---------- administração (Configurações, só gerente) ----------
 let admAssin = '';
 function renderAdm(){
-  if (!souGerente()) return;
+  if (!souDono()) return;
   const ass = JSON.stringify(appCfg);
   const ativoEl = document.activeElement;
   if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
@@ -3860,7 +3945,7 @@ function assinarEtapa2(){
   else if (souCoord()) qa = query(collection(db,'avaliacoes'), where('equipe','==',perfil.equipe || '-'));
   else if (perfil.papel !== 'sdr') qa = query(collection(db,'avaliacoes'), where('corretorUid','==',uidAtual));
   if (qa) subsPapel.push(onSnapshot(qa, s => { avaliacoes = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
-  if (souGerente()) subsPapel.push(onSnapshot(doc(db,'config','integracao'), s => { integ = s.exists() ? s.data() : {}; render(); }, silencio));
+  if (souDono()) subsPapel.push(onSnapshot(doc(db,'config','integracao'), s => { integ = s.exists() ? s.data() : {}; render(); }, silencio));
   if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'leads_dia'), where('dia','>=',inicioJanela())), s => { leadsDias = s.docs.map(d => d.data()); render(); }, silencio));
 }
 Object.defineProperty(window, 'avaliacoes', { get: () => avaliacoes });
@@ -3899,7 +3984,7 @@ function cardAvaliacao(a){
   return `<div class="vcard" style="--vc:${inf.cor}">
     <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>doc</span></div>
     <div class="v-body" style="cursor:default">
-      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b><span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
+      <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b><span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.cartaApp ? '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">carta no app</span>' : ''}${a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
       <div class="v-meta">${meta.join('')}</div>
       ${hist ? `<div class="v-obs">🕘 ${hist}</div>` : ''}
     </div>
@@ -3908,10 +3993,24 @@ function cardAvaliacao(a){
 }
 window.cartaDaAvaliacao = id => {
   const a = avaliacoes.find(x => x.id === id); if (!a) return;
-  abrirFormCarta(null, { cliente:nomeBonito(a.nome), telefone:a.telefone, cpf:a.cpf, corretorUid:a.corretorUid || uidAtual });
+  abrirFormCarta(null, { cliente:nomeBonito(a.nome), telefone:a.telefone, cpf:a.cpf, renda:a.renda, corretorUid:a.corretorUid || uidAtual });
   toast('Dados da avaliação preenchidos. Complete o valor aprovado.');
 };
 window.af = (k, v) => { aFil[k] = v; render(); };
+// o mesmo cliente (CPF ou telefone) aparece uma vez só, com a última alteração; carta cadastrada no app conta como aprovado
+function avaliacoesUnificadas(){
+  const chave = a => a.cpfNorm ? 'c' + a.cpfNorm : (soDig(a.cpf).length === 11 ? 'c' + soDig(a.cpf) : (a.telNorm ? 't' + a.telNorm : 'i' + a.id));
+  const quando = a => a.statusEm || a.atualizadoEm || Date.parse((a.data || '') + 'T12:00:00') || 0;
+  const m = new Map();
+  avaliacoes.forEach(a => { const k = chave(a), atual = m.get(k); if (!atual || quando(a) > quando(atual)) m.set(k, a); });
+  return [...m.values()].map(a => {
+    const c = cartaDoCliente(a);
+    if (!c) return a;
+    const tc = c.atualizadoEm || c.criadoEm || Date.parse(c.data + 'T12:00:00') || 0;
+    if (tc > quando(a) && infoStatus(a.status).g !== 'aprovado') return { ...a, status:'APROVADO', cartaApp:true, statusEm:tc, historico:[...(a.historico || []), { status:'APROVADO (carta no app)', em:tc }] };
+    return { ...a, cartaApp:true };
+  });
+}
 function renderAvaliacoes(){
   const ativo = souAtivo();
   $('bannerAval').innerHTML = bannerAcesso();
@@ -3925,7 +4024,8 @@ function renderAvaliacoes(){
   $('aCorretor').innerHTML = '<option value="">Todos os corretores</option>' + nomes.map(n => `<option ${aFil.corretor===n?'selected':''}>${esc(n)}</option>`).join('');
   $('aPeriodo').value = aFil.periodo;
   const [de, ate] = faixaAval(aFil.periodo), t = norm(aFil.busca), dig = soDig(aFil.busca);
-  const noPer = avaliacoes.filter(a => (a.data || '') >= de && (a.data || '') <= ate);
+  const unif = avaliacoesUnificadas(), ocultos = avaliacoes.length - unif.length;
+  const noPer = unif.filter(a => (a.data || '') >= de && (a.data || '') <= ate);
   const conta = g => noPer.filter(a => infoStatus(a.status).g === g).length;
   $('asTotal').textContent = noPer.length; $('asAnalise').textContent = conta('analise'); $('asCond').textContent = conta('condicionado');
   $('asAprov').textContent = conta('aprovado'); $('asReprov').textContent = conta('reprovado');
@@ -3934,6 +4034,7 @@ function renderAvaliacoes(){
     .sort((a,b) => (b.statusEm || 0) - (a.statusEm || 0) || (b.data || '').localeCompare(a.data || ''));
   $('janelaAval').innerHTML = souGerente() ? avisoJanela(aFil.periodo === 'todas') : '';
   $('avalLista').innerHTML = l.length ? l.slice(0, 300).map(cardAvaliacao).join('') + (l.length > 300 ? `<div class="muted" style="padding:8px">Mostrando 300 de ${l.length}. Use a busca ou os filtros.</div>` : '')
+    + (ocultos ? `<div class="muted" style="font-size:12.5px;padding:8px 2px">🔁 ${ocultos} registro${ocultos!==1?'s':''} repetido${ocultos!==1?'s':''} do mesmo cliente escondido${ocultos!==1?'s':''}: aparece só a última alteração. Nada foi apagado.</div>` : '')
     : vazio(avaliacoes.length ? 'Nenhuma avaliação com esses filtros' : 'Nenhuma avaliação ainda', avaliacoes.length ? 'Mude o período ou o grupo.' : 'Assim que a planilha da administração for ligada ao app, as avaliações aparecem aqui.');
 }
 window.lerPlanilhaAgora = async () => {
@@ -3969,7 +4070,7 @@ const novaChave = () => [...crypto.getRandomValues(new Uint8Array(18))].map(b =>
 const urlCrm = () => CARTEIRO_URL.replace(/\/$/, '') + '/crm?chave=' + (integ.chave || '');
 let integAssin = '';
 function renderIntegracoes(){
-  if (!souGerente()) return;
+  if (!souDono()) return;
   const ativoEl = document.activeElement;
   const ass = JSON.stringify([integ, perfisLista.length]);
   if (ass === integAssin || (ativoEl && ativoEl.closest?.('#cardInteg'))) return;
@@ -4175,12 +4276,14 @@ window.importarLeadsAgora = async () => {
 // =====================================================================
 // == PAINEL DO DONO, LEADS DE HOJE, PRESENÇA NO PLANTÃO E PESQUISA ====
 // =====================================================================
-let presencas = {}, leadsHoje = [], pesquisas = [];
+let presencas = {}, leadsHoje = [], pesquisas = [], leadsAjustes = {};
+window.leadsDiaSel = '';
 window.presDia = ''; window.painelMes = 'atual';
 function assinarEtapa3(){
   const silencio = e => console.warn('Painel:', e.code || e.message);
   if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'presenca'), where('dia','>=',inicioJanela())), s => { presencas = {}; s.docs.forEach(d => presencas[d.id] = d.data()); render(); }, silencio));
   if (souGerente()) subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('dia','>=',hojeISO())), s => { leadsHoje = s.docs.map(d => d.data()); render(); }, silencio));
+  if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'leads_ajuste'), where('dia','>=',inicioJanela())), s => { leadsAjustes = {}; s.docs.forEach(d => leadsAjustes[d.id] = d.data()); render(); }, silencio));
   let qp;
   if (souGerente()) qp = collection(db,'pesquisas');
   else if (souCoord()) qp = query(collection(db,'pesquisas'), where('equipe','==',perfil.equipe || '-'));
@@ -4227,25 +4330,38 @@ window.marcarPresenca = async (uid, st) => {
 };
 
 // ---------- leads de hoje (ao vivo, do CRM) ----------
-function resumoLeadsHoje(){
-  const h = hojeISO(), g = new Map();
-  leadsHoje.filter(e => e.dia === h).forEach(e => {
-    const k = e.corretorUid || 'crm:' + norm(e.corretorCrm || e.corretorNome);
-    if (!g.has(k)) g.set(k, { uid:e.corretorUid || '', nome:e.corretorNome || e.corretorCrm || '?', equipe:e.equipe || '', n:0, origens:{}, ultimo:0 });
-    const x = g.get(k); x.n++; const o = e.origem || 'sem origem'; x.origens[o] = (x.origens[o] || 0) + 1; x.ultimo = Math.max(x.ultimo, e.em || 0);
-  });
-  return [...g.values()].sort((a,b) => b.n - a.n);
+const chaveNomeLead = n => norm(n).replace(/\(.*?\)/g, '').trim();
+// leads de um dia por pessoa: eventos ao vivo (hoje) ou o fechamento do dia, com os ajustes do gerente por cima
+function leadsDoDia(dia){
+  const g = new Map(), h = hojeISO();
+  const pega = (nome, uid, equipe) => { const k = chaveNomeLead(nome); if (!g.has(k)) g.set(k, { chave:k, uid:uid || '', nome:nome || '?', equipe:equipe || '', n:0, origens:{}, ultimo:0 }); const x = g.get(k); if (uid && !x.uid) { x.uid = uid; x.equipe = equipe || x.equipe; } return x; };
+  if (dia === h) leadsHoje.filter(e => e.dia === h).forEach(e => { const x = pega(e.corretorCrm || e.corretorNome, e.corretorUid, e.equipe); x.n++; const o = e.origem || 'sem origem'; x.origens[o] = (x.origens[o] || 0) + 1; x.ultimo = Math.max(x.ultimo, e.em || 0); });
+  else (leadsDias.find(d => d.dia === dia)?.linhas || []).forEach(l => { const x = pega(l.nome, l.uid, l.equipe); x.n += Number(l.leads) || 0; });
+  Object.values(leadsAjustes[dia]?.itens || {}).forEach(a => { const x = pega(a.nome, a.uid, a.equipe); x.ajustado = true; x.original = x.n; x.n = Number(a.leads) || 0; });
+  return [...g.values()].filter(x => x.n > 0 || x.ajustado).sort((a,b) => b.n - a.n);
 }
+function resumoLeadsHoje(){ return leadsDoDia(hojeISO()); }
+window.ajustarLeads = async (chave) => {
+  const dia = leadsDiaSel || hojeISO(), x = leadsDoDia(dia).find(y => y.chave === chave); if (!x) return;
+  const v = prompt(`Quantos leads ${x.nome} teve em ${dataBR(dia)}?\n(o app contou ${x.ajustado ? x.original : x.n}; deixe vazio para voltar ao número do app)`, x.n);
+  if (v === null) return;
+  const itens = { ...(leadsAjustes[dia]?.itens || {}) };
+  if (v.trim() === '') delete itens[chave];
+  else { const n = Math.max(0, Math.round(Number(v))); if (isNaN(n)) { toast('Digite um número'); return; } itens[chave] = { nome:x.nome, uid:x.uid, equipe:x.equipe, leads:n, por:perfil.nome, em:Date.now() }; }
+  try { await gravar(setDoc(doc(db,'leads_ajuste',dia), { dia, itens })); toast('Leads ajustados ✓ Vale para o painel e os relatórios.'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 function htmlLeadsHoje(){
-  const l = resumoLeadsHoje(), tot = l.reduce((a,x) => a + x.n, 0), max = Math.max(1, ...l.map(x => x.n));
+  const dia = leadsDiaSel || hojeISO(), ehHoje = dia === hojeISO();
+  const l = leadsDoDia(dia), tot = l.reduce((a,x) => a + x.n, 0), max = Math.max(1, ...l.map(x => x.n));
   const pres = presencas[hojeISO()]?.marcados || {};
-  const parados = pessoasPlantao().filter(p => pres[p.uid]?.status === 'presente' && !l.some(x => x.uid === p.uid));
+  const parados = ehHoje ? pessoasPlantao().filter(p => pres[p.uid]?.status === 'presente' && !l.some(x => x.uid === p.uid)) : [];
   const hh = ms => { const d = new Date(ms); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
-  return `<div class="lh-top"><b>${tot}</b><span>lead${tot!==1?'s':''} hoje · ${l.length} corretor${l.length!==1?'es':''}</span></div>
-    ${l.length ? l.map(x => `<div class="lh-row"><div class="lh-n"><b>${esc(x.nome)}</b><span>${esc(eqNome(x.equipe))} · último às ${hh(x.ultimo)}</span>
-      <div class="lh-orig">${Object.entries(x.origens).sort((a,b) => b[1]-a[1]).map(([o,q]) => `<i>${esc(o)} ${q}</i>`).join('')}</div></div>
-      <div class="lh-bar"><i style="width:${x.n/max*100}%"></i></div><b class="lh-q">${x.n}</b></div>`).join('')
-      : '<div class="muted" style="font-size:13.5px;padding:6px 0">Nenhum lead chegou hoje ainda. Assim que o CRM passar um lead para alguém, aparece aqui na hora.</div>'}
+  return `<div class="lh-top"><b>${tot}</b><span>lead${tot!==1?'s':''} ${ehHoje ? 'hoje' : 'em ' + dataBR(dia)} · ${l.length} corretor${l.length!==1?'es':''}</span><input type="date" value="${dia}" max="${hojeISO()}" onchange="leadsDiaSel=this.value;render()" style="width:auto;margin-left:auto"></div>
+    ${l.length ? l.map(x => `<div class="lh-row"><div class="lh-n"><b>${esc(x.nome)}</b><span>${x.uid ? esc(eqNome(x.equipe)) : 'sem conta no app'}${x.ultimo ? ' · último às ' + hh(x.ultimo) : ''}${x.ajustado ? ` · <span class="late">ajustado (o app contou ${x.original})</span>` : ''}</span>
+      ${Object.keys(x.origens).length ? `<div class="lh-orig">${Object.entries(x.origens).sort((a,b) => b[1]-a[1]).map(([o,q]) => `<i>${esc(o)} ${q}</i>`).join('')}</div>` : ''}</div>
+      <div class="lh-bar"><i style="width:${x.n/max*100}%"></i></div><b class="lh-q">${x.n} <button class="link" title="Corrigir o número" onclick="ajustarLeads('${esc(x.chave)}')">✏️</button></b></div>`).join('')
+      : `<div class="muted" style="font-size:13.5px;padding:6px 0">${ehHoje ? 'Nenhum lead chegou hoje ainda. Assim que o CRM passar um lead para alguém, aparece aqui na hora.' : 'Nenhum lead registrado nesse dia.'}</div>`}
     ${parados.length ? `<div class="lh-parados">⏸️ No plantão e sem lead hoje: ${parados.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}`;
 }
 
@@ -4303,8 +4419,8 @@ function aprovUnificadas(avs, cs){
 function numerosPeriodo(de, ate){
   const h = hojeISO(), noP = d => !!d && d >= de && d <= ate;
   const leadsLinhas = [];
-  leadsDias.filter(x => noP(x.dia) && x.dia !== h).forEach(x => (x.linhas || []).forEach(l => leadsLinhas.push(l)));
-  if (noP(h)) resumoLeadsHoje().forEach(x => leadsLinhas.push({ uid:x.uid, nome:x.nome, equipe:x.equipe, leads:x.n }));
+  const diasComLead = new Set([...leadsDias.map(x => x.dia), ...Object.keys(leadsAjustes), h].filter(noP));
+  diasComLead.forEach(d => leadsDoDia(d).forEach(x => leadsLinhas.push({ uid:x.uid, nome:x.nome, equipe:x.equipe, leads:x.n })));
   const avs = avaliacoes.filter(a => noP(a.data));
   const cs = cartas.filter(c => noP(c.data)), vds = cartas.filter(c => c.status === 'Venda fechada' && noP(c.vendaEm || c.data));
   const vs = rankingDocs.filter(r => noP(r.date) && r.status !== 'Cancelada');
@@ -4314,7 +4430,7 @@ function numerosPeriodo(de, ate){
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
     semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
-    unif:aprovUnificadas(avs, cs), vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
+    unif:aprovUnificadas(avaliacoesUnificadas().filter(a => noP(a.data)), cs), vendas:vds.length, valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
 }
 function variacao(a, b){
@@ -4344,11 +4460,11 @@ function renderPainel(){
     ${kpi('🗂️','Docs', A.docs, B.docs, 'planilha de avaliações')}
     <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
     ${kpi('🔷','Condicionados', A.cond, B.cond)}
-    ${kpi('✅','Aprovações', A.unif.length, B.unif.length, `${A.unif.filter(x => x.plan).length} na planilha · ${A.unif.filter(x => x.app).length} cartas no app · ${A.unif.filter(x => x.plan && x.app).length} nas duas`)}
-    ${kpi('⏳','Aprovados sem carta no app', A.semCarta, B.semCarta, 'aprovados na planilha que o corretor ainda não cadastrou')}
+    ${kpi('✅','Aprovações', A.unif.length, B.unif.length, `planilha + cartas do app, sem repetir cliente${A.semCarta ? ` · ${A.semCarta} ainda sem carta no app` : ''}`)}
     ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, 'planilha de avaliações')}
-    ${kpi('🎉','Vendas', A.vendas, B.vendas, A.valor ? brl(A.valor) + ' em cartas no app' : '')}
+    ${kpi('🎉','Vendas', A.vendas, B.vendas)}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
+    <div class="pd-kpi"><span>⭐ Nota do atendimento</span><b>${(() => { const l = pesquisas.filter(p => p.respondida && typeof p.nota === 'number' && iso(new Date(p.respondidaEm || 0)) >= de && iso(new Date(p.respondidaEm || 0)) <= ate); return l.length ? mediaNotas(l).toLocaleString('pt-BR') : '–'; })()}</b><em>média das pesquisas após a visita</em></div>
     <div class="pd-kpi"><span>📍 Plantão</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
   </div>`;
   // equipes
@@ -4365,7 +4481,7 @@ function renderPainel(){
   const top = pontosDoMes(de.slice(0,7)).slice(0, 5);
   html += `<div class="card"><div class="card-head"><h2>🏆 Destaques do mês</h2><span class="muted">por pontos</span></div>${top.length ? top.map((x,i) => `<div class="pt-row"><span>${MEDALHA(i)} ${esc(x.nome)} <small class="muted">${esc(eqNome(x.equipe))}</small></span><b>${x.pontos} pts · ${x.vendas} venda${x.vendas!==1?'s':''}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Sem pontos no período. Defina a pontuação em Configurações.</div>'}</div></div>`;
   // ao vivo + notas
-  if (atual) html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>📥 Leads de hoje <span class="ao-vivo">ao vivo</span></h2><button class="link" onclick="setView('corretores')">📍 Plantão</button></div>${htmlLeadsHoje()}</div>
+  if (atual) html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>📥 Leads por dia <span class="ao-vivo">ao vivo</span></h2><button class="link" onclick="setView('corretores')">📍 Plantão</button></div>${htmlLeadsHoje()}</div>
     <div class="card"><div class="card-head"><h2>⭐ Nota do atendimento</h2><span class="muted">pesquisa após a visita</span></div>${htmlNotas(de, ate)}</div></div>`;
   else html += `<div class="card"><div class="card-head"><h2>⭐ Nota do atendimento</h2></div>${htmlNotas(de, ate)}</div>`;
   html += `<div class="card" style="margin-bottom:20px"><div class="card-head"><h2>📞 SDRs</h2><span class="muted">visitas marcadas e resumo do dia</span></div>${tabelaSdr(de, ate)}</div>`;
@@ -4405,20 +4521,48 @@ function textoVisitaSdr(v){
   return `Visita na imobiliária\nNome: ${nomeBonito(v.cliente)}\nAvaliação: ${(v.avaliacao || '').toLowerCase()}\nHorário: ${d}/${m} às ${v.time}\nCorretor: ${v.corretorNome ? nomeBonito(v.corretorNome) : ''}\nSDR: ${nomeBonito(primeiro(v.sdrNome || perfil?.nome || ''))}`;
 }
 window.avisarPeloWhats = v => {
-  const txt = textoVisitaSdr(v), dest = [];
-  const cor = v.corretorUid ? perfisLista.find(p => p.uid === v.corretorUid) : null, co = coordDaEquipe(v.equipe);
-  if (cor) dest.push([cor, 'corretor']);
-  if (co && co.uid !== cor?.uid) dest.push([co, 'coordenador']);
-  window._sdrMsg = { txt, dest:dest.map(([p]) => p.telefone || '') };
-  $('msgSub').textContent = `Visita de ${nomeBonito(v.cliente)} marcada ✓ · avise quem vai atender`;
-  $('msgLista').innerHTML = `<div class="msg-item"><b>📲 Mensagem para o atendimento</b><textarea id="sdrTxt" class="msg-txt" style="min-height:150px">${esc(txt)}</textarea>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">${dest.map(([p, r], i) => p.telefone
-      ? `<button class="snooze wa" onclick="enviarSdrMsg(${i})">${IC.wa}Enviar para ${esc(primeiro(p.nome))} (${r})</button>`
-      : `<span class="muted" style="font-size:12.5px">${esc(primeiro(p.nome))} (${r}) ainda não cadastrou o WhatsApp</span>`).join('')}
-      <button class="snooze" onclick="copiarSdrMsg()">📋 Copiar</button></div></div>`;
+  if (!v) return;
+  window._sdrVis = v;
+  const equipe = membrosSelecionaveis().filter(p => p.uid !== uidAtual);
+  const atual = v.corretorUid || (v.corretorNome ? '__livre' : '');
+  $('msgSub').textContent = `Visita de ${nomeBonito(v.cliente)} · avise quem vai atender`;
+  $('msgLista').innerHTML = `<div class="sdr-envio">
+      <div class="row2"><div><label>Quem vai atender</label><select id="sdrQuem" onchange="sdrMudouQuem()">
+        <option value="">— escolha —</option>${equipe.map(p => `<option value="${p.uid}" ${atual===p.uid?'selected':''}>${esc(p.nome)}${p.papel === 'coordenador' ? ' (coordenador)' : ''}</option>`).join('')}
+        <option value="__livre" ${atual==='__livre'?'selected':''}>✍️ Outra pessoa (digitar)</option></select></div>
+        <div><label>WhatsApp de quem vai atender</label><input id="sdrFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
+      <div id="sdrLivreWrap" class="${atual==='__livre'?'':'hide'}"><label>Nome de quem vai atender</label><input id="sdrLivre" value="${esc(atual==='__livre' ? v.corretorNome : '')}" oninput="sdrAtualizaTexto()"></div>
+      <div class="msg-item" style="margin:0"><b>📲 Mensagem</b><textarea id="sdrTxt" class="msg-txt" style="min-height:150px"></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="snooze wa" onclick="enviarSdrMsg()">${IC.wa}Enviar no WhatsApp</button><button class="snooze" onclick="copiarSdrMsg()">📋 Copiar</button></div></div></div>`;
+  sdrMudouQuem(true);
   abrir('msgModal');
 };
-window.enviarSdrMsg = i => { const t = $('sdrTxt').value.trim(), tel = window._sdrMsg?.dest?.[i]; if (tel) enviarWhats(tel, t); };
+function sdrEscolhido(){
+  const q = $('sdrQuem').value;
+  if (q === '__livre') return { uid:'', nome:$('sdrLivre').value.trim() };
+  const p = q ? perfisLista.find(x => x.uid === q) : null;
+  return p ? { uid:p.uid, nome:p.nome, telefone:p.telefone || '', equipe:p.equipe } : { uid:'', nome:'' };
+}
+window.sdrAtualizaTexto = () => { const v = window._sdrVis, e = sdrEscolhido(); $('sdrTxt').value = textoVisitaSdr({ ...v, corretorNome:e.nome }); };
+window.sdrMudouQuem = inicio => {
+  const q = $('sdrQuem').value, e = sdrEscolhido();
+  $('sdrLivreWrap').classList.toggle('hide', q !== '__livre');
+  if (!inicio || !$('sdrFone').value) $('sdrFone').value = e.telefone || (q === '' ? (coordDaEquipe(window._sdrVis.equipe)?.telefone || '') : '');
+  sdrAtualizaTexto();
+};
+// grava na visita quem vai atender (se mudou) e abre o WhatsApp dessa pessoa
+window.enviarSdrMsg = async () => {
+  const v = window._sdrVis, e = sdrEscolhido(), tel = $('sdrFone').value.trim(), txt = $('sdrTxt').value.trim();
+  if (soDig(tel).length < 10) { toast('Digite o WhatsApp de quem vai atender, com DDD'); $('sdrFone').focus(); return; }
+  enviarWhats(tel, txt);
+  if (e.nome && (e.uid !== (v.corretorUid || '') || e.nome !== (v.corretorNome || ''))) {
+    const dados = { ...v, corretorUid:e.uid, corretorNome:e.nome, atualizadoEm:Date.now() }; delete dados.id; delete dados._tok;
+    try { const b = writeBatch(db); b.set(doc(db,'visitas',v.id), dados); b.set(doc(db,'ranking',v.id), rankingDe(dados)); await gravar(b.commit());
+      window._sdrVis = { ...dados, id:v.id }; if (e.uid) avisarCarteiro('visita', v.id, false); syncPlanilha('visitas', v.id); }
+    catch(err) { toast('Mensagem aberta, mas não consegui salvar o corretor: ' + err.message); }
+  }
+  if (e.uid && tel && !perfisLista.find(x => x.uid === e.uid)?.telefone) {} // o telefone do corretor é dele; não gravamos por ele
+};
 window.copiarSdrMsg = async () => { const t = $('sdrTxt').value; try { await navigator.clipboard.writeText(t); toast('Mensagem copiada ✓'); } catch(e) { prompt('Copie a mensagem:', t); } };
 
 // ---------- ranking das SDRs ----------
@@ -4579,7 +4723,7 @@ window.salvarColados = async () => {
       else { const uid = $('resSdr' + i).value; if (!uid) { toast(`Escolha a SDR do resumo de ${dataBR(r.dia)}`); return; } s = sdrsAtivas().find(p => p.uid === uid); if (r.autor && !sdrDoAutor(r.autor)) novosApelidos[r.autor] = uid; }
       await gravarResumo(r, s);
     }
-    if (souGerente() && Object.keys(novosApelidos).length) await gravar(setDoc(doc(db,'config','app'), { apelidosSdr:{ ...(appCfg.apelidosSdr || {}), ...novosApelidos } }, { merge:true }));
+    if (souDono() && Object.keys(novosApelidos).length) await gravar(setDoc(doc(db,'config','app'), { apelidosSdr:{ ...(appCfg.apelidosSdr || {}), ...novosApelidos } }, { merge:true }));
     fechar('resModal'); toast(`${lidos.length} resumo${lidos.length!==1?'s':''} salvo${lidos.length!==1?'s':''} ✓`);
   } catch(e) { toast('Erro: ' + e.message); }
 };
