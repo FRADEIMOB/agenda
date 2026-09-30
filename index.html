@@ -514,6 +514,45 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
   html,body{overflow-x:hidden}
 }
 
+/* cartão do perfil (visual limpo) */
+.profile{padding:16px 16px 14px}
+.profile .avatar{width:54px;height:54px;border-radius:50%;font-size:21px;border:2px solid #ffffffcc;box-shadow:0 0 0 3px #ffffff26}
+.person .av,.foto-grande,.av{border-radius:50%!important}
+.profile .avatar img{border-radius:50%}
+.profile .avatar:after{right:0;bottom:0;width:11px;height:11px}
+.profile .p-mail{display:none}
+.profile .p-name{font-size:15.5px;letter-spacing:-.01em}
+.profile .p-role{display:block;margin-top:3px;padding:0;background:none;border:0;font-size:12px;font-weight:600;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-stats{display:grid;grid-template-columns:repeat(3,1fr);background:#ffffff1f;border:1px solid #ffffff26;border-radius:14px;padding:10px 2px;text-align:center}
+.p-stats>div{min-width:0}
+.p-stats>div+div{border-left:1px solid #ffffff2e}
+.p-stats b{display:block;font-size:17px;font-weight:800;line-height:1.15;letter-spacing:-.02em}
+.p-stats span{display:block;font-size:10px;font-weight:600;opacity:.85;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+
+/* Etapa 1: pontos, mensagens, motivos, repetidos */
+.motivos{display:grid;gap:8px}
+.motivos button{text-align:left;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font:inherit;font-weight:600;cursor:pointer}
+.motivos button:hover{border-color:var(--accent);background:var(--accent-soft)}
+.msg-item{border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.msg-item b{display:block;margin-bottom:6px}
+.msg-item .snooze{display:inline-flex;align-items:center;gap:6px}
+.msg-item .snooze svg{width:16px;height:16px;flex:none}
+.msg-item p{margin:0 0 10px;white-space:pre-wrap;font-size:13.5px;color:var(--muted);line-height:1.45}
+.rep-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--danger-soft);color:var(--danger);margin-left:6px;white-space:nowrap}
+.pt-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.pt-row:last-child{border-bottom:0}
+.pt-row input{width:90px;text-align:center}
+.pt-row span{font-size:13.5px;font-weight:600}
+table.rank td.pts{font-weight:800;color:var(--accent)}
+.rep-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+.rep-item:last-child{border-bottom:0}
+.rep-item .ri{flex:1;min-width:0;font-size:13.5px}
+.rep-item .ri b{display:block;font-size:14.5px;margin-bottom:3px}
+.rep-item .ra{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.arq-row{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.arq-row .ai{flex:1;min-width:0}
+.arq-row .ai b{display:block;font-size:14.5px}
+
 /* Mobile */
 .mobilebar{display:none}
 .fab{display:none}
@@ -834,7 +873,29 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
 
       <!-- RELATÓRIOS -->
       <section class="view" id="v-relatorios">
-        <div class="page-head"><div><h1>Relatórios</h1><div class="sub">Como anda a sua produtividade.</div></div></div>
+        <div class="page-head"><div><h1>Relatórios</h1><div class="sub" id="relSub">Como anda a sua produtividade.</div></div></div>
+        <div id="relGestao" class="gest hide">
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-head"><h2>🏆 Pontos</h2><div class="ph-acoes"><select id="ptMes" style="width:auto" onchange="ptMesSel=this.value;render()"></select></div></div>
+            <div class="janela" id="ptInfo"></div>
+            <div id="ptTabela" style="overflow-x:auto"></div>
+            <div class="janela" style="justify-content:flex-end;gap:14px;flex-wrap:wrap;margin-top:10px">
+              <button class="link gerente-only hide" id="btnRecalc" onclick="recalcularMes()">🔄 Refazer o fechamento deste mês</button>
+              <button class="link" onclick="exportarPontos(false)">⬇ Exportar este mês para Excel</button>
+              <button class="link" onclick="exportarPontos(true)">⬇ Exportar todos os meses</button>
+            </div>
+          </div>
+          <div class="card gerente-only hide" style="margin-bottom:20px">
+            <div class="card-head"><h2>⚠ Clientes repetidos</h2><span class="muted">Só os gerentes veem</span></div>
+            <div id="repLista"></div>
+            <div class="janela" style="justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px"><span class="hint" style="margin:0" id="repInfo"></span><button class="link" id="btnVerifHist" onclick="verificarHistorico()">🔍 Verificar todo o histórico</button></div>
+          </div>
+          <div class="rep-grid" style="margin-bottom:20px">
+            <div class="card"><div class="card-head"><h2>📣 Origem dos clientes</h2><select id="origPer" style="width:auto" onchange="origPer=this.value;render()"><option value="mes">Este mês</option><option value="3m">Últimos 3 meses</option></select></div><div id="origTabela"></div></div>
+            <div class="card"><div class="card-head"><h2>❌ Motivos da perda</h2><span class="muted" id="motPerTxt">este mês</span></div><div id="motTabela"></div></div>
+          </div>
+          <div class="rep-sec" style="margin:4px 0 14px">Sua agenda pessoal</div>
+        </div>
         <div class="kpis" style="margin-bottom:20px">
           <div class="kpi"><b id="kSemana">0</b><span>Concluídas em 7 dias</span></div>
           <div class="kpi"><b id="kTaxa">0%</b><span>Taxa de conclusão (30 dias)</span></div>
@@ -881,6 +942,19 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
               <label class="toggle"><input type="checkbox" id="cfgNotif" onchange="alternarNotif(this.checked)"><span></span></label></div>
             <div class="set-row"><div><b>Avisar com antecedência de</b><span>Minutos antes do horário</span></div>
               <select id="cfgMin" style="width:auto" onchange="salvarMin(this.value)"><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hora</option></select></div>
+          </div>
+          <div class="card gerente-only hide" id="cardAdmPontos">
+            <div class="card-head"><h2>🏆 Pontuação</h2><span class="muted">Só gerentes</span></div>
+            <div class="hint" style="margin-top:0;margin-bottom:12px">Quanto vale cada ação. Os pontos zeram todo dia 1º. Mudou um valor? Vale para o mês em andamento; os meses já fechados não mudam. Pode usar números negativos.</div>
+            <div id="admPontos"></div>
+            <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarPontuacao()">Salvar pontuação</button>
+          </div>
+          <div class="card gerente-only hide" id="cardAdmListas">
+            <div class="card-head"><h2>📋 Listas do app</h2><span class="muted">Só gerentes</span></div>
+            <div class="fg"><label>Origens do cliente <span class="muted" style="font-weight:500">(uma por linha)</span></label><textarea id="admOrigens" style="min-height:120px"></textarea></div>
+            <div class="fg"><label>Motivos da perda <span class="muted" style="font-weight:500">(um por linha)</span></label><textarea id="admMotivos" style="min-height:120px"></textarea></div>
+            <button class="btn btn-primary btn-block" onclick="salvarListas()">Salvar listas</button>
+            <div class="set-row" style="margin-top:14px"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div>
           </div>
           <div class="card">
             <div class="card-head"><h2>Seus dados</h2></div>
@@ -976,12 +1050,18 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <div class="fg"><label>Imóvel / empreendimento</label><input id="vmImovel" placeholder="Nome do empreendimento" list="listaImoveis"><datalist id="listaImoveis"></datalist></div>
       <div class="row2 fg">
         <div id="vmCorWrap"><label>Corretor</label><select id="vmCorretor"></select></div>
-        <div><label>Status</label><select id="vmStatus"></select></div>
+        <div><label>Status</label><select id="vmStatus" onchange="vmMostrarMotivo()"></select></div>
       </div>
+      <div class="row2 fg"><div><label>Origem do cliente</label><select id="vmOrigem" onchange="vmMostrarIndicado()"></select></div>
+        <div id="vmIndWrap" class="hide"><label>Indicado por</label><input id="vmIndicado" placeholder="Quem indicou?"></div></div>
+      <div class="fg hide" id="vmMotivoWrap"><label>Motivo da perda</label><select id="vmMotivo"></select></div>
       <div class="fg"><label>Observação</label><textarea id="vmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <div class="row2" id="vmExtras">
         <button class="btn btn-ghost" onclick="addGoogle(visitaComoTarefa(lerVisita()))"><i data-ic="calplus" style="width:17px;height:17px;display:grid"></i>Google Agenda</button>
-        <button class="btn btn-danger" onclick="excluirVisita(visitaAtualId(),true)">Excluir</button>
+        <button class="btn btn-ghost" onclick="abrirMensagens('v',visitaAtualId())">💬 Mensagens prontas</button>
+      </div>
+      <div class="row2" id="vmExtras2" style="margin-top:10px">
+        <span></span><button class="btn btn-danger" onclick="excluirVisita(visitaAtualId(),true)">🗄️ Arquivar</button>
       </div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('visModal')">Cancelar</button><button class="btn btn-primary" id="vmSalvar" onclick="salvarVisita()">Salvar visita</button></div>
@@ -1005,12 +1085,13 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <div class="fg"><label>CPF do cliente</label><input id="cmCpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCpf(this)"><div class="hint" id="cmCpfAviso" style="margin-top:6px"></div></div>
       <div class="row2 fg"><div><label>Valor aprovado (R$)</label><input id="cmValor" inputmode="numeric" placeholder="Ex.: 180.000" onblur="formatarValor(this)"></div><div><label>Subsídio (R$, opcional)</label><input id="cmSubsidio" inputmode="numeric" placeholder="Ex.: 55.000" onblur="formatarValor(this)"></div></div>
       <div class="row2 fg"><div><label>Data da aprovação</label><input type="date" id="cmData"></div><div><label>Válida até (opcional)</label><input type="date" id="cmValidade"></div></div>
-      <div class="row2 fg"><div><label>Banco</label><select id="cmBanco"></select></div><div><label>Situação</label><select id="cmStatus"></select></div></div>
+      <div class="row2 fg"><div><label>Banco</label><select id="cmBanco"></select></div><div><label>Situação</label><select id="cmStatus" onchange="cmMostrarMotivo()"></select></div></div>
+      <div class="fg hide" id="cmMotivoWrap"><label>Motivo da perda</label><select id="cmMotivo"></select></div>
       <div class="fg"><label>Empreendimento de interesse (opcional)</label><input id="cmImovel" placeholder="Nome do empreendimento" list="listaImoveis2"><datalist id="listaImoveis2"></datalist></div>
       <div class="fg" id="cmCorWrap"><label>Corretor</label><select id="cmCorretor"></select></div>
       <div class="fg"><label>Documentos recebidos <span class="muted" id="cmDocsQt" style="font-weight:500"></span></label><div class="docs-grid" id="cmDocs"></div></div>
       <div class="fg"><label>Observação</label><textarea id="cmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
-      <button class="btn btn-danger btn-block" id="cmExcluir" onclick="excluirCarta(cartaAtualId(),true)">Excluir carta</button>
+      <div class="row2" id="cmExcluir"><button class="btn btn-ghost" onclick="abrirMensagens('c',cartaAtualId())">💬 Mensagens prontas</button><button class="btn btn-danger" onclick="excluirCarta(cartaAtualId(),true)">🗄️ Arquivar carta</button></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('cartaModal')">Cancelar</button><button class="btn btn-primary" id="cmSalvar" onclick="salvarCarta()">Salvar carta</button></div>
   </div>
@@ -1027,6 +1108,30 @@ html[data-theme="dark"] .cst-aprovada{color:#6ee7b7}html[data-theme="dark"] .cst
       <div id="avLista"></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('avisoModal')">Cancelar</button><button class="btn btn-primary" onclick="publicarAviso()">Publicar</button></div>
+  </div>
+</div>
+
+<!-- ================= MENSAGENS PRONTAS ================= -->
+<div class="modal" id="msgModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><div><h2>💬 Mensagens prontas</h2><div class="muted" style="font-size:13px;margin-top:3px" id="msgSub"></div></div><button class="icon-btn" onclick="fechar('msgModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="msgLista"></div>
+  </div>
+</div>
+
+<!-- ================= MOTIVO DA PERDA ================= -->
+<div class="modal" id="motivoModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><div><h2>Qual foi o motivo?</h2><div class="muted" style="font-size:13px;margin-top:3px" id="motivoSub"></div></div><button class="icon-btn" onclick="fechar('motivoModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="motivos" id="motivoLista"></div></div>
+  </div>
+</div>
+
+<!-- ================= ARQUIVADOS (gerente) ================= -->
+<div class="modal" id="arqModal">
+  <div class="sheet" style="width:min(720px,100%)">
+    <div class="sheet-head"><div><h2>🗄️ Arquivados</h2><div class="muted" style="font-size:13px;margin-top:3px">Nada é apagado de verdade. Tudo o que foi arquivado continua guardado na nuvem e pode ser restaurado.</div></div><button class="icon-btn" onclick="fechar('arqModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="seg" id="segArq" style="margin-bottom:14px"></div><input id="arqBusca" placeholder="Buscar cliente ou corretor..." oninput="renderArquivados()" style="margin-bottom:12px"><div id="arqLista"></div></div>
   </div>
 </div>
 
@@ -1515,7 +1620,8 @@ function render(){
   renderVisitasTudo();
 
   // ----- RELATÓRIOS -----
-  if (view === 'relatorios') renderRelatorios(stk);
+  if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
+  if (view === 'config') renderAdm();
 
   // ----- CONFIG -----
   if (view === 'config') {
@@ -1766,7 +1872,7 @@ const FIREBASE_ANTIGO = {
 const EMAIL_ANTIGO_TENDA = 'tropatenda@fradeimoveis.com';
 
 let uidAtual = '', perfil = null, perfilOk = false, instalacao = null, instOk = false;
-let equipes = {}, visitas = [], rankingDocs = [], perfisLista = [];
+let equipes = {}, visitas = [], rankingDocs = [], perfisLista = [], visitasBrutas = [];
 let subsBase = [], subsPapel = [], chaveSubs = '', cadDispensado = false;
 let visAba = 'lista', vFil = { busca:'', periodo:'proximas', status:'', equipe:'', corretor:'' };
 window.rankPeriodo = 'mes'; window.rankEquipe = ''; window.corPeriodo = 'mes';
@@ -1818,15 +1924,17 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {};
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
   if (souGerente()) qv = historicoCompleto ? collection(db,'visitas') : query(collection(db,'visitas'), where('date','>=',inicioJanela()));
   else if (souCoord()) qv = query(collection(db,'visitas'), where('equipe','==',perfil.equipe||'-'));
   else qv = query(collection(db,'visitas'), where('corretorUid','==',uidAtual));
-  subsPapel.push(onSnapshot(qv, s => { visitas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  subsPapel.push(onSnapshot(qv, s => { visitasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); visitas = visitasBrutas.filter(x => !x.arquivado); render(); }, erro));
   const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=',inicioJanela()));
-  subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.ranking = true; render(); fecharMesesPendentes(); }, erro));
+  assinarEtapa1(erro);
   assinarCartas(erro);
   let qp = null;
   if (souGerente()) qp = collection(db,'perfis');
@@ -1926,13 +2034,15 @@ function cardVisita(v, compacto){
   if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">✗ Não veio</button>`);
   if (!compacto) {
     acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitas.find(x=>x.id==='${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
-    acoes.push(`<button class="icon-btn del" onclick="excluirVisita('${v.id}')" title="Excluir">${IC.trash}</button>`);
+    if (v.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('v','${v.id}')" title="Mensagens prontas">💬</button>`);
+    acoes.push(`<button class="icon-btn del" onclick="excluirVisita('${v.id}')" title="Arquivar">🗄️</button>`);
   }
   return `<div class="vcard" style="--vc:${cor}">
     <div class="v-time"><b>${esc(v.time||'--:--')}</b></div>
     <div class="v-body" onclick="editarVisita('${v.id}')">
-      <div class="v-top"><b>${esc(v.cliente)}</b><span class="vst ${stCls(v.status)}">${esc(v.status)}</span></div>
+      <div class="v-top"><b>${esc(v.cliente)}${seloRepetido('visita', v.id)}</b><span class="vst ${stCls(v.status)}">${esc(v.status)}</span></div>
       <div class="v-meta">${meta.join('')}</div>
+      ${v.motivoPerda && !compacto ? `<div class="v-obs">❌ ${esc(v.motivoPerda)}</div>` : ''}
       ${v.obs && !compacto ? `<div class="v-obs">📝 ${esc(v.obs)}</div>` : ''}
     </div>
     <div class="v-actions">${acoes.join('')}</div>
@@ -1948,7 +2058,7 @@ function renderPapel(){
     el.classList.remove('hide');
     if (perfil.status === 'pendente') el.textContent = '⏳ Aguardando aprovação';
     else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
-    else el.textContent = (perfil.papel === 'gerente' ? '⭐ Gerente' : PAPEIS[perfil.papel] + (perfil.equipe ? ' · ' + eqNome(perfil.equipe) : ''));
+    else { el.textContent = perfil.papel === 'gerente' ? '⭐ Gerente' : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir()));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
@@ -2060,8 +2170,10 @@ function agrupaRanking(rows){
 function renderRanking(){
   $('rPeriodo').value = rankPeriodo;
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  $('segRank').innerHTML = [['visitas','Visitas'],['cartas','Cartas aprovadas']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
+  $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos');
+  if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
   $('janelaRank').innerHTML = avisoJanela(rankPeriodo === 'todas');
   const [de, ate] = faixa(rankPeriodo);
@@ -2104,7 +2216,8 @@ function abrirFormVisita(v, dataPadrao){
     $('vmCorretor').innerHTML = ops.join('');
     $('vmCorretor').value = v ? (v.corretorUid || '') : uidAtual;
   }
-  $('vmExtras').classList.toggle('hide', !v);
+  $('vmExtras').classList.toggle('hide', !v); $('vmExtras2').classList.toggle('hide', !v);
+  preencherOrigemMotivo(v);
   abrir('visModal');
   if (!v) setTimeout(() => $('vmCliente').focus(), 80);
 }
@@ -2115,7 +2228,10 @@ window.novaVisita = (data) => {
 window.editarVisita = id => { const v = visitas.find(x => x.id === id); if (v) abrirFormVisita(v); };
 function lerVisita(){
   const d = { date:$('vmData').value, time:$('vmHora').value, cliente:$('vmCliente').value.trim(), telefone:$('vmFone').value.trim(),
-    empreendimento:$('vmImovel').value.trim(), status:$('vmStatus').value, obs:$('vmObs').value.trim() };
+    empreendimento:$('vmImovel').value.trim(), status:$('vmStatus').value, obs:$('vmObs').value.trim(),
+    origem:$('vmOrigem').value, indicadoPor:$('vmOrigem').value === 'Indicação' ? $('vmIndicado').value.trim() : '',
+    motivoPerda: PERDA_V.includes($('vmStatus').value) ? $('vmMotivo').value : '' };
+  d.telNorm = chaveTel(d.telefone);
   if (!podeGerir()) { d.corretorUid = uidAtual; d.corretorNome = perfil.nome; d.equipe = perfil.equipe || ''; }
   else {
     const uid = $('vmCorretor').value;
@@ -2126,14 +2242,16 @@ function lerVisita(){
   return d;
 }
 window.lerVisita = lerVisita;
-function rankingDe(d){ return { equipe:d.equipe||'', corretorUid:d.corretorUid||'', corretorNome:d.corretorNome||'', date:d.date||'', status:d.status||'' }; }
+function rankingDe(d){ return { equipe:d.equipe||'', corretorUid:d.corretorUid||'', corretorNome:d.corretorNome||'', date:d.date||'', status:d.status||'', semPontos:!!d.semPontos }; }
 window.salvarVisita = async () => {
   const d = lerVisita();
   if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
   if (!d.cliente) { toast('Informe o nome do cliente'); $('vmCliente').focus(); return; }
   if (!d.empreendimento) { toast('Informe o imóvel ou empreendimento'); $('vmImovel').focus(); return; }
+  if (!d.origem && !vOrig) { toast('Escolha a origem do cliente'); $('vmOrigem').focus(); return; }
+  if (PERDA_V.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('vmMotivo').focus(); return; }
   const id = vEditId || doc(collection(db,'visitas')).id;
-  const dados = { ...d, criadoPor: vOrig?.criadoPor || uidAtual, criadoEm: vOrig?.criadoEm || Date.now(), atualizadoEm: Date.now() };
+  const dados = { ...d, criadoPor: vOrig?.criadoPor || uidAtual, criadoEm: vOrig?.criadoEm || Date.now(), atualizadoEm: Date.now(), semPontos: !!vOrig?.semPontos };
   $('vmSalvar').disabled = true;
   try {
     const b = writeBatch(db);
@@ -2146,9 +2264,10 @@ window.salvarVisita = async () => {
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('vmSalvar').disabled = false;
 };
-window.mudarStatus = async (id, st) => {
+window.mudarStatus = async (id, st, motivo) => {
   const v = visitas.find(x => x.id === id); if (!v) return;
-  const dados = { ...v, status:st, atualizadoEm:Date.now() }; delete dados.id;
+  if (PERDA_V.includes(st) && !motivo) { pedirMotivo('v', id, st); return; }
+  const dados = { ...v, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_V.includes(st) ? motivo : '' }; delete dados.id;
   try {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
@@ -2157,14 +2276,14 @@ window.mudarStatus = async (id, st) => {
 };
 window.excluirVisita = async (id, doModal) => {
   const v = visitas.find(x => x.id === id); if (!v) return;
-  if (!confirm(`Excluir a visita de ${v.cliente}?`)) return;
+  if (!confirm(`Arquivar a visita de ${v.cliente}?\n\nEla sai da lista, mas continua guardada na nuvem. O gerente pode restaurar quando quiser.`)) return;
   try {
     const b = writeBatch(db);
-    b.delete(doc(db,'visitas',id)); b.delete(doc(db,'ranking',id));
+    b.set(doc(db,'visitas',id), marcaArquivo(), { merge:true }); b.set(doc(db,'ranking',id), { arquivado:true }, { merge:true });
     await gravar(b.commit());
     if (doModal) fechar('visModal');
-    toast('Visita excluída');
-  } catch(e) { toast('Erro ao excluir: ' + e.message); }
+    toast('Visita arquivada');
+  } catch(e) { toast('Erro ao arquivar: ' + e.message); }
 };
 window.whatsConfirmar = id => {
   const v = visitas.find(x => x.id === id); if (!v) return;
@@ -2399,9 +2518,9 @@ const C_STATUS = ['Aprovada','Em negociação','Venda fechada','Desistiu','Venci
 const C_COR = { 'Aprovada':'#10b981', 'Em negociação':'#3b82f6', 'Venda fechada':'#8b5cf6', 'Desistiu':'#ef4444', 'Vencida':'#64748b' };
 const BANCOS = ['Caixa','Banco do Brasil','Outro'];
 let avisos = [];
-let cartas = [], rankingCartas = [], cEditId = null, cOrig = null;
+let cartas = [], rankingCartas = [], cEditId = null, cOrig = null, cartasBrutas = [];
 let cFil = { busca:'', periodo:'mes', status:'', equipe:'', corretor:'' };
-window.rankTipo = 'visitas';
+window.rankTipo = 'pontos';
 const soDig = x => String(x||'').replace(/\D/g,'');
 const fmtCpf = x => { const d = soDig(x).slice(0,11); return d.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); };
 const cpfOculto = x => { const d = soDig(x); return d.length === 11 ? `***.${d.slice(3,6)}.${d.slice(6,9)}-**` : ''; };
@@ -2422,7 +2541,8 @@ const brl = n => (Number(n)||0).toLocaleString('pt-BR', { style:'currency', curr
 const lerValor = s => { const t = String(s||'').replace(/[^\d,]/g,'').replace(',','.'); return t ? Math.round(parseFloat(t)) : 0; };
 const fmtValorInput = n => n ? (Number(n)).toLocaleString('pt-BR') : '';
 function cStCls(st){ return 'cst-' + norm(st).replace(/[^a-z0-9]+/g,'-'); }
-function rankingCartaDe(c){ return { equipe:c.equipe||'', corretorUid:c.corretorUid||'', corretorNome:c.corretorNome||'', data:c.data||'', status:c.status||'', valor:c.valor||0 }; }
+function rankingCartaDe(c){ return { equipe:c.equipe||'', corretorUid:c.corretorUid||'', corretorNome:c.corretorNome||'', data:c.data||'', status:c.status||'', valor:c.valor||0,
+  vendaEm:c.vendaEm||'', docsCompletos: docsOk(c) === DOCS.length, semPontos:!!c.semPontos }; }
 function diasParaVencer(c){ return c.validade ? diffDias(c.validade) : null; }
 function cartasDoPerfil(p, de, ate){ return cartas.filter(c => c.corretorUid === p.uid && c.data >= de && c.data <= ate); }
 
@@ -2433,8 +2553,8 @@ function assinarCartas(erro){
   if (souGerente()) qc = collection(db,'cartas');
   else if (souCoord()) qc = query(collection(db,'cartas'), where('equipe','==',perfil.equipe||'-'));
   else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
-  subsPapel.push(onSnapshot(qc, s => { cartas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
-  subsPapel.push(onSnapshot(collection(db,'ranking_cartas'), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
+  subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
+  subsPapel.push(onSnapshot(collection(db,'ranking_cartas'), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
 }
 
 function cardCarta(c){
@@ -2457,11 +2577,12 @@ function cardCarta(c){
   const acoes = [];
   if (c.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')" title="Abrir conversa">${IC.wa}WhatsApp</button>`);
   if (c.status === 'Aprovada' || c.status === 'Em negociação') acoes.push(`<button class="snooze" onclick="mudarStatusCarta('${c.id}','Venda fechada')">🎉 Venda fechada</button>`);
-  acoes.push(`<button class="icon-btn del" onclick="excluirCarta('${c.id}')" title="Excluir">${IC.trash}</button>`);
+  if (c.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('c','${c.id}')" title="Mensagens prontas">💬</button>`);
+  acoes.push(`<button class="icon-btn del" onclick="excluirCarta('${c.id}')" title="Arquivar">🗄️</button>`);
   return `<div class="vcard" style="--vc:${cor}">
     <div class="v-time"><b style="font-size:15px">${parseISO(c.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</b><span>aprovada</span></div>
     <div class="v-body" onclick="editarCarta('${c.id}')">
-      <div class="v-top"><b>${esc(c.cliente)}</b><span class="vst ${cStCls(c.status)}">${esc(c.status)}</span></div>
+      <div class="v-top"><b>${esc(c.cliente)}${seloRepetido('carta', c.id)}</b><span class="vst ${cStCls(c.status)}">${esc(c.status)}</span></div>
       <div class="v-meta"><span style="color:var(--text);font-weight:700">💰 ${brl(c.valor)}${c.subsidio ? ' · subsídio ' + brl(c.subsidio) : ''}</span>${meta.join('')}</div>
       <div class="v-meta">${aviso}</div>
       ${c.obs ? `<div class="v-obs">📝 ${esc(c.obs)}</div>` : ''}
@@ -2524,6 +2645,7 @@ function abrirFormCarta(c, pre){
     $('cmCorretor').value = c ? c.corretorUid : (pre?.corretorUid || uidAtual);
   }
   $('cmExcluir').classList.toggle('hide', !c);
+  preencherMotivoCarta(c);
   abrir('cartaModal');
   if (!c) setTimeout(() => (pre ? $('cmValor') : $('cmCliente')).focus(), 80);
 }
@@ -2537,7 +2659,10 @@ window.editarCarta = id => { const c = cartas.find(x => x.id === id); if (c) abr
 window.salvarCarta = async () => {
   const d = { cliente:$('cmCliente').value.trim(), telefone:$('cmFone').value.trim(), cpf:fmtCpf($('cmCpf').value), data:$('cmData').value, validade:$('cmValidade').value,
     valor:lerValor($('cmValor').value), subsidio:lerValor($('cmSubsidio').value), banco:$('cmBanco').value,
-    empreendimento:$('cmImovel').value.trim(), status:$('cmStatus').value, obs:$('cmObs').value.trim() };
+    empreendimento:$('cmImovel').value.trim(), status:$('cmStatus').value, obs:$('cmObs').value.trim(),
+    motivoPerda: PERDA_C.includes($('cmStatus').value) ? $('cmMotivo').value : '' };
+  d.telNorm = chaveTel(d.telefone); d.cpfNorm = soDig(d.cpf).length === 11 ? soDig(d.cpf) : '';
+  if (PERDA_C.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('cmMotivo').focus(); return; }
   if (!d.cliente) { toast('Informe o nome do cliente'); $('cmCliente').focus(); return; }
   if (!d.data) { toast('Informe a data da aprovação'); return; }
   if (!d.valor) { toast('Informe o valor aprovado'); $('cmValor').focus(); return; }
@@ -2552,7 +2677,7 @@ window.salvarCarta = async () => {
   d.docs = { ...cDocs };
   if (cOrig?.visitaId || cPre?.visitaId) d.visitaId = cOrig?.visitaId || cPre.visitaId;
   aplicarPosVenda(d, cOrig);
-  const dados = { ...d, criadoPor: cOrig?.criadoPor || uidAtual, criadoEm: cOrig?.criadoEm || Date.now(), atualizadoEm: Date.now() };
+  const dados = { ...d, criadoPor: cOrig?.criadoPor || uidAtual, criadoEm: cOrig?.criadoEm || Date.now(), atualizadoEm: Date.now(), semPontos: !!cOrig?.semPontos };
   $('cmSalvar').disabled = true;
   try {
     const b = writeBatch(db);
@@ -2564,17 +2689,18 @@ window.salvarCarta = async () => {
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('cmSalvar').disabled = false;
 };
-window.mudarStatusCarta = async (id, st) => {
+window.mudarStatusCarta = async (id, st, motivo) => {
   const c = cartas.find(x => x.id === id); if (!c) return;
-  const dados = { ...c, status:st, atualizadoEm:Date.now() }; delete dados.id;
+  if (PERDA_C.includes(st) && !motivo) { pedirMotivo('c', id, st); return; }
+  const dados = { ...c, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_C.includes(st) ? motivo : '' }; delete dados.id;
   aplicarPosVenda(dados, c);
   try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); if (st === 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); } toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirCarta = async (id, doModal) => {
   const c = cartas.find(x => x.id === id); if (!c) return;
-  if (!confirm(`Excluir a carta de ${c.cliente}?`)) return;
-  try { const b = writeBatch(db); b.delete(doc(db,'cartas',id)); b.delete(doc(db,'ranking_cartas',id)); await gravar(b.commit()); if (doModal) fechar('cartaModal'); toast('Carta excluída'); }
+  if (!confirm(`Arquivar a carta de ${c.cliente}?\n\nEla sai da lista, mas continua guardada na nuvem. O gerente pode restaurar quando quiser.`)) return;
+  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), marcaArquivo(), { merge:true }); b.set(doc(db,'ranking_cartas',id), { arquivado:true }, { merge:true }); await gravar(b.commit()); if (doModal) fechar('cartaModal'); toast('Carta arquivada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.toLocaleString('pt-BR') : ''; };
@@ -2757,14 +2883,15 @@ function renderPainelPapel(){
   const noMes = c => c.data >= mi && c.data <= mf;
   const vendaNoMes = c => c.status === 'Venda fechada' && (c.vendaEm || c.data) >= mi && (c.vendaEm || c.data) <= mf;
   const rk = rankingMes(''), pos = rk.findIndex(g => g.uid === uidAtual), eu = rk[pos];
+  const rkP = pontosDoMes(mesAtual()), pPos = rkP.findIndex(g => g.uid === uidAtual), pEu = rkP[pPos];
   // cartão do perfil
   const minhasCartas = cartas.filter(c => c.corretorUid === uidAtual && noMes(c)).length;
   const totMes = rankingDocs.filter(r => r.date >= mi && r.date <= mf && r.status !== 'Cancelada').length, cartasMes = cartas.filter(noMes).length;
+  const vendasMes = cartas.filter(vendaNoMes).length, minhasVendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
+  const caixa = itens => `<div class="p-stats">${itens.map(([v,r]) => `<div><b>${v}</b><span>${r}</span></div>`).join('')}</div>`;
   $('pFootRank').innerHTML = souGerente()
-    ? `<div class="p-rank"><div class="med">📊</div><div><b>${totMes} visita${totMes!==1?'s':''} no mês</b><span>${cartasMes} carta${cartasMes!==1?'s':''} aprovada${cartasMes!==1?'s':''} · todas as equipes</span></div></div>`
-    : pos >= 0
-    ? `<div class="p-rank"><div class="med">${MEDALHA(pos)}</div><div><b>${pos+1}º no ranking do mês</b><span>${eu.total} visita${eu.total!==1?'s':''} · ${minhasCartas} carta${minhasCartas!==1?'s':''}</span></div></div>`
-    : `<div class="p-rank"><div class="med">🏁</div><div><b>Ainda fora do ranking</b><span>Marque a primeira visita do mês</span></div></div>`;
+    ? caixa([[totMes,'visitas'],[cartasMes,'cartas'],[vendasMes,'vendas']])
+    : caixa([[pPos >= 0 ? (pPos > 2 ? (pPos+1) + 'º' : MEDALHA(pPos) + ' ' + (pPos+1) + 'º') : '–','ranking'],[pEu ? pEu.pontos : 0,'pontos'],[minhasCartas,'cartas']]);
 
   if (!podeGerir()) {
     const vh = visitas.filter(v => v.corretorUid === uidAtual && v.date === h && v.status !== 'Cancelada');
@@ -2774,7 +2901,7 @@ function renderPainelPapel(){
       statCard('house','var(--accent)','var(--accent-soft)', vh.length, 'Visitas hoje', vh.length ? `${conf} confirmada${conf!==1?'s':''}` : '', "setView('visitas')") +
       statCard('card','var(--ok)','var(--ok-soft)', minhasCartas, 'Cartas no mês', '', "setView('cartas')") +
       statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', vendas, 'Vendas no mês', '', "cf('status','Venda fechada');setView('cartas')") +
-      statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', pos >= 0 ? (pos+1)+'º' : '–', 'No ranking', pos >= 0 ? `de ${rk.length} corretores` : 'sem visitas no mês', "setVisAba('ranking');setView('visitas')");
+      statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', pPos >= 0 ? (pPos+1)+'º' : '–', 'No ranking', pPos >= 0 ? `${pEu.pontos} pontos · de ${rkP.length}` : 'sem pontos no mês', "rankTipo='pontos';setVisAba('ranking');setView('visitas')");
     return;
   }
   // gestor (gerente ou coordenador)
@@ -3002,6 +3129,414 @@ document.addEventListener('keydown', e => {
 });
 $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal')) fecharModal(); });
 ['visModal','relModal','menuModal','confModal','cartaModal','avisoModal','maisModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) fechar(id); }));
+
+// =====================================================================
+// ======= ETAPA 1: PONTOS, ORIGEM, MOTIVOS, ARQUIVO, REPETIDOS ========
+// =====================================================================
+const PERDA_V = ['Não compareceu','Cancelada'];
+const PERDA_C = ['Desistiu','Vencida'];
+const CFG_PADRAO = {
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30 },
+  origens:['Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
+  motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
+};
+const PONTOS_ITENS = [
+  ['vPendente','🏠 Visita marcada (pendente ou reagendada)'],
+  ['vConfirmada','✅ Visita confirmada'],
+  ['vRealizada','⭐ Visita realizada'],
+  ['vFalta','🚫 Cliente não compareceu'],
+  ['carta','📄 Carta aprovada'],
+  ['docs','🗂️ Documentação completa'],
+  ['venda','🎉 Venda fechada']
+];
+let appCfg = JSON.parse(JSON.stringify(CFG_PADRAO)), repetidos = [], pontosMeses = {}, carregado = {};
+window.ptMesSel = ''; window.origPer = 'mes'; window.arqAba = 'visitas';
+const mesAtual = () => hojeISO().slice(0,7);
+function mesAnterior(n){ const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - n); return iso(d).slice(0,7); }
+function nomeMes(m){ const [a, mm] = m.split('-').map(Number); return maiuscula(new Date(a, mm-1, 1).toLocaleDateString('pt-BR', { month:'long', year:'numeric' })); }
+// telefone → chave de comparação (DDD + 8 últimos dígitos). Sem DDD, considera 83 (Paraíba)
+function chaveTel(t){
+  let d = soDig(t);
+  if (d.startsWith('55') && d.length >= 12) d = d.slice(2);
+  d = d.replace(/^0+/, '');
+  if (d.length < 8) return '';
+  return d.length >= 10 ? d.slice(0,2) + d.slice(-8) : '83' + d.slice(-8);
+}
+window.chaveTel = chaveTel;
+const marcaArquivo = () => ({ arquivado:true, arquivadoPor:uidAtual, arquivadoPorNome:perfil?.nome || '', arquivadoEm:Date.now() });
+
+// ---------- assinaturas ----------
+function assinarEtapa1(){
+  const silencio = e => console.warn('Etapa 1:', e.code || e.message);
+  subsPapel.push(onSnapshot(doc(db,'config','app'), s => {
+    const d = s.exists() ? s.data() : {};
+    appCfg = { pontos:{ ...CFG_PADRAO.pontos, ...(d.pontos || {}) },
+      origens: d.origens?.length ? d.origens : CFG_PADRAO.origens,
+      motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos };
+    carregado.cfg = true; render(); fecharMesesPendentes();
+  }, e => { carregado.cfg = true; silencio(e); }));
+  subsPapel.push(onSnapshot(collection(db,'pontos_meses'), s => {
+    pontosMeses = {}; s.docs.forEach(d => pontosMeses[d.id] = d.data());
+    carregado.pm = true; render(); fecharMesesPendentes();
+  }, silencio));
+  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'repetidos'), s => {
+    repetidos = s.docs.map(d => ({ id:d.id, ...d.data() })); render();
+  }, silencio));
+}
+
+// ---------- pontos ----------
+function pontosDoMes(m, val){
+  val = val || appCfg.pontos;
+  const n = k => Number(val[k]) || 0;
+  const noMes = d => !!d && d.slice(0,7) === m;
+  const g = new Map();
+  const pega = r => {
+    const k = r.corretorUid || 'n:' + norm(r.corretorNome);
+    if (!g.has(k)) g.set(k, { uid:r.corretorUid || '', nome:r.corretorNome || 'Sem nome', equipe:r.equipe || '', visitas:0, confirmadas:0, realizadas:0, faltas:0, cartas:0, docs:0, vendas:0, pontos:0 });
+    const x = g.get(k); if (r.corretorNome) x.nome = r.corretorNome; if (r.equipe) x.equipe = r.equipe; return x;
+  };
+  rankingDocs.filter(r => noMes(r.date) && !r.semPontos && r.status !== 'Cancelada').forEach(r => {
+    const x = pega(r); x.visitas++;
+    if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); }
+    else if (r.status === 'Realizada') { x.realizadas++; x.pontos += n('vRealizada'); }
+    else if (r.status === 'Não compareceu') { x.faltas++; x.pontos += n('vFalta'); }
+    else x.pontos += n('vPendente');
+  });
+  rankingCartas.filter(r => !r.semPontos).forEach(r => {
+    const aprov = noMes(r.data), venda = r.status === 'Venda fechada' && noMes(r.vendaEm || r.data);
+    if (!aprov && !venda) return;
+    const x = pega(r);
+    if (aprov) { x.cartas++; x.pontos += n('carta'); if (r.docsCompletos) { x.docs++; x.pontos += n('docs'); } }
+    if (venda) { x.vendas++; x.pontos += n('venda'); }
+  });
+  return [...g.values()].sort((a,b) => b.pontos-a.pontos || b.vendas-a.vendas || b.cartas-a.cartas || a.nome.localeCompare(b.nome,'pt-BR'));
+}
+window.pontosDoMes = pontosDoMes;
+function linhasDoMes(m){
+  if (m !== mesAtual() && pontosMeses[m]) return pontosMeses[m].linhas || [];
+  return pontosDoMes(m);
+}
+function posicoes(lista){ let pos = 0; return lista.map((x,i) => { if (i && x.pontos !== lista[i-1].pontos) pos = i; return pos; }); }
+
+// fechamento automático do mês (feito pelo primeiro gerente que abrir o app no mês novo)
+let fechando = new Set();
+async function fecharMes(m, forcar){
+  if (!souGerente() || fechando.has(m)) return;
+  fechando.add(m);
+  try {
+    const linhas = pontosDoMes(m);
+    if (!linhas.length && !forcar) return;
+    await gravar(setDoc(doc(db,'pontos_meses',m), { mes:m, valores:{ ...appCfg.pontos }, linhas: JSON.parse(JSON.stringify(linhas)), fechadoEm:Date.now(), fechadoPor:perfil?.nome || '' }));
+    if (forcar) toast('Fechamento de ' + nomeMes(m) + ' refeito');
+  } catch(e) { console.warn('Fechamento do mês:', e.message); }
+  finally { fechando.delete(m); }
+}
+function fecharMesesPendentes(){
+  if (!souGerente() || !carregado.ranking || !carregado.rc || !carregado.pm || !carregado.cfg) return;
+  const limite = inicioJanela().slice(0,7);
+  [1, 2].map(mesAnterior).forEach(m => { if (!pontosMeses[m] && m > limite) fecharMes(m); });
+}
+window.recalcularMes = () => {
+  const m = ptMesSel;
+  if (m === mesAtual()) return;
+  if (m <= inicioJanela().slice(0,7) && !historicoCompleto) { toast('Esse mês é antigo. Carregue o histórico completo (em Visitas) e tente de novo.'); return; }
+  if (!confirm(`Refazer o fechamento de ${nomeMes(m)} com os dados e a pontuação de agora?\n\nO resultado guardado deste mês será substituído.`)) return;
+  fecharMes(m, true);
+};
+
+function renderRankingPontos(){
+  const m = mesAtual(), todos = pontosDoMes(m);
+  const eqs = listaEquipes().map(e => ({ e, n: todos.filter(x => x.equipe === e.id).reduce((a,x) => a + x.pontos, 0) }));
+  const max = Math.max(0, ...eqs.map(x => x.n));
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n===max?' · 🏆 liderando':''}</span></div>`).join('');
+  const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
+  $('rankTit').textContent = 'Ranking de pontos · ' + nomeMes(m);
+  if (!lista.length) { $('rankLista').innerHTML = vazio('Ninguém pontuou ainda neste mês', 'Visitas, cartas e vendas geram pontos. O ranking aparece aqui.'); return; }
+  const pos = posicoes(lista);
+  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Pontos</th><th class="hide-m">Visitas</th><th>Cartas</th><th>Vendas</th></tr></thead><tbody>${
+    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td></tr>`).join('')
+  }</tbody><tfoot></tfoot></table>
+  <div class="hint" style="margin-top:10px">Valem: ${PONTOS_ITENS.map(([k,n]) => `${n.replace(/^\S+\s/,'').toLowerCase()} <b>${appCfg.pontos[k]}</b>`).join(' · ')}</div>`;
+}
+
+// ---------- relatórios de gestão ----------
+function tabelaPontos(linhas){
+  if (!linhas.length) return vazio('Sem pontos neste mês', 'Assim que houver visitas, cartas ou vendas, a tabela aparece aqui.');
+  const pos = posicoes(linhas);
+  return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th class="hide-m">Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th>Pontos</th></tr></thead><tbody>${
+    linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="hide-m">${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
+  }</tbody></table>`;
+}
+function faixaOrig(){ const [mi, mf] = faixa('mes'); return origPer === '3m' ? [somaDias(hojeISO(), -89), mf] : [mi, mf]; }
+function renderRelGestao(){
+  if (!podeGerir()) { $('relSub').textContent = 'Como anda a sua produtividade.'; return; }
+  $('relSub').textContent = 'Pontos, origem dos clientes, motivos da perda e a sua agenda pessoal.';
+  // pontos
+  const meses = [...new Set([mesAtual(), ...Object.keys(pontosMeses)])].sort().reverse();
+  if (!ptMesSel || !meses.includes(ptMesSel)) window.ptMesSel = mesAtual();
+  $('ptMes').innerHTML = meses.map(m => `<option value="${m}" ${m===ptMesSel?'selected':''}>${nomeMes(m)}${m===mesAtual()?' · em andamento':''}</option>`).join('');
+  let linhas = linhasDoMes(ptMesSel);
+  if (souCoord()) linhas = linhas.filter(x => x.equipe === perfil.equipe);
+  const fech = pontosMeses[ptMesSel];
+  $('ptInfo').innerHTML = ptMesSel === mesAtual() ? '⏳ Mês em andamento. Os pontos mudam a cada ação e o mês fecha sozinho no dia 1º.'
+    : fech ? `🔒 Mês fechado em ${new Date(fech.fechadoEm).toLocaleDateString('pt-BR')}${fech.fechadoPor ? ' por ' + esc(fech.fechadoPor) : ''}. Os valores ficaram congelados.` : 'Mês ainda não fechado.';
+  $('btnRecalc').classList.toggle('hide', !souGerente() || ptMesSel === mesAtual());
+  $('ptTabela').innerHTML = tabelaPontos(linhas);
+  // origem
+  $('origPer').value = origPer;
+  const [de, ate] = faixaOrig();
+  $('motPerTxt').textContent = origPer === '3m' ? 'últimos 3 meses' : 'este mês';
+  const vs = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada');
+  const g = new Map();
+  vs.forEach(v => {
+    const k = v.origem || 'Não informada';
+    if (!g.has(k)) g.set(k, { n:0, real:0, cartas:0, vendas:0 });
+    const x = g.get(k); x.n++; if (v.status === 'Realizada') x.real++;
+    const c = cartas.find(c => c.visitaId === v.id || (v.telNorm && c.telNorm === v.telNorm));
+    if (c) { x.cartas++; if (c.status === 'Venda fechada') x.vendas++; }
+  });
+  const og = [...g.entries()].sort((a,b) => b[1].n - a[1].n);
+  const pct = (a,b) => b ? Math.round(a/b*100) + '%' : '–';
+  $('origTabela').innerHTML = og.length ? `<table class="rank"><thead><tr><th>Origem</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Viram carta</th></tr></thead><tbody>${
+    og.map(([k,x]) => `<tr><td><span class="nm">${esc(k)}</span></td><td class="tot">${x.n}</td><td class="hide-m">${x.real}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="hide-m">${pct(x.cartas, x.n)}</td></tr>`).join('')}</tbody></table>
+    <div class="hint" style="margin-top:10px">A carta é ligada à visita quando foi criada a partir dela ou quando tem o mesmo telefone.</div>`
+    : '<div class="muted" style="font-size:13.5px">Nenhuma visita no período.</div>';
+  // motivos
+  const mg = new Map();
+  const soma = (k, t) => { k = k || 'Não informado'; if (!mg.has(k)) mg.set(k, { v:0, c:0 }); mg.get(k)[t]++; };
+  visitas.filter(v => v.date >= de && v.date <= ate && PERDA_V.includes(v.status)).forEach(v => soma(v.motivoPerda, 'v'));
+  cartas.filter(c => PERDA_C.includes(c.status) && iso(new Date(c.atualizadoEm || Date.now())) >= de).forEach(c => soma(c.motivoPerda, 'c'));
+  const mgl = [...mg.entries()].sort((a,b) => (b[1].v + b[1].c) - (a[1].v + a[1].c));
+  const totM = mgl.reduce((a,[,x]) => a + x.v + x.c, 0);
+  $('motTabela').innerHTML = mgl.length ? mgl.map(([k,x]) => `<div class="hbar"><div class="hbar-top">${esc(k)}<span>${x.v + x.c}${x.c ? ` <small class="muted">(${x.v} visita${x.v!==1?'s':''} · ${x.c} carta${x.c!==1?'s':''})</small>` : ''}</span></div><div class="hbar-track"><i style="width:${(x.v+x.c)/totM*100}%;background:var(--danger)"></i></div></div>`).join('')
+    : '<div class="muted" style="font-size:13.5px">Nenhuma perda registrada no período. 🎉</div>';
+  if (souGerente()) renderRepetidos();
+}
+
+// ---------- clientes repetidos (só gerentes) ----------
+function seloRepetido(tipo, id){
+  if (!souGerente()) return '';
+  const r = repetidos.find(x => x.tipo === tipo && x.refId === id && x.status !== 'mantido');
+  if (!r) return '';
+  const a = (r.anteriores || [])[0];
+  return ` <span class="rep-badge" title="Já cadastrado por ${esc(a?.corretorNome || 'outro corretor')} em ${dataBR(a?.data)}">⚠ Repetido${r.status === 'anulado' ? ' · sem pontos' : ''}</span>`;
+}
+window.mostrarRepResolvidos = false;
+function renderRepetidos(){
+  const abertos = repetidos.filter(r => r.status === 'aberto' || !r.status).sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  const outros = repetidos.filter(r => r.status && r.status !== 'aberto').sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  const linha = r => {
+    const ants = (r.anteriores || []).map(a => `${esc(a.corretorNome || 'Sem corretor')} em ${dataBR(a.data)} (${a.tipo === 'carta' ? 'carta' : 'visita'})`).join('<br>');
+    const acoes = r.status === 'anulado' ? `<span class="muted">Pontos anulados</span><button class="snooze" onclick="resolverRepetido('${r.id}','aberto')">Desfazer</button>`
+      : r.status === 'mantido' ? `<span class="muted">Pontos mantidos</span><button class="snooze" onclick="resolverRepetido('${r.id}','aberto')">Desfazer</button>`
+      : `<button class="snooze" onclick="resolverRepetido('${r.id}','anulado')">🚫 Anular pontos</button><button class="snooze" onclick="resolverRepetido('${r.id}','mantido')">✓ Manter</button>`;
+    return `<div class="rep-item"><div class="ri"><b>${esc(r.cliente || 'Cliente')} <span class="muted" style="font-weight:500;font-size:12.5px">${r.telefone ? '📱 ' + esc(r.telefone) : ''}${r.cpf ? ' · 🪪 ' + esc(cpfOculto(r.cpf)) : ''}</span></b>
+      Cadastrado por <b style="display:inline;font-size:13.5px">${esc(r.corretorNome || '')}</b> em ${dataBR(r.data)} (${r.tipo === 'carta' ? 'carta' : 'visita'})<br><span class="muted">Antes: ${ants}</span></div><div class="ra">${acoes}</div></div>`;
+  };
+  $('repLista').innerHTML = (abertos.length ? abertos.map(linha).join('') : '<div class="muted" style="font-size:13.5px">Nenhum cliente repetido para analisar. ✓</div>')
+    + (outros.length ? `<div style="margin-top:10px"><button class="link" onclick="mostrarRepResolvidos=!mostrarRepResolvidos;render()">${mostrarRepResolvidos ? 'Esconder' : 'Ver'} os já resolvidos (${outros.length})</button></div>${mostrarRepResolvidos ? outros.map(linha).join('') : ''}` : '');
+  $('repInfo').textContent = 'O corretor cadastra normalmente e não vê este aviso. Compara telefone e CPF com todo o histórico.';
+}
+window.resolverRepetido = async (id, status) => {
+  const r = repetidos.find(x => x.id === id); if (!r || !souGerente()) return;
+  const col = r.tipo === 'carta' ? 'cartas' : 'visitas', rk = r.tipo === 'carta' ? 'ranking_cartas' : 'ranking';
+  const semPontos = status === 'anulado';
+  try {
+    const b = writeBatch(db);
+    b.set(doc(db,'repetidos',id), { status, resolvidoPor:perfil.nome, resolvidoEm:Date.now() }, { merge:true });
+    b.set(doc(db,col,r.refId), { semPontos }, { merge:true });
+    b.set(doc(db,rk,r.refId), { semPontos }, { merge:true });
+    await gravar(b.commit());
+    toast(status === 'anulado' ? 'Pontos desse cadastro anulados' : status === 'mantido' ? 'Cadastro mantido com os pontos' : 'Voltou para análise');
+  } catch(e) { toast('Erro: ' + e.message); }
+};
+window.verificarHistorico = async () => {
+  if (!souGerente()) return;
+  if (!confirm('Vou conferir todas as visitas e cartas já cadastradas, de todas as equipes, procurando o mesmo telefone ou CPF com corretores diferentes.\n\nPode levar alguns segundos. Continuar?')) return;
+  const btn = $('btnVerifHist'); btn.disabled = true; btn.textContent = '⏳ Verificando…';
+  try {
+    const [sv, sc] = await Promise.all([getDocs(collection(db,'visitas')), getDocs(collection(db,'cartas'))]);
+    const regs = [], ups = [];
+    sv.docs.forEach(d => { const x = d.data(), tel = chaveTel(x.telefone);
+      if (tel && x.telNorm !== tel) ups.push(['visitas', d.id, { telNorm:tel }]);
+      regs.push({ tipo:'visita', refId:d.id, cliente:x.cliente || '', telefone:x.telefone || '', cpf:'', corretorUid:x.corretorUid || '', corretorNome:x.corretorNome || '', equipe:x.equipe || '', data:x.date || '', criadoEm:x.criadoEm || 0, chaves:[tel && 't' + tel].filter(Boolean) }); });
+    sc.docs.forEach(d => { const x = d.data(), tel = chaveTel(x.telefone), cpf = soDig(x.cpf).length === 11 ? soDig(x.cpf) : '';
+      if ((tel && x.telNorm !== tel) || (cpf && x.cpfNorm !== cpf)) ups.push(['cartas', d.id, { telNorm:tel, cpfNorm:cpf }]);
+      regs.push({ tipo:'carta', refId:d.id, cliente:x.cliente || '', telefone:x.telefone || '', cpf:x.cpf || '', corretorUid:x.corretorUid || '', corretorNome:x.corretorNome || '', equipe:x.equipe || '', data:x.data || '', criadoEm:x.criadoEm || 0, chaves:[tel && 't' + tel, cpf && 'c' + cpf].filter(Boolean) }); });
+    const porChave = new Map();
+    regs.forEach(r => r.chaves.forEach(k => { if (!porChave.has(k)) porChave.set(k, []); porChave.get(k).push(r); }));
+    const ordem = r => (r.data || '') + String(r.criadoEm || 0).padStart(15, '0');
+    const jaTem = new Set(repetidos.map(x => x.id)), novos = [];
+    regs.forEach(r => {
+      if (!r.corretorUid && !r.corretorNome) return;
+      const ant = new Map();
+      r.chaves.forEach(k => porChave.get(k).forEach(o => {
+        if (o === r || (o.corretorUid || o.corretorNome) === (r.corretorUid || r.corretorNome) || (o.corretorUid && o.corretorUid === r.corretorUid)) return;
+        if (ordem(o) < ordem(r)) ant.set(o.tipo + ':' + o.refId, o);
+      }));
+      const id = r.tipo + '_' + r.refId;
+      if (!ant.size || jaTem.has(id)) return;
+      novos.push([id, { tipo:r.tipo, refId:r.refId, cliente:r.cliente, telefone:r.telefone, cpf:r.cpf, corretorUid:r.corretorUid, corretorNome:r.corretorNome, equipe:r.equipe, data:r.data,
+        anteriores:[...ant.values()].sort((a,b) => ordem(a).localeCompare(ordem(b))).map(o => ({ tipo:o.tipo, refId:o.refId, cliente:o.cliente, corretorUid:o.corretorUid, corretorNome:o.corretorNome, data:o.data })),
+        status:'aberto', criadoEm:Date.now() }]);
+    });
+    const ops = [...ups.map(([c,id,d]) => b => b.set(doc(db,c,id), d, { merge:true })), ...novos.map(([id,d]) => b => b.set(doc(db,'repetidos',id), d))];
+    for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i+400).forEach(f => f(b)); await gravar(b.commit()); }
+    toast(novos.length ? `${novos.length} cliente${novos.length!==1?'s':''} repetido${novos.length!==1?'s':''} encontrado${novos.length!==1?'s':''}` : `Tudo certo: nenhum cliente repetido novo em ${regs.length} cadastros`);
+  } catch(e) { toast('Erro ao verificar: ' + e.message); }
+  btn.disabled = false; btn.textContent = '🔍 Verificar todo o histórico';
+};
+
+// ---------- origem e motivo nos formulários ----------
+const opcoes = (lista, atual, vazio) => (vazio ? `<option value="">${vazio}</option>` : '') + [...lista, ...(atual && !lista.includes(atual) ? [atual] : [])].map(o => `<option ${o===atual?'selected':''}>${esc(o)}</option>`).join('');
+function preencherOrigemMotivo(v){
+  $('vmOrigem').innerHTML = opcoes(appCfg.origens, v?.origem || '', 'Escolha a origem…');
+  $('vmIndicado').value = v?.indicadoPor || '';
+  $('vmMotivo').innerHTML = opcoes(appCfg.motivos, v?.motivoPerda || '', 'Escolha o motivo…');
+  vmMostrarIndicado(); vmMostrarMotivo();
+}
+window.vmMostrarIndicado = () => $('vmIndWrap').classList.toggle('hide', $('vmOrigem').value !== 'Indicação');
+window.vmMostrarMotivo = () => $('vmMotivoWrap').classList.toggle('hide', !PERDA_V.includes($('vmStatus').value));
+function preencherMotivoCarta(c){
+  $('cmMotivo').innerHTML = opcoes(appCfg.motivos, c?.motivoPerda || '', 'Escolha o motivo…');
+  cmMostrarMotivo();
+}
+window.cmMostrarMotivo = () => $('cmMotivoWrap').classList.toggle('hide', !PERDA_C.includes($('cmStatus').value));
+let motivoCtx = null;
+function pedirMotivo(tipo, id, st){
+  const x = tipo === 'v' ? visitas.find(v => v.id === id) : cartas.find(c => c.id === id);
+  motivoCtx = { tipo, id, st };
+  $('motivoSub').textContent = `${x?.cliente || ''} · ${st}`;
+  $('motivoLista').innerHTML = appCfg.motivos.map((m,i) => `<button onclick="escolherMotivo(${i})">${esc(m)}</button>`).join('');
+  abrir('motivoModal');
+}
+window.escolherMotivo = i => {
+  const m = appCfg.motivos[i], c = motivoCtx; if (!c) return;
+  fechar('motivoModal'); motivoCtx = null;
+  if (c.tipo === 'v') mudarStatus(c.id, c.st, m); else mudarStatusCarta(c.id, c.st, m);
+};
+
+// ---------- mensagens prontas ----------
+window._msgs = [];
+window.abrirMensagens = (t, id) => {
+  const x = t === 'v' ? visitas.find(v => v.id === id) : cartas.find(c => c.id === id);
+  if (!x) return;
+  if (!x.telefone) { toast('Esse cliente está sem telefone.'); return; }
+  const p = primeiro(x.cliente), eu = primeiro(perfil?.nome || state?.profile?.name || ''), no = x.empreendimento ? ' no ' + x.empreendimento : '';
+  const itens = [];
+  if (t === 'v') {
+    itens.push(['✅ Confirmar a visita', `Olá, ${p}! Tudo bem? Aqui é ${eu}, da Frade Imóveis. Passando para confirmar a sua visita ${quandoTxt(x.date)} às ${x.time}${no}. Posso confirmar?`]);
+    itens.push(['⏰ Lembrete no dia', `Bom dia, ${p}! Aqui é ${eu}, da Frade Imóveis. Só lembrando da nossa visita hoje às ${x.time}${no}. Estou te esperando! 😊`]);
+    itens.push(['🙏 Depois da visita', `Oi, ${p}! Obrigado pela visita${no}. O que você achou? Fico à disposição para tirar qualquer dúvida e darmos o próximo passo.`]);
+    itens.push(['📄 Pedir documentos', `Oi, ${p}! Para fazermos a sua análise de crédito, preciso destes documentos:\n${DOCS.map(([,n]) => '• ' + n).join('\n')}\n\nPode me mandar as fotos por aqui mesmo. 😊`]);
+    itens.push(['🔁 Remarcar', `Oi, ${p}! Aqui é ${eu}, da Frade Imóveis. Sentimos a sua falta na visita. Vamos remarcar? Me diga o melhor dia e horário para você.`]);
+  } else {
+    const falta = DOCS.filter(([k]) => !x.docs?.[k]).map(([,n]) => n);
+    itens.push(['🎉 Parabéns pela aprovação', `Parabéns, ${p}! 🎉 A sua carta de crédito foi aprovada no valor de ${brl(x.valor)}. Vamos marcar para escolher o seu imóvel?`]);
+    if (falta.length) itens.push(['📄 Documentos que faltam', `Oi, ${p}! Para seguirmos com o seu processo, ainda faltam:\n${falta.map(n => '• ' + n).join('\n')}\n\nPode me mandar as fotos por aqui mesmo. 😊`]);
+    if (x.validade) itens.push(['⏳ Carta perto de vencer', `Oi, ${p}! A sua carta de crédito vale até ${dataBR(x.validade)}. Vamos garantir o seu imóvel antes disso?`]);
+    itens.push(['🤝 Pedir indicação', `Oi, ${p}! Tudo bem? Se você conhece alguém que também sonha com a casa própria, me indica? Vou cuidar com o mesmo carinho. 😊`]);
+  }
+  window._msgs = itens.map(([, txt]) => ({ tel:x.telefone, txt }));
+  $('msgSub').textContent = `${x.cliente} · 📱 ${x.telefone}`;
+  $('msgLista').innerHTML = itens.map(([tit, txt], i) => `<div class="msg-item"><b>${tit}</b><p>${esc(txt)}</p><button class="snooze wa" onclick="enviarMsg(${i})">${IC.wa}Enviar no WhatsApp</button></div>`).join('');
+  abrir('msgModal');
+};
+window.enviarMsg = i => {
+  const m = window._msgs[i]; if (!m) return;
+  let n = soDig(m.tel); if (n.length <= 11) n = '55' + n;
+  window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(m.txt), '_blank');
+};
+
+// ---------- arquivados (gerente) ----------
+let arqDados = { visitas:[], cartas:[] };
+window.abrirArquivados = async () => {
+  if (!souGerente()) return;
+  abrir('arqModal'); $('arqLista').innerHTML = '<div class="muted">Carregando…</div>';
+  try {
+    const [sv, sc] = await Promise.all([getDocs(query(collection(db,'visitas'), where('arquivado','==',true))), getDocs(query(collection(db,'cartas'), where('arquivado','==',true)))]);
+    arqDados = { visitas: sv.docs.map(d => ({ id:d.id, ...d.data() })), cartas: sc.docs.map(d => ({ id:d.id, ...d.data() })) };
+  } catch(e) { toast('Erro ao carregar: ' + e.message); }
+  renderArquivados();
+};
+window.renderArquivados = () => {
+  $('segArq').innerHTML = [['visitas','Visitas'],['cartas','Cartas']].map(([k,n]) => `<button class="${arqAba===k?'on':''}" onclick="arqAba='${k}';renderArquivados()">${n} (${arqDados[k].length})</button>`).join('');
+  const t = norm($('arqBusca').value);
+  const l = arqDados[arqAba].filter(x => !t || norm([x.cliente, x.corretorNome].join(' ')).includes(t)).sort((a,b) => (b.arquivadoEm||0) - (a.arquivadoEm||0));
+  $('arqLista').innerHTML = l.length ? l.map(x => `<div class="arq-row"><div class="ai"><b>${esc(x.cliente || 'Cliente')}</b>
+      <span class="muted">${arqAba === 'visitas' ? `${dataBR(x.date)} às ${esc(x.time||'')} · 🏠 ${esc(x.empreendimento||'')}` : `aprovada em ${dataBR(x.data)} · 💰 ${brl(x.valor)}`} · 👤 ${esc(x.corretorNome||'')}</span><br>
+      <span class="muted" style="font-size:12.5px">Arquivada${x.arquivadoPorNome ? ' por ' + esc(x.arquivadoPorNome) : ''}${x.arquivadoEm ? ' em ' + new Date(x.arquivadoEm).toLocaleDateString('pt-BR') : ''}</span></div>
+      <button class="snooze" onclick="restaurar('${arqAba}','${x.id}')">↩ Restaurar</button></div>`).join('')
+    : '<div class="muted" style="font-size:13.5px;padding:8px 0">Nada arquivado aqui.</div>';
+};
+window.restaurar = async (tipo, id) => {
+  const rk = tipo === 'cartas' ? 'ranking_cartas' : 'ranking';
+  try {
+    const b = writeBatch(db);
+    b.set(doc(db,tipo,id), { arquivado:false, restauradoPor:perfil.nome, restauradoEm:Date.now() }, { merge:true });
+    b.set(doc(db,rk,id), { arquivado:false }, { merge:true });
+    await gravar(b.commit());
+    arqDados[tipo] = arqDados[tipo].filter(x => x.id !== id); renderArquivados(); toast('Restaurado ✓');
+  } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// ---------- administração (Configurações, só gerente) ----------
+let admAssin = '';
+function renderAdm(){
+  if (!souGerente()) return;
+  const ass = JSON.stringify(appCfg);
+  const ativoEl = document.activeElement;
+  if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas')))) return;
+  admAssin = ass;
+  $('admPontos').innerHTML = PONTOS_ITENS.map(([k,n]) => `<div class="pt-row"><span>${n}</span><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}"></div>`).join('');
+  $('admOrigens').value = appCfg.origens.join('\n');
+  $('admMotivos').value = appCfg.motivos.join('\n');
+}
+window.salvarPontuacao = async () => {
+  const pontos = {}; PONTOS_ITENS.forEach(([k]) => pontos[k] = Math.round(Number($('pt_' + k).value) || 0));
+  try { await gravar(setDoc(doc(db,'config','app'), { pontos, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
+  catch(e) { toast('Erro ao salvar: ' + e.message); }
+};
+window.salvarListas = async () => {
+  const lista = id => [...new Set($(id).value.split('\n').map(x => x.trim()).filter(Boolean))];
+  const origens = lista('admOrigens'), motivos = lista('admMotivos');
+  if (!origens.length || !motivos.length) { toast('As listas não podem ficar vazias'); return; }
+  try { await gravar(setDoc(doc(db,'config','app'), { origens, motivos, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Listas salvas'); }
+  catch(e) { toast('Erro ao salvar: ' + e.message); }
+};
+
+// ---------- exportar pontos para Excel (.xlsx) ----------
+async function carregarXLSX(){
+  if (window.XLSX) return window.XLSX;
+  await new Promise((ok, erro) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = ok; s.onerror = erro; document.head.appendChild(s); });
+  return window.XLSX;
+}
+const CAB_PONTOS = ['Posição','Corretor','Equipe','Visitas','Confirmadas','Realizadas','Faltas','Cartas aprovadas','Docs completos','Vendas','Pontos'];
+function linhasPlanilha(m){
+  let l = linhasDoMes(m); if (souCoord()) l = l.filter(x => x.equipe === perfil.equipe);
+  const pos = posicoes(l);
+  return l.map((x,i) => [pos[i] + 1, x.nome, eqNome(x.equipe), x.visitas, x.confirmadas, x.realizadas, x.faltas, x.cartas, x.docs, x.vendas, x.pontos]);
+}
+window.exportarPontos = async (todos) => {
+  if (!podeGerir()) return;
+  const meses = todos ? [...new Set([mesAtual(), ...Object.keys(pontosMeses)])].sort() : [ptMesSel || mesAtual()];
+  try {
+    const X = await carregarXLSX(), wb = X.utils.book_new();
+    meses.forEach(m => {
+      const val = (m !== mesAtual() && pontosMeses[m]?.valores) || appCfg.pontos;
+      const dados = [[`Pontos · ${nomeMes(m)}${m === mesAtual() ? ' (em andamento)' : ''}`], [], CAB_PONTOS, ...linhasPlanilha(m), [], ['Pontuação usada'], ...PONTOS_ITENS.map(([k,n]) => [n.replace(/^\S+\s/,''), Number(val[k]) || 0])];
+      const ws = X.utils.aoa_to_sheet(dados);
+      ws['!cols'] = [{wch:9},{wch:28},{wch:18},{wch:9},{wch:12},{wch:11},{wch:8},{wch:16},{wch:15},{wch:8},{wch:9}];
+      X.utils.book_append_sheet(wb, ws, nomeMes(m).replace(' de ', ' ').slice(0,31));
+    });
+    X.writeFile(wb, todos ? `pontos-todos-os-meses-${hojeISO()}.xlsx` : `pontos-${meses[0]}.xlsx`);
+    toast('Planilha baixada ✓');
+  } catch(e) {
+    const m = meses[meses.length - 1];
+    baixarCSV('pontos-' + m, CAB_PONTOS, linhasPlanilha(m));
+  }
+};
+
 </script>
 </body>
 </html>
