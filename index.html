@@ -900,6 +900,53 @@ html.lenis,html.lenis body{height:auto}
 .lenis [data-lenis-prevent],.lenis [data-lenis-prevent-wheel],.lenis [data-lenis-prevent-touch]{overscroll-behavior:contain}
 .lenis.lenis-smooth iframe{pointer-events:none}
 .lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;transition-behavior:allow-discrete}
+
+/* assistente: abinha na borda direita que abre o chat */
+.ia-bolha{position:fixed;right:0;bottom:120px;z-index:27;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 9px 16px;border:1px solid rgba(255,255,255,.28);border-right:0;border-radius:14px 0 0 14px;cursor:pointer;color:#fff;
+  background:linear-gradient(160deg,rgba(28,95,142,.92),rgba(18,63,99,.92));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:-6px 10px 26px rgba(18,63,99,.30);transition:transform .2s var(--ease,ease),padding .2s,right .26s var(--ease,ease)}
+.ia-bolha:hover{padding-right:13px}
+.ia-bolha:focus-visible{outline:3px solid color-mix(in srgb,#1C5F8E 45%,transparent);outline-offset:2px}
+.ia-bic,.ia-bic svg{width:20px;height:20px;display:block}
+.ia-btx{writing-mode:vertical-rl;transform:rotate(180deg);font-size:13px;font-weight:600;letter-spacing:.02em}
+.ia-bolha.on{right:min(420px,100vw)}
+.ia-bolha.hide{display:none}
+.ia-painel{position:fixed;right:0;top:0;bottom:0;z-index:26;width:min(420px,100vw);display:flex;flex-direction:column;
+  background:var(--vidro-forte,var(--card));-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);border-left:1px solid var(--vidro-borda,var(--border));
+  box-shadow:-24px 0 60px rgba(2,6,23,.22);transform:translateX(102%);visibility:hidden;transition:transform .26s var(--ease,ease),visibility 0s .26s}
+.ia-painel.open{transform:none;visibility:visible;transition:transform .26s var(--ease,ease),visibility 0s}
+.ia-topo{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.ia-tit{display:flex;align-items:center;gap:10px}.ia-tit b{display:block;font-size:15px}.ia-tit small{display:block;color:var(--muted);font-size:12px}
+.ia-ic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#1C5F8E,#123F63)}.ia-ic svg{width:18px;height:18px}
+.ia-acoes{display:flex;align-items:center;gap:6px}.ia-acoes .link{font-size:12.5px}
+.ia-x{width:32px;height:32px;border-radius:10px;border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer}.ia-x:hover{background:var(--side-hover);color:var(--text)}
+.ia-corpo{flex:1;min-height:0;display:flex;padding:12px}
+.ia-corpo .ass-card{flex:1;display:flex;flex-direction:column;min-height:0;margin:0;padding:0;background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.ia-corpo .ass-msgs{max-height:none;flex:1;min-height:0}
+.ia-corpo .ass-sug{margin:8px 0}.ia-corpo .ass-sug button{font-size:12.5px;padding:6px 10px}
+@media (max-width:900px){
+  .ia-bolha{bottom:calc(150px + env(safe-area-inset-bottom));padding:11px 7px 13px}
+  .ia-btx{font-size:12px}
+  .ia-painel{width:100vw}
+  .ia-bolha.on{display:none}
+}
+@media (prefers-reduced-motion:reduce){.ia-bolha,.ia-painel{transition:none}}
+
+/* painel executivo no celular: nada passa da tela */
+.pd-grid>*,.pd-kpis>*{min-width:0}
+.tab-rola{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
+.so-m{display:none}
+.pt-row>span{min-width:0;overflow-wrap:anywhere}
+@media(max-width:600px){
+  .so-pc{display:none}.so-m{display:inline}
+  .pd-eq{font-size:13.5px}
+  .pd-eq th,.pd-eq td{padding-left:4px;padding-right:4px}
+  .pd-eq th{font-size:10.5px;letter-spacing:0}
+  .pd-eq td:first-child{white-space:normal;line-height:1.25}
+  .pd-eq .nm{white-space:normal}
+  .pd-eq .tot{font-size:16px}
+  .pd-grid .pt-row{grid-template-columns:1fr;gap:2px}
+  .pd-grid .pt-row>b{font-size:13px;color:var(--muted)}
+}
 </style>
 </head>
 <body>
@@ -964,7 +1011,6 @@ html.lenis,html.lenis body{height:auto}
       <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
-      <button data-view="assistente" class="gerente-only hide" onclick="setView('assistente')"><i data-ic="spark"></i>Assistente</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -1456,6 +1502,12 @@ html.lenis,html.lenis body{height:auto}
   </main>
 </div>
 
+<button class="ia-bolha hide" id="iaBolha" onclick="iaAlternar()" title="Falar com o assistente" aria-label="Falar com o assistente"><span class="ia-bic" data-ic="spark"></span><span class="ia-btx">Assistente</span></button>
+<div class="ia-painel" id="iaPainel" role="dialog" aria-label="Assistente" data-lenis-prevent>
+  <div class="ia-topo"><div class="ia-tit"><span class="ia-ic" data-ic="spark"></span><div><b>Assistente</b><small>Pergunte sobre os números do app</small></div></div>
+    <div class="ia-acoes"><button class="link" onclick="assLimpar()">Nova conversa</button><button class="ia-x" onclick="iaFechar()" aria-label="Fechar">×</button></div></div>
+  <div id="iaCorpo" class="ia-corpo"></div>
+</div>
 <button class="fab hide" id="fab" onclick="abrirMais()" title="Adicionar" data-ic="plus"></button>
 <nav class="mobilebar hide" id="mobilebar">
   <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
@@ -1719,7 +1771,6 @@ html.lenis,html.lenis body{height:auto}
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
-      <button class="gerente-only hide" onclick="fechar('menuModal');setView('assistente')"><i data-ic="spark"></i>Assistente</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><i data-ic="phone"></i>Instalar aplicativo</button>
@@ -2052,6 +2103,7 @@ window.setView = v => {
   if (v === 'desempenho' && !podeGerir()) v = 'hoje';
   if (v === 'vendas' && !souGerente()) v = 'hoje';
   if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
+  if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
   if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
@@ -2118,7 +2170,7 @@ function streak(){
 }
 function render(){
   if (!state) return;
-  aplicarTema();
+  aplicarTema(); iaBolhaVis();
   pintarIcones();
   const p = state.profile, T = state.tasks, h = hojeISO();
   const deHoje = T.filter(t => t.date === h);
@@ -5097,9 +5149,9 @@ function renderPainel(){
       aprov:A.cs.filter(c => c.equipe === e.id).length, aprovPlan:A.unif.filter(x => x.equipe === e.id).length, vendas:A.vendasL.filter(v => v.equipe === e.id).length, pts };
   });
   const lider = eqs.slice().sort((a,b) => b.vendas - a.vendas || b.aprov - a.aprov || b.docs - a.docs)[0];
-  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Aprovações</th><th class="hide-m">Cartas no app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
+  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>Equipes</h2></div><div class="tab-rola"><table class="rank pd-eq"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th><span class="so-pc">Aprovações</span><span class="so-m">Aprov.</span></th><th class="hide-m">Cartas no app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
     eqs.map(x => { const m = media(x.leads, x.docs); return `<tr class="${lider && x === lider && (x.vendas || x.aprov) ? 'me' : ''}"><td><span class="nm">${esc(x.e.icone || '')} ${esc(x.e.nome)}</span></td><td class="tot">${x.leads}</td><td>${x.docs}</td><td class="hide-m" style="color:${corM(m)};font-weight:700">${m === null ? '–' : m.toLocaleString('pt-BR')}</td><td>${x.aprovPlan}</td><td class="hide-m">${x.aprov}</td><td>${x.vendas}</td><td class="hide-m">${x.pts}</td></tr>`; }).join('')
-  }</tbody></table></div>`;
+  }</tbody></table></div></div>`;
   // destaques
   const top = pontosDoMes(de.slice(0,7)).slice(0, 5);
   html += `<div class="card"><div class="card-head"><h2>Destaques do mês</h2><span class="muted">por pontos</span></div>${top.length ? top.map((x,i) => `<div class="pt-row"><span>${MEDALHA(i)} ${esc(x.nome)} <small class="muted">${esc(eqNome(x.equipe))}</small></span><b>${x.pontos} pts · ${x.vendas} venda${x.vendas!==1?'s':''}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Sem pontos no período. Defina a pontuação em Configurações.</div>'}</div></div>`;
@@ -5211,7 +5263,15 @@ function renderApEscolha(){
 }
 
 // ---------- aba Assistente (Claude pelo carteiro) ----------
-let assHist = [];
+let assHist = [], iaAberto = false;
+// o mesmo chat mora na aba Assistente e no balão do canto: a conversa é uma só
+function iaMover(paraPainel){ const card = document.querySelector('.ass-card'); if (!card) return; (paraPainel ? $('iaCorpo') : $('v-assistente')).appendChild(card); }
+window.iaAbrir = () => { if (!souGerente()) return;
+  iaAberto = true; iaMover(true); $('iaPainel').classList.add('open'); iaBolhaVis(); $('assMsgs').dataset.n = ''; renderAssistente(); setTimeout(() => $('assTxt').focus(), 250); };
+window.iaFechar = () => { iaAberto = false; $('iaPainel').classList.remove('open'); iaBolhaVis(); };
+window.iaAlternar = () => iaAberto ? iaFechar() : iaAbrir();
+function iaBolhaVis(){ const b = $('iaBolha'); if (!b) return; b.classList.toggle('hide', !souGerente() || $('apresent')?.classList.contains('open')); b.classList.toggle('on', iaAberto); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && iaAberto) iaFechar(); });
 const ASS_SUG = ['Analise o mês e me dê os pontos para a reunião', 'Quem precisa de atenção esta semana?', 'Compare este mês com o mês passado', 'Qual equipe está melhor e por quê?', 'Escreva uma mensagem para o grupo com os destaques da semana', 'Quais corretores têm muitos leads e poucos docs?'];
 function contextoAssistente(){
   const bloco = q => { const D = dadosReuniao(q), A = D.A;
@@ -5235,7 +5295,7 @@ function mdSimples(t){
   return out.join('');
 }
 function renderAssistente(){
-  if (view !== 'assistente' || !souGerente()) return;
+  if (!iaAberto || !souGerente()) return;
   if ($('assMsgs').dataset.n === String(assHist.length) && $('assMsgs').dataset.p === String(!!window._assPensando)) return;
   $('assMsgs').dataset.n = assHist.length; $('assMsgs').dataset.p = !!window._assPensando;
   $('assMsgs').innerHTML = (assHist.length ? '' : `<div class="ass-m ele"><p>Oi! Sou o assistente da Frade. Posso analisar os números do mês e da semana, comparar equipes e corretores, apontar quem precisa de atenção e escrever mensagens para a equipe. O que você quer saber?</p></div>`)
@@ -5390,10 +5450,10 @@ window.abrirApresentacao = (qual) => {
   apMes = qual === 'atual' ? 'mes_atual' : qual === 'passado' ? 'mes_passado' : (qual || apMes);
   apDados = dadosReuniao(apMes); apSlides = montarSlides(apDados); apIdx = 0;
   preencherSel('apMesSel', '<option value="mes_passado">Mês passado</option><option value="mes_atual">Este mês (até hoje)</option><option value="sem_passada">Semana passada</option><option value="sem_atual">Esta semana (até hoje)</option>', apMes, 'mes:');
-  $('apresent').classList.add('open'); document.body.style.overflow = 'hidden'; window.lenis?.stop();
+  $('apresent').classList.add('open'); document.body.style.overflow = 'hidden'; window.lenis?.stop(); if (iaAberto) iaFechar(); iaBolhaVis();
   apDesenhar();
 };
-window.fecharApresentacao = () => { $('apresent').classList.remove('open'); document.body.style.overflow = ''; window.lenis?.start(); if (document.fullscreenElement) document.exitFullscreen?.(); };
+window.fecharApresentacao = () => { $('apresent').classList.remove('open'); document.body.style.overflow = ''; window.lenis?.start(); iaBolhaVis(); if (document.fullscreenElement) document.exitFullscreen?.(); };
 window.apIr = d => { apIdx = Math.max(0, Math.min(apSlides.length - 1, apIdx + d)); apDesenhar(); };
 window.apTelaCheia = () => { const el = $('apresent'); if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el); else document.exitFullscreen?.(); setTimeout(apEscala, 300); };
 window.addEventListener('resize', () => { if ($('apresent')?.classList.contains('open')) apEscala(); });
@@ -5795,7 +5855,7 @@ function renderSdrHoje(){
 <script>
 window.addEventListener('load', function(){
   if (!window.Lenis || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var dentro = '.sidebar,.sheet-body,.sheet,.modal,.busca-res,.ass-msgs,#apresent,.tabela-wrap,.table-wrap,select,textarea,[data-lenis-prevent]';
+  var dentro = '.ia-painel,.sidebar,.sheet-body,.sheet,.modal,.busca-res,.ass-msgs,#apresent,.tabela-wrap,.table-wrap,select,textarea,[data-lenis-prevent]';
   var lenis = new Lenis({
     lerp: 0.12, wheelMultiplier: 1, smoothWheel: true, syncTouch: false, autoRaf: true, anchors: true,
     // áreas que rolam por dentro (menu, janelas, chat, listas) continuam com a rolagem delas
