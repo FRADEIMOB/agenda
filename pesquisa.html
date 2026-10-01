@@ -49,8 +49,11 @@ function obrigado(){ caixa.innerHTML = '<div class="fim"><div>🙏</div><h1>Muit
 async function iniciar(){
   if (!/^[A-Za-z0-9]{16,40}$/.test(t)) { caixa.innerHTML = '<p class="erro">Link inválido. Peça um novo link ao seu corretor.</p>'; return; }
   try {
-    const r = await fetch(URL_DOC + '?key=' + CHAVE_API);
-    if (!r.ok) throw new Error();
+    // tenta com a chave do app e, se der erro, sem a chave (a leitura da pesquisa é pública)
+    let r = await fetch(URL_DOC + '?key=' + CHAVE_API).catch(() => null);
+    if (!r || !r.ok) { const r2 = await fetch(URL_DOC).catch(() => null); if (r2 && (r2.ok || !r)) r = r2; }
+    if (!r || !r.ok) { let det = ''; try { const j = await r.json(); det = (j.error && (j.error.status || j.error.message)) || ''; } catch(_) {}
+      const e = new Error(); e.cod = r ? r.status + (det ? ' · ' + det : '') : 'sem internet'; throw e; }
     const f = (await r.json()).fields || {};
     if (f.respondida && f.respondida.booleanValue) { obrigado(); return; }
     const cor = primeiro(f.corretorNome && f.corretorNome.stringValue), cli = primeiro(f.cliente && f.cliente.stringValue);
@@ -61,7 +64,7 @@ async function iniciar(){
       <textarea id="com" maxlength="600" placeholder="Quer contar como foi? (opcional)"></textarea>
       <label class="ok"><input type="checkbox" id="dep"> Autorizo a Frade Imóveis a usar meu comentário como depoimento, só com o meu primeiro nome.</label>
       <button class="btn" id="env" disabled onclick="enviar()">Enviar avaliação</button>`;
-  } catch(e) { caixa.innerHTML = '<p class="erro">Não encontramos esta pesquisa. Peça um novo link ao seu corretor.</p>'; }
+  } catch(e) { caixa.innerHTML = '<p class="erro">Não encontramos esta pesquisa. Peça um novo link ao seu corretor.</p>' + (e.cod ? `<p style="font-size:12px;color:#94a3b8;margin-top:10px">código: ${esc(String(e.cod))}</p>` : ''); }
 }
 function escolher(i){ nota = i; document.querySelectorAll('.notas button').forEach((b, j) => b.classList.toggle('on', j === i)); document.getElementById('env').disabled = false; }
 async function enviar(){
