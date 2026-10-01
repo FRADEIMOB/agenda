@@ -997,7 +997,7 @@ html.modo-ceo .nav{display:flex;flex-direction:column}
 html.modo-ceo .nav>*{order:5}
 html.modo-ceo .nav .nav-title{display:none!important}
 html.modo-ceo .nav [data-view="painel"]{order:1}html.modo-ceo .nav [data-view="desempenho"]{order:2}html.modo-ceo .nav [data-view="vendas"]{order:3}
-html.modo-ceo .nav [data-view="cartas"]{order:4}html.modo-ceo .nav [data-view="empreendimentos"]{order:5}html.modo-ceo .nav [data-view="apresentacao"]{order:4}
+html.modo-ceo .nav [data-view="cartas"]{order:4}html.modo-ceo .nav [data-view="ranking"]{order:3}html.modo-ceo .nav [data-view="empreendimentos"]{order:5}html.modo-ceo .nav [data-view="apresentacao"]{order:4}
 html.modo-ceo .nav [data-view="tarefas"]{order:6;margin-top:14px}html.modo-ceo .nav [data-view="calendario"]{order:7}
 html.modo-ceo .nav [data-view="config"]{order:8;margin-top:14px}html.modo-ceo .nav button:last-child{order:9}
 
@@ -1186,6 +1186,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
       <button data-view="vendas" class="gerente-only hide" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
+      <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
@@ -1403,6 +1404,12 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
           <div id="assSug" class="ass-sug"></div>
           <div class="ass-in"><textarea id="assTxt" rows="2" placeholder="Ex.: quem precisa de atenção esta semana?" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();assEnviar()}"></textarea><button class="btn btn-primary" id="assBtn" onclick="assEnviar()">Enviar</button></div>
         </div>
+      </section>
+
+      <!-- RANKING (aba própria) -->
+      <section class="view" id="v-ranking">
+        <div class="page-head"><div><h1>Ranking</h1><div class="sub">Pontos, visitas, cartas aprovadas e VGV de cada corretor e equipe.</div></div></div>
+        <div id="rankHost"></div>
       </section>
 
       <!-- EMPREENDIMENTOS (material de venda) -->
@@ -2021,6 +2028,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
       <button class="so-ceo" onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
       <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
+      <button onclick="fechar('menuModal');setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
@@ -2066,6 +2074,7 @@ const IC = {
   chave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8M17 6l3 3M14.5 8.5l2 2"/></svg>',
   doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14.5l2 2 4-4"/></svg>',
   painel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="15" width="7.5" height="6" rx="1.5"/></svg>',
+  trofeu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
   trend:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
   tela:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8 21h8M12 16.5V21M7 12.5l3-3 2.5 2.5L17 7.5"/></svg>',
   spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8zM5 3.5l.6 1.4 1.4.6-1.4.6L5 7.5l-.6-1.4L3 5.5l1.4-.6z"/></svg>',
@@ -2351,7 +2360,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -2825,7 +2834,7 @@ window.souDono = souDono;
 // CEO: só visualiza os números e resultados; a agenda pessoal dele é particular. Só o gestor tem acesso a tudo.
 const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
-const VIEWS_CEO = ['painel','desempenho','vendas','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
+const VIEWS_CEO = ['painel','desempenho','vendas','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
 window.podeGerir = podeGerir;
@@ -3080,8 +3089,7 @@ function renderVisitasTudo(){
   // Página Visitas
   $('bannerVis').innerHTML = ban;
   $('visConteudo').classList.toggle('hide', !ativo);
-  $('segVis').innerHTML = [['lista','Lista'],['ranking','Ranking']].map(([k,n]) => `<button class="${visAba===k?'on':''}" onclick="setVisAba('${k}')">${n}</button>`).join('');
-  $('segVis').classList.toggle('hide', !ativo);
+  $('segVis').innerHTML = ''; $('segVis').classList.add('hide'); visAba = 'lista';
   $('btnNovaVisPag').classList.toggle('hide', !ativo);
   $('btnConfPag').classList.toggle('hide', !ativo);
   const nConf = paraConfirmar().length;
@@ -3091,13 +3099,16 @@ function renderVisitasTudo(){
   else {
     $('visSub').textContent = souGerente() ? 'Todas as equipes e corretores.' : souCoord() ? 'Visitas da ' + eqNome(perfil.equipe) + '.' : 'As suas visitas.';
     $('paneLista').classList.toggle('hide', visAba !== 'lista');
-    $('paneRanking').classList.toggle('hide', visAba !== 'ranking');
-    if (view === 'visitas' && visAba === 'lista') renderListaVisitas();
-    if (view === 'visitas' && visAba === 'ranking') renderRanking();
+    if (view === 'visitas') renderListaVisitas();
+    // o ranking mora na aba própria
+    const host = $('rankHost'), pr = $('paneRanking');
+    if (host && pr && pr.parentElement !== host) host.appendChild(pr);
+    pr.classList.toggle('hide', view !== 'ranking');
+    if (view === 'ranking') renderRanking();
   }
   if (view === 'corretores' && podeGerir()) renderCorretores();
 }
-window.setVisAba = a => { visAba = a; render(); };
+window.setVisAba = a => { if (a === 'ranking') { setView('ranking'); return; } visAba = a; render(); };
 window.vf = (k, v) => { vFil[k] = v; render(); };
 window.filtrarStatus = st => { vFil.status = vFil.status === st ? '' : st; $('vStatus').value = vFil.status; render(); };
 
@@ -4035,7 +4046,7 @@ function renderPainelPapel(){
       statCard('house','var(--accent)','var(--accent-soft)', marcHoje, 'Marcadas hoje', '', "novaVisita()") +
       statCard('check','var(--ok)','var(--ok-soft)', eu2.visitas, 'Visitas no mês', '', "setView('visitas')") +
       statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', eu2.realizadas, 'Realizadas no mês', '', "setView('visitas')") +
-      statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', sp >= 0 ? (sp+1)+'º' : '–', 'Ranking das SDRs', `${eu2.pontos} pontos`, "rankTipo='pontos';setVisAba('ranking');setView('visitas')");
+      statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', sp >= 0 ? (sp+1)+'º' : '–', 'Ranking das SDRs', `${eu2.pontos} pontos`, "rankTipo='pontos';setView('ranking')");
     return;
   }
   if (!podeGerir()) {
@@ -4046,7 +4057,7 @@ function renderPainelPapel(){
       statCard('house','var(--accent)','var(--accent-soft)', vh.length, 'Visitas hoje', vh.length ? `${conf} confirmada${conf!==1?'s':''}` : '', "setView('visitas')") +
       statCard('card','var(--ok)','var(--ok-soft)', minhasCartas, 'Aprovações no mês', 'planilha + cartas', "setView('cartas')") +
       statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', vendas, 'Vendas no mês', '', "cf('status','Venda fechada');setView('cartas')") +
-      statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', pPos >= 0 ? (pPos+1)+'º' : '–', 'No ranking', pPos >= 0 ? `${pEu.pontos} pontos · de ${rkP.length}` : 'sem pontos no mês', "rankTipo='pontos';setVisAba('ranking');setView('visitas')");
+      statCard('chart','var(--warn)','color-mix(in srgb,var(--warn) 14%,transparent)', pPos >= 0 ? (pPos+1)+'º' : '–', 'No ranking', pPos >= 0 ? `${pEu.pontos} pontos · de ${rkP.length}` : 'sem pontos no mês', "rankTipo='pontos';setView('ranking')");
     return;
   }
   // gestor (gerente ou coordenador)
