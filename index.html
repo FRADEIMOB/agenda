@@ -1924,7 +1924,7 @@ html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDocFromServer, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -2665,7 +2665,7 @@ window.limparAntigas = () => {
 const STATUS = ['Pendente','Confirmada','Reagendada','Realizada','Não compareceu','Cancelada'];
 const ST_COR = { Pendente:'#f59e0b', Confirmada:'#10b981', Reagendada:'#3b82f6', Cancelada:'#ef4444', Realizada:'#8b5cf6', 'Não compareceu':'#64748b' };
 const stCls = st => 'st-' + norm(st).replace(/[^a-z0-9]+/g,'-');
-const MESES_JANELA = 3; // carrega só os últimos 3 meses + visitas futuras (economiza o limite gratuito)
+const MESES_JANELA = 2; // carrega o mês atual e os 2 anteriores + visitas futuras (economiza o limite gratuito); meses mais antigos vêm pelo seletor
 let historicoCompleto = false, enviadosConf = new Set();
 const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR' };
 // lista de perfis na ordem da empresa: CEO, Gerente, Coordenador, Corretor, SDR (CEO = gerente com cargo de direção)
@@ -4645,11 +4645,34 @@ window.aFil = { busca:'', periodo:'mes', grupo:'', corretor:'' };
 function assinarEtapa2(){
   const silencio = e => console.warn('Etapa 2:', e.code || e.message);
   let qa;
-  if (souGerente()) qa = historicoCompleto ? collection(db,'avaliacoes') : query(collection(db,'avaliacoes'), where('data','>=',inicioJanela()));
+  if (souGerente()) qa = null; // gerência: leitura econômica logo abaixo
   else if (souCoord()) qa = query(collection(db,'avaliacoes'), where('equipe','==',perfil.equipe || '-'));
   else if (perfil.papel !== 'sdr') qa = query(collection(db,'avaliacoes'), where('corretorUid','==',uidAtual));
   const limpa = x => { if (typeof x.aba === 'string') x.aba = x.aba.trim(); if (typeof x.corretorNome === 'string') x.corretorNome = x.corretorNome.trim(); return x; };
   if (qa) subsPapel.push(onSnapshot(qa, s => { avaliacoesTodas = s.docs.map(d => limpa({ id:d.id, ...d.data() })); filtrarAvaliacoes(); render(); }, silencio));
+  // ECONOMIA (plano grátis do Firebase: 50 mil leituras por dia): a gerência tem milhares de avaliações.
+  // O app usa o que já está guardado no aparelho e só busca na nuvem o que mudou desde a última vez.
+  if (souGerente()) {
+    const janela = inicioJanela(), chaveFull = 'avalFull:' + uidAtual + ':' + janela, mapa = new Map();
+    let vivo = true, max = 0;
+    subsPapel.push(() => { vivo = false; });
+    const pega = d => { const x = limpa({ id:d.id, ...d.data() }); mapa.set(d.id, x); max = Math.max(max, Number(x.atualizadoEm) || 0); };
+    const publicar = () => { avaliacoesTodas = [...mapa.values()].filter(a => historicoCompleto || (a.data || '') >= janela); filtrarAvaliacoes(); render(); };
+    (async () => {
+      try { (await getDocsFromCache(collection(db,'avaliacoes'))).docs.forEach(pega); } catch(e) {}
+      let jaTem = false; try { jaTem = localStorage.getItem(chaveFull) === '1'; } catch(e) {}
+      if (!jaTem || !mapa.size || !max) {
+        // primeira vez neste aparelho (ou período maior): busca tudo uma vez só
+        try { (await getDocs(historicoCompleto ? collection(db,'avaliacoes') : query(collection(db,'avaliacoes'), where('data','>=',janela)))).docs.forEach(pega);
+          try { localStorage.setItem(chaveFull, '1'); } catch(e) {} } catch(e) { silencio(e); }
+      }
+      if (!vivo) return;
+      publicar();
+      const fim = onSnapshot(query(collection(db,'avaliacoes'), where('atualizadoEm','>', max)), s => {
+        s.docChanges().forEach(ch => { if (ch.type !== 'removed') pega(ch.doc); }); publicar(); }, silencio);
+      if (vivo) subsPapel.push(fim); else fim();
+    })();
+  }
   if (souDono()) subsPapel.push(onSnapshot(doc(db,'config','integracao'), s => { integ = s.exists() ? s.data() : {}; render(); }, silencio));
   if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'leads_dia'), where('dia','>=',inicioJanela())), s => { leadsDias = s.docs.map(d => d.data()); render(); }, silencio));
 }
