@@ -2901,7 +2901,7 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
-  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; empreendimentos = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; rankingVendas = []; window._rvOk = false; empreendimentos = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -2919,7 +2919,7 @@ function configurarAcesso(){
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador','sdr']));
   else if (perfil.papel === 'sdr') qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
-  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisLista = s.docs.map(d => ({ uid:d.id, ...d.data() })); render(); }, erro));
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisLista = s.docs.map(d => ({ uid:d.id, ...d.data() })); render(); sincVendasRanking(); }, erro));
 }
 
 // ---------- Cadastro / primeiro gerente ----------
@@ -3166,8 +3166,7 @@ function agrupaRanking(rows){
 function renderRanking(){
   $('rPeriodo').value = rankPeriodo;
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  if (rankTipo === 'vgv' && !souGerente()) rankTipo = 'pontos';
-  $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ...(souGerente() ? [['vgv','VGV']] : [])].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
   $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos');
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
@@ -3621,7 +3620,9 @@ function assinarCartas(erro){
   else if (souCoord()) qc = query(collection(db,'cartas'), where('equipe','==',perfil.equipe||'-'));
   else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
   if (qc) subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
-  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('reservas:', e.code || e.message)));
+  // resumo das vendas para o ranking de VGV de todos (sem dados do cliente); a gestão mantém ele em dia
+  subsPapel.push(onSnapshot(collection(db,'ranking_vendas'), s => { rankingVendas = s.docs.map(d => ({ id:d.id, ...d.data() })); window._rvOk = true; render(); sincVendasRanking(); }, e => console.warn('ranking_vendas:', e.code || e.message)));
+  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); sincVendasRanking(); }, e => console.warn('reservas:', e.code || e.message)));
   subsPapel.push(onSnapshot(souGerente() || historicoCompleto ? collection(db,'ranking_cartas') : query(collection(db,'ranking_cartas'), where('data','>=', somaMeses(mesAtual() + '-01', -6))), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
 }
 
@@ -3821,7 +3822,8 @@ window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.to
 // ---------- ranking de VGV (valor geral de vendas) ----------
 function rankingVgv(de, ate, eqF){
   const g = new Map();
-  vendasUnificadas(de, ate).forEach(v => {
+  const fonte = souGerente() ? vendasUnificadas(de, ate) : rankingVendas.filter(x => !x.caiu && x.dia >= de && x.dia <= ate).map(x => ({ valor:x.valor || 0, corretores:x.corretores || [], equipe:(x.corretores || [])[0]?.equipe || '' }));
+  fonte.forEach(v => {
     const cs = v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:v.equipe }];
     cs.forEach(c => { if (eqF && c.equipe !== eqF) return;
       const k = c.uid || 'n:' + norm(c.nome);
@@ -5788,6 +5790,22 @@ window.restaurarReserva = async id => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 const limpaNomeCor = n => norm(String(n || '').replace(/creci.*$/i, '').replace(/\d+/g, '').replace(/\b(novato|corretor|corretora|sdr)\b/gi, '')).trim();
+let rankingVendas = [];
+Object.defineProperty(window, 'rankingVendas', { get: () => rankingVendas });
+let _sincT = null;
+window.sincVendasRanking = () => sincVendasRanking();
+function sincVendasRanking(){
+  if (!souGerente() || souCeo() || !window._rvOk || !perfisLista.length) return;
+  clearTimeout(_sincT); _sincT = setTimeout(async () => {
+    const atual = new Map(rankingVendas.map(x => [x.id, x])), b = writeBatch(db); let n = 0;
+    reservasTodas.forEach(r => {
+      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
+      const a = atual.get(r.id);
+      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
+    });
+    if (n) try { await b.commit(); } catch(e) { console.warn('sinc ranking_vendas', e.code || e.message); }
+  }, 1500);
+}
 function corretoresDaReserva(txt){
   const partes = String(txt || '').split(/\s*(?:\/|\+|,|\be\b)\s*/i).map(limpaNomeCor).filter(Boolean);
   const ativos = perfisLista.filter(p => p.status === 'ativo');
