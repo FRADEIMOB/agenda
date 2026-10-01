@@ -1058,6 +1058,13 @@ html.modo-ceo .nav [data-view="config"]{order:8;margin-top:14px}html.modo-ceo .n
   .hx-lado b{font-size:26px}.hx-lado span{font-size:11.5px}
   .hx-chip{font-size:10.5px;padding:1px 6px}
 }
+
+/* modo TV / tela cheia do painel */
+.tv-sair{display:none}
+html.modo-tv .sidebar,html.modo-tv .topbar,html.modo-tv .mobilebar,html.modo-tv .fab,html.modo-tv .ia-bolha,html.modo-tv .page-head .ph-acoes .btn{display:none!important}
+html.modo-tv .content,html.modo-tv .main{padding-bottom:24px!important}
+html.modo-tv #v-painel{padding-top:44px}
+html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:40;border:1px solid var(--border);background:color-mix(in srgb,var(--card) 85%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--text);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,.15)}
 </style>
 </head>
 <body>
@@ -1262,7 +1269,7 @@ html.modo-ceo .nav [data-view="config"]{order:8;margin-top:14px}html.modo-ceo .n
                 <select id="vCorretor" onchange="vf('corretor',this.value)"></select>
               </div>
               <div class="janela" id="janelaVis"></div>
-              <div class="janela gest hide" style="justify-content:flex-end;margin-top:-6px"><button class="link" onclick="exportarVisitas()">⬇ Exportar para Excel</button></div>
+              <div class="janela gest hide" style="justify-content:flex-end;margin-top:-6px"><button class="link gerente-only hide" onclick="arqAba='visitas';abrirArquivados()" style="margin-right:16px">🗄️ Visitas arquivadas</button><button class="link" onclick="exportarVisitas()">⬇ Exportar para Excel</button></div>
               <div id="visLista"></div>
             </div>
           </div>
@@ -1301,7 +1308,7 @@ html.modo-ceo .nav [data-view="config"]{order:8;margin-top:14px}html.modo-ceo .n
               <select id="cEquipe" onchange="cf('equipe',this.value)"></select>
               <select id="cCorretor" onchange="cf('corretor',this.value)"></select>
             </div>
-            <div class="janela gest hide" style="justify-content:flex-end;margin-top:-6px"><button class="link" onclick="exportarCartas()">⬇ Exportar para Excel</button></div>
+            <div class="janela gest hide" style="justify-content:flex-end;margin-top:-6px"><button class="link gerente-only hide" onclick="arqAba='cartas';abrirArquivados()" style="margin-right:16px">🗄️ Cartas arquivadas</button><button class="link" onclick="exportarCartas()">⬇ Exportar para Excel</button></div>
             <div id="cartasLista"></div>
           </div>
         </div>
@@ -1620,6 +1627,7 @@ html.modo-ceo .nav [data-view="config"]{order:8;margin-top:14px}html.modo-ceo .n
     <div class="ia-acoes"><button class="link" onclick="assLimpar()">Nova conversa</button><button class="ia-x" onclick="iaFechar()" aria-label="Fechar">×</button></div></div>
   <div id="iaCorpo" class="ia-corpo"></div>
 </div>
+<button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <button class="fab hide" id="fab" onclick="abrirMais()" title="Adicionar" data-ic="plus"></button>
 <nav class="mobilebar hide" id="mobilebar">
   <button data-view="hoje" class="nao-ceo" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
@@ -5445,11 +5453,21 @@ function renderPainel(){
   html += `<div class="card" style="margin-bottom:20px"><div class="card-head"><h2>SDRs</h2><span class="muted">visitas marcadas e resumo do dia</span></div>${tabelaSdr(de, ate)}</div>`;
   $('painelConteudo').innerHTML = html;
 }
+// tela cheia do painel (para TV ou reunião). O iPhone não deixa a página ocupar a tela inteira,
+// então ali (e em qualquer aparelho) o app entra no "modo TV": some menu, barras e botões, fica só o painel.
 window.telaCheiaPainel = () => {
-  const el = $('v-painel');
-  if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el);
-  else document.exitFullscreen?.();
+  const html = document.documentElement;
+  if (html.classList.contains('modo-tv')) { sairTelaCheia(); return; }
+  html.classList.add('modo-tv'); window.lenis?.scrollTo(0, { immediate:true }); window.scrollTo(0, 0);
+  const el = document.documentElement, f = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (f) try { const r = f.call(el); if (r && r.catch) r.catch(() => {}); } catch(e) {}
 };
+window.sairTelaCheia = () => {
+  document.documentElement.classList.remove('modo-tv');
+  if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+};
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) document.documentElement.classList.remove('modo-tv'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.documentElement.classList.contains('modo-tv')) sairTelaCheia(); });
 
 // ---------- Desempenho: leads, docs e aprovações de cada corretor ----------
 let desPer = 'semana', desEq = '', desOrdem = 'leads', desBusca = '';
