@@ -1078,6 +1078,11 @@ html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area
 .emp-ml{display:grid;grid-template-columns:130px 1fr 1.4fr 36px;gap:8px;align-items:center;margin-bottom:8px}
 @media(max-width:600px){.emp-ml{grid-template-columns:1fr 1fr 36px}.emp-ml .em-link{grid-column:1/3}.emp-mat{flex-direction:column;align-items:stretch}.emp-acoes{justify-content:flex-start}}
 html.modo-ceo [onclick^="editarEmp"]{display:none!important}
+
+.emp-imp{display:flex;flex-direction:column;gap:4px;padding:10px 0;border-bottom:1px solid var(--border)}.emp-imp.off{opacity:.5}
+.emp-imp-t{display:flex;align-items:center;gap:10px}.emp-imp-t input[type=checkbox]{width:20px;height:20px;flex:none}
+.emp-imp-nome{flex:1;min-width:0}.emp-imp span{font-size:12.5px;padding-left:30px}
+#v-empreendimentos .ph-acoes{display:flex;gap:8px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -1356,7 +1361,7 @@ html.modo-ceo [onclick^="editarEmp"]{display:none!important}
       <!-- EMPREENDIMENTOS (material de venda) -->
       <section class="view" id="v-empreendimentos">
         <div class="page-head"><div><h1>Empreendimentos</h1><div class="sub">Material de venda de cada empreendimento: fotos, tabela, book e vídeos para mandar ao cliente.</div></div>
-          <button class="btn btn-primary so-cel nao-ceo" onclick="editarEmp()">+ Novo empreendimento</button></div>
+          <div class="ph-acoes"><button class="btn btn-ghost nao-ceo" onclick="abrirImpEmp()">Importar do WhatsApp</button><button class="btn btn-primary so-cel nao-ceo" onclick="editarEmp()">+ Novo empreendimento</button></div></div>
         <input id="empBusca" placeholder="Buscar empreendimento ou bairro..." oninput="empFiltro=this.value;renderEmp()" style="margin-bottom:16px">
         <div id="empLista" class="emp-grid"></div>
       </section>
@@ -1918,7 +1923,19 @@ html.modo-ceo [onclick^="editarEmp"]{display:none!important}
       <div id="empMats"></div>
       <button class="btn btn-ghost" onclick="empAddMat()">+ Adicionar material</button>
     </div>
-    <div class="sheet-foot"><button class="btn btn-ghost emp-arq hide" id="empArqBtn" onclick="arquivarEmp()">Arquivar</button><button class="btn btn-ghost" onclick="fechar('empModal')">Cancelar</button><button class="btn btn-primary" id="empSalvar" onclick="salvarEmp()">Salvar</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost emp-arq hide" id="empArqBtn" onclick="excluirEmp()" style="color:var(--danger)">Excluir</button><button class="btn btn-ghost" onclick="fechar('empModal')">Cancelar</button><button class="btn btn-primary" id="empSalvar" onclick="salvarEmp()">Salvar</button></div>
+  </div>
+</div>
+<div class="modal" id="empImpModal">
+  <div class="sheet" style="width:min(680px,100%)">
+    <div class="sheet-head"><h2>Importar do WhatsApp</h2><button class="icon-btn" onclick="fechar('empImpModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="hint" style="margin:0 0 12px">No WhatsApp, abra o grupo dos imóveis → toque no nome do grupo → <b>Exportar conversa</b> → <b>Sem mídia</b>. Depois envie aqui o arquivo (.zip ou .txt). O app reconhece os nomes dos empreendimentos na conversa e separa em cada um os links (fotos, tabela, book, vídeo), o preço, os quartos, o bairro e a entrega. Você confere antes de gravar.</div>
+      <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('empImpArq').click()">Escolher arquivo</button><input type="file" id="empImpArq" class="hide" accept=".zip,.txt,text/plain,application/zip" onchange="lerImpEmp(this)"></div>
+      <div id="empImpInfo" class="hint" style="margin:10px 0"></div>
+      <div id="empImpLista"></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('empImpModal')">Cancelar</button><button class="btn btn-primary" id="empImpBtn" disabled onclick="gravarImpEmp()">Importar</button></div>
   </div>
 </div>
 <div class="modal" id="alertaModal">
@@ -5157,11 +5174,107 @@ window.salvarEmp = async () => {
   try { await gravar(setDoc(empEdit ? doc(db,'empreendimentos',empEdit) : doc(collection(db,'empreendimentos')), dados, { merge:true })); fechar('empModal'); toast('Empreendimento salvo ✓'); }
   catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'publique as regras novas do Firebase' : e.message)); }
 };
-window.arquivarEmp = async () => {
+window.excluirEmp = async () => {
   const e = empreendimentos.find(x => x.id === empEdit); if (!e) return;
-  if (!confirm(`Arquivar ${e.nome}? Ele some da lista (o gestor pode trazer de volta).`)) return;
-  try { await gravar(setDoc(doc(db,'empreendimentos',e.id), { arquivado:true, atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' }, { merge:true })); fechar('empModal'); toast('Arquivado'); }
-  catch(err) { toast('Erro: ' + err.message); }
+  if (!confirm(`Excluir ${e.nome}?\n\nUse quando o empreendimento não fizer mais parte. Ele e os links do material de venda saem do app.`)) return;
+  try { await gravar(deleteDoc(doc(db,'empreendimentos',e.id))); fechar('empModal'); toast('Empreendimento excluído'); }
+  catch(err) { toast('Erro: ' + (err.code === 'permission-denied' ? 'publique as regras novas do Firebase' : err.message)); }
+};
+// ---------- importar empreendimentos de uma conversa exportada do WhatsApp ----------
+let empImp = [];
+window.abrirImpEmp = () => { if (souCeo()) { toast('Perfil CEO: só visualização'); return; } empImp = []; $('empImpInfo').textContent = ''; $('empImpLista').innerHTML = ''; $('empImpBtn').disabled = true; $('empImpArq').value = ''; abrir('empImpModal'); };
+async function textoDoArquivo(f){
+  if (/\.zip$/i.test(f.name) || f.type.includes('zip')) {
+    if (!window.JSZip) await new Promise((ok, erro) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'; sc.onload = ok; sc.onerror = () => erro(new Error('sem internet para abrir o .zip')); document.head.appendChild(sc); });
+    const z = await JSZip.loadAsync(await f.arrayBuffer());
+    const txt = Object.values(z.files).find(x => !x.dir && /\.txt$/i.test(x.name));
+    if (!txt) throw new Error('não achei a conversa (.txt) dentro do .zip');
+    return txt.async('string');
+  }
+  return f.text();
+}
+// separa as mensagens: "01/10/2026 11:34 - Nome: texto" (Android) ou "[01/10/2026, 11:34:12] Nome: texto" (iPhone)
+function mensagensWhats(txt){
+  const re = /^\u200e?\[?(\d{1,2})\/(\d{1,2})\/(\d{2,4})[,\s]+(\d{1,2}):(\d{2})(?::\d{2})?\]?\s*(?:-\s*)?([^:]{1,60}):\s?([\s\S]*)$/;
+  const msgs = [];
+  txt.replace(/\r/g, '').split('\n').forEach(l => {
+    const m = l.match(re);
+    if (m) { const a = m[3].length === 2 ? '20' + m[3] : m[3]; msgs.push({ dia:`${a}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`, quando:+new Date(+a, +m[2]-1, +m[1], +m[4], +m[5]), autor:m[6].replace(/^\u200e/, '').trim(), texto:m[7] }); }
+    else if (msgs.length) msgs[msgs.length - 1].texto += '\n' + l;
+  });
+  return msgs;
+}
+const tipoDoLink = (u, ctx) => { const t = norm(String(ctx || '').replace(/https?:\/\/\S+/g, ' ')), url = String(u).toLowerCase();
+  if (/youtu|vimeo|instagram\.com\/(reel|p)\//.test(url) || /\bvideos?\b|\breels?\b|\btour\b/.test(t)) return 'video';
+  if (/\btabela|\bprecos?\b|\bvalores\b|\bespelho/.test(t)) return 'tabela';
+  if (/\bplantas?\b/.test(t)) return 'planta';
+  if (/\bfotos?\b|\bimagens?\b|\bgaleria/.test(t) || /photos\.app|photos\.google/.test(url)) return 'fotos';
+  if (/\bbook\b|\bapresentacao|\bfolder\b|\bcatalogo|\bmaterial/.test(t)) return 'book';
+  return 'outro'; };
+const limpaNome = t => String(t || '').replace(/https?:\/\/\S+/g, '').replace(/[*_~`]/g, '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
+window.lerImpEmp = async input => {
+  const f = input.files && input.files[0]; if (!f) return;
+  $('empImpInfo').textContent = 'Lendo a conversa…'; $('empImpLista').innerHTML = '';
+  try {
+    const msgs = mensagensWhats(await textoDoArquivo(f));
+    if (!msgs.length) throw new Error('não reconheci o formato da conversa');
+    // 1) descobre os nomes dos empreendimentos: os já cadastrados + os que aparecem na conversa ("Residencial X", "Condomínio Y"…)
+    const RE_NOME = /(?:^|[^\wÀ-ú])((?:[Rr]esidencial|[Rr]esid\.|[Rr]es\.|[Cc]ondom[ií]nio|[Cc]ond\.|[Ee]dif[ií]cio|[Ee]d\.|[Jj]ardi(?:m|ns)|[Pp]arque|[Pp]ark|[Vv]illa|[Vv]ila|[Rr]eserva|[Ss]olar|[Ss]pazio|[Aa]lameda|[Rr]ecanto|[Pp]ortal|[Tt]orres?|[Mm]irante|[Vv]ivendas?|[Ll]oteamento|RESIDENCIAL|CONDOM[IÍ]NIO|EDIF[IÍ]CIO)\s+(?:d[aeo]s?\s+)?[A-ZÀ-Ú0-9][\wÀ-ú'’.-]*(?:\s+(?:d[aeo]s?\s+|e\s+)?[A-ZÀ-Ú0-9][\wÀ-ú'’.-]*){0,4})/g;
+    const cont = new Map();
+    empreendimentos.filter(e => !e.arquivado).forEach(e => cont.set(norm(e.nome), { nome:e.nome, n:99 }));
+    msgs.forEach(m => m.texto.split('\n').flatMap(l => [...limpaNome(l).matchAll(RE_NOME)].map(x => x[1])).forEach(n => { n = n.replace(/[.,;:]+$/, '').trim(); const k = norm(n); const x = cont.get(k) || { nome:n, n:0 }; x.n++; cont.set(k, x); }));
+    const nomes = [...cont.entries()].filter(([, x]) => x.n >= 1).sort((a, b) => b[0].length - a[0].length); // o nome mais longo ganha ("Jardim das Flores II" antes de "Jardim das Flores")
+    const achaNome = t => { const n = norm(limpaNome(t)); const hit = nomes.find(([k]) => k.length >= 4 && n.includes(k)); return hit ? hit[1].nome : ''; };
+    // 2) junta tudo o que fala de cada empreendimento: links, preço, quartos, bairro, entrega
+    const grupos = new Map(), pega = nome => { const k = norm(nome); if (!grupos.has(k)) grupos.set(k, { nome, materiais:[], info:new Set(), local:'' }); return grupos.get(k); };
+    let atual = '', atualEm = 0;
+    msgs.forEach((m, i) => {
+      const nomeMsg = achaNome(m.texto);
+      if (nomeMsg) { atual = nomeMsg; atualEm = m.quando; }
+      const links = m.texto.match(/https?:\/\/[^\s<>"]+/g);
+      // sem nome na mensagem: vale o último empreendimento falado no grupo (até 30 min antes)
+      let nome = nomeMsg || (atual && m.quando - atualEm <= 30 * 6e4 ? atual : '');
+      if (!nome && links) { const l1 = m.texto.split('\n').map(limpaNome).find(x => x && x.length > 3 && !/^<?(arquivo|midia|mídia) /i.test(x)); nome = (l1 || 'Sem nome · ' + dataBR(m.dia)).slice(0, 80); }
+      if (!nome) return;
+      if (!nomeMsg && !links) return; // conversa solta não vira informação
+      const g = pega(nome), t = limpaNome(m.texto);
+      (links || []).forEach(u => { u = u.replace(/[).,;]+$/, ''); if (!g.materiais.some(x => x.link === u)) g.materiais.push({ tipo:tipoDoLink(u, m.texto), titulo:'', link:u }); });
+      const preco = t.match(/(?:a partir de|apartir de|por|valor(?:es)?(?: de)?|R\$)\s*R?\$?\s*\d{2,3}(?:[.\s]\d{3})+(?:,\d{2})?|R\$\s*\d{2,3}\s*mil/i); if (preco) g.info.add('A partir de ' + preco[0].replace(/^(a partir de|apartir de|por|valor(es)?( de)?)\s*/i, '').trim());
+      const qt = t.match(/\b([1-4])\s*(?:e\s*[1-4]\s*)?(?:quartos?|qts?|dormit[oó]rios?)\b/i); if (qt) g.info.add(qt[0].replace(/\s+/g, ' '));
+      const ent = t.match(/entrega(?: prevista)?(?: em| para)?\s*[a-zç]*\s*(?:de\s*)?\d{4}/i); if (ent) g.info.add(ent[0]);
+      if (!g.local) for (const l of m.texto.split('\n')) { const bai = limpaNome(l).match(/(?:^|\s)(?:[Bb]airro(?: d[aeo])?|[Ll]ocalizado n[oa]|[Ff]ica n[oa])\s+([A-ZÀ-Ú][\wÀ-ú]+(?:\s+(?:d[aeo]s?\s+)?[A-ZÀ-Ú][\wÀ-ú]+){0,2})/); if (bai) { g.local = bai[1]; break; } }
+    });
+    grupos.forEach(g => { g.desc = [...g.info].slice(0, 4).join(' · ').slice(0, 300); });
+    [...grupos.keys()].forEach(k => { const g = grupos.get(k); if (!g.materiais.length && !g.desc) grupos.delete(k); });
+    empImp = [...grupos.values()].map(g => ({ ...g, marcado:true, existe:empreendimentos.find(e => !e.arquivado && norm(e.nome) === norm(g.nome)) }));
+    $('empImpInfo').innerHTML = empImp.length ? `<b>${empImp.length} empreendimento${empImp.length!==1?'s':''}</b> encontrado${empImp.length!==1?'s':''} em ${msgs.length} mensagens. Confira os nomes e desmarque o que não for imóvel.` : 'Nenhuma mensagem com link nessa conversa. Fotos e PDFs enviados direto no grupo não vêm na exportação; o app precisa de links (Drive, YouTube, site).';
+    renderImpEmp();
+  } catch(e) { $('empImpInfo').textContent = 'Não consegui ler: ' + e.message; }
+};
+function renderImpEmp(){
+  $('empImpLista').innerHTML = empImp.map((g, i) => `<div class="emp-imp ${g.marcado ? '' : 'off'}">
+    <label class="emp-imp-t"><input type="checkbox" ${g.marcado ? 'checked' : ''} onchange="empImp[${i}].marcado=this.checked;renderImpEmp()"><input class="emp-imp-nome" value="${esc(g.nome)}" maxlength="80" onchange="empImp[${i}].nome=this.value.trim()"></label>
+    <span class="muted">${g.materiais.length} link${g.materiais.length!==1?'s':''}${g.materiais.length ? ': ' + [...new Set(g.materiais.map(m => empTipoNome(m.tipo)))].join(', ') : ''}${g.local ? ' · ' + esc(g.local) : ''}${g.desc ? ' · ' + esc(g.desc) : ''}${g.existe ? ' · <b>junta com o que já existe</b>' : ''}</span></div>`).join('');
+  $('empImpBtn').disabled = !empImp.some(g => g.marcado && g.nome);
+  window.empImp = empImp;
+}
+window.gravarImpEmp = async () => {
+  const sel = empImp.filter(g => g.marcado && g.nome); if (!sel.length) return;
+  $('empImpBtn').disabled = true; $('empImpBtn').textContent = 'Importando…';
+  try {
+    const b = writeBatch(db), agora = Date.now();
+    sel.slice(0, 400).forEach(g => {
+      const ex = empreendimentos.find(e => !e.arquivado && norm(e.nome) === norm(g.nome));
+      const mats = [...(ex?.materiais || [])]; g.materiais.forEach(m => { if (!mats.some(x => x.link === m.link)) mats.push(m); });
+      const dados = { nome:g.nome.slice(0, 80), materiais:mats.slice(0, 30), atualizadoEm:agora, atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+      if (!ex) Object.assign(dados, { local:g.local || '', desc:g.desc || '', criadoEm:agora, criadoPor:uidAtual, arquivado:false, origem:'whatsapp' });
+      else { if (!ex.local && g.local) dados.local = g.local; if (!ex.desc && g.desc) dados.desc = g.desc; }
+      b.set(ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), dados, { merge:true });
+    });
+    await gravar(b.commit());
+    fechar('empImpModal'); toast(`${sel.length} empreendimento${sel.length!==1?'s':''} importado${sel.length!==1?'s':''} ✓`);
+  } catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'publique as regras novas do Firebase' : e.message)); }
+  $('empImpBtn').disabled = false; $('empImpBtn').textContent = 'Importar';
 };
 const empMsg = (e, m) => `${e.nome}${e.local ? ' · ' + e.local : ''}\n${m.titulo || empTipoNome(m.tipo)}: ${m.link}`;
 window.empCopiar = async (id, i) => { const e = empreendimentos.find(x => x.id === id), m = e?.materiais?.[i]; if (!m) return;

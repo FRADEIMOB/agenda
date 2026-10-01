@@ -18,7 +18,7 @@ self.addEventListener('notificationclick', e => {
     return clients.openWindow(link);
   }));
 });
-const CACHE = 'minha-agenda-v45';
+const CACHE = 'minha-agenda-v47';
 const ARQUIVOS = ['./', './index.html', './manifest.json', './frade-icone-192.png', './frade-icone-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './frade-icone-180.png', './logo-frade.png', './logo-frade-claro.png'];
 
 self.addEventListener('install', e => {
