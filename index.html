@@ -3155,11 +3155,13 @@ function agrupaRanking(rows){
 function renderRanking(){
   $('rPeriodo').value = rankPeriodo;
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  if (rankTipo === 'vgv' && !souGerente()) rankTipo = 'pontos';
+  $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ...(souGerente() ? [['vgv','VGV']] : [])].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
   $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos');
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
+  if (rankTipo === 'vgv') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'VGV = soma do valor das vendas (reservas) pela data da reserva. Venda em parceria divide o valor entre os corretores. Vendas que caíram não entram.'; renderRankingVgv(); return; }
   $('janelaRank').innerHTML = avisoJanela(rankPeriodo === 'todas');
   const [de, ate] = faixa(rankPeriodo);
   const base = rankingDocs.filter(r => r.date && r.date >= de && r.date <= ate && r.status !== 'Cancelada');
@@ -3805,6 +3807,34 @@ window.excluirCarta = async (id, doModal) => {
 };
 window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.toLocaleString('pt-BR') : ''; };
 
+// ---------- ranking de VGV (valor geral de vendas) ----------
+function rankingVgv(de, ate, eqF){
+  const g = new Map();
+  vendasUnificadas(de, ate).forEach(v => {
+    const cs = v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:v.equipe }];
+    cs.forEach(c => { if (eqF && c.equipe !== eqF) return;
+      const k = c.uid || 'n:' + norm(c.nome);
+      if (!g.has(k)) g.set(k, { uid:c.uid, nome:c.nome, equipe:c.equipe || '', vgv:0, vendas:0 });
+      const x = g.get(k); x.vgv += (v.valor || 0) / cs.length; x.vendas += 1 / cs.length; });
+  });
+  return [...g.values()].sort((a,b) => b.vgv - a.vgv || b.vendas - a.vendas);
+}
+const fmtVendas = n => Number.isInteger(n) ? String(n) : n.toLocaleString('pt-BR', { maximumFractionDigits:1 });
+function renderRankingVgv(){
+  const [de, ate] = rankPeriodo === 'todas' ? ['0000','9999'] : faixa(rankPeriodo);
+  const todos = rankingVgv(de, ate, '');
+  const eqs = listaEquipes().map(e => { const l = todos.filter(x => x.equipe === e.id); return { e, v:l.reduce((a,x) => a + x.vgv, 0), n:l.reduce((a,x) => a + x.vendas, 0) }; });
+  const max = Math.max(0, ...eqs.map(x => x.v));
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.v && x.v===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b style="font-size:22px">${brl(x.v)}</b><span>${fmtVendas(x.n)} venda${x.n!==1?'s':''}${x.v && x.v===max?' · 🏆 liderando':''}</span></div>`).join('');
+  const lista = rankEquipe ? todos.filter(x => x.equipe === rankEquipe) : todos;
+  const total = lista.reduce((a,x) => a + x.vgv, 0);
+  $('rankTit').textContent = 'Ranking de VGV ' + (ROT_PERIODO[rankPeriodo] || '') + (total ? ' · total ' + brl(total) : '');
+  if (!lista.length) { $('rankLista').innerHTML = vazio('Nenhuma venda no período', 'As reservas cadastradas em Vendas entram aqui com o valor.'); return; }
+  const med = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
+  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>VGV</th><th>Vendas</th><th class="hide-m">Ticket médio</th></tr></thead><tbody>${
+    lista.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${med(i)}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot">${brl(x.vgv)}</td><td>${fmtVendas(x.vendas)}</td><td class="hide-m">${x.vendas ? brl(x.vgv / x.vendas) : '–'}</td></tr>`).join('')
+  }</tbody></table>`;
+}
 function renderRankingCartas(){
   const [de, ate] = rankPeriodo === 'todas' ? ['0000','9999'] : faixa(rankPeriodo);
   const base = rankingCartas.filter(r => r.data && r.data >= de && r.data <= ate);
@@ -5890,6 +5920,9 @@ function renderPainel(){
   const tabelaEq = `<div class="card"><div class="card-head"><h2>Equipes</h2></div><div class="tab-rola"><table class="rank pd-eq"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th><span class="so-pc">Aprovações</span><span class="so-m">Aprov.</span></th><th class="hide-m">Cartas no app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
     eqs.map(x => { const m = media(x.leads, x.docs); return `<tr class="${lider && x === lider && (x.vendas || x.aprov) ? 'me' : ''}"><td><span class="nm">${esc(x.e.icone || '')} ${esc(x.e.nome)}</span></td><td class="tot">${x.leads}</td><td>${x.docs}</td><td class="hide-m" style="color:${corM(m)};font-weight:700">${m === null ? '–' : m.toLocaleString('pt-BR')}</td><td>${x.aprovPlan}</td><td class="hide-m">${x.aprov}</td><td>${x.vendas}</td><td class="hide-m">${x.pts}</td></tr>`; }).join('')
   }</tbody></table></div></div>`;
+  // ranking de VGV do mês
+  const vgvTop = rankingVgv(de, ate, '').slice(0, 5);
+  html += `<div class="card" style="margin-bottom:20px"><div class="card-head"><h2>Ranking de VGV</h2><span class="muted">valor vendido no mês${A.valorVendido ? ' · total ' + brl(A.valorVendido) : ''}</span></div>${vgvTop.length ? vgvTop.map((x,i) => `<div class="pt-row"><span>${MEDALHA(i)} ${esc(x.nome)} <small class="muted">${esc(eqNome(x.equipe))}</small></span><b>${brl(x.vgv)} · ${fmtVendas(x.vendas)} venda${x.vendas!==1?'s':''}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma venda no mês ainda.</div>'}</div>`;
   html += `<div class="pd-grid ${souCeo() ? 'so-um' : ''}">` + (souCeo() ? '' : tabelaEq);
   // destaques
   const top = pontosDoMes(de.slice(0,7)).slice(0, 5);
