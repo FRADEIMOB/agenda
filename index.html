@@ -4074,6 +4074,10 @@ $('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classLi
 window.abrirMais = () => { renderPainelPapel(); abrir('maisModal'); };
 
 // ================= Sem internet, instalar app e confete =================
+// se o Firebase não responder (ex.: limite grátis do dia esgotado, ele fica tentando para sempre), desiste e avisa
+function comTempo(p, ms = 30000){
+  return Promise.race([p, new Promise((_, erro) => setTimeout(() => { const e = new Error('o Firebase não respondeu. Pode ser o limite grátis do dia; tente de novo mais tarde'); e.code = 'tempo'; erro(e); }, ms))]);
+}
 function gravar(p){
   if (navigator.onLine) return p;
   p.catch(e => toast('Erro ao sincronizar: ' + e.message));
@@ -5456,20 +5460,22 @@ window.gravarImpEmp = async () => {
       else { if (!ex.local && g.local) dados.local = g.local; if (!ex.desc && g.desc) dados.desc = g.desc; }
       b.set(ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), dados, { merge:true });
     });
-    await gravar(b.commit());
+    $('empImpBtn').textContent = 'Gravando…';
+    await comTempo(gravar(b.commit()));
     // as fotos vão depois, uma por uma (cada foto reduzida para caber no plano grátis)
     const comFoto = sel.filter(g => g.fotosArq.length && empImpZip);
     if (comFoto.length) {
       await new Promise(r => setTimeout(r, 400));
       let feitas = 0, total = comFoto.reduce((a, g) => a + Math.min(12, g.fotosArq.length), 0);
       for (const g of comFoto) {
+        $('empImpBtn').textContent = `Fotos ${feitas}/${total}…`;
         const emp = empreendimentos.find(e => norm(e.nome) === norm(g.nome)) || (await getDocs(query(collection(db,'empreendimentos'), where('nome','==',g.nome.slice(0, 80))))).docs.map(d => ({ id:d.id }))[0];
         if (!emp) continue;
-        const exist = (await getDocs(query(collection(db,'emp_fotos'), where('empId','==',emp.id)))).docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.ordem || 0) - (b.ordem || 0));
+        const exist = (await comTempo(getDocs(query(collection(db,'emp_fotos'), where('empId','==',emp.id))))).docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.ordem || 0) - (b.ordem || 0));
         const novas = [];
         for (const n of g.fotosArq.slice(0, 12)) { const f = empImpZip.file(new RegExp('(^|/)' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i'))[0]; if (!f) continue;
           try { novas.push(await comprimirFoto(await f.async('blob'))); } catch(e) {} $('empImpBtn').textContent = `Fotos ${++feitas}/${total}…`; }
-        if (novas.length) await gravarFotosEmp(emp.id, novas, [], exist);
+        if (novas.length) await comTempo(gravarFotosEmp(emp.id, novas, [], exist), 90000);
       }
     }
     fechar('empImpModal'); toast(`${sel.length} empreendimento${sel.length!==1?'s':''} importado${sel.length!==1?'s':''} ✓`);
