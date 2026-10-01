@@ -1083,6 +1083,33 @@ html.modo-ceo [onclick^="editarEmp"]{display:none!important}
 .emp-imp-t{display:flex;align-items:center;gap:10px}.emp-imp-t input[type=checkbox]{width:20px;height:20px;flex:none}
 .emp-imp-nome{flex:1;min-width:0}.emp-imp span{font-size:12.5px;padding-left:30px}
 #v-empreendimentos .ph-acoes{display:flex;gap:8px;flex-wrap:wrap}
+
+/* empreendimentos: cartão com capa + material completo */
+.emp-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.emp-capa-card{display:flex;flex-direction:column;text-align:left;padding:0;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--card);box-shadow:var(--shadow);cursor:pointer;font:inherit;color:inherit;transition:transform .2s var(--ease,ease),box-shadow .2s}
+.emp-capa-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(15,23,42,.14)}
+.emp-capa-card:focus-visible{outline:3px solid color-mix(in srgb,#1C5F8E 45%,transparent);outline-offset:2px}
+.emp-capa{position:relative;aspect-ratio:16/10;background:linear-gradient(145deg,#1C5F8E,#123F63);display:grid;place-items:center;overflow:hidden}
+.emp-capa img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.emp-sem{color:rgba(255,255,255,.55)}.emp-sem svg{width:44px;height:44px}
+.emp-n{position:absolute;right:10px;bottom:10px;z-index:2;font-style:normal;font-size:12px;font-weight:600;color:#fff;background:rgba(10,30,48,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:4px 10px;border-radius:999px}
+.emp-info{display:flex;flex-direction:column;gap:3px;padding:14px 16px 16px}
+.emp-info b{font-size:16.5px}.emp-info span{font-size:13px;color:var(--muted)}.emp-info em{font-style:normal;font-size:13.5px;color:var(--text2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.emp-info small{margin-top:6px;font-size:12.5px;font-weight:600;color:#1C5F8E}
+.ev-galeria{position:relative;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:#0d2236;display:grid;place-items:center}
+.ev-galeria img{width:100%;height:100%;object-fit:contain}
+.ev-galeria.vazio{background:var(--card2);border:1px dashed var(--border);aspect-ratio:auto;min-height:120px}
+.ev-seta{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:#123F63;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.ev-seta.esq{left:10px}.ev-seta.dir{right:10px}
+.ev-cont{position:absolute;left:12px;bottom:10px;font-style:normal;font-size:12px;font-weight:600;color:#fff;background:rgba(10,30,48,.6);padding:3px 9px;border-radius:999px}
+.ev-minis{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px}
+.ev-minis button{flex:none;width:72px;height:54px;border-radius:10px;overflow:hidden;border:2px solid transparent;padding:0;cursor:pointer;background:none;opacity:.7}
+.ev-minis button.on{border-color:#F5841F;opacity:1}.ev-minis img{width:100%;height:100%;object-fit:cover}
+.ev-foto-acoes{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.ev-foto-acoes .snooze{display:inline-flex;align-items:center;gap:5px}.ev-foto-acoes svg{width:16px;height:16px}
+.ef-grid{display:flex;flex-wrap:wrap;gap:8px}
+.ef{position:relative;width:96px;height:72px;border-radius:10px;overflow:hidden;border:1px solid var(--border)}.ef img{width:100%;height:100%;object-fit:cover}
+.ef button{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:15px;line-height:1;cursor:pointer}
+.ef.nova{outline:2px solid #F5841F}
 </style>
 </head>
 <body>
@@ -1918,6 +1945,9 @@ html.modo-ceo [onclick^="editarEmp"]{display:none!important}
       <div class="fg"><label>Nome</label><input id="empNome" maxlength="80" placeholder="Ex.: Residencial Jardim das Flores"></div>
       <div class="fg"><label>Bairro / cidade <span class="muted">(opcional)</span></label><input id="empLocal" maxlength="80" placeholder="Ex.: Valentina, João Pessoa"></div>
       <div class="fg"><label>Resumo <span class="muted">(opcional)</span></label><textarea id="empDesc" rows="2" maxlength="300" placeholder="Ex.: 2 quartos, a partir de R$ 180 mil, entrega em 2027"></textarea></div>
+      <div class="rep-sec">Fotos</div>
+      <div id="empFotosEd" class="ef-grid"></div>
+      <div class="int-linha" style="margin:8px 0 4px"><button class="btn btn-ghost" onclick="document.getElementById('empFotoArq').click()">+ Adicionar fotos</button><input type="file" id="empFotoArq" class="hide" accept="image/*" multiple onchange="empAddFotos(this)"></div>
       <div class="rep-sec">Material de venda</div>
       <div class="hint" style="margin:0 0 10px">Cole o link de cada material (Google Drive, YouTube, site da construtora…). No Drive, deixe o compartilhamento como "qualquer pessoa com o link".</div>
       <div id="empMats"></div>
@@ -1926,11 +1956,17 @@ html.modo-ceo [onclick^="editarEmp"]{display:none!important}
     <div class="sheet-foot"><button class="btn btn-ghost emp-arq hide" id="empArqBtn" onclick="excluirEmp()" style="color:var(--danger)">Excluir</button><button class="btn btn-ghost" onclick="fechar('empModal')">Cancelar</button><button class="btn btn-primary" id="empSalvar" onclick="salvarEmp()">Salvar</button></div>
   </div>
 </div>
+<div class="modal" id="empVerModal">
+  <div class="sheet" style="width:min(760px,100%)">
+    <div class="sheet-head"><div><h2 id="evNome">Empreendimento</h2><div class="muted" style="font-size:13px;margin-top:3px" id="evLocal"></div></div><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-ghost" id="evEditar" onclick="editarDoVer()">Editar</button><button class="icon-btn" onclick="fechar('empVerModal')" data-ic="x"></button></div></div>
+    <div class="sheet-body" id="evCorpo"></div>
+  </div>
+</div>
 <div class="modal" id="empImpModal">
   <div class="sheet" style="width:min(680px,100%)">
     <div class="sheet-head"><h2>Importar do WhatsApp</h2><button class="icon-btn" onclick="fechar('empImpModal')" data-ic="x"></button></div>
     <div class="sheet-body">
-      <div class="hint" style="margin:0 0 12px">No WhatsApp, abra o grupo dos imóveis → toque no nome do grupo → <b>Exportar conversa</b> → <b>Sem mídia</b>. Depois envie aqui o arquivo (.zip ou .txt). O app reconhece os nomes dos empreendimentos na conversa e separa em cada um os links (fotos, tabela, book, vídeo), o preço, os quartos, o bairro e a entrega. Você confere antes de gravar.</div>
+      <div class="hint" style="margin:0 0 12px">No WhatsApp, abra o grupo dos imóveis → toque no nome do grupo → <b>Exportar conversa</b> → <b>Anexar mídia</b> (para trazer as fotos). Depois envie aqui o arquivo .zip. O app reconhece os nomes dos empreendimentos na conversa e separa em cada um os links (fotos, tabela, book, vídeo), o preço, os quartos, o bairro e a entrega. Você confere antes de gravar.</div>
       <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('empImpArq').click()">Escolher arquivo</button><input type="file" id="empImpArq" class="hide" accept=".zip,.txt,text/plain,application/zip" onchange="lerImpEmp(this)"></div>
       <div id="empImpInfo" class="hint" style="margin:10px 0"></div>
       <div id="empImpLista"></div>
@@ -5133,20 +5169,87 @@ let empreendimentos = [], empEdit = null; window.empFiltro = '';
 const EMP_TIPOS = [['fotos','Fotos'],['tabela','Tabela de preços'],['book','Book'],['video','Vídeo'],['planta','Plantas'],['outro','Outro']];
 const empTipoNome = k => (EMP_TIPOS.find(t => t[0] === k) || EMP_TIPOS[5])[1];
 const linkOk = u => /^https?:\/\/\S+$/i.test(String(u || '').trim());
+// foto de capa: a primeira foto enviada; sem foto, a miniatura de um link do Drive marcado como Fotos
+const driveId = u => (String(u || '').match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]{20,})/) || [])[1] || '';
+const capaDe = e => e.capa || (() => { const m = (e.materiais || []).find(x => x.tipo === 'fotos' && driveId(x.link)); return m ? `https://drive.google.com/thumbnail?id=${driveId(m.link)}&sz=w800` : ''; })();
 function renderEmp(){
   if (view !== 'empreendimentos') return;
   const t = norm(window.empFiltro || '');
   const l = empreendimentos.filter(e => !e.arquivado && (!t || norm([e.nome, e.local, e.desc].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
-  $('empLista').innerHTML = l.length ? l.map(e => `<div class="card emp-card">
-      <div class="emp-topo"><div style="min-width:0"><h3>${esc(e.nome)}</h3>${e.local ? `<span class="muted">${esc(e.local)}</span>` : ''}</div>${souCeo() ? '' : `<button class="link" onclick="editarEmp('${e.id}')">Editar</button>`}</div>
-      ${e.desc ? `<p class="emp-desc">${esc(e.desc)}</p>` : ''}
-      <div class="emp-mats">${(e.materiais || []).length ? e.materiais.map((m, i) => `<div class="emp-mat"><div style="min-width:0"><b>${esc(m.titulo || empTipoNome(m.tipo))}</b>${m.titulo ? `<span>${esc(empTipoNome(m.tipo))}</span>` : ''}</div>
-          <div class="emp-acoes"><a class="snooze" href="${esc(m.link)}" target="_blank" rel="noopener">Abrir</a><button class="snooze" onclick="empCopiar('${e.id}',${i})">Copiar</button><button class="snooze wa" onclick="empWhats('${e.id}',${i})">${IC.wa}Enviar</button></div></div>`).join('')
-        : '<div class="muted" style="font-size:13.5px">Nenhum material ainda.</div>'}</div>
-      ${e.atualizadoPorNome ? `<small class="muted">Atualizado por ${esc(primeiro(e.atualizadoPorNome))}${e.atualizadoEm ? ' em ' + new Date(e.atualizadoEm).toLocaleDateString('pt-BR') : ''}</small>` : ''}
-    </div>`).join('')
-    : `<div class="card">${vazio(t ? 'Nada encontrado' : 'Nenhum empreendimento ainda', t ? 'Tente outro nome.' : (souCeo() ? 'A equipe ainda não cadastrou empreendimentos.' : 'Toque em "Novo empreendimento" para cadastrar o primeiro, com os links do material de venda.'))}</div>`;
+  $('empLista').innerHTML = l.length ? l.map(e => { const c = capaDe(e), n = (e.nFotos || 0);
+    return `<button class="emp-capa-card" onclick="verEmp('${e.id}')">
+      <div class="emp-capa">${c ? `<img src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.remove()">` : ''}<span class="emp-sem" data-ic="predio"></span>${n > 1 ? `<i class="emp-n">${n} fotos</i>` : ''}</div>
+      <div class="emp-info"><b>${esc(e.nome)}</b>${e.local ? `<span>${esc(e.local)}</span>` : ''}${e.desc ? `<em>${esc(e.desc)}</em>` : ''}
+      <small>${(e.materiais || []).length === 1 ? '1 material' : (e.materiais || []).length + ' materiais'} · ver tudo</small></div></button>`; }).join('')
+    : `<div class="card" style="grid-column:1/-1">${vazio(t ? 'Nada encontrado' : 'Nenhum empreendimento ainda', t ? 'Tente outro nome.' : (souCeo() ? 'A equipe ainda não cadastrou empreendimentos.' : 'Toque em "Novo empreendimento" ou importe do grupo do WhatsApp.'))}</div>`;
+  pintarIcones($('empLista'));
 }
+// ---------- material completo de um empreendimento (todas as fotos + links) ----------
+let empVerId = null, empFotos = [], empFotoIdx = 0;
+window.verEmp = async id => {
+  const e = empreendimentos.find(x => x.id === id); if (!e) return;
+  empVerId = id; empFotos = []; empFotoIdx = 0;
+  $('evNome').textContent = e.nome; $('evLocal').textContent = e.local || '';
+  $('evEditar').classList.toggle('hide', souCeo());
+  $('evCorpo').innerHTML = htmlEmpDetalhe(e, true);
+  abrir('empVerModal');
+  try {
+    const sn = await getDocs(query(collection(db,'emp_fotos'), where('empId','==',id)));
+    empFotos = sn.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.ordem || 0) - (b.ordem || 0));
+  } catch(err) { console.warn('fotos', err.message); }
+  if (empVerId === id) $('evCorpo').innerHTML = htmlEmpDetalhe(e, false);
+};
+function htmlEmpDetalhe(e, carregando){
+  const drive = capaDe(e) && !e.capa ? [{ dados:capaDe(e) }] : [];
+  const fotos = empFotos.length ? empFotos : drive, f = fotos[empFotoIdx] || fotos[0];
+  return `${f ? `<div class="ev-galeria"><img src="${esc(f.dados)}" alt="${esc(e.nome)} – foto ${empFotoIdx + 1}">
+      ${fotos.length > 1 ? `<button class="ev-seta esq" onclick="empFotoNav(-1)" aria-label="Foto anterior">‹</button><button class="ev-seta dir" onclick="empFotoNav(1)" aria-label="Próxima foto">›</button><i class="ev-cont">${empFotoIdx + 1} / ${fotos.length}</i>` : ''}</div>
+      ${fotos.length > 1 ? `<div class="ev-minis">${fotos.map((x, i) => `<button class="${i === empFotoIdx ? 'on' : ''}" onclick="empFotoIr(${i})"><img src="${esc(x.dados)}" alt="Foto ${i + 1}"></button>`).join('')}</div>` : ''}
+      ${empFotos.length ? `<div class="ev-foto-acoes"><button class="snooze" onclick="empFotoBaixar()">Baixar foto</button><button class="snooze wa" onclick="empFotoCompartilhar()">${IC.wa}Mandar fotos</button></div>` : ''}`
+    : carregando ? '<div class="ev-galeria vazio"><span class="muted">Carregando fotos…</span></div>' : `<div class="ev-galeria vazio"><span class="muted">Sem fotos ainda${souCeo() ? '' : ' · toque em Editar para adicionar'}</span></div>`}
+    ${e.desc ? `<p class="emp-desc" style="margin-top:14px">${esc(e.desc)}</p>` : ''}
+    <div class="rep-sec">Material de venda</div>
+    <div class="emp-mats">${(e.materiais || []).length ? e.materiais.map((m, i) => `<div class="emp-mat"><div style="min-width:0"><b>${esc(m.titulo || empTipoNome(m.tipo))}</b>${m.titulo ? `<span>${esc(empTipoNome(m.tipo))}</span>` : ''}</div>
+      <div class="emp-acoes"><a class="snooze" href="${esc(m.link)}" target="_blank" rel="noopener">Abrir</a><button class="snooze" onclick="empCopiar('${e.id}',${i})">Copiar</button><button class="snooze wa" onclick="empWhats('${e.id}',${i})">${IC.wa}Enviar</button></div></div>`).join('')
+      : '<div class="muted" style="font-size:13.5px">Nenhum link ainda.</div>'}</div>
+    ${e.atualizadoPorNome ? `<small class="muted" style="display:block;margin-top:12px">Atualizado por ${esc(primeiro(e.atualizadoPorNome))}${e.atualizadoEm ? ' em ' + new Date(e.atualizadoEm).toLocaleDateString('pt-BR') : ''}</small>` : ''}`;
+}
+window.empFotoNav = d => { const n = empFotos.length || 1; empFotoIdx = (empFotoIdx + d + n) % n; const e = empreendimentos.find(x => x.id === empVerId); if (e) $('evCorpo').innerHTML = htmlEmpDetalhe(e, false); };
+window.empFotoIr = i => { empFotoIdx = i; empFotoNav(0); };
+const blobDeDataUrl = d => fetch(d).then(r => r.blob());
+window.empFotoBaixar = async () => { const f = empFotos[empFotoIdx]; if (!f) return; const e = empreendimentos.find(x => x.id === empVerId);
+  const a = document.createElement('a'); a.href = f.dados; a.download = `${(e?.nome || 'foto').replace(/[^\wÀ-ú -]/g, '')} ${empFotoIdx + 1}.jpg`; document.body.appendChild(a); a.click(); a.remove(); };
+// no celular abre o "compartilhar" do aparelho com as fotos (dá para escolher o WhatsApp do cliente)
+window.empFotoCompartilhar = async () => {
+  const e = empreendimentos.find(x => x.id === empVerId); if (!empFotos.length) return;
+  try {
+    const files = await Promise.all(empFotos.slice(0, 10).map(async (f, i) => new File([await blobDeDataUrl(f.dados)], `${(e?.nome || 'foto').replace(/[^\wÀ-ú -]/g, '')} ${i + 1}.jpg`, { type:'image/jpeg' })));
+    if (navigator.canShare && navigator.canShare({ files })) { await navigator.share({ files, text:e?.nome || '' }); return; }
+  } catch(err) { if (err.name === 'AbortError') return; }
+  toast('Este aparelho não manda várias fotos direto. Use "Baixar foto" e envie pelo WhatsApp.');
+};
+window.editarDoVer = () => { const id = empVerId; fechar('empVerModal'); editarEmp(id); };
+// reduz a foto para caber no banco grátis (cerca de 150 KB) e faz a miniatura da capa
+function comprimirFoto(fonte, lado = 1280, q = 0.72){
+  return new Promise((ok, erro) => {
+    const url = typeof fonte === 'string' ? fonte : URL.createObjectURL(fonte), im = new Image();
+    im.onload = () => { const k = Math.min(1, lado / Math.max(im.width, im.height)), c = document.createElement('canvas');
+      c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      if (typeof fonte !== 'string') URL.revokeObjectURL(url);
+      let d = c.toDataURL('image/jpeg', q); if (d.length > 900000) d = c.toDataURL('image/jpeg', 0.5); ok(d); };
+    im.onerror = () => erro(new Error('foto inválida')); im.src = url; });
+}
+let empNovasFotos = [], empFotosExist = [], empFotosTirar = [];
+function renderFotosEdit(){
+  $('empFotosEd').innerHTML = [...empFotosExist.map((f, i) => `<div class="ef"><img src="${esc(f.dados)}" alt=""><button onclick="empTirarFoto('e',${i})" aria-label="Tirar foto">×</button></div>`),
+    ...empNovasFotos.map((d, i) => `<div class="ef nova"><img src="${esc(d)}" alt=""><button onclick="empTirarFoto('n',${i})" aria-label="Tirar foto">×</button></div>`)].join('')
+    || '<span class="muted" style="font-size:13px">Nenhuma foto. A primeira vira a capa.</span>';
+}
+window.empTirarFoto = (k, i) => { if (k === 'e') empFotosTirar.push(empFotosExist.splice(i, 1)[0].id); else empNovasFotos.splice(i, 1); renderFotosEdit(); };
+window.empAddFotos = async input => {
+  const fs = [...(input.files || [])].slice(0, 20); input.value = '';
+  for (const f of fs) { try { empNovasFotos.push(await comprimirFoto(f)); renderFotosEdit(); } catch(e) {} }
+};
 function empLinhaMat(m = {}){
   return `<div class="emp-ml"><select class="em-tipo">${EMP_TIPOS.map(([k,n]) => `<option value="${k}" ${m.tipo===k?'selected':''}>${n}</option>`).join('')}</select>
     <input class="em-tit" maxlength="60" placeholder="Nome (opcional)" value="${esc(m.titulo || '')}">
@@ -5161,8 +5264,20 @@ window.editarEmp = id => {
   $('empNome').value = e?.nome || ''; $('empLocal').value = e?.local || ''; $('empDesc').value = e?.desc || '';
   $('empMats').innerHTML = (e?.materiais?.length ? e.materiais : [{ tipo:'fotos' }, { tipo:'tabela' }, { tipo:'book' }]).map(empLinhaMat).join('');
   $('empArqBtn').classList.toggle('hide', !e);
+  empNovasFotos = []; empFotosExist = []; empFotosTirar = []; renderFotosEdit();
   abrir('empModal'); setTimeout(() => $('empNome').focus(), 200);
+  if (e) getDocs(query(collection(db,'emp_fotos'), where('empId','==',e.id))).then(sn => { if (empEdit !== e.id) return;
+    empFotosExist = sn.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.ordem || 0) - (b.ordem || 0)); renderFotosEdit(); }).catch(() => {});
 };
+// grava as fotos novas, apaga as tiradas e atualiza a capa e a contagem
+async function gravarFotosEmp(empId, novas, tirar, existentes){
+  let ordem = Math.max(0, ...existentes.map(f => f.ordem || 0)) + 1;
+  for (const d of novas) await gravar(setDoc(doc(collection(db,'emp_fotos')), { empId, dados:d, ordem:ordem++, criadoPor:uidAtual, criadoEm:Date.now() }));
+  for (const id of tirar) await gravar(deleteDoc(doc(db,'emp_fotos',id)));
+  const primeira = existentes[0]?.dados || novas[0] || '';
+  const capa = primeira ? await comprimirFoto(primeira, 480, 0.6) : '';
+  await gravar(setDoc(doc(db,'empreendimentos',empId), { capa, nFotos:existentes.length + novas.length }, { merge:true }));
+}
 window.salvarEmp = async () => {
   const nome = $('empNome').value.trim().replace(/\s+/g, ' ');
   if (!nome) { toast('Digite o nome do empreendimento'); return; }
@@ -5171,17 +5286,23 @@ window.salvarEmp = async () => {
   const dados = { nome:nome.slice(0, 80), local:$('empLocal').value.trim().slice(0, 80), desc:$('empDesc').value.trim().slice(0, 300), materiais:mats.slice(0, 30),
     atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
   if (!empEdit) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false });
-  try { await gravar(setDoc(empEdit ? doc(db,'empreendimentos',empEdit) : doc(collection(db,'empreendimentos')), dados, { merge:true })); fechar('empModal'); toast('Empreendimento salvo ✓'); }
-  catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'publique as regras novas do Firebase' : e.message)); }
+  try {
+    const ref = empEdit ? doc(db,'empreendimentos',empEdit) : doc(collection(db,'empreendimentos'));
+    await gravar(setDoc(ref, dados, { merge:true }));
+    if (empNovasFotos.length || empFotosTirar.length) { $('empSalvar').textContent = 'Enviando fotos…'; await gravarFotosEmp(ref.id, empNovasFotos, empFotosTirar, empFotosExist); }
+    $('empSalvar').textContent = 'Salvar'; fechar('empModal'); toast('Empreendimento salvo ✓'); }
+  catch(e) { $('empSalvar').textContent = 'Salvar'; toast('Erro: ' + (e.code === 'permission-denied' ? 'publique as regras novas do Firebase' : e.message)); }
 };
 window.excluirEmp = async () => {
   const e = empreendimentos.find(x => x.id === empEdit); if (!e) return;
   if (!confirm(`Excluir ${e.nome}?\n\nUse quando o empreendimento não fizer mais parte. Ele e os links do material de venda saem do app.`)) return;
-  try { await gravar(deleteDoc(doc(db,'empreendimentos',e.id))); fechar('empModal'); toast('Empreendimento excluído'); }
+  try { const sn = await getDocs(query(collection(db,'emp_fotos'), where('empId','==',e.id))).catch(() => null);
+    if (sn) for (const d of sn.docs) await gravar(deleteDoc(doc(db,'emp_fotos',d.id)));
+    await gravar(deleteDoc(doc(db,'empreendimentos',e.id))); fechar('empModal'); toast('Empreendimento excluído'); }
   catch(err) { toast('Erro: ' + (err.code === 'permission-denied' ? 'publique as regras novas do Firebase' : err.message)); }
 };
 // ---------- importar empreendimentos de uma conversa exportada do WhatsApp ----------
-let empImp = [];
+let empImp = [], empImpZip = null;
 window.abrirImpEmp = () => { if (souCeo()) { toast('Perfil CEO: só visualização'); return; } empImp = []; $('empImpInfo').textContent = ''; $('empImpLista').innerHTML = ''; $('empImpBtn').disabled = true; $('empImpArq').value = ''; abrir('empImpModal'); };
 async function textoDoArquivo(f){
   if (/\.zip$/i.test(f.name) || f.type.includes('zip')) {
@@ -5189,6 +5310,7 @@ async function textoDoArquivo(f){
     const z = await JSZip.loadAsync(await f.arrayBuffer());
     const txt = Object.values(z.files).find(x => !x.dir && /\.txt$/i.test(x.name));
     if (!txt) throw new Error('não achei a conversa (.txt) dentro do .zip');
+    empImpZip = z;
     return txt.async('string');
   }
   return f.text();
@@ -5214,7 +5336,7 @@ const tipoDoLink = (u, ctx) => { const t = norm(String(ctx || '').replace(/https
 const limpaNome = t => String(t || '').replace(/https?:\/\/\S+/g, '').replace(/[*_~`]/g, '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
 window.lerImpEmp = async input => {
   const f = input.files && input.files[0]; if (!f) return;
-  $('empImpInfo').textContent = 'Lendo a conversa…'; $('empImpLista').innerHTML = '';
+  $('empImpInfo').textContent = 'Lendo a conversa…'; $('empImpLista').innerHTML = ''; empImpZip = null;
   try {
     const msgs = mensagensWhats(await textoDoArquivo(f));
     if (!msgs.length) throw new Error('não reconheci o formato da conversa');
@@ -5226,18 +5348,20 @@ window.lerImpEmp = async input => {
     const nomes = [...cont.entries()].filter(([, x]) => x.n >= 1).sort((a, b) => b[0].length - a[0].length); // o nome mais longo ganha ("Jardim das Flores II" antes de "Jardim das Flores")
     const achaNome = t => { const n = norm(limpaNome(t)); const hit = nomes.find(([k]) => k.length >= 4 && n.includes(k)); return hit ? hit[1].nome : ''; };
     // 2) junta tudo o que fala de cada empreendimento: links, preço, quartos, bairro, entrega
-    const grupos = new Map(), pega = nome => { const k = norm(nome); if (!grupos.has(k)) grupos.set(k, { nome, materiais:[], info:new Set(), local:'' }); return grupos.get(k); };
+    const grupos = new Map(), pega = nome => { const k = norm(nome); if (!grupos.has(k)) grupos.set(k, { nome, materiais:[], fotosArq:[], info:new Set(), local:'' }); return grupos.get(k); };
     let atual = '', atualEm = 0;
     msgs.forEach((m, i) => {
       const nomeMsg = achaNome(m.texto);
       if (nomeMsg) { atual = nomeMsg; atualEm = m.quando; }
       const links = m.texto.match(/https?:\/\/[^\s<>"]+/g);
+      const fotosArq = empImpZip ? (m.texto.match(/[\w\-]+\.(?:jpe?g|png|webp)/gi) || []).filter(n => empImpZip.file(new RegExp('(^|/)' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i')).length) : [];
       // sem nome na mensagem: vale o último empreendimento falado no grupo (até 30 min antes)
       let nome = nomeMsg || (atual && m.quando - atualEm <= 30 * 6e4 ? atual : '');
       if (!nome && links) { const l1 = m.texto.split('\n').map(limpaNome).find(x => x && x.length > 3 && !/^<?(arquivo|midia|mídia) /i.test(x)); nome = (l1 || 'Sem nome · ' + dataBR(m.dia)).slice(0, 80); }
       if (!nome) return;
-      if (!nomeMsg && !links) return; // conversa solta não vira informação
+      if (!nomeMsg && !links && !fotosArq.length) return; // conversa solta não vira informação
       const g = pega(nome), t = limpaNome(m.texto);
+      fotosArq.forEach(n => { if (!g.fotosArq.includes(n)) g.fotosArq.push(n); });
       (links || []).forEach(u => { u = u.replace(/[).,;]+$/, ''); if (!g.materiais.some(x => x.link === u)) g.materiais.push({ tipo:tipoDoLink(u, m.texto), titulo:'', link:u }); });
       const preco = t.match(/(?:a partir de|apartir de|por|valor(?:es)?(?: de)?|R\$)\s*R?\$?\s*\d{2,3}(?:[.\s]\d{3})+(?:,\d{2})?|R\$\s*\d{2,3}\s*mil/i); if (preco) g.info.add('A partir de ' + preco[0].replace(/^(a partir de|apartir de|por|valor(es)?( de)?)\s*/i, '').trim());
       const qt = t.match(/\b([1-4])\s*(?:e\s*[1-4]\s*)?(?:quartos?|qts?|dormit[oó]rios?)\b/i); if (qt) g.info.add(qt[0].replace(/\s+/g, ' '));
@@ -5245,16 +5369,16 @@ window.lerImpEmp = async input => {
       if (!g.local) for (const l of m.texto.split('\n')) { const bai = limpaNome(l).match(/(?:^|\s)(?:[Bb]airro(?: d[aeo])?|[Ll]ocalizado n[oa]|[Ff]ica n[oa])\s+([A-ZÀ-Ú][\wÀ-ú]+(?:\s+(?:d[aeo]s?\s+)?[A-ZÀ-Ú][\wÀ-ú]+){0,2})/); if (bai) { g.local = bai[1]; break; } }
     });
     grupos.forEach(g => { g.desc = [...g.info].slice(0, 4).join(' · ').slice(0, 300); });
-    [...grupos.keys()].forEach(k => { const g = grupos.get(k); if (!g.materiais.length && !g.desc) grupos.delete(k); });
+    [...grupos.keys()].forEach(k => { const g = grupos.get(k); if (!g.materiais.length && !g.desc && !g.fotosArq.length) grupos.delete(k); });
     empImp = [...grupos.values()].map(g => ({ ...g, marcado:true, existe:empreendimentos.find(e => !e.arquivado && norm(e.nome) === norm(g.nome)) }));
-    $('empImpInfo').innerHTML = empImp.length ? `<b>${empImp.length} empreendimento${empImp.length!==1?'s':''}</b> encontrado${empImp.length!==1?'s':''} em ${msgs.length} mensagens. Confira os nomes e desmarque o que não for imóvel.` : 'Nenhuma mensagem com link nessa conversa. Fotos e PDFs enviados direto no grupo não vêm na exportação; o app precisa de links (Drive, YouTube, site).';
+    $('empImpInfo').innerHTML = empImp.length ? `<b>${empImp.length} empreendimento${empImp.length!==1?'s':''}</b> encontrado${empImp.length!==1?'s':''} em ${msgs.length} mensagens. Confira os nomes e desmarque o que não for imóvel.` : 'Não achei empreendimentos nessa conversa. Para trazer as fotos, exporte com <b>Anexar mídia</b> e envie o .zip.';
     renderImpEmp();
   } catch(e) { $('empImpInfo').textContent = 'Não consegui ler: ' + e.message; }
 };
 function renderImpEmp(){
   $('empImpLista').innerHTML = empImp.map((g, i) => `<div class="emp-imp ${g.marcado ? '' : 'off'}">
     <label class="emp-imp-t"><input type="checkbox" ${g.marcado ? 'checked' : ''} onchange="empImp[${i}].marcado=this.checked;renderImpEmp()"><input class="emp-imp-nome" value="${esc(g.nome)}" maxlength="80" onchange="empImp[${i}].nome=this.value.trim()"></label>
-    <span class="muted">${g.materiais.length} link${g.materiais.length!==1?'s':''}${g.materiais.length ? ': ' + [...new Set(g.materiais.map(m => empTipoNome(m.tipo)))].join(', ') : ''}${g.local ? ' · ' + esc(g.local) : ''}${g.desc ? ' · ' + esc(g.desc) : ''}${g.existe ? ' · <b>junta com o que já existe</b>' : ''}</span></div>`).join('');
+    <span class="muted">${g.fotosArq.length ? g.fotosArq.length + ' foto' + (g.fotosArq.length!==1?'s':'') + ' · ' : ''}${g.materiais.length} link${g.materiais.length!==1?'s':''}${g.materiais.length ? ': ' + [...new Set(g.materiais.map(m => empTipoNome(m.tipo)))].join(', ') : ''}${g.local ? ' · ' + esc(g.local) : ''}${g.desc ? ' · ' + esc(g.desc) : ''}${g.existe ? ' · <b>junta com o que já existe</b>' : ''}</span></div>`).join('');
   $('empImpBtn').disabled = !empImp.some(g => g.marcado && g.nome);
   window.empImp = empImp;
 }
@@ -5272,6 +5396,21 @@ window.gravarImpEmp = async () => {
       b.set(ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), dados, { merge:true });
     });
     await gravar(b.commit());
+    // as fotos vão depois, uma por uma (cada foto reduzida para caber no plano grátis)
+    const comFoto = sel.filter(g => g.fotosArq.length && empImpZip);
+    if (comFoto.length) {
+      await new Promise(r => setTimeout(r, 400));
+      let feitas = 0, total = comFoto.reduce((a, g) => a + Math.min(12, g.fotosArq.length), 0);
+      for (const g of comFoto) {
+        const emp = empreendimentos.find(e => norm(e.nome) === norm(g.nome)) || (await getDocs(query(collection(db,'empreendimentos'), where('nome','==',g.nome.slice(0, 80))))).docs.map(d => ({ id:d.id }))[0];
+        if (!emp) continue;
+        const exist = (await getDocs(query(collection(db,'emp_fotos'), where('empId','==',emp.id)))).docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.ordem || 0) - (b.ordem || 0));
+        const novas = [];
+        for (const n of g.fotosArq.slice(0, 12)) { const f = empImpZip.file(new RegExp('(^|/)' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i'))[0]; if (!f) continue;
+          try { novas.push(await comprimirFoto(await f.async('blob'))); } catch(e) {} $('empImpBtn').textContent = `Fotos ${++feitas}/${total}…`; }
+        if (novas.length) await gravarFotosEmp(emp.id, novas, [], exist);
+      }
+    }
     fechar('empImpModal'); toast(`${sel.length} empreendimento${sel.length!==1?'s':''} importado${sel.length!==1?'s':''} ✓`);
   } catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'publique as regras novas do Firebase' : e.message)); }
   $('empImpBtn').disabled = false; $('empImpBtn').textContent = 'Importar';
