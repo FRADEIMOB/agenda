@@ -7,8 +7,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#022C45",
-  "theme_color": "#022C45",
+  "background_color": "#123F63",
+  "theme_color": "#123F63",
   "lang": "pt-BR",
   "icons": [
     { "src": "frade-icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },

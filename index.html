@@ -740,6 +740,166 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .int-bloco.dobra-b>b::after{content:'';width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s}
 .int-bloco.dobra-b.aberto>b::after{transform:rotate(45deg) translateY(-2px)}
 .int-bloco.dobra-b:not(.aberto)>:not(b){display:none!important}
+
+/* =====================================================================
+   IDENTIDADE FRADE (azul-marinho, azul Frade, laranja de destaque, creme)
+   ===================================================================== */
+:root{
+  --accent:#1C5F8E;--frade:#1C5F8E;--marinho:#123F63;--destaque:#F5841F;--azul-cl:#2AAAE1;
+  --bg:#F5F1EB;--card:#ffffff;--card2:#FAF7F3;--text:#13293D;--text2:#34495D;--muted:#6A7A89;--border:#E6DFD5;
+  --side:#123F63;--side-text:#C3D7E8;--side-hover:rgba(255,255,255,.07);
+  --shadow:0 1px 2px rgba(19,41,61,.05);
+  --ok:#1E8E5A;--ok-soft:#E8F5EE;--danger:#C8402F;--danger-soft:#FBECE9;--warn:#C97A12;
+  --tit:'Saira Condensed','Saira',sans-serif;
+}
+html[data-theme="dark"]{
+  --bg:#0D1823;--card:#132230;--card2:#0F1C28;--text:#E6EEF5;--text2:#C3D1DD;--muted:#8899A8;--border:#22364A;
+  --side:#0A1621;--side-text:#9FB6C9;--side-hover:rgba(255,255,255,.06);--shadow:none;--ok-soft:#10291D;--danger-soft:#2C1714;
+}
+body{font-family:'Saira',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14.5px}
+h1,.page-head h1{font-family:var(--tit);font-weight:700;letter-spacing:0}
+.page-head h1{font-size:34px;line-height:1.05}
+.card-head h2,.card h2{font-family:var(--tit);font-weight:700;font-size:20px;letter-spacing:.005em}
+.stat b,.pd-kpi b,.lh-top b,.p-stats b{font-family:var(--tit);font-weight:700;letter-spacing:0}
+/* menu lateral marinho, como na apresentação */
+.sidebar{background:var(--side);border-right:0}
+.sidebar .brand-name{color:#fff}.sidebar .brand-name span{color:var(--destaque)}
+.sidebar .brand-sub{color:#8FB0C9}
+.brand-mark.marca{box-shadow:none;background:#123F63;padding:4px;border-radius:9px}
+.nav-title{color:#7FA3BF;letter-spacing:.06em;font-size:10.5px}
+.nav button{color:var(--side-text);font-weight:500;border-radius:8px;position:relative}
+.nav button:hover{background:var(--side-hover);color:#fff}
+.nav button.active{background:rgba(255,255,255,.09);color:#fff}
+.nav button.active:before{content:'';position:absolute;left:-16px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--destaque)}
+.nav .count{background:rgba(255,255,255,.1);color:#D7E5F0}
+.nav button.active .count{background:var(--destaque);color:#fff}
+.nav .count.red{background:var(--destaque)}
+.side-foot .btn-ghost{background:transparent;border-color:rgba(255,255,255,.18);color:#fff}
+/* cartão do perfil liso */
+.profile{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);box-shadow:none;border-radius:12px}
+.profile:hover{transform:none;background:rgba(255,255,255,.09)}
+.profile:before,.profile:after{display:none}
+.avatar{border-radius:50%;background:#0C2F4D;border-color:rgba(255,255,255,.2)}
+.avatar:after{border-color:var(--side)}
+.p-stats{background:transparent;border:0;border-top:1px solid rgba(255,255,255,.12);border-radius:0;padding:10px 0 0}
+.p-stats>div+div{border-left-color:rgba(255,255,255,.12)}
+/* botões e campos */
+.btn{border-radius:9px;font-weight:600}
+.btn-primary{background:var(--accent);box-shadow:none}
+.btn-primary:hover{filter:none;background:color-mix(in srgb,var(--accent) 88%,#000)}
+input,select,textarea{border-radius:9px}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+/* cartões sóbrios */
+.card{border-radius:12px;box-shadow:var(--shadow);border-color:var(--border)}
+.stat{border-radius:12px;box-shadow:var(--shadow)}
+.stat-ic{background:color-mix(in srgb,var(--accent) 9%,transparent)!important;color:var(--accent)!important;border-radius:9px}
+.pd-kpi{border-radius:12px;box-shadow:var(--shadow)}
+.pd-kpi>span{font-weight:600;color:var(--muted)}
+.vcard{border-radius:10px}
+.topbar{background:color-mix(in srgb,var(--bg) 92%,transparent)}
+.fab{background:var(--destaque)!important;box-shadow:0 6px 16px rgba(245,132,31,.35)!important}
+.mobilebar button.active,.mobilebar button.on{color:var(--accent)}
+/* login com a cara da Frade */
+.hero{background:#123F63}
+.hero h1{font-family:var(--tit);font-weight:700;font-size:48px;letter-spacing:0}
+.hero-deco{border-color:rgba(245,132,31,.35)}
+
+.brand-name span{color:var(--destaque)}
+.hero{background:#1C5F8E url('fundos/seta.jpg') right -60px bottom -40px/auto 50% no-repeat}
+.hero-deco{display:none}
+.feat-ic{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
+
+/* =====================================================================
+   VIDRO E MOVIMENTO (leve; desligado para quem prefere menos animação)
+   ===================================================================== */
+:root{--vidro:rgba(255,255,255,.66);--vidro-borda:rgba(255,255,255,.75);--vidro-forte:rgba(255,255,255,.82);--ease:cubic-bezier(.22,.8,.26,1)}
+html[data-theme="dark"]{--vidro:rgba(19,34,48,.62);--vidro-borda:rgba(255,255,255,.07);--vidro-forte:rgba(19,34,48,.82)}
+/* fundo com manchas suaves de azul e laranja para o vidro aparecer */
+body{background:
+  radial-gradient(900px 600px at 105% -10%, rgba(42,170,225,.16), transparent 60%),
+  radial-gradient(700px 520px at 30% 110%, rgba(245,132,31,.10), transparent 60%),
+  radial-gradient(800px 600px at -10% 40%, rgba(28,95,142,.10), transparent 60%),
+  var(--bg);background-attachment:fixed}
+html[data-theme="dark"] body{background:
+  radial-gradient(900px 600px at 105% -10%, rgba(42,170,225,.12), transparent 60%),
+  radial-gradient(700px 520px at 30% 110%, rgba(245,132,31,.07), transparent 60%),
+  var(--bg);background-attachment:fixed}
+/* vidro fosco */
+.card,.stat,.pd-kpi,.ap-op{background:var(--vidro);border:1px solid var(--vidro-borda);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 1px 2px rgba(19,41,61,.04),0 8px 28px rgba(19,41,61,.06)}
+html[data-theme="dark"] .card,html[data-theme="dark"] .stat,html[data-theme="dark"] .pd-kpi{box-shadow:none}
+.vcard{background:var(--vidro-forte)}
+.topbar{background:rgba(245,241,235,.6);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-bottom-color:rgba(230,223,213,.7)}
+html[data-theme="dark"] .topbar{background:rgba(13,24,35,.6);border-bottom-color:rgba(255,255,255,.06)}
+.sidebar{background:linear-gradient(180deg,#14466F 0%,#123F63 45%,#0F3655 100%)}
+html[data-theme="dark"] .sidebar{background:linear-gradient(180deg,#0C1B29,#0A1621)}
+.mobilebar{-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
+.modal{background:rgba(10,30,48,.38);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.sheet{background:var(--vidro-forte);-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);border-color:var(--vidro-borda);border-radius:18px}
+.toast{background:rgba(18,63,99,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+/* movimento: troca de tela, cartões em sequência, janelas */
+@keyframes fr-entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes fr-zoom{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes fr-fundo{from{opacity:0}to{opacity:1}}
+.view.on{animation:fr-entra .32s var(--ease) both}
+.view.on .stats>*,.view.on .pd-kpis>*,.view.on .grid>*>.card,.view.on .col>.card,.view.on .set-grid>.card,.view.on>.card,.view.on .ap-escolha>*{animation:fr-entra .42s var(--ease) both}
+.view.on .stats>*:nth-child(2),.view.on .pd-kpis>*:nth-child(2),.view.on .col>.card:nth-child(2),.view.on .set-grid>.card:nth-child(2),.view.on .ap-escolha>*:nth-child(2){animation-delay:.04s}
+.view.on .stats>*:nth-child(3),.view.on .pd-kpis>*:nth-child(3),.view.on .col>.card:nth-child(3),.view.on .set-grid>.card:nth-child(3),.view.on .ap-escolha>*:nth-child(3){animation-delay:.08s}
+.view.on .stats>*:nth-child(4),.view.on .pd-kpis>*:nth-child(4),.view.on .col>.card:nth-child(4),.view.on .set-grid>.card:nth-child(4),.view.on .ap-escolha>*:nth-child(4){animation-delay:.12s}
+.view.on .stats>*:nth-child(n+5),.view.on .pd-kpis>*:nth-child(n+5),.view.on .col>.card:nth-child(n+5),.view.on .set-grid>.card:nth-child(n+5){animation-delay:.16s}
+.modal.open{animation:fr-fundo .2s ease both}
+.modal.open .sheet{animation:fr-zoom .28s var(--ease) both}
+/* reações ao toque e ao passar o mouse */
+.nav button{transition:background .18s ease,color .18s ease}
+.nav button svg{transition:transform .25s var(--ease)}
+.nav button:hover svg{transform:translateX(2px)}
+.nav button.active:before{animation:fr-barra .3s var(--ease) both}
+@keyframes fr-barra{from{transform:scaleY(.2);opacity:0}to{transform:none;opacity:1}}
+.stat,.ap-op,.vcard,.pd-kpi,.dobra>.card-head{transition:transform .22s var(--ease),box-shadow .22s var(--ease),background .2s}
+.stat[onclick]:hover,.ap-op:hover,.vcard:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(19,41,61,.05),0 14px 34px rgba(19,41,61,.10)}
+.btn,.snooze,.icon-btn,.seg button{transition:transform .12s ease,background .18s ease,color .18s ease,border-color .18s ease,filter .18s ease}
+.btn:active,.snooze:active,.icon-btn:active,.seg button:active{transform:scale(.96)}
+.dobra:not(.aberto)>.card-head:hover h2::after{transform:rotate(-45deg) translateX(2px)}
+.dobra.aberto>:not(.card-head){animation:fr-entra .3s var(--ease) both}
+input,select,textarea{transition:border-color .18s ease,box-shadow .18s ease}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;transition-duration:.001ms!important}
+}
+
+/* comemoração de pontos */
+.fr-pontos{position:fixed;left:50%;top:38%;z-index:400;transform:translate(-50%,0);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;justify-content:center;max-width:min(92vw,520px);
+  padding:14px 22px;border-radius:16px;background:rgba(18,63,99,.9);color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 20px 50px rgba(18,63,99,.35);
+  pointer-events:none;animation:fr-sobe 2.5s cubic-bezier(.22,.8,.26,1) both;text-align:center}
+.fr-pontos b{font:700 40px/1 'Saira Condensed',sans-serif;color:#F5841F}
+.fr-pontos span{font:600 16px 'Saira',sans-serif;color:#FFD2A8}
+.fr-pontos em{flex-basis:100%;font-style:normal;font-size:14px;color:#D9E7F2}
+.fr-pontos.grande b{font-size:58px}
+@keyframes fr-sobe{0%{opacity:0;transform:translate(-50%,24px) scale(.8)}14%{opacity:1;transform:translate(-50%,0) scale(1.06)}22%{transform:translate(-50%,0) scale(1)}78%{opacity:1;transform:translate(-50%,-14px)}100%{opacity:0;transform:translate(-50%,-46px)}}
+@media (prefers-reduced-motion: reduce){.fr-pontos{animation:none;opacity:1}}
+
+/* botões que só aparecem no celular (no computador, o botão de cima faz o mesmo) */
+@media(min-width:901px){.so-cel{display:none!important}}
+
+/* seletor de mês */
+.sel-mes{width:auto;min-width:150px;padding:7px 30px 7px 12px;border-radius:999px;font-size:13px}
+.seg .sel-mes{margin-left:6px}
+.sel-mes.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.ap-outro{cursor:default}.ap-outro select{margin-top:8px;width:100%}
+/* barra de rolagem fina e transparente (claro e escuro) */
+*{scrollbar-width:thin;scrollbar-color:rgba(127,140,160,.35) transparent}
+*::-webkit-scrollbar{width:8px;height:8px;background:transparent}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:rgba(127,140,160,.30);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background-color:rgba(127,140,160,.55)}
+*::-webkit-scrollbar-corner,*::-webkit-scrollbar-button{display:none;width:0;height:0;background:transparent}
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+
+/* Lenis: rolagem suave */
+html.lenis,html.lenis body{height:auto}
+.lenis:not(.lenis-autoToggle).lenis-stopped{overflow:clip}
+.lenis [data-lenis-prevent],.lenis [data-lenis-prevent-wheel],.lenis [data-lenis-prevent-touch]{overscroll-behavior:contain}
+.lenis.lenis-smooth iframe{pointer-events:none}
+.lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;transition-behavior:allow-discrete}
 </style>
 </head>
 <body>
@@ -749,7 +909,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 <!-- ================= LOGIN ================= -->
 <section class="login hide" id="login">
   <div class="hero">
-    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCACcAcwDASIAAhEBAxEB/8QAHQABAAMAAwEBAQAAAAAAAAAAAAcICQEFBgMEAv/EAF8QAAECBQEEAgkMCwwJAwUAAAECAwAEBQYRBwgSITETQRQiOFFhcXSBshUWGDI2VZGSk7HR0hckNUJSVHJzlaGzCRkjKDM0Q1NWV3WUN2JkZYKFwcLTJUWiRIOl4eL/xAAcAQEAAgMBAQEAAAAAAAAAAAAAAwQBAgUGBwj/xAA/EQABAwIEAwQFBwwDAAAAAAABAAIDBBEFEiExBhNRFEFSkSIzU4HRBzJCVGGS4RUWFyM0NWJxcqGxwUTw8f/aAAwDAQACEQMRAD8AqHCEI9QvIpCEIIkIQgiQhHIGesAQRcQjvLetKtXLNpap0q4WicKmFIPRp8ZEfCt29Vrenly1TlHWcKKUuKQQhfhBMUm4jTOl5AkGfpfVXnYZVNgFSYzkPfbRdVCEIuqikIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIAZMf220t10NNNrcWeAShJUT5hGC4NFystaXGzRdfxHOD3vNEgWvpNXa6gTNQKqXLdXTNnfX18E/TEt23ptbNuLRMMMLmppPHp5k7xz4E8hHjMZ46w7DiWNdnf0G3mvc4H8n2J4mBI9vLZ1O/koOtvT65LmWVS8mZaXBAVMTCShP/Dw4xLts6RUCiLbmqitdTm08cOJAaB8CfpMSJCPlOMcd4jiF2Mdy2dBv7yvsGCfJ7hmG2fI3mPHedvcNl/DTTMuyG2GkNNjkhCQkDzCP4mZaWnJYszUu0+2eaHUBQ+Ax9odUeOErg7ODr1717gxMLOWQLdO5RncWjNEqswuapEyumPK4lsJCmifFzERTcOnly24Suak1TDGSA/LArTjvnhwizkxNSsojfmpplhHfdWEx5Kp38w2VMUiWL6wcdK7wRjvgDiY97gPGWMU5DD+sYPF8f8A1fP8e4Bwitu9n6t58PwVZsHJGDkc/BCJYrVIbuadVO1FtKHz98wgNgeYc48fVrJn5FJdklGbb7yU9sPN1x9Ww7iujqrMkOR3Q/FfI8X4ExGgBfG3mM6jfyXl4R9HWXmHCh5pxtQ6lpKTHzj04cHC4Oi8W5jmnK4apCEIytUhCEESEIQRIQhBEhCEESEIQRIQhBEhCEESEIQRIQhBEhCEESEIQRIQhBEhCEESEIQRIQhBEhCEESEIQRIQhBEhCEESEIQRI+svLTM28GZWXdfcPJDaSonzCPlElaKe7qZ4DhK5GRy7cRzcXrjQUclUG3yi9l1cEw4YjXR0jjYPNrr525pBcFWUl6qk0phXH+Eby4ofk54RMFq2NRLTY+0m1uzB9s+6cknwDqj0vLlHMfnrGOMMRxO7HvysPcNB8Sv0ngfBWGYTZ8bMzx9I6n4BDxOTxhCOCQkZJA8ceX1K9dsuYR6G3rGuq6FBVGo77rGcKmVgIbT5zjPmiZrX0CpEmWpu5JxyoPAZVLITuNA97OcqjvYZw1XYgQWMs3qdB+K87ivFGH4dcSPu7oNT7+nvUDUyi1itP9FR6XNzys4PQNFQHjPIR5m+nryst9UrP2dUaekndTOzjZ6FR/1SBg8+/F96bR6ZR5FMpS5BiUZTybaQEiP7qFNkapT3JGoyjM1LODC2XkBSVDwgx7ql4Dp42Xkfmd/byXg5/lGmfJZkQDP56/BZcTCp2qTfZc86XXCOCsYA8UfZqXQ31Zi6N67LdoVx0zdrzDluzGCVMtN9Iw4fCknKfMYrpd+iuotmh5+oW8/MyDZP27J4dRjvkJJUnziKdbg9XTC2W7fsXpsK4hw6tsA+z+jtD8D7lH3i4QBI5QBB5EHjjhCOKb7Fel0X4qjSpGqsdFONbw74OCI8XVLDmpcFylvGZSf6JQwoeI9cSDHOT347OG49WYfpC70eh2XnsY4Ww/FmkVEdndRoVCczJzUm50c3LOsK7ziSI+ESTfoHrbbJAyHkjPmMRt1CPrmB4ocSpRO5tjchfAOKMEbg1caVjswsDf8AmkIQjsLzicIceqLpbEVnWpdVrXUq5bbplVUxMsBpU5LpcKAULJAzyzFjrjtnZ6s5bDd1UWyaMt8FTSZ5pporA5kZ5xSkrAx5Za6vxUJkYH5gFk/g96HHvRqH2fsmfjOm3xmIdnbJn41pt8ZiNe3fwFb/AJP/AIwsvMHvQ88T/tZPadvanUxWmzlCXThI/wAKaOUFvf3uvd4Zi2ug2lOmtd2d7WqlWsahzc49JIU6+9KpUpascSSecSyVQYwPI3UMdIXvLAdlmXjwwjU6rUHZeoNYepVakLAkJ5kgOy0z0SFoJGRkHlwIj5yVm7Ld4P8AqXS6XYdSfX2oZlFt9Ic97dIOfFEXbx4Sp/yd3ZwstYRfjVfYitmepk9WdM5iYptQQguNUhwhxh1XPdSpRyjPLmRFG7gt6s2rcc1Qbgp70hUZRZbel3RgpI/UfNFmGoZKPRVOemfCfSC6uEIRMoEjkpwkK47p5KxwMdlb9Bqlz3PI0CjSjs1PTryWWWWx2yiT/wBOJ80X41S2WqWrZakKFbUoX7gt5hx5h1ppPSzyiSVIVx8JI8UQSztjIa7vViKmdK0uHcs9IRyQQSCCCOBB6o4idV0hHI4keONHdmPTLT249l+2KrXbKotQnnWnOkmZiWSta8OrAyT4IhnmEIuQrFPTmd2UFZw/BDh3+MapVug7MltVZVLuCm2FTJ1KAsy82Gm1hJ5HBj8ktQNlOvvCVlJTTyccVwCG3GcnxYMVu3i18pVr8nd2cLLgZ70MRpvdGx/oldMt09KpDtDcWMpfpTx3Dnkd1RKSPFFRtZdlK99LpeYrdMU7cNuM5U5PNNpQ4wnAOXEAnhz4jhw8MSx1kchtsVDLRSxi+4UAw64RcfYlse0Lvot0Kui2qbV1MvNhozjIcKOA5Z5RLLJy2FxUEMXNeGBU4xCNXLjsnZ0tDoPXTb1lUfsjPQ9mtttdJjnjPPnHQ/xRv6zTf5Rn6YqivB2aVeOHEbvCzBh88affxRv6zTf5Rn6YqPtb/Yy+yDQPsYKoBp/qarsn1GKCjpelON7d68YiSKq5jsuUhQzUnKbmzAqvMIeOEW1SSEIQRIQhBEhCEESEIQRIkrRP3dTXkv8A3iI1iRtGn2Ja9Jt2ZfaZbErxU4sJA7Yd+PPcVNLsKnDRfRel4PcG4xTucdMysNDIHMxHFwaw27S0OsUpLlRm08AUjDXxuvzRaPZapNIvPSSVvys01lyquTjzacE9G2lBAGEnhnieMfD8P4KxGqaJJG5GdTv5br75iPHeF0jnRRv5jx3N289l5iz9L7mu1aH0yq5KnE4M28MZ/JSeJ6onG2NGbTt51qbfbdqk2g5Dk1gpB8CAMfDmJGSAlOABgR/R5R9EwvhaioAHZcz+p/0F82xfi+vxElodkYe4f7PevHV7UfTuzKimlXHdtEo01uBaZaZfS0rdPWB3o6k696Mp56mW3/nExSjbmTjaJlScHNNR/wBIrjIUefqSFKkpYuhPPGOEezbSwtiEkjsoXhhUzyTGKJmY/ZclaxnX/RcDjqZbn+bEfwdoTRVPPUq3uH+0f/qMqzadfxj1PPwiOPWnX/e9XxhEOeg9uPMK0abE/qzvI/Baoq2itEkn/SXQPlj9EfNe0ToaU4c1KoBB6i4T/wBIyz9alwe96vjCHrUuD3vV8YQzUHtx5hBT4oP+M7yPwV/L7rOyhfDpm5q/6NSqgAR2XT1dGpX5Q3MK88VuuxFm0auJl7dv2j3HJuqIbellFLiePALSRwPiiFPWpcHver4wh606+QftBXxhHJr8JwirBJmAd1BC9FhWPcQ0BDRA5zB3EH+xtopYBBAI4jqMDEbS7t2W3Jl1bREukgFLuFj58x39JvmSmsNVBsyrueYGUnz9UeNrOGamNplpyJGDvHwX0eg42o5niGsaYZD3OFh7iub9Obcb/Pj5jEbRIl8vsv22yph1DiC8CClQPUYjwx77g5hZhwDt7lfKflEkbJi5c03GULiEIR6peDV7tgP3KXj5VL+guOm2/R/6xaJHPsd700x3OwH7lLx8ql/QXE/aqaJae6tTUg9e6ZxS5JCkMCXnTLjBIJzjnyjjySCOpzFd1kZkpg0LJTj3v1Qz4I0l9hfoB/UVj9MKjr6/seaD0606nUJVirl6WlXXmwauojeSgkcOviIt9vj2AKpHD5AL3Czp/VwjWLZx47LtpZ/EU/NGUU0lKJx9pIIShxSU57wJAjV3Zv7l20R/sKfmiPET6AW+Gj9YQqCbVoxta3YB/Wtcf/soiHZeZmJSZbmZR91h9tQWh1pZSpBHIgjkYvTrPsh3rqTrbWrzplw0aVlJ9SFNtTG/vp3UJSc4GOqPNW3sDV1VZbN13nIt09KgVppzalOrHWAVDA8fGJI6qIRgErSSkldISB3qcdkfUG4b/wBBULuRxUxM054ySJtYO88hOQnJ6yAACYhfb4tmmy09a10spCJ18uSboSAN9IBWFHw5OItPb9IsPQvSRulMzzdOo1NaU6t6cfBWtR7ZSjnmonPAeIRnntK63DWLURv1MaLdBpe+zJFSSlT2Sf4RQPIkHGIqUzS+fOwWCt1TgyDI86qEoQj32kGl9X1Y1JlrdpgSGmymYm3FK3dxkOJC8HB44UcCOs5waCSuMxhcQ0K1mxNo5LS1GVqvW5RZnJjeZpyXRwbQDguJH+sDjMW9la5R5+tztGlKlLPz0ju9kyyFgrZ3hkbw6sgiPNXDWra0d0WenV7stSqHIhqXaUrKlbqQlCBnipROIzx0y2h7gt/aWf1BrrqVS1cfQ3V20tg/wQxjcBPakYH6443LfUl0i7vMZShsfmv1bVmjrWmGqoqVIaWKJW1LmWUgdqwvPbNg/CrxGIBjXbVnTWhaw6TzNvzy876OyJGaaV/JuhJ3FAjmnjxHXGUF025VLRvKpWzWmeinqfMLl3kjkVJOMjvg9Ri/R1GdmU7hc6tp+W7M3YrqU+2HjjUnZJ7ke1Pzbv7ZcZbJ9sPGI1J2Se5HtT827+2XGmIerUmGesKp1to4O1NNcB9zZb/uivYJScp4HvjnFg9tHPspprPvbLf90V7izALxtVSpNpSpP011+1L0um0+oNecmJAqBcp9QUp5lQB5AE5TnwRplpvfND1a0nkLklW2HWJ9jdmpRY3g2vilbageYyCOPMRj9F49gSqT7tPu2kLLipNosOIzyQo9JkDxxVroGludosQrlBUOz8t2oKgLae00kdMtfZ2m0aXWxSJ1lE5KJWQQAodukY6grIEWB2AfuHdv59v0RHV/ugMowKvZc8MB9TUw0fCkFJHzx2mwD9w7t/Pt+iI1e/PS3KyxgZV2C/L+6A/yVkjhzmfN7SKR5jXPU7SnTnUs0839K9P2Fv8AY324qXxvY3uRGeQiPfYo7OXvV/8AmHPrRHT1bY2BpBUtVRPlkzAhZnZjg8Y0ve2VNnVuWccbpXbpQSB6sL54/KjOCuyzEndFRlJZO6yzMuNtpznCQogcevhF6GobLfKFz56Z0IGYrr4QhFhVkhCEESEIQRIQhBEhCEESHUR3xgwhBAbIOcaabFncqyPl8z6QjMsc4002LO5VkfL5n0hFDEPVro4b6wqw0DyMI4PtTHGXdCzk25x/GHk/DTEf9Ih7T3+Qm/CB84iYNudaTtDyeVAYpiOZ8UVvp9bnqWlQkZwNBXPGDFnE6F9dh3IjIBPVRYFikWF4sKqYEtF9lM2cjO8IecRE3rwruPukPiph68a774p+BMeH/MesP02+f4L6j+k/DvA/y/FSzx74hx74iJvXjXffJPwJh68a774p+BMY/Mas8bfP8Fn9J+G+B/l+Klnj3xDziIm9eFdz90h8VMPXjXPfJPwJh+Y9Z42/99yfpPw3wP8AIfFe5vUZs9/ODlafniLOY4x2k3ctWqEmZWZnQ40oglOBxx4o6uPccOYVLhtMYpSCb30XzHjDHYcZrG1FOCABbVf30rnQ9Fvncznd6sx/EIR3w0DZeTc4u3KQhCMrCvdsB+5S8fKpf0Fx1+3nUqhT6ragkZt1gLYeKghWM9umOw2AiPWneOSP51LeguOl2/TmrWj1/a73ppjlb1dl2iSKS4VPvXFXeuqzPx4KuGtqSQqqzRB4Y3o6yEdPI3ouQXu6p341i2cO5dtHyFPzRk71GNYdm9SfYu2l2w/mKR+qKOI/Mauhhnzyqu7Qe0hrHY20NcFsWxdbclTJRbYZYMiw5uZaSo9spJJ4k9cTZs07ScvqtSzbl1TLEtdcskEk7jSZ4ZPbNpB5gbuRjrinu1h3Wt1/ls/sURF1rXLVrOvGnXPQpky9QkH0vsrHIkHOD3weREbdmY+IWGtlr2t8Uxubi6urtg6HXdXkv6h29UpuqSUsyFTdIWVOKaA5rZAT7UAEkZ4dUUUWlSF7iwQpPAgjBB70at6Ja0WxrRp42tLzCaw0yGalTVnKkq3cKIHWhWCR4IrBtT7Mj1BnHtQdPKa6/TX3Cuo09hAPYpJ/lEgfechgZx4ojpZyw8qTRSVdMHjnRlVCQ2466lpltbjiyEoQgZKieQA6zGoOy7oyvSfSxb1VQg16rqTMTakKVhCAD0aMEDBAVx8MVF2T9FZnUbUaWuuqS6023R3w6p7dBRMPoKVJaznvKCj4ovDrbrNR9GLFarU6widm5l7oZaRDoQpw7pJV+SCAD4xGK2UucImarNFEGAzPUNbUtha16q16Xt21KChVtSWHQ448hBmHSMHqJwMDEVwOyBroRhVsy5HlSfoiWx+6BVPGDprKfpBX1IfvgNTx/o0k/wBIK+pCIVEbcoaElNNI7M5xurCbO0pqjRdNEWvqZSESr9MCWJOaQ4lfTtYz22OsE48QiFdtLRCZqqBqtbksp16XZDVVZRvLUtAICFpSAeWVb3LgI6dH7oDUukAOm0qE5GSKgrl1/eRbS2rit7VrR5irSSku0ytSSm3GyclvfTurQfCMkRXIlgfzHCysgxVDDE03WPSfbDxxqTsk9yPan5t39suM69VdPatpnqpU7aqco6y0iZcVJOLTgPy/SEIWPGAI0T2SikbJFqgkA9G7+1XFuudmiBCp4c0tlLSqdbaHdTTWB/7bLf8AdFewMxpVq9sl0jVzUxy8Z29Z6mOuS7cv2OzKIcSAjODkqB648ZIbAdnszaXJ+/6zNNA8Wm5VtrPnyYRVsTWAErE1DK95cAqJ06lVOs1BuQpFOmp+adVuoZlWlOKUe8ABGnezBo27pLpWFVdsIr9WCH59AUcN4KtxGD1hKsHwx6CyNGNJtHqaZ2lUmSlXWkZcqtQWFO46yVq9r5sRFWt+1/Z9t2xNUfTeqy9drzyVNJm5ZRLMmce33sYUePADI4HJiGaZ1SckY0U8MDKUcyQ6qC9t695W5dcZO3ZCYbfYoUoELW2pKk9K5hShkdYG6COoxJWwD9w7t/Pt+iIpDUJ+dqtVmKlUZlyZm5hwuuvOHKlqJySTF3dgIgUO7cn+nb9ERYnjEdPlVenk5lTmXz2+335dNlKYcU2VGYBKev2kUm9UJ08TMufDGpOu2z/T9chRhPXNNUf1M6Qp6BhLvSb+OeSMcohr979t7+8qq/o9v60QU1TExgDt1NVUsz5C5uyo4KjPA5E04D44/MSSSSck8YvZ+9/W9jjqVVP0e39eK67RGikhoheVIocjX5msJn5JU2p19hLRQQ4UboAJ72YuR1MT3ZW7qlLSysbmfsochCEWVVSEIQRIQhBEhCEESEIQRIQhBEHONNNizuVZHy+Z9IRmWOcaabFncqyPl8z6QihiHq10cN9YVYaEIRxl3V56tWJZdxz4nrgtKh1WZCdwPT0i28sDvZUCcR132JdLv7uLT/RLH1Y9lmEbB7hoCtSxveF437Eul393Fp/olj6sPsS6Xf3cWn+iWPqx7KEM7uqZG9F477E2l2P9HFp/olj6sPsTaX/3c2n+iWPqx7GGfAYZ3dUyN6Lx32JtLv7ubU/RLH1YfYm0v/u5tP8ARLH1Y9jnwGEM7uqZG9FV/awsCxqDsy1io0SzaBTZtDrITMSdPaZcTlwDgpKQRGcsahbYKQrZOuDI5OMftBGXvXHYoCTHquHiLQJBbokIQi8uekIQgi99p/rLqBphJzkpZlZ7AZnFpceT0YXvlIIHPxmPhf8Aq1fGp7sm5edWE+qTSpLJDYRugnJ5eIR4iEaZGZs1tVJzH5ct9EhCEbqNIla3do/V+1LYlLfoV0rlqfKI6NlrokndT3oimEauYHaOC2Y9zPmmy7u7Lsrt73bNXLck32XUpoguvbu7vYASOHiAjpIQjYaCywSTuvQ2dfN02DcSK5adZmqbOJBBUyshKwRjCk8lDxxIz21VrfMMKYmbtDzSxhTbkshSVDvEEYMQxCNDGxxuQt2yvaLAqT7U2gNULIt4UO1K41S5AOKd6GXlkAFSjkk98/QI6G/dUr51Nm5R+8669UTKJKWEqG6lGcZIA4ZOBxjx0IctgN7aoZXkZSdEhw6yB44RfTZT0Ft+g6dDVG+5Bt+bm2lOMMTrYU1LMpJ7coWngs4PHvERpNM2IXK3ggMrrDZULGCMggjwHMSPZeu+qWn9sigWtdExJ08OKdSwQFhKlc8Z5DhHaa56xJ1MuxyVotFpdIt2TeV2G1JyaGHHhyC3SOZ54HLBiJDxMbAZ2+mFhxMbjkK9jfmqF5alzMpM3jUW6hMSiShp4spSsJPMFQ4kR6C1NofVmybRk7Ztu51ydMlElLLIaSrdBJJ4nwkxF0IyY2EZSNFoJXg5gdVNXssNdc+7Rz5FMfnmtqXXSbbKFX5ONAjmwlKD8OIh2Ea8iPwhbmok8RXrK9qfqLc+8K/fNwVBCubb8+4UH/hBxHlCSTkmOIRIAG7KNzi7cpHubB1ev7TKWm2LMra6c3NqCngEBW8RwHOPDQg4BwsUa4tN2lTV7LDXX+2jnyKYeyw11z7s3PkUxCsIj5MY+iFJ2iTxFTV7LDXXHuzc+RTHgr+1LvHU2qylSvOrGoTMo0WGVlATuoKt7HDwmPJQjIjY3UBYdLI4WcUhCESKJIQhBEhCEFmyQhCCwkIQgiQhCCIOcaabFncqyPl8z6QjMsc4002LO5VkfL5n0hFDEPVro4b6wqw0IQPKOMu6FD1/bS2l+mt5u2vdM7Umqg22l1SWJJTicKAI7bPeMeWO2voaP/cq0fFTVfTFWdtZvc2opo59tIy5/wDgIgOn0ao1VKzIyxdCOZBAjo9ngZEJZXWH2lc1s9TLMYYGZj0AuVo/7NnQ7P8APq5+jFfTHJ22tDsn7drvD/dx4/8AyjO71n3D73q+MIes+4Pe5XxxFbn4b7YeYV3sOMfVnfdK0PVtuaHjlNV8+KnH60fydt7RAf8A1FwnxU0/WjPL1n3B73K+OIes+4Pe5XxxGefhvth94LHYcY+rO+6VoYdt/REf01wn/l3/APccHbg0R6l3Gf8Alw+vGenrPuD3uV8cQ9Z9w+96vjCHPw32w+8E7DjH1Z33Sre6/bU2lupOg9YtG3VVr1Rmi0WeyZINt9qsKOVbxxwEUljtJ23qvT5VUxNyhbaGMqyDHVngY6dE+B7CYHZh9huuNiEVRFIBUsLXdCLJCEIuKgkIQgimjRHZ2rWttKqk7Srhp9NFOdbaWmaQsle+CQRug/gx+TW7QWsaJTNLZqtckKmag2taexUrG7ukDjvAd+LI7AfuUvHyqX9BcdNt/fda0fJ3vTTFATv7RkvoumaaPs/Mtqq0aOadDVTVNqyxOmTemZOZeZe+9DjbZUkK4HgTwMedu60q5Y94Tds3HJqlahKK3VoOcK7ykkgZSe/EvbGxxtc0XyOc/YxdXaJ0QpmrWnM45JyTProk2CunTRKgpRAJ6I4OMKPDiDjhG0tTypQ07FRxUglhzN3CywhH6qlT56lVV+nVKUdlZphZbcZdQUqSQccQY/LF0KiQRoUhCOyt+g1S6LpkLeossuZqE++mXYaQM7ylHA83hjB0FygFzYLtLBsWu6j37I2lbrKXJ2bXjfcyENJHtlrIBwkDnwjstWbGl9OdTp60mJlyZMkejcdX98scyPBGkOz/AKKUrSDTdiXXLsOXBNoDtRnEhRKl49oMk4CQd3hjOMxQ3ao7qC5Pz6vninFUc2XKNlempOVFmduoYxHf2lZN1X1WvUu06FO1aZGN5Ms0VBsEgbyyOCRxGTHvdBtD61rLeyJZvEtQ5RYcqE24lW6UAp3mkEffkKGOPDnGkTEtpxolp2voGpC3qJLgk5VjpFbpVjeJypRwYzUVQjOVouVimozIM7jYKl9v7B+pc0pl+u3Lb9LRkKU2ytx9xPn3AIl5/Y/qtSoa5Csax3RNoWndW0qZWWleApPMRGWpW3PcVSmTLaY01VGYSojsyottPuODvhGCE/CYiRe1Zr85MdMrUOYSfwUScuE/BuRCGVMmpICmMlLFoASpVruwRfDOV25eNCm0gHCJzpGlHzhBEV/1E0hv/S6qGTu+gvS7f3k8yFOSrvV2rmAOscD3xE3WBtw6g0aqj1/MNXJIEbpTLNNSryT3wQnB6+H64ubYGolh64adOzlKLc5KPoLM7TZrdLjJI4pcSCcdeCPMYw6aeHWQXC2EFPPpEbFZFiJZ0W0SVrROTlMpd20+l1SWSXTKTbSzvtDdG+CkHrUBiPZ7Tuzq7pTVfXXb4S5bFQmlpQygLJklKJUltRUTkY4A+CIQs+66zY96yF00GaMvOyTqXUkAELAOd0g8CDjkYu5+ZHmjKomPlSZZQpj1d2T7x0nsBV2v1in1iSadS3MJlErCmgrgFYKRwzwiv8bF0yetjVTStp5XY9TpFVlUpebCt4dskFSCRyIJx4CIyl1TsOoab6r1e06g2U9ivqMurBw4ySejWM9RHzRBSVDpLsfuFPWUzY7PZsV46EIkLRPTea1S1mpNsNs78mpwPz6iSAmXSRv8RxBIOItucGguPcqTGl5yhSHpNslXhqppvL3nL1+mUmUmXVoYamkOFa0pJSVcE8BkHEeG1m0iOjlzStuT1zyVXqbrIfdbk21BLKSSBvFWOJweEaaXbcls6O6NzVVdS1J02kym7LSySBvqAwltOeZJxGS10XJVLuvKo3HWZlUxOz0wt9xasZ4nIHDvDhFKmlkmcXHZXqqGKFoaPnKcdJ9ky49WNMpW86ZdVLkZeYdcbDEwhwrTuKweQIj23sA7z/tzQfk3fqxPWxh3J1J8smfTiINpvaI1a031/mrYtG45eSpiJKXeSyuQZdIUtJKjvKSTziIzTPlLGFTiCCOFsjwuk9gHeX9uqD8m79WB2BLyxn19UH5N36sRv7MXaC/tlJ/oqX+rA7Yu0ERxvGTP/Kpf6sS5KrqFFzKQ/RKi/UGzZnT7U2r2bOTjU4/TXywt9kEJWcA5GePXEw6UbJlxasaZSt5Uy6qXIMTDjjQYmG3FKSUKKeJSCOqIRui6K1ed4z1z3DMomapPudLMPIbS2Fq5Z3UgAcuqNHtjDuTaV5ZNftDG9TI+OIG+qjpY2SykW0VBtX9Lp/SHUVVo1OqStQmEy6Hy7LJUEYUMgdsMx4NKFrcS2hJUtRwlIGST3hFittjupX/8Ol/Rjvdh+xqFcuqNXr9Zkmpp2jstuSYcJ/g3SsdvgcCcZHGN2z5YRI5RugDpuW3RefsTYz1ZvCms1SoqpluybqEuITUFL6cg99sJ4HxxL8hsCUgSOKlfM0qZxzYaAQD5xmJz2h9XnNHNJVVqRklzNUnXew5LgChpwpJ3155gY5dcUJntqvXuen+ylagzMuoE4blZVhtA/wCHciqx9RP6TTYK5IympzlcLlSjdWwbfMkhT9o3PSKohKclicUthw+IhJT8MVeuS265aNzTNv3HTXqfUJZZQ4y6kg8OsZ5jwxa/RnbXq1Ofm5DWGYmKrLlvelp+UlmkLbUM9opKQN7PDB6ojHaJ2gJDWqfk26ZayaXKSZy3MzW4uacAKuG8n2qTve1yeI5xPC6cPyyC4VedtOWZozY9FBMIQi4qKQhCCIOcaabFncqyPl8z6QjMsc4002LO5VkfL5n0hFDEPVro4b6wqw0DyhA8o4y7oWau22nG004e/T2PQERZp7/N5vxD5xEr7b4xtK579PZx8URFGnv83m/EPnER8Sfuh3uV7gn9/s969rCA5Qj4+5fohIQhGqJCEIyFkLoLz9x7/wCWn54izqiU7z9x7/5aPniLByj63wR+wu/qP+AvgHym/vRv9I/yUhCEeyXzlIQhBFe7YD9yl4+VS/oLjptv77rWj5O96aY7nYD9yl4+VS/oLjptv77rWj5O96aY5Y/a12j+yKJNjbuuaL5HOfso05mJliUli9MvIabBAK1nAGTgcYzH2Nu65ovkc5+xi+e0I44zsvXy8y4ptxukvKStBIKSBkEEcvHEdcLygLagOWElQjtd7P0zeEinUSzKe25VJNo+qMu0gBcyylOQvOeJSE4wBk5igChhWMEHvEco0b2T9fFalW4/ZtzOBVeprYUh5xwrVOM5xk5605SOvMRPtbbOLdA7M1Ts2Xbbpy3EioU5hpLaZcqUEhxIHMKUrjw4RPTzGN3Kk81XqYRI3nxe8KnqELccS22lSlqISlKRkqJ5ARoTsn7Pz2n9Jc1BveSZZrM00DKsvDt5BrjvFR3iMqASeWQPPHhdknZwVOLk9U70lR0CHA5S5B9tCw5unHSrB5cc4GOrMe/2vdd0WXaLunltPIVWqswtqbeadKFSLRAHV98oK4eDMYqJjK7lRrNPAIW86RWhlJ2TqEimbkZlqYYVndcaVvJODg4MZbbU6sbUVyH/AGhXzxofocc7O1pKVxUqmtKUe+SkEmM79qjuoLk/Pq+eIaEZZSFPXuzQhyu/sj23KUHZWt59hpKHqmFzr6t3BUorKRnv9qlMVf22tR5qvatsWRKTK/UujtJcW2hw7jry0g7xGOaRlPXzMWv2WqvLVfZTtNbDoWuXl1S7oA9otLiuHwEHzxTTbJsmdtjaDdrK2/8A06sy6HZd3hxWhIStJx1gn9cZpgO0HNutam4pmhuyrrCEI664qRJuguo9U021so1Sk3Xewpqablp2XSvdS6hZ3BvcDnd3yREZR7TSW0Kre+stv0CkNFx9c608s8O0bQoLWo+JKVGI5bZDmUkJIeMu61I1gtGWv/Qqv0BxtK+yZMusEjO64kbyDzHWIyHmGixNOsKPbNrUg+MEiNir+uGTszSOtV6eWnoJCRUo73AKIThI85wPPGPE48JmozEwBgOurXjvZUTFHDr2cO5dHE7Xb1VttiLVtNGuma0vrMwvsSpqMxT1LV2rbwHbIAx98Bnn1eGJV2ztIl3Zpwm+6LKoXU6N20ylDeVvS/I8c/eZKvFmM9ZGenKZUmKhT5l2WmmFhxp5pRSpChyII5RrHo3qFStYNDpCsOJbddel+w6lKudsA4EhLgIPMHPnzGKpnJkErVmkeJojC9ZKfrBjR/Y80eNjaa+vSrsBNYrzKHEoW3hcuzlW6M547w3VdXVESyOyPNzO17UqY6DL2fJrbqjboaSUutrXkMAcuBBSfBxizW0BqUxpLoVP1WUHRzzyOwaa22d3cdUkhKhjkE4z8EYqp+ZaOPvWaSn5OaSTuVS9tnVP1yalS+n9Lmiqn0RIXMlC8pdmFgHiMfepOOffiqnWPHH3nJybqFQenZ6ZdmJh5ZW466oqUtRPEknnHw6x44vxRiNgaFzZpTLIXFacbGHcnUnyyZ9OI82iNl6/tVNcJq7qBO0xmRdlJdhKJhwhWUJIUfFEh7GHcnUnyyZ9OPJa8bWNxaRaxTFm06z6XU5dqVZmEzExNONrJWnJBCRjhHJbzBO7l7rskR9nbzdtFCnsFtVvfShfKn6Y6O8dkDUiybJqF0VOpUdUpIt9K4lpZKiPBHvP3wC8P7uaH/nnfqx52+9tK5b70/qdpzti0iUYqDJaU+1OOrUjwgEYMXWmqJGYaKm9tJY5Tqqwp5iNN9jDuTaV5ZNftDGZI5iNNtjDuTqV5ZNftDDEPVrGHetVVNtjupXv8Ol/RjzOzlrS1o1qS7P1KUcmaTUW0y030asKZSFhXSAYO8RjlHpttjupX/8ADpf0YrnjjyiSFgfCGu2UMzyycubutdJlzSrX3Tl+lNztMuSkvpStSG1krZUeKVY4KQoeaKtX5sHVRpcxPaf3VLzKO2U3TZ5ktqHHgkOb5B8ZiolEuK4LaqQn7erlRpM0P6aRmFsq85SRnzxP+nm2hqXZ0l2DcUu3dzO8P4aoTK0PpHHICwCD5x1RXFPLD6o6Kz2qGbSZtj1USXvpBqVp0Au8LRn6cwo4TM9q6yo/loJHwx4fjgHqjVPSXXnT3XenTNJl5VLVRbaDkzR6i2F5T1lORhaQeHLzRB+1RsyW5TrMqGpVhyTFLXIpDk7S5ZlLbCmu2K3Rx4KAxwHDAjeOsJdkkFitJaEZc8RuFRyED1Qi+uckIQgiDnGmmxZ3Ksj5fM+kIzL640Y2QL0s+h7MslI1m6qJTpoT0wosTc80ysAkYO6pQMUa8Ex6LoYcQJDdWijg+1MeX+yZpz/b62P0qx9eODqZpzgj1+2x+lGPrxx8jui7fMb1VBNuAfxkkH/dzXzCIn09/m834h84iTds6s0iubQbU5RapJVGX9T209NJvoeRnA4bySREW2HNS0sxM9kTDTWSAN9YTnl34j4iY5+ElrRc6K9wZIyPHWOebDVe6HKEfl9Uqdy7Plflk/TD1Tp34/K/Kp+mPkhpJz9A+S/QHb6b2jfML9UI/L6p078flflU/TD1Tp34/K/Kp+mHY5/AfJO303tG+YX6oR+X1Tp34/K/Kp+mHqnTvx+V+VT9MOyT+A+SCvpvaN8wuqvP3Hv/AJaPniLByiTLunpJ60nkMzbDiypJ3EOAnge8IjPlH1bguNzKJweLekf9L4R8pMrJcTa5huMo2/mUhCEevXz1IQgOJ6oIr3bAXuUvDyqX9BcdNt+/da0fJ3vTTHgdmDaCszRe369J3RT6zMu1B9pxoyDTawkISoHe3lp/CEddtP652lrPPUF+2JKrSokGnEOifaQneKlAjG6pXejnCJ/ac9tF1TOzs2S+q/Jsa91zRfI5z9jF8dojuV79/wAGf9GM4tn/AFDomlmukhedwy85MSEvLvtKbkkpU4S4jdGAogc+fGLLaq7Y2md8aLXNaVLo9yMztTkHJVlyYYaS2lShwKiHCceaMVML3TNcBos0s8bIS0nVUqoNcqlt16TrdGnHZWdlHkvNOtLKSClWcHB4jgMiNU9EdWKTrTpQxV3ZVhudQOhn5FZCwlacAq3TntCRkZjJz9USDo7qtV9IdTJe6KahUxL7impuS391MwgpIAPhBIUD4IsVVPzW6bhVaSp5LtditGNftYKfoxpW5OSzDKqtNoWxTZYABIcxneIGO1HE8OuMsqtVqjWqzM1Sqzj05OPqLjr7yytSlHwmPXatao13VvUaYuitKLaSkNSsqDlMu2PvB58nPhjwuMnHmhTU/KbrulVU852mwWu2hnHZztD/AAxn0BGeG1Pw2oLk/Pq+eLC6b7ZemFoaU0G2alRrlcmqfJty7q2ZdooKkpAJSS4DjzRVXWu+KTqJrNV7sojU21JTjhW2ibSEuAeEAkfriCmhe2YucNFZq5o3whrTqvc7NOv0zpFdopVXDsxbFQdAfbSo/ay1FI6VIJxgBPERoXelkWfqxYvqXW5diekXklxiYb3VKbUUkBaFYPEb2Yx5iUtK9oDUXSQmWt2pomKWtYU5TZ1Jda55JTxygkZGR343qaQuOdh1UVNWBgySahe81L2NtSLML9QttTVzUlBJR2OCJkJ6t5vHE/kxBjtnXYxOdiP2xWEPZxuGTcz6MXkt/b3sSZZbRcdn12mvY7dcqpuYbz4MqSceaPap20dDVtBZqtUSfwTJ8fSiMT1DNHNUhp6Z+rX2VPNPdlHVi/Vh5dNbt+SyN6YqwW2SP9VAGTF89FdDrZ0Xs7sGRUmeqj2HJyqOtJStxWOSTjKUDjgZ64iit7eOmUkCmi25cdUcwd0qS0ygnxlZOPNFbtVdrPUjUdExS6e8i3KE6CgycmcuuJPU47zPLkABzjVzaio0IsFIx9NT6tNyvb7Xe0JK3o+5pna2+KbT5xYqE3vYEw62opCU4OCgEE8eZxFTCcwyTzOTCOhFEI25QuZNM6V2YpE9bKOrLmnGtMvTp9ZVRa4UyT4JJ6JxSv4NYGcDtiAT3ogWOUqUhYWlRSoHII5gxmRgkaWlYikMbg4LbQuJSguEpwBne8EZa7TmrExqdrRPtSry/UOlOqlpFvfyFYCUqXjOMlSSREiTu15O+xRkLPkkveu1TSqdNTjgBSlgDAcBzkqKTjwEExVA8TnOfCYo0lKY3FzlfrawSNDWJDrHjhDwx0VzAtN9jDuTqT5ZM+nFdtrrTq+7m2mJ2p0C0qtUZMyEqgTEtLLcQVBByMgcxHbbP21Vp9pXohI2fX6VcExPMPvOrck2W1NkLVkYKlg/qiUPZ46Se8V2f5Zn/wAscjLLHMXtbddrPDJA2NzrKkf2GtVf7AV//JufRHI0Z1Vx7gK//k3Poi7fs8dJPeK7f8sz/wCWHs8NJMfcK7f8sz/5Yn7RUeBV+z03tFnvU6VUqJWn6VV5J6TnZde47LvJKVoPeIPKNK9jDuTaV5ZNftDGf+r930y/tb7iu+jtTLUjUprp2kTQCXEjAGFAEjq75ixuz9tVafaVaHSFnXBSrgmJ9h951a5NhtTZC17wwVLB5eCNqpj5IgANVpRvZHMSTovD7bPdSPn/AHdL+jHc7OOyvS9UrZTet0XFu0rpi0iQpyh0qlJxkOqUDu8DyHHlEZbRGplB1Y1ocu23Jafl5JUo0xuTqEoXvJGDwSojHnjq9KdaL10frbk7a022qWmFJM1ITKd5l4DwdSuAG8OMbhkghDW6FaGSPnlz9Qpg1k2N7stF6arlhKNeoxcUoSSQTNSyOoYA7cc8kcYruuy7vRUewFWtWRM5x0fYbmc/BF5rc29rCnGm27ntSuUt7dG+5KluYaz147ZKgPNHsfZpaG9Dv+q1UzjO52Hx8XtortnqIxZzbqyaemkOZrrKFdlDZ3vmmalymo10MvUKSkErDEo6Cl+ZWpOOKSOCADnwxY/acuGQt/ZZu1c+T9vSiqeyBjKnHUlKefnPmiKbm287Dk5ZaLWtat1WYx2q5oty7QPh7ZSj8EVA1U1ovfV2udmXPPJTKNq3peny43WWBk4wOs8TxPHjGrYZZpBI8WW7p4YIzHGblR5ngIQhHVXHSEIQRI4KEE5KEk98gGOYQWQbbL+dxv8Aq0fFENxv+rb+KI/qEEuVwEpSMJSAPAMQIB5gGOYQWFxupz7UfBDdT+CPgjmEBos3K43U/giG6n8EfBHMIzdLrjdT+CPgjkJT1ACEIXS6YA4jGYQhGFhIQhBEhCEETnzhCEESEIQRIQhBEhCEESEIQRIQhBEzDJznJzCEESEIQRIQhBEhCEESEIQRIcoQgiQhCCJCEIInViGIQgiQhCCJCEIIkIQgiQhCCL//2Q==" alt="Frade Imóveis" style="width:220px;max-width:60%;border-radius:10px">
+    <img src="logo-frade.png" alt="Frade Imóveis" style="width:250px;max-width:70%">
     <div class="hero-body">
       <h1>Seu dia organizado, do celular ao computador.</h1>
       <p class="lead">Tarefas, compromissos e lembretes em um só lugar, sincronizados em tempo real em todos os seus aparelhos.</p>
@@ -762,7 +922,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
   </div>
   <div class="auth">
     <div class="auth-box">
-      <div class="brand" data-brand></div>
+      <div class="brand"><img src="logo-frade-claro.png" alt="Frade Imóveis" style="width:190px;display:block"></div>
       <h2 id="authTitle">Bem-vindo de volta</h2>
       <p class="sub" id="authSub">Entre para acessar sua agenda.</p>
       <div class="field hide" id="campoNome"><label for="nome">Seu nome completo</label><input id="nome" autocomplete="name" placeholder="Ex.: Ana Flávia Souza"></div>
@@ -795,24 +955,24 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas<span class="count" id="cTarefas">0</span></button>
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
-      <button data-view="vendas" class="gerente-only hide" onclick="setView('vendas')"><i data-ic="star"></i>Vendas<span class="count" id="cVendas"></span></button>
-      <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="list"></i>Avaliações<span class="count" id="cAval"></span></button>
-      <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
+      <button data-view="vendas" class="gerente-only hide" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
+      <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
+      <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
-      <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="chart"></i>Painel executivo</button>
-      <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="chart"></i>Desempenho</button>
-      <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="card"></i>Apresentação</button>
-      <button data-view="assistente" class="gerente-only hide" onclick="setView('assistente')"><i data-ic="star"></i>Assistente</button>
+      <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
+      <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
+      <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
+      <button data-view="assistente" class="gerente-only hide" onclick="setView('assistente')"><i data-ic="spark"></i>Assistente</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
       <button onclick="sair()"><i data-ic="logout"></i>Sair</button>
     </nav>
     <div class="side-foot">
-      <button class="btn btn-ghost btn-block instalar hide" onclick="instalarApp()">📲 Instalar aplicativo</button>
-      <div class="side-card"><b>Dica rápida</b><span id="dica"></span></div>
+      <button class="btn btn-ghost btn-block instalar hide" onclick="instalarApp()">Instalar aplicativo</button>
+      <div class="side-card hide"><b>Dica rápida</b><span id="dica"></span></div>
     </div>
   </aside>
 
@@ -823,14 +983,14 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <div class="top-actions">
         <button class="icon-btn m-only" id="btnBuscaM" onclick="abrirBuscaM()" title="Buscar" data-ic="search" style="display:none"></button>
         <button class="icon-btn" onclick="alternarTema()" title="Modo claro/escuro" id="btnTema"></button>
-        <button class="btn btn-primary hide-m" onclick="acaoPrincipal()"><i data-ic="plus" style="width:17px;height:17px;display:grid"></i><span id="btnNovoTxt">Nova tarefa</span></button>
+        <button class="btn btn-primary hide-m" id="btnTopo" onclick="acaoPrincipal()"><i data-ic="plus" style="width:17px;height:17px;display:grid"></i><span id="btnNovoTxt">Nova tarefa</span></button>
       </div>
     </header>
 
     <div class="content">
       <!-- HOJE -->
       <section class="view" id="v-hoje">
-        <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">📣 Publicar aviso</button></div>
+        <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">Publicar aviso</button></div>
         <div id="bannerHoje"></div>
         <div id="conviteNotif"></div>
         <div class="mural" id="mural"></div>
@@ -844,7 +1004,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="grid-home">
           <div class="col">
           <div class="card hide" id="cardSdr">
-            <div class="card-head"><h2>📞 Seu mês como SDR</h2></div>
+            <div class="card-head"><h2>Seu mês como SDR</h2></div>
             <div id="sdrHoje"></div>
           </div>
           <div class="card hide" id="cardAtencao">
@@ -925,7 +1085,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <!-- VISITAS -->
       <section class="view" id="v-visitas">
         <div class="page-head"><div><h1>Visitas</h1><div class="sub" id="visSub"></div></div>
-          <div class="ph-acoes"><button class="btn btn-ghost wa" id="btnConfPag" onclick="abrirConfirmar()"><i data-ic="wa" style="width:17px;height:17px;display:grid"></i><span class="txtConfAm">Confirmar amanhã</span></button><div class="seg" id="segVis"></div><button class="btn btn-primary hide-m" id="btnNovaVisPag" onclick="novaVisita()">+ Nova visita</button></div></div>
+          <div class="ph-acoes"><button class="btn btn-ghost wa" id="btnConfPag" onclick="abrirConfirmar()"><i data-ic="wa" style="width:17px;height:17px;display:grid"></i><span class="txtConfAm">Confirmar amanhã</span></button><div class="seg" id="segVis"></div><button class="btn btn-primary so-cel" id="btnNovaVisPag" onclick="novaVisita()">+ Nova visita</button></div></div>
         <div id="bannerVis"></div>
         <div id="visConteudo">
           <div id="paneLista">
@@ -965,7 +1125,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <!-- CARTAS APROVADAS -->
       <section class="view" id="v-cartas">
         <div class="page-head"><div><h1>Cartas aprovadas</h1><div class="sub" id="cartasSub"></div></div>
-          <button class="btn btn-primary" id="btnNovaCartaPag" onclick="novaCarta()">+ Nova carta</button></div>
+          <button class="btn btn-primary so-cel" id="btnNovaCartaPag" onclick="novaCarta()">+ Nova carta</button></div>
         <div id="bannerCartas"></div>
         <div id="cartasConteudo">
           <div class="stats">
@@ -978,7 +1138,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
           <div class="card">
             <div class="tb-grid">
               <input id="cBusca" placeholder="Buscar cliente, CPF, telefone, empreendimento..." oninput="cf('busca',this.value)">
-              <select id="cPeriodo" onchange="cf('periodo',this.value)"><option value="mes">Aprovadas este mês</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
+              <select id="cPeriodo" onchange="if(this.value.startsWith('m:'))garantirHistorico(this.value.slice(2));cf('periodo',this.value)"><option value="mes">Aprovadas este mês</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
               <select id="cStatus" onchange="cf('status',this.value)"></select>
               <select id="cEquipe" onchange="cf('equipe',this.value)"></select>
               <select id="cCorretor" onchange="cf('corretor',this.value)"></select>
@@ -992,20 +1152,20 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <!-- PAINEL DO DONO -->
       <section class="view" id="v-painel">
         <div class="page-head"><div><h1>Painel executivo</h1><div class="sub" id="painelSub"></div></div>
-          <div class="ph-acoes"><div class="seg" id="painelSeg"></div><button class="btn btn-primary" onclick="abrirApresentacao()">📑 Apresentação da reunião</button><button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia</button></div></div>
+          <div class="ph-acoes"><div class="seg" id="painelSeg"></div><button class="btn btn-primary" onclick="abrirApresentacao()">Apresentação da reunião</button><button class="btn btn-ghost" onclick="telaCheiaPainel()">Tela cheia</button></div></div>
         <div id="painelConteudo"></div>
       </section>
 
       <!-- APRESENTAÇÃO DA REUNIÃO -->
       <section class="view" id="v-apresentacao">
-        <div class="page-head"><div><h1>📑 Apresentação</h1><div class="sub">Escolha o período e o app monta todos os slides no estilo da Frade, com os números do app.</div></div></div>
+        <div class="page-head"><div><h1>Apresentação</h1><div class="sub">Escolha o período e o app monta todos os slides no estilo da Frade, com os números do app.</div></div></div>
         <div class="ap-escolha" id="apEscolha"></div>
         <div class="card" style="margin-top:18px"><div class="hint" style="margin:0">Na apresentação: passe com as setas (ou arrastando no celular), use <b>📺 Tela cheia</b> na TV, <b>🖨️ PDF</b> para salvar e <b>⬇ PowerPoint</b> para editar. O último slide tem espaço para escrever os direcionamentos na hora da reunião.</div></div>
       </section>
 
       <!-- ASSISTENTE (CLAUDE) -->
       <section class="view" id="v-assistente">
-        <div class="page-head"><div><h1>🤖 Assistente</h1><div class="sub">Pergunte sobre os números do app. Ele vê leads, docs, aprovações, vendas e visitas por corretor e equipe (sem CPF nem telefone de clientes).</div></div>
+        <div class="page-head"><div><h1>Assistente</h1><div class="sub">Pergunte sobre os números do app. Ele vê leads, docs, aprovações, vendas e visitas por corretor e equipe (sem CPF nem telefone de clientes).</div></div>
           <button class="btn btn-ghost" onclick="assLimpar()">Nova conversa</button></div>
         <div class="card ass-card">
           <div id="assMsgs" class="ass-msgs"></div>
@@ -1016,8 +1176,8 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 
       <!-- VENDAS (RESERVAS) -->
       <section class="view" id="v-vendas">
-        <div class="page-head"><div><h1>🎉 Vendas</h1><div class="sub" id="vendSub">Reservas feitas. Cada reserva conta como venda.</div></div>
-          <button class="btn btn-primary gerente-only hide" onclick="editarReserva()">+ Nova reserva</button></div>
+        <div class="page-head"><div><h1>Vendas</h1><div class="sub" id="vendSub">Reservas feitas. Cada reserva conta como venda.</div></div>
+          <button class="btn btn-primary gerente-only hide so-cel" onclick="editarReserva()">+ Nova reserva</button></div>
         <div class="stats">
           <div class="stat"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="star"></div><div><b id="vsQtd">0</b><span>Vendas no período</span></div></div>
           <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="vsValor">R$ 0</b><span>Valor vendido</span></div></div>
@@ -1026,7 +1186,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="card">
           <div class="tb-grid">
             <input id="vBusca" placeholder="Buscar cliente, CPF, corretor, empreendimento..." oninput="vSet('busca',this.value)">
-            <select id="vPeriodo" onchange="vSet('periodo',this.value)"><option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
+            <select id="vendPeriodo" onchange="if(this.value.startsWith('m:'))garantirHistorico(this.value.slice(2));vSet('periodo',this.value)"><option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
             <select id="vEquipe" onchange="vSet('equipe',this.value)"></select>
           </div>
           <div id="vendLista"></div>
@@ -1035,7 +1195,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 
       <!-- RESUMO DO DIA (SDR) -->
       <section class="view" id="v-resumo">
-        <div class="page-head"><div><h1>📝 Resumo do dia</h1><div class="sub">Os mesmos dados da mensagem do grupo. Preencha todo dia o resumo de ontem.</div></div></div>
+        <div class="page-head"><div><h1>Resumo do dia</h1><div class="sub">Os mesmos dados da mensagem do grupo. Preencha todo dia o resumo de ontem.</div></div></div>
         <div id="resAviso"></div>
         <div class="card">
       <div id="resForm">
@@ -1049,7 +1209,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         </div>
         <div class="row2 fg" style="margin-top:12px"><div><label>Aprovações do dia</label><input id="res_aprovDia" inputmode="numeric"></div><div><label>Aprovações em outro CCA</label><input id="res_aprovOutroCca" inputmode="numeric"></div></div>
         <div class="row2"><button class="btn btn-ghost" onclick="salvarResumoSdr(false)">Salvar</button><button class="btn btn-primary" onclick="salvarResumoSdr(true)">Salvar e mandar no grupo</button></div>
-        <div style="margin-top:10px"><button class="link" onclick="abrirColarSdr()">📋 Ou cole a mensagem que você já mandou no grupo</button></div>
+        <div style="margin-top:10px"><button class="link" onclick="abrirColarSdr()">Ou cole a mensagem que você já mandou no grupo</button></div>
               </div>
         </div>
         <div class="card"><div class="card-head"><h2>Meus resumos</h2><span class="muted">toque para abrir</span></div><div id="resLista"></div></div>
@@ -1065,7 +1225,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <!-- AVALIAÇÕES DE CRÉDITO -->
       <section class="view" id="v-avaliacoes">
         <div class="page-head"><div><h1>Avaliações de crédito</h1><div class="sub" id="avalSub"></div></div>
-          <button class="btn btn-ghost hide" id="btnAvalSync" onclick="lerPlanilhaAgora()">🔄 Ler a planilha agora</button></div>
+          <button class="btn btn-ghost hide" id="btnAvalSync" onclick="lerPlanilhaAgora()">Ler a planilha agora</button></div>
         <div id="bannerAval"></div>
         <div id="avalConteudo">
           <div class="stats aval-stats">
@@ -1095,7 +1255,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
           <select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div>
         <div class="janela" id="janelaCor"></div>
         <div class="card hide" id="cardPresenca" style="margin-bottom:20px">
-          <div class="card-head pt-head"><h2>📍 Plantão</h2><input type="date" id="presData" onchange="mudarDiaPresenca(this.value)" style="width:auto"></div>
+          <div class="card-head pt-head"><h2>Plantão</h2><input type="date" id="presData" onchange="mudarDiaPresenca(this.value)" style="width:auto"></div>
           <div class="hint" style="margin-top:0" id="presResumo"></div>
           <div id="presLista"></div>
           <div class="rep-sec" style="margin:16px 0 8px">Resumo do mês</div>
@@ -1145,34 +1305,34 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
         <div class="page-head"><div><h1>Relatórios</h1><div class="sub" id="relSub">Como anda a sua produtividade.</div></div></div>
         <div id="relGestao" class="gest hide">
           <div class="card" style="margin-bottom:20px">
-            <div class="card-head pt-head"><h2>🏆 Pontos</h2><select id="ptMes" onchange="ptMesSel=this.value;render()"></select></div>
+            <div class="card-head pt-head"><h2>Pontos</h2><select id="ptMes" onchange="ptMesSel=this.value;render()"></select></div>
             <div class="janela" id="ptInfo"></div>
             <div id="ptTabela" style="overflow-x:auto"></div>
             <div class="janela" style="justify-content:flex-end;gap:14px;flex-wrap:wrap;margin-top:10px">
-              <button class="link gerente-only hide" id="btnRecalc" onclick="recalcularMes()">🔄 Refazer o fechamento deste mês</button>
+              <button class="link gerente-only hide" id="btnRecalc" onclick="recalcularMes()">Refazer o fechamento deste mês</button>
               <button class="link" onclick="exportarPontos(false)">⬇ Exportar este mês para Excel</button>
               <button class="link" onclick="exportarPontos(true)">⬇ Exportar todos os meses</button>
             </div>
           </div>
           <div class="card gerente-only hide" style="margin-bottom:20px">
-            <div class="card-head"><h2>⚠ Clientes repetidos</h2><span class="muted">Só os gerentes veem</span></div>
+            <div class="card-head"><h2>Clientes repetidos</h2><span class="muted">Só os gerentes veem</span></div>
             <div id="repLista"></div>
-            <div class="janela" style="justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px"><span class="hint" style="margin:0" id="repInfo"></span><button class="link" id="btnVerifHist" onclick="verificarHistorico()">🔍 Verificar todo o histórico</button></div>
+            <div class="janela" style="justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px"><span class="hint" style="margin:0" id="repInfo"></span><button class="link" id="btnVerifHist" onclick="verificarHistorico()">Verificar todo o histórico</button></div>
           </div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-head pt-head"><h2>📞 SDRs</h2><button class="btn btn-ghost" onclick="abrirResumoSdr()">📝 Resumos do dia · enviar conversa</button></div>
+            <div class="card-head pt-head"><h2>SDRs</h2><button class="btn btn-ghost" onclick="abrirResumoSdr()">Resumos do dia · enviar conversa</button></div>
             <div id="sdrRelTabela"></div>
           </div>
           <div class="card hide" id="cardRelAuto" style="margin-bottom:20px">
-            <div class="card-head"><h2>📊 Relatórios de desempenho</h2><span class="muted">Leads · docs · condicionados · aprovações · média</span></div>
+            <div class="card-head"><h2>Relatórios de desempenho</h2><span class="muted">Leads · docs · condicionados · aprovações · média</span></div>
             <div class="hint" style="margin-top:0">Saem sozinhos: <b>toda segunda às 8h</b> (semana completa, de segunda a domingo) e <b>todo dia 1º às 8h</b> (mês completo). Chegam no e-mail dos gerentes e ficam guardados aqui.</div>
             <div class="rel-botoes"><button class="btn btn-ghost" onclick="gerarRelatorioAgora('semana_atual')">Esta semana (até hoje)</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('semana_passada')">Semana passada</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('mes_atual')">Este mês (até hoje)</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('mes_passado')">Mês passado</button></div>
             <label class="muted" style="display:flex;gap:8px;align-items:center;font-size:13px;margin:4px 0 12px"><input type="checkbox" id="relEnviar" style="width:auto"> Enviar também por e-mail para os gerentes</label>
             <div id="relAutoLista"></div>
           </div>
           <div class="rep-grid" style="margin-bottom:20px">
-            <div class="card"><div class="card-head pt-head"><h2>📣 Origem dos clientes</h2><select id="origPer" onchange="origPer=this.value;render()"><option value="mes">Este mês</option><option value="3m">Últimos 3 meses</option></select></div><div id="origTabela"></div></div>
-            <div class="card"><div class="card-head"><h2>❌ Motivos da perda</h2><span class="muted" id="motPerTxt">este mês</span></div><div id="motTabela"></div></div>
+            <div class="card"><div class="card-head pt-head"><h2>Origem dos clientes</h2><select id="origPer" onchange="origPer=this.value;render()"><option value="mes">Este mês</option><option value="3m">Últimos 3 meses</option></select></div><div id="origTabela"></div></div>
+            <div class="card"><div class="card-head"><h2>Motivos da perda</h2><span class="muted" id="motPerTxt">este mês</span></div><div id="motTabela"></div></div>
           </div>
           <div class="rep-sec" style="margin:4px 0 14px">Sua agenda pessoal</div>
         </div>
@@ -1198,7 +1358,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="foto-box">
               <div class="foto-grande" id="fotoGrande">A</div>
               <div class="fb-acoes">
-                <button class="btn btn-primary" onclick="document.getElementById('fotoArquivo').click()">📷 Escolher foto</button>
+                <button class="btn btn-primary" onclick="document.getElementById('fotoArquivo').click()">Escolher foto</button>
                 <button class="link hide" id="btnTirarFoto" onclick="removerFoto()">Remover foto</button>
                 <div class="hint">Aparece no seu perfil e para o coordenador e os gerentes.</div>
               </div>
@@ -1208,8 +1368,6 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
             <div class="fg"><label>Seu nome</label><input id="cfgNome" placeholder="Como quer ser chamado" onchange="salvarNome()"></div>
             <div class="fg"><label>Seu WhatsApp <span class="muted" style="font-weight:500">(para as SDRs e a equipe avisarem você)</span></label><input id="cfgFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999" onchange="salvarFone()"></div>
             <div class="fg"><label>E-mail da conta</label><input id="cfgEmail" disabled></div>
-            <label>Cor principal</label>
-            <div class="colors" id="cores"></div>
           </div>
           <div class="card">
             <div class="card-head"><h2>Aparência e avisos</h2></div>
@@ -1225,57 +1383,57 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
               <select id="cfgMin" style="width:auto" onchange="salvarMin(this.value)"><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hora</option></select></div>
           </div>
           <div class="card dono-only hide" id="cardAdmPontos">
-            <div class="card-head"><h2>🏆 Pontuação</h2><span class="muted">Só o gestor</span></div>
+            <div class="card-head"><h2>Pontuação</h2><span class="muted">Só o gestor</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Quanto vale cada ação. Os pontos zeram todo dia 1º. Mudou um valor? Vale para o mês em andamento; os meses já fechados não mudam. Pode usar números negativos.</div>
             <div id="admPontos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarPontuacao()">Salvar pontuação</button>
           </div>
           <div class="card dono-only hide" id="cardAdmListas">
-            <div class="card-head"><h2>📋 Listas do app</h2><span class="muted">Só o gestor</span></div>
+            <div class="card-head"><h2>Listas do app</h2><span class="muted">Só o gestor</span></div>
             <div class="fg"><label>Origens do cliente <span class="muted" style="font-weight:500">(uma por linha)</span></label><textarea id="admOrigens" style="min-height:120px"></textarea></div>
             <div class="fg"><label>Motivos da perda <span class="muted" style="font-weight:500">(um por linha)</span></label><textarea id="admMotivos" style="min-height:120px"></textarea></div>
             <button class="btn btn-primary btn-block" onclick="salvarListas()">Salvar listas</button>
             <div class="set-row" style="margin-top:14px"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Nada é apagado.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div>
           </div>
           <div class="card dono-only hide" id="cardInteg" style="grid-column:1/-1">
-            <div class="card-head"><h2>🔗 Integrações</h2><span class="muted">Só o gestor · CRM, planilha e e-mail</span></div>
+            <div class="card-head"><h2>Integrações</h2><span class="muted">Só o gestor · CRM, planilha e e-mail</span></div>
             <div class="int-bloco"><b>1. Chave de segurança</b><span>Só quem tem esta chave consegue mandar dados para o app. Ela vai no ajudante da planilha e no endereço do CRM.</span>
               <div class="int-linha"><code id="intChave"></code><button class="btn btn-ghost" onclick="copiarTexto('intChave')">Copiar</button><button class="btn btn-ghost" id="btnGerarChave" onclick="gerarChave()">Gerar chave</button></div></div>
             <div class="int-bloco"><b>2. CRM (Dynamus)</b><span>Endereço para colar na ação <b>Webhook</b> do fluxo novo. O CRM só avisa o app; nada muda lá dentro.</span>
               <div class="int-linha"><code id="intCrmUrl"></code><button class="btn btn-ghost" onclick="copiarTexto('intCrmUrl')">Copiar</button></div><span class="muted" id="intUltLead"></span></div>
             <div class="int-bloco"><b>3. Ajudante da planilha (Google)</b><span>Endereço que o Google mostra depois de implantar o ajudante. Ele lê a planilha de avaliações, mantém a planilha do app e envia os e-mails.</span>
               <div class="int-linha"><input id="intScript" placeholder="https://script.google.com/macros/s/.../exec"><button class="btn btn-ghost" onclick="salvarScript()">Salvar</button><button class="btn btn-ghost" onclick="testarAjudante()">Testar</button></div>
-              <div class="int-linha"><span class="muted" id="intUltSync"></span><button class="link" onclick="lerPlanilhaAgora()">🔄 Ler a planilha agora</button></div></div>
+              <div class="int-linha"><span class="muted" id="intUltSync"></span><button class="link" onclick="lerPlanilhaAgora()">Ler a planilha agora</button></div></div>
             <div class="int-bloco"><b>4. Quem é quem</b><span>Ligue cada aba da planilha e cada nome do CRM ao corretor certo do app.</span>
               <div id="intLigacoes"></div><button class="btn btn-primary" id="btnSalvarLig" style="margin-top:10px" onclick="salvarLigacoes()">Salvar ligações</button></div>
             <div class="int-bloco"><b>5. Abas que o app não lê</b><span>Uma aba por linha, com o nome igual ao da planilha. As avaliações dessas abas somem do app, do painel e dos relatórios (a planilha não é alterada e nada é apagado).</span>
               <textarea id="intIgnoradas" style="min-height:120px;margin-top:8px"></textarea>
               <button class="btn btn-primary" style="margin-top:8px" onclick="salvarAbasIgnoradas()">Salvar abas</button></div>
             <div class="int-bloco"><b>6. Docs do WhatsApp</b><span>Envie o arquivo <b>docs-whatsapp.json</b> (preparado a partir das conversas com o correspondente). Entram só os clientes que não estão na planilha; se a administração lançar o cliente depois, o do WhatsApp some sozinho para não contar duas vezes.</span>
-              <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impWhatsArq').click()">📂 Escolher arquivo</button><input type="file" id="impWhatsArq" class="hide" accept=".json,application/json" onchange="lerDocsWhats(this)"></div>
+              <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impWhatsArq').click()">Escolher arquivo</button><input type="file" id="impWhatsArq" class="hide" accept=".json,application/json" onchange="lerDocsWhats(this)"></div>
               <div id="impWhatsInfo" class="hint" style="margin:6px 0"></div>
               <button class="btn btn-primary hide" id="btnImpWhats" onclick="importarDocsWhats()">Importar</button></div>
             <div class="int-bloco"><b>9. Reservas (vendas) do WhatsApp</b><span>Envie o arquivo <b>reservas-whatsapp.json</b> (tirado do grupo de reservas). Cada reserva conta como venda, sem repetir cliente. Pode enviar de novo depois: as que já existem só são atualizadas.</span>
-              <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impResArq').click()">📂 Escolher arquivo</button><input type="file" id="impResArq" class="hide" accept=".json,application/json" onchange="lerReservasArq(this)"></div>
+              <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impResArq').click()">Escolher arquivo</button><input type="file" id="impResArq" class="hide" accept=".json,application/json" onchange="lerReservasArq(this)"></div>
               <div id="impResInfo" class="hint" style="margin:6px 0"></div>
               <button class="btn btn-primary hide" id="btnImpRes" onclick="importarReservas()">Importar</button></div>
             <div class="int-bloco"><b>7. Leads antigos (antes de ligar o CRM)</b><span>Baixe a planilha de oportunidades do CRM (Excel ou CSV) e envie aqui. O app mostra a prévia por corretor antes de gravar. Conta cada lead para o corretor que aparece como responsável na planilha.</span>
               <div class="int-linha"><label style="font-size:13px">De <input type="date" id="impDe" value="2026-09-14" onchange="previaLeads()" style="width:auto"></label><label style="font-size:13px">até <input type="date" id="impAte" onchange="previaLeads()" style="width:auto"></label>
-                <button class="btn btn-ghost" onclick="document.getElementById('impLeadsArq').click()">📂 Escolher planilha</button><input type="file" id="impLeadsArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerArquivoLeads(this)"></div>
+                <button class="btn btn-ghost" onclick="document.getElementById('impLeadsArq').click()">Escolher planilha</button><input type="file" id="impLeadsArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerArquivoLeads(this)"></div>
               <div id="impLeadsCols"></div><div class="hint" id="impLeadsInfo" style="margin:6px 0"></div><div id="impLeadsPrev"></div>
               <button class="btn btn-primary" id="btnImpLeads" disabled onclick="importarLeadsAgora()">Importar leads</button></div>
             <div class="int-bloco"><b>8. Planilha do app</b><span>A cada visita ou carta cadastrada ou alterada, a linha é atualizada sozinha. Use o botão uma vez para mandar o que já existe.</span>
               <div class="int-linha"><button class="btn btn-ghost" id="btnEnviarTudo" onclick="enviarTudoPlanilha()">Enviar tudo para a planilha do app</button></div></div>
           </div>
           <div class="card dono-only hide" id="cardGrupos" style="grid-column:1/-1">
-            <div class="card-head"><h2>🗂️ Status da planilha de avaliações</h2><span class="muted">Só o gestor</span></div>
+            <div class="card-head"><h2>Status da planilha de avaliações</h2><span class="muted">Só o gestor</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:12px">Em que grupo cada status entra nos relatórios e depois de quantos dias o cliente volta para o corretor como <b>repescagem</b> (deixe em branco para não voltar; 0 = avisar na hora). Status novos que a administração criar aparecem aqui sozinhos.</div>
             <div class="grp-row grp-cab"><span>Status</span><span>Grupo</span><span>Repescagem (dias)</span></div>
             <div id="admGrupos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarGrupos()">Salvar status</button>
           </div>
           <div class="card dono-only hide" id="cardAdmMsgs" style="grid-column:1/-1">
-            <div class="card-head"><h2>💬 Mensagens prontas</h2><span class="muted">Só o gestor edita · valem para todos</span></div>
+            <div class="card-head"><h2>Mensagens prontas</h2><span class="muted">Só o gestor edita · valem para todos</span></div>
             <div class="hint" style="margin-top:0;margin-bottom:10px">Escreva do jeito que quiser. Use os campos abaixo e o app troca pelo dado do cliente na hora de enviar:</div>
             <div class="chips" id="msgCampos" style="margin-bottom:14px"></div>
             <div id="admMsgs"></div>
@@ -1388,10 +1546,10 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <div class="fg"><label>Observação</label><textarea id="vmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <div class="row2" id="vmExtras">
         <button class="btn btn-ghost" onclick="addGoogle(visitaComoTarefa(lerVisita()))"><i data-ic="calplus" style="width:17px;height:17px;display:grid"></i>Google Agenda</button>
-        <button class="btn btn-ghost" onclick="abrirMensagens('v',visitaAtualId())">💬 Mensagens prontas</button>
+        <button class="btn btn-ghost" onclick="abrirMensagens('v',visitaAtualId())">Mensagens prontas</button>
       </div>
       <div class="row2" id="vmExtras2" style="margin-top:10px">
-        <span></span><button class="btn btn-danger" onclick="excluirVisita(visitaAtualId(),true)">🗄️ Arquivar</button>
+        <span></span><button class="btn btn-danger" onclick="excluirVisita(visitaAtualId(),true)">Arquivar</button>
       </div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('visModal')">Cancelar</button><button class="btn btn-primary" id="vmSalvar" onclick="salvarVisita()">Salvar visita</button></div>
@@ -1422,7 +1580,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <div class="fg" id="cmCorWrap"><label>Corretor</label><select id="cmCorretor"></select></div>
       <div class="fg"><label>Documentos recebidos <span class="muted" id="cmDocsQt" style="font-weight:500"></span></label><div class="docs-grid" id="cmDocs"></div></div>
       <div class="fg"><label>Observação</label><textarea id="cmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
-      <div class="row2" id="cmExcluir"><button class="btn btn-ghost" onclick="abrirMensagens('c',cartaAtualId())">💬 Mensagens prontas</button><button class="btn btn-danger" onclick="excluirCarta(cartaAtualId(),true)">🗄️ Arquivar carta</button></div>
+      <div class="row2" id="cmExcluir"><button class="btn btn-ghost" onclick="abrirMensagens('c',cartaAtualId())">Mensagens prontas</button><button class="btn btn-danger" onclick="excluirCarta(cartaAtualId(),true)">Arquivar carta</button></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('cartaModal')">Cancelar</button><button class="btn btn-primary" id="cmSalvar" onclick="salvarCarta()">Salvar carta</button></div>
   </div>
@@ -1431,7 +1589,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 <!-- ================= MODAL DE AVISO ================= -->
 <div class="modal" id="avisoModal">
   <div class="sheet" style="width:min(480px,100%)">
-    <div class="sheet-head"><h2>📣 Publicar aviso</h2><button class="icon-btn" onclick="fechar('avisoModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><h2>Publicar aviso</h2><button class="icon-btn" onclick="fechar('avisoModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <div class="fg"><label>Mensagem</label><textarea id="avTexto" placeholder="Ex.: Reunião geral amanhã às 8h no escritório." style="min-height:100px" maxlength="500"></textarea></div>
       <div class="row2 fg"><div><label>Para quem</label><select id="avDestino"></select></div>
@@ -1445,7 +1603,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 <!-- ================= MENSAGENS PRONTAS ================= -->
 <div class="modal" id="msgModal">
   <div class="sheet" style="width:min(560px,100%)">
-    <div class="sheet-head"><div><h2>💬 Mensagens prontas</h2><div class="muted" style="font-size:13px;margin-top:3px" id="msgSub"></div></div><button class="icon-btn" onclick="fechar('msgModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><div><h2>Mensagens prontas</h2><div class="muted" style="font-size:13px;margin-top:3px" id="msgSub"></div></div><button class="icon-btn" onclick="fechar('msgModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="msgLista"></div>
   </div>
 </div>
@@ -1461,7 +1619,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 <!-- ================= ARQUIVADOS (gerente) ================= -->
 <div class="modal" id="arqModal">
   <div class="sheet" style="width:min(720px,100%)">
-    <div class="sheet-head"><div><h2>🗄️ Arquivados</h2><div class="muted" style="font-size:13px;margin-top:3px">Nada é apagado de verdade. Tudo o que foi arquivado continua guardado na nuvem e pode ser restaurado.</div></div><button class="icon-btn" onclick="fechar('arqModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><div><h2>Arquivados</h2><div class="muted" style="font-size:13px;margin-top:3px">Nada é apagado de verdade. Tudo o que foi arquivado continua guardado na nuvem e pode ser restaurado.</div></div><button class="icon-btn" onclick="fechar('arqModal')" data-ic="x"></button></div>
     <div class="sheet-body"><div class="seg" id="segArq" style="margin-bottom:14px"></div><input id="arqBusca" placeholder="Buscar cliente ou corretor..." oninput="renderArquivados()" style="margin-bottom:12px"><div id="arqLista"></div></div>
   </div>
 </div>
@@ -1477,11 +1635,11 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 <!-- ================= RESUMO DO DIA (SDR) ================= -->
 <div class="modal" id="resModal">
   <div class="sheet" style="width:min(640px,100%)">
-    <div class="sheet-head"><div><h2>📝 Resumo do dia</h2><div class="muted" style="font-size:13px;margin-top:3px">Os mesmos campos da mensagem do grupo</div></div><button class="icon-btn" onclick="fechar('resModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><div><h2>Resumo do dia</h2><div class="muted" style="font-size:13px;margin-top:3px">Os mesmos campos da mensagem do grupo</div></div><button class="icon-btn" onclick="fechar('resModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <div class="hint" style="margin-top:0">Cole uma ou várias mensagens do grupo, ou envie a <b>conversa exportada</b> do WhatsApp (⋮ → Mais → Exportar conversa → Sem mídia). Só as mensagens com "DATA REFERENTE" são lidas.</div>
       <div class="int-linha" style="margin:8px 0"><label style="font-size:13px">De <input type="date" id="resDe" style="width:auto" onchange="lerColado()"></label><label style="font-size:13px">até <input type="date" id="resAte" style="width:auto" onchange="lerColado()"></label>
-        <button class="btn btn-ghost" onclick="document.getElementById('resArq').click()">📂 Enviar conversa exportada</button><input type="file" id="resArq" class="hide" accept=".txt,.zip,text/plain" onchange="lerArquivoConversa(this)"></div>
+        <button class="btn btn-ghost" onclick="document.getElementById('resArq').click()">Enviar conversa exportada</button><input type="file" id="resArq" class="hide" accept=".txt,.zip,text/plain" onchange="lerArquivoConversa(this)"></div>
       <textarea id="resColar" placeholder="Cole aqui a mensagem do grupo…" style="min-height:120px" oninput="clearTimeout(window._rcT);window._rcT=setTimeout(lerColado,400)"></textarea>
       <div id="resPrevia" style="margin-top:10px"></div>
     </div>
@@ -1491,9 +1649,9 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 <!-- ================= ALTERAR SENHA ================= -->
 <div id="apresent" class="apresent">
   <div class="ap-barra">
-    <select id="apMesSel" onchange="abrirApresentacao(this.value)" style="width:auto"><option value="mes_passado">Mês passado</option><option value="mes_atual">Este mês (até hoje)</option><option value="sem_passada">Semana passada</option><option value="sem_atual">Esta semana (até hoje)</option></select>
+    <select id="apMesSel" onchange="if(this.value.startsWith('mes:'))garantirHistorico(this.value.slice(4));abrirApresentacao(this.value)" style="width:auto"><option value="mes_passado">Mês passado</option><option value="mes_atual">Este mês (até hoje)</option><option value="sem_passada">Semana passada</option><option value="sem_atual">Esta semana (até hoje)</option></select>
     <span id="apPag" class="ap-pag"></span>
-    <div class="ap-bts"><button class="btn btn-ghost" onclick="apTelaCheia()">📺 Tela cheia</button><button class="btn btn-ghost" onclick="apPdf()">🖨️ PDF</button><button class="btn btn-ghost" onclick="apPptx()">⬇ PowerPoint</button><button class="btn btn-ghost" onclick="fecharApresentacao()">✕</button></div>
+    <div class="ap-bts"><button class="btn btn-ghost" onclick="apTelaCheia()">Tela cheia</button><button class="btn btn-ghost" onclick="apPdf()">PDF</button><button class="btn btn-ghost" onclick="apPptx()">⬇ PowerPoint</button><button class="btn btn-ghost" onclick="fecharApresentacao()">✕</button></div>
   </div>
   <div class="ap-palco" id="apPalco"></div>
   <div class="ap-nav"><button onclick="apIr(-1)" aria-label="Anterior">‹</button><button onclick="apIr(1)" aria-label="Próximo">›</button></div>
@@ -1512,14 +1670,14 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
       <div class="row2 fg"><div><label>Origem do lead</label><input id="rvOrig"></div><div><label>Previsão de assinatura</label><input id="rvPrev"></div></div>
       <div class="fg"><label>Status do imóvel</label><input id="rvStImo"></div>
       <div class="fg"><label>Observação</label><textarea id="rvObs" style="min-height:60px"></textarea></div>
-      <div class="row2"><button class="btn btn-ghost" id="rvCaiuBtn" onclick="vendaCaiu()">✖ Venda caiu</button><button class="btn btn-primary" onclick="salvarReserva()">Salvar</button></div>
+      <div class="row2"><button class="btn btn-ghost" id="rvCaiuBtn" onclick="vendaCaiu()">Venda caiu</button><button class="btn btn-primary" onclick="salvarReserva()">Salvar</button></div>
     </div>
   </div>
 </div>
 
 <div class="modal" id="senhaModal">
   <div class="sheet" style="width:min(420px,100%)">
-    <div class="sheet-head"><h2>🔑 Alterar senha</h2><button class="icon-btn" onclick="fechar('senhaModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><h2>Alterar senha</h2><button class="icon-btn" onclick="fechar('senhaModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <div class="fg"><label>Senha atual</label><input type="password" id="snAtual" autocomplete="current-password"></div>
       <div class="fg"><label>Nova senha</label><input type="password" id="snNova" autocomplete="new-password" placeholder="Mínimo de 6 caracteres"></div>
@@ -1556,15 +1714,15 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
     <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
     <div class="sheet-body menu-list">
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
-      <button class="gerente-only hide" onclick="fechar('menuModal');setView('vendas')"><span style="width:20px;text-align:center">🎉</span>Vendas</button>
-      <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><span style="width:20px;text-align:center">📋</span>Avaliações de crédito</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
+      <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
-      <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><span style="width:20px;text-align:center">📊</span>Painel executivo</button>
-      <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><span style="width:20px;text-align:center">📑</span>Apresentação</button>
-      <button class="gerente-only hide" onclick="fechar('menuModal');setView('assistente')"><span style="width:20px;text-align:center">🤖</span>Assistente</button>
-      <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><span style="width:20px;text-align:center">📈</span>Desempenho</button>
+      <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('assistente')"><i data-ic="spark"></i>Assistente</button>
+      <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
-      <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><span style="width:20px;text-align:center">📲</span>Instalar aplicativo</button>
+      <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><i data-ic="phone"></i>Instalar aplicativo</button>
       <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
       <button onclick="fechar('menuModal');sair()"><i data-ic="logout"></i>Sair</button>
     </div>
@@ -1599,6 +1757,14 @@ catch(e) { db = getFirestore(fb); }
 
 // ================= Ícones =================
 const IC = {
+  chave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8M17 6l3 3M14.5 8.5l2 2"/></svg>',
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14.5l2 2 4-4"/></svg>',
+  painel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="15" width="7.5" height="6" rx="1.5"/></svg>',
+  trend:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+  tela:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8 21h8M12 16.5V21M7 12.5l3-3 2.5 2.5L17 7.5"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8zM5 3.5l.6 1.4 1.4.6-1.4.6L5 7.5l-.6-1.4L3 5.5l1.4-.6z"/></svg>',
+  nota:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
+
   logo:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="m8.8 15 2.2 2.2 4.4-4.4"/></svg>',
   home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>',
   list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 6 1.5 1.5L8 4.5M3.5 12.5 5 14l3-3M3.5 19 5 20.5l3-3M12 6h9M12 12.5h9M12 19h9"/></svg>',
@@ -1630,7 +1796,7 @@ const IC = {
   menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
   emptyI:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="12" width="44" height="42" rx="8"/><path d="M22 6v10M42 6v10M10 26h44"/><path d="m24 40 6 6 11-12"/></svg>'
 };
-const MARCA_IMG = 'data:image/png;base64,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';
+const MARCA_IMG = 'data:image/png;base64,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';
 function pintarIcones(root=document){
   root.querySelectorAll('[data-ic]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = IC[el.dataset.ic] || ''; el.dataset.icDone = 1; } });
   root.querySelectorAll('[data-brand]').forEach(el => { if (!el.dataset.icDone) { el.innerHTML = `<div class="brand-mark marca"><img src="${MARCA_IMG}" alt=""></div><div><div class="brand-name">Frade <span>Imóveis</span></div><div class="brand-sub">Minha Agenda</div></div>`; el.dataset.icDone = 1; } });
@@ -1715,10 +1881,10 @@ function aplicarTema(){
   const pref = state?.profile?.theme || localStorage.getItem('tema') || 'auto';
   const escuro = pref === 'dark' || (pref === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = escuro ? 'dark' : 'light';
-  let cor = state?.profile?.color || localStorage.getItem('cor') || '#E65100';
-  if (cor === '#2563eb' && !state?.profile?.corEscolhida) cor = '#E65100'; // antiga cor padrão vira a cor da Frade, a não ser que a pessoa tenha escolhido o azul
-  document.documentElement.style.setProperty('--accent', cor);
-  document.querySelector('meta[name=theme-color]').content = '#022C45';
+  // cor da marca Frade para todos (identidade única)
+  const cor = '#1C5F8E';
+  document.documentElement.style.setProperty('--accent', escuro ? '#3B9AD9' : cor);
+  document.querySelector('meta[name=theme-color]').content = '#123F63';
   $('btnTema').innerHTML = escuro ? IC.sun : IC.moon;
   try { localStorage.setItem('tema', pref); localStorage.setItem('cor', cor); } catch(e){}
 }
@@ -1893,7 +2059,7 @@ window.setView = v => {
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-'+v));
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   document.title = TITULOS[v] + ' · Minha Agenda';
-  window.scrollTo(0,0);
+  if (window.lenis) window.lenis.scrollTo(0, { immediate:true }); else window.scrollTo(0,0);
   render();
 };
 window.irFiltro = f => { filtro = f; filtroCat = ''; setView('tarefas'); };
@@ -2072,7 +2238,7 @@ function render(){
   if (view === 'config') {
     if (document.activeElement !== $('cfgNome')) $('cfgNome').value = p.name;
     $('cfgEmail').value = emailAtual;
-    $('cores').innerHTML = CORES.map(c => `<button class="color ${c===p.color?'sel':''}" style="background:${c}" onclick="setCor('${c}')" title="${c}"></button>`).join('');
+    if ($('cores')) $('cores').innerHTML = CORES.map(c => `<button class="color ${c===p.color?'sel':''}" style="background:${c}" onclick="setCor('${c}')" title="${c}"></button>`).join('');
     $('segTema').innerHTML = [['light','Claro'],['dark','Escuro'],['auto','Auto']].map(([k,v]) => `<button class="${p.theme===k?'on':''}" onclick="setTema('${k}')">${v}</button>`).join('');
     $('cfgNotif').checked = !!p.notif;
     $('cfgMin').value = String(p.notifMin || 15);
@@ -2371,7 +2537,26 @@ function iniciarVisitas(user){
     equipes = {}; snap.docs.forEach(d => equipes[d.id] = { id:d.id, ...d.data() }); preencherCadEquipes(); render();
   }, e => console.error(e)));
 }
-function inicioJanela(){ const d = new Date(); d.setMonth(d.getMonth() - MESES_JANELA); d.setDate(1); return iso(d); }
+let janelaDesde = null; // mês mais antigo pedido no seletor: carrega só dali pra frente (economiza leituras, mantém grátis)
+function inicioJanela(){ if (historicoCompleto) return '2000-01-01'; if (janelaDesde) return janelaDesde + '-01'; const d = new Date(); d.setMonth(d.getMonth() - MESES_JANELA); d.setDate(1); return iso(d); }
+// ---------- seletor de mês: todos os meses desde o começo dos dados (nada é apagado) ----------
+const MES_INICIO = '2026-07';
+function mesesDisponiveis(){
+  const out = [], hoje = mesAtual(); let m = hoje;
+  while (m >= MES_INICIO && out.length < 240) { out.push(m); const [a, mm] = m.split('-').map(Number); m = mm === 1 ? `${a-1}-12` : `${a}-${String(mm-1).padStart(2,'0')}`; }
+  return out;
+}
+const fimDoMes = m => { const [a, mm] = m.split('-').map(Number); return iso(new Date(a, mm, 0)); };
+// se o mês escolhido é mais antigo que os últimos meses carregados, traz o histórico completo sozinho
+function garantirHistorico(m){
+  if (historicoCompleto || !m) return;
+  if (m < inicioJanela().slice(0,7)) { janelaDesde = m; toast('Carregando ' + nomeMes(m) + '…'); configurarAcesso(); render(); }
+}
+window.garantirHistorico = garantirHistorico;
+const faixaDoMes = p => { const m = p.slice(2); return [m + '-01', m === mesAtual() ? hojeISO() : fimDoMes(m)]; };
+const optsMesesP = (sel, pref = 'm:') => `<optgroup label="Escolher mês">${mesesDisponiveis().map(m => `<option value="${pref}${m}" ${sel === pref + m ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</optgroup>`;
+function preencherSel(id, base, sel, pref){ const el = $(id); if (!el) return; el.innerHTML = base + optsMesesP(sel, pref); el.value = sel; }
+const opcoesMeses = (sel, incluirAtual = true) => mesesDisponiveis().filter(m => incluirAtual || m !== mesAtual()).map(m => `<option value="${m}" ${sel === m ? 'selected' : ''}>${nomeMes(m)}${m === mesAtual() ? ' (até hoje)' : ''}</option>`).join('');
 window.carregarHistorico = () => { historicoCompleto = true; toast('Carregando o histórico completo…'); configurarAcesso(); render(); };
 function avisoJanela(precisa){
   if (!precisa || historicoCompleto) return '';
@@ -2379,7 +2564,7 @@ function avisoJanela(precisa){
   return `Mostrando dados a partir de ${desde}. <button class="link" onclick="carregarHistorico()">Carregar histórico completo</button>`;
 }
 function configurarAcesso(){
-  const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto : 'sem';
+  const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto + '|' + inicioJanela() : 'sem';
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
@@ -2463,7 +2648,7 @@ window.configurarGerente = async () => {
 $('cadModal').querySelector('.sheet-foot .btn').onclick = () => fecharCadastro();
 
 // ---------- Ações gerais ----------
-window.acaoPrincipal = () => (view === 'visitas' ? novaVisita() : view === 'cartas' ? novaCarta() : novaTarefa());
+window.acaoPrincipal = () => (view === 'visitas' ? novaVisita() : view === 'cartas' ? novaCarta() : view === 'vendas' ? editarReserva() : novaTarefa());
 function faixa(p){
   const h = hojeISO(), d = new Date();
   if (p === 'hoje') return [h, h];
@@ -2494,10 +2679,10 @@ function cardVisita(v, compacto){
   if (v.telefone) meta.push(`<span>📱 ${esc(v.telefone)}</span>`);
   const acoes = [];
   if (v.telefone && AGUARDA_CONF.concat('Confirmada').includes(v.status)) acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
-  if (v.status === 'Pendente' || v.status === 'Reagendada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">✓ Confirmada</button>`);
-  if (v.status === 'Confirmada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Realizada')">✓ Realizada</button>`);
+  if (v.status === 'Pendente' || v.status === 'Reagendada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">Confirmada</button>`);
+  if (v.status === 'Confirmada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Realizada')">Realizada</button>`);
   if (v.status === 'Realizada' && !cartas.some(c => c.visitaId === v.id)) acoes.push(`<button class="snooze" onclick="cartaDaVisita('${v.id}')">+ Carta aprovada</button>`);
-  if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">✗ Não veio</button>`);
+  if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">Não veio</button>`);
   if (!compacto) {
     acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitas.find(x=>x.id==='${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
     if (souSdr()) acoes.push(`<button class="icon-btn" onclick="avisarPeloWhats(visitas.find(x=>x.id==='${v.id}'))" title="Avisar o corretor pelo WhatsApp">📲</button>`);
@@ -2549,7 +2734,9 @@ function renderVisitasTudo(){
   $('cVisitas').textContent = vh.filter(v => v.status !== 'Cancelada').length;
   const pendentes = souGerente() ? perfisLista.filter(p => p.status === 'pendente') : [];
   $('cPend').textContent = pendentes.length; $('cPend').classList.toggle('hide', !pendentes.length);
-  $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : view === 'cartas' ? 'Nova carta' : 'Nova tarefa';
+  $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : view === 'cartas' ? 'Nova carta' : view === 'vendas' ? 'Nova reserva' : 'Nova tarefa';
+  // um botão principal por tela: na tela Hoje a agenda já tem o campo de adicionar
+  $('btnTopo').classList.toggle('hide', view === 'hoje' || (view === 'cartas' && perfil?.papel === 'sdr'));
   $('cCartas').textContent = cartas.filter(c => c.data && c.data >= faixa('mes')[0] && c.data <= faixa('mes')[1]).length;
   if (view === 'cartas') renderCartas();
   const ban = bannerAcesso();
@@ -2746,7 +2933,8 @@ window.salvarVisita = async () => {
     if (!vOrig) avisarCarteiro('visita', id, true); // visita nova: corretor (se foi outra pessoa), coordenador da equipe e gerentes
     else if (dados.corretorUid !== uidAtual && (vOrig.corretorUid !== dados.corretorUid || vOrig.date !== dados.date || vOrig.time !== dados.time)) avisarCarteiro('visita', id, false);
     syncPlanilha('visitas', id);
-    fechar('visModal'); toast(vEditId ? 'Visita atualizada' : 'Visita cadastrada');
+    fechar('visModal'); if (vEditId) toast('Visita atualizada'); else comemorar(ptsDe('vPendente'), 'Visita marcada', dados.corretorNome, 0);
+    if (vOrig && vOrig.status !== dados.status) { if (dados.status === 'Realizada') comemorar(ptsDe('vRealizada'), 'Visita realizada', dados.corretorNome); else if (dados.status === 'Confirmada') comemorar(ptsDe('vConfirmada'), 'Visita confirmada', dados.corretorNome, 0); }
     if (souSdr() && !vOrig) setTimeout(() => avisarPeloWhats({ ...dados, id }), 250);
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('vmSalvar').disabled = false;
@@ -2758,7 +2946,10 @@ window.mudarStatus = async (id, st, motivo) => {
   try {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
-    await gravar(b.commit()); syncPlanilha('visitas', id); toast('Visita marcada como ' + st.toLowerCase());
+    await gravar(b.commit()); syncPlanilha('visitas', id);
+    if (st === 'Realizada' && v.status !== 'Realizada') comemorar(ptsDe('vRealizada'), 'Visita realizada', v.corretorNome);
+    else if (st === 'Confirmada' && v.status !== 'Confirmada') comemorar(ptsDe('vConfirmada'), 'Visita confirmada', v.corretorNome, 0);
+    else toast('Visita marcada como ' + st.toLowerCase());
   } catch(e) { toast('Erro ao atualizar: ' + e.message); }
 };
 window.excluirVisita = async (id, doModal) => {
@@ -2791,7 +2982,7 @@ function renderConfirmar(){
       <div class="ci"><b>${esc(v.cliente)} <span class="vst ${stCls(v.status)}">${esc(v.status)}</span></b><span>🏠 ${esc(v.empreendimento)}${podeGerir() ? ' · 👤 ' + esc(v.corretorNome) : ''}${v.telefone ? ' · 📱 ' + esc(v.telefone) : ' · sem telefone'}</span></div>
       <div class="ca">
         ${v.telefone ? `<button class="snooze wa ${enviadosConf.has(v.id)?'enviado':''}" onclick="enviarConf('${v.id}')">${IC.wa}${enviadosConf.has(v.id)?'Enviado ✓':'WhatsApp'}</button>` : ''}
-        <button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">✓ Confirmada</button>
+        <button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">Confirmada</button>
         <button class="snooze" onclick="fechar('confModal');editarVisita('${v.id}')">Reagendar</button>
       </div></div>`).join('') : vazio('Tudo certo para amanhã 🎉', confirmadas ? 'Todas as visitas de amanhã já estão confirmadas.' : 'Não há visitas marcadas para amanhã.');
 }
@@ -2916,7 +3107,7 @@ window.abrirRelatorio = async uid => {
   const kpi = (n, t) => `<div class="kpi"><b>${n}</b><span>${t}</span></div>`;
   let gestao = '';
   if (souGerente() && uid !== uidAtual && (p.papel !== 'gerente' || souDono()) && !(instalacao && uid === instalacao.gerenteUid)) {
-    gestao = `<div class="rep-sec">Foto</div><div class="foto-box"><div class="foto-grande">${p.foto ? `<img src="${p.foto}" alt="">` : esc((p.nome||'?')[0].toUpperCase())}</div><div class="fb-acoes"><button class="btn btn-ghost" onclick="fotoDeOutro('${uid}')">📷 ${p.foto ? 'Trocar' : 'Adicionar'} foto</button>${p.foto ? `<button class="link" onclick="salvarFotoDe('${uid}','')">Remover foto</button>` : ''}</div></div>
+    gestao = `<div class="rep-sec">Foto</div><div class="foto-box"><div class="foto-grande">${p.foto ? `<img src="${p.foto}" alt="">` : esc((p.nome||'?')[0].toUpperCase())}</div><div class="fb-acoes"><button class="btn btn-ghost" onclick="fotoDeOutro('${uid}')">${p.foto ? 'Trocar' : 'Adicionar'} foto</button>${p.foto ? `<button class="link" onclick="salvarFotoDe('${uid}','')">Remover foto</button>` : ''}</div></div>
       <div class="rep-sec">Acesso</div>
       <div class="row2 fg"><div><label>Perfil</label><select id="gmPapel" ${p.papel === 'gerente' && !souDono() ? 'disabled' : ''}>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono() || p.papel === 'gerente').map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></div>
       <div><label>Equipe</label><select id="gmEquipe"><option value="">Sem equipe</option>${listaEquipes().map(e => `<option value="${e.id}" ${p.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select></div></div>
@@ -3084,7 +3275,7 @@ function cardCarta(c){
   }
   const acoes = [];
   if (c.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')" title="Abrir conversa">${IC.wa}WhatsApp</button>`);
-  if (c.status === 'Aprovada' || c.status === 'Em negociação') acoes.push(`<button class="snooze" onclick="mudarStatusCarta('${c.id}','Venda fechada')">🎉 Venda fechada</button>`);
+  if (c.status === 'Aprovada' || c.status === 'Em negociação') acoes.push(`<button class="snooze" onclick="mudarStatusCarta('${c.id}','Venda fechada')">Venda fechada</button>`);
   if (c.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('c','${c.id}')" title="Mensagens prontas">💬</button>`);
   acoes.push(`<button class="icon-btn del" onclick="excluirCarta('${c.id}')" title="Arquivar">🗄️</button>`);
   return `<div class="vcard" style="--vc:${cor}">
@@ -3136,8 +3327,9 @@ function renderCartas(){
   const nomes = new Map(); cartas.forEach(c => { if (!nomes.has(c.corretorUid)) nomes.set(c.corretorUid, c.corretorNome || 'Sem nome'); });
   planAprov.forEach(a => { if (a.corretorUid && !nomes.has(a.corretorUid)) nomes.set(a.corretorUid, a.corretorNome || a.aba || 'Sem nome'); });
   $('cCorretor').innerHTML = '<option value="">Todos os corretores</option>' + [...nomes].sort((a,b) => a[1].localeCompare(b[1],'pt-BR')).map(([k,n]) => `<option value="${esc(k)}" ${cFil.corretor===k?'selected':''}>${esc(n)}</option>`).join('');
-  $('cPeriodo').value = cFil.periodo;
-  const [de, ate] = cFil.periodo === 'todas' ? ['0000','9999'] : faixa(cFil.periodo), t = norm(cFil.busca);
+  preencherSel('cPeriodo', '<option value="mes">Aprovadas este mês</option><option value="semana">Esta semana</option><option value="todas">Todas</option>', cFil.periodo);
+  const faixaC = p => p === 'todas' ? ['0000','9999'] : p.startsWith('m:') ? faixaDoMes(p) : faixa(p);
+  const [de, ate] = faixaC(cFil.periodo), t = norm(cFil.busca);
   const lista = cartas.filter(c => {
     if (!c.data || c.data < de || c.data > ate) return false;
     if (cFil.status && c.status !== cFil.status) return false;
@@ -3163,7 +3355,7 @@ function renderCartas(){
   $('csVendas').textContent = lista.filter(c => c.status === 'Venda fechada').length;
   $('csVence').textContent = vencendo;
   $('csSdrBox').classList.toggle('hide', !podeGerir());
-  if (podeGerir()) { const [sd, sa] = cFil.periodo === 'todas' ? ['0000','9999'] : faixa(cFil.periodo), q = aprovSdr(sd, sa);
+  if (podeGerir()) { const [sd, sa] = cFil.periodo === 'todas' ? ['0000','9999'] : cFil.periodo.startsWith('m:') ? faixaDoMes(cFil.periodo) : faixa(cFil.periodo), q = aprovSdr(sd, sa);
     $('csSdr').textContent = q.dia; $('csSdrSub').textContent = 'Aprovações das SDRs (WhatsApp)' + (q.outro ? ` · ${q.outro} em outro CCA` : ''); }
   $('cartasLista').innerHTML = juntos.length ? juntos.map(x => x.h).join('') : vazio('Nenhuma aprovação nesse filtro', 'Cadastre uma carta aprovada pelo botão "Nova carta".');
 }
@@ -3228,10 +3420,16 @@ window.salvarCarta = async () => {
     const b = writeBatch(db);
     b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados));
     await gravar(b.commit());
-    if (dados.status === 'Venda fechada' && cOrig?.status !== 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); }
+    const virouVenda = dados.status === 'Venda fechada' && cOrig?.status !== 'Venda fechada';
+    const docsCompletou = docsOk(dados) === DOCS.length && (!cOrig || docsOk(cOrig) < DOCS.length);
+    if (virouVenda) avisarCarteiro('venda', id);
     if (!cEditId) avisarCarteiro('carta', id, true);
     syncPlanilha('cartas', id);
-    fechar('cartaModal'); toast(cEditId ? 'Carta atualizada' : 'Carta cadastrada 🎉');
+    fechar('cartaModal');
+    if (virouVenda) comemorar(ptsDe('venda'), 'Venda fechada!', dados.corretorNome, 2);
+    else if (!cEditId) comemorar(ptsDe('carta') + (docsCompletou ? ptsDe('docs') : 0), docsCompletou ? 'Carta aprovada com documentação completa' : 'Carta aprovada', dados.corretorNome, 1);
+    else if (docsCompletou) comemorar(ptsDe('docs'), 'Documentação completa', dados.corretorNome, 1);
+    else toast('Carta atualizada');
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('cmSalvar').disabled = false;
 };
@@ -3240,7 +3438,7 @@ window.mudarStatusCarta = async (id, st, motivo) => {
   if (PERDA_C.includes(st) && !motivo) { pedirMotivo('c', id, st); return; }
   const dados = { ...c, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_C.includes(st) ? motivo : '' }; delete dados.id;
   aplicarPosVenda(dados, c);
-  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); syncPlanilha('cartas', id); if (st === 'Venda fechada') { soltarConfete(); avisarCarteiro('venda', id); } toast(st === 'Venda fechada' ? 'Parabéns pela venda! 🎉' : 'Carta atualizada'); }
+  try { const b = writeBatch(db); b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados)); await gravar(b.commit()); syncPlanilha('cartas', id); if (st === 'Venda fechada' && c.status !== 'Venda fechada') { avisarCarteiro('venda', id); comemorar(ptsDe('venda'), 'Venda fechada!', c.corretorNome, 2); } else toast('Carta atualizada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirCarta = async (id, doModal) => {
@@ -3362,7 +3560,7 @@ function renderAtencao(){
   // pós-venda do próprio corretor
   cartas.filter(c => c.corretorUid === uidAtual && c.status === 'Venda fechada').forEach(c => (c.posVenda || []).filter(p => !p.feito && p.date <= h).forEach(p => itens.push({ ord:0,
     html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,#8b5cf6 14%,transparent)">🎁</div><div class="att"><b>${esc(p.texto)}</b><span>Pós-venda · ${esc(c.cliente)}</span></div>
-      <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="posVendaFeito('${c.id}','${p.id}')">✓ Feito</button></div></div>` })));
+      <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="posVendaFeito('${c.id}','${p.id}')">Feito</button></div></div>` })));
   // cartas vencendo (no escopo de quem vê)
   cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status) && validadeDe(c)).forEach(c => {
     const d = diffDias(validadeDe(c)); if (d > 7) return;
@@ -3476,7 +3674,7 @@ function renderPainelPapel(){
   $('statsPapel').innerHTML =
     statCard('house','var(--accent)','var(--accent-soft)', vh.length, 'Visitas hoje', `${conf} confirmada${conf!==1?'s':''}`, "setView('visitas')") +
     statCard('wa','#16a34a','color-mix(in srgb,#16a34a 12%,transparent)', paraConf, 'Confirmar amanhã', paraConf ? 'faltam confirmar' : 'tudo certo', "abrirConfirmar()") +
-    statCard('card','var(--ok)','var(--ok-soft)', aprovEq, 'Aprovações no mês', 'planilha + cartas, sem repetir', "setView('cartas')") +
+    statCard('card','var(--ok)','var(--ok-soft)', aprovEq, 'Aprovações no mês', 'planilha + cartas', "setView('cartas')") +
     (souGerente()
       ? statCard('users','var(--danger)','var(--danger-soft)', pend, 'Aguardando aprovação', pend ? 'clique para aprovar' : 'nenhum cadastro novo', "setView('corretores')")
       : statCard('star','#8b5cf6','color-mix(in srgb,#8b5cf6 14%,transparent)', vendas, 'Vendas no mês', '', "setView('cartas')"));
@@ -3485,12 +3683,12 @@ function renderPainelPapel(){
   const linhas = eqs.map(e => {
     const vHoje = visitas.filter(v => v.equipe === e.id && v.date === h && v.status !== 'Cancelada').length;
     const vMes = rankingDocs.filter(r => r.equipe === e.id && r.date >= mi && r.date <= mf && r.status !== 'Cancelada').length;
-    const cMes = cartas.filter(c => c.equipe === e.id && noMes(c)).length;
-    const vd = cartas.filter(c => c.equipe === e.id && vendaNoMes(c)).length;
+    const cMes = aprovMes.filter(x => x.equipe === e.id).length;
+    const vd = souGerente() ? vendasUnificadas(mi, mf).filter(v => v.equipe === e.id).length : cartas.filter(c => c.equipe === e.id && vendaNoMes(c)).length;
     return `<div class="eq-row"><span class="en">${esc(e.icone||'')} ${esc(e.nome)}</span><b>${vHoje}</b><b>${vMes}</b><b>${cMes}</b><b>${vd}</b></div>`;
   }).join('');
   const top = rankingMes(souCoord() ? perfil.equipe : '').slice(0,3);
-  $('painelEquipe').innerHTML = `<div class="eq-row head"><span>Equipe</span><span>Hoje</span><span>Visitas</span><span>Cartas</span><span>Vendas</span></div>${linhas}
+  $('painelEquipe').innerHTML = `<div class="eq-row head"><span>Equipe</span><span>Hoje</span><span>Visitas</span><span>Aprov.</span><span>Vendas</span></div>${linhas}
     <div class="rep-sec" style="margin-top:16px">Destaques do mês</div>
     <div class="top3">${top.length ? top.map((g,i) => `<div><span class="m">${MEDALHA(i)}</span><span class="n">${esc(g.nome)}</span><span class="v">${g.total} visita${g.total!==1?'s':''}</span></div>`).join('') : '<span class="muted" style="font-size:13px">Sem visitas no mês ainda.</span>'}</div>`;
 }
@@ -3546,11 +3744,23 @@ window.instalarApp = async () => {
   alert('Para instalar no Android:\n\n1. Toque nos três pontinhos (⋮) no canto de cima do Chrome\n2. Toque em "Instalar app" ou "Adicionar à tela inicial"\n3. Confirme em "Instalar"\n\nSe não aparecer, recarregue a página uma vez e tente de novo.');
 };
 
-function soltarConfete(){
+// comemoração quando alguém faz algo que dá ponto no ranking: "+X pontos" subindo e confete
+function comemorar(pts, rotulo, quem, forca = 1){
+  pts = Number(pts) || 0;
+  const el = document.createElement('div'); el.className = 'fr-pontos' + (forca > 1 ? ' grande' : '');
+  el.innerHTML = `${pts > 0 ? `<b>+${pts}</b><span>ponto${pts !== 1 ? 's' : ''}</span>` : '<b>✓</b>'}<em>${esc(rotulo)}${quem && quem !== perfil?.nome ? ' · ' + esc(primeiro(quem)) : ''}</em>`;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 2600);
+  if (forca >= 1) soltarConfete(forca > 1 ? 170 : 55);
+  try { navigator.vibrate?.(forca > 1 ? [30, 40, 30] : 25); } catch(e) {}
+}
+window.comemorar = comemorar;
+const ptsDe = k => Number(appCfg?.pontos?.[k]) || 0;
+function soltarConfete(qtd = 160){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cv = $('confete'), ctx = cv.getContext('2d');
   cv.width = innerWidth; cv.height = innerHeight; cv.classList.remove('hide');
-  const cores = ['#E65100','#FF6600','#022C45','#ffffff','#10b981','#f59e0b'];
-  const ps = Array.from({ length:160 }, () => ({ x:innerWidth/2 + (Math.random()-.5)*200, y:innerHeight*.35, vx:(Math.random()-.5)*16, vy:-Math.random()*14-4, r:Math.random()*6+4, c:cores[Math.floor(Math.random()*cores.length)], a:Math.random()*6, va:(Math.random()-.5)*.3 }));
+  const cores = ['#F5841F','#FFB26B','#1C5F8E','#2AAAE1','#ffffff'];
+  const ps = Array.from({ length:qtd }, () => ({ x:innerWidth/2 + (Math.random()-.5)*200, y:innerHeight*.35, vx:(Math.random()-.5)*16, vy:-Math.random()*14-4, r:Math.random()*6+4, c:cores[Math.floor(Math.random()*cores.length)], a:Math.random()*6, va:(Math.random()-.5)*.3 }));
   const ini = performance.now();
   (function passo(t){
     ctx.clearRect(0,0,cv.width,cv.height);
@@ -3933,7 +4143,7 @@ function renderRepetidos(){
     const ants = (r.anteriores || []).map(a => `${esc(a.corretorNome || 'Sem corretor')} em ${dataBR(a.data)} (${a.tipo === 'carta' ? 'carta' : 'visita'})`).join('<br>');
     const acoes = r.status === 'anulado' ? `<span class="muted">Pontos anulados</span><button class="snooze" onclick="resolverRepetido('${r.id}','aberto')">Desfazer</button>`
       : r.status === 'mantido' ? `<span class="muted">Pontos mantidos</span><button class="snooze" onclick="resolverRepetido('${r.id}','aberto')">Desfazer</button>`
-      : `<button class="snooze" onclick="resolverRepetido('${r.id}','anulado')">🚫 Anular pontos</button><button class="snooze" onclick="resolverRepetido('${r.id}','mantido')">✓ Manter</button>`;
+      : `<button class="snooze" onclick="resolverRepetido('${r.id}','anulado')">Anular pontos</button><button class="snooze" onclick="resolverRepetido('${r.id}','mantido')">Manter</button>`;
     return `<div class="rep-item"><div class="ri"><b>${esc(r.cliente || 'Cliente')} <span class="muted" style="font-weight:500;font-size:12.5px">${r.telefone ? '📱 ' + esc(r.telefone) : ''}${r.cpf ? ' · 🪪 ' + esc(cpfOculto(r.cpf)) : ''}</span></b>
       Cadastrado por <b style="display:inline;font-size:13.5px">${esc(r.corretorNome || '')}</b> em ${dataBR(r.data)} (${r.tipo === 'carta' ? 'carta' : 'visita'})<br><span class="muted">Antes: ${ants}</span></div><div class="ra">${acoes}</div></div>`;
   };
@@ -4306,7 +4516,7 @@ function itensEtapa2(){
     if (agora < base + prazo * 864e5) return;
     const baixa = /BAIXA/.test(a.status);
     itens.push({ ord:0, html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,#f59e0b 16%,transparent)">🔁</div><div class="att"><b>Repescagem: ${esc(nomeBonito(a.nome))}</b><span>${baixa ? 'Restrição fácil de pagar: oriente o cliente a quitar e reenviar a documentação' : `${esc(a.status)} desde ${new Date(a.statusEm).toLocaleDateString('pt-BR')} · vale falar de novo`}</span></div>
-      <div class="ata">${a.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="repescado('${a.id}')">✓ Falei</button></div></div>` });
+      <div class="ata">${a.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="repescado('${a.id}')">Falei</button></div></div>` });
   });
   const limite = agora - 45 * 864e5;
   avaliacoes.filter(a => infoStatus(a.status).g === 'aprovado' && (a.statusEm || 0) >= limite && (a.corretorUid === uidAtual || souGerente()) && !cartaDoCliente(a)).forEach(a => {
@@ -4742,12 +4952,12 @@ function aprovSdr(de, ate){
 let reservas = [], reservasTodas = [];
 window.vFil = { busca:'', periodo:'mes', equipe:'', caidas:false };
 window.vSet = (k, v) => { vFil[k] = v; if (k === 'busca') { clearTimeout(window._vT); window._vT = setTimeout(render, 250); } else render(); };
-function faixaVend(p){ return p === 'todas' ? ['0000-01-01','9999-12-31'] : p === 'passado' ? faixaMesRel(1) : faixa(p === 'semana' ? 'semana' : 'mes'); }
+function faixaVend(p){ if (p && p.startsWith('m:')) return faixaDoMes(p); return p === 'todas' ? ['0000-01-01','9999-12-31'] : p === 'passado' ? faixaMesRel(1) : faixa(p === 'semana' ? 'semana' : 'mes'); }
 function renderVendas(){
   if (view !== 'vendas' || !souGerente()) return;
   const [de, ate] = faixaVend(vFil.periodo), t = norm(vFil.busca), dig = soDig(vFil.busca);
   const eqF = vFil.equipe;
-  $('vPeriodo').value = vFil.periodo;
+  preencherSel('vendPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option>', vFil.periodo);
   $('vEquipe').classList.toggle('hide', !souGerente());
   $('vEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${vFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   const comCor = reservasTodas.map(r => ({ ...r, cor:corretoresDaReserva(r.corretorTexto) }));
@@ -4765,7 +4975,7 @@ function renderVendas(){
         <div class="v-meta">${r.valor ? `<span style="color:var(--text);font-weight:700">💰 ${brl(r.valor)}</span>` : ''}<span>👤 ${esc(r.cor.map(c => c.nome).join(' / ') || r.corretorTexto || '—')}</span>${r.empreendimento ? `<span>🏠 ${esc(r.empreendimento)}</span>` : ''}${r.construtora ? `<span>🏗️ ${esc(r.construtora)}</span>` : ''}${r.previsao ? `<span>✍️ ${esc(r.previsao)}</span>` : ''}${r.cpf ? `<span>🪪 ${cpfOculto(r.cpf)}</span>` : ''}</div>
         ${r.caiu && r.motivoCaiu ? `<div class="v-obs">✖ ${esc(r.motivoCaiu)}</div>` : r.obs ? `<div class="v-obs">📝 ${esc(r.obs)}</div>` : ''}
       </div>
-      <div class="v-actions">${r.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(r.telefone)}')">${IC.wa}WhatsApp</button>` : ''}${g ? (r.caiu ? `<button class="snooze" onclick="restaurarReserva('${r.id}')">↩ Voltar a contar</button>` : `<button class="snooze" onclick="editarReserva('${r.id}')">✏️ Editar</button>`) : ''}</div>
+      <div class="v-actions">${r.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(r.telefone)}')">${IC.wa}WhatsApp</button>` : ''}${g ? (r.caiu ? `<button class="snooze" onclick="restaurarReserva('${r.id}')">↩ Voltar a contar</button>` : `<button class="snooze" onclick="editarReserva('${r.id}')">Editar</button>`) : ''}</div>
     </div>`).join('') : vazio(vFil.caidas ? 'Nenhuma venda caiu nesse período' : 'Nenhuma venda nesse período', 'Mude o período ou cadastre pelo botão "Nova reserva".'));
 }
 let rvId = null;
@@ -4851,32 +5061,34 @@ function variacao(a, b){
 }
 function renderPainel(){
   if (!souDirecao()) { $('painelConteudo').innerHTML = ''; return; }
-  const atual = painelMes === 'atual', hoje = new Date();
-  const [de, fimMes] = faixaMesRel(atual ? 0 : 1);
+  if (painelMes === 'atual') painelMes = mesAtual(); else if (painelMes === 'passado') painelMes = mesAnterior(1);
+  const mesSel = painelMes, atual = mesSel === mesAtual(), hoje = new Date();
+  const de = mesSel + '-01', fimMes = fimDoMes(mesSel);
   const ate = atual ? hojeISO() : fimMes;
   // mesmo período no mês anterior (para comparar de forma justa)
-  const [dePrev, fimPrev] = faixaMesRel(atual ? 1 : 2);
+  const mPrev = (() => { const [a, mm] = mesSel.split('-').map(Number); return mm === 1 ? `${a-1}-12` : `${a}-${String(mm-1).padStart(2,'0')}`; })();
+  const dePrev = mPrev + '-01', fimPrev = fimDoMes(mPrev);
   const diaCorte = atual ? hoje.getDate() : 31;
   const atePrev = somaDias(dePrev, Math.min(diaCorte, Number(fimPrev.slice(8,10))) - 1);
   const A = numerosPeriodo(de, ate), B = numerosPeriodo(dePrev, atePrev);
   const media = (l, d) => d ? Math.round(l / d * 100) / 100 : null;
   const mA = media(A.leads, A.docs), mB = media(B.leads, B.docs);
   const corM = m => m === null ? '' : m <= 5 ? 'var(--ok)' : m <= 10 ? '#ca8a04' : 'var(--danger)';
-  $('painelSeg').innerHTML = [['atual','Este mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${painelMes===k?'on':''}" onclick="painelMes='${k}';render()">${n}</button>`).join('');
+  $('painelSeg').innerHTML = `<select class="sel-mes" onchange="painelMes=this.value;garantirHistorico(this.value);render()">${opcoesMeses(mesSel)}</select>`;
   $('painelSub').textContent = `${nomeMes(de.slice(0,7))}${atual ? ' · até hoje' : ''} · comparado com o mesmo período de ${nomeMes(dePrev.slice(0,7)).toLowerCase()}`;
-  const kpi = (ic, rot, v, vb, extra) => `<div class="pd-kpi"><span>${ic} ${rot}</span><b>${v}</b>${variacao(typeof v === 'number' ? v : 0, vb)}${extra ? `<em>${extra}</em>` : ''}</div>`;
+  const kpi = (ic, rot, v, vb, extra) => `<div class="pd-kpi"><span>${rot}</span><b>${v}</b>${variacao(typeof v === 'number' ? v : 0, vb)}${extra ? `<em>${extra}</em>` : ''}</div>`;
   let html = `<div class="pd-kpis">
     ${kpi('📥','Leads', A.leads, B.leads, 'do CRM')}
     ${kpi('🗂️','Docs', A.docs, B.docs, 'planilha de avaliações')}
-    <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
+    <div class="pd-kpi"><span>Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
     ${kpi('🔷','Condicionados', A.cond, B.cond)}
     ${kpi('✅','Aprovações', A.unif.length, B.unif.length, `planilha + cartas do app, sem repetir cliente${A.semCarta ? ` · ${A.semCarta} ainda sem carta no app` : ''}`)}
     ${kpi('🎧','Aprovações das SDRs', A.sdr.dia, B.sdr.dia, `do resumo do WhatsApp${A.sdr.outro ? ` · ${A.sdr.outro} em outro CCA` : ''} · não soma no total`)}
     ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, 'planilha de avaliações')}
     ${kpi('🎉','Vendas', A.vendas, B.vendas, `reservas + cartas vendidas${A.valorVendido ? ' · ' + brl(A.valorVendido) : ''}`)}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
-    <div class="pd-kpi"><span>⭐ Nota do atendimento</span><b>${(() => { const l = pesquisas.filter(p => p.respondida && typeof p.nota === 'number' && iso(new Date(p.respondidaEm || 0)) >= de && iso(new Date(p.respondidaEm || 0)) <= ate); return l.length ? mediaNotas(l).toLocaleString('pt-BR') : '–'; })()}</b><em>média das pesquisas após a visita</em></div>
-    <div class="pd-kpi"><span>📍 Plantão</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
+    <div class="pd-kpi"><span>Nota do atendimento</span><b>${(() => { const l = pesquisas.filter(p => p.respondida && typeof p.nota === 'number' && iso(new Date(p.respondidaEm || 0)) >= de && iso(new Date(p.respondidaEm || 0)) <= ate); return l.length ? mediaNotas(l).toLocaleString('pt-BR') : '–'; })()}</b><em>média das pesquisas após a visita</em></div>
+    <div class="pd-kpi"><span>Plantão</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
   </div>`;
   // equipes
   const eqs = listaEquipes().map(e => {
@@ -4885,17 +5097,17 @@ function renderPainel(){
       aprov:A.cs.filter(c => c.equipe === e.id).length, aprovPlan:A.unif.filter(x => x.equipe === e.id).length, vendas:A.vendasL.filter(v => v.equipe === e.id).length, pts };
   });
   const lider = eqs.slice().sort((a,b) => b.vendas - a.vendas || b.aprov - a.aprov || b.docs - a.docs)[0];
-  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>🏁 Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Aprovações</th><th class="hide-m">Cartas no app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
+  html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>Equipes</h2></div><table class="rank"><thead><tr><th>Equipe</th><th>Leads</th><th>Docs</th><th class="hide-m">Média</th><th>Aprovações</th><th class="hide-m">Cartas no app</th><th>Vendas</th><th class="hide-m">Pontos</th></tr></thead><tbody>${
     eqs.map(x => { const m = media(x.leads, x.docs); return `<tr class="${lider && x === lider && (x.vendas || x.aprov) ? 'me' : ''}"><td><span class="nm">${esc(x.e.icone || '')} ${esc(x.e.nome)}</span></td><td class="tot">${x.leads}</td><td>${x.docs}</td><td class="hide-m" style="color:${corM(m)};font-weight:700">${m === null ? '–' : m.toLocaleString('pt-BR')}</td><td>${x.aprovPlan}</td><td class="hide-m">${x.aprov}</td><td>${x.vendas}</td><td class="hide-m">${x.pts}</td></tr>`; }).join('')
   }</tbody></table></div>`;
   // destaques
   const top = pontosDoMes(de.slice(0,7)).slice(0, 5);
-  html += `<div class="card"><div class="card-head"><h2>🏆 Destaques do mês</h2><span class="muted">por pontos</span></div>${top.length ? top.map((x,i) => `<div class="pt-row"><span>${MEDALHA(i)} ${esc(x.nome)} <small class="muted">${esc(eqNome(x.equipe))}</small></span><b>${x.pontos} pts · ${x.vendas} venda${x.vendas!==1?'s':''}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Sem pontos no período. Defina a pontuação em Configurações.</div>'}</div></div>`;
+  html += `<div class="card"><div class="card-head"><h2>Destaques do mês</h2><span class="muted">por pontos</span></div>${top.length ? top.map((x,i) => `<div class="pt-row"><span>${MEDALHA(i)} ${esc(x.nome)} <small class="muted">${esc(eqNome(x.equipe))}</small></span><b>${x.pontos} pts · ${x.vendas} venda${x.vendas!==1?'s':''}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Sem pontos no período. Defina a pontuação em Configurações.</div>'}</div></div>`;
   // ao vivo + notas
-  if (atual) html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>📥 Leads por dia <span class="ao-vivo">ao vivo</span></h2><button class="link" onclick="setView('corretores')">📍 Plantão</button></div>${htmlLeadsHoje()}</div>
-    <div class="card"><div class="card-head"><h2>⭐ Nota do atendimento</h2><span class="muted">pesquisa após a visita</span></div>${htmlNotas(de, ate)}</div></div>`;
-  else html += `<div class="card"><div class="card-head"><h2>⭐ Nota do atendimento</h2></div>${htmlNotas(de, ate)}</div>`;
-  html += `<div class="card" style="margin-bottom:20px"><div class="card-head"><h2>📞 SDRs</h2><span class="muted">visitas marcadas e resumo do dia</span></div>${tabelaSdr(de, ate)}</div>`;
+  if (atual) html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>Leads por dia <span class="ao-vivo">ao vivo</span></h2><button class="link" onclick="setView('corretores')">Plantão</button></div>${htmlLeadsHoje()}</div>
+    <div class="card"><div class="card-head"><h2>Nota do atendimento</h2><span class="muted">pesquisa após a visita</span></div>${htmlNotas(de, ate)}</div></div>`;
+  else html += `<div class="card"><div class="card-head"><h2>Nota do atendimento</h2></div>${htmlNotas(de, ate)}</div>`;
+  html += `<div class="card" style="margin-bottom:20px"><div class="card-head"><h2>SDRs</h2><span class="muted">visitas marcadas e resumo do dia</span></div>${tabelaSdr(de, ate)}</div>`;
   $('painelConteudo').innerHTML = html;
 }
 window.telaCheiaPainel = () => {
@@ -4912,6 +5124,7 @@ function faixaDes(p){
   if (p === 'semana') return faixa('semana');
   if (p === 'mes') return faixa('mes');
   if (p === 'passado') return faixaMesRel(1);
+  if (p && p.startsWith('m:')) return faixaDoMes(p);
   return faixa('semana');
 }
 // números por corretor num período (usado no Desempenho e na apresentação da reunião)
@@ -4947,7 +5160,8 @@ function renderDesempenho(){
   if (!podeGerir()) { $('desConteudo').innerHTML = ''; return; }
   const [de, ate0] = faixaDes(desPer), h = hojeISO(), ate = ate0 > h ? h : ate0;
   const eqFiltro = souGerente() ? desEq : (perfil.equipe || '-');
-  $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desSet('per','${k}')">${n}</button>`).join('');
+  $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desSet('per','${k}')">${n}</button>`).join('')
+    + `<select class="sel-mes ${desPer.startsWith('m:')?'on':''}" onchange="garantirHistorico(this.value.slice(2));desSet('per',this.value)"><option value="" disabled ${desPer.startsWith('m:')?'':'selected'}>Outro mês</option>${optsMesesP(desPer)}</select>`;
   $('desSub').textContent = (de === ate ? dataBR(de) : `${dataBR(de)} a ${dataBR(ate)}`) + (ate === h ? ' · atualiza sozinho' : '') + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
   const { linhas, vendasP } = calcDesempenho(de, ate);
   const media = r => r.docs ? Math.round(r.leads / r.docs * 100) / 100 : null;
@@ -4964,11 +5178,11 @@ function renderDesempenho(){
   const semLiga = lista.filter(r => !r.ligado && (r.leads || r.docs || r.aprov)).length;
   $('desConteudo').innerHTML = `
     <div class="pd-kpis">
-      <div class="pd-kpi"><span>📥 Leads</span><b>${tot.leads}</b><em>ficaram com o corretor no fim do dia${ate === h ? ' · hoje ao vivo' : ''}</em></div>
-      <div class="pd-kpi"><span>🗂️ Docs</span><b>${tot.docs}</b><em>planilha de avaliações</em></div>
-      <div class="pd-kpi"><span>⚖️ Média lead/doc</span><b style="color:${corM(tot)}">${fmtM(tot)}</b><em>quanto menor, melhor</em></div>
-      <div class="pd-kpi"><span>✅ Aprovações</span><b>${tot.aprov}</b><em>planilha + cartas do app, sem repetir</em></div>
-      ${souGerente() ? '' : '<!--'}<div class="pd-kpi"><span>🎉 Vendas</span><b>${tot.vendas}</b><em>reservas + cartas vendidas${(() => { const v = vendasP.reduce((a,x) => a + x.valor, 0); return v ? ' · ' + brl(v) : ''; })()}</em></div>${souGerente() ? '' : '-->'}
+      <div class="pd-kpi"><span>Leads</span><b>${tot.leads}</b><em>ficaram com o corretor no fim do dia${ate === h ? ' · hoje ao vivo' : ''}</em></div>
+      <div class="pd-kpi"><span>Docs</span><b>${tot.docs}</b><em>planilha de avaliações</em></div>
+      <div class="pd-kpi"><span>Média lead/doc</span><b style="color:${corM(tot)}">${fmtM(tot)}</b><em>quanto menor, melhor</em></div>
+      <div class="pd-kpi"><span>Aprovações</span><b>${tot.aprov}</b><em>planilha + cartas do app, sem repetir</em></div>
+      ${souGerente() ? '' : '<!--'}<div class="pd-kpi"><span>Vendas</span><b>${tot.vendas}</b><em>reservas + cartas vendidas${(() => { const v = vendasP.reduce((a,x) => a + x.valor, 0); return v ? ' · ' + brl(v) : ''; })()}</em></div>${souGerente() ? '' : '-->'}
     </div>
     <div class="card">
       <div class="tb-grid" style="margin-bottom:10px">
@@ -4988,11 +5202,12 @@ window.renderDesempenho = renderDesempenho;
 // ---------- aba Apresentação ----------
 function renderApEscolha(){
   if (view !== 'apresentacao' || !souGerente()) return;
-  const op = (q, ic, t, d) => { const P = periodoReuniao(q); return `<button class="ap-op" onclick="abrirApresentacao('${q}')"><span class="ic">${ic}</span><b>${t}</b><span>${P.rotulo}${P.atual ? ' · até hoje' : ''}</span><span>${d}</span><em>▶ Gerar apresentação</em></button>`; };
+  const op = (q, ic, t, d) => { const P = periodoReuniao(q); return `<button class="ap-op" onclick="abrirApresentacao('${q}')"><b>${t}</b><span>${P.rotulo}${P.atual ? ' · até hoje' : ''}</span><span>${d}</span><em>▶ Gerar apresentação</em></button>`; };
   const cedo = new Date().getDate() <= 5;
   $('apEscolha').innerHTML = (cedo ? op('mes_passado','🗓️','Mensal · mês passado','Fechamento do mês para a reunião.') + op('mes_atual','📆','Mensal · este mês','Parcial, até hoje.')
       : op('mes_atual','📆','Mensal · este mês','Para a reunião de fim de mês (até hoje).') + op('mes_passado','🗓️','Mensal · mês passado','O mês anterior fechado.'))
-    + op('sem_passada','📅','Semanal · semana passada','Segunda a domingo da semana anterior.') + op('sem_atual','⏱️','Semanal · esta semana','Parcial, até hoje.');
+    + op('sem_passada','📅','Semanal · semana passada','Segunda a domingo da semana anterior.') + op('sem_atual','⏱️','Semanal · esta semana','Parcial, até hoje.')
+    + `<div class="ap-op ap-outro"><b>Mensal · outro mês</b><span>Qualquer mês já registrado.</span><select class="sel-mes" onchange="if(this.value){garantirHistorico(this.value.slice(4));setTimeout(()=>abrirApresentacao(this.value),600)}"><option value="">Escolher mês…</option>${optsMesesP('', 'mes:')}</select></div>`;
 }
 
 // ---------- aba Assistente (Claude pelo carteiro) ----------
@@ -5024,7 +5239,7 @@ function renderAssistente(){
   if ($('assMsgs').dataset.n === String(assHist.length) && $('assMsgs').dataset.p === String(!!window._assPensando)) return;
   $('assMsgs').dataset.n = assHist.length; $('assMsgs').dataset.p = !!window._assPensando;
   $('assMsgs').innerHTML = (assHist.length ? '' : `<div class="ass-m ele"><p>Oi! Sou o assistente da Frade. Posso analisar os números do mês e da semana, comparar equipes e corretores, apontar quem precisa de atenção e escrever mensagens para a equipe. O que você quer saber?</p></div>`)
-    + assHist.map((m, i) => m.role === 'user' ? `<div class="ass-m eu">${esc(m.content)}</div>` : `<div class="ass-m ele">${mdSimples(m.content)}<button class="link copiar" onclick="assCopiar(${i})">📋 Copiar</button></div>`).join('')
+    + assHist.map((m, i) => m.role === 'user' ? `<div class="ass-m eu">${esc(m.content)}</div>` : `<div class="ass-m ele">${mdSimples(m.content)}<button class="link copiar" onclick="assCopiar(${i})">Copiar</button></div>`).join('')
     + (window._assPensando ? '<div class="ass-m ele"><p class="muted">Pensando…</p></div>' : '');
   $('assSug').innerHTML = assHist.length ? '' : ASS_SUG.map(t => `<button onclick="assEnviar(${JSON.stringify(t).replace(/"/g, '&quot;')})">${esc(t)}</button>`).join('');
   $('assMsgs').scrollTop = $('assMsgs').scrollHeight;
@@ -5049,14 +5264,17 @@ const AP_AZ = '#022C45', AP_LJ = '#E65100';
 // períodos da apresentação: mes_atual, mes_passado, sem_atual, sem_passada
 function periodoReuniao(qual){
   if (qual === 'atual') qual = 'mes_atual'; if (qual === 'passado') qual = 'mes_passado';
+  if (qual.startsWith('mes:')) { const m = qual.slice(4); qual = m === mesAtual() ? 'mes_atual' : m === mesAnterior(1) ? 'mes_passado' : qual; }
   const h = hojeISO(), hoje = new Date(), semana = qual.startsWith('sem'), atual = qual.endsWith('atual');
   let de, ate, dePrev, atePrev;
   if (semana) {
     const [s0] = faixa('semana'); de = atual ? s0 : somaDias(s0, -7); ate = atual ? h : somaDias(de, 6);
     dePrev = somaDias(de, -7); atePrev = somaDias(ate, -7);
   } else {
-    const [m0, fimMes] = faixaMesRel(atual ? 0 : 1); de = m0; ate = atual ? h : fimMes;
-    const [p0, fimPrev] = faixaMesRel(atual ? 1 : 2); dePrev = p0;
+    const mEsc = qual.startsWith('mes:') ? qual.slice(4) : atual ? mesAtual() : mesAnterior(1);
+    const mPv = (() => { const [a, mm] = mEsc.split('-').map(Number); return mm === 1 ? `${a-1}-12` : `${a}-${String(mm-1).padStart(2,'0')}`; })();
+    const m0 = mEsc + '-01', fimMes = fimDoMes(mEsc); de = m0; ate = atual ? h : fimMes;
+    const p0 = mPv + '-01', fimPrev = fimDoMes(mPv); dePrev = p0;
     atePrev = atual ? somaDias(p0, Math.min(hoje.getDate(), Number(fimPrev.slice(8,10))) - 1) : fimPrev;
   }
   const dm = d => d.slice(8,10) + '/' + d.slice(5,7);
@@ -5171,11 +5389,11 @@ window.abrirApresentacao = (qual) => {
   if (!souGerente()) return;
   apMes = qual === 'atual' ? 'mes_atual' : qual === 'passado' ? 'mes_passado' : (qual || apMes);
   apDados = dadosReuniao(apMes); apSlides = montarSlides(apDados); apIdx = 0;
-  $('apMesSel').value = apMes;
-  $('apresent').classList.add('open'); document.body.style.overflow = 'hidden';
+  preencherSel('apMesSel', '<option value="mes_passado">Mês passado</option><option value="mes_atual">Este mês (até hoje)</option><option value="sem_passada">Semana passada</option><option value="sem_atual">Esta semana (até hoje)</option>', apMes, 'mes:');
+  $('apresent').classList.add('open'); document.body.style.overflow = 'hidden'; window.lenis?.stop();
   apDesenhar();
 };
-window.fecharApresentacao = () => { $('apresent').classList.remove('open'); document.body.style.overflow = ''; if (document.fullscreenElement) document.exitFullscreen?.(); };
+window.fecharApresentacao = () => { $('apresent').classList.remove('open'); document.body.style.overflow = ''; window.lenis?.start(); if (document.fullscreenElement) document.exitFullscreen?.(); };
 window.apIr = d => { apIdx = Math.max(0, Math.min(apSlides.length - 1, apIdx + d)); apDesenhar(); };
 window.apTelaCheia = () => { const el = $('apresent'); if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el); else document.exitFullscreen?.(); setTimeout(apEscala, 300); };
 window.addEventListener('resize', () => { if ($('apresent')?.classList.contains('open')) apEscala(); });
@@ -5336,7 +5554,7 @@ window.avisarPeloWhats = v => {
         <div><label>WhatsApp de quem vai atender</label><input id="sdrFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
       <div id="sdrLivreWrap" class="${atual==='__livre'?'':'hide'}"><label>Nome de quem vai atender</label><input id="sdrLivre" value="${esc(atual==='__livre' ? v.corretorNome : '')}" oninput="sdrAtualizaTexto()"></div>
       <div class="msg-item" style="margin:0"><b>📲 Mensagem</b><textarea id="sdrTxt" class="msg-txt" style="min-height:150px"></textarea>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="snooze wa" onclick="enviarSdrMsg()">${IC.wa}Enviar no WhatsApp</button><button class="snooze" onclick="copiarSdrMsg()">📋 Copiar</button></div></div></div>`;
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="snooze wa" onclick="enviarSdrMsg()">${IC.wa}Enviar no WhatsApp</button><button class="snooze" onclick="copiarSdrMsg()">Copiar</button></div></div></div>`;
   sdrMudouQuem(true);
   abrir('msgModal');
 };
@@ -5566,10 +5784,32 @@ function renderSdrHoje(){
   const ontem = somaDias(hojeISO(), -1), feito = sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem);
   const pos = rankingSdr(mi, mf).findIndex(x => x.uid === uidAtual);
   $('sdrHoje').innerHTML = `<div class="p-stats" style="background:var(--bg);border-color:var(--border);color:var(--text)"><div><b>${eu.visitas}</b><span>visitas no mês</span></div><div><b>${eu.realizadas}</b><span>realizadas</span></div><div><b>${eu.pontos}</b><span>pontos${pos >= 0 ? ' · ' + (pos + 1) + 'º' : ''}</span></div></div>
-    <div class="row2" style="margin-top:12px"><button class="btn btn-primary" onclick="novaVisita()">+ Marcar visita</button><button class="btn btn-ghost" onclick="abrirResumoSdr()">📝 Resumo do dia${feito ? ' ✓' : ''}</button></div>
+    <div class="row2" style="margin-top:12px"><button class="btn btn-primary" onclick="novaVisita()">+ Marcar visita</button><button class="btn btn-ghost" onclick="abrirResumoSdr()">Resumo do dia${feito ? ' ✓' : ''}</button></div>
     ${feito ? '' : `<div class="hint" style="margin-top:8px">Você ainda não mandou o resumo de ontem (${dataBR(ontem)}).</div>`}`;
 }
 
+</script>
+
+<!-- Lenis: rolagem suave no computador (no celular fica a rolagem nativa). Se não carregar, o app rola normal. -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script>
+window.addEventListener('load', function(){
+  if (!window.Lenis || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var dentro = '.sidebar,.sheet-body,.sheet,.modal,.busca-res,.ass-msgs,#apresent,.tabela-wrap,.table-wrap,select,textarea,[data-lenis-prevent]';
+  var lenis = new Lenis({
+    lerp: 0.12, wheelMultiplier: 1, smoothWheel: true, syncTouch: false, autoRaf: true, anchors: true,
+    // áreas que rolam por dentro (menu, janelas, chat, listas) continuam com a rolagem delas
+    prevent: function(n){ return n && n.closest ? !!n.closest(dentro) : false; }
+  });
+  window.lenis = lenis;
+  // quando abre uma janela (modal), a página de trás para de rolar
+  new MutationObserver(function(){
+    var aberto = document.querySelector('.modal.open, #apresent.open');
+    if (aberto) lenis.stop(); else lenis.start();
+  }).observe(document.body, { subtree:true, attributes:true, attributeFilter:['class'] });
+  // conteúdo muda de altura o tempo todo (render): avisa o Lenis
+  new ResizeObserver(function(){ lenis.resize(); }).observe(document.body);
+});
 </script>
 </body>
 </html>
