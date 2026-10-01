@@ -1343,7 +1343,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
           <div id="paneRanking" class="hide">
             <div class="toolbar">
               <div class="seg" id="segRank"></div>
-              <select id="rPeriodo" onchange="rankPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option></select>
+              <select id="rPeriodo" onchange="if(this.value.startsWith('m:'))garantirHistorico(this.value.slice(2));rankPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option></select>
               <select id="rEquipe" onchange="rankEquipe=this.value;render()"></select>
             </div>
             <div class="janela" id="janelaRank"></div>
@@ -2869,7 +2869,7 @@ function iniciarVisitas(user){
   }, e => console.error(e)));
 }
 // início do ranking para quem não é gerente: o que vier primeiro entre o dia 1º do mês e a segunda-feira desta semana
-function inicioRankingEquipe(){ const m = mesAtual() + '-01', sem = faixa('semana')[0]; return sem < m ? sem : m; }
+function inicioRankingEquipe(){ const m = mesAnterior(1) + '-01', j = janelaDesde ? janelaDesde + '-01' : m; return j < m ? j : m; }
 let janelaDesde = null; // mês mais antigo pedido no seletor: carrega só dali pra frente (economiza leituras, mantém grátis)
 function inicioJanela(){ if (historicoCompleto) return '2000-01-01'; if (janelaDesde) return janelaDesde + '-01'; const d = new Date(); d.setMonth(d.getMonth() - MESES_JANELA); d.setDate(1); return iso(d); }
 // ---------- seletor de mês: todos os meses desde o começo dos dados (nada é apagado) ----------
@@ -2883,7 +2883,8 @@ const fimDoMes = m => { const [a, mm] = m.split('-').map(Number); return iso(new
 // se o mês escolhido é mais antigo que os últimos meses carregados, traz o histórico completo sozinho
 function garantirHistorico(m){
   if (historicoCompleto || !m) return;
-  if (m < inicioJanela().slice(0,7)) { janelaDesde = m; toast('Carregando ' + nomeMes(m) + '…'); configurarAcesso(); render(); }
+  const lim = (souGerente() ? inicioJanela() : (inicioRankingEquipe() < inicioJanela() ? inicioRankingEquipe() : inicioJanela())).slice(0,7);
+  if (m < lim) { janelaDesde = m; toast('Carregando ' + nomeMes(m) + '…'); configurarAcesso(); render(); }
 }
 window.garantirHistorico = garantirHistorico;
 const faixaDoMes = p => { const m = p.slice(2); return [m + '-01', m === mesAtual() ? hojeISO() : fimDoMes(m)]; };
@@ -2992,6 +2993,9 @@ function faixa(p){
   if (p === 'anteriores') return ['0000-01-01', somaDias(h, -1)];
   return ['0000-01-01', '9999-12-31'];
 }
+// período do ranking: os de sempre + mês passado + qualquer mês
+const faixaRank = p => p === 'todas' ? ['0000-01-01','9999-12-31'] : p === 'passado' ? faixaMesRel(1) : (p && p.startsWith('m:')) ? faixaDoMes(p) : faixa(p);
+const rotRank = p => p === 'passado' ? 'do mês passado' : (p && p.startsWith('m:')) ? 'de ' + nomeMes(p.slice(2)).toLowerCase() : (ROT_PERIODO[p] || '');
 const ROT_PERIODO = { mes:'deste mês', semana:'desta semana', proximas:'de hoje em diante', todas:'de todo o período' };
 const AGUARDA_CONF = ['Pendente','Reagendada'];
 function minhasVisitasCal(){ return souAtivo() ? visitas.filter(v => v.corretorUid === uidAtual) : []; }
@@ -3164,7 +3168,7 @@ function agrupaRanking(rows){
   return [...g.values()].sort((a,b) => b.total-a.total || b.real-a.real || b.conf-a.conf || a.nome.localeCompare(b.nome,'pt-BR'));
 }
 function renderRanking(){
-  $('rPeriodo').value = rankPeriodo;
+  preencherSel('rPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option>', rankPeriodo);
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
@@ -3173,14 +3177,14 @@ function renderRanking(){
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
   if (rankTipo === 'vgv') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'VGV = soma do valor das vendas (reservas) pela data da reserva. Venda em parceria divide o valor entre os corretores. Vendas que caíram não entram.'; renderRankingVgv(); return; }
   $('janelaRank').innerHTML = avisoJanela(rankPeriodo === 'todas');
-  const [de, ate] = faixa(rankPeriodo);
+  const [de, ate] = faixaRank(rankPeriodo);
   const base = rankingDocs.filter(r => r.date && r.date >= de && r.date <= ate && r.status !== 'Cancelada');
   // disputa entre equipes
   const eqs = listaEquipes().map(e => ({ e, n: base.filter(r => r.equipe === e.id).length, real: base.filter(r => r.equipe === e.id && r.status === 'Realizada').length }));
   const max = Math.max(0, ...eqs.map(x => x.n));
   $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>visitas · ${x.real} realizada${x.real!==1?'s':''}${x.n && x.n===max?' · 🏆 liderando':''}</span></div>`).join('');
   const lista = agrupaRanking(base.filter(r => !rankEquipe || r.equipe === rankEquipe));
-  $('rankTit').textContent = 'Ranking de corretores ' + ROT_PERIODO[rankPeriodo];
+  $('rankTit').textContent = 'Ranking de corretores ' + rotRank(rankPeriodo);
   if (!lista.length) { $('rankLista').innerHTML = vazio('Sem visitas no período', 'Assim que as visitas forem marcadas, o ranking aparece aqui.'); return; }
   const med = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
   let pos = 0, ant = null;
@@ -3834,14 +3838,14 @@ function rankingVgv(de, ate, eqF){
 }
 const fmtVendas = n => Number.isInteger(n) ? String(n) : n.toLocaleString('pt-BR', { maximumFractionDigits:1 });
 function renderRankingVgv(){
-  const [de, ate] = rankPeriodo === 'todas' ? ['0000','9999'] : faixa(rankPeriodo);
+  const [de, ate] = faixaRank(rankPeriodo);
   const todos = rankingVgv(de, ate, '');
   const eqs = listaEquipes().map(e => { const l = todos.filter(x => x.equipe === e.id); return { e, v:l.reduce((a,x) => a + x.vgv, 0), n:l.reduce((a,x) => a + x.vendas, 0) }; });
   const max = Math.max(0, ...eqs.map(x => x.v));
   $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.v && x.v===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b style="font-size:22px">${brl(x.v)}</b><span>${fmtVendas(x.n)} venda${x.n!==1?'s':''}${x.v && x.v===max?' · 🏆 liderando':''}</span></div>`).join('');
   const lista = rankEquipe ? todos.filter(x => x.equipe === rankEquipe) : todos;
   const total = lista.reduce((a,x) => a + x.vgv, 0);
-  $('rankTit').textContent = 'Ranking de VGV ' + (ROT_PERIODO[rankPeriodo] || '') + (total ? ' · total ' + brl(total) : '');
+  $('rankTit').textContent = 'Ranking de VGV ' + (rotRank(rankPeriodo) || '') + (total ? ' · total ' + brl(total) : '');
   if (!lista.length) { $('rankLista').innerHTML = vazio('Nenhuma venda no período', 'As reservas cadastradas em Vendas entram aqui com o valor.'); return; }
   const med = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
   $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>VGV</th><th>Vendas</th><th class="hide-m">Ticket médio</th></tr></thead><tbody>${
@@ -3849,7 +3853,7 @@ function renderRankingVgv(){
   }</tbody></table>`;
 }
 function renderRankingCartas(){
-  const [de, ate] = rankPeriodo === 'todas' ? ['0000','9999'] : faixa(rankPeriodo);
+  const [de, ate] = faixaRank(rankPeriodo);
   const base = rankingCartas.filter(r => r.data && r.data >= de && r.data <= ate);
   const eqs = listaEquipes().map(e => ({ e, n: base.filter(r => r.equipe === e.id).length, v: base.filter(r => r.equipe === e.id && r.status === 'Venda fechada').length }));
   const max = Math.max(0, ...eqs.map(x => x.n));
@@ -3861,7 +3865,7 @@ function renderRankingCartas(){
     const x = g.get(k); x.total++; x.valor += r.valor || 0; if (r.status === 'Venda fechada') x.vendas++;
   });
   const lista = [...g.values()].sort((a,b) => b.total-a.total || b.vendas-a.vendas || b.valor-a.valor);
-  $('rankTit').textContent = 'Ranking de cartas aprovadas ' + ROT_PERIODO[rankPeriodo];
+  $('rankTit').textContent = 'Ranking de cartas aprovadas ' + rotRank(rankPeriodo);
   if (!lista.length) { $('rankLista').innerHTML = vazio('Nenhuma carta no período', 'Assim que as cartas forem cadastradas, o ranking aparece aqui.'); return; }
   const med = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
   let pos = 0, ant = null;
