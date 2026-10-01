@@ -1110,6 +1110,26 @@ html.modo-ceo [onclick^="editarEmp"]{display:none!important}
 .ef{position:relative;width:96px;height:72px;border-radius:10px;overflow:hidden;border:1px solid var(--border)}.ef img{width:100%;height:100%;object-fit:cover}
 .ef button{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:15px;line-height:1;cursor:pointer}
 .ef.nova{outline:2px solid #F5841F}
+
+/* cartão estilo portal */
+.emp-capa-card{position:relative}
+.emp-car{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:#123F63;font-size:22px;line-height:1;cursor:pointer;opacity:0;transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.emp-car.esq{left:8px}.emp-car.dir{right:8px}
+.emp-capa-card:hover .emp-car,.emp-capa-card:focus-within .emp-car{opacity:1}
+@media (hover:none){.emp-car{opacity:.9}}
+.emp-loc{font-size:13px;color:var(--muted)}
+.emp-info b{font-size:17px;line-height:1.3}
+.emp-preco{display:flex;align-items:baseline;gap:6px;margin-top:8px}.emp-preco strong{font-size:18px;color:#123F63}.emp-preco small{font-size:12px;color:var(--muted);font-weight:500}
+html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
+.emp-ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(60px,1fr));border-top:1px solid var(--border);margin-top:auto}
+.emp-ficha div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;text-align:center}
+.emp-ficha div+div{border-left:1px solid var(--border)}
+.emp-ficha svg{width:22px;height:22px;color:var(--muted)}.emp-ficha b{font-size:14px}.emp-ficha span{font-size:11.5px;color:var(--muted)}
+.emp-ficha.ev{border:1px solid var(--border);border-radius:14px;margin-top:10px}
+.emp-capa-card{height:100%}
+.emp-campos{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.emp-campos label{font-size:12.5px}
+@media(max-width:600px){.emp-campos{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -1944,6 +1964,13 @@ html.modo-ceo [onclick^="editarEmp"]{display:none!important}
     <div class="sheet-body">
       <div class="fg"><label>Nome</label><input id="empNome" maxlength="80" placeholder="Ex.: Residencial Jardim das Flores"></div>
       <div class="fg"><label>Bairro / cidade <span class="muted">(opcional)</span></label><input id="empLocal" maxlength="80" placeholder="Ex.: Valentina, João Pessoa"></div>
+      <div class="emp-campos">
+        <div><label>Preço a partir de</label><input id="empPreco" maxlength="20" inputmode="decimal" placeholder="R$ 189.900"></div>
+        <div><label>Área (m²)</label><input id="empArea" maxlength="12" inputmode="decimal" placeholder="45"></div>
+        <div><label>Quartos</label><input id="empQuartos" maxlength="8" placeholder="2"></div>
+        <div><label>Vagas</label><input id="empVagas" maxlength="8" placeholder="1"></div>
+        <div><label>Banheiros</label><input id="empBanhos" maxlength="8" placeholder="1"></div>
+      </div>
       <div class="fg"><label>Resumo <span class="muted">(opcional)</span></label><textarea id="empDesc" rows="2" maxlength="300" placeholder="Ex.: 2 quartos, a partir de R$ 180 mil, entrega em 2027"></textarea></div>
       <div class="rep-sec">Fotos</div>
       <div id="empFotosEd" class="ef-grid"></div>
@@ -5168,6 +5195,8 @@ let presencas = {}, leadsHoje = [], pesquisas = [], leadsAjustes = {}, alertas =
 let empreendimentos = [], empEdit = null; window.empFiltro = '';
 const EMP_TIPOS = [['fotos','Fotos'],['tabela','Tabela de preços'],['book','Book'],['video','Vídeo'],['planta','Plantas'],['outro','Outro']];
 const empTipoNome = k => (EMP_TIPOS.find(t => t[0] === k) || EMP_TIPOS[5])[1];
+const hostDe = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch(e) { return ''; } };
+const tituloMat = m => m.titulo || (m.tipo === 'outro' ? ({ 'instagram.com':'Instagram', 'youtube.com':'YouTube', 'youtu.be':'YouTube', 'drive.google.com':'Arquivo no Drive', 'docs.google.com':'Documento', 'wa.me':'WhatsApp' }[hostDe(m.link)] || 'Link · ' + hostDe(m.link)) : empTipoNome(m.tipo));
 const linkOk = u => /^https?:\/\/\S+$/i.test(String(u || '').trim());
 // foto de capa: a primeira foto enviada; sem foto, a miniatura de um link do Drive marcado como Fotos
 const driveId = u => (String(u || '').match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]{20,})/) || [])[1] || '';
@@ -5177,13 +5206,36 @@ function renderEmp(){
   const t = norm(window.empFiltro || '');
   const l = empreendimentos.filter(e => !e.arquivado && (!t || norm([e.nome, e.local, e.desc].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
   $('empLista').innerHTML = l.length ? l.map(e => { const c = capaDe(e), n = (e.nFotos || 0);
-    return `<button class="emp-capa-card" onclick="verEmp('${e.id}')">
-      <div class="emp-capa">${c ? `<img src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.remove()">` : ''}<span class="emp-sem" data-ic="predio"></span>${n > 1 ? `<i class="emp-n">${n} fotos</i>` : ''}</div>
-      <div class="emp-info"><b>${esc(e.nome)}</b>${e.local ? `<span>${esc(e.local)}</span>` : ''}${e.desc ? `<em>${esc(e.desc)}</em>` : ''}
-      <small>${(e.materiais || []).length === 1 ? '1 material' : (e.materiais || []).length + ' materiais'} · ver tudo</small></div></button>`; }).join('')
+    return `<div class="emp-capa-card" role="button" tabindex="0" onclick="verEmp('${e.id}')" onkeydown="if(event.key==='Enter')verEmp('${e.id}')">
+      <div class="emp-capa" id="cap_${e.id}">${c ? `<img src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.remove()">` : ''}<span class="emp-sem" data-ic="predio"></span>
+        ${n > 1 ? `<button class="emp-car esq" onclick="event.stopPropagation();cardFoto('${e.id}',-1)" aria-label="Foto anterior">‹</button><button class="emp-car dir" onclick="event.stopPropagation();cardFoto('${e.id}',1)" aria-label="Próxima foto">›</button><i class="emp-n">${n} fotos</i>` : ''}</div>
+      <div class="emp-info">${e.local ? `<span class="emp-loc">${esc(e.local)}</span>` : ''}<b>${esc(e.nome)}</b>${e.desc ? `<em>${esc(e.desc)}</em>` : ''}
+        <div class="emp-preco">${e.preco ? `<strong>${esc(/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco)}</strong><small>a partir de</small>` : `<small>${(e.materiais || []).length === 1 ? '1 material' : (e.materiais || []).length + ' materiais'} · ver tudo</small>`}</div></div>
+      ${fichaEmp(e)}
+    </div>`; }).join('')
     : `<div class="card" style="grid-column:1/-1">${vazio(t ? 'Nada encontrado' : 'Nenhum empreendimento ainda', t ? 'Tente outro nome.' : (souCeo() ? 'A equipe ainda não cadastrou empreendimentos.' : 'Toque em "Novo empreendimento" ou importe do grupo do WhatsApp.'))}</div>`;
   pintarIcones($('empLista'));
 }
+// linha de ícones: área, quartos, vagas, banheiros (só o que estiver preenchido)
+const ICF = {
+  area:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/></svg>',
+  quartos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 21v-3M21 21v-3"/><path d="M6 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M12 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>',
+  vagas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M6 17v2M18 17v2M4 13l2-5a2 2 0 0 1 2-1h8a2 2 0 0 1 2 1l2 5v4H4z"/><circle cx="8" cy="14" r="1"/><circle cx="16" cy="14" r="1"/></svg>',
+  banheiros:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V5a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg>' };
+function fichaEmp(e){
+  const it = [['area', e.area ? String(e.area).replace(/\s*m²?$/i, '') + ' m²' : '', 'área'], ['quartos', e.quartos, /^1$/.test(e.quartos) ? 'quarto' : 'quartos'], ['vagas', e.vagas, /^1$/.test(e.vagas) ? 'vaga' : 'vagas'], ['banheiros', e.banheiros, /^1$/.test(e.banheiros) ? 'banheiro' : 'banheiros']].filter(x => x[1]);
+  return it.length ? `<div class="emp-ficha">${it.map(([k, v, r]) => `<div>${ICF[k]}<b>${esc(v)}</b><span>${r}</span></div>`).join('')}</div>` : '';
+}
+// setas no cartão: busca as fotos só quando alguém passa
+const fotosCache = {};
+window.cardFoto = async (id, d) => {
+  if (!fotosCache[id]) { try { fotosCache[id] = { i:0, l:(await getDocs(query(collection(db,'emp_fotos'), where('empId','==',id)))).docs.map(x => x.data()).sort((a,b) => (a.ordem || 0) - (b.ordem || 0)) }; } catch(e) { return; } }
+  const c = fotosCache[id]; if (!c.l.length) return;
+  c.i = (c.i + d + c.l.length) % c.l.length;
+  const box = $('cap_' + id); if (!box) return; let im = box.querySelector('img');
+  if (!im) { im = document.createElement('img'); im.alt = ''; box.prepend(im); }
+  im.src = c.l[c.i].dados;
+};
 // ---------- material completo de um empreendimento (todas as fotos + links) ----------
 let empVerId = null, empFotos = [], empFotoIdx = 0;
 window.verEmp = async id => {
@@ -5207,9 +5259,11 @@ function htmlEmpDetalhe(e, carregando){
       ${fotos.length > 1 ? `<div class="ev-minis">${fotos.map((x, i) => `<button class="${i === empFotoIdx ? 'on' : ''}" onclick="empFotoIr(${i})"><img src="${esc(x.dados)}" alt="Foto ${i + 1}"></button>`).join('')}</div>` : ''}
       ${empFotos.length ? `<div class="ev-foto-acoes"><button class="snooze" onclick="empFotoBaixar()">Baixar foto</button><button class="snooze wa" onclick="empFotoCompartilhar()">${IC.wa}Mandar fotos</button></div>` : ''}`
     : carregando ? '<div class="ev-galeria vazio"><span class="muted">Carregando fotos…</span></div>' : `<div class="ev-galeria vazio"><span class="muted">Sem fotos ainda${souCeo() ? '' : ' · toque em Editar para adicionar'}</span></div>`}
+    ${e.preco ? `<div class="emp-preco" style="margin-top:14px"><strong>${esc(/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco)}</strong><small>a partir de</small></div>` : ''}
+    ${fichaEmp(e).replace('emp-ficha', 'emp-ficha ev')}
     ${e.desc ? `<p class="emp-desc" style="margin-top:14px">${esc(e.desc)}</p>` : ''}
     <div class="rep-sec">Material de venda</div>
-    <div class="emp-mats">${(e.materiais || []).length ? e.materiais.map((m, i) => `<div class="emp-mat"><div style="min-width:0"><b>${esc(m.titulo || empTipoNome(m.tipo))}</b>${m.titulo ? `<span>${esc(empTipoNome(m.tipo))}</span>` : ''}</div>
+    <div class="emp-mats">${(e.materiais || []).length ? e.materiais.map((m, i) => `<div class="emp-mat"><div style="min-width:0"><b>${esc(tituloMat(m))}</b>${m.titulo ? `<span>${esc(empTipoNome(m.tipo))}</span>` : ''}</div>
       <div class="emp-acoes"><a class="snooze" href="${esc(m.link)}" target="_blank" rel="noopener">Abrir</a><button class="snooze" onclick="empCopiar('${e.id}',${i})">Copiar</button><button class="snooze wa" onclick="empWhats('${e.id}',${i})">${IC.wa}Enviar</button></div></div>`).join('')
       : '<div class="muted" style="font-size:13.5px">Nenhum link ainda.</div>'}</div>
     ${e.atualizadoPorNome ? `<small class="muted" style="display:block;margin-top:12px">Atualizado por ${esc(primeiro(e.atualizadoPorNome))}${e.atualizadoEm ? ' em ' + new Date(e.atualizadoEm).toLocaleDateString('pt-BR') : ''}</small>` : ''}`;
@@ -5262,6 +5316,7 @@ window.editarEmp = id => {
   const e = id ? empreendimentos.find(x => x.id === id) : null; empEdit = e ? e.id : null;
   $('empTit').textContent = e ? 'Editar empreendimento' : 'Novo empreendimento';
   $('empNome').value = e?.nome || ''; $('empLocal').value = e?.local || ''; $('empDesc').value = e?.desc || '';
+  [['empPreco','preco'],['empArea','area'],['empQuartos','quartos'],['empVagas','vagas'],['empBanhos','banheiros']].forEach(([i,k]) => $(i).value = e?.[k] || '');
   $('empMats').innerHTML = (e?.materiais?.length ? e.materiais : [{ tipo:'fotos' }, { tipo:'tabela' }, { tipo:'book' }]).map(empLinhaMat).join('');
   $('empArqBtn').classList.toggle('hide', !e);
   empNovasFotos = []; empFotosExist = []; empFotosTirar = []; renderFotosEdit();
@@ -5284,6 +5339,7 @@ window.salvarEmp = async () => {
   const mats = [...document.querySelectorAll('#empMats .emp-ml')].map(r => ({ tipo:r.querySelector('.em-tipo').value, titulo:r.querySelector('.em-tit').value.trim().slice(0, 60), link:r.querySelector('.em-link').value.trim() })).filter(m => m.link);
   const ruim = mats.find(m => !linkOk(m.link)); if (ruim) { toast('Link inválido: ' + ruim.link.slice(0, 40) + ' (precisa começar com https://)'); return; }
   const dados = { nome:nome.slice(0, 80), local:$('empLocal').value.trim().slice(0, 80), desc:$('empDesc').value.trim().slice(0, 300), materiais:mats.slice(0, 30),
+    preco:$('empPreco').value.trim().slice(0, 20), area:$('empArea').value.trim().slice(0, 12), quartos:$('empQuartos').value.trim().slice(0, 8), vagas:$('empVagas').value.trim().slice(0, 8), banheiros:$('empBanhos').value.trim().slice(0, 8),
     atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
   if (!empEdit) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false });
   try {
@@ -5327,13 +5383,13 @@ function mensagensWhats(txt){
   return msgs;
 }
 const tipoDoLink = (u, ctx) => { const t = norm(String(ctx || '').replace(/https?:\/\/\S+/g, ' ')), url = String(u).toLowerCase();
-  if (/youtu|vimeo|instagram\.com\/(reel|p)\//.test(url) || /\bvideos?\b|\breels?\b|\btour\b/.test(t)) return 'video';
+  if (/youtu|vimeo|instagram\.com\/reels?\//.test(url) || /\bvideos?\b|\breels?\b|\btour\b/.test(t)) return 'video';
   if (/\btabela|\bprecos?\b|\bvalores\b|\bespelho/.test(t)) return 'tabela';
   if (/\bplantas?\b/.test(t)) return 'planta';
   if (/\bfotos?\b|\bimagens?\b|\bgaleria/.test(t) || /photos\.app|photos\.google/.test(url)) return 'fotos';
   if (/\bbook\b|\bapresentacao|\bfolder\b|\bcatalogo|\bmaterial/.test(t)) return 'book';
   return 'outro'; };
-const limpaNome = t => String(t || '').replace(/https?:\/\/\S+/g, '').replace(/[*_~`]/g, '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
+const limpaNome = t => String(t || '').replace(/https?:\/\/\S+/g, '').replace(/\(arquivo anexado\)|<anexado:[^>]*>|\u200e/gi, '').replace(/\.(pdf|jpe?g|png|webp|docx?|xlsx?|mp4|mov)\b/gi, '').replace(/[*_~`]/g, '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
 window.lerImpEmp = async input => {
   const f = input.files && input.files[0]; if (!f) return;
   $('empImpInfo').textContent = 'Lendo a conversa…'; $('empImpLista').innerHTML = ''; empImpZip = null;
@@ -5348,7 +5404,7 @@ window.lerImpEmp = async input => {
     const nomes = [...cont.entries()].filter(([, x]) => x.n >= 1).sort((a, b) => b[0].length - a[0].length); // o nome mais longo ganha ("Jardim das Flores II" antes de "Jardim das Flores")
     const achaNome = t => { const n = norm(limpaNome(t)); const hit = nomes.find(([k]) => k.length >= 4 && n.includes(k)); return hit ? hit[1].nome : ''; };
     // 2) junta tudo o que fala de cada empreendimento: links, preço, quartos, bairro, entrega
-    const grupos = new Map(), pega = nome => { const k = norm(nome); if (!grupos.has(k)) grupos.set(k, { nome, materiais:[], fotosArq:[], info:new Set(), local:'' }); return grupos.get(k); };
+    const grupos = new Map(), pega = nome => { const k = norm(nome); if (!grupos.has(k)) grupos.set(k, { nome, materiais:[], fotosArq:[], info:new Set(), local:'', preco:'', area:'', quartos:'', vagas:'', banheiros:'' }); return grupos.get(k); };
     let atual = '', atualEm = 0;
     msgs.forEach((m, i) => {
       const nomeMsg = achaNome(m.texto);
@@ -5363,8 +5419,12 @@ window.lerImpEmp = async input => {
       const g = pega(nome), t = limpaNome(m.texto);
       fotosArq.forEach(n => { if (!g.fotosArq.includes(n)) g.fotosArq.push(n); });
       (links || []).forEach(u => { u = u.replace(/[).,;]+$/, ''); if (!g.materiais.some(x => x.link === u)) g.materiais.push({ tipo:tipoDoLink(u, m.texto), titulo:'', link:u }); });
-      const preco = t.match(/(?:a partir de|apartir de|por|valor(?:es)?(?: de)?|R\$)\s*R?\$?\s*\d{2,3}(?:[.\s]\d{3})+(?:,\d{2})?|R\$\s*\d{2,3}\s*mil/i); if (preco) g.info.add('A partir de ' + preco[0].replace(/^(a partir de|apartir de|por|valor(es)?( de)?)\s*/i, '').trim());
-      const qt = t.match(/\b([1-4])\s*(?:e\s*[1-4]\s*)?(?:quartos?|qts?|dormit[oó]rios?)\b/i); if (qt) g.info.add(qt[0].replace(/\s+/g, ' '));
+      const num = re => { const x = t.match(re); return x ? x[1] : ''; };
+      if (!g.quartos) g.quartos = num(/\b([1-5](?:\s*(?:e|ou|a)\s*[1-5])?)\s*(?:quartos?|qts?|dormit[oó]rios?|dorms?)\b/i).replace(/\s+/g, ' ');
+      if (!g.vagas) g.vagas = num(/\b([0-4])\s*vagas?\b/i);
+      if (!g.banheiros) g.banheiros = num(/\b([1-4])\s*(?:banheiros?|wcs?|banhos?)\b/i);
+      if (!g.area) g.area = num(/\b(\d{2,3}(?:[.,]\d{1,2})?)\s*m(?:²|2|\b)/i);
+      if (!g.preco) { const pr = t.match(/R\$\s*(\d{2,3}(?:[.\s]\d{3})+(?:,\d{2})?|\d{2,3}\s*mil)/i); if (pr) g.preco = 'R$ ' + pr[1].replace(/\s+/g, ' '); }
       const ent = t.match(/entrega(?: prevista)?(?: em| para)?\s*[a-zç]*\s*(?:de\s*)?\d{4}/i); if (ent) g.info.add(ent[0]);
       if (!g.local) for (const l of m.texto.split('\n')) { const bai = limpaNome(l).match(/(?:^|\s)(?:[Bb]airro(?: d[aeo])?|[Ll]ocalizado n[oa]|[Ff]ica n[oa])\s+([A-ZÀ-Ú][\wÀ-ú]+(?:\s+(?:d[aeo]s?\s+)?[A-ZÀ-Ú][\wÀ-ú]+){0,2})/); if (bai) { g.local = bai[1]; break; } }
     });
@@ -5391,6 +5451,7 @@ window.gravarImpEmp = async () => {
       const ex = empreendimentos.find(e => !e.arquivado && norm(e.nome) === norm(g.nome));
       const mats = [...(ex?.materiais || [])]; g.materiais.forEach(m => { if (!mats.some(x => x.link === m.link)) mats.push(m); });
       const dados = { nome:g.nome.slice(0, 80), materiais:mats.slice(0, 30), atualizadoEm:agora, atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+      ['preco','area','quartos','vagas','banheiros'].forEach(k => { if (g[k] && !(ex && ex[k])) dados[k] = g[k]; });
       if (!ex) Object.assign(dados, { local:g.local || '', desc:g.desc || '', criadoEm:agora, criadoPor:uidAtual, arquivado:false, origem:'whatsapp' });
       else { if (!ex.local && g.local) dados.local = g.local; if (!ex.desc && g.desc) dados.desc = g.desc; }
       b.set(ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), dados, { merge:true });
