@@ -947,6 +947,13 @@ html.lenis,html.lenis body{height:auto}
   .pd-grid .pt-row{grid-template-columns:1fr;gap:2px}
   .pd-grid .pt-row>b{font-size:13px;color:var(--muted)}
 }
+
+/* datas e horários no iPhone: o Safari aumenta esses campos sozinho e eles passam da coluna */
+input[type=date],input[type=time],input[type=datetime-local],input[type=month]{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;text-align:left}
+input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value,input[type=datetime-local]::-webkit-date-and-time-value{text-align:left;margin:0}
+.row2>*,.row3>*,.fg>*{min-width:0}
+
+.btn-excluir{font-size:16px;opacity:.7}.btn-excluir:hover{opacity:1;background:color-mix(in srgb,var(--danger) 12%,transparent)}
 </style>
 </head>
 <body>
@@ -2528,6 +2535,12 @@ const stCls = st => 'st-' + norm(st).replace(/[^a-z0-9]+/g,'-');
 const MESES_JANELA = 3; // carrega só os últimos 3 meses + visitas futuras (economiza o limite gratuito)
 let historicoCompleto = false, enviadosConf = new Set();
 const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR' };
+// lista de perfis na ordem da empresa: CEO, Gerente, Coordenador, Corretor, SDR (CEO = gerente com cargo de direção)
+function opcoesPapel(p, comGerencia){
+  const atual = p.papel === 'gerente' && p.cargo === 'dono' ? 'ceo' : p.papel;
+  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR']];
+  return ops.map(([k,n]) => `<option value="${k}" ${atual===k?'selected':''}>${n}</option>`).join('');
+}
 const EQUIPES_PADRAO = { raio:{ nome:'Tropa do Raio', icone:'⚡', ordem:1 }, tenda:{ nome:'Tropa Tenda', icone:'🏕️', ordem:2 } };
 // Sistema antigo (Central de Visitas) — usado só para importar
 const FIREBASE_ANTIGO = {
@@ -3059,7 +3072,7 @@ function renderCorretores(){
   const opEq = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   $('pendLista').innerHTML = pend.map(p => `<div class="pend">
       <div><b>${esc(p.nome)}</b><span>${esc(p.email||'')} · pediu: ${esc(eqNome(p.equipe))}</span></div>
-      <select id="pp_${p.uid}">${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono()).map(([k,n]) => `<option value="${k}" ${k==='corretor'?'selected':''}>${n}</option>`).join('')}</select>
+      <select id="pp_${p.uid}">${opcoesPapel({ papel:'corretor' }, souDono())}</select>
       <select id="pe_${p.uid}">${opEq(p.equipe)}</select>
       <button class="btn btn-primary" onclick="aprovar('${p.uid}')">Aprovar</button>
       <button class="btn btn-danger" onclick="recusar('${p.uid}')">Recusar</button>
@@ -3079,7 +3092,7 @@ function renderCorretores(){
   $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
   $('corLista').innerHTML = membros.length ? membros.map(p => {
     const st = statsVisitas(visitasDoPerfil(p, de, ate)), nCartas = cartasDoPerfil(p, de, ate).length;
-    const info = [PAPEIS[p.papel], p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.status === 'bloqueado' ? '🔒 bloqueado' : ''].filter(Boolean).join(' · ');
+    const info = [(p.papel === 'gerente' && p.cargo === 'dono' ? 'CEO' : PAPEIS[p.papel]), p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.status === 'bloqueado' ? '🔒 bloqueado' : ''].filter(Boolean).join(' · ');
     return `<div class="person" onclick="abrirRelatorio('${p.uid}')"><div class="av">${p.foto ? `<img src="${p.foto}" alt="">` : esc((p.nome||'?')[0].toUpperCase())}</div>
       <div class="pi"><b>${esc(p.nome)}${p.uid===uidAtual?' (você)':''}</b><span>${esc(info)}</span></div>
       <div class="ps"><div><b>${st.total}</b><span>marcadas</span></div><div><b>${st.conf}</b><span>confirm.</span></div><div><b>${st.real}</b><span>realizadas</span></div><div><b>${nCartas}</b><span>cartas</span></div></div></div>`;
@@ -3088,17 +3101,18 @@ function renderCorretores(){
   if (souGerente()) {
     const todos = perfisLista.filter(p => p.status !== 'pendente').sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
     const opEqs = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-    $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th></tr></thead><tbody>' + todos.map(p => {
+    $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th><th></th></tr></thead><tbody>' + todos.map(p => {
+      const bx = `<td><button class="icon-btn btn-excluir" title="Excluir cadastro" aria-label="Excluir cadastro de ${esc(p.nome)}" onclick="excluirCadastro('${p.uid}')">🗑️</button></td>`;
       const ehDono = (instalacao && p.uid === instalacao.gerenteUid) || String(p.email || '').toLowerCase() === EMAIL_DONO;
       if (p.papel === 'gerente' && souDono() && !ehDono && p.uid !== uidAtual) return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
         <td><select onchange="mudarCargo('${p.uid}',this.value,this)"><option value="gerente" ${p.cargo!=='dono'?'selected':''}>⭐ Gerente</option><option value="dono" ${p.cargo==='dono'?'selected':''}>🏢 CEO</option>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente').map(([k,n]) => `<option value="papel:${k}">Mudar para ${n}</option>`).join('')}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
-        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td></tr>`;
-      if (p.uid === uidAtual || ehDono || (p.papel === 'gerente' && !souDono())) return `<tr><td><b>${esc(p.nome)}${p.uid === uidAtual ? ' (você)' : ''}</b><span>${esc(p.email||'')}</span></td><td>${ehDono ? '👑 Gestor' : p.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente'}</td><td>${p.equipe ? esc(eqNome(p.equipe)) : '—'}${p.uid === uidAtual && souGerente() ? ` <select style="width:auto;margin-left:6px" onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${souDono() ? '' : 'disabled'}>${opEqs(p.equipe)}</select>` : ''}</td><td>${p.status === 'bloqueado' ? '🔒 Bloqueado' : 'Liberado'}${p.papel === 'gerente' && !souDono() && !ehDono && p.uid !== uidAtual ? '<br><small class="muted">só o gestor altera gerentes</small>' : ''}</td></tr>`;
+        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td>${bx}</tr>`;
+      if (p.uid === uidAtual || ehDono || (p.papel === 'gerente' && !souDono())) return `<tr><td><b>${esc(p.nome)}${p.uid === uidAtual ? ' (você)' : ''}</b><span>${esc(p.email||'')}</span></td><td>${ehDono ? '👑 Gestor' : p.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente'}</td><td>${p.equipe ? esc(eqNome(p.equipe)) : '—'}${p.uid === uidAtual && souGerente() ? ` <select style="width:auto;margin-left:6px" onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${souDono() ? '' : 'disabled'}>${opEqs(p.equipe)}</select>` : ''}</td><td>${p.status === 'bloqueado' ? '🔒 Bloqueado' : 'Liberado'}${p.papel === 'gerente' && !souDono() && !ehDono && p.uid !== uidAtual ? '<br><small class="muted">só o gestor altera gerentes</small>' : ''}</td><td></td></tr>`;
       return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
-        <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono()).map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${opcoesPapel(p, souDono())}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
-        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td></tr>`;
+        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td>${bx}</tr>`;
     }).join('') + '</tbody>';
     $('equipesLista').innerHTML = listaEquipes().map(e => `<div class="team-row"><input class="emo" value="${esc(e.icone||'')}" onchange="editarEquipe('${e.id}','icone',this.value)"><input value="${esc(e.nome)}" onchange="editarEquipe('${e.id}','nome',this.value)"><button class="icon-btn del" onclick="excluirEquipe('${e.id}')" title="Excluir equipe">${IC.trash}</button></div>`).join('') || '<div class="muted" style="font-size:13.5px">Nenhuma equipe cadastrada.</div>';
     const atual = $('impEquipe').value;
@@ -3108,7 +3122,14 @@ function renderCorretores(){
 }
 window.mudarPermissao = async (uid, campo, valor, el) => {
   const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  if (campo === 'papel' && valor === 'ceo') {
+    if (!souDono()) { el.value = p.papel; return; }
+    if (!confirm(`Tornar ${p.nome} CEO? Essa pessoa vai ver e editar tudo, incluindo o Painel executivo.`)) { el.value = p.papel; return; }
+    try { await setDoc(doc(db,'perfis',uid), { papel:'gerente', cargo:'dono' }, { merge:true }); toast(`${primeiro(p.nome)} agora é CEO`); } catch(e) { toast('Erro: ' + e.message); el.value = p.papel; }
+    return;
+  }
   const dados = { [campo]: valor };
+  if (campo === 'papel' && valor === 'gerente') dados.cargo = '';
   if (campo === 'papel' && valor === 'gerente') {
     if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo (menos os outros gerentes, que só o gestor altera).`)) { el.value = p.papel; return; }
   }
@@ -3128,10 +3149,10 @@ window.setCorEq = k => { corEquipeFiltro = k; render(); };
 
 window.aprovar = async uid => {
   const p = perfisLista.find(x => x.uid === uid); if (!p) return;
-  const papel = $('pp_' + uid).value, equipe = $('pe_' + uid).value;
+  const escolha = $('pp_' + uid).value, papel = escolha === 'ceo' ? 'gerente' : escolha, equipe = $('pe_' + uid).value;
   if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
   try {
-    await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now() }, { merge:true });
+    await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now(), ...(papel === 'gerente' ? { cargo: escolha === 'ceo' ? 'dono' : '' } : {}) }, { merge:true });
     // vincula visitas antigas que estão só com o nome desta pessoa
     const soltas = visitas.filter(v => !v.corretorUid && norm(v.corretorNome) === norm(p.nome));
     for (let i = 0; i < soltas.length; i += 200) {
@@ -3155,18 +3176,20 @@ window.abrirRelatorio = async uid => {
   const vs = visitasDoPerfil(p, de, ate), st = statsVisitas(vs);
   const prox = visitas.filter(v => (v.corretorUid === uid) && v.date >= h && v.status !== 'Cancelada').sort((a,b) => (a.date+a.time).localeCompare(b.date+b.time)).slice(0,6);
   $('rmNome').innerHTML = (p.foto ? `<img src="${p.foto}" alt="" style="width:40px;height:40px;border-radius:12px;object-fit:cover;vertical-align:middle;margin-right:10px">` : '') + esc(p.nome);
-  $('rmInfo').textContent = [PAPEIS[p.papel], p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.email].filter(Boolean).join(' · ');
+  $('rmInfo').textContent = [(p.papel === 'gerente' && p.cargo === 'dono' ? 'CEO' : PAPEIS[p.papel]), p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.email].filter(Boolean).join(' · ');
   const kpi = (n, t) => `<div class="kpi"><b>${n}</b><span>${t}</span></div>`;
   let gestao = '';
   if (souGerente() && uid !== uidAtual && (p.papel !== 'gerente' || souDono()) && !(instalacao && uid === instalacao.gerenteUid)) {
     gestao = `<div class="rep-sec">Foto</div><div class="foto-box"><div class="foto-grande">${p.foto ? `<img src="${p.foto}" alt="">` : esc((p.nome||'?')[0].toUpperCase())}</div><div class="fb-acoes"><button class="btn btn-ghost" onclick="fotoDeOutro('${uid}')">${p.foto ? 'Trocar' : 'Adicionar'} foto</button>${p.foto ? `<button class="link" onclick="salvarFotoDe('${uid}','')">Remover foto</button>` : ''}</div></div>
       <div class="rep-sec">Acesso</div>
-      <div class="row2 fg"><div><label>Perfil</label><select id="gmPapel" ${p.papel === 'gerente' && !souDono() ? 'disabled' : ''}>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente' || souDono() || p.papel === 'gerente').map(([k,n]) => `<option value="${k}" ${p.papel===k?'selected':''}>${n}</option>`).join('')}</select></div>
+      <div class="row2 fg"><div><label>Perfil</label><select id="gmPapel" ${p.papel === 'gerente' && !souDono() ? 'disabled' : ''}>${opcoesPapel(p, souDono() || p.papel === 'gerente')}</select></div>
       <div><label>Equipe</label><select id="gmEquipe"><option value="">Sem equipe</option>${listaEquipes().map(e => `<option value="${e.id}" ${p.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('')}</select></div></div>
       <div class="row2"><select id="gmStatus"><option value="ativo" ${p.status==='ativo'?'selected':''}>Acesso liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>Acesso bloqueado</option></select>
       <button class="btn btn-primary" onclick="salvarGestao('${uid}')">Salvar alterações</button></div>
       <div class="rep-sec">Senha</div>
-      <div class="set-row" style="border:0;padding-top:0"><div><b>🔑 Senha provisória</b><span>Para quem esqueceu a senha. A pessoa entra com ela e troca depois em Configurações.</span></div><button class="btn btn-ghost" onclick="senhaProvisoria('${uid}')">Definir</button></div>`;
+      <div class="set-row" style="border:0;padding-top:0"><div><b>🔑 Senha provisória</b><span>Para quem esqueceu a senha. A pessoa entra com ela e troca depois em Configurações.</span></div><button class="btn btn-ghost" onclick="senhaProvisoria('${uid}')">Definir</button></div>
+      <div class="rep-sec">Excluir cadastro</div>
+      <div class="set-row" style="border:0;padding-top:0"><div><b>🗑️ Tirar do sistema</b><span>Para quem saiu da empresa. A pessoa perde o acesso e some das listas. O histórico (visitas, docs, cartas e vendas) continua guardado com o nome dela.</span></div><button class="btn btn-ghost" style="color:var(--danger);border-color:color-mix(in srgb,var(--danger) 40%,transparent)" onclick="excluirCadastro('${uid}')">Excluir</button></div>`;
   }
   $('rmCorpo').innerHTML = `
     <div class="rep-sec" style="margin-top:0">Visitas ${ROT_PERIODO[corPeriodo]}</div>
@@ -3192,10 +3215,22 @@ window.abrirRelatorio = async uid => {
       (deHoje.length ? deHoje.sort((a,b) => (a.time||'99').localeCompare(b.time||'99')).map(t => `<div class="task ${t.done?'done':''}" style="cursor:default"><span class="check" style="cursor:default">${IC.check}</span><div class="t-body" style="cursor:default"><div class="t-title">${esc(t.title)}</div><div class="t-meta">${t.time ? `<span class="mi">${IC.clock}${t.time}</span>` : ''}</div></div></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma tarefa para hoje.</div>');
   } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
 };
+window.excluirCadastro = async (uid) => {
+  const p = perfisLista.find(x => x.uid === uid); if (!p || !souGerente() || uid === uidAtual) return;
+  if (p.papel === 'gerente' && !souDono()) { toast('Só o gestor exclui gerentes'); return; }
+  if (instalacao && uid === instalacao.gerenteUid) { toast('O cadastro do gestor não pode ser excluído'); return; }
+  if (!confirm(`Excluir o cadastro de ${p.nome}?\n\nEla perde o acesso ao app e sai das listas. O histórico de visitas, docs, cartas e vendas continua guardado.\n\nSe um dia voltar, é só ela entrar de novo e você aprovar.`)) return;
+  try { await deleteDoc(doc(db,'perfis',uid)); fechar('relModal'); toast(`Cadastro de ${p.nome} excluído`); } catch(e) { toast('Erro: ' + e.message); }
+};
 window.salvarGestao = async uid => {
-  const papel = $('gmPapel').value, equipe = $('gmEquipe').value, status = $('gmStatus').value;
+  const esc0 = $('gmPapel').value, equipe = $('gmEquipe').value, status = $('gmStatus').value;
+  const papel = esc0 === 'ceo' ? 'gerente' : esc0, p0 = perfisLista.find(x => x.uid === uid) || {};
   if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe'); return; }
-  try { await setDoc(doc(db,'perfis',uid), { papel, equipe, status }, { merge:true }); toast('Alterações salvas'); fechar('relModal'); }
+  if (papel === 'gerente' && !souDono()) { toast('Só o gestor coloca alguém como CEO ou gerente'); return; }
+  if (papel === 'gerente' && p0.papel !== 'gerente' && !confirm(`Tornar ${p0.nome || 'essa pessoa'} ${esc0 === 'ceo' ? 'CEO' : 'GERENTE'}? Ela vai ver e editar tudo.`)) return;
+  const dados = { papel, equipe, status };
+  if (papel === 'gerente' || p0.cargo) dados.cargo = esc0 === 'ceo' ? 'dono' : '';
+  try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Alterações salvas'); fechar('relModal'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
 
