@@ -997,7 +997,7 @@ html.modo-ceo .nav{display:flex;flex-direction:column}
 html.modo-ceo .nav>*{order:5}
 html.modo-ceo .nav .nav-title{display:none!important}
 html.modo-ceo .nav [data-view="painel"]{order:1}html.modo-ceo .nav [data-view="desempenho"]{order:2}html.modo-ceo .nav [data-view="vendas"]{order:3}
-html.modo-ceo .nav [data-view="cartas"]{order:4}html.modo-ceo .nav [data-view="apresentacao"]{order:4}
+html.modo-ceo .nav [data-view="cartas"]{order:4}html.modo-ceo .nav [data-view="empreendimentos"]{order:5}html.modo-ceo .nav [data-view="apresentacao"]{order:4}
 html.modo-ceo .nav [data-view="tarefas"]{order:6;margin-top:14px}html.modo-ceo .nav [data-view="calendario"]{order:7}
 html.modo-ceo .nav [data-view="config"]{order:8;margin-top:14px}html.modo-ceo .nav button:last-child{order:9}
 
@@ -1065,6 +1065,19 @@ html.modo-tv .sidebar,html.modo-tv .topbar,html.modo-tv .mobilebar,html.modo-tv 
 html.modo-tv .content,html.modo-tv .main{padding-bottom:24px!important}
 html.modo-tv #v-painel{padding-top:44px}
 html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:40;border:1px solid var(--border);background:color-mix(in srgb,var(--card) 85%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--text);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,.15)}
+
+/* empreendimentos */
+.emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+.emp-card{display:flex;flex-direction:column;gap:12px}
+.emp-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.emp-topo h3{font-size:18px;margin:0 0 2px}.emp-topo span{font-size:13px}
+.emp-desc{margin:0;font-size:14px;color:var(--text2);line-height:1.5}
+.emp-mats{display:flex;flex-direction:column;gap:8px}
+.emp-mat{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--card2)}
+.emp-mat b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.emp-mat span{font-size:12px;color:var(--muted)}
+.emp-acoes{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}.emp-acoes .snooze{display:inline-flex;align-items:center;gap:5px}.emp-acoes svg{width:16px;height:16px;flex:none}.emp-acoes .snooze{text-decoration:none}
+.emp-ml{display:grid;grid-template-columns:130px 1fr 1.4fr 36px;gap:8px;align-items:center;margin-bottom:8px}
+@media(max-width:600px){.emp-ml{grid-template-columns:1fr 1fr 36px}.emp-ml .em-link{grid-column:1/3}.emp-mat{flex-direction:column;align-items:stretch}.emp-acoes{justify-content:flex-start}}
+html.modo-ceo [onclick^="editarEmp"]{display:none!important}
 </style>
 </head>
 <body>
@@ -1124,6 +1137,7 @@ html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area
       <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
+      <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
       <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
@@ -1337,6 +1351,14 @@ html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area
           <div id="assSug" class="ass-sug"></div>
           <div class="ass-in"><textarea id="assTxt" rows="2" placeholder="Ex.: quem precisa de atenção esta semana?" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();assEnviar()}"></textarea><button class="btn btn-primary" id="assBtn" onclick="assEnviar()">Enviar</button></div>
         </div>
+      </section>
+
+      <!-- EMPREENDIMENTOS (material de venda) -->
+      <section class="view" id="v-empreendimentos">
+        <div class="page-head"><div><h1>Empreendimentos</h1><div class="sub">Material de venda de cada empreendimento: fotos, tabela, book e vídeos para mandar ao cliente.</div></div>
+          <button class="btn btn-primary so-cel nao-ceo" onclick="editarEmp()">+ Novo empreendimento</button></div>
+        <input id="empBusca" placeholder="Buscar empreendimento ou bairro..." oninput="empFiltro=this.value;renderEmp()" style="margin-bottom:16px">
+        <div id="empLista" class="emp-grid"></div>
       </section>
 
       <!-- VENDAS (RESERVAS) -->
@@ -1884,6 +1906,21 @@ html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area
 </div>
 
 <!-- ================= MENU (celular) ================= -->
+<div class="modal" id="empModal">
+  <div class="sheet" style="width:min(620px,100%)">
+    <div class="sheet-head"><h2 id="empTit">Novo empreendimento</h2><button class="icon-btn" onclick="fechar('empModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label>Nome</label><input id="empNome" maxlength="80" placeholder="Ex.: Residencial Jardim das Flores"></div>
+      <div class="fg"><label>Bairro / cidade <span class="muted">(opcional)</span></label><input id="empLocal" maxlength="80" placeholder="Ex.: Valentina, João Pessoa"></div>
+      <div class="fg"><label>Resumo <span class="muted">(opcional)</span></label><textarea id="empDesc" rows="2" maxlength="300" placeholder="Ex.: 2 quartos, a partir de R$ 180 mil, entrega em 2027"></textarea></div>
+      <div class="rep-sec">Material de venda</div>
+      <div class="hint" style="margin:0 0 10px">Cole o link de cada material (Google Drive, YouTube, site da construtora…). No Drive, deixe o compartilhamento como "qualquer pessoa com o link".</div>
+      <div id="empMats"></div>
+      <button class="btn btn-ghost" onclick="empAddMat()">+ Adicionar material</button>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost emp-arq hide" id="empArqBtn" onclick="arquivarEmp()">Arquivar</button><button class="btn btn-ghost" onclick="fechar('empModal')">Cancelar</button><button class="btn btn-primary" id="empSalvar" onclick="salvarEmp()">Salvar</button></div>
+  </div>
+</div>
 <div class="modal" id="alertaModal">
   <div class="sheet" style="width:min(480px,100%)">
     <div class="sheet-head"><div><h2>Novo alerta</h2><div class="muted" style="font-size:13px;margin-top:3px" id="alNome"></div></div><button class="icon-btn" onclick="fechar('alertaModal')" data-ic="x"></button></div>
@@ -1902,6 +1939,7 @@ html.modo-tv .tv-sair{display:block;position:fixed;top:calc(12px + env(safe-area
     <div class="sheet-body menu-list">
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button class="so-ceo" onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
+      <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
@@ -1944,6 +1982,7 @@ catch(e) { db = getFirestore(fb); }
 
 // ================= Ícones =================
 const IC = {
+  predio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10"/><path d="M3 21h18"/><path d="M8 7h2M8 11h2M8 15h2M12 7h0M12 11h0M12 15h0"/></svg>',
   chave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8M17 6l3 3M14.5 8.5l2 2"/></svg>',
   doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14.5l2 2 4-4"/></svg>',
   painel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="15" width="7.5" height="6" rx="1.5"/></svg>',
@@ -2232,7 +2271,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -2421,6 +2460,7 @@ function render(){
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
   if (view === 'config') renderAdm();
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
+  renderEmp();
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
@@ -2705,7 +2745,7 @@ window.souDono = souDono;
 // CEO: só visualiza os números e resultados; a agenda pessoal dele é particular. Só o gestor tem acesso a tudo.
 const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
-const VIEWS_CEO = ['painel','desempenho','vendas','cartas','apresentacao','tarefas','calendario','config'];
+const VIEWS_CEO = ['painel','desempenho','vendas','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
 window.podeGerir = podeGerir;
@@ -2739,6 +2779,8 @@ function iniciarVisitas(user){
     equipes = {}; snap.docs.forEach(d => equipes[d.id] = { id:d.id, ...d.data() }); preencherCadEquipes(); render();
   }, e => console.error(e)));
 }
+// início do ranking para quem não é gerente: o que vier primeiro entre o dia 1º do mês e a segunda-feira desta semana
+function inicioRankingEquipe(){ const m = mesAtual() + '-01', sem = faixa('semana')[0]; return sem < m ? sem : m; }
 let janelaDesde = null; // mês mais antigo pedido no seletor: carrega só dali pra frente (economiza leituras, mantém grátis)
 function inicioJanela(){ if (historicoCompleto) return '2000-01-01'; if (janelaDesde) return janelaDesde + '-01'; const d = new Date(); d.setMonth(d.getMonth() - MESES_JANELA); d.setDate(1); return iso(d); }
 // ---------- seletor de mês: todos os meses desde o começo dos dados (nada é apagado) ----------
@@ -2770,7 +2812,7 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
-  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; empreendimentos = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
   if (!souAtivo()) return;
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -2779,7 +2821,8 @@ function configurarAcesso(){
   else if (perfil.papel === 'sdr') qv = query(collection(db,'visitas'), where('criadoPor','==',uidAtual));
   else qv = query(collection(db,'visitas'), where('corretorUid','==',uidAtual));
   subsPapel.push(onSnapshot(qv, s => { visitasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); visitas = visitasBrutas.filter(x => !x.arquivado); render(); }, erro));
-  const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=',inicioJanela()));
+  // ECONOMIA: corretor, SDR e coordenador só precisam do ranking do mês (e da semana); a gerência carrega a janela toda
+  const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=', souGerente() ? inicioJanela() : inicioRankingEquipe()));
   subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.ranking = true; render(); fecharMesesPendentes(); }, erro));
   assinarEtapa1(erro); assinarEtapa2(); assinarEtapa3(); assinarSdr();
   assinarCartas(erro);
@@ -2850,7 +2893,7 @@ window.configurarGerente = async () => {
 $('cadModal').querySelector('.sheet-foot .btn').onclick = () => fecharCadastro();
 
 // ---------- Ações gerais ----------
-window.acaoPrincipal = () => (view === 'visitas' ? novaVisita() : view === 'cartas' ? novaCarta() : view === 'vendas' ? editarReserva() : novaTarefa());
+window.acaoPrincipal = () => (view === 'visitas' ? novaVisita() : view === 'cartas' ? novaCarta() : view === 'vendas' ? editarReserva() : view === 'empreendimentos' ? editarEmp() : novaTarefa());
 function faixa(p){
   const h = hojeISO(), d = new Date();
   if (p === 'hoje') return [h, h];
@@ -2938,7 +2981,7 @@ function renderVisitasTudo(){
   $('cVisitas').textContent = vh.filter(v => v.status !== 'Cancelada').length;
   const pendentes = souGerente() ? perfisLista.filter(p => p.status === 'pendente') : [];
   $('cPend').textContent = pendentes.length; $('cPend').classList.toggle('hide', !pendentes.length);
-  $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : view === 'cartas' ? 'Nova carta' : view === 'vendas' ? 'Nova reserva' : 'Nova tarefa';
+  $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : view === 'cartas' ? 'Nova carta' : view === 'vendas' ? 'Nova reserva' : view === 'empreendimentos' ? 'Novo empreendimento' : 'Nova tarefa';
   // um botão principal por tela: na tela Hoje a agenda já tem o campo de adicionar
   $('btnTopo').classList.toggle('hide', view === 'hoje' || (view === 'cartas' && perfil?.papel === 'sdr'));
   $('cCartas').textContent = cartas.filter(c => c.data && c.data >= faixa('mes')[0] && c.data <= faixa('mes')[1]).length;
@@ -3486,7 +3529,7 @@ function assinarCartas(erro){
   else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
   if (qc) subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
   if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('reservas:', e.code || e.message)));
-  subsPapel.push(onSnapshot(collection(db,'ranking_cartas'), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
+  subsPapel.push(onSnapshot(souGerente() || historicoCompleto ? collection(db,'ranking_cartas') : query(collection(db,'ranking_cartas'), where('data','>=', somaMeses(mesAtual() + '-01', -6))), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
 }
 
 function cardCarta(c){
@@ -5068,6 +5111,63 @@ window.importarLeadsAgora = async () => {
 // == PAINEL DO DONO, LEADS DE HOJE, PRESENÇA NO PLANTÃO E PESQUISA ====
 // =====================================================================
 let presencas = {}, leadsHoje = [], pesquisas = [], leadsAjustes = {}, alertas = [];
+// ---------- EMPREENDIMENTOS: material de venda (todos cadastram e editam; o CEO só olha) ----------
+let empreendimentos = [], empEdit = null; window.empFiltro = '';
+const EMP_TIPOS = [['fotos','Fotos'],['tabela','Tabela de preços'],['book','Book'],['video','Vídeo'],['planta','Plantas'],['outro','Outro']];
+const empTipoNome = k => (EMP_TIPOS.find(t => t[0] === k) || EMP_TIPOS[5])[1];
+const linkOk = u => /^https?:\/\/\S+$/i.test(String(u || '').trim());
+function renderEmp(){
+  if (view !== 'empreendimentos') return;
+  const t = norm(window.empFiltro || '');
+  const l = empreendimentos.filter(e => !e.arquivado && (!t || norm([e.nome, e.local, e.desc].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
+  $('empLista').innerHTML = l.length ? l.map(e => `<div class="card emp-card">
+      <div class="emp-topo"><div style="min-width:0"><h3>${esc(e.nome)}</h3>${e.local ? `<span class="muted">${esc(e.local)}</span>` : ''}</div>${souCeo() ? '' : `<button class="link" onclick="editarEmp('${e.id}')">Editar</button>`}</div>
+      ${e.desc ? `<p class="emp-desc">${esc(e.desc)}</p>` : ''}
+      <div class="emp-mats">${(e.materiais || []).length ? e.materiais.map((m, i) => `<div class="emp-mat"><div style="min-width:0"><b>${esc(m.titulo || empTipoNome(m.tipo))}</b>${m.titulo ? `<span>${esc(empTipoNome(m.tipo))}</span>` : ''}</div>
+          <div class="emp-acoes"><a class="snooze" href="${esc(m.link)}" target="_blank" rel="noopener">Abrir</a><button class="snooze" onclick="empCopiar('${e.id}',${i})">Copiar</button><button class="snooze wa" onclick="empWhats('${e.id}',${i})">${IC.wa}Enviar</button></div></div>`).join('')
+        : '<div class="muted" style="font-size:13.5px">Nenhum material ainda.</div>'}</div>
+      ${e.atualizadoPorNome ? `<small class="muted">Atualizado por ${esc(primeiro(e.atualizadoPorNome))}${e.atualizadoEm ? ' em ' + new Date(e.atualizadoEm).toLocaleDateString('pt-BR') : ''}</small>` : ''}
+    </div>`).join('')
+    : `<div class="card">${vazio(t ? 'Nada encontrado' : 'Nenhum empreendimento ainda', t ? 'Tente outro nome.' : (souCeo() ? 'A equipe ainda não cadastrou empreendimentos.' : 'Toque em "Novo empreendimento" para cadastrar o primeiro, com os links do material de venda.'))}</div>`;
+}
+function empLinhaMat(m = {}){
+  return `<div class="emp-ml"><select class="em-tipo">${EMP_TIPOS.map(([k,n]) => `<option value="${k}" ${m.tipo===k?'selected':''}>${n}</option>`).join('')}</select>
+    <input class="em-tit" maxlength="60" placeholder="Nome (opcional)" value="${esc(m.titulo || '')}">
+    <input class="em-link" type="url" inputmode="url" placeholder="https://…" value="${esc(m.link || '')}">
+    <button class="icon-btn" title="Tirar" onclick="this.parentElement.remove()">${IC.x}</button></div>`;
+}
+window.empAddMat = () => $('empMats').insertAdjacentHTML('beforeend', empLinhaMat());
+window.editarEmp = id => {
+  if (souCeo()) { toast('Perfil CEO: só visualização'); return; }
+  const e = id ? empreendimentos.find(x => x.id === id) : null; empEdit = e ? e.id : null;
+  $('empTit').textContent = e ? 'Editar empreendimento' : 'Novo empreendimento';
+  $('empNome').value = e?.nome || ''; $('empLocal').value = e?.local || ''; $('empDesc').value = e?.desc || '';
+  $('empMats').innerHTML = (e?.materiais?.length ? e.materiais : [{ tipo:'fotos' }, { tipo:'tabela' }, { tipo:'book' }]).map(empLinhaMat).join('');
+  $('empArqBtn').classList.toggle('hide', !e);
+  abrir('empModal'); setTimeout(() => $('empNome').focus(), 200);
+};
+window.salvarEmp = async () => {
+  const nome = $('empNome').value.trim().replace(/\s+/g, ' ');
+  if (!nome) { toast('Digite o nome do empreendimento'); return; }
+  const mats = [...document.querySelectorAll('#empMats .emp-ml')].map(r => ({ tipo:r.querySelector('.em-tipo').value, titulo:r.querySelector('.em-tit').value.trim().slice(0, 60), link:r.querySelector('.em-link').value.trim() })).filter(m => m.link);
+  const ruim = mats.find(m => !linkOk(m.link)); if (ruim) { toast('Link inválido: ' + ruim.link.slice(0, 40) + ' (precisa começar com https://)'); return; }
+  const dados = { nome:nome.slice(0, 80), local:$('empLocal').value.trim().slice(0, 80), desc:$('empDesc').value.trim().slice(0, 300), materiais:mats.slice(0, 30),
+    atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+  if (!empEdit) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false });
+  try { await gravar(setDoc(empEdit ? doc(db,'empreendimentos',empEdit) : doc(collection(db,'empreendimentos')), dados, { merge:true })); fechar('empModal'); toast('Empreendimento salvo ✓'); }
+  catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'publique as regras novas do Firebase' : e.message)); }
+};
+window.arquivarEmp = async () => {
+  const e = empreendimentos.find(x => x.id === empEdit); if (!e) return;
+  if (!confirm(`Arquivar ${e.nome}? Ele some da lista (o gestor pode trazer de volta).`)) return;
+  try { await gravar(setDoc(doc(db,'empreendimentos',e.id), { arquivado:true, atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' }, { merge:true })); fechar('empModal'); toast('Arquivado'); }
+  catch(err) { toast('Erro: ' + err.message); }
+};
+const empMsg = (e, m) => `${e.nome}${e.local ? ' · ' + e.local : ''}\n${m.titulo || empTipoNome(m.tipo)}: ${m.link}`;
+window.empCopiar = async (id, i) => { const e = empreendimentos.find(x => x.id === id), m = e?.materiais?.[i]; if (!m) return;
+  try { await navigator.clipboard.writeText(m.link); toast('Link copiado ✓'); } catch(err) { prompt('Copie o link:', m.link); } };
+window.empWhats = (id, i) => { const e = empreendimentos.find(x => x.id === id), m = e?.materiais?.[i]; if (!m) return;
+  window.open('https://wa.me/?text=' + encodeURIComponent(empMsg(e, m)), '_blank'); };
 // ---------- alertas sobre corretores: o CEO (e a gestão) cria; vê só gestor, gerentes e o coordenador da equipe ----------
 const alertasAbertos = () => alertas.filter(a => !a.resolvido).sort((a,b) => (b.criadoEm||0) - (a.criadoEm||0));
 const alertasDe = (uid, nome) => alertas.filter(a => (uid && a.corretorUid === uid) || (!uid && norm(a.corretorNome) === norm(nome)));
@@ -5125,6 +5225,7 @@ function assinarEtapa3(){
   if (souGerente()) qal = collection(db,'alertas');
   else if (souCoord()) qal = query(collection(db,'alertas'), where('equipe','==',perfil.equipe || '-'));
   if (qal) subsPapel.push(onSnapshot(qal, s => { alertas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  subsPapel.push(onSnapshot(collection(db,'empreendimentos'), s => { empreendimentos = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
 }
 
 function enviarWhats(tel, txt){
