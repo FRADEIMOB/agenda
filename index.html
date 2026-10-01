@@ -5367,7 +5367,8 @@ function renderPainel(){
   $('painelSeg').innerHTML = `<select class="sel-mes" onchange="painelMes=this.value;garantirHistorico(this.value);render()">${opcoesMeses(mesSel)}</select>`;
   const hrP = hoje.getHours(), saudP = (hrP < 12 ? 'Bom dia' : hrP < 18 ? 'Boa tarde' : 'Boa noite') + ', ' + nomeBonito(primeiro(perfil?.nome || state?.profile?.name || ''));
   $('painelTit').textContent = souCeo() ? saudP : 'Painel executivo';
-  $('painelSub').textContent = `${souCeo() ? 'Painel executivo · ' : ''}${nomeMes(de.slice(0,7))}${atual ? ' · até hoje' : ''} · comparado com o mesmo período de ${nomeMes(dePrev.slice(0,7)).toLowerCase()}`;
+  // CEO: mesma saudação dos outros perfis ("Boa noite, Fulano" + a data de hoje)
+  $('painelSub').textContent = souCeo() ? dataLonga(hojeISO()) : `${nomeMes(de.slice(0,7))}${atual ? ' · até hoje' : ''} · comparado com o mesmo período de ${nomeMes(dePrev.slice(0,7)).toLowerCase()}`;
   const kpi = (ic, rot, v, vb, extra) => `<div class="pd-kpi"><span>${rot}</span><b>${v}</b>${variacao(typeof v === 'number' ? v : 0, vb)}${extra ? `<em>${extra}</em>` : ''}</div>`;
   // ---------- funil do mês: lead → doc → aprovação → visita → venda ----------
   const etapas = [
