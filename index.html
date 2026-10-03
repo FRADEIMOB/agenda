@@ -1270,6 +1270,16 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
 .sal-partes{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted);margin-top:6px}.sal-partes b{color:var(--text)}
 .sal-nums,.sal-regra{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-top:8px}
 .sal-nums label,.sal-regra label{font-size:12px;color:var(--muted);display:grid;gap:3px}
+.rg-lista{display:grid;gap:10px}
+.rg-pessoa{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.rg-cab{display:flex;justify-content:space-between;align-items:center;gap:10px}.rg-cab b{font-size:15px}.rg-acoes{display:flex;gap:6px;align-items:center}
+.rg-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.rg-chips span{font-size:12.5px;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--accent) 9%,transparent);color:var(--text2)}.rg-chips em{font-size:13px;color:var(--muted)}
+.rg-edit{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}.rg-edit .fx-nome{font-weight:700;font-size:15px;max-width:340px}
+.rg-sec{margin-top:14px}.rg-sec h4{font-size:12.5px;color:var(--muted);font-weight:700;margin:0 0 6px}
+.rg-linha{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--border);font-size:14px}.rg-linha>span{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.rg-linha small{color:var(--muted)}
+.rg-in{width:96px;padding:6px 8px;text-align:right;font-weight:700}.rg-in.rg-curto{width:58px;text-align:center}.rg-linha select{padding:6px 8px}
+.rg-add{margin-top:10px;width:100%;max-width:380px;padding:8px 10px;color:var(--accent);font-weight:600}
+.rg-pe{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 .sal-ajuste summary{cursor:pointer;font-size:12.5px;color:var(--muted);margin-top:6px}
 .sal-resumo{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
 .sal-resumo span{font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.sal-resumo b{display:block;font-size:28px}.sal-resumo small{color:var(--muted)}
@@ -6454,15 +6464,65 @@ function salNumsDe(x){
   if (sdr) Object.assign(n, { docs:sdr.docs, media: sdr.docs ? Math.round(sdr.leads / sdr.docs * 100) / 100 : 0, visitas:sdr.realizadas, recontatos:sdr.recup });
   return (salNums[x.id] = n);
 }
+// ---------- regras de salário: uma frase por regra ----------
+const REGRAS_SAL = [
+  { id:'contrato', nome:'Por contrato assinado', campos:['porContrato'], frase:'R$ {porContrato} por contrato assinado' },
+  { id:'reserva', nome:'Por reserva', campos:['porReserva'], frase:'R$ {porReserva} por reserva' },
+  { id:'reservaCRM', nome:'Por reserva (quando mais da metade vem do CRM)', campos:['porReservaCRM'], frase:'R$ {porReservaCRM} por reserva quando mais da metade vier do CRM' },
+  { id:'doc', nome:'Por documentação', campos:['porDoc','docMediaMax'], frase:'R$ {porDoc} por documentação, só se a média lead/doc ficar abaixo de {docMediaMax}', opc:['docMediaMax'] },
+  { id:'visita', nome:'Por visita que veio ao escritório', campos:['porVisita'], frase:'R$ {porVisita} por visita que veio ao escritório' },
+  { id:'recontato', nome:'Por recontato', campos:['porRecontato'], frase:'R$ {porRecontato} por recontato' },
+  { id:'semana', nome:'Por semana sem roxo no desempenho', campos:['porSemana'], frase:'R$ {porSemana} por semana sem roxo no desempenho' },
+  { id:'metade', nome:'Metade do fixo se não bater os contratos', campos:['metadeAbaixo'], frase:'Recebe metade do fixo se fechar menos de {metadeAbaixo} contratos' },
+  { id:'exc', nome:'Comissão por contrato acima de um número', campos:['excValor','excLimite'], frase:'R$ {excValor} por contrato acima de {excLimite} contratos' },
+  { id:'meta', nome:'Bônus por todos os contratos se bater a meta', campos:['metaTodos','valorTodos'], frase:'Se bater {metaTodos} contratos, R$ {valorTodos} por todos os contratos' } ];
+window._salRasc = {};
+const _num = v => Number(v) || 0, _fmt = v => _num(v).toLocaleString('pt-BR', { maximumFractionDigits:2 });
+function resumoRegra(rg){
+  rg = rg || {}; const t = [];
+  if (_num(rg.fixo)) t.push('Fixo ' + brl(_num(rg.fixo)));
+  if (_num(rg.vtDia)) t.push(`VT ${_fmt(rg.vtDia)} passagens/dia`); else if (_num(rg.vt)) t.push('VT ' + brl(_num(rg.vt)));
+  REGRAS_SAL.forEach(r => { if (!r.campos.some(k => _num(rg[k]) && !(r.opc || []).includes(k))) return;
+    let f = r.frase; (r.opc || []).forEach(k => { if (!_num(rg[k])) f = f.replace(/, só se[^{]*\{\w+\}/, ''); });
+    t.push(f.replace(/\{(\w+)\}/g, (m, k) => _fmt(rg[k]))); });
+  return t;
+}
+function htmlRegraPessoa(x){
+  const ed = window._salRasc[x.id];
+  if (!ed) { const t = resumoRegra(x.regra || { fixo:Number(x.valor) || 0 });
+    return `<div class="rg-pessoa" id="salr_${x.id}"><div class="rg-cab"><b>${esc(x.descricao)}</b><span class="rg-acoes"><button class="btn btn-ghost" onclick="editarRegraSal('${x.id}')">Editar</button><button class="icon-btn del" title="Tirar da folha" onclick="excluirDaFolha('${x.id}')">🗑️</button></span></div>
+      <div class="rg-chips">${t.length ? t.map(c => `<span>${esc(c)}</span>`).join('') : '<em>Sem salário definido. Toque em Editar.</em>'}</div></div>`; }
+  const rg = ed.rg, inp = (k, ph, w) => `<input class="rg-in${w ? ' rg-curto' : ''}" inputmode="decimal" value="${rg[k] === undefined || rg[k] === '' ? '' : String(rg[k]).replace('.', ',')}" placeholder="${ph || '0'}" oninput="_salRasc['${x.id}'].rg.${k}=this.value">`;
+  const vtModo = ed.vt;
+  const linhas = REGRAS_SAL.filter(r => ed.ativas.includes(r.id)).map(r => `<div class="rg-linha"><span>${r.frase.replace(/\{(\w+)\}/g, (m, k) => inp(k, (r.opc || []).includes(k) ? '—' : '0', r.frase.indexOf('R$ {' + k + '}') < 0))}</span><button class="icon-btn" title="Tirar esta regra" onclick="tirarRegraSal('${x.id}','${r.id}')">✕</button></div>`).join('');
+  const faltam = REGRAS_SAL.filter(r => !ed.ativas.includes(r.id));
+  return `<div class="rg-pessoa rg-edit" id="salr_${x.id}">
+    <div class="rg-cab"><input class="fx-nome" value="${esc(x.descricao)}" onchange="renomearFixa('${x.id}', this.value)" title="Mudar o nome"></div>
+    <div class="rg-sec"><h4>Salário fixo</h4><div class="rg-linha"><span>R$ ${inp('fixo', '0')} por mês</span></div></div>
+    <div class="rg-sec"><h4>Vale-transporte</h4><div class="rg-linha"><span><select onchange="_salRasc['${x.id}'].vt=this.value;redesenharRegraSal('${x.id}')"><option value="passagem" ${vtModo === 'passagem' ? 'selected' : ''}>Por passagem</option><option value="fixo" ${vtModo === 'fixo' ? 'selected' : ''}>Valor fixo</option><option value="nao" ${vtModo === 'nao' ? 'selected' : ''}>Não recebe</option></select>
+      ${vtModo === 'passagem' ? `${inp('vtDia', '2', 1)} passagens por dia <small>(ida e volta = 2)</small>` : vtModo === 'fixo' ? `R$ ${inp('vt', '0')} por mês` : ''}</span></div></div>
+    <div class="rg-sec"><h4>Comissões e regras</h4>${linhas || '<div class="muted" style="font-size:13px">Nenhuma comissão. Só o fixo.</div>'}
+      ${faltam.length ? `<select class="rg-add" onchange="if(this.value)addRegraSal('${x.id}',this.value)"><option value="">+ Adicionar comissão ou regra…</option>${faltam.map(r => `<option value="${r.id}">${r.nome}</option>`).join('')}</select>` : ''}</div>
+    <div class="rg-pe"><button class="btn btn-ghost" onclick="cancelarRegraSal('${x.id}')">Cancelar</button><button class="btn btn-primary" onclick="salvarRegra('${x.id}')">Salvar</button></div></div>`;
+}
+function redesenharRegraSal(id){ const x = finFixas.find(f => f.id === id), el = document.getElementById('salr_' + id); if (x && el) el.outerHTML = htmlRegraPessoa(x); }
+window.redesenharRegraSal = redesenharRegraSal;
+window.editarRegraSal = id => {
+  const x = finFixas.find(f => f.id === id); if (!x) return;
+  const rg = { ...(x.regra || { fixo:Number(x.valor) || 0 }) };
+  window._salRasc[id] = { rg, vt:_num(rg.vtDia) ? 'passagem' : _num(rg.vt) ? 'fixo' : 'nao', ativas:REGRAS_SAL.filter(r => r.campos.some(k => _num(rg[k]) && !(r.opc || []).includes(k))).map(r => r.id) };
+  redesenharRegraSal(id);
+};
+window.cancelarRegraSal = id => { delete window._salRasc[id]; redesenharRegraSal(id); };
+window.addRegraSal = (id, rid) => { const e = window._salRasc[id]; if (!e.ativas.includes(rid)) e.ativas.push(rid); redesenharRegraSal(id); setTimeout(() => { const ins = document.querySelectorAll('#salr_' + id + ' .rg-linha input'); ins[ins.length - 1]?.focus(); }, 30); };
+window.tirarRegraSal = (id, rid) => { const e = window._salRasc[id], r = REGRAS_SAL.find(q => q.id === rid); e.ativas = e.ativas.filter(q => q !== rid); r.campos.forEach(k => delete e.rg[k]); redesenharRegraSal(id); };
 function htmlSalarios(){
   if (salMes !== finMes) { salMes = finMes; salNums = {}; }
   const folha = finFixas.filter(x => /folha|pró-labore/i.test(x.categoria || '') || x.regra).sort((a,b) => (a.descricao || '').localeCompare(b.descricao || '', 'pt-BR'));
   const base = numerosDoMesSal(salMes);
   const topo = `<div class="fin-filtros"><div class="seg"><button class="${salModo === 'folha' ? 'on' : ''}" onclick="salModo='folha';render()">Folha do mês (calculada)</button><button class="${salModo === 'regras' ? 'on' : ''}" onclick="salModo='regras';render()">Salários e comissões (você define)</button></div><button class="btn btn-primary" onclick="novoFuncionario()">➕ Adicionar funcionário</button><button class="btn btn-ghost" onclick="abrirFixas()">📥 Trazer da planilha</button></div>`;
   if (!folha.length) return topo + vazio('Ninguém na folha ainda', 'Toque em “➕ Adicionar funcionário” para colocar cada pessoa e o salário dela, ou em “📥 Trazer da planilha” e escolha o arquivo despesas-fixas.json.');
-  if (salModo === 'regras') return topo + `<div class="hint" style="margin:0 0 12px">Aqui você escolhe o salário de cada um: fixo, VT, comissões e bônus. Deixe em branco o que não se aplica. Na aba “Folha do mês” o app só calcula com os números do mês e entrega pronto.</div>` + folha.map(x => {
-    const rg = x.regra || { fixo:Number(x.valor) || 0 };
-    return `<div class="sal-card" id="salr_${x.id}"><div class="sal-top"><input class="fx-nome" value="${esc(x.descricao)}" onchange="renomearFixa('${x.id}', this.value)" title="Mudar o nome"><span style="display:flex;gap:6px"><button class="icon-btn del" title="Tirar da folha" onclick="excluirDaFolha('${x.id}')">🗑️</button><button class="btn btn-primary" onclick="salvarRegra('${x.id}')">Salvar</button></span></div><div class="sal-regra">${REGRA_CAMPOS.map(([k, rot]) => `<label>${rot}<input type="number" step="any" data-k="${k}" value="${rg[k] || ''}" placeholder="—"></label>`).join('')}</div></div>`; }).join('');
+  if (salModo === 'regras') return topo + `<div class="hint" style="margin:0 0 12px">Aqui você define quanto cada pessoa ganha. Toque em <b>Editar</b> para mudar. Na aba “Folha do mês” o app faz a conta com os números do mês.</div><div class="rg-lista">` + folha.map(x => htmlRegraPessoa(x)).join('') + '</div>';
   let tot = 0;
   const cards = folha.map(x => {
     const rg = x.regra || { fixo:Number(x.valor) || 0 }, n = salNumsDe(x), c = calcSalario(rg, n); tot += c.total;
@@ -6492,8 +6552,8 @@ window.novoFuncionario = async () => {
   const nome = (prompt('Nome do funcionário (ex.: Camila - SDR):') || '').trim(); if (!nome) return;
   const id = 'fol_' + Date.now().toString(36);
   const d = { descricao:nome, categoria:'Folha de pagamento', valor:0, dia:5, varia:true, regra:{}, criadoEm:Date.now(), criadoPor:perfil.nome };
-  try { await gravar(setDoc(doc(db,'fin_fixas',id), d)); if (!finFixas.some(f => f.id === id)) finFixas.push({ id, ...d }); salModo = 'regras'; render();
-    setTimeout(() => { const el = document.getElementById('salr_' + id); if (el) { el.scrollIntoView({ block:'center' }); el.querySelector('.sal-regra input')?.focus(); } }, 200);
+  try { await gravar(setDoc(doc(db,'fin_fixas',id), d)); if (!finFixas.some(f => f.id === id)) finFixas.push({ id, ...d }); salModo = 'regras'; render(); editarRegraSal(id);
+    setTimeout(() => { const el = document.getElementById('salr_' + id); if (el) { el.scrollIntoView({ block:'center' }); el.querySelector('.rg-linha input')?.focus(); } }, 200);
     toast(nome + ' entrou na folha. Agora preencha o salário e toque em Salvar.'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirDaFolha = async id => {
@@ -6503,8 +6563,10 @@ window.excluirDaFolha = async id => {
     await gravar(b.commit()); finFixas = finFixas.filter(f => f.id !== id); render(); toast(x.descricao + ' saiu da folha'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.salvarRegra = async id => {
-  const el = $('salr_' + id), rg = {}; el.querySelectorAll('.sal-regra input').forEach(i => { const v = Number(i.value); if (v) rg[i.dataset.k] = v; });
-  try { await gravar(setDoc(doc(db,'fin_fixas',id), { regra:rg, ...(rg.fixo ? { valor:rg.fixo + (rg.vt || 0) } : {}) }, { merge:true })); const x = finFixas.find(f => f.id === id); if (x) x.regra = rg; delete salNums[id]; toast('Salário de ' + (x ? nomeDaFixa(x.descricao) : '') + ' salvo'); } catch(e) { toast('Erro: ' + e.message); }
+  const e = window._salRasc[id]; if (!e) return; const rg = {};
+  const ok = ['fixo', ...(e.vt === 'passagem' ? ['vtDia'] : e.vt === 'fixo' ? ['vt'] : []), ...REGRAS_SAL.filter(r => e.ativas.includes(r.id)).flatMap(r => r.campos)];
+  ok.forEach(k => { const v = lerDec(String(e.rg[k] ?? '')); if (v) rg[k] = v; });
+  try { await gravar(updateDoc(doc(db,'fin_fixas',id), { regra:rg, ...(rg.fixo ? { valor:rg.fixo + (rg.vt || 0) } : {}) })); const x = finFixas.find(f => f.id === id); if (x) x.regra = rg; delete salNums[id]; delete window._salRasc[id]; redesenharRegraSal(id); toast('Salário de ' + (x ? nomeDaFixa(x.descricao) : '') + ' salvo'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.lancarSalarios = async () => {
   const folha = finFixas.filter(f => document.getElementById('sal_' + f.id));
