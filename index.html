@@ -1225,6 +1225,20 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
 @keyframes zapPisca{50%{opacity:.25}}
 .zap-play{border:1px solid var(--border);background:var(--card2);color:var(--text);border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}.zap-play small{color:var(--muted);font-weight:500;margin-left:6px}
 @media(max-width:760px){.zap-grav .muted{display:none}.zap-grav .btn{padding:8px 10px;font-size:13px}}
+.zap-msgs,.zap-lista,.zap-det{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#zapMsgs{scroll-behavior:auto}
+.zap{grid-template-rows:minmax(0,1fr)}.zap-col{min-height:0}.zap-msgs,.zap-lista{min-height:0}
+@media(max-width:760px){
+  html[data-view="whatsapp"],html[data-view="whatsapp"] body{overflow:hidden;height:100%}
+  #v-whatsapp .zap{position:fixed;left:0;right:0;top:var(--zapTop,61px);bottom:var(--zapBot,64px);height:auto;min-height:0;border-radius:0;border-left:0;border-right:0;z-index:5}
+}
+#v-whatsapp,#v-whatsapp.on{transform:none!important;animation:none!important;filter:none!important}
+.zap-fab{display:none}
+@media(max-width:900px){
+  .zap-fab:not(.hide){display:grid;place-items:center;position:fixed;right:86px;bottom:calc(82px + env(safe-area-inset-bottom));width:48px;height:48px;border-radius:50%;border:0;background:#25d366;color:#fff;box-shadow:0 8px 20px rgba(37,211,102,.4);z-index:9}
+  .zap-fab svg{width:26px;height:26px}
+  .zap-fab-n{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--bg)}
+}
 </style>
 </head>
 <body>
@@ -1527,10 +1541,10 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
             <div class="zap-st"><span id="zapChip" class="zap-chip">●</span><button class="link hide" id="zapSair" onclick="zapDesconectar()">Desconectar</button></div>
             <div class="zap-abas" id="zapAbas"><button data-a="naoLidas" onclick="zapAba='naoLidas';render()">Não lidas <span class="zap-nl hide" id="zapNl">0</span></button><button data-a="todas" onclick="zapAba='todas';render()">Todas</button><button data-a="semDono" onclick="zapAba='semDono';render()">Sem corretor</button></div>
             <input class="zap-busca" placeholder="Buscar nome, número ou mensagem" oninput="zapBusca=this.value;renderZap()">
-            <div class="zap-lista" id="zapLista"></div>
+            <div class="zap-lista" id="zapLista" data-lenis-prevent></div>
           </div>
           <div class="zap-col zap-chat" id="zapChat"></div>
-          <div class="zap-col zap-det" id="zapDet"></div>
+          <div class="zap-col zap-det" id="zapDet" data-lenis-prevent></div>
         </div>
       </section>
 
@@ -1834,6 +1848,7 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
 </div>
 <button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <button class="fab hide" id="fab" onclick="abrirMais()" title="Adicionar" data-ic="plus"></button>
+<button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <nav class="mobilebar hide" id="mobilebar">
   <button data-view="hoje" class="nao-ceo" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
   <button data-view="visitas" class="nao-ceo" onclick="setView('visitas')"><i data-ic="house"></i>Visitas</button>
@@ -2709,7 +2724,8 @@ function render(){
   if (view === 'config') renderAdm();
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
   renderEmp(); renderFinanceiro(); renderZap();
-  if ($('cZap')) { const nz = zapConvs.filter(c => c.naoLidas > 0).length; $('cZap').textContent = nz; $('cZap').classList.toggle('hide', !nz); }
+  if ($('cZap')) { const nz = zapConvs.filter(c => c.naoLidas > 0).length; $('cZap').textContent = nz; $('cZap').classList.toggle('hide', !nz); $('zapFabN').textContent = nz; $('zapFabN').classList.toggle('hide', !nz); }
+  if ($('zapFab')) $('zapFab').classList.toggle('hide', !souGerente() || souCeo() || view === 'whatsapp' || !$('app') || $('app').classList.contains('hide'));
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
   if (!window._hashZap && souGerente() && !souCeo() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
@@ -6031,6 +6047,7 @@ function zapNoApp(c){
 }
 function abrirConversa(id){
   if (zapSel === id && zapSubMsgs) { document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto'); return; }
+  document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto');
   zapSel = id; zapMsgs = []; if (zapSubMsgs) zapSubMsgs();
   zapSubMsgs = onSnapshot(query(collection(db,'zap_conversas',id,'msgs'), orderBy('em','desc'), limit(200)), s => { zapMsgs = s.docs.map(d => ({ id:d.id, ...d.data() })).reverse(); renderZap();
     const cc = zapConvs.find(x => x.id === zapSel); if (cc?.naoLidas && view === 'whatsapp' && !document.hidden) setDoc(doc(db,'zap_conversas',zapSel), { naoLidas:0 }, { merge:true }).catch(() => {}); }, e => console.warn('msgs:', e.message));
@@ -6045,6 +6062,9 @@ const _zapCache = {};
 function zapPor(el, html){ const e = $(el); if (!e) return false; if (_zapCache[el] === html) return false; _zapCache[el] = html; e.innerHTML = html; return true; }
 function renderZap(){
   if (view !== 'whatsapp' || !souGerente()) return;
+  // no celular a conversa fica numa tela fixa, entre a barra de cima e o menu de baixo
+  if (innerWidth <= 760) { const tb = document.querySelector('.topbar'), mb = document.querySelector('.mobilebar'), z = document.querySelector('#v-whatsapp .zap');
+    if (z) { z.style.setProperty('--zapTop', Math.max(0, tb ? tb.getBoundingClientRect().bottom : 61) + 'px'); z.style.setProperty('--zapBot', (mb && getComputedStyle(mb).display !== 'none' ? mb.getBoundingClientRect().height : 0) + 'px'); } }
   const st = !zapStatus ? 'nunca' : !zapVivo() ? 'off' : zapStatus.estado;
   const chip = { conectado:['ok', '● Conectado · ' + fmtFone(zapStatus?.numero || '')], qr:['warn', '● Aguardando QR Code'], off:['bad', '● Robô desligado'], nunca:['bad', '● Robô não instalado'], reconectando:['warn', '● Reconectando…'], iniciando:['warn', '● Ligando…'], desconectado:['warn', '● Desconectado'] }[st] || ['warn', st];
   $('zapChip').className = 'zap-chip ' + chip[0]; $('zapChip').textContent = chip[1];
@@ -6071,7 +6091,7 @@ function renderZap(){
   const estrut = 'conv:' + c.id;
   if (_zapCache.zapChat !== estrut) {
     _zapCache.zapChat = estrut; delete _zapCache.zapCab; delete _zapCache.zapMsgs; delete _zapCache.zapAviso;
-    $('zapChat').innerHTML = `<div class="zap-ch-head" id="zapCab"></div><div class="zap-msgs" id="zapMsgs"></div><div id="zapAviso"></div>
+    $('zapChat').innerHTML = `<div class="zap-ch-head" id="zapCab"></div><div class="zap-msgs" id="zapMsgs" data-lenis-prevent></div><div id="zapAviso"></div>
       <div class="zap-input"><label class="icon-btn zap-anexo" title="Mandar foto, áudio ou arquivo">📎<input type="file" id="zapArq" accept="image/*,audio/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="zapAnexar(this)" hidden></label>
         <textarea id="zapTxt" rows="1" placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();zapEnviar()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'"></textarea><button class="icon-btn zap-mic" onclick="zapGravar()" title="Gravar áudio">🎤</button><button class="btn btn-primary zap-env" onclick="zapEnviar()" title="Enviar">➤</button>
         <div class="zap-grav hide" id="zapGrav"><span class="zap-rec"></span><b id="zapGravT">0:00</b><span class="muted">Gravando áudio…</span><button class="btn btn-ghost" onclick="zapGravFim(false)">✕ Cancelar</button><button class="btn btn-primary" onclick="zapGravFim(true)">➤ Enviar áudio</button></div></div>`;
@@ -6088,7 +6108,10 @@ function renderZap(){
     return sep + `<div class="zap-b ${m.de === 'eu' ? 'eu' : 'ele'}"><div class="zap-bt">${mid}${txt ? `<div>${txt}</div>` : ''}</div><small>${m.de === 'eu' && m.porNome ? esc(primeiro(m.porNome)) + ' · ' : ''}${new Date(m.em || 0).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}${m.de === 'eu' ? ' ✓✓' : ''}</small></div>`;
   }).join('');
   const pend = zapSaidaPend.filter(x => x.jid === c.jid).map(x => `<div class="zap-b eu ${x.estado === 'erro' ? 'erro' : 'pend'}"><div class="zap-bt">${x.midia ? '📎 ' + esc(x.midia.nome || 'arquivo') + (x.texto ? '<br>' : '') : ''}${esc(x.texto || '')}</div><small>${x.estado === 'erro' ? '⚠️ Não enviada: ' + esc(x.erro || '') : '🕓 enviando…'}</small></div>`).join('');
-  if (zapPor('zapMsgs', (bolhas || '<div class="zap-vazio-l">Ainda não há mensagens guardadas desta conversa.</div>') + pend)) { carregarMidias(); if (noFim || !box.dataset.rolou) { box.scrollTop = box.scrollHeight; box.dataset.rolou = '1'; } }
+  if (zapPor('zapMsgs', (bolhas || '<div class="zap-vazio-l">Ainda não há mensagens guardadas desta conversa.</div>') + pend)) {
+    carregarMidias();
+    if (noFim || !box.dataset.rolou) { const desce = () => { box.scrollTop = box.scrollHeight; if (box.clientHeight && zapMsgs.length) box.dataset.rolou = '1'; }; desce(); requestAnimationFrame(desce); setTimeout(desce, 120); }
+  } else if (!box.dataset.rolou && box.clientHeight && zapMsgs.length) { box.scrollTop = box.scrollHeight; box.dataset.rolou = '1'; }
   // detalhes do contato
   const noApp = zapNoApp(c);
   if (document.activeElement?.id !== 'zapCorSel') zapPor('zapDet', `<div class="zap-det-card"><span class="zap-av g">${esc(iniciais(zapNome(c)))}</span><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
@@ -6101,6 +6124,7 @@ function renderZap(){
 }
 // lista: um clique só já abre (o evento fica no contêiner, que nunca é redesenhado)
 document.addEventListener('click', ev => { const b = ev.target.closest?.('#zapLista .zap-item'); if (b) abrirConversa(b.dataset.id); });
+addEventListener('resize', () => { if (view === 'whatsapp') renderZap(); });
 // ---------- fotos, áudios e arquivos ----------
 const zapMidCache = new Map();
 function htmlMidia(m){
@@ -7311,7 +7335,7 @@ function renderSdrHoje(){
 <script>
 window.addEventListener('load', function(){
   if (!window.Lenis || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var dentro = '.ia-painel,.sidebar,.sheet-body,.sheet,.modal,.busca-res,.ass-msgs,#apresent,.tabela-wrap,.table-wrap,select,textarea,[data-lenis-prevent]';
+  var dentro = '.ia-painel,.sidebar,.sheet-body,.sheet,.modal,.busca-res,.ass-msgs,#apresent,.tabela-wrap,.table-wrap,.zap-msgs,.zap-lista,.zap-det,.fin-tab-wrap,select,textarea,[data-lenis-prevent]';
   var lenis = new Lenis({
     lerp: 0.12, wheelMultiplier: 1, smoothWheel: true, syncTouch: false, autoRaf: true, anchors: true,
     // áreas que rolam por dentro (menu, janelas, chat, listas) continuam com a rolagem delas
