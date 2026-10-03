@@ -6234,17 +6234,36 @@ window.zapAssumir = async (id, uid) => {
   try { await gravar(setDoc(doc(db,'zap_conversas',id), { corretorUid:uid || '', corretorNome:p ? p.nome : '', equipe:p ? (p.equipe || '') : '' }, { merge:true })); toast(p ? 'Conversa passada para ' + primeiro(p.nome) : 'Conversa sem responsável'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
+// apaga direto pelo app (não depende do robô estar ligado). Só o gestor.
+async function zapApagar(ids){
+  let etapa = 'ler as conversas', n = 0;
+  try {
+    const convs = ids ? ids : (await getDocs(collection(db,'zap_conversas'))).docs.map(d => d.id);
+    for (const id of convs) {
+      etapa = 'ler as mensagens';
+      const msgs = (await getDocs(collection(db,'zap_conversas',id,'msgs'))).docs;
+      for (const m of msgs) {
+        const md = m.data().midia;
+        etapa = 'apagar fotos e áudios';
+        if (md && md.id && md.n) for (let i = 0; i < md.n; i++) await deleteDoc(doc(db,'zap_midia', md.id + '_' + i)).catch(() => {});
+        etapa = 'apagar as mensagens'; await deleteDoc(doc(db,'zap_conversas',id,'msgs',m.id));
+      }
+      etapa = 'apagar a conversa'; await deleteDoc(doc(db,'zap_conversas',id)); n++;
+    }
+    if (!ids) { etapa = 'limpar a fila de envio'; for (const x of (await getDocs(collection(db,'zap_saida'))).docs) await deleteDoc(x.ref).catch(() => {}); }
+    toast(n === 1 ? 'Conversa apagada do app' : n + ' conversas apagadas do app');
+  } catch(e) { toast('Não consegui ' + etapa + ': ' + (e.code === 'permission-denied' ? 'falta publicar as regras novas do Firebase (versão 23h30).' : e.message)); }
+  zapSel = null; Object.keys(_zapCache).forEach(k => delete _zapCache[k]); render();
+}
 window.zapLimpar = async () => {
   if (!souDono()) return;
   if (!confirm('Apagar TODAS as conversas guardadas no app?\n\nNão apaga nada do celular, só do app. Não dá para desfazer.')) return;
-  try { await setDoc(doc(db,'zap_status','robo'), { comando:'limpar', comandoEm:Date.now(), alvo:'' }, { merge:true }); zapSel = null; Object.keys(_zapCache).forEach(k => delete _zapCache[k]); toast('Pedido enviado ao robô. As conversas somem em instantes.'); render(); }
-  catch(e) { toast('Erro: ' + e.message); }
+  toast('Apagando as conversas…'); zapApagar(null);
 };
 window.zapApagarConversa = async id => {
   if (!souDono()) return;
   if (!confirm('Apagar esta conversa do app? (não apaga do celular)')) return;
-  try { await setDoc(doc(db,'zap_status','robo'), { comando:'apagarConversa', comandoEm:Date.now(), alvo:id }, { merge:true }); zapSel = null; Object.keys(_zapCache).forEach(k => delete _zapCache[k]); toast('Apagando a conversa…'); render(); }
-  catch(e) { toast('Erro: ' + e.message); }
+  zapApagar([id]);
 };
 window.zapDesconectar = async () => {
   if (!confirm('Desconectar o número do robô? Para voltar, será preciso ler o QR Code de novo.')) return;
