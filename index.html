@@ -953,6 +953,7 @@ input[type=date],input[type=time],input[type=datetime-local],input[type=month]{-
 input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value,input[type=datetime-local]::-webkit-date-and-time-value{text-align:left;margin:0}
 .row2>*,.row3>*,.fg>*{min-width:0}
 
+.fv-tiradas{margin-top:14px;display:grid;gap:8px}.fv-tiradas>.btn{justify-self:start}
 .btn-excluir{font-size:16px;opacity:.7}.btn-excluir:hover{opacity:1;background:color-mix(in srgb,var(--danger) 12%,transparent)}
 
 /* ---------- perfil CEO: direto, números e resultados ---------- */
@@ -2214,7 +2215,7 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
   <div class="sheet" style="width:min(640px,100%)">
     <div class="sheet-head"><div><h2 id="fvTit">Venda</h2><div class="muted" style="font-size:13px;margin-top:3px" id="fvSub"></div></div><button class="icon-btn" onclick="fechar('fvModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="fvCorpo"></div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('fvModal')">Cancelar</button><button class="btn btn-primary" id="fvSalvar" onclick="salvarVendaFin()">Salvar</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="excluirVendaFin()" style="color:var(--danger)">Excluir</button><button class="btn btn-ghost" onclick="fechar('fvModal')">Cancelar</button><button class="btn btn-primary" id="fvSalvar" onclick="salvarVendaFin()">Salvar</button></div>
   </div>
 </div>
 <div class="modal" id="consModal">
@@ -6064,6 +6065,7 @@ function assinarFinanceiro(){
   subsPapel.push(onSnapshot(doc(db,'fin_config','geral'), s => { if (s.exists()) finCfg = { ...finCfg, ...s.data() }; render(); }, silencio));
 }
 const finDoMes = m => finLanc.filter(x => (x.data || '').slice(0,7) === m);
+window.renderFinanceiro = () => renderFinanceiro();
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
   if (!finMes) window.finMes = mesAtual();
@@ -6083,7 +6085,7 @@ function renderFinanceiro(){
   $('finAviso').innerHTML = venc.length ? `<div class="fin-alerta">⚠️ ${venc.length} lançamento${venc.length > 1 ? 's' : ''} vencido${venc.length > 1 ? 's' : ''} em aberto (${brl(venc.reduce((a,x) => a + (Number(x.valor) || 0), 0))}). <button class="link" onclick="finAba='lanc';finTipo='vencidos';render()">Ver</button></div>` : '';
   document.querySelectorAll('#finAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === finAba));
   const ativo = document.activeElement;
-  if (finAba === 'salarios' && ativo && ativo.closest && ativo.closest('#finCorpo')) return; // não apaga o que está sendo digitado
+  if (finAba === 'salarios' && ativo && /^(INPUT|TEXTAREA|SELECT)$/.test(ativo.tagName) && ativo.closest('#finCorpo')) return; // não apaga o que está sendo digitado
   $('finCorpo').innerHTML = finAba === 'comissoes' ? htmlFunil() : finAba === 'salarios' ? htmlSalarios() : finAba === 'cats' ? htmlFinCats(l) : htmlFinLanc(l);
 }
 function htmlFinLanc(l){
@@ -6174,12 +6176,12 @@ function previsaoMes(m){
   const lM = finDoMes(m), auto = id => /^cv_/.test(id);
   let entrou = 0, vaiEntrar = 0, semData = 0; const fontes = [];
   lM.filter(x => x.tipo === 'entrada').forEach(x => { if (x.pago) entrou += Number(x.valor) || 0; else if (!auto(x.id)) vaiEntrar += Number(x.valor) || 0; });
-  reservas.forEach(r => { const v = vendaFin(r);
+  reservas.forEach(r => { if (finVendas[r.id]?.excluida) return; const v = vendaFin(r);
     if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant) { if (noM(v.prevA) || (v.prevA && v.prevA < de && m === mesAtual())) { vaiEntrar += v.adiant; fontes.push(v); } }
     if (!v.f.recRestante && v.rest) { if (!v.prevR) semData += v.rest; else if (noM(v.prevR) || (v.prevR < de && m === mesAtual())) { vaiEntrar += v.rest; fontes.push(v); } } });
   const sai = lM.filter(x => x.tipo === 'saida'), pago = sai.filter(x => x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0), aPagar = sai.filter(x => !x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0);
   // pagamento dos corretores previsto (vendas recebidas e corretor ainda não pago)
-  const corPrev = reservas.map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0);
+  const corPrev = reservas.filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0);
   return { entrou, vaiEntrar, semData, pago, aPagar: aPagar + corPrev, saldo: entrou + vaiEntrar - pago - aPagar - corPrev, fontes };
 }
 // despesas fixas: viram lançamentos do mês sozinhas
@@ -6193,7 +6195,7 @@ async function gerarFixasDoMes(m){
 }
 function htmlGolpe(m){
   const p = previsaoMes(m), cor = p.saldo >= 0 ? 'var(--ok)' : 'var(--danger)';
-  const andamento = reservas.map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
+  const andamento = reservas.filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
   let aviso = '';
   if (p.saldo < 0) {
     const ass = andamento.filter(v => !v.ok.assinatura), somaAss = ass.reduce((a,v) => a + v.rest, 0);
@@ -6206,7 +6208,8 @@ function htmlGolpe(m){
     <div class="pd-kpi"><span>Comissões em andamento</span><b>${brl(totAnd)}</b><em>${andamento.length} venda${andamento.length === 1 ? '' : 's'} no funil</em></div></div>${aviso}`;
 }
 function htmlFunil(){
-  const vs = reservas.slice().sort((a,b) => (b.dia || '').localeCompare(a.dia || '')).map(vendaFin);
+  const tiradas = reservas.filter(r => finVendas[r.id]?.excluida);
+  const vs = reservas.filter(r => !finVendas[r.id]?.excluida).sort((a,b) => (b.dia || '').localeCompare(a.dia || '')).map(vendaFin);
   const t = norm(finBusca), filtradas = vs.filter(v => !t || norm([v.r.cliente, v.r.corretorTexto, v.cons, v.r.empreendimento].join(' ')).includes(t));
   const cols = [...ETAPAS_FIN, ['fim','Concluídas']];
   const cards = i => filtradas.filter(v => v.etapa === i);
@@ -6217,8 +6220,21 @@ function htmlFunil(){
   return `<div class="fin-filtros"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"><button class="btn btn-ghost" onclick="abrirConstrutoras()">⚙️ Construtoras e prazos</button></div>
     <div class="fv-funil">${cols.map(([k,n], i) => { const l = cards(i), soma = l.reduce((a,v) => a + (i === ETAPAS_FIN.length ? v.total : v.aReceber || v.total), 0);
       return `<div class="fv-col"><div class="fv-head"><b>${n}</b><span>${l.length} · ${brl(soma)}</span></div>${l.map(card).join('') || '<div class="fv-vazio">—</div>'}</div>`; }).join('')}</div>
-    ${!vs.length ? vazio('Nenhuma venda ainda', 'As reservas cadastradas em Vendas entram aqui para acompanhar a comissão até o dinheiro entrar.') : ''}`;
+    ${!vs.length ? vazio('Nenhuma venda ainda', 'As reservas cadastradas em Vendas entram aqui para acompanhar a comissão até o dinheiro entrar.') : ''}
+    ${tiradas.length ? `<div class="fv-tiradas"><button class="btn btn-ghost" onclick="finVerTiradas=!finVerTiradas;render()">🗑️ ${tiradas.length} venda${tiradas.length > 1 ? 's' : ''} excluída${tiradas.length > 1 ? 's' : ''} do financeiro · ${finVerTiradas ? 'Esconder' : 'Ver'}</button>
+      ${finVerTiradas ? tiradas.map(r => `<div class="arq-row"><div class="ai"><b>${esc(r.cliente || 'Cliente')}</b><span class="muted" style="font-size:12.5px">${dataBR(r.dia)} · ${esc(r.corretorTexto || '')}</span></div><button class="snooze" onclick="voltarVendaFin('${r.id}')">↩ Voltar pro funil</button></div>`).join('') : ''}</div>` : ''}`;
 }
+window.finVerTiradas = false;
+window.excluirVendaFin = async () => {
+  const r = reservas.find(x => x.id === finVEdit); if (!r) return;
+  const lancs = finLanc.filter(x => x.vendaId === r.id || (x.id || '').startsWith('cv_' + r.id + '_'));
+  if (!confirm(`Excluir a venda de ${r.cliente || 'cliente'} do financeiro?\n\nEla sai do funil${lancs.length ? ` e ${lancs.length} lançamento(s) dela saem de Entradas e saídas` : ''}. A reserva continua em Vendas e dá para voltar com ela depois.`)) return;
+  try { const b = writeBatch(db); b.set(doc(db,'fin_vendas',r.id), { excluida:true, excluidaEm:Date.now(), excluidaPor:perfil.nome }, { merge:true });
+    lancs.forEach(x => b.delete(doc(db,'fin_lanc',x.id))); await gravar(b.commit()); fechar('fvModal'); toast('Venda excluída do financeiro'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.voltarVendaFin = async id => {
+  try { await gravar(setDoc(doc(db,'fin_vendas',id), { excluida:false }, { merge:true })); toast('Venda de volta no funil'); } catch(e) { toast('Erro: ' + e.message); }
+};
 window.abrirVendaFin = id => {
   const r = reservas.find(x => x.id === id); if (!r) return; finVEdit = id;
   const v = vendaFin(r), f = v.f, ro = '';
@@ -6420,17 +6436,17 @@ function htmlSalarios(){
   if (salMes !== finMes) { salMes = finMes; salNums = {}; }
   const folha = finFixas.filter(x => /folha|pró-labore/i.test(x.categoria || '') || x.regra).sort((a,b) => (a.descricao || '').localeCompare(b.descricao || '', 'pt-BR'));
   const base = numerosDoMesSal(salMes);
-  const topo = `<div class="fin-filtros"><div class="seg"><button class="${salModo === 'folha' ? 'on' : ''}" onclick="salModo='folha';render()">Folha do mês (calculada)</button><button class="${salModo === 'regras' ? 'on' : ''}" onclick="salModo='regras';render()">Salários e comissões (você define)</button></div></div>`;
-  if (!folha.length) return topo + vazio('Ninguém na folha ainda', 'Cadastre as pessoas em Despesas fixas, na categoria Folha de pagamento (ou traga da planilha).');
+  const topo = `<div class="fin-filtros"><div class="seg"><button class="${salModo === 'folha' ? 'on' : ''}" onclick="salModo='folha';render()">Folha do mês (calculada)</button><button class="${salModo === 'regras' ? 'on' : ''}" onclick="salModo='regras';render()">Salários e comissões (você define)</button></div><button class="btn btn-primary" onclick="novoFuncionario()">➕ Adicionar funcionário</button><button class="btn btn-ghost" onclick="abrirFixas()">📥 Trazer da planilha</button></div>`;
+  if (!folha.length) return topo + vazio('Ninguém na folha ainda', 'Toque em “➕ Adicionar funcionário” para colocar cada pessoa e o salário dela, ou em “📥 Trazer da planilha” e escolha o arquivo despesas-fixas.json.');
   if (salModo === 'regras') return topo + `<div class="hint" style="margin:0 0 12px">Aqui você escolhe o salário de cada um: fixo, VT, comissões e bônus. Deixe em branco o que não se aplica. Na aba “Folha do mês” o app só calcula com os números do mês e entrega pronto.</div>` + folha.map(x => {
     const rg = x.regra || { fixo:Number(x.valor) || 0 };
-    return `<div class="sal-card" id="salr_${x.id}"><div class="sal-top"><input class="fx-nome" value="${esc(x.descricao)}" onchange="renomearFixa('${x.id}', this.value)" title="Mudar o nome"><button class="btn btn-primary" onclick="salvarRegra('${x.id}')">Salvar</button></div><div class="sal-regra">${REGRA_CAMPOS.map(([k, rot]) => `<label>${rot}<input type="number" step="any" data-k="${k}" value="${rg[k] || ''}" placeholder="—"></label>`).join('')}</div></div>`; }).join('');
+    return `<div class="sal-card" id="salr_${x.id}"><div class="sal-top"><input class="fx-nome" value="${esc(x.descricao)}" onchange="renomearFixa('${x.id}', this.value)" title="Mudar o nome"><span style="display:flex;gap:6px"><button class="icon-btn del" title="Tirar da folha" onclick="excluirDaFolha('${x.id}')">🗑️</button><button class="btn btn-primary" onclick="salvarRegra('${x.id}')">Salvar</button></span></div><div class="sal-regra">${REGRA_CAMPOS.map(([k, rot]) => `<label>${rot}<input type="number" step="any" data-k="${k}" value="${rg[k] || ''}" placeholder="—"></label>`).join('')}</div></div>`; }).join('');
   let tot = 0;
   const cards = folha.map(x => {
     const rg = x.regra || { fixo:Number(x.valor) || 0 }, n = salNumsDe(x), c = calcSalario(rg, n); tot += c.total;
     const usa = k => Number(rg[k]) > 0;
     const campo = (k, rot, show) => show ? `<label>${rot}<input type="number" step="any" value="${n[k] ?? 0}" oninput="salNums['${x.id}'].${k}=Number(this.value)||0;salAtualiza('${x.id}')"></label>` : '';
-    return `<div class="sal-card" id="sal_${x.id}"><div class="sal-top"><div><b>${esc(x.descricao)}</b></div><span class="sal-tot">${brl2(c.total)}</span></div>
+    return `<div class="sal-card" id="sal_${x.id}"><div class="sal-top"><div><b>${esc(x.descricao)}</b></div><span style="display:flex;gap:6px;align-items:center"><span class="sal-tot">${brl2(c.total)}</span><button class="icon-btn del" title="Tirar da folha" onclick="excluirDaFolha('${x.id}')">🗑️</button></span></div>
       <div class="sal-partes">${c.partes.map(p => `<span>${esc(p[0])}: <b>${brl2(p[1])}</b></span>`).join('')}</div>
       <details class="sal-ajuste"><summary>Números usados</summary><div class="sal-nums">${campo('contratos','Contratos', usa('porContrato') || usa('metadeAbaixo') || usa('excLimite') || usa('metaTodos'))}${campo('reservas','Reservas', usa('porReserva') || usa('porReservaCRM'))}${campo('pctCRM','% do CRM', usa('porReservaCRM'))}${campo('docs','Docs', usa('porDoc'))}${campo('media','Média lead/doc', usa('docMediaMax'))}${campo('visitas','Visitas', usa('porVisita'))}${campo('recontatos','Recontatos', usa('porRecontato'))}${campo('semanas','Semanas sem roxo', usa('porSemana'))}${campo('bonus','Bônus (R$), se tiver', true)}${campo('final','Valor final (R$), se quiser trocar o calculado', true)}</div></details></div>`;
   }).join('');
@@ -6449,6 +6465,20 @@ window.salAtualiza = id => {
   el.querySelector('.sal-partes').innerHTML = c.partes.map(p => `<span>${esc(p[0])}: <b>${brl2(p[1])}</b></span>`).join('');
   const tot = finFixas.filter(f => document.getElementById('sal_' + f.id)).reduce((a, f) => a + calcSalario(f.regra || { fixo:Number(f.valor) || 0 }, salNumsDe(f)).total, 0);
   if ($('salTotal')) $('salTotal').textContent = brl2(tot);
+};
+window.novoFuncionario = async () => {
+  const nome = (prompt('Nome do funcionário (ex.: Camila - SDR):') || '').trim(); if (!nome) return;
+  const id = 'fol_' + Date.now().toString(36);
+  const d = { descricao:nome, categoria:'Folha de pagamento', valor:0, dia:5, varia:true, regra:{}, criadoEm:Date.now(), criadoPor:perfil.nome };
+  try { await gravar(setDoc(doc(db,'fin_fixas',id), d)); if (!finFixas.some(f => f.id === id)) finFixas.push({ id, ...d }); salModo = 'regras'; render();
+    setTimeout(() => { const el = document.getElementById('salr_' + id); if (el) { el.scrollIntoView({ block:'center' }); el.querySelector('.sal-regra input')?.focus(); } }, 200);
+    toast(nome + ' entrou na folha. Agora preencha o salário e toque em Salvar.'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.excluirDaFolha = async id => {
+  const x = finFixas.find(f => f.id === id); if (!x) return;
+  if (!confirm(`Excluir ${x.descricao} da folha?\n\nO salário dessa pessoa para de ser calculado e lançado todo mês. Sai também o lançamento dele deste mês, se ainda não foi pago. O que já foi pago continua.`)) return;
+  try { const b = writeBatch(db); b.delete(doc(db,'fin_fixas',id)); finLanc.filter(l => l.fixa === id && !l.pago && (l.data || '') >= hojeISO().slice(0,7)).forEach(l => b.delete(doc(db,'fin_lanc',l.id)));
+    await gravar(b.commit()); finFixas = finFixas.filter(f => f.id !== id); render(); toast(x.descricao + ' saiu da folha'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.salvarRegra = async id => {
   const el = $('salr_' + id), rg = {}; el.querySelectorAll('.sal-regra input').forEach(i => { const v = Number(i.value); if (v) rg[i.dataset.k] = v; });
