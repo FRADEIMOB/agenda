@@ -6159,8 +6159,8 @@ function vendaFin(r){
   const total = f.comissao != null && f.comissao !== '' ? Number(f.comissao) : (brutaRes || Math.round(vgv * pctImob) / 100);
   const pctA = tipo === 'adiantamento' ? Number(f.pctAdiant ?? rg.pctAdiant) || 0 : 0;
   const adiant = Math.round(total * pctA) / 100, rest = Math.round((total - adiant) * 100) / 100;
-  const pctNF = f.nota === 'sem' ? 0 : Number(f.pctImposto ?? finCfg.pctImposto ?? 16) || 0, imposto = Math.round(total * pctNF) / 100, liquido = Math.round((total - imposto) * 100) / 100;
-  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number(f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0, valCor = Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCor) * 100) / 100;
+  const pctNF = f.nota === 'sem' ? 0 : Number(f.pctImposto ?? finCfg.pctImposto ?? 16) || 0, imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : Math.round(total * pctNF) / 100, liquido = Math.round((total - imposto) * 100) / 100;
+  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number(f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0, valCor = f.valCor != null && f.valCor !== '' ? Number(f.valCor) : Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCor) * 100) / 100;
   const prevA = f.prevAdiant || somaDiasISO(r.dia, rg.diasAdiant), prevR = f.prevRestante || (f.assinaturaEm ? somaDiasISO(f.assinaturaEm, rg.diasRestante) : '');
   const ok = { reserva:!!f.sinalPago, entrada:f.geraEntrada === 'nao' || !!f.entradaPaga, identificacao:!!f.identificada, assinatura:!!f.assinaturaEm, faturada:!!f.faturada,
     recebida: tipo === 'adiantamento' ? !!(f.recAdiant && f.recRestante) : !!f.recRestante, paga:!!f.corPago };
@@ -6234,6 +6234,8 @@ window.abrirVendaFin = id => {
       <div class="fg"><label>Comissão total (bruta), em R$</label><input id="fvBruta" inputmode="decimal" value="${f.comissao != null && f.comissao !== '' ? String(f.comissao).replace('.', ',') : ''}" placeholder="${String(v.total).replace('.', ',')}"></div></div>
       <div class="row2"><div class="fg"><label>% do adiantamento</label><input id="fvPctA" type="number" step="1" value="${v.tipo === 'adiantamento' ? v.pctA : (regraConst('Tenda').pctAdiant || 30)}"></div>
       <div class="fg"><label>% do corretor (sobre o líquido)</label><input id="fvPctC" type="number" step="0.01" value="${v.pctCor}"></div></div>
+      <div class="row2"><div class="fg"><label>Comissão do corretor (R$), se quiser trocar a calculada</label><input id="fvValCor" inputmode="decimal" value="${f.valCor != null && f.valCor !== '' ? String(f.valCor).replace('.', ',') : ''}" placeholder="${String(Math.round(v.liquido * v.pctCor) / 100).replace('.', ',')}"></div>
+      <div class="fg"><label>Imposto da nota (R$), se quiser trocar o calculado</label><input id="fvImpV" inputmode="decimal" value="${f.impostoV != null && f.impostoV !== '' ? String(f.impostoV).replace('.', ',') : ''}" placeholder="${String(Math.round(v.total * v.pctNF) / 100).replace('.', ',')}"></div></div>
       <div class="fv-conta"><span>Bruta <b>${brl2(v.total)}</b></span><span>Imposto da nota (${v.pctNF}%) <b>− ${brl2(v.imposto)}</b></span><span>Líquido <b>${brl2(v.liquido)}</b></span><span>Corretor <b>${brl2(v.valCor)}</b></span><span>Imobiliária <b>${brl2(v.valImob)}</b></span>${v.tipo === 'adiantamento' ? `<span>Adiantamento <b>${brl2(v.adiant)}</b> + restante <b>${brl2(v.rest)}</b></span>` : ''}</div></div>
     <div class="fv-sec"><h4>Andamento do processo</h4><div class="fg"><select id="fvProc">${['','Formulário','Avaliação do imóvel','Conformidade','Extrato','Aguardando unidade','Obra','Suspensiva','Assinatura agendada','Assinou'].map(x => `<option ${f.processo === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
     <div class="fv-sec"><h4>1 · Reserva e sinal</h4>${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="fg"><label>Valor do sinal</label><input id="fvSinalV" inputmode="decimal" value="${f.sinalValor ? String(f.sinalValor).replace('.', ',') : ''}" ${ro}></div></div>
@@ -6267,7 +6269,7 @@ window.salvarVendaFin = async () => {
   const num = id => lerDec($(id).value) || 0, v0 = vendaFin(r);
   const bruta = $('fvBruta').value.trim();
   const d = { reservaId:r.id, cliente:r.cliente || '', construtora:$('fvCons').value.trim(), tipo:$('fvTipo').value, pctImob:Number($('fvPct').value) || 0, pctAdiant:Number($('fvPctA').value) || 0, pctCor:Number($('fvPctC').value) || 0,
-    comissao:bruta ? lerDec(bruta) : '', processo:$('fvProc').value, emissor:$('fvEmissor').value, nf:$('fvNF').value.trim(), pctImposto:Number($('fvPctNF').value) || 0,
+    comissao:bruta ? lerDec(bruta) : '', valCor:$('fvValCor').value.trim() ? lerDec($('fvValCor').value) : '', impostoV:$('fvImpV').value.trim() ? lerDec($('fvImpV').value) : '', processo:$('fvProc').value, emissor:$('fvEmissor').value, nf:$('fvNF').value.trim(), pctImposto:Number($('fvPctNF').value) || 0,
     sinalPago:$('fvSinal').checked, sinalValor:num('fvSinalV'), geraEntrada:$('fvGera').value, entradaValor:num('fvEntV'), entradaForma:$('fvForma').value, entradaPaga:$('fvEntPaga').checked,
     identificada:$('fvIdent').checked, assinaturaEm:$('fvAss').value, nota:$('fvNota').value, faturada:$('fvFat').checked,
     prevAdiant:$('fvPrevA').value, prevRestante:$('fvPrevR').value, recAdiant:$('fvTipo').value === 'adiantamento' && $('fvRecA').checked, recRestante:$('fvRecR').checked, corPago:$('fvCorP').checked,
@@ -6400,7 +6402,9 @@ function calcSalario(rg, n){
   if (v('metaTodos') && q('contratos') >= v('metaTodos') && v('valorTodos')) partes.push([`Bateu ${v('metaTodos')}: ${q('contratos')} × ${brl(v('valorTodos'))}`, v('valorTodos') * q('contratos')]);
   else if (v('excLimite') && v('excValor') && q('contratos') > v('excLimite')) partes.push([`${q('contratos') - v('excLimite')} acima de ${v('excLimite')} × ${brl(v('excValor'))}`, v('excValor') * (q('contratos') - v('excLimite'))]);
   if (q('bonus')) partes.push(['Bônus', q('bonus')]);
-  return { total: Math.round(partes.reduce((a, p) => a + p[1], 0) * 100) / 100, partes };
+  const calc = Math.round(partes.reduce((a, p) => a + p[1], 0) * 100) / 100;
+  if (n.final) return { total:Number(n.final), partes:[...partes, [`Valor final escolhido por você (o calculado era ${brl2(calc)})`, Number(n.final) - calc]] };
+  return { total:calc, partes };
 }
 window.salModo = 'folha';
 function salNumsDe(x){
@@ -6428,7 +6432,7 @@ function htmlSalarios(){
     const campo = (k, rot, show) => show ? `<label>${rot}<input type="number" step="any" value="${n[k] ?? 0}" oninput="salNums['${x.id}'].${k}=Number(this.value)||0;salAtualiza('${x.id}')"></label>` : '';
     return `<div class="sal-card" id="sal_${x.id}"><div class="sal-top"><div><b>${esc(x.descricao)}</b></div><span class="sal-tot">${brl2(c.total)}</span></div>
       <div class="sal-partes">${c.partes.map(p => `<span>${esc(p[0])}: <b>${brl2(p[1])}</b></span>`).join('')}</div>
-      <details class="sal-ajuste"><summary>Números usados</summary><div class="sal-nums">${campo('contratos','Contratos', usa('porContrato') || usa('metadeAbaixo') || usa('excLimite') || usa('metaTodos'))}${campo('reservas','Reservas', usa('porReserva') || usa('porReservaCRM'))}${campo('pctCRM','% do CRM', usa('porReservaCRM'))}${campo('docs','Docs', usa('porDoc'))}${campo('media','Média lead/doc', usa('docMediaMax'))}${campo('visitas','Visitas', usa('porVisita'))}${campo('recontatos','Recontatos', usa('porRecontato'))}${campo('semanas','Semanas sem roxo', usa('porSemana'))}${campo('bonus','Bônus (R$), se tiver', true)}</div></details></div>`;
+      <details class="sal-ajuste"><summary>Números usados</summary><div class="sal-nums">${campo('contratos','Contratos', usa('porContrato') || usa('metadeAbaixo') || usa('excLimite') || usa('metaTodos'))}${campo('reservas','Reservas', usa('porReserva') || usa('porReservaCRM'))}${campo('pctCRM','% do CRM', usa('porReservaCRM'))}${campo('docs','Docs', usa('porDoc'))}${campo('media','Média lead/doc', usa('docMediaMax'))}${campo('visitas','Visitas', usa('porVisita'))}${campo('recontatos','Recontatos', usa('porRecontato'))}${campo('semanas','Semanas sem roxo', usa('porSemana'))}${campo('bonus','Bônus (R$), se tiver', true)}${campo('final','Valor final (R$), se quiser trocar o calculado', true)}</div></details></div>`;
   }).join('');
   const mv = mesVT(salMes), du = diasUteis(mv), auto = diasUteisAuto(mv);
   const vt = `<div class="sal-vt"><b>🚌 Vale-transporte</b><label>Valor da passagem (R$)<input id="vtPassagem" inputmode="decimal" value="${finCfg.passagem ? String(finCfg.passagem).replace('.', ',') : ''}" placeholder="ex.: 4,90"></label>
