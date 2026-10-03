@@ -1130,6 +1130,87 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
 .emp-campos{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px}
 .emp-campos label{font-size:12.5px}
 @media(max-width:600px){.emp-campos{grid-template-columns:1fr 1fr}}
+.info-tog{font-size:13px}
+.info-tog>summary{cursor:pointer;list-style:none;color:var(--muted);font-weight:600;font-size:12.5px;display:inline-flex;align-items:center;gap:4px;padding:3px 0;user-select:none}
+.info-tog>summary::-webkit-details-marker{display:none}
+.info-tog>summary:hover,.info-tog[open]>summary{color:var(--text)}
+.pn-abas{display:flex;flex-wrap:wrap;margin:4px 0 14px;max-width:100%}
+.pn-abas button{flex:1 1 auto;white-space:nowrap}
+@media (max-width:640px){.pn-abas{overflow-x:auto;flex-wrap:nowrap}.pn-abas button{padding:8px 10px;font-size:12.5px}}
+.ml-card .ml-disc{display:flex;gap:8px}.ml-card .ml-disc input{flex:1;min-width:0}
+.ml-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--border)}
+.ml-av{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;flex:none}
+.ml-txt{flex:1;min-width:0}.ml-txt b{display:block;font-size:14px}.ml-txt small{color:var(--muted);font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ml-acoes{display:flex;gap:6px;align-items:center;flex:none}
+.pill-ok{font-size:11.5px;font-weight:700;color:var(--ok);background:var(--ok-soft);padding:2px 8px;border-radius:99px}
+.snooze.lig{color:var(--accent)}
+.fin-pos{color:var(--ok)}.fin-neg{color:var(--danger)}
+.fin-alerta{background:var(--danger-soft);color:var(--danger);border-radius:12px;padding:10px 14px;margin:-6px 0 14px;font-size:14px;font-weight:600}
+.fin-filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}.fin-filtros input{flex:1;min-width:200px}
+.fin-tab-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:4px 12px}
+.fin-tab td{vertical-align:middle}.fin-data{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+.fin-tab td b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.fin-cat{font-size:12px;background:var(--card2);border:1px solid var(--border);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.fin-st{font-size:12px;font-weight:700;border:1px solid var(--border);background:var(--card2);color:var(--muted);border-radius:99px;padding:4px 10px;white-space:nowrap;cursor:pointer;display:inline-block}
+.fin-st.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}.fin-st.atr{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+.fin-st[disabled]{cursor:default}
+.fin-cfg{display:flex;flex-wrap:wrap;gap:14px;align-items:end;margin-bottom:14px}.fin-cfg>div{flex:1;min-width:220px}.fin-cfg label{font-size:12.5px;font-weight:600;color:var(--muted);display:grid;gap:4px}.fin-cfg input{width:120px}
+.fin-lancar{padding:6px 12px;font-size:12.5px}
+.fin-bar{display:grid;grid-template-columns:minmax(0,1.3fr) 2fr auto;gap:10px;align-items:center;padding:7px 0;font-size:13.5px}.fin-bar>div{background:var(--card2);border-radius:99px;height:10px;overflow:hidden}.fin-bar i{display:block;height:100%;border-radius:99px}.fin-bar b{font-variant-numeric:tabular-nums}
+#v-financeiro .ph-acoes select{width:auto}
+html.modo-ceo .nao-ceo{display:none!important}
+.zap-teste{font-size:10px;font-weight:700;background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn);border-radius:99px;padding:1px 6px;margin-left:4px}
+#v-whatsapp.on{display:block}
+.zap{display:grid;grid-template-columns:300px minmax(0,1fr) 270px;height:calc(100vh - 150px);min-height:520px;background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.zap-col{min-width:0;display:flex;flex-direction:column}
+.zap-lista-col{border-right:1px solid var(--border)}
+.zap-lh{display:flex;justify-content:space-between;align-items:center;padding:14px 14px 4px}.zap-lh h2{font-size:18px;margin:0}
+.zap-st{display:flex;justify-content:space-between;align-items:center;padding:0 14px 8px}
+.zap-chip{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--card2)}
+.zap-chip.ok{color:var(--ok);background:var(--ok-soft)}.zap-chip.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}.zap-chip.bad{color:var(--danger);background:var(--danger-soft)}
+.zap-abas{display:flex;gap:2px;padding:0 10px;border-bottom:1px solid var(--border)}
+.zap-abas button{border:0;background:none;padding:9px 8px;font-weight:600;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;display:flex;gap:5px;align-items:center}
+.zap-abas button.on{color:var(--accent);border-bottom-color:var(--accent)}
+.zap-busca{margin:10px 12px;width:auto}
+.zap-lista{overflow-y:auto;flex:1;padding:0 6px 10px}
+.zap-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid transparent;background:none;padding:9px 8px;border-radius:12px;cursor:pointer;color:var(--text)}
+.zap-item:hover{background:var(--card2)}.zap-item.sel{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
+.zap-av{width:40px;height:40px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,var(--card2));color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:13.5px;flex:none}
+.zap-av.g{width:64px;height:64px;font-size:20px}
+.zap-it-txt{min-width:0}.zap-it-txt b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zap-it-txt small{display:block;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.zap-it-txt em{font-style:normal;font-size:11px;color:var(--muted)}
+.zap-it-dir{display:grid;justify-items:end;gap:4px}.zap-it-dir small{font-size:11.5px;color:var(--muted)}
+.zap-nl{background:#25d366;color:#fff;font-size:11px;font-weight:700;border-radius:99px;min-width:19px;height:19px;display:inline-grid;place-items:center;padding:0 5px}
+.zap-vazio-l{color:var(--muted);font-size:13.5px;padding:18px 10px;text-align:center}
+.zap-chat{background:var(--card2);position:relative}
+.zap-ch-head{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--border)}
+.zap-ch-nome{flex:1;min-width:0}.zap-ch-nome b{display:block}.zap-ch-nome small{color:var(--muted)}
+.zap-ch-acoes{display:flex;gap:6px;align-items:center}
+.zap-msgs{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:6px;background-image:radial-gradient(color-mix(in srgb,var(--muted) 12%,transparent) 1px,transparent 1px);background-size:18px 18px}
+.zap-dia{text-align:center;margin:8px 0}.zap-dia span{background:var(--card);border:1px solid var(--border);font-size:12px;padding:3px 10px;border-radius:99px;color:var(--muted)}
+.zap-b{max-width:min(75%,560px);display:grid;gap:2px}.zap-b.ele{align-self:flex-start}.zap-b.eu{align-self:flex-end}
+.zap-bt{padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.4;white-space:pre-wrap;word-wrap:break-word;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.zap-b.ele .zap-bt{background:var(--card);border-top-left-radius:4px}.zap-b.eu .zap-bt{background:color-mix(in srgb,#25d366 20%,var(--card));border-top-right-radius:4px}
+.zap-b small{font-size:11px;color:var(--muted);padding:0 4px}.zap-b.eu small{text-align:right}
+.zap-b.pend{opacity:.7}.zap-b.erro .zap-bt{outline:1px solid var(--danger)}.zap-b.erro small{color:var(--danger)}
+.zap-input{display:flex;gap:8px;padding:10px 12px;background:var(--card);border-top:1px solid var(--border);align-items:flex-end}
+.zap-input textarea{flex:1;resize:none;min-height:42px;max-height:140px;border-radius:12px}
+.zap-env{height:42px;width:46px;padding:0;font-size:17px}
+.zap-ro{font-size:12.5px;color:var(--muted);padding:6px 14px;background:var(--card);border-top:1px solid var(--border)}
+.zap-vazio,.zap-con{margin:auto;text-align:center;display:grid;gap:10px;justify-items:center;padding:24px;max-width:420px}
+.zap-vazio span{color:var(--muted);font-size:14px}
+.zap-vazio-ic{width:56px;height:56px;border-radius:16px;background:color-mix(in srgb,#25d366 16%,transparent);color:#1da851;display:grid;place-items:center}.zap-vazio-ic svg{width:28px;height:28px}
+.zap-con h2{margin:0}.zap-con ol{text-align:left;font-size:14px;margin:0;padding-left:20px;display:grid;gap:4px}
+.zap-qr{width:260px;height:260px;background:#fff;padding:10px;border-radius:14px;border:1px solid var(--border)}
+.zap-aviso{font-size:12.5px;background:var(--danger-soft);color:var(--danger);border-radius:10px;padding:8px 10px}
+.zap-det{border-left:1px solid var(--border);padding:16px;overflow-y:auto;gap:6px}
+.zap-det label{font-size:12px;font-weight:700;color:var(--muted);margin-top:12px}
+.zap-det-card{display:grid;justify-items:center;gap:4px;text-align:center;padding-bottom:6px}.zap-det-card small{color:var(--muted)}
+.zap-tag{font-size:13px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:6px 9px}
+@media(max-width:1200px){.zap{grid-template-columns:280px minmax(0,1fr)}.zap-det{display:none}#v-whatsapp.zap-det-on .zap{grid-template-columns:280px minmax(0,1fr) 260px}#v-whatsapp.zap-det-on .zap-det{display:flex}}
+@media(max-width:760px){.zap{grid-template-columns:1fr;height:calc(100vh - 170px)}.zap-chat{display:none}#v-whatsapp.zap-chat-aberto .zap-lista-col{display:none}#v-whatsapp.zap-chat-aberto .zap-chat{display:flex}
+  #v-whatsapp.zap-det-on .zap{grid-template-columns:1fr}#v-whatsapp.zap-det-on .zap-chat{display:none}#v-whatsapp.zap-det-on .zap-lista-col{display:none}}
+html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none!important}
 </style>
 </head>
 <body>
@@ -1180,22 +1261,25 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
       <div class="p-foot hide" id="pFootRank"></div>
     </div>
     <nav class="nav">
-      <div class="nav-title">Menu</div>
+      <div class="nav-title">Dia a dia</div>
       <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje<span class="count" id="cHoje">0</span></button>
       <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas<span class="count" id="cTarefas">0</span></button>
-      <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
-      <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
-      <button data-view="vendas" class="gerente-only hide" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
-      <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
-      <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
-      <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
-      <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
-      <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
-      <div class="nav-title gest hide" style="margin-top:14px">Gestão</div>
+      <button data-view="whatsapp" class="gerente-only hide" onclick="setView('whatsapp')"><i data-ic="zap"></i>WhatsApp <small class="zap-teste">teste</small><span class="count red hide" id="cZap">0</span></button>
+      <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
+      <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
+      <div class="nav-title" style="margin-top:14px">Resultados</div>
       <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
+      <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
+      <button data-view="vendas" class="gerente-only hide" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
+      <button data-view="financeiro" class="gerente-only hide" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
+      <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
+      <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
+      <div class="nav-title" style="margin-top:14px">Ferramentas</div>
+      <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
+      <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -1224,6 +1308,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">Publicar aviso</button></div>
         <div id="bannerHoje"></div>
         <div id="alertasHoje"></div>
+        <div id="ligHoje"></div>
         <div id="conviteNotif"></div>
         <div class="mural" id="mural"></div>
         <div class="stats hide" id="statsPapel"></div>
@@ -1349,7 +1434,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
             <div class="janela" id="janelaRank"></div>
             <div class="battle" id="battle"></div>
             <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2></div><div id="rankLista"></div>
-              <div class="hint" style="margin-top:12px" id="rankNota"></div></div>
+              <details class="info-tog" style="margin-top:12px"><summary>ⓘ Como é contado</summary><div class="hint" style="margin-top:6px" id="rankNota"></div></details></div>
           </div>
         </div>
       </section>
@@ -1418,6 +1503,31 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
           <div class="ph-acoes"><button class="btn btn-ghost nao-ceo" onclick="abrirImpEmp()">Importar do WhatsApp</button><button class="btn btn-primary so-cel nao-ceo" onclick="editarEmp()">+ Novo empreendimento</button></div></div>
         <input id="empBusca" placeholder="Buscar empreendimento ou bairro..." oninput="empFiltro=this.value;renderEmp()" style="margin-bottom:16px">
         <div id="empLista" class="emp-grid"></div>
+      </section>
+
+      <!-- WHATSAPP (TESTE) -->
+      <section class="view" id="v-whatsapp">
+        <div class="zap">
+          <div class="zap-col zap-lista-col">
+            <div class="zap-lh"><h2>Conversas</h2><button class="icon-btn" title="Nova conversa" onclick="zapNova()">✎</button></div>
+            <div class="zap-st"><span id="zapChip" class="zap-chip">●</span><button class="link hide" id="zapSair" onclick="zapDesconectar()">Desconectar</button></div>
+            <div class="zap-abas" id="zapAbas"><button data-a="naoLidas" onclick="zapAba='naoLidas';render()">Não lidas <span class="zap-nl hide" id="zapNl">0</span></button><button data-a="todas" onclick="zapAba='todas';render()">Todas</button><button data-a="semDono" onclick="zapAba='semDono';render()">Sem corretor</button></div>
+            <input class="zap-busca" placeholder="Buscar nome, número ou mensagem" oninput="zapBusca=this.value;renderZap()">
+            <div class="zap-lista" id="zapLista"></div>
+          </div>
+          <div class="zap-col zap-chat" id="zapChat"></div>
+          <div class="zap-col zap-det" id="zapDet"></div>
+        </div>
+      </section>
+
+      <!-- FINANCEIRO -->
+      <section class="view" id="v-financeiro">
+        <div class="page-head"><div><h1>Financeiro</h1><div class="sub">Entradas, saídas e comissões da imobiliária. Só a gerência e o CEO veem esta tela.</div></div>
+          <div class="ph-acoes"><select id="finMesSel" onchange="finMes=this.value;render()"></select><button class="btn btn-ghost" onclick="exportarFin()">Exportar</button><button class="btn btn-primary nao-ceo" onclick="editarFin()">+ Lançamento</button></div></div>
+        <div class="pd-kpis" id="finKpis"></div>
+        <div id="finAviso"></div>
+        <div class="seg pn-abas" id="finAbas"><button data-a="lanc" onclick="finAba='lanc';render()">Lançamentos</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões das vendas</button><button data-a="cats" onclick="finAba='cats';render()">Por categoria</button></div>
+        <div id="finCorpo"></div>
       </section>
 
       <!-- VENDAS (RESERVAS) -->
@@ -1571,7 +1681,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
           </div>
           <div class="card hide" id="cardRelAuto" style="margin-bottom:20px">
             <div class="card-head"><h2>Relatórios de desempenho</h2><span class="muted">Leads · docs · condicionados · aprovações · média</span></div>
-            <div class="hint" style="margin-top:0">Saem sozinhos: <b>toda segunda às 8h</b> (semana completa, de segunda a domingo) e <b>todo dia 1º às 8h</b> (mês completo). Chegam no e-mail dos gerentes e ficam guardados aqui.</div>
+            <details class="info-tog"><summary>ⓘ Quando os relatórios saem</summary><div class="hint" style="margin-top:6px">Saem sozinhos: <b>toda segunda às 8h</b> (semana completa, de segunda a domingo) e <b>todo dia 1º às 8h</b> (mês completo). Chegam no e-mail dos gerentes e ficam guardados aqui.</div></details>
             <div class="rel-botoes"><button class="btn btn-ghost" onclick="gerarRelatorioAgora('semana_atual')">Esta semana (até hoje)</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('semana_passada')">Semana passada</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('mes_atual')">Este mês (até hoje)</button><button class="btn btn-ghost" onclick="gerarRelatorioAgora('mes_passado')">Mês passado</button></div>
             <label class="muted" style="display:flex;gap:8px;align-items:center;font-size:13px;margin:4px 0 12px"><input type="checkbox" id="relEnviar" style="width:auto"> Enviar também por e-mail para os gerentes</label>
             <div id="relAutoLista"></div>
@@ -1630,7 +1740,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
           </div>
           <div class="card dono-only hide" id="cardAdmPontos">
             <div class="card-head"><h2>Pontuação</h2><span class="muted">Só o gestor</span></div>
-            <div class="hint" style="margin-top:0;margin-bottom:12px">Quanto vale cada ação. Os pontos zeram todo dia 1º. Mudou um valor? Vale para o mês em andamento; os meses já fechados não mudam. Pode usar números negativos.</div>
+            <details class="info-tog"><summary>ⓘ Como funciona a pontuação</summary><div class="hint" style="margin-top:6px;margin-bottom:12px">Quanto vale cada ação. Os pontos zeram todo dia 1º. Mudou um valor? Vale para o mês em andamento; os meses já fechados não mudam. Pode usar números negativos.</div></details>
             <div id="admPontos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarPontuacao()">Salvar pontuação</button>
           </div>
@@ -1673,7 +1783,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
           </div>
           <div class="card dono-only hide" id="cardGrupos" style="grid-column:1/-1">
             <div class="card-head"><h2>Status da planilha de avaliações</h2><span class="muted">Só o gestor</span></div>
-            <div class="hint" style="margin-top:0;margin-bottom:12px">Em que grupo cada status entra nos relatórios e depois de quantos dias o cliente volta para o corretor como <b>repescagem</b> (deixe em branco para não voltar; 0 = avisar na hora). Status novos que a administração criar aparecem aqui sozinhos.</div>
+            <details class="info-tog"><summary>ⓘ Como os status são agrupados</summary><div class="hint" style="margin-top:6px;margin-bottom:12px">Em que grupo cada status entra nos relatórios e depois de quantos dias o cliente volta para o corretor como <b>repescagem</b> (deixe em branco para não voltar; 0 = avisar na hora). Status novos que a administração criar aparecem aqui sozinhos.</div></details>
             <div class="grp-row grp-cab"><span>Status</span><span>Grupo</span><span>Repescagem (dias)</span></div>
             <div id="admGrupos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarGrupos()">Salvar status</button>
@@ -2020,6 +2130,22 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('alertaModal')">Cancelar</button><button class="btn btn-primary al-salvar" onclick="salvarAlerta()">Enviar alerta</button></div>
   </div>
 </div>
+<div class="modal" id="finModal">
+  <div class="sheet" style="width:min(520px,100%)">
+    <div class="sheet-head"><h2 id="finTit">Novo lançamento</h2><button class="icon-btn" onclick="fechar('finModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="row2"><div class="fg"><label>Tipo</label><select id="finTipoSel" onchange="finCatsOpc()"><option value="entrada">Entrada (dinheiro que entra)</option><option value="saida">Saída (dinheiro que sai)</option></select></div>
+        <div class="fg"><label>Valor (R$)</label><input id="finValor" inputmode="decimal" placeholder="0,00"></div></div>
+      <div class="fg"><label>Descrição</label><input id="finDesc" maxlength="120" placeholder="Ex.: Aluguel do escritório de outubro"></div>
+      <div class="row2"><div class="fg"><label>Categoria</label><input id="finCat" list="finCats" maxlength="60" placeholder="Escolha ou escreva"><datalist id="finCats"></datalist></div>
+        <div class="fg"><label>Data (vencimento)</label><input id="finData" type="date"></div></div>
+      <div class="fg"><label>Corretor (opcional)</label><select id="finCor"></select></div>
+      <label class="chk" style="display:flex;gap:8px;align-items:center;margin:4px 0 12px"><input type="checkbox" id="finPago" style="width:auto"> Já foi pago / recebido</label>
+      <div class="fg"><label>Observação</label><textarea id="finObs" rows="2" maxlength="400"></textarea></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('finModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarFin()">Salvar</button></div>
+  </div>
+</div>
 <div class="modal" id="menuModal">
   <div class="sheet" style="width:min(420px,100%)">
     <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
@@ -2032,6 +2158,8 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('whatsapp')"><i data-ic="zap"></i>WhatsApp (teste)</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
@@ -2050,7 +2178,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc, updateDoc, increment, deleteField, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -2070,6 +2198,8 @@ catch(e) { db = getFirestore(fb); }
 
 // ================= Ícones =================
 const IC = {
+  dinheiro:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/></svg>',
+  zap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>',
   predio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10"/><path d="M3 21h18"/><path d="M8 7h2M8 11h2M8 15h2M12 7h0M12 11h0M12 15h0"/></svg>',
   chave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8M17 6l3 3M14.5 8.5l2 2"/></svg>',
   doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14.5l2 2 4-4"/></svg>',
@@ -2360,12 +2490,14 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
   if (v === 'desempenho' && !podeGerir()) v = 'hoje';
   if (v === 'vendas' && !souGerente()) v = 'hoje';
+  if (v === 'financeiro' && !souGerente()) v = 'hoje';
+  if (v === 'whatsapp' && (!souGerente() || souCeo())) v = 'hoje';
   if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
   if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
   if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
@@ -2410,7 +2542,7 @@ function linha(t, opts={}){
       ${atrasada ? `<button class="snooze" onclick="adiar(${t.id},0)" title="Mover para hoje">Hoje</button>` : ''}
       ${!t.done ? `<button class="snooze" onclick="adiar(${t.id},1)" title="Adiar para amanhã">+1 dia</button>` : ''}
       ${!t.done && t.date ? `<button class="icon-btn" onclick="addGoogle(acha(${t.id}))" title="Adicionar ao Google Agenda">${IC.calplus}</button>` : ''}
-      ${t.phone ? `<button class="icon-btn wa" onclick="abrirWhats('${esc(t.phone)}')" title="WhatsApp">${IC.wa}</button>` : ''}
+      ${t.phone ? `<button class="icon-btn lig-ic" data-tel="${esc(t.phone)}" data-cli="${esc(t.title || '')}" data-or="tarefa" onclick="ligarBtn(this)" title="Ligar pelo app">📞</button><button class="icon-btn wa" onclick="abrirWhats('${esc(t.phone)}')" title="WhatsApp">${IC.wa}</button>` : ''}
       <button class="icon-btn del" onclick="excluir(${t.id})" title="Excluir">${IC.trash}</button>
     </div>
   </div>`;
@@ -2549,8 +2681,10 @@ function render(){
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
   if (view === 'config') renderAdm();
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
-  renderEmp();
+  renderEmp(); renderFinanceiro(); renderZap();
+  if ($('cZap')) { const nz = zapConvs.filter(c => c.naoLidas > 0).length; $('cZap').textContent = nz; $('cZap').classList.toggle('hide', !nz); }
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
+  if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
   if (souSdr()) { const ontem = somaDias(hojeISO(), -1); $('cResumo').classList.toggle('hide', sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem)); }
@@ -2834,7 +2968,7 @@ window.souDono = souDono;
 // CEO: só visualiza os números e resultados; a agenda pessoal dele é particular. Só o gestor tem acesso a tudo.
 const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
-const VIEWS_CEO = ['painel','desempenho','vendas','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
+const VIEWS_CEO = ['painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
 window.podeGerir = podeGerir;
@@ -2914,13 +3048,13 @@ function configurarAcesso(){
   // ECONOMIA: corretor, SDR e coordenador só precisam do ranking do mês (e da semana); a gerência carrega a janela toda
   const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=', souGerente() ? inicioJanela() : inicioRankingEquipe()));
   subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.ranking = true; render(); fecharMesesPendentes(); }, erro));
-  assinarEtapa1(erro); assinarEtapa2(); assinarEtapa3(); assinarSdr();
+  assinarEtapa1(erro); assinarEtapa2(); assinarEtapa3(); assinarEtapa4(); assinarSdr();
   assinarCartas(erro);
   let qp = null;
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador','sdr']));
   else if (perfil.papel === 'sdr') qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
-  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisLista = s.docs.map(d => ({ uid:d.id, ...d.data() })); render(); sincVendasRanking(); }, erro));
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisLista = s.docs.map(d => ({ uid:d.id, ...d.data() })); render(); sincVendasRanking(); sincPresencaRanking(); }, erro));
 }
 
 // ---------- Cadastro / primeiro gerente ----------
@@ -3016,6 +3150,7 @@ function cardVisita(v, compacto){
   if (souGerente() && !compacto) meta.push(`<span>${esc(eqNome(v.equipe))}</span>`);
   if (v.telefone) meta.push(`<span>📱 ${esc(v.telefone)}</span>`);
   const acoes = [];
+  if (v.telefone && v.status !== 'Cancelada') acoes.push(htmlLigar(v.telefone, v.cliente, 'visita'));
   if (v.telefone && AGUARDA_CONF.concat('Confirmada').includes(v.status)) acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
   if (v.status === 'Pendente' || v.status === 'Reagendada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">Confirmada</button>`);
   if (v.status === 'Confirmada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Realizada')">Realizada</button>`);
@@ -3496,7 +3631,7 @@ window.abrirRelatorio = async uid => {
   } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
 };
 setTimeout(() => {
-  const bloq = ['ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','restaurarReserva','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarReserva','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria','vendaCaiu'];
+  const bloq = ['salvarFin','excluirFin','alternarPagoFin','lancarComissao','salvarFinCfg','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','restaurarReserva','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarReserva','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria','vendaCaiu'];
   bloq.forEach(n => { const f = window[n]; if (typeof f !== 'function' || f._ceo) return;
     const g = function(...a){ if (souCeo()) { toast('Perfil CEO: só visualização'); return; } return f.apply(this, a); }; g._ceo = true; window[n] = g; });
 }, 0);
@@ -3648,7 +3783,7 @@ function cardCarta(c){
     else aviso = `<span>vence em ${parseISO(validadeDe(c)).toLocaleDateString('pt-BR')}</span>`;
   }
   const acoes = [];
-  if (c.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')" title="Abrir conversa">${IC.wa}WhatsApp</button>`);
+  if (c.telefone) acoes.push(htmlLigar(c.telefone, c.cliente, 'carta'), `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')" title="Abrir conversa">${IC.wa}WhatsApp</button>`);
   if (c.status === 'Aprovada' || c.status === 'Em negociação') acoes.push(`<button class="snooze" onclick="mudarStatusCarta('${c.id}','Venda fechada')">Venda fechada</button>`);
   if (c.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('c','${c.id}')" title="Mensagens prontas">💬</button>`);
   acoes.push(`<button class="icon-btn del" onclick="excluirCarta('${c.id}')" title="Arquivar">🗄️</button>`);
@@ -3673,7 +3808,7 @@ function cardAprovPlanilha(a){
   if (a.cpf) meta.push(`<span>🪪 ${cpfOculto(a.cpf)}</span>`);
   if (a.renda) meta.push(`<span>renda ${esc(a.renda)}</span>`);
   const acoes = [];
-  if (a.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
+  if (a.telefone) acoes.push(htmlLigar(a.telefone, a.nome, 'avaliacao'), `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
   if (a.corretorUid === uidAtual || podeGerir()) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
   return `<div class="vcard" style="--vc:#10b981">
     <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>aprovada</span></div>
@@ -3963,12 +4098,12 @@ function renderAtencao(){
   // pós-venda do próprio corretor
   cartas.filter(c => c.corretorUid === uidAtual && c.status === 'Venda fechada').forEach(c => (c.posVenda || []).filter(p => !p.feito && p.date <= h).forEach(p => itens.push({ ord:0,
     html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,#8b5cf6 14%,transparent)">🎁</div><div class="att"><b>${esc(p.texto)}</b><span>Pós-venda · ${esc(c.cliente)}</span></div>
-      <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="posVendaFeito('${c.id}','${p.id}')">Feito</button></div></div>` })));
+      <div class="ata">${c.telefone ? htmlLigar(c.telefone, c.cliente, 'carta') + `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="posVendaFeito('${c.id}','${p.id}')">Feito</button></div></div>` })));
   // cartas vencendo (no escopo de quem vê)
   cartas.filter(c => ['Aprovada','Em negociação'].includes(c.status) && validadeDe(c)).forEach(c => {
     const d = diffDias(validadeDe(c)); if (d > 7) return;
     itens.push({ ord:1, html:`<div class="at-row"><div class="ati" style="background:var(--danger-soft)">⏳</div><div class="att"><b>Carta de ${esc(c.cliente)} ${d < 0 ? `venceu há ${-d} dia${-d!==1?'s':''}` : d === 0 ? 'vence hoje' : `vence em ${d} dia${d!==1?'s':''}`}</b><span>${brl(c.valor)}${podeGerir() ? ' · ' + esc(c.corretorNome) : ''}</span></div>
-      <div class="ata">${c.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="editarCarta('${c.id}')">Abrir</button></div></div>` });
+      <div class="ata">${c.telefone ? htmlLigar(c.telefone, c.cliente, 'carta') + `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="editarCarta('${c.id}')">Abrir</button></div></div>` });
   });
   // documentos faltando nas cartas do próprio corretor
   cartas.filter(c => c.corretorUid === uidAtual && ['Aprovada','Em negociação'].includes(c.status) && docsOk(c) < DOCS.length).forEach(c => {
@@ -4315,7 +4450,7 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:1, recontato:1, ligLimite:30 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
@@ -4326,7 +4461,10 @@ const PONTOS_ITENS = [
   ['vFalta','🚫 Cliente não compareceu'],
   ['carta','📄 Carta aprovada'],
   ['docs','🗂️ Documentação completa'],
-  ['venda','🎉 Venda fechada']
+  ['venda','🎉 Venda fechada'],
+  ['presenca','🙋 Presença no plantão'],
+  ['ligacao','📞 Ligação (1ª vez para o número)'],
+  ['recontato','🔁 Recontato (ligou de novo outro dia)']
 ];
 const MSG_PADRAO = [
   { id:'confirmar', tipo:'visita', titulo:'✅ Confirmar a visita', texto:'Olá, {cliente}! Tudo bem? Aqui é {corretor}, da Frade Imóveis. Passando para confirmar a sua visita {dia} às {hora}. Posso confirmar?' },
@@ -4411,7 +4549,7 @@ function pontosDoMes(m, val){
   const g = new Map();
   const pega = r => {
     const k = r.corretorUid || 'n:' + norm(r.corretorNome);
-    if (!g.has(k)) g.set(k, { uid:r.corretorUid || '', nome:r.corretorNome || 'Sem nome', equipe:r.equipe || '', visitas:0, confirmadas:0, realizadas:0, faltas:0, cartas:0, docs:0, vendas:0, pontos:0 });
+    if (!g.has(k)) g.set(k, { uid:r.corretorUid || '', nome:r.corretorNome || 'Sem nome', equipe:r.equipe || '', visitas:0, confirmadas:0, realizadas:0, faltas:0, cartas:0, docs:0, vendas:0, presencas:0, ligacoes:0, recontatos:0, pontos:0 });
     const x = g.get(k); if (r.corretorNome) x.nome = r.corretorNome; if (r.equipe) x.equipe = r.equipe; return x;
   };
   rankingDocs.filter(r => noMes(r.date) && !r.semPontos && !visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
@@ -4427,6 +4565,13 @@ function pontosDoMes(m, val){
     const x = pega(r);
     if (aprov) { x.cartas++; x.pontos += n('carta'); if (r.docsCompletos) { x.docs++; x.pontos += n('docs'); } }
     if (venda) { x.vendas++; x.pontos += n('venda'); }
+  });
+  // presença no plantão, ligações e recontatos (resumo por corretor e mês, sem dados de cliente)
+  rankingAtiv.filter(r => r.mes === m && r.uid).forEach(r => {
+    const x = pega({ corretorUid:r.uid, corretorNome:(perfisLista.find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
+    const pr = Object.keys(r.pres || {}).length, l = somaCap(r.lig, val), c = somaCap(r.rec, val);
+    x.presencas += pr; x.ligacoes += l; x.recontatos += c;
+    x.pontos += pr * n('presenca') + l * n('ligacao') + c * n('recontato');
   });
   return [...g.values()].sort((a,b) => b.pontos-a.pontos || b.vendas-a.vendas || b.cartas-a.cartas || a.nome.localeCompare(b.nome,'pt-BR'));
 }
@@ -4473,11 +4618,11 @@ function renderRankingPontos(){
   $('rankTit').textContent = 'Ranking de pontos · ' + nomeMes(m);
   if (!lista.length) { $('rankLista').innerHTML = vazio('Ninguém pontuou ainda neste mês', 'Visitas, cartas e vendas geram pontos. O ranking aparece aqui.'); return; }
   const pos = posicoes(lista);
-  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th></tr></thead><tbody>${
-    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td></tr>`).join('')
+  $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Presenças</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
+    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
   }</tbody><tfoot></tfoot></table>
   ${rankingSdr(...faixa('mes')).length ? `<div class="rep-sec" style="margin:18px 0 8px">📞 Ranking das SDRs</div>${tabelaSdr(...faixa('mes'))}` : ''}
-  <div class="hint" style="margin-top:10px">Valem: ${PONTOS_ITENS.map(([k,n]) => `${n.replace(/^\S+\s/,'').toLowerCase()} <b>${appCfg.pontos[k]}</b>`).join(' · ')}</div>`;
+  <details class="info-tog" style="margin-top:10px"><summary>ⓘ Quanto vale cada ação</summary><div class="hint" style="margin-top:6px">Valem: ${PONTOS_ITENS.map(([k,n]) => `${n.replace(/^\S+\s/,'').toLowerCase()} <b>${appCfg.pontos[k]}</b>`).join(' · ')}${ligLimite() ? ` · até ${ligLimite()} ligações e ${ligLimite()} recontatos pontuam por dia (cada número conta uma vez por dia)` : ''}</div></details>`;
 }
 
 // ---------- relatórios de gestão ----------
@@ -4715,7 +4860,8 @@ function renderAdm(){
   const ativoEl = document.activeElement;
   if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
   admAssin = ass;
-  $('admPontos').innerHTML = PONTOS_ITENS.map(([k,n]) => `<div class="pt-row"><span>${n}</span><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}"></div>`).join('');
+  $('admPontos').innerHTML = PONTOS_ITENS.map(([k,n]) => `<div class="pt-row"><span>${n}</span><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}"></div>`).join('')
+    + `<div class="pt-row"><span>📵 Máximo de ligações e de recontatos que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`;
   $('admOrigens').value = appCfg.origens.join('\n');
   rascMsgs = JSON.parse(JSON.stringify(appCfg.mensagens || MSG_PADRAO)); desenharModelos();
   $('admMotivos').value = appCfg.motivos.join('\n');
@@ -4742,7 +4888,7 @@ window.salvarModelos = async () => {
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
 window.salvarPontuacao = async () => {
-  const pontos = {}; PONTOS_ITENS.forEach(([k]) => pontos[k] = Math.round(Number($('pt_' + k).value) || 0));
+  const pontos = {}; [...PONTOS_ITENS.map(x => x[0]), 'ligLimite'].forEach(k => pontos[k] = Math.round(Number($('pt_' + k).value) || 0));
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
@@ -4881,7 +5027,7 @@ function cardAvaliacao(a){
   if (a.parcela) meta.push(`<span>parcela ${esc(a.parcela)}</span>`);
   const hist = (a.historico || []).slice(-4).map(x => `${esc(x.status)} <span class="muted">${new Date(x.em).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span>`).join(' → ');
   const acoes = [];
-  if (a.telefone) acoes.push(`<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
+  if (a.telefone) acoes.push(htmlLigar(a.telefone, a.nome, 'avaliacao'), `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
   if (inf.g === 'aprovado' && !cartaDoCliente(a) && (a.corretorUid === uidAtual || podeGerir())) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
   return `<div class="vcard" style="--vc:${inf.cor}">
     <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>${a.dataEstimada ? 'sem data' : 'doc'}</span></div>
@@ -4958,7 +5104,7 @@ function itensEtapa2(){
     if (agora < base + prazo * 864e5) return;
     const baixa = /BAIXA/.test(a.status);
     itens.push({ ord:0, html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,#f59e0b 16%,transparent)">🔁</div><div class="att"><b>Repescagem: ${esc(nomeBonito(a.nome))}</b><span>${baixa ? 'Restrição fácil de pagar: oriente o cliente a quitar e reenviar a documentação' : `${esc(a.status)} desde ${new Date(a.statusEm).toLocaleDateString('pt-BR')} · vale falar de novo`}</span></div>
-      <div class="ata">${a.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="repescado('${a.id}')">Falei</button></div></div>` });
+      <div class="ata">${a.telefone ? htmlLigar(a.telefone, a.nome, 'repescagem') + `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="repescado('${a.id}')">Falei</button></div></div>` });
   });
   const limite = agora - 45 * 864e5;
   avaliacoes.filter(a => infoStatus(a.status).g === 'aprovado' && (a.statusEm || 0) >= limite && (a.corretorUid === uidAtual || souGerente()) && !cartaDoCliente(a)).forEach(a => {
@@ -5576,10 +5722,10 @@ function htmlAlertasHoje(){
   return `<div class="card al-card"><div class="card-head"><h2>Alertas da direção</h2><span class="muted">${l.length} em aberto</span></div>${l.map(cardAlerta).join('')}</div>`;
 }
 window.leadsDiaSel = '';
-window.presDia = ''; window.painelMes = 'atual';
+window.presDia = ''; window.painelMes = 'atual'; window.painelAba = 'equipes';
 function assinarEtapa3(){
   const silencio = e => console.warn('Painel:', e.code || e.message);
-  if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'presenca'), where('dia','>=',inicioJanela())), s => { presencas = {}; s.docs.forEach(d => presencas[d.id] = d.data()); render(); }, silencio));
+  if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'presenca'), where('dia','>=',inicioJanela())), s => { presencas = {}; s.docs.forEach(d => presencas[d.id] = d.data()); render(); sincPresencaRanking(); }, silencio));
   if (souGerente()) subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('dia','>=',hojeISO())), s => { leadsHoje = s.docs.map(d => d.data()); render(); }, silencio));
   if (podeGerir()) subsPapel.push(onSnapshot(query(collection(db,'leads_ajuste'), where('dia','>=',inicioJanela())), s => { leadsAjustes = {}; s.docs.forEach(d => leadsAjustes[d.id] = d.data()); render(); }, silencio));
   let qp;
@@ -5593,6 +5739,352 @@ function assinarEtapa3(){
   if (qal) subsPapel.push(onSnapshot(qal, s => { alertas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   subsPapel.push(onSnapshot(collection(db,'empreendimentos'), s => { empreendimentos = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
 }
+
+// =====================================================================
+// ======= ETAPA 4: LIGAÇÕES PELO APP E PRESENÇA VALENDO PONTOS ========
+// =====================================================================
+let rankingAtiv = [], meusLeadsHoje = [], minhasLigHoje = [], _presSinc = false;
+const ligLimite = () => Math.max(0, Number(appCfg.pontos.ligLimite) || 0);
+function somaCap(mapa, val){
+  const cap = Math.max(0, Number((val || appCfg.pontos).ligLimite) || 0);
+  return Object.values(mapa || {}).reduce((a, n) => a + (cap ? Math.min(Number(n) || 0, cap) : (Number(n) || 0)), 0);
+}
+const ligaPontua = () => souAtivo() && !souCeo() && ['corretor','coordenador'].includes(perfil?.papel);
+function assinarEtapa4(){
+  rankingAtiv = []; meusLeadsHoje = []; minhasLigHoje = []; _presSinc = false;
+  const silencio = e => console.warn('Etapa 4:', e.code || e.message);
+  subsPapel.push(onSnapshot(query(collection(db,'ranking_ativ'), where('mes','>=', mesAnterior(1))), s => { rankingAtiv = s.docs.map(d => ({ id:d.id, ...d.data() })); sincPresencaRanking(); render(); }, silencio));
+  if (ligaPontua()) {
+    subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+    subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  }
+  assinarFinanceiro(); assinarZap();
+}
+// a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
+async function presencaNoRanking(uid, dia, presente){
+  if (!souGerente() || souCeo()) return;
+  const p = perfisLista.find(x => x.uid === uid) || {}, m = dia.slice(0,7);
+  await setDoc(doc(db,'ranking_ativ', m + '_' + uid), { mes:m, uid, nome:p.nome || '', equipe:p.equipe || '', pres:{ [dia]: presente ? true : deleteField() }, atualizadoEm:Date.now() }, { merge:true });
+}
+// confere uma vez por sessão: presenças antigas (de antes desta versão) entram no ranking
+async function sincPresencaRanking(){
+  if (_presSinc || !souGerente() || souCeo() || !Object.keys(presencas).length || !perfisLista.length) return;
+  _presSinc = true;
+  try {
+    const meses = [mesAtual(), mesAnterior(1)], quer = {};
+    Object.entries(presencas).forEach(([dia, d]) => { if (!meses.includes(dia.slice(0,7))) return;
+      Object.entries(d.marcados || {}).forEach(([uid, x]) => { if (x.status === 'presente') ((quer[dia.slice(0,7) + '_' + uid] = quer[dia.slice(0,7) + '_' + uid] || new Set())).add(dia); }); });
+    const b = writeBatch(db); let n = 0;
+    const ids = new Set([...Object.keys(quer), ...rankingAtiv.filter(r => meses.includes(r.mes)).map(r => r.id)]);
+    ids.forEach(id => {
+      const tem = new Set(Object.keys((rankingAtiv.find(r => r.id === id) || {}).pres || {})), q = quer[id] || new Set();
+      const add = [...q].filter(d => !tem.has(d)), tira = [...tem].filter(d => !q.has(d));
+      if (!add.length && !tira.length) return;
+      const [m, uid] = [id.slice(0,7), id.slice(8)], p = perfisLista.find(x => x.uid === uid) || {};
+      const pres = {}; add.forEach(d => pres[d] = true); tira.forEach(d => pres[d] = deleteField());
+      b.set(doc(db,'ranking_ativ',id), { mes:m, uid, nome:p.nome || '', equipe:p.equipe || '', pres, atualizadoEm:Date.now() }, { merge:true }); n++;
+    });
+    if (n) await b.commit();
+  } catch(e) { console.warn('Presença no ranking:', e.message); _presSinc = false; }
+}
+// ---------- ligar pelo app: abre o discador e registra sozinho ----------
+function htmlLigar(tel, cliente, origem){
+  if (!soDig(tel)) return '';
+  return `<button class="snooze lig" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarBtn(this)" title="Ligar pelo app (conta pontos)">📞 Ligar</button>`;
+}
+window.htmlLigar = htmlLigar;
+window.ligarBtn = b => ligar(b.dataset.tel, b.dataset.cli, b.dataset.or);
+window.ligar = (tel, cliente, origem) => {
+  let n = soDig(tel);
+  if (n.length < 8) { toast('Telefone incompleto'); return; }
+  const a = document.createElement('a'); a.href = 'tel:' + (n.length >= 12 && n.startsWith('55') ? '+' + n : n); document.body.appendChild(a); a.click(); a.remove();
+  registrarLigacao(tel, cliente, origem).catch(e => console.warn('Ligação:', e.message));
+};
+async function registrarLigacao(tel, cliente, origem){
+  if (!ligaPontua()) return;
+  const t = chaveTel(tel); if (!t) return;
+  const h = hojeISO(), m = h.slice(0,7);
+  if (minhasLigHoje.some(x => x.telNorm === t)) { toast('📞 Ligando… (esse número já contou hoje)'); return; }
+  let antes = [];
+  try { antes = (await getDocs(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('telNorm','==',t)))).docs.map(d => d.data()); } catch(e) {}
+  if (antes.some(x => x.dia === h)) return;
+  const rec = antes.length > 0, b = writeBatch(db);
+  b.set(doc(collection(db,'ligacoes')), { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec });
+  b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [rec ? 'rec' : 'lig']:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true });
+  await gravar(b.commit());
+  toast(rec ? '🔁 Recontato registrado. Conta pontos no ranking.' : '📞 Ligação registrada. Conta pontos no ranking.');
+}
+window.ligarDiscador = () => { const v = $('discNum').value; if (soDig(v).length < 8) { toast('Digite o número com DDD'); return; } ligar(v, '', 'discador'); $('discNum').value = ''; };
+// card "Meus leads de hoje" na tela Hoje
+function htmlMeusLeads(){
+  if (!ligaPontua() || view !== 'hoje') return '';
+  const lig = minhasLigHoje.filter(x => !x.recontato).length, rec = minhasLigHoje.filter(x => x.recontato).length;
+  const feitos = new Set(minhasLigHoje.map(x => x.telNorm));
+  const l = meusLeadsHoje.slice().sort((a,b) => (b.em || 0) - (a.em || 0));
+  const linhas = l.map(e => {
+    const tel = e.telefone || '', ok = e.telNorm && feitos.has(e.telNorm);
+    return `<div class="ml-row"><div class="ml-av">${esc((e.cliente || '?').trim()[0] || '?')}</div><div class="ml-txt"><b>${esc(e.cliente || 'Lead sem nome')}</b><small>${esc(tel || 'sem telefone no aviso do CRM')}${e.origem ? ' · ' + esc(e.origem) : ''} · ${new Date(e.em || 0).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</small></div>
+      <div class="ml-acoes">${ok ? '<span class="pill-ok">✓ ligou</span>' : ''}${htmlLigar(tel, e.cliente, 'lead')}${tel ? `<button class="snooze wa" onclick="abrirWhats('${esc(soDig(tel))}')" title="WhatsApp">${IC.wa}WhatsApp</button>` : ''}</div></div>`;
+  }).join('');
+  return `<div class="card ml-card"><div class="card-head"><h2>📞 Ligações de hoje</h2><span class="muted">${lig} ligaç${lig === 1 ? 'ão' : 'ões'} · ${rec} recontato${rec === 1 ? '' : 's'}</span></div>
+    <div class="ml-disc"><input id="discNum" inputmode="tel" placeholder="Ligar para um número (com DDD)" onkeydown="if(event.key==='Enter')ligarDiscador()"><button class="btn btn-primary" onclick="ligarDiscador()">📞 Ligar</button></div>
+    ${l.length ? `<div class="rep-sec" style="margin:14px 0 6px">Seus leads de hoje (${l.length})</div>${linhas}` : '<div class="muted" style="font-size:13.5px;margin-top:10px">Os leads que o CRM passar para você hoje aparecem aqui com o botão de ligar.</div>'}
+    <details class="info-tog" style="margin-top:8px"><summary>ⓘ Como conta</summary><div class="hint" style="margin-top:6px">Ligue sempre pelo botão 📞 do app: a ligação é registrada sozinha. Primeira vez para um número conta como <b>ligação</b>; ligar de novo para o mesmo número em outro dia conta como <b>recontato</b>. Cada número conta uma vez por dia.</div></details></div>`;
+}
+
+// =====================================================================
+// ================= FINANCEIRO (só gerência e CEO) ====================
+// =====================================================================
+let finLanc = [], finCfg = { pctImob:5, pctCor:1.5 }, finEdit = null;
+window.finMes = ''; window.finAba = 'lanc'; window.finBusca = ''; window.finTipo = '';
+const FIN_CATS = { entrada:['Comissão de venda','Bônus da construtora','Aluguel recebido','Outras entradas'],
+  saida:['Comissão de corretor','Salários e pró-labore','Aluguel do escritório','Marketing e anúncios','Impostos','Contas (água, luz, internet)','Material e escritório','Sistemas e assinaturas','Outras saídas'] };
+const brl2 = n => (Number(n) || 0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+function assinarFinanceiro(){
+  finLanc = [];
+  if (!souGerente()) return;
+  const silencio = e => console.warn('Financeiro:', e.code || e.message);
+  subsPapel.push(onSnapshot(collection(db,'fin_lanc'), s => { finLanc = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  subsPapel.push(onSnapshot(doc(db,'fin_config','geral'), s => { if (s.exists()) finCfg = { ...finCfg, ...s.data() }; render(); }, silencio));
+}
+const finDoMes = m => finLanc.filter(x => (x.data || '').slice(0,7) === m);
+function renderFinanceiro(){
+  if (view !== 'financeiro' || !souGerente()) return;
+  if (!finMes) window.finMes = mesAtual();
+  if (document.activeElement?.id !== 'finMesSel') { $('finMesSel').innerHTML = opcoesMeses(finMes); $('finMesSel').value = finMes; }
+  const l = finDoMes(finMes), h = hojeISO();
+  const soma = f => l.filter(f).reduce((a,x) => a + (Number(x.valor) || 0), 0);
+  const rec = soma(x => x.tipo === 'entrada' && x.pago), pag = soma(x => x.tipo === 'saida' && x.pago);
+  const aRec = soma(x => x.tipo === 'entrada' && !x.pago), aPag = soma(x => x.tipo === 'saida' && !x.pago);
+  const venc = finLanc.filter(x => !x.pago && x.data && x.data < h);
+  $('finKpis').innerHTML = `
+    <div class="pd-kpi"><span>Recebido</span><b class="fin-pos">${brl(rec)}</b><em>entradas pagas no mês</em></div>
+    <div class="pd-kpi"><span>Pago</span><b class="fin-neg">${brl(pag)}</b><em>saídas pagas no mês</em></div>
+    <div class="pd-kpi"><span>Saldo do mês</span><b style="color:${rec - pag >= 0 ? 'var(--ok)' : 'var(--danger)'}">${brl(rec - pag)}</b><em>recebido menos pago</em></div>
+    <div class="pd-kpi"><span>A receber</span><b>${brl(aRec)}</b><em>entradas em aberto</em></div>
+    <div class="pd-kpi"><span>A pagar</span><b>${brl(aPag)}</b><em>saídas em aberto</em></div>`;
+  $('finAviso').innerHTML = venc.length ? `<div class="fin-alerta">⚠️ ${venc.length} lançamento${venc.length > 1 ? 's' : ''} vencido${venc.length > 1 ? 's' : ''} em aberto (${brl(venc.reduce((a,x) => a + (Number(x.valor) || 0), 0))}). <button class="link" onclick="finAba='lanc';finTipo='vencidos';render()">Ver</button></div>` : '';
+  document.querySelectorAll('#finAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === finAba));
+  $('finCorpo').innerHTML = finAba === 'comissoes' ? htmlFinComissoes() : finAba === 'cats' ? htmlFinCats(l) : htmlFinLanc(l);
+}
+function htmlFinLanc(l){
+  const t = norm(finBusca), h = hojeISO();
+  let lista = finTipo === 'vencidos' ? finLanc.filter(x => !x.pago && x.data && x.data < h) : l;
+  lista = lista.filter(x => (!finTipo || finTipo === 'vencidos' || (finTipo === 'aberto' ? !x.pago : x.tipo === finTipo)) && (!t || norm([x.descricao, x.categoria, x.corretorNome, x.obs].join(' ')).includes(t)))
+    .sort((a,b) => (a.data || '').localeCompare(b.data || '') || (a.criadoEm || 0) - (b.criadoEm || 0));
+  const filtros = [['','Tudo'],['entrada','Entradas'],['saida','Saídas'],['aberto','Em aberto'],['vencidos','Vencidos']];
+  const cab = `<div class="fin-filtros"><div class="seg">${filtros.map(([k,n]) => `<button class="${finTipo === k ? 'on' : ''}" onclick="finTipo='${k}';render()">${n}</button>`).join('')}</div>
+    <input id="finBuscaI" placeholder="Buscar descrição, categoria ou corretor..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=$('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"></div>`;
+  if (!lista.length) return cab + vazio(finTipo === 'vencidos' ? 'Nada vencido' : 'Nenhum lançamento neste mês', souCeo() ? 'Quando a gerência lançar entradas e saídas, elas aparecem aqui.' : 'Toque em “+ Lançamento” ou lance as comissões das vendas na aba Comissões.');
+  return cab + `<div class="fin-tab-wrap"><table class="rank fin-tab"><thead><tr><th>Data</th><th>Descrição</th><th class="hide-m">Categoria</th><th style="text-align:right">Valor</th><th>Situação</th><th class="nao-ceo"></th></tr></thead><tbody>${lista.map(x => {
+    const atras = !x.pago && x.data && x.data < h;
+    return `<tr><td class="fin-data">${dataBR(x.data)}</td><td><span class="nm">${esc(x.descricao || x.categoria || '—')}</span>${x.corretorNome ? `<span class="eq">👤 ${esc(x.corretorNome)}</span>` : ''}${x.vendaId ? '<span class="eq">🔑 da venda</span>' : ''}</td>
+      <td class="hide-m"><span class="fin-cat">${esc(x.categoria || '—')}</span></td>
+      <td style="text-align:right" class="${x.tipo === 'entrada' ? 'fin-pos' : 'fin-neg'}"><b>${x.tipo === 'entrada' ? '+' : '−'} ${brl2(x.valor)}</b></td>
+      <td><button class="fin-st ${x.pago ? 'ok' : atras ? 'atr' : ''}" ${souCeo() ? 'disabled' : ''} onclick="alternarPagoFin('${x.id}')">${x.pago ? (x.tipo === 'entrada' ? '✓ Recebido' : '✓ Pago') : atras ? 'Vencido' : 'Em aberto'}</button></td>
+      <td class="nao-ceo" style="white-space:nowrap"><button class="icon-btn" title="Editar" onclick="editarFin('${x.id}')">✏️</button><button class="icon-btn del" title="Excluir" onclick="excluirFin('${x.id}')">🗑️</button></td></tr>`; }).join('')}</tbody></table></div>`;
+}
+function htmlFinCats(l){
+  const grupo = tipo => { const m = new Map(); l.filter(x => x.tipo === tipo).forEach(x => m.set(x.categoria || 'Sem categoria', (m.get(x.categoria || 'Sem categoria') || 0) + (Number(x.valor) || 0))); return [...m].sort((a,b) => b[1] - a[1]); };
+  const bloco = (tit, arr, cor) => { const max = Math.max(1, ...arr.map(x => x[1])), tot = arr.reduce((a,x) => a + x[1], 0);
+    return `<div class="card"><div class="card-head"><h2>${tit}</h2><span class="muted">${brl(tot)}</span></div>${arr.length ? arr.map(([c,v]) => `<div class="fin-bar"><span>${esc(c)}</span><div><i style="width:${Math.max(2, v / max * 100)}%;background:${cor}"></i></div><b>${brl(v)}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nada neste mês.</div>'}</div>`; };
+  return `<div class="pd-grid">${bloco('Entradas por categoria', grupo('entrada'), 'var(--ok)')}${bloco('Saídas por categoria', grupo('saida'), 'var(--danger)')}</div>`;
+}
+function htmlFinComissoes(){
+  const de = finMes + '-01', ate = fimDoMes(finMes);
+  const vs = reservas.filter(r => r.dia >= de && r.dia <= ate).sort((a,b) => (a.dia || '').localeCompare(b.dia || ''));
+  const pi = Number(finCfg.pctImob) || 0, pc = Number(finCfg.pctCor) || 0;
+  const cfg = `<div class="card fin-cfg"><div><b>Percentuais padrão</b><div class="muted" style="font-size:13px">Usados para calcular a comissão quando você lança uma venda. Dá para ajustar cada lançamento depois.</div></div>
+    <label>Imobiliária recebe (%)<input id="finPctImob" type="number" step="0.01" value="${pi}" ${souCeo() ? 'disabled' : ''}></label>
+    <label>Corretor recebe (%)<input id="finPctCor" type="number" step="0.01" value="${pc}" ${souCeo() ? 'disabled' : ''}></label>
+    <button class="btn btn-ghost nao-ceo" onclick="salvarFinCfg()">Salvar</button></div>`;
+  if (!vs.length) return cfg + vazio('Nenhuma venda neste mês', 'As vendas cadastradas em Vendas aparecem aqui para lançar a comissão.');
+  return cfg + `<div class="fin-tab-wrap"><table class="rank fin-tab"><thead><tr><th>Venda</th><th>Corretor</th><th style="text-align:right">VGV</th><th style="text-align:right">Comissão</th><th>Situação</th></tr></thead><tbody>${vs.map(r => {
+    const ls = finLanc.filter(x => x.vendaId === r.id), cor = corretoresDaReserva(r.corretorTexto), vgv = Number(r.valor) || 0;
+    const ent = ls.filter(x => x.tipo === 'entrada'), sai = ls.filter(x => x.tipo === 'saida');
+    const st = !ls.length ? (souCeo() ? '<span class="fin-cat">Não lançada</span>' : `<button class="btn btn-primary fin-lancar" onclick="lancarComissao('${r.id}')">Lançar comissão</button>`)
+      : `<span class="fin-st ${ent.every(x => x.pago) ? 'ok' : ''}">${ent.every(x => x.pago) ? '✓ Recebida' : 'A receber'}</span> <span class="fin-st ${sai.every(x => x.pago) ? 'ok' : ''}">${sai.every(x => x.pago) ? '✓ Corretor pago' : 'Corretor a pagar'}</span>`;
+    const valCom = ls.length ? ent.reduce((a,x) => a + (Number(x.valor) || 0), 0) : vgv * pi / 100;
+    return `<tr><td><span class="nm">${esc(r.cliente || 'Cliente')}</span><span class="eq">${dataBR(r.dia)}${r.empreendimento ? ' · ' + esc(r.empreendimento) : ''}</span></td>
+      <td>${esc(cor.map(c => primeiro(c.nome)).join(' + ') || r.corretorTexto || '—')}</td><td style="text-align:right">${brl(vgv)}</td>
+      <td style="text-align:right"><b>${brl2(valCom)}</b>${ls.length ? '' : '<span class="eq">estimada</span>'}</td><td>${st}</td></tr>`; }).join('')}</tbody></table></div>`;
+}
+window.salvarFinCfg = async () => {
+  const pctImob = Number($('finPctImob').value) || 0, pctCor = Number($('finPctCor').value) || 0;
+  try { await gravar(setDoc(doc(db,'fin_config','geral'), { pctImob, pctCor, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); toast('Percentuais salvos'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.lancarComissao = async id => {
+  const r = reservas.find(x => x.id === id); if (!r) return;
+  if (finLanc.some(x => x.vendaId === id)) { toast('A comissão dessa venda já foi lançada'); return; }
+  const vgv = Number(r.valor) || 0; if (!vgv) { toast('Essa venda está sem valor. Coloque o valor em Vendas primeiro.'); return; }
+  const cor = corretoresDaReserva(r.corretorTexto), pi = Number(finCfg.pctImob) || 0, pc = Number(finCfg.pctCor) || 0;
+  const b = writeBatch(db), base = { data:r.dia, vendaId:id, pago:false, criadoEm:Date.now(), criadoPor:perfil.nome };
+  b.set(doc(collection(db,'fin_lanc')), { ...base, tipo:'entrada', categoria:'Comissão de venda', descricao:`Comissão · ${r.cliente || 'venda'}`, valor:Math.round(vgv * pi) / 100 });
+  const partes = cor.length ? cor : [{ uid:'', nome:r.corretorTexto || 'Corretor' }];
+  partes.forEach(c => b.set(doc(collection(db,'fin_lanc')), { ...base, tipo:'saida', categoria:'Comissão de corretor', descricao:`Comissão de ${primeiro(c.nome)} · ${r.cliente || 'venda'}`, corretorUid:c.uid || '', corretorNome:c.nome || '', valor:Math.round(vgv * pc / partes.length) / 100 }));
+  try { await gravar(b.commit()); toast('Comissão lançada: entrada da imobiliária e pagamento do corretor'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.editarFin = id => {
+  const x = id ? finLanc.find(l => l.id === id) : null; finEdit = x ? id : null;
+  $('finTit').textContent = x ? 'Editar lançamento' : 'Novo lançamento';
+  $('finTipoSel').value = x?.tipo || 'saida'; finCatsOpc();
+  $('finDesc').value = x?.descricao || ''; $('finCat').value = x?.categoria || '';
+  $('finValor').value = x ? String(x.valor).replace('.', ',') : ''; $('finData').value = x?.data || hojeISO();
+  $('finPago').checked = !!x?.pago; $('finObs').value = x?.obs || '';
+  $('finCor').innerHTML = '<option value="">Nenhum</option>' + perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'gerente').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${x?.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('');
+  abrir('finModal'); setTimeout(() => $('finDesc').focus(), 50);
+};
+window.finCatsOpc = () => { $('finCats').innerHTML = FIN_CATS[$('finTipoSel').value].map(c => `<option value="${c}">`).join(''); };
+window.salvarFin = async () => {
+  const valor = Number(String($('finValor').value).replace(/\./g, '').replace(',', '.')) || 0;
+  const descricao = $('finDesc').value.trim(), categoria = $('finCat').value.trim(), data = $('finData').value;
+  if (!descricao && !categoria) { toast('Escreva uma descrição'); return; }
+  if (valor <= 0) { toast('Coloque o valor'); return; }
+  if (!data) { toast('Escolha a data'); return; }
+  const uidC = $('finCor').value, pc = perfisLista.find(p => p.uid === uidC);
+  const d = { tipo:$('finTipoSel').value, descricao, categoria, valor, data, pago:$('finPago').checked, obs:$('finObs').value.trim(), corretorUid:uidC || '', corretorNome:pc ? pc.nome : '', atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
+  if ($('finPago').checked) d.pagoEm = finLanc.find(x => x.id === finEdit)?.pagoEm || Date.now();
+  try {
+    if (finEdit) await gravar(setDoc(doc(db,'fin_lanc',finEdit), d, { merge:true }));
+    else await gravar(setDoc(doc(collection(db,'fin_lanc')), { ...d, criadoEm:Date.now(), criadoPor:perfil.nome }));
+    fechar('finModal'); toast('Lançamento salvo'); if (data.slice(0,7) !== finMes) { window.finMes = data.slice(0,7); render(); }
+  } catch(e) { toast('Erro: ' + e.message); }
+};
+window.alternarPagoFin = async id => {
+  const x = finLanc.find(l => l.id === id); if (!x) return;
+  try { await gravar(setDoc(doc(db,'fin_lanc',id), { pago:!x.pago, pagoEm:!x.pago ? Date.now() : deleteField(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.excluirFin = async id => {
+  const x = finLanc.find(l => l.id === id); if (!x) return;
+  if (!confirm(`Excluir o lançamento “${x.descricao || x.categoria}” de ${brl2(x.valor)}?`)) return;
+  try { await gravar(deleteDoc(doc(db,'fin_lanc',id))); toast('Lançamento excluído'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.exportarFin = () => {
+  const l = finDoMes(finMes).sort((a,b) => (a.data || '').localeCompare(b.data || ''));
+  baixarCSV('financeiro-' + finMes, ['Data','Tipo','Descrição','Categoria','Corretor','Valor','Situação','Observação'], l.map(x => [dataBR(x.data), x.tipo === 'entrada' ? 'Entrada' : 'Saída', x.descricao || '', x.categoria || '', x.corretorNome || '', String(x.valor).replace('.', ','), x.pago ? (x.tipo === 'entrada' ? 'Recebido' : 'Pago') : 'Em aberto', x.obs || '']));
+};
+
+// =====================================================================
+// ============ WHATSAPP (TESTE · gerência) — caixa de entrada ==========
+// =====================================================================
+let zapStatus = null, zapConvs = [], zapMsgs = [], zapSel = null, zapSubMsgs = null, zapSaidaPend = [];
+window.zapAba = 'todas'; window.zapBusca = '';
+function assinarZap(){
+  zapStatus = null; zapConvs = []; zapMsgs = []; zapSel = null; if (zapSubMsgs) { zapSubMsgs(); zapSubMsgs = null; }
+  if (!souGerente()) return;
+  const silencio = e => console.warn('WhatsApp:', e.code || e.message);
+  subsPapel.push(onSnapshot(doc(db,'zap_status','robo'), s => { zapStatus = s.exists() ? s.data() : null; render(); }, silencio));
+  subsPapel.push(onSnapshot(query(collection(db,'zap_conversas'), orderBy('ultimaEm','desc'), limit(150)), s => { zapConvs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  subsPapel.push(onSnapshot(query(collection(db,'zap_saida'), where('estado','in',['pendente','erro'])), s => { zapSaidaPend = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => x.porUid === uidAtual && Date.now() - (x.criadoEm || 0) < 6 * 3600e3); render(); }, silencio));
+  subsPapel.push(() => { if (zapSubMsgs) { zapSubMsgs(); zapSubMsgs = null; } });
+}
+const zapVivo = () => zapStatus && Date.now() - (zapStatus.vivoEm || 0) < 6 * 60e3;
+const zapNome = c => c?.nome || (c?.numero ? fmtFone(c.numero) : 'Contato');
+function fmtFone(n){ let d = soDig(n); if (d.startsWith('55') && d.length >= 12) d = d.slice(2); return d.length === 11 ? `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}` : d.length === 10 ? `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}` : d; }
+const iniciais = n => String(n || '?').trim().split(/\s+/).slice(0,2).map(x => x[0] || '').join('').toUpperCase() || '?';
+function quandoCurto(ms){
+  if (!ms) return ''; const d = new Date(ms), h = hojeISO(), di = iso(d);
+  if (di === h) return d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  if (di === somaDias(h, -1)) return 'ontem';
+  const dias = Math.round((parseISO(h) - parseISO(di)) / 864e5); return dias < 7 ? `-${dias}d` : d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
+}
+// quem é esse contato no app (planilha, cartas, visitas)
+function zapNoApp(c){
+  const t = chaveTel(c?.numero || ''); if (!t) return [];
+  const out = [];
+  avaliacoes.filter(a => a.telNorm === t || chaveTel(a.telefone) === t).slice(0,2).forEach(a => out.push(`📋 Planilha: <b>${esc(a.status || 'sem status')}</b> · ${esc(primeiro(a.corretorNome || a.aba || ''))}`));
+  cartas.filter(x => (x.telNorm || chaveTel(x.telefone)) === t).slice(0,2).forEach(x => out.push(`📄 Carta: <b>${esc(x.status || '')}</b> · ${esc(primeiro(x.corretorNome || ''))}`));
+  visitas.filter(v => chaveTel(v.telefone) === t).slice(0,2).forEach(v => out.push(`🏠 Visita ${dataBR(v.date)}: <b>${esc(v.status || '')}</b> · ${esc(primeiro(v.corretorNome || ''))}`));
+  return out;
+}
+function abrirConversa(id){
+  if (zapSel === id && zapSubMsgs) return;
+  zapSel = id; zapMsgs = []; if (zapSubMsgs) zapSubMsgs();
+  zapSubMsgs = onSnapshot(query(collection(db,'zap_conversas',id,'msgs'), orderBy('em','desc'), limit(200)), s => { zapMsgs = s.docs.map(d => ({ id:d.id, ...d.data() })).reverse(); renderZap(true); }, e => console.warn('msgs:', e.message));
+  const c = zapConvs.find(x => x.id === id);
+  if (c?.naoLidas && !souCeo()) setDoc(doc(db,'zap_conversas',id), { naoLidas:0 }, { merge:true }).catch(() => {});
+  document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto');
+  render();
+}
+window.abrirConversa = abrirConversa;
+window.zapVoltar = () => { document.getElementById('v-whatsapp')?.classList.remove('zap-chat-aberto'); };
+function renderZap(soMsgs){
+  if (view !== 'whatsapp' || !souGerente()) return;
+  // status do robô
+  const st = !zapStatus ? 'nunca' : !zapVivo() ? 'off' : zapStatus.estado;
+  const chip = { conectado:['ok', '● Conectado · ' + fmtFone(zapStatus?.numero || '')], qr:['warn', '● Aguardando QR Code'], off:['bad', '● Robô desligado'], nunca:['bad', '● Robô não instalado'], reconectando:['warn', '● Reconectando…'], iniciando:['warn', '● Ligando…'], desconectado:['warn', '● Desconectado'] }[st] || ['warn', st];
+  if (!soMsgs) {
+    $('zapChip').className = 'zap-chip ' + chip[0]; $('zapChip').textContent = chip[1];
+    $('zapSair').classList.toggle('hide', st !== 'conectado' || souCeo());
+    // lista
+    const t = norm(zapBusca);
+    let l = zapConvs.filter(c => !t || norm([c.nome, c.numero, c.ultima, c.corretorNome].join(' ')).includes(t) || (soDig(t).length >= 3 && soDig(c.numero).includes(soDig(t))));
+    const nl = zapConvs.filter(c => c.naoLidas > 0).length;
+    $('zapNl').textContent = nl; $('zapNl').classList.toggle('hide', !nl);
+    if (zapAba === 'naoLidas') l = l.filter(c => c.naoLidas > 0);
+    if (zapAba === 'semDono') l = l.filter(c => !c.corretorUid);
+    document.querySelectorAll('#zapAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === zapAba));
+    $('zapLista').innerHTML = l.length ? l.map(c => `<button class="zap-item ${zapSel === c.id ? 'sel' : ''}" onclick="abrirConversa('${c.id}')">
+        <span class="zap-av">${esc(iniciais(zapNome(c)))}</span>
+        <span class="zap-it-txt"><b>${esc(zapNome(c))}</b><small>${c.ultimaDe === 'eu' ? '<i>Você:</i> ' : ''}${esc(c.ultima || '')}</small>${c.corretorNome ? `<em>👤 ${esc(primeiro(c.corretorNome))}</em>` : ''}</span>
+        <span class="zap-it-dir"><small>${quandoCurto(c.ultimaEm)}</small>${c.naoLidas ? `<span class="zap-nl">${c.naoLidas}</span>` : ''}</span></button>`).join('')
+      : `<div class="zap-vazio-l">${zapAba === 'naoLidas' ? 'Nenhuma conversa sem ler. 🎉' : zapBusca ? 'Nada encontrado.' : 'As conversas aparecem aqui assim que alguém mandar mensagem para o número conectado.'}</div>`;
+  }
+  // conversa aberta / conexão
+  const c = zapConvs.find(x => x.id === zapSel);
+  if (st !== 'conectado' && !c) { $('zapChat').innerHTML = htmlZapConexao(st); $('zapDet').innerHTML = ''; return; }
+  if (!c) { $('zapChat').innerHTML = `<div class="zap-vazio"><div class="zap-vazio-ic">${IC.zap}</div><b>Escolha uma conversa</b><span>ou comece uma nova pelo número do cliente.</span>${souCeo() ? '' : '<button class="btn btn-primary" onclick="zapNova()">+ Nova conversa</button>'}</div>`; $('zapDet').innerHTML = ''; return; }
+  const ant = $('zapMsgs'), noFim = !ant || ant.scrollHeight - ant.scrollTop - ant.clientHeight < 80, rasc = $('zapTxt')?.value || '';
+  let dia = '';
+  const bolhas = zapMsgs.map(m => {
+    const d = iso(new Date(m.em || 0)), sep = d !== dia ? `<div class="zap-dia"><span>${d === hojeISO() ? 'Hoje' : d === somaDias(hojeISO(), -1) ? 'Ontem' : dataBR(d)}</span></div>` : ''; dia = d;
+    return sep + `<div class="zap-b ${m.de === 'eu' ? 'eu' : 'ele'}"><div class="zap-bt">${esc(m.texto || '').replace(/\n/g, '<br>')}</div><small>${m.de === 'eu' && m.porNome ? esc(primeiro(m.porNome)) + ' · ' : ''}${new Date(m.em || 0).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}${m.de === 'eu' ? ' ✓✓' : ''}</small></div>`;
+  }).join('');
+  const pend = zapSaidaPend.filter(x => x.jid === c.jid).map(x => `<div class="zap-b eu ${x.estado === 'erro' ? 'erro' : 'pend'}"><div class="zap-bt">${esc(x.texto)}</div><small>${x.estado === 'erro' ? '⚠️ Não enviada: ' + esc(x.erro || '') : '🕓 enviando…'}</small></div>`).join('');
+  $('zapChat').innerHTML = `<div class="zap-ch-head"><button class="icon-btn so-cel" onclick="zapVoltar()" title="Voltar">←</button><span class="zap-av">${esc(iniciais(zapNome(c)))}</span><div class="zap-ch-nome"><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
+      <div class="zap-ch-acoes">${c.numero ? htmlLigar(c.numero, zapNome(c), 'whatsapp') : ''}<button class="icon-btn" title="Detalhes do contato" onclick="document.getElementById('v-whatsapp').classList.toggle('zap-det-on')">ⓘ</button></div></div>
+    <div class="zap-msgs" id="zapMsgs">${bolhas || '<div class="zap-vazio-l">Ainda não há mensagens guardadas desta conversa.</div>'}${pend}</div>
+    ${souCeo() ? '<div class="zap-ro">Perfil CEO: só visualização</div>' : st !== 'conectado' ? '<div class="zap-ro">⚠️ O WhatsApp do robô não está conectado. As mensagens ficam guardadas e saem quando ele voltar.</div>' : ''}
+    ${souCeo() ? '' : `<div class="zap-input"><textarea id="zapTxt" rows="1" placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();zapEnviar()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'"></textarea><button class="btn btn-primary zap-env" onclick="zapEnviar()" title="Enviar">➤</button></div>`}`;
+  if ($('zapTxt')) { $('zapTxt').value = rasc; }
+  const box = $('zapMsgs'); if (box && noFim) box.scrollTop = box.scrollHeight;
+  // detalhes do contato
+  const noApp = zapNoApp(c);
+  $('zapDet').innerHTML = `<div class="zap-det-card"><span class="zap-av g">${esc(iniciais(zapNome(c)))}</span><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
+    <label>Corretor responsável</label>
+    <select ${souCeo() ? 'disabled' : ''} onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>
+    <label>No app</label>${noApp.length ? noApp.map(x => `<div class="zap-tag">${x}</div>`).join('') : '<div class="muted" style="font-size:13px">Esse número ainda não está em visitas, cartas ou na planilha.</div>'}
+    <label>Conversa</label><div class="muted" style="font-size:13px">Primeira mensagem guardada: ${c.criadoEm ? new Date(c.criadoEm).toLocaleDateString('pt-BR') : '—'}</div>
+    ${c.numero ? `<a class="btn btn-ghost" style="margin-top:12px" href="https://wa.me/${soDig(c.numero)}" target="_blank" rel="noopener">Abrir no WhatsApp do celular</a>` : ''}`;
+}
+function htmlZapConexao(st){
+  if (st === 'qr' && zapStatus?.qr) return `<div class="zap-con"><h2>Conecte o número de teste</h2><img class="zap-qr" src="${zapStatus.qr}" alt="QR Code do WhatsApp"><ol><li>No celular com o <b>chip de teste</b>, abra o WhatsApp.</li><li>Toque em <b>⋮ → Aparelhos conectados → Conectar um aparelho</b>.</li><li>Aponte a câmera para este QR Code.</li></ol><div class="hint">O código muda a cada 20 segundos. Se expirar, ele se atualiza sozinho aqui.</div></div>`;
+  const txt = st === 'nunca' ? 'O robô do WhatsApp ainda não foi ligado nenhuma vez.' : st === 'off' ? 'O robô do WhatsApp está desligado (o computador onde ele roda está desligado ou a janela foi fechada).' : 'O robô está ligando. O QR Code aparece aqui em instantes.';
+  return `<div class="zap-con"><div class="zap-vazio-ic">${IC.zap}</div><h2>WhatsApp de teste</h2><p>${txt}</p><div class="hint">Para ligar: no computador onde o robô foi instalado, dê dois cliques em <b>iniciar.bat</b> (na pasta robo-whatsapp) e deixe a janela aberta.</div><div class="zap-aviso">⚠️ Ligação não oficial: use só um chip de teste. O WhatsApp pode bloquear o número.</div></div>`;
+}
+window.zapEnviar = async () => {
+  const c = zapConvs.find(x => x.id === zapSel), txt = ($('zapTxt')?.value || '').trim();
+  if (!c || !txt) return;
+  $('zapTxt').value = ''; $('zapTxt').style.height = 'auto';
+  try { await gravar(setDoc(doc(collection(db,'zap_saida')), { jid:c.jid, texto:txt.slice(0, 4000), porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() })); }
+  catch(e) { toast('Erro: ' + e.message); $('zapTxt').value = txt; }
+};
+window.zapNova = async () => {
+  const n = prompt('Número do cliente com DDD (ex.: 83 99999-0000):'); if (!n || soDig(n).length < 10) return;
+  const txt = prompt('Primeira mensagem:', 'Olá! Aqui é ' + primeiro(perfil.nome) + ', da Frade Imóveis. ');
+  if (!txt || !txt.trim()) return;
+  try { await gravar(setDoc(doc(collection(db,'zap_saida')), { numero:soDig(n), texto:txt.trim(), porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() })); toast('Mensagem na fila. A conversa aparece na lista quando sair.'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.zapAssumir = async (id, uid) => {
+  const p = perfisLista.find(x => x.uid === uid);
+  try { await gravar(setDoc(doc(db,'zap_conversas',id), { corretorUid:uid || '', corretorNome:p ? p.nome : '', equipe:p ? (p.equipe || '') : '' }, { merge:true })); toast(p ? 'Conversa passada para ' + primeiro(p.nome) : 'Conversa sem responsável'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.zapDesconectar = async () => {
+  if (!confirm('Desconectar o número do robô? Para voltar, será preciso ler o QR Code de novo.')) return;
+  try { await setDoc(doc(db,'zap_status','robo'), { comando:'sair', comandoEm:Date.now() }, { merge:true }); toast('Pedido enviado ao robô'); } catch(e) { toast('Erro: ' + e.message); }
+};
 
 function enviarWhats(tel, txt){
   let n = soDig(tel); if (n.length <= 11) n = '55' + n;
@@ -5628,7 +6120,8 @@ window.marcarPresenca = async (uid, st) => {
   const atual = presencas[presDia]?.marcados?.[uid]?.status;
   const novo = atual === st ? '' : st, agora = new Date();
   const hora = presDia === hojeISO() ? `${pad(agora.getHours())}:${pad(agora.getMinutes())}` : '';
-  try { await gravar(setDoc(doc(db,'presenca',presDia), { dia:presDia, marcados:{ [uid]:{ status:novo, hora, por:perfil.nome, em:Date.now() } }, atualizadoEm:Date.now() }, { merge:true })); }
+  try { await gravar(setDoc(doc(db,'presenca',presDia), { dia:presDia, marcados:{ [uid]:{ status:novo, hora, por:perfil.nome, em:Date.now() } }, atualizadoEm:Date.now() }, { merge:true }));
+    await presencaNoRanking(uid, presDia, novo === 'presente'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 
@@ -5922,7 +6415,7 @@ function renderPainel(){
           ${(i % Math.ceil(dias.length / 10) === 0) ? `<text x="${x + w/2}" y="${H + 16}" class="rt-t">${d.slice(8,10)}</text>` : ''}</g>`; }).join('')}
     </svg>
     <div class="rt-pe"><span>Melhor dia: <b>${(() => { const b = dias.slice().sort((a,c) => docsDia(c) - docsDia(a))[0]; return b && docsDia(b) ? dataBR(b).slice(0,5) + ' · ' + docsDia(b) + ' docs' : '–'; })()}</b></span><span>Média: <b>${(A.docs / Math.max(dias.length, 1)).toLocaleString('pt-BR', { maximumFractionDigits:1 })} docs por dia</b></span></div></div>`;
-  let html = hero + funil + ritmo + `<details class="pd-todos" ${souCeo() ? '' : 'open'}><summary>Todos os números do mês</summary><div class="pd-kpis">
+  let html = hero + funil + '<!--SEC:numeros-->' + ritmo + `<details class="pd-todos" open><summary>Todos os números do mês</summary><div class="pd-kpis">
     ${kpi('📥','Leads', A.leads, B.leads, 'do CRM')}
     ${kpi('🗂️','Docs', A.docs, B.docs, 'planilha de avaliações')}
     <div class="pd-kpi"><span>Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
@@ -5946,6 +6439,7 @@ function renderPainel(){
     return `<div class="eqc ${i === 0 && (x.vendas || x.aprovPlan) ? 'lider' : ''}"><div class="eqc-t"><b>${esc(x.e.icone || '')} ${esc(x.e.nome)}</b>${i === 0 && (x.vendas || x.aprovPlan) ? '<span>na frente</span>' : `<span>${i + 1}º</span>`}</div>
       <div class="eqc-n"><div><b>${x.vendas}</b><span>vendas</span></div><div><b>${x.aprovPlan}</b><span>aprov.</span></div><div><b>${x.docs}</b><span>docs</span></div><div><b>${x.leads}</b><span>leads</span></div></div>
       <div class="eqc-c"><i style="width:${Math.min(100, c || 0)}%"></i></div><small>${c === null ? 'sem documentações' : c.toLocaleString('pt-BR') + '% das documentações aprovadas'}</small></div>`; }).join('')}</div>`;
+  html += '<!--SEC:equipes-->';
   if (souCeo()) html += `<div class="card"><div class="card-head"><h2>Equipes</h2><span class="muted">${mesNome.toLowerCase()}</span></div>${eqCards}</div>`;
   // alertas que o CEO criou
   if (souCeo()) { const meus = alertas.filter(a => a.autorUid === uidAtual).sort((a,b) => (b.criadoEm||0) - (a.criadoEm||0)).slice(0, 8);
@@ -5961,11 +6455,17 @@ function renderPainel(){
   const top = pontosDoMes(de.slice(0,7)).slice(0, 5);
   html += `<div class="card"><div class="card-head"><h2>Destaques do mês</h2><span class="muted">por pontos</span></div>${top.length ? top.map((x,i) => `<div class="pt-row"><span>${MEDALHA(i)} ${esc(x.nome)} <small class="muted">${esc(eqNome(x.equipe))}</small></span><b>${x.pontos} pts · ${x.vendas} venda${x.vendas!==1?'s':''}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Sem pontos no período. Defina a pontuação em Configurações.</div>'}</div></div>`;
   // ao vivo + notas
+  html += '<!--SEC:operacao-->';
   if (atual) html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>Leads por dia <span class="ao-vivo">ao vivo</span></h2><button class="link" onclick="setView('corretores')">Plantão</button></div>${htmlLeadsHoje()}</div>
     <div class="card"><div class="card-head"><h2>Nota do atendimento</h2><span class="muted">pesquisa após a visita</span></div>${htmlNotas(de, ate)}</div></div>`;
   else html += `<div class="card"><div class="card-head"><h2>Nota do atendimento</h2></div>${htmlNotas(de, ate)}</div>`;
   html += `<div class="card" style="margin-bottom:20px"><div class="card-head"><h2>SDRs</h2><span class="muted">visitas marcadas e resumo do dia</span></div>${tabelaSdr(de, ate)}</div>`;
-  $('painelConteudo').innerHTML = html;
+  // topo fixo (faixa + funil) e o resto em abas, para a tela não ficar comprida
+  const [topoP, ...resto] = html.split(/<!--SEC:/);
+  const secs = {}; resto.forEach(x => { const k = x.slice(0, x.indexOf('-->')); secs[k] = x.slice(x.indexOf('-->') + 3); });
+  const ABAS_P = [['equipes', 'Equipes e VGV'], ['numeros', 'Ritmo'], ['operacao', 'Leads e SDRs']];
+  if (!secs[window.painelAba]) window.painelAba = 'equipes';
+  $('painelConteudo').innerHTML = topoP + `<div class="seg pn-abas">${ABAS_P.map(([k, n]) => `<button class="${window.painelAba === k ? 'on' : ''}" onclick="painelAba='${k}';render()">${n}</button>`).join('')}</div>` + (secs[window.painelAba] || '');
 }
 // tela cheia do painel (para TV ou reunião). O iPhone não deixa a página ocupar a tela inteira,
 // então ali (e em qualquer aparelho) o app entra no "modo TV": some menu, barras e botões, fica só o painel.
@@ -6494,7 +6994,7 @@ function tabelaSdr(de, ate){
   const pos = posicoes(l);
   return `<div style="overflow-x:auto"><table class="rank"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th class="hide-m">Docs</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
     l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td class="hide-m">${x.docs}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
-    <div class="hint" style="margin-top:8px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam.</div>`;
+    <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam.</div></details>`;
 }
 
 // ---------- resumo do dia das SDRs ----------
