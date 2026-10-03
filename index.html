@@ -1217,6 +1217,14 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
 .zap-mid video{max-width:min(300px,100%);border-radius:10px}
 .zap-mid-info{font-size:12.5px;color:var(--muted)}
 .zap-doc{display:inline-block;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-weight:600;text-decoration:none;color:var(--text)}
+.zap-input{position:relative}
+.zap-mic{height:42px;width:42px;font-size:18px;flex:none}
+.zap-grav{position:absolute;inset:0;background:var(--card);display:flex;align-items:center;gap:10px;padding:10px 12px;z-index:2}
+.zap-grav b{font-variant-numeric:tabular-nums}.zap-grav .muted{flex:1;font-size:13px}
+.zap-rec{width:12px;height:12px;border-radius:50%;background:var(--danger);animation:zapPisca 1s infinite}
+@keyframes zapPisca{50%{opacity:.25}}
+.zap-play{border:1px solid var(--border);background:var(--card2);color:var(--text);border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}.zap-play small{color:var(--muted);font-weight:500;margin-left:6px}
+@media(max-width:760px){.zap-grav .muted{display:none}.zap-grav .btn{padding:8px 10px;font-size:13px}}
 </style>
 </head>
 <body>
@@ -2143,6 +2151,8 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
       <div class="hint" style="margin:0 0 12px">Sai sozinha, uma vez só, quando um cliente novo manda a primeira mensagem para o número.</div>
       <label class="chk" style="display:flex;gap:8px;align-items:center;margin:0 0 12px"><input type="checkbox" id="zapBvAtivo" style="width:auto"> Mandar a mensagem de boas-vindas</label>
       <label>Texto</label><textarea id="zapBvTxt" rows="4" maxlength="1000"></textarea>
+      <label class="chk" style="display:flex;gap:8px;align-items:center;margin:14px 0 0"><input type="checkbox" id="zapHist" style="width:auto"> Trazer as conversas antigas do celular ao conectar (últimos 3 dias)</label>
+      <div class="dono-only" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)"><button class="btn btn-ghost" style="color:var(--danger)" onclick="fechar('zapCfgModal');zapLimpar()">🗑️ Apagar todas as conversas do app</button><div class="hint" style="margin-top:6px">Só apaga do app. As conversas continuam no celular.</div></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('zapCfgModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarZapCfg()">Salvar</button></div>
   </div>
@@ -3649,7 +3659,7 @@ window.abrirRelatorio = async uid => {
   } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
 };
 setTimeout(() => {
-  const bloq = ['salvarZapCfg','zapAnexar','salvarFin','excluirFin','alternarPagoFin','lancarComissao','salvarFinCfg','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','restaurarReserva','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarReserva','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria','vendaCaiu'];
+  const bloq = ['zapLimpar','zapApagarConversa','salvarZapCfg','zapAnexar','zapGravar','salvarFin','excluirFin','alternarPagoFin','lancarComissao','salvarFinCfg','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','restaurarReserva','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarReserva','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria','vendaCaiu'];
   bloq.forEach(n => { const f = window[n]; if (typeof f !== 'function' || f._ceo) return;
     const g = function(...a){ if (souCeo()) { toast('Perfil CEO: só visualização'); return; } return f.apply(this, a); }; g._ceo = true; window[n] = g; });
 }, 0);
@@ -6002,7 +6012,7 @@ function assinarZap(){
 }
 const zapVivo = () => zapStatus && Date.now() - (zapStatus.vivoEm || 0) < 6 * 60e3;
 const zapNome = c => c?.nome || (c?.numero ? fmtFone(c.numero) : 'Contato');
-function fmtFone(n){ let d = soDig(n); if (d.startsWith('55') && d.length >= 12) d = d.slice(2); return d.length === 11 ? `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}` : d.length === 10 ? `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}` : d; }
+function fmtFone(n){ let d = soDig(n); if (d.startsWith('55') && d.length >= 12) d = d.slice(2); if (d.length === 10 && /[6-9]/.test(d[2])) d = d.slice(0,2) + '9' + d.slice(2); return d.length === 11 ? `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}` : d.length === 10 ? `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}` : d; }
 const iniciais = n => String(n || '?').trim().split(/\s+/).slice(0,2).map(x => x[0] || '').join('').toUpperCase() || '?';
 function quandoCurto(ms){
   if (!ms) return ''; const d = new Date(ms), h = hojeISO(), di = iso(d);
@@ -6063,7 +6073,8 @@ function renderZap(){
     _zapCache.zapChat = estrut; delete _zapCache.zapCab; delete _zapCache.zapMsgs; delete _zapCache.zapAviso;
     $('zapChat').innerHTML = `<div class="zap-ch-head" id="zapCab"></div><div class="zap-msgs" id="zapMsgs"></div><div id="zapAviso"></div>
       <div class="zap-input"><label class="icon-btn zap-anexo" title="Mandar foto, áudio ou arquivo">📎<input type="file" id="zapArq" accept="image/*,audio/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="zapAnexar(this)" hidden></label>
-        <textarea id="zapTxt" rows="1" placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();zapEnviar()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'"></textarea><button class="btn btn-primary zap-env" onclick="zapEnviar()" title="Enviar">➤</button></div>`;
+        <textarea id="zapTxt" rows="1" placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();zapEnviar()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'"></textarea><button class="icon-btn zap-mic" onclick="zapGravar()" title="Gravar áudio">🎤</button><button class="btn btn-primary zap-env" onclick="zapEnviar()" title="Enviar">➤</button>
+        <div class="zap-grav hide" id="zapGrav"><span class="zap-rec"></span><b id="zapGravT">0:00</b><span class="muted">Gravando áudio…</span><button class="btn btn-ghost" onclick="zapGravFim(false)">✕ Cancelar</button><button class="btn btn-primary" onclick="zapGravFim(true)">➤ Enviar áudio</button></div></div>`;
     setTimeout(() => $('zapTxt')?.focus(), 30);
   }
   zapPor('zapCab', `<button class="icon-btn so-cel" onclick="zapVoltar()" title="Voltar">←</button><span class="zap-av">${esc(iniciais(zapNome(c)))}</span><div class="zap-ch-nome"><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
@@ -6085,7 +6096,8 @@ function renderZap(){
     <select id="zapCorSel" onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>
     <label>No app</label>${noApp.length ? noApp.map(x => `<div class="zap-tag">${x}</div>`).join('') : '<div class="muted" style="font-size:13px">Esse número ainda não está em visitas, cartas ou na planilha.</div>'}
     <label>Conversa</label><div class="muted" style="font-size:13px">Primeira mensagem guardada: ${c.criadoEm ? new Date(c.criadoEm).toLocaleDateString('pt-BR') : '—'}</div>
-    ${c.numero ? `<a class="btn btn-ghost" style="margin-top:12px" href="https://wa.me/${soDig(c.numero)}" target="_blank" rel="noopener">Abrir no WhatsApp do celular</a>` : ''}`);
+    ${c.numero ? `<a class="btn btn-ghost" style="margin-top:12px" href="https://wa.me/${soDig(c.numero)}" target="_blank" rel="noopener">Abrir no WhatsApp do celular</a>` : ''}
+    ${souDono() ? `<button class="btn btn-ghost" style="margin-top:8px;color:var(--danger)" onclick="zapApagarConversa('${c.id}')">🗑️ Apagar conversa do app</button>` : ''}`);
 }
 // lista: um clique só já abre (o evento fica no contêiner, que nunca é redesenhado)
 document.addEventListener('click', ev => { const b = ev.target.closest?.('#zapLista .zap-item'); if (b) abrirConversa(b.dataset.id); });
@@ -6110,37 +6122,67 @@ async function urlMidia(id, n, mime){
 }
 function carregarMidias(){
   document.querySelectorAll('#zapMsgs .zap-mid:not([data-ok])').forEach(async el => {
-    el.dataset.ok = '1';
     const { mid, n, mime, nome } = el.dataset;
+    // vídeo e arquivo grande só baixam quando a pessoa toca (economiza leituras)
+    if ((mime.startsWith('video/') || Number(n) > 3) && !el.dataset.quer && !zapMidCache.has(mid)) { el.innerHTML = `<button class="zap-play" onclick="this.parentNode.dataset.quer=1;carregarMidias()">${mime.startsWith('video/') ? '▶ Ver vídeo' : '⬇ Abrir arquivo'} <small>${Math.max(1, Math.round(Number(n) * 0.65))} MB</small></button>`; return; }
+    el.dataset.ok = '1'; if (el.dataset.quer) el.innerHTML = '<span class="zap-mid-info">⏳ Carregando…</span>';
     try {
       const u = await urlMidia(mid, Number(n) || 1, mime);
       if (mime.startsWith('image/')) el.innerHTML = `<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="Foto" onload="const b=document.getElementById('zapMsgs');if(b&&b.scrollHeight-b.scrollTop-b.clientHeight<400)b.scrollTop=b.scrollHeight"></a>`;
       else if (mime.startsWith('audio/')) el.innerHTML = `<audio controls preload="metadata" src="${u}"></audio>`;
-      else if (mime.startsWith('video/')) el.innerHTML = `<video controls preload="metadata" src="${u}"></video>`;
+      else if (mime.startsWith('video/')) el.innerHTML = `<video controls playsinline preload="metadata" src="${u}"></video>`;
       else el.innerHTML = `<a class="zap-doc" href="${u}" download="${esc(nome || 'arquivo')}">📄 ${esc(nome || 'Baixar arquivo')}</a>`;
     } catch(e) { el.innerHTML = '<span class="zap-mid-info">📎 Não deu para abrir este arquivo.</span>'; }
   });
 }
+window.carregarMidias = carregarMidias;
 window.zapAnexar = async inp => {
   const f = inp.files?.[0]; inp.value = ''; if (!f) return;
   const c = zapConvs.find(x => x.id === zapSel); if (!c) return;
-  if (f.size > 4 * 1024 * 1024 && !f.type.startsWith('image/')) { toast('Arquivo muito grande (máximo 4 MB)'); return; }
+  if (f.size > 15 * 1024 * 1024 && !f.type.startsWith('image/')) { toast('Arquivo muito grande (máximo 15 MB)'); return; }
+  await zapMandarArquivo(f, f.type || 'application/octet-stream', f.name || '', false);
+};
+async function zapMandarArquivo(f, tipo, nomeArq, voz){
+  const c = zapConvs.find(x => x.id === zapSel); if (!c) return;
   try {
-    toast('Enviando ' + (f.type.startsWith('image/') ? 'a foto' : 'o arquivo') + '…');
-    let blob = f, mime = f.type || 'application/octet-stream';
+    toast(voz ? 'Enviando o áudio…' : 'Enviando ' + (tipo.startsWith('image/') ? 'a foto' : tipo.startsWith('video/') ? 'o vídeo' : 'o arquivo') + '…');
+    let blob = f, mime = tipo;
     if (mime.startsWith('image/') && mime !== 'image/gif') { const durl = await comprimirFoto(f, 1600, 0.82); blob = await (await fetch(durl)).blob(); mime = 'image/jpeg'; }
     const b64 = await new Promise((ok, erro) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = erro; r.readAsDataURL(blob); });
     const ref = doc(collection(db,'zap_saida')), id = 'out_' + ref.id, P = 900000, n = Math.ceil(b64.length / P);
     for (let i = 0; i < n; i++) await setDoc(doc(db,'zap_midia', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime });
     const leg = ($('zapTxt')?.value || '').trim(); if (leg) { $('zapTxt').value = ''; }
-    await setDoc(ref, { jid:c.jid, texto:leg, midia:{ id, n, mime, nome:f.name || '', tamanho:blob.size }, porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() });
+    await setDoc(ref, { jid:c.jid, texto:voz ? '' : leg, midia:{ id, n, mime, nome:nomeArq, tamanho:blob.size, voz:!!voz }, porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() });
+    if (voz && leg) $('zapTxt').value = leg;
   } catch(e) { toast('Erro ao enviar: ' + e.message); }
+}
+// ---------- gravar áudio pelo microfone do computador ou do celular ----------
+let zapRec = null;
+window.zapGravar = async () => {
+  if (zapRec) return;
+  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) { toast('Este navegador não grava áudio. Use o Chrome ou o Edge.'); return; }
+  let st;
+  try { st = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true } }); }
+  catch(e) { toast('Libere o microfone para o app (cadeado ao lado do endereço do site).'); return; }
+  const tipo = ['audio/webm;codecs=opus','audio/ogg;codecs=opus','audio/mp4','audio/webm'].find(t => MediaRecorder.isTypeSupported?.(t)) || '';
+  const mr = new MediaRecorder(st, tipo ? { mimeType:tipo, audioBitsPerSecond:48000 } : undefined), pedacos = [];
+  zapRec = { mr, st, pedacos, ini:Date.now(), enviar:false, tm:setInterval(() => { const s2 = Math.floor((Date.now() - zapRec.ini) / 1000); $('zapGravT').textContent = Math.floor(s2 / 60) + ':' + String(s2 % 60).padStart(2,'0'); if (s2 >= 300) zapGravFim(true); }, 250) };
+  mr.ondataavailable = e => { if (e.data.size) pedacos.push(e.data); };
+  mr.onstop = async () => {
+    const r = zapRec; zapRec = null; clearInterval(r.tm); r.st.getTracks().forEach(t => t.stop()); $('zapGrav')?.classList.add('hide');
+    if (!r.enviar) return;
+    const mime = (mr.mimeType || tipo || 'audio/webm').split(';')[0], blob = new Blob(r.pedacos, { type:mime });
+    if (blob.size < 1500) { toast('Áudio muito curto'); return; }
+    await zapMandarArquivo(blob, mime, 'audio.' + (mime.includes('mp4') ? 'm4a' : mime.includes('ogg') ? 'ogg' : 'webm'), true);
+  };
+  mr.start(500); $('zapGrav').classList.remove('hide');
 };
+window.zapGravFim = enviar => { if (!zapRec) return; zapRec.enviar = enviar; try { zapRec.mr.stop(); } catch(e) {} };
 // ---------- mensagem automática de boas-vindas ----------
 let zapCfg = { boasVindasAtivo:true, boasVindas:'Olá! Seja bem-vindo à Frade Imóveis! Aguarde enquanto damos continuidade ao atendimento.' };
-window.zapConfig = () => { $('zapBvAtivo').checked = zapCfg.boasVindasAtivo !== false; $('zapBvTxt').value = zapCfg.boasVindas || ''; abrir('zapCfgModal'); };
+window.zapConfig = () => { $('zapBvAtivo').checked = zapCfg.boasVindasAtivo !== false; $('zapBvTxt').value = zapCfg.boasVindas || ''; $('zapHist').checked = !!zapCfg.importarHistorico; document.querySelectorAll('#zapCfgModal .dono-only').forEach(e => e.classList.toggle('hide', !souDono())); abrir('zapCfgModal'); };
 window.salvarZapCfg = async () => {
-  try { await gravar(setDoc(doc(db,'zap_config','geral'), { boasVindasAtivo:$('zapBvAtivo').checked, boasVindas:$('zapBvTxt').value.trim().slice(0, 1000), atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); fechar('zapCfgModal'); toast('Mensagem automática salva'); }
+  try { await gravar(setDoc(doc(db,'zap_config','geral'), { boasVindasAtivo:$('zapBvAtivo').checked, boasVindas:$('zapBvTxt').value.trim().slice(0, 1000), importarHistorico:$('zapHist').checked, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); fechar('zapCfgModal'); toast('Mensagem automática salva'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 
@@ -6166,6 +6208,18 @@ window.zapNova = async () => {
 window.zapAssumir = async (id, uid) => {
   const p = perfisLista.find(x => x.uid === uid);
   try { await gravar(setDoc(doc(db,'zap_conversas',id), { corretorUid:uid || '', corretorNome:p ? p.nome : '', equipe:p ? (p.equipe || '') : '' }, { merge:true })); toast(p ? 'Conversa passada para ' + primeiro(p.nome) : 'Conversa sem responsável'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.zapLimpar = async () => {
+  if (!souDono()) return;
+  if (!confirm('Apagar TODAS as conversas guardadas no app?\n\nNão apaga nada do celular, só do app. Não dá para desfazer.')) return;
+  try { await setDoc(doc(db,'zap_status','robo'), { comando:'limpar', comandoEm:Date.now(), alvo:'' }, { merge:true }); zapSel = null; Object.keys(_zapCache).forEach(k => delete _zapCache[k]); toast('Pedido enviado ao robô. As conversas somem em instantes.'); render(); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.zapApagarConversa = async id => {
+  if (!souDono()) return;
+  if (!confirm('Apagar esta conversa do app? (não apaga do celular)')) return;
+  try { await setDoc(doc(db,'zap_status','robo'), { comando:'apagarConversa', comandoEm:Date.now(), alvo:id }, { merge:true }); zapSel = null; Object.keys(_zapCache).forEach(k => delete _zapCache[k]); toast('Apagando a conversa…'); render(); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.zapDesconectar = async () => {
