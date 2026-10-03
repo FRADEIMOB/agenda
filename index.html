@@ -1211,6 +1211,12 @@ html.modo-ceo .nao-ceo{display:none!important}
 @media(max-width:760px){.zap{grid-template-columns:1fr;height:calc(100vh - 170px)}.zap-chat{display:none}#v-whatsapp.zap-chat-aberto .zap-lista-col{display:none}#v-whatsapp.zap-chat-aberto .zap-chat{display:flex}
   #v-whatsapp.zap-det-on .zap{grid-template-columns:1fr}#v-whatsapp.zap-det-on .zap-chat{display:none}#v-whatsapp.zap-det-on .zap-lista-col{display:none}}
 html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none!important}
+.zap-anexo{cursor:pointer;height:42px;width:42px;display:grid;place-items:center;font-size:18px;flex:none}
+.zap-mid img{display:block;max-width:min(280px,100%);max-height:320px;border-radius:10px;margin-bottom:4px;cursor:zoom-in}
+.zap-mid audio{width:250px;max-width:100%;height:40px}
+.zap-mid video{max-width:min(300px,100%);border-radius:10px}
+.zap-mid-info{font-size:12.5px;color:var(--muted)}
+.zap-doc{display:inline-block;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-weight:600;text-decoration:none;color:var(--text)}
 </style>
 </head>
 <body>
@@ -1509,7 +1515,7 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
       <section class="view" id="v-whatsapp">
         <div class="zap">
           <div class="zap-col zap-lista-col">
-            <div class="zap-lh"><h2>Conversas</h2><button class="icon-btn" title="Nova conversa" onclick="zapNova()">✎</button></div>
+            <div class="zap-lh"><h2>Conversas</h2><div style="display:flex;gap:4px"><button class="icon-btn" title="Mensagem automática" onclick="zapConfig()">⚙️</button><button class="icon-btn" title="Nova conversa" onclick="zapNova()">✎</button></div></div>
             <div class="zap-st"><span id="zapChip" class="zap-chip">●</span><button class="link hide" id="zapSair" onclick="zapDesconectar()">Desconectar</button></div>
             <div class="zap-abas" id="zapAbas"><button data-a="naoLidas" onclick="zapAba='naoLidas';render()">Não lidas <span class="zap-nl hide" id="zapNl">0</span></button><button data-a="todas" onclick="zapAba='todas';render()">Todas</button><button data-a="semDono" onclick="zapAba='semDono';render()">Sem corretor</button></div>
             <input class="zap-busca" placeholder="Buscar nome, número ou mensagem" oninput="zapBusca=this.value;renderZap()">
@@ -2130,6 +2136,17 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('alertaModal')">Cancelar</button><button class="btn btn-primary al-salvar" onclick="salvarAlerta()">Enviar alerta</button></div>
   </div>
 </div>
+<div class="modal" id="zapCfgModal">
+  <div class="sheet" style="width:min(480px,100%)">
+    <div class="sheet-head"><h2>Mensagem automática</h2><button class="icon-btn" onclick="fechar('zapCfgModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="hint" style="margin:0 0 12px">Sai sozinha, uma vez só, quando um cliente novo manda a primeira mensagem para o número.</div>
+      <label class="chk" style="display:flex;gap:8px;align-items:center;margin:0 0 12px"><input type="checkbox" id="zapBvAtivo" style="width:auto"> Mandar a mensagem de boas-vindas</label>
+      <label>Texto</label><textarea id="zapBvTxt" rows="4" maxlength="1000"></textarea>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('zapCfgModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarZapCfg()">Salvar</button></div>
+  </div>
+</div>
 <div class="modal" id="finModal">
   <div class="sheet" style="width:min(520px,100%)">
     <div class="sheet-head"><h2 id="finTit">Novo lançamento</h2><button class="icon-btn" onclick="fechar('finModal')" data-ic="x"></button></div>
@@ -2685,6 +2702,7 @@ function render(){
   if ($('cZap')) { const nz = zapConvs.filter(c => c.naoLidas > 0).length; $('cZap').textContent = nz; $('cZap').classList.toggle('hide', !nz); }
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
+  if (!window._hashZap && souGerente() && !souCeo() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
   if (souSdr()) { const ontem = somaDias(hojeISO(), -1); $('cResumo').classList.toggle('hide', sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem)); }
@@ -3631,7 +3649,7 @@ window.abrirRelatorio = async uid => {
   } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
 };
 setTimeout(() => {
-  const bloq = ['salvarFin','excluirFin','alternarPagoFin','lancarComissao','salvarFinCfg','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','restaurarReserva','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarReserva','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria','vendaCaiu'];
+  const bloq = ['salvarZapCfg','zapAnexar','salvarFin','excluirFin','alternarPagoFin','lancarComissao','salvarFinCfg','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','restaurarReserva','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarReserva','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria','vendaCaiu'];
   bloq.forEach(n => { const f = window[n]; if (typeof f !== 'function' || f._ceo) return;
     const g = function(...a){ if (souCeo()) { toast('Perfil CEO: só visualização'); return; } return f.apply(this, a); }; g._ceo = true; window[n] = g; });
 }, 0);
@@ -5797,7 +5815,10 @@ window.ligarBtn = b => ligar(b.dataset.tel, b.dataset.cli, b.dataset.or);
 window.ligar = (tel, cliente, origem) => {
   let n = soDig(tel);
   if (n.length < 8) { toast('Telefone incompleto'); return; }
-  const a = document.createElement('a'); a.href = 'tel:' + (n.length >= 12 && n.startsWith('55') ? '+' + n : n); document.body.appendChild(a); a.click(); a.remove();
+  if (n.startsWith('55') && n.length >= 12) n = n.slice(2);       // tira o código do Brasil
+  n = n.replace(/^0+/, '');
+  if (n.length === 10 && /[6-9]/.test(n[2])) n = n.slice(0,2) + '9' + n.slice(2); // celular sem o 9 (como o WhatsApp guarda)
+  const a = document.createElement('a'); a.href = 'tel:' + n; document.body.appendChild(a); a.click(); a.remove();
   registrarLigacao(tel, cliente, origem).catch(e => console.warn('Ligação:', e.message));
 };
 async function registrarLigacao(tel, cliente, origem){
@@ -5970,10 +5991,11 @@ window.exportarFin = () => {
 let zapStatus = null, zapConvs = [], zapMsgs = [], zapSel = null, zapSubMsgs = null, zapSaidaPend = [];
 window.zapAba = 'todas'; window.zapBusca = '';
 function assinarZap(){
-  zapStatus = null; zapConvs = []; zapMsgs = []; zapSel = null; if (zapSubMsgs) { zapSubMsgs(); zapSubMsgs = null; }
+  zapStatus = null; zapConvs = []; zapMsgs = []; zapSel = null; if (zapSubMsgs) { zapSubMsgs(); zapSubMsgs = null; } Object.keys(_zapCache).forEach(k => delete _zapCache[k]);
   if (!souGerente()) return;
   const silencio = e => console.warn('WhatsApp:', e.code || e.message);
   subsPapel.push(onSnapshot(doc(db,'zap_status','robo'), s => { zapStatus = s.exists() ? s.data() : null; render(); }, silencio));
+  subsPapel.push(onSnapshot(doc(db,'zap_config','geral'), s => { if (s.exists()) zapCfg = { ...zapCfg, ...s.data() }; }, silencio));
   subsPapel.push(onSnapshot(query(collection(db,'zap_conversas'), orderBy('ultimaEm','desc'), limit(150)), s => { zapConvs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   subsPapel.push(onSnapshot(query(collection(db,'zap_saida'), where('estado','in',['pendente','erro'])), s => { zapSaidaPend = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => x.porUid === uidAtual && Date.now() - (x.criadoEm || 0) < 6 * 3600e3); render(); }, silencio));
   subsPapel.push(() => { if (zapSubMsgs) { zapSubMsgs(); zapSubMsgs = null; } });
@@ -5998,9 +6020,10 @@ function zapNoApp(c){
   return out;
 }
 function abrirConversa(id){
-  if (zapSel === id && zapSubMsgs) return;
+  if (zapSel === id && zapSubMsgs) { document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto'); return; }
   zapSel = id; zapMsgs = []; if (zapSubMsgs) zapSubMsgs();
-  zapSubMsgs = onSnapshot(query(collection(db,'zap_conversas',id,'msgs'), orderBy('em','desc'), limit(200)), s => { zapMsgs = s.docs.map(d => ({ id:d.id, ...d.data() })).reverse(); renderZap(true); }, e => console.warn('msgs:', e.message));
+  zapSubMsgs = onSnapshot(query(collection(db,'zap_conversas',id,'msgs'), orderBy('em','desc'), limit(200)), s => { zapMsgs = s.docs.map(d => ({ id:d.id, ...d.data() })).reverse(); renderZap();
+    const cc = zapConvs.find(x => x.id === zapSel); if (cc?.naoLidas && view === 'whatsapp' && !document.hidden) setDoc(doc(db,'zap_conversas',zapSel), { naoLidas:0 }, { merge:true }).catch(() => {}); }, e => console.warn('msgs:', e.message));
   const c = zapConvs.find(x => x.id === id);
   if (c?.naoLidas && !souCeo()) setDoc(doc(db,'zap_conversas',id), { naoLidas:0 }, { merge:true }).catch(() => {});
   document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto');
@@ -6008,55 +6031,119 @@ function abrirConversa(id){
 }
 window.abrirConversa = abrirConversa;
 window.zapVoltar = () => { document.getElementById('v-whatsapp')?.classList.remove('zap-chat-aberto'); };
-function renderZap(soMsgs){
+const _zapCache = {};
+function zapPor(el, html){ const e = $(el); if (!e) return false; if (_zapCache[el] === html) return false; _zapCache[el] = html; e.innerHTML = html; return true; }
+function renderZap(){
   if (view !== 'whatsapp' || !souGerente()) return;
-  // status do robô
   const st = !zapStatus ? 'nunca' : !zapVivo() ? 'off' : zapStatus.estado;
   const chip = { conectado:['ok', '● Conectado · ' + fmtFone(zapStatus?.numero || '')], qr:['warn', '● Aguardando QR Code'], off:['bad', '● Robô desligado'], nunca:['bad', '● Robô não instalado'], reconectando:['warn', '● Reconectando…'], iniciando:['warn', '● Ligando…'], desconectado:['warn', '● Desconectado'] }[st] || ['warn', st];
-  if (!soMsgs) {
-    $('zapChip').className = 'zap-chip ' + chip[0]; $('zapChip').textContent = chip[1];
-    $('zapSair').classList.toggle('hide', st !== 'conectado' || souCeo());
-    // lista
-    const t = norm(zapBusca);
-    let l = zapConvs.filter(c => !t || norm([c.nome, c.numero, c.ultima, c.corretorNome].join(' ')).includes(t) || (soDig(t).length >= 3 && soDig(c.numero).includes(soDig(t))));
-    const nl = zapConvs.filter(c => c.naoLidas > 0).length;
-    $('zapNl').textContent = nl; $('zapNl').classList.toggle('hide', !nl);
-    if (zapAba === 'naoLidas') l = l.filter(c => c.naoLidas > 0);
-    if (zapAba === 'semDono') l = l.filter(c => !c.corretorUid);
-    document.querySelectorAll('#zapAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === zapAba));
-    $('zapLista').innerHTML = l.length ? l.map(c => `<button class="zap-item ${zapSel === c.id ? 'sel' : ''}" onclick="abrirConversa('${c.id}')">
-        <span class="zap-av">${esc(iniciais(zapNome(c)))}</span>
-        <span class="zap-it-txt"><b>${esc(zapNome(c))}</b><small>${c.ultimaDe === 'eu' ? '<i>Você:</i> ' : ''}${esc(c.ultima || '')}</small>${c.corretorNome ? `<em>👤 ${esc(primeiro(c.corretorNome))}</em>` : ''}</span>
-        <span class="zap-it-dir"><small>${quandoCurto(c.ultimaEm)}</small>${c.naoLidas ? `<span class="zap-nl">${c.naoLidas}</span>` : ''}</span></button>`).join('')
-      : `<div class="zap-vazio-l">${zapAba === 'naoLidas' ? 'Nenhuma conversa sem ler. 🎉' : zapBusca ? 'Nada encontrado.' : 'As conversas aparecem aqui assim que alguém mandar mensagem para o número conectado.'}</div>`;
-  }
-  // conversa aberta / conexão
+  $('zapChip').className = 'zap-chip ' + chip[0]; $('zapChip').textContent = chip[1];
+  $('zapSair').classList.toggle('hide', st !== 'conectado' || souCeo());
+  // lista (só redesenha quando muda, para o clique nunca se perder)
+  const t = norm(zapBusca);
+  let l = zapConvs.filter(c => !t || norm([c.nome, c.numero, c.ultima, c.corretorNome].join(' ')).includes(t) || (soDig(t).length >= 3 && soDig(c.numero).includes(soDig(t))));
+  const nl = zapConvs.filter(c => c.naoLidas > 0).length;
+  $('zapNl').textContent = nl; $('zapNl').classList.toggle('hide', !nl);
+  if (zapAba === 'naoLidas') l = l.filter(c => c.naoLidas > 0 || c.id === zapSel);
+  if (zapAba === 'semDono') l = l.filter(c => !c.corretorUid);
+  document.querySelectorAll('#zapAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === zapAba));
+  zapPor('zapLista', l.length ? l.map(c => `<button class="zap-item ${zapSel === c.id ? 'sel' : ''}" data-id="${esc(c.id)}">
+      <span class="zap-av">${esc(iniciais(zapNome(c)))}</span>
+      <span class="zap-it-txt"><b>${esc(zapNome(c))}</b><small>${c.ultimaDe === 'eu' ? '<i>Você:</i> ' : ''}${esc(c.ultima || '')}</small>${c.corretorNome ? `<em>👤 ${esc(primeiro(c.corretorNome))}</em>` : ''}</span>
+      <span class="zap-it-dir"><small>${quandoCurto(c.ultimaEm)}</small>${c.naoLidas && c.id !== zapSel ? `<span class="zap-nl">${c.naoLidas}</span>` : ''}</span></button>`).join('')
+    : `<div class="zap-vazio-l">${zapAba === 'naoLidas' ? 'Nenhuma conversa sem ler. 🎉' : zapBusca ? 'Nada encontrado.' : 'As conversas aparecem aqui assim que alguém mandar mensagem para o número conectado.'}</div>`);
   const c = zapConvs.find(x => x.id === zapSel);
-  if (st !== 'conectado' && !c) { $('zapChat').innerHTML = htmlZapConexao(st); $('zapDet').innerHTML = ''; return; }
-  if (!c) { $('zapChat').innerHTML = `<div class="zap-vazio"><div class="zap-vazio-ic">${IC.zap}</div><b>Escolha uma conversa</b><span>ou comece uma nova pelo número do cliente.</span>${souCeo() ? '' : '<button class="btn btn-primary" onclick="zapNova()">+ Nova conversa</button>'}</div>`; $('zapDet').innerHTML = ''; return; }
-  const ant = $('zapMsgs'), noFim = !ant || ant.scrollHeight - ant.scrollTop - ant.clientHeight < 80, rasc = $('zapTxt')?.value || '';
+  if (!c) {
+    const corpo = st !== 'conectado' ? htmlZapConexao(st) : `<div class="zap-vazio"><div class="zap-vazio-ic">${IC.zap}</div><b>Escolha uma conversa</b><span>ou comece uma nova pelo número do cliente.</span><button class="btn btn-primary" onclick="zapNova()">+ Nova conversa</button></div>`;
+    zapPor('zapChat', corpo); zapPor('zapDet', ''); return;
+  }
+  // estrutura da conversa: monta uma vez por conversa (o campo de digitar nunca é apagado)
+  const estrut = 'conv:' + c.id;
+  if (_zapCache.zapChat !== estrut) {
+    _zapCache.zapChat = estrut; delete _zapCache.zapCab; delete _zapCache.zapMsgs; delete _zapCache.zapAviso;
+    $('zapChat').innerHTML = `<div class="zap-ch-head" id="zapCab"></div><div class="zap-msgs" id="zapMsgs"></div><div id="zapAviso"></div>
+      <div class="zap-input"><label class="icon-btn zap-anexo" title="Mandar foto, áudio ou arquivo">📎<input type="file" id="zapArq" accept="image/*,audio/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="zapAnexar(this)" hidden></label>
+        <textarea id="zapTxt" rows="1" placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();zapEnviar()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'"></textarea><button class="btn btn-primary zap-env" onclick="zapEnviar()" title="Enviar">➤</button></div>`;
+    setTimeout(() => $('zapTxt')?.focus(), 30);
+  }
+  zapPor('zapCab', `<button class="icon-btn so-cel" onclick="zapVoltar()" title="Voltar">←</button><span class="zap-av">${esc(iniciais(zapNome(c)))}</span><div class="zap-ch-nome"><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
+    <div class="zap-ch-acoes">${c.numero ? htmlLigar(c.numero, zapNome(c), 'whatsapp') : ''}<button class="icon-btn" title="Detalhes do contato" onclick="document.getElementById('v-whatsapp').classList.toggle('zap-det-on')">ⓘ</button></div>`);
+  zapPor('zapAviso', st !== 'conectado' ? '<div class="zap-ro">⚠️ O WhatsApp do robô não está conectado. As mensagens ficam guardadas e saem quando ele voltar.</div>' : '');
+  const box = $('zapMsgs'), noFim = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
   let dia = '';
   const bolhas = zapMsgs.map(m => {
     const d = iso(new Date(m.em || 0)), sep = d !== dia ? `<div class="zap-dia"><span>${d === hojeISO() ? 'Hoje' : d === somaDias(hojeISO(), -1) ? 'Ontem' : dataBR(d)}</span></div>` : ''; dia = d;
-    return sep + `<div class="zap-b ${m.de === 'eu' ? 'eu' : 'ele'}"><div class="zap-bt">${esc(m.texto || '').replace(/\n/g, '<br>')}</div><small>${m.de === 'eu' && m.porNome ? esc(primeiro(m.porNome)) + ' · ' : ''}${new Date(m.em || 0).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}${m.de === 'eu' ? ' ✓✓' : ''}</small></div>`;
+    const mid = m.midia ? htmlMidia(m) : '', txt = m.midia && /^(📷 Foto|🎤 Áudio|🎥 Vídeo|💟 Figurinha)$/.test(m.texto || '') ? '' : esc(m.texto || '').replace(/\n/g, '<br>');
+    return sep + `<div class="zap-b ${m.de === 'eu' ? 'eu' : 'ele'}"><div class="zap-bt">${mid}${txt ? `<div>${txt}</div>` : ''}</div><small>${m.de === 'eu' && m.porNome ? esc(primeiro(m.porNome)) + ' · ' : ''}${new Date(m.em || 0).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}${m.de === 'eu' ? ' ✓✓' : ''}</small></div>`;
   }).join('');
-  const pend = zapSaidaPend.filter(x => x.jid === c.jid).map(x => `<div class="zap-b eu ${x.estado === 'erro' ? 'erro' : 'pend'}"><div class="zap-bt">${esc(x.texto)}</div><small>${x.estado === 'erro' ? '⚠️ Não enviada: ' + esc(x.erro || '') : '🕓 enviando…'}</small></div>`).join('');
-  $('zapChat').innerHTML = `<div class="zap-ch-head"><button class="icon-btn so-cel" onclick="zapVoltar()" title="Voltar">←</button><span class="zap-av">${esc(iniciais(zapNome(c)))}</span><div class="zap-ch-nome"><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
-      <div class="zap-ch-acoes">${c.numero ? htmlLigar(c.numero, zapNome(c), 'whatsapp') : ''}<button class="icon-btn" title="Detalhes do contato" onclick="document.getElementById('v-whatsapp').classList.toggle('zap-det-on')">ⓘ</button></div></div>
-    <div class="zap-msgs" id="zapMsgs">${bolhas || '<div class="zap-vazio-l">Ainda não há mensagens guardadas desta conversa.</div>'}${pend}</div>
-    ${souCeo() ? '<div class="zap-ro">Perfil CEO: só visualização</div>' : st !== 'conectado' ? '<div class="zap-ro">⚠️ O WhatsApp do robô não está conectado. As mensagens ficam guardadas e saem quando ele voltar.</div>' : ''}
-    ${souCeo() ? '' : `<div class="zap-input"><textarea id="zapTxt" rows="1" placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();zapEnviar()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'"></textarea><button class="btn btn-primary zap-env" onclick="zapEnviar()" title="Enviar">➤</button></div>`}`;
-  if ($('zapTxt')) { $('zapTxt').value = rasc; }
-  const box = $('zapMsgs'); if (box && noFim) box.scrollTop = box.scrollHeight;
+  const pend = zapSaidaPend.filter(x => x.jid === c.jid).map(x => `<div class="zap-b eu ${x.estado === 'erro' ? 'erro' : 'pend'}"><div class="zap-bt">${x.midia ? '📎 ' + esc(x.midia.nome || 'arquivo') + (x.texto ? '<br>' : '') : ''}${esc(x.texto || '')}</div><small>${x.estado === 'erro' ? '⚠️ Não enviada: ' + esc(x.erro || '') : '🕓 enviando…'}</small></div>`).join('');
+  if (zapPor('zapMsgs', (bolhas || '<div class="zap-vazio-l">Ainda não há mensagens guardadas desta conversa.</div>') + pend)) { carregarMidias(); if (noFim || !box.dataset.rolou) { box.scrollTop = box.scrollHeight; box.dataset.rolou = '1'; } }
   // detalhes do contato
   const noApp = zapNoApp(c);
-  $('zapDet').innerHTML = `<div class="zap-det-card"><span class="zap-av g">${esc(iniciais(zapNome(c)))}</span><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
+  if (document.activeElement?.id !== 'zapCorSel') zapPor('zapDet', `<div class="zap-det-card"><span class="zap-av g">${esc(iniciais(zapNome(c)))}</span><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
     <label>Corretor responsável</label>
-    <select ${souCeo() ? 'disabled' : ''} onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>
+    <select id="zapCorSel" onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>
     <label>No app</label>${noApp.length ? noApp.map(x => `<div class="zap-tag">${x}</div>`).join('') : '<div class="muted" style="font-size:13px">Esse número ainda não está em visitas, cartas ou na planilha.</div>'}
     <label>Conversa</label><div class="muted" style="font-size:13px">Primeira mensagem guardada: ${c.criadoEm ? new Date(c.criadoEm).toLocaleDateString('pt-BR') : '—'}</div>
-    ${c.numero ? `<a class="btn btn-ghost" style="margin-top:12px" href="https://wa.me/${soDig(c.numero)}" target="_blank" rel="noopener">Abrir no WhatsApp do celular</a>` : ''}`;
+    ${c.numero ? `<a class="btn btn-ghost" style="margin-top:12px" href="https://wa.me/${soDig(c.numero)}" target="_blank" rel="noopener">Abrir no WhatsApp do celular</a>` : ''}`);
 }
+// lista: um clique só já abre (o evento fica no contêiner, que nunca é redesenhado)
+document.addEventListener('click', ev => { const b = ev.target.closest?.('#zapLista .zap-item'); if (b) abrirConversa(b.dataset.id); });
+// ---------- fotos, áudios e arquivos ----------
+const zapMidCache = new Map();
+function htmlMidia(m){
+  const x = m.midia;
+  if (x.grande) return `<div class="zap-mid-info">📎 Arquivo grande (${Math.round((x.tamanho || 0) / 1048576)} MB). Abra no WhatsApp do celular.</div>`;
+  if (x.erro || !x.id) return `<div class="zap-mid-info">📎 Não deu para baixar este arquivo. Veja no celular.</div>`;
+  return `<div class="zap-mid" data-mid="${esc(x.id)}" data-n="${x.n}" data-mime="${esc(x.mime || '')}" data-nome="${esc(x.nome || '')}"><span class="zap-mid-info">⏳ Carregando…</span></div>`;
+}
+async function urlMidia(id, n, mime){
+  if (zapMidCache.has(id)) return zapMidCache.get(id);
+  const p = (async () => {
+    const partes = [];
+    for (let i = 0; i < n; i++) { const s = await getDoc(doc(db,'zap_midia', id + '_' + i)); if (!s.exists()) throw new Error('arquivo incompleto'); partes.push(s.data().d); }
+    const bin = atob(partes.join('')), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([u8], { type:mime || 'application/octet-stream' }));
+  })();
+  zapMidCache.set(id, p); p.catch(() => zapMidCache.delete(id));
+  return p;
+}
+function carregarMidias(){
+  document.querySelectorAll('#zapMsgs .zap-mid:not([data-ok])').forEach(async el => {
+    el.dataset.ok = '1';
+    const { mid, n, mime, nome } = el.dataset;
+    try {
+      const u = await urlMidia(mid, Number(n) || 1, mime);
+      if (mime.startsWith('image/')) el.innerHTML = `<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="Foto" onload="const b=document.getElementById('zapMsgs');if(b&&b.scrollHeight-b.scrollTop-b.clientHeight<400)b.scrollTop=b.scrollHeight"></a>`;
+      else if (mime.startsWith('audio/')) el.innerHTML = `<audio controls preload="metadata" src="${u}"></audio>`;
+      else if (mime.startsWith('video/')) el.innerHTML = `<video controls preload="metadata" src="${u}"></video>`;
+      else el.innerHTML = `<a class="zap-doc" href="${u}" download="${esc(nome || 'arquivo')}">📄 ${esc(nome || 'Baixar arquivo')}</a>`;
+    } catch(e) { el.innerHTML = '<span class="zap-mid-info">📎 Não deu para abrir este arquivo.</span>'; }
+  });
+}
+window.zapAnexar = async inp => {
+  const f = inp.files?.[0]; inp.value = ''; if (!f) return;
+  const c = zapConvs.find(x => x.id === zapSel); if (!c) return;
+  if (f.size > 4 * 1024 * 1024 && !f.type.startsWith('image/')) { toast('Arquivo muito grande (máximo 4 MB)'); return; }
+  try {
+    toast('Enviando ' + (f.type.startsWith('image/') ? 'a foto' : 'o arquivo') + '…');
+    let blob = f, mime = f.type || 'application/octet-stream';
+    if (mime.startsWith('image/') && mime !== 'image/gif') { const durl = await comprimirFoto(f, 1600, 0.82); blob = await (await fetch(durl)).blob(); mime = 'image/jpeg'; }
+    const b64 = await new Promise((ok, erro) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = erro; r.readAsDataURL(blob); });
+    const ref = doc(collection(db,'zap_saida')), id = 'out_' + ref.id, P = 900000, n = Math.ceil(b64.length / P);
+    for (let i = 0; i < n; i++) await setDoc(doc(db,'zap_midia', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime });
+    const leg = ($('zapTxt')?.value || '').trim(); if (leg) { $('zapTxt').value = ''; }
+    await setDoc(ref, { jid:c.jid, texto:leg, midia:{ id, n, mime, nome:f.name || '', tamanho:blob.size }, porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() });
+  } catch(e) { toast('Erro ao enviar: ' + e.message); }
+};
+// ---------- mensagem automática de boas-vindas ----------
+let zapCfg = { boasVindasAtivo:true, boasVindas:'Olá! Seja bem-vindo à Frade Imóveis! Aguarde enquanto damos continuidade ao atendimento.' };
+window.zapConfig = () => { $('zapBvAtivo').checked = zapCfg.boasVindasAtivo !== false; $('zapBvTxt').value = zapCfg.boasVindas || ''; abrir('zapCfgModal'); };
+window.salvarZapCfg = async () => {
+  try { await gravar(setDoc(doc(db,'zap_config','geral'), { boasVindasAtivo:$('zapBvAtivo').checked, boasVindas:$('zapBvTxt').value.trim().slice(0, 1000), atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); fechar('zapCfgModal'); toast('Mensagem automática salva'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+
 function htmlZapConexao(st){
   if (st === 'qr' && zapStatus?.qr) return `<div class="zap-con"><h2>Conecte o número de teste</h2><img class="zap-qr" src="${zapStatus.qr}" alt="QR Code do WhatsApp"><ol><li>No celular com o <b>chip de teste</b>, abra o WhatsApp.</li><li>Toque em <b>⋮ → Aparelhos conectados → Conectar um aparelho</b>.</li><li>Aponte a câmera para este QR Code.</li></ol><div class="hint">O código muda a cada 20 segundos. Se expirar, ele se atualiza sozinho aqui.</div></div>`;
   const txt = st === 'nunca' ? 'O robô do WhatsApp ainda não foi ligado nenhuma vez.' : st === 'off' ? 'O robô do WhatsApp está desligado (o computador onde ele roda está desligado ou a janela foi fechada).' : 'O robô está ligando. O QR Code aparece aqui em instantes.';
