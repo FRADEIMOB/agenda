@@ -1374,6 +1374,61 @@ button.bg-card{cursor:pointer;transition:border-color .15s}button.bg-card:hover{
 @media(max-width:760px){.modal.open .sheet{animation:sheetSobe .3s cubic-bezier(.2,.9,.25,1) both}@keyframes sheetSobe{from{transform:translateY(40%);opacity:.4}to{transform:none;opacity:1}}}
 @media(prefers-reduced-motion:reduce){.btn:active,.icon-btn:active,.stat:active{transform:none}.modal.open .sheet{animation:none}}
 /* sorteio */
+/* ===== correspondente (v82) ===== */
+.so-corresp{display:none!important}html.modo-corresp .so-corresp{display:flex!important}
+html.modo-corresp .nav>button[data-view]:not([data-view="analises"]):not([data-view="config"]),html.modo-corresp .nav .nav-title,
+html.modo-corresp .mobilebar>button[data-view]:not([data-view="analises"]),html.modo-corresp #menuModal .menu-list>button:not([onclick*="'analises'"]):not([onclick*="'config'"]):not([onclick*="sair"]),
+html.modo-corresp #btnTopo,html.modo-corresp #fab,html.modo-corresp .p-foot,html.modo-corresp #searchBox,html.modo-corresp .profile .p-stats,html.modo-corresp .zap-teste{display:none!important}
+.an-topo{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}.an-topo>div:first-child{flex:1;min-width:240px}.an-topo h1{margin:0;font-size:26px;letter-spacing:-.02em}
+.an-sub{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:620px}.an-topo-bts{display:flex;gap:8px;flex-wrap:wrap}
+.an-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.an-kpi{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:grid;gap:2px;border-top:3px solid var(--c)}.an-kpi b{font-size:24px;letter-spacing:-.02em}.an-kpi span{font-size:12px;color:var(--muted)}
+.an-filtros{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.an-filtros input{flex:1;min-width:200px;max-width:320px}
+.an-tabs{display:flex;gap:6px;flex-wrap:wrap}.an-tabs button{border:1px solid var(--border);background:var(--card);border-radius:99px;padding:7px 13px;font-weight:600;font-size:13px;color:var(--text2);cursor:pointer}
+.an-tabs button.on{background:var(--marinho);color:#fff;border-color:var(--marinho)}.an-tabs i{font-style:normal;opacity:.7;font-size:12px}
+.an-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.an-card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--c);border-radius:16px;padding:13px 15px;display:grid;gap:6px;transition:box-shadow .15s,transform .15s}
+.an-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}.an-card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.an-card.nova{background:color-mix(in srgb,var(--c) 6%,var(--card))}
+.an-c1{display:flex;align-items:center;gap:8px}.an-c1 small{margin-left:auto;color:var(--muted);font-size:12px}
+.an-st{font-size:12px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);border-radius:99px;padding:3px 9px;white-space:nowrap}.an-st.grande{font-size:13.5px;padding:5px 12px}
+.an-dot{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--accent);border-radius:99px;padding:2px 8px}
+.an-cli{font-size:16px;line-height:1.25}.an-c2{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--text2)}.an-c3{font-size:13px;color:var(--text2);border-top:1px dashed var(--border);padding-top:6px}
+.an-vazio{text-align:center;padding:46px 20px;background:var(--card);border:1px dashed var(--border);border-radius:20px}.an-vazio span{font-size:40px}.an-vazio b{display:block;font-size:17px;margin:8px 0 4px}.an-vazio p{color:var(--muted);max-width:440px;margin:auto}
+.an-v-topo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.an-passos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.an-passos>div{display:grid;justify-items:center;text-align:center;gap:2px;font-size:12.5px;color:var(--muted)}
+.an-passos i{font-style:normal;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--border);font-weight:700}.an-passos .ok i{background:var(--ok);border-color:var(--ok);color:#fff}.an-passos .ok b{color:var(--text)}
+.an-alerta{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:14px}
+html[data-theme="dark"] .an-alerta{background:#2a1a0c;border-color:#7c2d12;color:#fdba74}
+.an-result{border:1px solid color-mix(in srgb,var(--c) 40%,var(--border));background:color-mix(in srgb,var(--c) 7%,var(--card));border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.an-r-tit{font-weight:800;font-size:17px;color:var(--c);margin-bottom:8px}.an-r-grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.an-r-grade div{display:grid}.an-r-grade span{font-size:12px;color:var(--muted)}.an-r-grade b{font-size:16px}.an-result p{margin:8px 0 0;font-size:14px}
+.an-acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.an-v-grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.an-box{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px}.an-box h3{margin:0 0 8px;font-size:14px}
+.an-dados{display:grid;gap:5px}.an-dados div{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}.an-dados span{color:var(--muted)}.an-dados b{text-align:right}
+.an-obs{margin-top:10px;font-size:13.5px;color:var(--text2)}
+.an-docs{display:grid;gap:6px}.an-doc{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 10px}.an-doc:hover{border-color:var(--accent)}
+.an-doc i{font-style:normal;font-size:20px}.an-doc span{display:grid;min-width:0}.an-doc b{font-size:13.5px}.an-doc small{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.an-chat{margin-top:12px}.an-msgs{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow:auto;padding:2px}
+.an-msg{max-width:82%;background:var(--card);border:1px solid var(--border);border-radius:14px 14px 14px 4px;padding:7px 11px;align-self:flex-start}.an-msg.eu{align-self:flex-end;background:color-mix(in srgb,var(--accent) 10%,var(--card));border-radius:14px 14px 4px 14px}
+.an-msg.sis{align-self:center;background:transparent;border-style:dashed;max-width:95%;text-align:center}.an-msg small{color:var(--muted);font-size:11px}.an-msg p{margin:2px 0 0;font-size:14px;white-space:pre-wrap}
+.an-escreve{display:flex;gap:8px;margin-top:10px;align-items:flex-end}.an-escreve textarea{flex:1;resize:vertical;min-height:40px}
+.an-sec{font-weight:800;font-size:13px;color:var(--accent);margin:16px 0 8px;letter-spacing:.01em}.an-form .an-sec:first-child{margin-top:0}
+.an-dl{border:1px solid var(--border);border-radius:12px;padding:9px 11px;margin-bottom:7px}.an-dl.tem{border-color:color-mix(in srgb,var(--ok) 45%,var(--border));background:color-mix(in srgb,var(--ok) 5%,transparent)}
+.an-dl-t{display:flex;align-items:center;gap:10px;justify-content:space-between}.an-dl-t b{font-size:13.5px;font-weight:600}.an-dl-t .btn{padding:6px 11px;font-size:12.5px;flex-shrink:0}
+.an-dl-arqs{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.an-dl-arqs span{font-size:12px;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:3px 4px 3px 9px;display:inline-flex;align-items:center;gap:4px;max-width:100%}
+.an-dl-arqs span.novo{border-style:dashed}.an-dl-arqs button{all:unset;cursor:pointer;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;color:var(--muted)}.an-dl-arqs button:hover{background:var(--danger-soft);color:var(--danger)}
+.an-prog{font-size:12.5px;color:var(--muted)}
+.an-resumo{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px}.an-res-topo{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}.an-res-topo b{font-size:17px}.an-res-topo select{width:auto}
+.an-res-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:14px}.an-res-kpis div{border-radius:14px;padding:10px 12px;background:color-mix(in srgb,var(--c) 9%,var(--card));display:grid}.an-res-kpis b{font-size:24px;color:var(--c)}.an-res-kpis span{font-size:12px;color:var(--text2)}
+.tbl-wrap{overflow-x:auto}.an-tab td.ok{color:var(--ok);font-weight:700}.an-tab td.ruim{color:var(--danger);font-weight:700}.an-tab tr.tot td{font-weight:800;border-top:2px solid var(--border)}.an-res-nota{font-size:12px;color:var(--muted);margin:10px 0 0}
+@media(max-width:760px){.an-res-kpis{grid-template-columns:repeat(3,1fr)}}
+.an-tipo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.an-tipo input{display:none}.an-tipo span{display:grid;gap:2px;border:1.5px solid var(--border);border-radius:14px;padding:11px 13px;cursor:pointer;height:100%;box-sizing:border-box}
+.an-tipo small{color:var(--muted);font-size:12px}.an-tipo input:checked+span{border-color:var(--accent);background:var(--accent-soft)}
+.an-tipo-tag{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:-4px}
+.an-res-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.an-res-opts label{flex:1;min-width:120px}.an-res-opts input{display:none}
+.an-res-opts span{display:block;text-align:center;border:1.5px solid var(--border);border-radius:12px;padding:10px;font-weight:700;cursor:pointer}.an-res-opts input:checked+span{border-color:var(--accent);background:var(--accent-soft)}
+.an-test-lista{display:grid;gap:2px;max-height:50vh;overflow:auto;margin-top:8px}
+@media(max-width:760px){.an-kpis{grid-template-columns:repeat(2,1fr)}.an-kpis .an-kpi:last-child{grid-column:1/-1}.an-v-grade{grid-template-columns:1fr}.an-r-grade{grid-template-columns:1fr 1fr}.an-grade{grid-template-columns:1fr}.an-filtros input{max-width:none}}
 /* ===== check-in (v79) ===== */
 .ci-card{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 10%,var(--card)),var(--card) 70%);border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:18px;padding:14px 16px;margin-bottom:14px}
 .ci-card.atras{background:linear-gradient(120deg,color-mix(in srgb,var(--danger) 12%,var(--card)),var(--card) 70%);border-color:color-mix(in srgb,var(--danger) 35%,var(--border))}
@@ -1653,6 +1708,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button data-view="financeiro" class="gerente-only hide" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
       <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
       <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
+      <button data-view="analises" class="an-nav hide" onclick="setView('analises')"><i data-ic="pasta"></i>Correspondente <small class="zap-teste">teste</small><span class="count red hide" id="cAnalises">0</span></button>
       <div class="nav-title" style="margin-top:14px">Ferramentas</div>
       <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
@@ -1917,6 +1973,14 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       </section>
 
       <!-- VENDAS (RESERVAS) -->
+      <section class="view" id="v-analises">
+        <div class="an-topo"><div><h1 id="anTit">Correspondente</h1><p class="an-sub" id="anSub"></p></div>
+          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="anTestBt" onclick="abrirTestadores()">Quem participa do teste</button><button class="btn btn-primary hide" id="anNovaBt" onclick="novaPasta()">+ Nova pasta</button></div></div>
+        <div class="an-kpis" id="anKpis"></div>
+        <div class="an-filtros"><div class="an-tabs" id="anTabs"></div><input id="anBusca" placeholder="Buscar cliente, CPF ou corretor" oninput="anBuscar(this.value)"></div>
+        <div id="anLista"></div>
+      </section>
+
       <section class="view" id="v-aulas">
         <div class="au-topo"><div class="au-prog" id="auProg"></div><button class="btn btn-primary hide" id="auNovaBt" onclick="novaAula()">+ Nova aula</button></div>
         <div class="au-tabs" id="auTabs"></div>
@@ -2265,6 +2329,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Agenda</button>
   <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas</button>
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
+  <button data-view="analises" class="so-corresp" onclick="setView('analises')"><i data-ic="pasta"></i>Pastas</button>
   <button onclick="abrir('menuModal')"><i data-ic="menu"></i>Menu</button>
 </nav>
 
@@ -2629,6 +2694,74 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   </div>
 </div>
 <input type="file" id="vaArq" class="hide" accept=".json,application/json" onchange="lerVendasAntigas(this)">
+<div class="modal" id="anModal">
+  <div class="sheet an-form" style="width:min(680px,100%)">
+    <div class="sheet-head"><h2 id="anFTit">Nova pasta para a Prime</h2><button class="icon-btn" onclick="fechar('anModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="an-tipo" id="anTipoBox"><label><input type="radio" name="anTipo" value="analise" checked onchange="anTipoVis()"><span><b>📋 Análise de crédito</b><small>Dados completos + documentação</small></span></label>
+        <label><input type="radio" name="anTipo" value="verificacao" onchange="anTipoVis()"><span><b>🔍 Verificar CPF</b><small>Só consulta: outro CCA, restrição, análise válida</small></span></label></div>
+      <div class="fg"><label>Nome</label><input id="anNome" maxlength="100"></div>
+      <div class="row2"><div class="fg"><label>CPF</label><input id="anCpf" inputmode="numeric" maxlength="14" oninput="this.value=mascCpf(this.value)"></div><div class="fg"><label>Telefone</label><input id="anFone" inputmode="tel" maxlength="20"></div></div>
+      <div id="anSoAnalise">
+        <div class="row2"><div class="fg"><label>E-mail</label><input id="anEmail" type="email" maxlength="100"></div><div class="fg"><label>Profissão</label><input id="anProf" maxlength="60"></div></div>
+        <div class="row2"><div class="fg"><label>Renda formal</label><input id="anRendaF" inputmode="decimal" placeholder="R$ 0,00"></div><div class="fg"><label>Renda total</label><input id="anRendaT" inputmode="decimal" placeholder="R$ 0,00"></div></div>
+        <div class="row3"><div class="fg"><label>Estado civil</label><select id="anCivil"><option value="">—</option><option>Solteiro(a)</option><option>Casado(a)</option><option>União estável</option><option>Divorciado(a)</option><option>Viúvo(a)</option></select></div>
+          <div class="fg"><label>Mais de 3 anos</label><select id="anMais3"><option value="">—</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+          <div class="fg"><label>Dependente</label><select id="anDep"><option value="">—</option><option value="sim">Sim</option><option value="nao">Não</option></select></div></div>
+        <div class="fg"><label>Empreendimento (opcional)</label><input id="anEmp" list="anEmps" maxlength="80"><datalist id="anEmps"></datalist></div>
+        <div class="an-sec">Documentação</div>
+        <div class="hint" style="margin:0 0 8px">Tire foto ou escolha o arquivo (pode mandar vários de uma vez). Os marcados com * são obrigatórios.</div>
+        <div id="anDocsBox"></div>
+      </div>
+      <input type="file" id="anArq" multiple accept="image/*,application/pdf" class="hide" onchange="anEscolheu(this)">
+      <div class="fg" style="margin-top:12px"><label>Observação para a Prime (opcional)</label><textarea id="anObs" rows="2" maxlength="1500"></textarea></div>
+    </div>
+    <div class="sheet-foot"><span class="an-prog" id="anProg"></span><span style="flex:1"></span><button class="btn btn-ghost" id="anRascBt" onclick="salvarPasta(false)">Salvar rascunho</button><button class="btn btn-primary" id="anEnviarBt" onclick="salvarPasta(true)">Enviar para a Prime</button></div>
+  </div>
+</div>
+<div class="modal" id="anVerModal">
+  <div class="sheet" style="width:min(820px,100%)">
+    <div class="sheet-head"><h2 id="anVTit">Pasta</h2><button class="icon-btn" onclick="fecharPasta()" data-ic="x"></button></div>
+    <div class="sheet-body" id="anVCorpo"></div>
+  </div>
+</div>
+<div class="modal" id="anRespModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><h2>Resultado da análise</h2><button class="icon-btn" onclick="fechar('anRespModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="an-res-opts" id="anResOpts"><label><input type="radio" name="anRes" value="aprovada" checked onchange="anResVis()"><span>✅ Aprovado</span></label><label><input type="radio" name="anRes" value="condicionada" onchange="anResVis()"><span>⚠️ Condicionado</span></label><label><input type="radio" name="anRes" value="reprovada" onchange="anResVis()"><span>❌ Reprovado</span></label></div>
+      <div id="anResNum"><div class="row2"><div class="fg"><label>Valor financiado</label><input id="anRFin" inputmode="decimal" placeholder="R$ 0,00"></div><div class="fg"><label>Subsídio</label><input id="anRSub" inputmode="decimal" placeholder="R$ 0,00"></div></div>
+        <div class="row2"><div class="fg"><label>Parcela</label><input id="anRParc" inputmode="decimal" placeholder="R$ 0,00"></div><div class="fg"><label>Prazo (meses)</label><input id="anRPrazo" type="number" min="1" max="420" placeholder="420"></div></div>
+        <div class="row2"><div class="fg"><label>Taxa de juros (% ao ano)</label><input id="anRTaxa" inputmode="decimal" placeholder="Ex.: 5,5"></div><div class="fg"><label>Validade da aprovação</label><input id="anRVal" type="date"></div></div></div>
+      <label class="fv-chk"><input type="checkbox" id="anRRest"> Cliente tem restrição no CPF</label>
+      <div class="fg" id="anRCondBox"><label id="anRCondL">Condição</label><textarea id="anRCond" rows="2" maxlength="600" placeholder="Ex.: precisa de entrada de R$ 8.000 / usar o FGTS / regularizar CPF"></textarea></div>
+      <div class="fg"><label>Observação (opcional)</label><textarea id="anRObs" rows="2" maxlength="1000"></textarea></div>
+      <div class="fg"><label>Anexar a carta ou simulação (opcional)</label><input type="file" id="anRArq" accept="image/*,application/pdf"></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anRespModal')">Cancelar</button><button class="btn btn-primary" id="anRBt" onclick="enviarResultado()">Enviar resultado</button></div>
+  </div>
+</div>
+<div class="modal" id="anVerifModal">
+  <div class="sheet" style="width:min(520px,100%)">
+    <div class="sheet-head"><h2>Resposta da verificação</h2><button class="icon-btn" onclick="fechar('anVerifModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="row2"><div class="fg"><label>Está em outro CCA?</label><select id="anVCca"><option value="nao">Não</option><option value="sim">Sim</option></select></div><div class="fg"><label>Qual? (se estiver)</label><input id="anVCcaQ" maxlength="60"></div></div>
+      <div class="row2"><div class="fg"><label>Tem restrição?</label><select id="anVRest"><option value="nao">Não</option><option value="sim">Sim</option></select></div><div class="fg"><label>Qual restrição? (se tiver)</label><input id="anVRestQ" maxlength="80"></div></div>
+      <div class="row2"><div class="fg"><label>Parcela (se tiver análise válida)</label><input id="anVParc" inputmode="decimal" placeholder="R$ 0,00"></div><div class="fg"><label>Prazo (meses)</label><input id="anVPrazo" type="number" min="1" max="420"></div></div>
+      <div class="fg"><label>Renda cadastrada</label><input id="anVRenda" inputmode="decimal" placeholder="R$ 0,00"></div>
+      <div class="fg"><label>Observação (opcional)</label><textarea id="anVObs" rows="2" maxlength="800"></textarea></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anVerifModal')">Cancelar</button><button class="btn btn-primary" id="anVBt" onclick="enviarVerificacao()">Enviar resposta</button></div>
+  </div>
+</div>
+<div class="modal" id="anTestModal">
+  <div class="sheet" style="width:min(480px,100%)">
+    <div class="sheet-head"><h2>Quem participa do teste</h2><button class="icon-btn" onclick="fechar('anTestModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="hint" style="margin:0 0 10px">A gerência e a Prime sempre veem. Escolha quais corretores e coordenadores já podem mandar pastas pelo app.</div>
+      <label class="fv-chk"><input type="checkbox" id="anTodos"> Liberar para toda a equipe</label><div id="anTestLista" class="an-test-lista"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anTestModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarTestadores()">Salvar</button></div>
+  </div>
+</div>
 <div class="modal" id="auVerModal">
   <div class="sheet au-sheet">
     <div class="sheet-head"><h2 id="auVerTit">Aula</h2><button class="icon-btn" onclick="fecharAula()" data-ic="x"></button></div>
@@ -2732,6 +2865,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button class="cor-only hide" onclick="fechar('menuModal');setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
       <button onclick="fechar('menuModal');setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
+      <button class="an-nav hide" onclick="fechar('menuModal');setView('analises')"><i data-ic="pasta"></i>Correspondente (teste)</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('whatsapp')"><i data-ic="zap"></i>WhatsApp (teste)</button>
@@ -2784,6 +2918,7 @@ const IC = {
   painel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="15" width="7.5" height="6" rx="1.5"/></svg>',
   trofeu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
   trend:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+  pasta:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M8.5 14l2.2 2.2 4.8-4.7"/></svg>',
   play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="M10 9.2v5.6l4.6-2.8z" fill="currentColor"/></svg>',
   tela:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8 21h8M12 16.5V21M7 12.5l3-3 2.5 2.5L17 7.5"/></svg>',
   spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8zM5 3.5l.6 1.4 1.4.6-1.4.6L5 7.5l-.6-1.4L3 5.5l1.4-.6z"/></svg>',
@@ -3036,7 +3171,7 @@ window.linkSenhaEmail = async () => {
   catch(e) { toast(traduzErro(e)); }
 };
 window.senhaProvisoria = async uid => {
-  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
   const s = prompt(`Senha provisória para ${p.nome} (mínimo 6 caracteres):`, 'frade' + Math.floor(1000 + Math.random() * 9000));
   if (!s) return;
   if (s.length < 6) { toast('A senha precisa ter pelo menos 6 caracteres'); return; }
@@ -3069,7 +3204,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -3086,6 +3221,8 @@ window.setView = v => {
   if (v !== 'recepcao') pararRecepcao();
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
   if (souCeo() && !VIEWS_CEO.includes(v)) v = 'painel';
+  if (souCorresp() && !['analises','config'].includes(v)) v = 'analises';
+  if (v === 'analises' && !anVisivel()) v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
   view = v; document.documentElement.dataset.view = v;
@@ -3518,11 +3655,11 @@ const ST_COR = { Pendente:'#f59e0b', Confirmada:'#10b981', Reagendada:'#3b82f6',
 const stCls = st => 'st-' + norm(st).replace(/[^a-z0-9]+/g,'-');
 const MESES_JANELA = 2; // carrega o mês atual e os 2 anteriores + visitas futuras (economiza o limite gratuito); meses mais antigos vêm pelo seletor
 let historicoCompleto = false, enviadosConf = new Set();
-const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR' };
+const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR', correspondente:'Correspondente' };
 // lista de perfis na ordem da empresa: CEO, Gerente, Coordenador, Corretor, SDR (CEO = gerente com cargo de direção)
 function opcoesPapel(p, comGerencia){
   const atual = p.papel === 'gerente' && p.cargo === 'dono' ? 'ceo' : p.papel;
-  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR']];
+  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR'], ['correspondente','Correspondente (Prime)']];
   return ops.map(([k,n]) => `<option value="${k}" ${atual===k?'selected':''}>${n}</option>`).join('');
 }
 const EQUIPES_PADRAO = { raio:{ nome:'Tropa do Raio', icone:'⚡', ordem:1 }, tenda:{ nome:'Tropa Tenda', icone:'🏕️', ordem:2 } };
@@ -3538,6 +3675,7 @@ const FIREBASE_ANTIGO = {
 const EMAIL_ANTIGO_TENDA = 'tropatenda@fradeimoveis.com';
 
 let uidAtual = '', perfil = null, perfilOk = false, instalacao = null, instOk = false;
+let perfisTodos = [];
 let equipes = {}, visitas = [], rankingDocs = [], perfisLista = [], visitasBrutas = [];
 window.visitaPorId = id => visitas.find(x => x.id === id);
 let subsBase = [], subsPapel = [], chaveSubs = '', cadDispensado = false;
@@ -3560,6 +3698,7 @@ window.souCeo = souCeo;
 const VIEWS_CEO = ['painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
+const souCorresp = () => souAtivo() && perfil.papel === 'correspondente';
 window.podeGerir = podeGerir;
 const eqNome = id => equipes[id] ? `${equipes[id].icone||''} ${equipes[id].nome}`.trim() : (id ? id : 'Sem equipe');
 const listaEquipes = () => Object.values(equipes).sort((a,b) => (a.ordem||99)-(b.ordem||99) || a.nome.localeCompare(b.nome,'pt-BR'));
@@ -3573,7 +3712,7 @@ function pararTudoVisitas(){
   subsBase.forEach(u => u()); subsPapel.forEach(u => u());
   subsBase = []; subsPapel = []; chaveSubs = '';
   perfil = null; perfilOk = false; instalacao = null; instOk = false; cadDispensado = false;
-  equipes = {}; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = [];
+  perfisTodos = []; equipes = {}; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = [];
 }
 function iniciarVisitas(user){
   uidAtual = user.uid;
@@ -3624,9 +3763,10 @@ function configurarAcesso(){
   const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto + '|' + inicioJanela() : 'sem';
   if (chave === chaveSubs) return;
   chaveSubs = chave;
-  subsPapel.forEach(u => u()); subsPapel = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
+  subsPapel.forEach(u => u()); subsPapel = []; perfisTodos = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
   visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; rankingVendas = []; window._rvOk = false; empreendimentos = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
   if (!souAtivo()) return;
+  if (perfil.papel === 'correspondente') { assinarEtapa1(() => {}); assinarNotifs(); assinarAnalises(); return; }
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
   if (souGerente()) qv = historicoCompleto ? collection(db,'visitas') : query(collection(db,'visitas'), where('date','>=',inicioJanela()));
@@ -3643,7 +3783,7 @@ function configurarAcesso(){
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador','sdr']));
   else if (perfil.papel === 'sdr') qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
-  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisLista = s.docs.map(d => ({ uid:d.id, ...d.data() })); render(); sincVendasRanking(); sincPresencaRanking(); }, erro));
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => ({ uid:d.id, ...d.data() })); perfisLista = perfisTodos.filter(p => p.papel !== 'correspondente'); render(); sincVendasRanking(); sincPresencaRanking(); }, erro));
 }
 
 // ---------- Cadastro / primeiro gerente ----------
@@ -3772,13 +3912,16 @@ function renderPapel(){
     el.classList.remove('hide');
     if (perfil.status === 'pendente') el.textContent = '⏳ Aguardando aprovação';
     else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
-    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Gestor' : perfil.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
+    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Gestor' : perfil.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : perfil.papel === 'correspondente' ? '🏦 Correspondente' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir()));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
   document.querySelectorAll('.direcao-only').forEach(e => e.classList.toggle('hide', !souDirecao()));
   document.documentElement.classList.toggle('modo-ceo', souCeo());
   if (souCeo() && !VIEWS_CEO.includes(view)) setTimeout(() => setView('painel'), 0);
+  document.documentElement.classList.toggle('modo-corresp', souCorresp());
+  if (souCorresp() && !['analises','config'].includes(view)) setTimeout(() => setView('analises'), 0);
+  document.querySelectorAll('.an-nav').forEach(e => e.classList.toggle('hide', !anVisivel()));
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr'));
@@ -3797,7 +3940,7 @@ function renderVisitasTudo(){
   const h = hojeISO(), ativo = souAtivo();
   const vh = visitasHojeEscopo();
   $('cVisitas').textContent = vh.filter(v => v.status !== 'Cancelada').length;
-  const pendentes = souGerente() ? perfisLista.filter(p => p.status === 'pendente') : [];
+  const pendentes = souGerente() ? perfisTodos.filter(p => p.status === 'pendente') : [];
   $('cPend').textContent = pendentes.length; $('cPend').classList.toggle('hide', !pendentes.length);
   $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : view === 'cartas' ? 'Nova carta' : view === 'vendas' ? 'Nova reserva' : view === 'empreendimentos' ? 'Novo empreendimento' : 'Nova tarefa';
   // um botão principal por tela: na tela Hoje a agenda já tem o campo de adicionar
@@ -4069,7 +4212,7 @@ function renderCorretores(){
   $('corPeriodo').value = corPeriodo;
   $('janelaCor').innerHTML = avisoJanela(souGerente() && corPeriodo === 'todas');
   const [de, ate] = faixa(corPeriodo);
-  const pend = perfisLista.filter(p => p.status === 'pendente');
+  const pend = perfisTodos.filter(p => p.status === 'pendente');
   $('cardPend').classList.toggle('hide', !souGerente() || !pend.length);
   $('pendQt').textContent = pend.length + (pend.length > 1 ? ' pessoas' : ' pessoa');
   const opEq = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
@@ -4089,7 +4232,7 @@ function renderCorretores(){
     if (corEquipeFiltro === '_ger') membros = membros.filter(p => p.papel === 'gerente');
     else if (corEquipeFiltro) membros = membros.filter(p => p.equipe === corEquipeFiltro);
   } else $('corEquipes').innerHTML = '';
-  const ordemPapel = { gerente:0, coordenador:1, corretor:2 };
+  const ordemPapel = { gerente:0, coordenador:1, corretor:2, sdr:3, correspondente:4 };
   membros.sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
   const totalPer = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada').length;
   $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
@@ -4102,7 +4245,7 @@ function renderCorretores(){
   }).join('') : vazio('Ninguém por aqui ainda', 'Quando os corretores se cadastrarem e forem aprovados, aparecem nesta lista.');
 
   if (souGerente()) {
-    const todos = perfisLista.filter(p => p.status !== 'pendente').sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
+    const todos = perfisTodos.filter(p => p.status !== 'pendente').sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
     const opEqs = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
     $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th><th></th></tr></thead><tbody>' + todos.map(p => {
       const bx = `<td><button class="icon-btn btn-excluir" title="Excluir cadastro" aria-label="Excluir cadastro de ${esc(p.nome)}" onclick="excluirCadastro('${p.uid}')">🗑️</button></td>`;
@@ -4124,7 +4267,7 @@ function renderCorretores(){
   }
 }
 window.mudarPermissao = async (uid, campo, valor, el) => {
-  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
   if (campo === 'papel' && valor === 'ceo') {
     if (!souDono()) { el.value = p.papel; return; }
     if (!confirm(`Tornar ${p.nome} CEO? Essa pessoa vai ver e editar tudo, incluindo o Painel executivo.`)) { el.value = p.papel; return; }
@@ -4143,7 +4286,7 @@ window.mudarPermissao = async (uid, campo, valor, el) => {
   catch(e) { toast('Erro ao salvar: ' + e.message); el.value = p[campo]; }
 };
 window.mudarCargo = async (uid, v, el) => {
-  const p = perfisLista.find(x => x.uid === uid); if (!p || !souDono()) return;
+  const p = perfisTodos.find(x => x.uid === uid); if (!p || !souDono()) return;
   if (v.startsWith('papel:')) { el.value = p.cargo === 'dono' ? 'dono' : 'gerente'; return mudarPermissao(uid, 'papel', v.slice(6), { value:v.slice(6) }); }
   try { await setDoc(doc(db,'perfis',uid), { cargo: v === 'dono' ? 'dono' : '' }, { merge:true }); toast(`${primeiro(p.nome)} agora é ${v === 'dono' ? 'CEO' : 'Gerente'}`); }
   catch(e) { toast('Erro: ' + e.message); el.value = p.cargo === 'dono' ? 'dono' : 'gerente'; }
@@ -4151,7 +4294,7 @@ window.mudarCargo = async (uid, v, el) => {
 window.setCorEq = k => { corEquipeFiltro = k; render(); };
 
 window.aprovar = async uid => {
-  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
   const escolha = $('pp_' + uid).value, papel = escolha === 'ceo' ? 'gerente' : escolha, equipe = $('pe_' + uid).value;
   if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
   try {
@@ -4167,14 +4310,14 @@ window.aprovar = async uid => {
   } catch(e) { toast('Erro ao aprovar: ' + e.message); }
 };
 window.recusar = async uid => {
-  const p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
   if (!confirm(`Recusar o cadastro de ${p.nome}?`)) return;
   try { await deleteDoc(doc(db,'perfis',uid)); toast('Cadastro recusado'); } catch(e) { toast('Erro: ' + e.message); }
 };
 
 // ---------- Relatório individual ----------
 window.abrirRelatorio = async uid => {
-  const p = uid === uidAtual ? { ...perfil, uid } : perfisLista.find(x => x.uid === uid); if (!p) return;
+  const p = uid === uidAtual ? { ...perfil, uid } : perfisTodos.find(x => x.uid === uid); if (!p) return;
   const [de, ate] = faixa(corPeriodo), h = hojeISO();
   const vs = visitasDoPerfil(p, de, ate), st = statsVisitas(vs);
   const prox = visitas.filter(v => (v.corretorUid === uid) && v.date >= h && v.status !== 'Cancelada').sort((a,b) => (a.date+a.time).localeCompare(b.date+b.time)).slice(0,6);
@@ -4226,7 +4369,7 @@ setTimeout(() => {
     const g = function(...a){ if (souCeo()) { toast('Perfil CEO: só visualização'); return; } return f.apply(this, a); }; g._ceo = true; window[n] = g; });
 }, 0);
 window.excluirCadastro = async (uid) => {
-  const p = perfisLista.find(x => x.uid === uid); if (!p || !souGerente() || uid === uidAtual) return;
+  const p = perfisTodos.find(x => x.uid === uid); if (!p || !souGerente() || uid === uidAtual) return;
   if (p.papel === 'gerente' && !souDono()) { toast('Só o gestor exclui gerentes'); return; }
   if (instalacao && uid === instalacao.gerenteUid) { toast('O cadastro do gestor não pode ser excluído'); return; }
   if (!confirm(`Excluir o cadastro de ${p.nome}?\n\nEla perde o acesso ao app e sai das listas. O histórico de visitas, docs, cartas e vendas continua guardado.\n\nSe um dia voltar, é só ela entrar de novo e você aprovar.`)) return;
@@ -4234,7 +4377,7 @@ window.excluirCadastro = async (uid) => {
 };
 window.salvarGestao = async uid => {
   const esc0 = $('gmPapel').value, equipe = $('gmEquipe').value, status = $('gmStatus').value;
-  const papel = esc0 === 'ceo' ? 'gerente' : esc0, p0 = perfisLista.find(x => x.uid === uid) || {};
+  const papel = esc0 === 'ceo' ? 'gerente' : esc0, p0 = perfisTodos.find(x => x.uid === uid) || {};
   if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe'); return; }
   if (papel === 'gerente' && !souDono()) { toast('Só o gestor coloca alguém como CEO ou gerente'); return; }
   if (papel === 'gerente' && p0.papel !== 'gerente' && !confirm(`Tornar ${p0.nome || 'essa pessoa'} ${esc0 === 'ceo' ? 'CEO' : 'GERENTE'}? Ela vai ver e editar tudo.`)) return;
@@ -4797,7 +4940,7 @@ function renderPainelPapel(){
   const conf = vh.filter(v => v.status === 'Confirmada').length;
   const paraConf = visitas.filter(v => v.date === am && AGUARDA_CONF.includes(v.status)).length;
   const cm = cartas.filter(noMes);
-  const pend = perfisLista.filter(p => p.status === 'pendente').length;
+  const pend = perfisTodos.filter(p => p.status === 'pendente').length;
   const vendas = souGerente() ? vendasMes : cartas.filter(vendaNoMes).length;
   const aprovEq = souGerente() ? aprovMes.length : aprovMes.filter(x => x.equipe === perfil.equipe).length;
   $('statsPapel').innerHTML =
@@ -4872,7 +5015,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 81;
+const APP_VERSAO = 82;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5134,7 +5277,7 @@ function assinarEtapa1(){
       origens: d.origens?.length ? (d.origens.includes('CRM') ? d.origens : ['CRM', ...d.origens]) : CFG_PADRAO.origens,
       motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
       abasIgnoradas: Array.isArray(d.abasIgnoradas) ? d.abasIgnoradas : ABAS_IGNORADAS_PADRAO,
-      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null };
+      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null };
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     carregado.cfg = true; render(); fecharMesesPendentes();
   }, e => { carregado.cfg = true; silencio(e); }));
@@ -5174,7 +5317,7 @@ function pontosDoMes(m, val){
   });
   // presença no plantão, ligações e recontatos (resumo por corretor e mês, sem dados de cliente)
   rankingAtiv.filter(r => r.mes === m && r.uid).forEach(r => {
-    const x = pega({ corretorUid:r.uid, corretorNome:(perfisLista.find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
+    const x = pega({ corretorUid:r.uid, corretorNome:(perfisTodos.find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const pr = Object.keys(r.pres || {}).length, l = somaCap(r.lig, val), c = somaCap(r.rec, val);
     x.presencas += pr; x.ligacoes += l; x.recontatos += c;
     x.pontos += pr * n('presenca') + l * n('ligacao') + c * n('recontato');
@@ -5883,7 +6026,7 @@ function dadosPlanilhaMes(r){
   const semanas = [];
   for (let i = 1; i < cab1.length; i += 5) { const rot = String(cab1[i] || ''); if (!rot || rot === 'TOTAL' || rot.startsWith('DIAS')) break; semanas.push(rot); }
   const m = r.de.slice(0,7), de = m + '-01', ate = fimDoMes(m);
-  const porNome = n => { const k = norm(n); return perfisLista.find(p => norm(p.nome) === k) || null; };
+  const porNome = n => { const k = norm(n); return perfisTodos.find(p => norm(p.nome) === k) || null; };
   const res = {}, con = {};
   reservas.filter(x => x.dia >= de && x.dia <= ate).forEach(x => { const cs = corretoresDaReserva(x.corretorTexto); cs.forEach(c => { const k = c.uid || norm(c.nome); res[k] = (res[k] || 0) + 1 / Math.max(1, cs.length); }); });
   cartas.filter(c => c.status === 'Venda fechada' && (c.vendaEm || c.data) >= de && (c.vendaEm || c.data) <= ate).forEach(c => { const k = c.corretorUid || norm(c.corretorNome); con[k] = (con[k] || 0) + 1; });
@@ -6484,12 +6627,12 @@ function assinarEtapa4(){
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
-  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); conferirLinkCheckin();
+  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); conferirLinkCheckin();
 }
 // a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
 async function presencaNoRanking(uid, dia, presente){
   if (!souGerente() || souCeo()) return;
-  const p = perfisLista.find(x => x.uid === uid) || {}, m = dia.slice(0,7);
+  const p = perfisTodos.find(x => x.uid === uid) || {}, m = dia.slice(0,7);
   await setDoc(doc(db,'ranking_ativ', m + '_' + uid), { mes:m, uid, nome:p.nome || '', equipe:p.equipe || '', pres:{ [dia]: presente ? true : deleteField() }, atualizadoEm:Date.now() }, { merge:true });
 }
 // confere uma vez por sessão: presenças antigas (de antes desta versão) entram no ranking
@@ -6506,7 +6649,7 @@ async function sincPresencaRanking(){
       const tem = new Set(Object.keys((rankingAtiv.find(r => r.id === id) || {}).pres || {})), q = quer[id] || new Set();
       const add = [...q].filter(d => !tem.has(d)), tira = [...tem].filter(d => !q.has(d));
       if (!add.length && !tira.length) return;
-      const [m, uid] = [id.slice(0,7), id.slice(8)], p = perfisLista.find(x => x.uid === uid) || {};
+      const [m, uid] = [id.slice(0,7), id.slice(8)], p = perfisTodos.find(x => x.uid === uid) || {};
       const pres = {}; add.forEach(d => pres[d] = true); tira.forEach(d => pres[d] = deleteField());
       b.set(doc(db,'ranking_ativ',id), { mes:m, uid, nome:p.nome || '', equipe:p.equipe || '', pres, atualizadoEm:Date.now() }, { merge:true }); n++;
     });
@@ -6566,7 +6709,8 @@ function htmlMeusLeads(){
 // =====================================================================
 let notifs = [], _notifPrimeira = true, _notifVistas = new Set();
 const NOTIF_CATS = [
-  ['aulas', '🎓 Aula nova publicada', p => true],
+  ['analises', '🏦 Correspondente (pasta enviada, pendência, resultado, mensagens)', p => true],
+  ['aulas', '🎓 Aula nova publicada', p => p !== 'correspondente'],
   ['checkin', '🏢 Presença no escritório (lembrete, atrasos, atendimento externo)', p => true],
   ['leads', '📞 Lead novo para você', p => ['corretor','coordenador'].includes(p)],
   ['visitas', '🏠 Visitas (marcada para você, lembrete 1 hora antes, confirmar as de amanhã)', p => p !== 'gerente' || true],
@@ -6619,7 +6763,7 @@ window.abrirNotif = async id => {
 // preferências de notificação (Configurações)
 function htmlPrefNotif(){
   const papel = perfil?.papel || 'corretor', off = new Set(perfil?.notifOff || []);
-  return NOTIF_CATS.filter(c => c[2](papel)).map(([k, rot]) => `<label class="pref-n"><span>${rot}</span><input type="checkbox" class="sw" ${off.has(k) ? '' : 'checked'} onchange="prefNotif('${k}', this.checked)"></label>`).join('');
+  return NOTIF_CATS.filter(c => papel === 'correspondente' ? ['analises','avisos'].includes(c[0]) : c[2](papel)).map(([k, rot]) => `<label class="pref-n"><span>${rot}</span><input type="checkbox" class="sw" ${off.has(k) ? '' : 'checked'} onchange="prefNotif('${k}', this.checked)"></label>`).join('');
 }
 window.prefNotif = async (k, ligado) => {
   const off = new Set(perfil?.notifOff || []); if (ligado) off.delete(k); else off.add(k);
@@ -6712,6 +6856,349 @@ window.abrirHistoricoFin = async () => {
 // =====================================================================
 // ============ CÓPIAS DE SEGURANÇA · v76 ============
 // =====================================================================
+// =====================================================================
+// ============ CORRESPONDENTE (PRIME) · pastas de crédito · v82 (teste) ============
+// =====================================================================
+let analises = [], anFiltro = 'abertas', anTermo = '', anAberta = null, anEdit = null, anNovos = [], anTirar = [];
+window.mascCpf = v => fmtCpf(v);
+const AN_ST = {
+  rascunho:{ nome:'Rascunho', cor:'#64748b', ic:'📝' }, enviada:{ nome:'Aguardando a Prime', cor:'#2563eb', ic:'📨' }, em_analise:{ nome:'Em análise', cor:'#7c3aed', ic:'🔎' },
+  pendencia:{ nome:'Pendência', cor:'#d97706', ic:'⚠️' }, aprovada:{ nome:'Aprovada', cor:'#059669', ic:'✅' }, condicionada:{ nome:'Condicionada', cor:'#0284c7', ic:'🟦' },
+  reprovada:{ nome:'Reprovada', cor:'#dc2626', ic:'❌' }, verificada:{ nome:'CPF verificado', cor:'#0d9488', ic:'🔍' }, cancelada:{ nome:'Cancelada', cor:'#94a3b8', ic:'🚫' } };
+const AN_ABERTAS = ['rascunho','enviada','em_analise','pendencia'], AN_RESP = ['aprovada','condicionada','reprovada','verificada'];
+const anVerif = a => a?.tipo === 'verificacao';
+const anTemRestricao = a => (a.verificacao?.restricao === 'sim') || !!a.resultado?.restricao;
+const anMesDe = ms => { if (!ms) return ''; const d = new Date(ms); return d.getFullYear() + '-' + pad(d.getMonth() + 1); };
+let anMes = '';
+function htmlResumoAnalises(lista){
+  const mes = anMes || mesAtual(), noMes = (a, campo) => anMesDe(a[campo]) === mes;
+  const meses = [...new Set([mesAtual(), ...lista.map(a => anMesDe(a.enviadaEm)).filter(Boolean)])].sort().reverse();
+  const por = {};
+  const linha = a => por[a.corretorUid] ||= { nome:a.corretorNome || '?', equipe:a.equipe || '', env:0, ver:0, aprov:0, cond:0, repr:0, rest:0 };
+  for (const a of lista) {
+    if (a.enviadaEm && noMes(a, 'enviadaEm')) { const l = linha(a); if (anVerif(a)) l.ver++; else l.env++; }
+    if (a.respondidaEm && noMes(a, 'respondidaEm')) { const l = linha(a);
+      if (a.status === 'aprovada') l.aprov++; else if (a.status === 'condicionada') l.cond++; else if (a.status === 'reprovada') l.repr++;
+      if (anTemRestricao(a)) l.rest++; }
+  }
+  const rows = Object.values(por).sort((x, y) => (y.aprov + y.cond) - (x.aprov + x.cond) || y.env - x.env || x.nome.localeCompare(y.nome, 'pt-BR'));
+  const tot = rows.reduce((t, r) => { for (const k of ['env','ver','aprov','cond','repr','rest']) t[k] += r[k]; return t; }, { env:0, ver:0, aprov:0, cond:0, repr:0, rest:0 });
+  const taxa = r => { const res = r.aprov + r.cond + r.repr; return res ? Math.round((r.aprov + r.cond) / res * 100) + '%' : '—'; };
+  const td = (n, cls = '') => `<td class="${cls}">${n || '<span class="muted">0</span>'}</td>`;
+  return `<div class="an-resumo"><div class="an-res-topo"><b>Resumo de ${nomeMes(mes)}</b><select onchange="anMudarMes(this.value)">${meses.map(m => `<option value="${m}" ${m === mes ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</select></div>
+    <div class="an-res-kpis"><div style="--c:#059669"><b>${tot.aprov}</b><span>aprovadas</span></div><div style="--c:#0284c7"><b>${tot.cond}</b><span>condicionadas</span></div><div style="--c:#dc2626"><b>${tot.repr}</b><span>reprovadas</span></div><div style="--c:#7c2d12"><b>${tot.rest}</b><span>com restrição</span></div><div style="--c:#2563eb"><b>${tot.env}</b><span>análises enviadas</span></div><div style="--c:#0d9488"><b>${tot.ver}</b><span>CPFs verificados</span></div></div>
+    ${rows.length ? `<div class="tbl-wrap"><table class="rank an-tab"><thead><tr><th>Corretor</th><th>Enviadas</th><th>✅ Aprovadas</th><th>🟦 Condic.</th><th>❌ Reprov.</th><th>⛔ Restrição</th><th class="hide-m">🔍 Verificações</th><th class="hide-m">Aprovação</th></tr></thead><tbody>
+      ${rows.map(r => `<tr><td><span class="nm">${esc(r.nome)}</span>${r.equipe ? `<small class="muted"> ${esc(eqNome(r.equipe))}</small>` : ''}</td>${td(r.env)}${td(r.aprov, 'ok')}${td(r.cond)}${td(r.repr, 'ruim')}${td(r.rest, 'ruim')}<td class="hide-m">${r.ver || '<span class="muted">0</span>'}</td><td class="hide-m"><b>${taxa(r)}</b></td></tr>`).join('')}
+      ${rows.length > 1 ? `<tr class="tot"><td>Total</td>${td(tot.env)}${td(tot.aprov)}${td(tot.cond)}${td(tot.repr)}${td(tot.rest)}<td class="hide-m">${tot.ver}</td><td class="hide-m"><b>${taxa(tot)}</b></td></tr>` : ''}</tbody></table></div>` : '<div class="muted" style="padding:14px 0">Nenhuma pasta neste mês.</div>'}
+    <p class="an-res-nota">Aprovadas, condicionadas e reprovadas contam no mês da resposta da Prime. Restrição conta quando a Prime marca restrição no CPF (na análise ou na verificação).</p></div>`;
+}
+window.anMudarMes = m => { anMes = m; renderAnalises(); };
+const simNao = v => v === 'sim' ? 'Sim' : v === 'nao' ? 'Não' : '';
+// o mesmo texto que os corretores mandam no grupo
+function anTextoGrupo(a){
+  const c = a.cliente || {};
+  if (anVerif(a)) { const v = a.verificacao || {};
+    return ['❌❌❌❌❌❌❌❌', 'Verificar CPF', '', `Nome: ${c.nome || ''}`, `Telefone: ${c.telefone || ''}`, `CPF: ${c.cpf || ''}`, `Está em outro CCA? ${v.cca ? simNao(v.cca) + (v.ccaQual ? ' (' + v.ccaQual + ')' : '') : ''}`, `Ver se tem Restrição?: ${v.restricao ? simNao(v.restricao) + (v.restricaoQual ? ' (' + v.restricaoQual + ')' : '') : ''}`,
+      `Parcela e prazo se tiver análise válida: ${v.parcela ? brl2(v.parcela) + (v.prazo ? ' em ' + v.prazo + ' meses' : '') : ''}`, `Renda cadastrada: ${v.renda ? brl(v.renda) : ''}`].join('\n'); }
+  return ['❌❌❌❌❌❌❌❌', 'Análise de Crédito:', '', `Nome: ${c.nome || ''}`, `CPF: ${c.cpf || ''}`, `Telefone: ${c.telefone || ''}`, `Email: ${c.email || ''}`, `Profissão: ${c.profissao || ''}`, `Renda formal: ${c.rendaFormal ? brl(c.rendaFormal) : ''}`, `Renda Total: ${c.renda ? brl(c.renda) : ''}`, `Estado Civil: ${c.civil || ''}`, `Mais de 3 anos: ${simNao(c.mais3)}`, `Dependente: ${simNao(c.dep)}`].join('\n');
+}
+window.anCopiarGrupo = async () => { const a = anAtual(); if (!a) return; try { await navigator.clipboard.writeText(anTextoGrupo(a)); toast('📋 Copiado no formato do grupo'); } catch(e) { toast('Não deu para copiar'); } };
+const AN_DOCS = [['identidade','RG e CPF, ou CNH', true], ['residencia','Comprovante de residência', true], ['renda','Comprovante de renda (contracheques, extratos ou declaração)', true],
+  ['estadocivil','Certidão de nascimento ou casamento', false], ['ctps','Carteira de trabalho digital', false], ['fgts','Extrato do FGTS', false], ['ir','Imposto de renda', false],
+  ['conjuge','Documentos do 2º proponente', false], ['outro','Outros documentos', false]];
+const anDocNome = t => (AN_DOCS.find(d => d[0] === t) || [, t === 'resposta' ? 'Carta / simulação da Prime' : 'Documento'])[1];
+const anCfg = () => appCfg.analises || { todos:false, testadores:[] };
+function anVisivel(){ if (!souAtivo()) return false; if (souCorresp() || souGerente()) return true; const c = anCfg(); return (!!c.todos && ['corretor','coordenador'].includes(perfil.papel)) || (c.testadores || []).includes(uidAtual); }
+window.anVisivel = anVisivel;
+const anPodeCriar = () => anVisivel() && !souCorresp() && !souCeo() && perfil.papel !== 'sdr';
+function assinarAnalises(){
+  analises = []; if (!souAtivo()) return;
+  const q = souCorresp() ? query(collection(db,'analises'), where('enviada','==',true))
+    : souGerente() ? collection(db,'analises')
+    : souCoord() ? query(collection(db,'analises'), where('equipe','==', perfil.equipe || '-'))
+    : query(collection(db,'analises'), where('corretorUid','==', uidAtual));
+  subsPapel.push(onSnapshot(q, s => { analises = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); if (anAberta && $('anVerModal').classList.contains('open')) pintarPasta(); }, e => console.warn('analises', e.code || e.message)));
+}
+const anNaoVista = a => { const v = (a.vistoPor || {})[uidAtual] || 0; return a.ultimo && a.ultimo.uid !== uidAtual && (a.ultimo.em || 0) > v; };
+function anContador(){
+  if (!anVisivel()) return 0;
+  if (souCorresp()) return analises.filter(a => a.status === 'enviada' || (AN_ABERTAS.includes(a.status) && anNaoVista(a))).length;
+  return analises.filter(a => anNaoVista(a) && (a.corretorUid === uidAtual || souGerente())).length;
+}
+const anTempo = ms => { if (!ms) return ''; const m = Math.round((Date.now() - ms) / 60000); return m < 1 ? 'agora' : m < 60 ? `há ${m} min` : m < 1440 ? `há ${Math.round(m / 60)} h` : `há ${Math.round(m / 1440)} dia${Math.round(m / 1440) > 1 ? 's' : ''}`; };
+const anDur = ms => { const h = ms / 3600e3; return h < 1 ? Math.max(1, Math.round(ms / 60000)) + ' min' : h < 48 ? Math.round(h) + ' h' : Math.round(h / 24) + ' dias'; };
+function renderAnalises(){
+  const n = anContador(); if ($('cAnalises')) { $('cAnalises').textContent = n; $('cAnalises').classList.toggle('hide', !n); }
+  if (view !== 'analises' || !$('anLista')) return;
+  $('anTit').textContent = souCorresp() ? 'Pastas de crédito' : 'Correspondente · Prime';
+  $('anSub').textContent = souCorresp() ? `Olá, ${primeiro(perfil.nome)}! Aqui chegam as pastas dos corretores da Frade.` : 'Mande a pasta do cliente com os documentos e acompanhe a análise da Prime por aqui. Fase de teste.';
+  $('anNovaBt').classList.toggle('hide', !anPodeCriar()); $('anTestBt').classList.toggle('hide', !souDono());
+  const mes = mesAtual(), lista = analises.filter(a => souCorresp() ? a.enviada : true);
+  const cont = st => lista.filter(a => a.status === st).length;
+  const resp = lista.filter(a => a.respondidaEm && a.enviadaEm), medio = resp.length ? resp.reduce((t, a) => t + (a.respondidaEm - a.enviadaEm), 0) / resp.length : 0;
+  const doMes = lista.filter(a => ['aprovada','condicionada','reprovada'].includes(a.status) && anMesDe(a.respondidaEm) === mes), aprov = doMes.filter(a => a.status !== 'reprovada').length;
+  $('anKpis').innerHTML = [[cont('enviada'), 'aguardando a Prime', '#2563eb'], [cont('em_analise'), 'em análise', '#7c3aed'], [cont('pendencia'), 'com pendência', '#d97706'],
+    [doMes.length ? `${aprov}/${doMes.length}` : '0', 'aprovadas no mês', '#059669'], [medio ? anDur(medio) : '—', 'tempo médio de resposta', '#0f172a']]
+    .map(([v, r, c]) => `<div class="an-kpi" style="--c:${c}"><b>${v}</b><span>${r}</span></div>`).join('');
+  const abas = [['abertas','Em andamento'], ['enviada','Aguardando'], ['em_analise','Em análise'], ['pendencia','Pendência'], ['respondidas','Respondidas'], ['todas','Todas'], ['resumo','📊 Resumo do mês']];
+  $('anTabs').innerHTML = abas.map(([k, r]) => { const q = k === 'resumo' ? 0 : anFiltrar(lista, k).length; return `<button class="${anFiltro === k ? 'on' : ''}" onclick="anAba('${k}')">${r}${q ? ` <i>${q}</i>` : ''}</button>`; }).join('');
+  $('anBusca').classList.toggle('hide', anFiltro === 'resumo');
+  if (anFiltro === 'resumo') { $('anLista').innerHTML = htmlResumoAnalises(lista); return; }
+  if (anFiltro === 'abertas' && !anFiltrar(lista, 'abertas').length && lista.length && !anTermo) anFiltro = 'todas';
+  const t = norm(anTermo), l = anFiltrar(lista, anFiltro).filter(a => !t || norm([a.cliente?.nome, a.cliente?.cpf, a.corretorNome, a.imovel?.empreendimento].join(' ')).includes(t) || soDig(a.cliente?.cpf).includes(soDig(anTermo) || '@'))
+    .sort((a, b) => (anNaoVista(b) - anNaoVista(a)) || ((b.ultimo?.em || b.atualizadoEm || 0) - (a.ultimo?.em || a.atualizadoEm || 0)));
+  $('anLista').innerHTML = l.length ? `<div class="an-grade">${l.map(htmlPastaCard).join('')}</div>` : `<div class="an-vazio"><span>🗂️</span><b>${lista.length ? 'Nada por aqui' : souCorresp() ? 'Nenhuma pasta ainda' : 'Nenhuma pasta enviada ainda'}</b><p>${lista.length ? 'Troque o filtro acima para ver as outras pastas.' : souCorresp() ? 'Quando um corretor enviar uma pasta, ela aparece aqui e você recebe um aviso.' : anPodeCriar() ? 'Toque em <b>+ Nova pasta</b>, preencha os dados do cliente e anexe os documentos.' : 'As pastas dos corretores aparecem aqui.'}</p></div>`;
+}
+function anFiltrar(l, k){ return k === 'abertas' ? l.filter(a => AN_ABERTAS.includes(a.status)) : k === 'respondidas' ? l.filter(a => AN_RESP.includes(a.status)) : k === 'todas' ? l : l.filter(a => a.status === k); }
+window.anAba = k => { anFiltro = k; renderAnalises(); };
+window.anBuscar = v => { anTermo = v; renderAnalises(); };
+function htmlPastaCard(a){
+  const st = AN_ST[a.status] || AN_ST.enviada, c = a.cliente || {}, renda = Number(c.renda) || 0, nd = (a.docs || []).filter(d => d.tipo !== 'resposta').length, v = a.verificacao || {};
+  return `<button class="an-card ${anNaoVista(a) ? 'nova' : ''}" style="--c:${st.cor}" onclick="abrirPasta('${a.id}')">
+    <div class="an-c1"><span class="an-st">${st.ic} ${st.nome}</span>${anNaoVista(a) ? '<em class="an-dot">novidade</em>' : ''}<small>${anTempo(a.ultimo?.em || a.atualizadoEm)}</small></div>
+    <b class="an-cli">${esc(c.nome || 'Cliente sem nome')}</b><span class="an-tipo-tag">${anVerif(a) ? '🔍 Verificar CPF' : '📋 Análise de crédito'}</span>
+    <div class="an-c2">${souCorresp() || podeGerir() ? `<span>👤 ${esc(primeiro(a.corretorNome || ''))}</span>` : ''}${renda ? `<span>💰 ${brl(renda)}</span>` : ''}${a.imovel?.empreendimento ? `<span>🏠 ${esc(a.imovel.empreendimento)}</span>` : ''}${anVerif(a) ? '' : `<span>📎 ${nd}</span>`}</div>
+    ${a.status === 'verificada' ? `<div class="an-c3">Outro CCA: ${simNao(v.cca)} · Restrição: ${simNao(v.restricao)}${v.parcela ? ' · parcela ' + brl2(v.parcela) : ''}</div>` : a.status === 'aprovada' || a.status === 'condicionada' ? `<div class="an-c3">Financiamento ${brl(a.resultado?.financiado)}${a.resultado?.subsidio ? ` · subsídio ${brl(a.resultado.subsidio)}` : ''}</div>` : a.status === 'pendencia' && a.pendencia ? `<div class="an-c3">${esc(a.pendencia).slice(0, 110)}</div>` : a.ultimo?.texto ? `<div class="an-c3 muted">${esc(a.ultimo.texto).slice(0, 110)}</div>` : ''}
+  </button>`;
+}
+// ---- abrir uma pasta ----
+window.abrirPasta = id => { anAberta = id; pintarPasta(); abrir('anVerModal'); marcarVista(id); };
+window.fecharPasta = () => { anAberta = null; fechar('anVerModal'); };
+async function marcarVista(id){ const a = analises.find(x => x.id === id); if (!a || !anNaoVista(a)) return; try { await updateDoc(doc(db,'analises', id), { ['vistoPor.' + uidAtual]: Date.now() }); } catch(e) {} }
+function pintarPasta(){
+  const a = analises.find(x => x.id === anAberta); if (!a || !$('anVCorpo')) return;
+  const st = AN_ST[a.status] || AN_ST.enviada, c = a.cliente || {}, cj = a.conjuge, r = a.resultado || {}, vf = a.verificacao || {}, ehV = anVerif(a);
+  const dono = a.corretorUid === uidAtual, editavel = (dono || souGerente() && !souCeo()) && ['rascunho','pendencia'].includes(a.status);
+  $('anVTit').textContent = c.nome || 'Pasta';
+  const passos = anVerif(a) ? [['Enviada', a.enviadaEm], ['Resposta', a.respondidaEm]] : [['Enviada', a.enviadaEm], ['Em análise', a.emAnaliseEm], ['Resposta', a.respondidaEm]];
+  const linha = (k, v) => v ? `<div><span>${k}</span><b>${v}</b></div>` : '';
+  const docs = a.docs || [];
+  const acoes = [];
+  if (souCorresp() || (souGerente() && !souCeo())) {
+    if (a.status === 'enviada') acoes.push(`<button class="btn btn-primary" onclick="anMudar('em_analise')">🔎 Começar a análise</button>`);
+    if (['enviada','em_analise','pendencia'].includes(a.status)) acoes.push(`<button class="btn btn-ghost" onclick="anPedirPendencia()">⚠️ ${ehV ? 'Pedir informação' : 'Pedir documento / pendência'}</button>`, `<button class="btn btn-primary" onclick="${ehV ? 'abrirVerificacao()' : 'abrirResultado()'}">${ehV ? 'Responder a verificação' : 'Responder resultado'}</button>`);
+    if (AN_RESP.includes(a.status)) acoes.push(`<button class="btn btn-ghost" onclick="${ehV ? 'abrirVerificacao()' : 'abrirResultado()'}">Corrigir a resposta</button>`);
+  }
+  if (dono || (souGerente() && !souCeo())) {
+    if (editavel) acoes.push(`<button class="btn btn-ghost" onclick="editarPasta('${a.id}')">✏️ Editar dados e documentos</button>`);
+    if (a.status === 'rascunho') acoes.push(`<button class="btn btn-primary" onclick="anEnviarJa()">📨 Enviar para a Prime</button>`);
+    if (a.status === 'pendencia') acoes.push(`<button class="btn btn-primary" onclick="anReenviar()">📨 Pendência resolvida · reenviar</button>`);
+    if ((a.status === 'aprovada' || a.status === 'condicionada') && !a.cartaLancada && dono) acoes.push(`<button class="btn btn-primary" onclick="anLancarCarta()">📄 Lançar carta aprovada</button>`);
+    if (AN_ABERTAS.includes(a.status)) acoes.push(`<button class="link" style="color:var(--danger)" onclick="anCancelar()">Cancelar pasta</button>`);
+  }
+  if (ehV && a.status === 'verificada' && dono) acoes.push(`<button class="btn btn-primary" onclick="anVirarAnalise()">📋 Mandar para análise de crédito</button>`);
+  acoes.push(`<button class="btn btn-ghost" onclick="anCopiarGrupo()">📋 Copiar no formato do grupo</button>`);
+  if (souGerente() && !souCeo()) acoes.push(`<button class="link" style="color:var(--danger)" onclick="anExcluir()">Excluir</button>`);
+  $('anVCorpo').innerHTML = `
+    <div class="an-v-topo" style="--c:${st.cor}"><span class="an-st grande">${st.ic} ${st.nome}</span><span class="muted">${esc(a.corretorNome || '')}${a.equipe ? ' · ' + esc(eqNome(a.equipe)) : ''}</span></div>
+    ${a.status !== 'rascunho' && a.status !== 'cancelada' ? `<div class="an-passos" style="grid-template-columns:repeat(${passos.length},1fr)">${passos.map(([n, t], i) => `<div class="${t ? 'ok' : ''}"><i>${t ? '✓' : i + 1}</i><b>${n}</b><small>${t ? new Date(t).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</small></div>`).join('')}</div>` : ''}
+    ${a.status === 'pendencia' && a.pendencia ? `<div class="an-alerta">⚠️ <b>Pendência:</b> ${esc(a.pendencia)}</div>` : ''}
+    ${a.status === 'verificada' ? `<div class="an-result" style="--c:${st.cor}"><div class="an-r-tit">🔍 Resposta da Prime</div><div class="an-r-grade">${linha('Está em outro CCA?', simNao(vf.cca) + (vf.ccaQual ? ' · ' + esc(vf.ccaQual) : ''))}${linha('Tem restrição?', simNao(vf.restricao) + (vf.restricaoQual ? ' · ' + esc(vf.restricaoQual) : ''))}${linha('Análise válida', vf.parcela ? brl2(vf.parcela) + (vf.prazo ? ' · ' + vf.prazo + ' meses' : '') : 'Não tem')}${linha('Renda cadastrada', vf.renda ? brl(vf.renda) : '—')}</div>${vf.obs ? `<p>${esc(vf.obs)}</p>` : ''}</div>` : ''}
+    ${AN_RESP.includes(a.status) && a.status !== 'verificada' ? `<div class="an-result" style="--c:${st.cor}"><div class="an-r-tit">${st.ic} ${st.nome}</div>
+      ${a.status !== 'reprovada' ? `<div class="an-r-grade">${linha('Valor financiado', r.financiado ? brl(r.financiado) : '')}${linha('Subsídio', r.subsidio ? brl(r.subsidio) : '')}${linha('Parcela', r.parcela ? brl2(r.parcela) : '')}${linha('Prazo', r.prazo ? r.prazo + ' meses' : '')}${linha('Juros', r.taxa ? String(r.taxa).replace('.', ',') + '% ao ano' : '')}${linha('Validade', r.validade ? dataBR(r.validade) : '')}</div>` : ''}
+      ${r.restricao ? '<p><b>⛔ Cliente com restrição no CPF</b></p>' : ''}${r.condicao ? `<p><b>${a.status === 'reprovada' ? 'Motivo' : 'Condição'}:</b> ${esc(r.condicao)}</p>` : ''}${r.obs ? `<p>${esc(r.obs)}</p>` : ''}</div>` : ''}
+    ${acoes.length ? `<div class="an-acoes">${acoes.join('')}</div>` : ''}
+    <div class="an-v-grade">
+      <div class="an-box"><h3>${ehV ? '🔍 Verificar CPF' : '📋 Análise de crédito'}</h3><div class="an-dados">${linha('Nome', esc(c.nome || ''))}${linha('CPF', esc(c.cpf || ''))}${linha('Telefone', esc(c.telefone || ''))}${linha('E-mail', esc(c.email || ''))}${linha('Profissão', esc(c.profissao || ''))}${linha('Renda formal', c.rendaFormal ? brl(c.rendaFormal) : '')}${linha('Renda total', !ehV && c.renda ? brl(c.renda) : '')}${linha('Estado civil', esc(c.civil || ''))}${linha('Mais de 3 anos', simNao(c.mais3))}${linha('Dependente', simNao(c.dep))}</div>
+        ${cj?.nome ? `<h3 style="margin-top:12px">2º proponente</h3><div class="an-dados">${linha('Nome', esc(cj.nome))}${linha('CPF', esc(cj.cpf || ''))}${linha('Renda bruta', cj.renda ? brl(cj.renda) : '')}${linha('Tipo de renda', esc(cj.tipoRenda || ''))}</div>` : ''}
+        ${a.imovel?.empreendimento || a.imovel?.valor ? `<h3 style="margin-top:12px">Imóvel</h3><div class="an-dados">${linha('Empreendimento', esc(a.imovel.empreendimento || ''))}${linha('Valor', a.imovel.valor ? brl(a.imovel.valor) : '')}</div>` : ''}
+        ${a.obs ? `<div class="an-obs">💬 ${esc(a.obs)}</div>` : ''}</div>
+      <div class="an-box ${ehV && !docs.length ? 'hide' : ''}"><h3>Documentos (${docs.length})</h3>${docs.length ? `<div class="an-docs">${docs.map((d, i) => `<button class="an-doc" onclick="anAbrirDoc(${i})"><i>${(d.mime || '').startsWith('image/') ? '🖼️' : '📄'}</i><span><b>${esc(anDocNome(d.tipo))}</b><small>${esc(d.nome || '')} · ${Math.max(1, Math.round((d.tamanho || 0) / 1024))} KB${d.porPapel === 'correspondente' ? ' · enviado pela Prime' : ''}</small></span></button>`).join('')}</div>` : '<div class="muted" style="font-size:13px">Nenhum documento anexado.</div>'}
+        ${souCorresp() && a.status !== 'cancelada' ? `<button class="btn btn-ghost" style="margin-top:8px" onclick="document.getElementById('anArqPrime').click()">📎 Anexar arquivo para o corretor</button><input type="file" id="anArqPrime" class="hide" accept="image/*,application/pdf" onchange="anPrimeAnexa(this)">` : ''}</div>
+    </div>
+    <div class="an-box an-chat"><h3>Conversa</h3><div class="an-msgs">${(a.msgs || []).length ? a.msgs.map(m => `<div class="an-msg ${m.uid === uidAtual ? 'eu' : ''} ${m.sistema ? 'sis' : ''}"><small>${esc(m.sistema ? '' : primeiro(m.nome || '') + (m.papel === 'correspondente' ? ' · Prime' : ''))} ${new Date(m.em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}</small><p>${esc(m.texto)}</p></div>`).join('') : '<div class="muted" style="font-size:13px">Nenhuma mensagem ainda.</div>'}</div>
+      ${a.status !== 'rascunho' && a.status !== 'cancelada' && !souCeo() ? `<div class="an-escreve"><textarea id="anMsg" rows="1" maxlength="1000" placeholder="Escreva uma mensagem…"></textarea><button class="btn btn-primary" onclick="anMandarMsg()">Enviar</button></div>` : ''}</div>`;
+  const box = document.querySelector('.an-msgs'); if (box) box.scrollTop = box.scrollHeight;
+}
+// ---- ações ----
+const anAtual = () => analises.find(x => x.id === anAberta);
+const anMsgSis = texto => ({ em:Date.now(), uid:uidAtual, nome:perfil.nome, papel:perfil.papel, texto, sistema:true });
+async function anGravar(upd, evento, texto){
+  const a = anAtual(); if (!a) return false;
+  const agora = Date.now(), m = texto ? [...(a.msgs || []), anMsgSis(texto)] : null;
+  try { await updateDoc(doc(db,'analises', a.id), { ...upd, ...(m ? { msgs:m } : {}), atualizadoEm:agora, ultimo:{ em:agora, uid:uidAtual, texto:texto || upd.status || '' }, ['vistoPor.' + uidAtual]:agora });
+    if (evento) avisarCarteiro('analise', a.id, false, { evento }); return true; }
+  catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'sem permissão (confira as regras novas do Firebase)' : e.message)); return false; }
+}
+window.anMudar = async st => { if (await anGravar({ status:st, ...(st === 'em_analise' ? { emAnaliseEm:Date.now() } : {}) }, st, st === 'em_analise' ? '🔎 A Prime começou a análise.' : '')) toast('Status atualizado ✓'); };
+window.anPedirPendencia = async () => {
+  const t = prompt('O que falta ou precisa ser corrigido? O corretor recebe um aviso.'); if (!t || !t.trim()) return;
+  if (await anGravar({ status:'pendencia', pendencia:t.trim() }, 'pendencia', '⚠️ Pendência: ' + t.trim())) toast('Pendência enviada ao corretor');
+};
+window.anReenviar = async () => { if (await anGravar({ status:'enviada', reenviadaEm:Date.now() }, 'reenviada', '📨 Pendência resolvida. Pasta reenviada.')) toast('📨 Pasta reenviada para a Prime'); };
+window.anEnviarJa = async () => {
+  const a = anAtual(); const falta = anVerif(a) ? [] : AN_DOCS.filter(d => d[2] && !(a.docs || []).some(x => x.tipo === d[0]));
+  if (falta.length) { toast('Faltam documentos obrigatórios: ' + falta.map(d => d[1].split(' (')[0]).join(', ')); return; }
+  if (await anGravar({ status:'enviada', enviada:true, enviadaEm:Date.now() }, 'enviada', '📨 Pasta enviada para a Prime.')) festejar('📨 Pasta enviada para a Prime!');
+};
+window.anCancelar = async () => { if (!confirm('Cancelar esta pasta? A Prime para de analisar.')) return; if (await anGravar({ status:'cancelada' }, 'cancelada', '🚫 Pasta cancelada.')) toast('Pasta cancelada'); };
+window.anExcluir = async () => {
+  const a = anAtual(); if (!a || !confirm('Excluir esta pasta e todos os documentos? Não dá para desfazer.')) return;
+  try { for (const d of a.docs || []) await anApagarArq(d); await deleteDoc(doc(db,'analises', a.id)); fecharPasta(); toast('Pasta excluída'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.anMandarMsg = async () => {
+  const a = anAtual(), t = $('anMsg').value.trim(); if (!a || !t) return;
+  const agora = Date.now(), m = { em:agora, uid:uidAtual, nome:perfil.nome, papel:perfil.papel, texto:t };
+  try { await updateDoc(doc(db,'analises', a.id), { msgs:[...(a.msgs || []), m], atualizadoEm:agora, ultimo:{ em:agora, uid:uidAtual, texto:t }, ['vistoPor.' + uidAtual]:agora });
+    $('anMsg').value = ''; avisarCarteiro('analise', a.id, false, { evento:'msg' }); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.anLancarCarta = () => {
+  const a = anAtual(); if (!a) return; const c = a.cliente || {}, r = a.resultado || {};
+  fecharPasta();
+  abrirFormCarta(null, { cliente:c.nome, telefone:c.telefone, cpf:c.cpf, renda:String(Number(c.renda) || 0), empreendimento:a.imovel?.empreendimento || '' });
+  setTimeout(() => { $('cmValor').value = fmtValorInput(r.financiado); $('cmSubsidio').value = fmtValorInput(r.subsidio); if (r.validade) $('cmValidade').value = r.validade; }, 50);
+  updateDoc(doc(db,'analises', a.id), { cartaLancada:Date.now() }).catch(() => {});
+};
+// ---- resultado (Prime) ----
+window.anResVis = () => { const v = document.querySelector('input[name=anRes]:checked').value; $('anResNum').classList.toggle('hide', v === 'reprovada'); $('anRCondL').textContent = v === 'reprovada' ? 'Motivo da reprovação' : v === 'condicionada' ? 'Condição' : 'Condição (se tiver)'; };
+window.abrirResultado = () => {
+  const a = anAtual(); if (!a) return; const r = a.resultado || {};
+  const v = AN_RESP.includes(a.status) ? a.status : 'aprovada'; document.querySelectorAll('input[name=anRes]').forEach(i => i.checked = i.value === v);
+  $('anRFin').value = r.financiado ? fmtValorInput(r.financiado) : ''; $('anRSub').value = r.subsidio ? fmtValorInput(r.subsidio) : ''; $('anRParc').value = r.parcela ? String(r.parcela).replace('.', ',') : '';
+  $('anRPrazo').value = r.prazo || ''; $('anRTaxa').value = r.taxa ? String(r.taxa).replace('.', ',') : ''; $('anRVal').value = r.validade || ''; $('anRCond').value = r.condicao || ''; $('anRObs').value = r.obs || ''; $('anRArq').value = ''; $('anRRest').checked = !!r.restricao;
+  anResVis(); abrir('anRespModal');
+};
+window.enviarResultado = async () => {
+  const a = anAtual(); if (!a) return; const st = document.querySelector('input[name=anRes]:checked').value;
+  const r = { financiado:lerValor($('anRFin').value), subsidio:lerValor($('anRSub').value), parcela:Math.round(lerDec($('anRParc').value) * 100) / 100, prazo:Number($('anRPrazo').value) || 0, taxa:lerDec($('anRTaxa').value) || 0, validade:$('anRVal').value, condicao:$('anRCond').value.trim(), obs:$('anRObs').value.trim(), restricao:$('anRRest').checked, por:perfil.nome, em:Date.now() };
+  if (st !== 'reprovada' && !r.financiado) { toast('Informe o valor financiado'); return; }
+  if (st !== 'aprovada' && !r.condicao) { toast(st === 'reprovada' ? 'Informe o motivo' : 'Informe a condição'); return; }
+  $('anRBt').disabled = true;
+  try {
+    let docs = a.docs || []; const f = $('anRArq').files[0];
+    if (f) { if (f.size > 10 * 1048576) throw new Error('arquivo grande demais (máximo 10 MB)'); docs = [...docs, await anSubirArq(f, 'resposta', a)]; }
+    const txt = st === 'reprovada' ? `❌ Reprovada: ${r.condicao}` : `${AN_ST[st].ic} ${AN_ST[st].nome}: financiamento de ${brl(r.financiado)}${r.subsidio ? `, subsídio de ${brl(r.subsidio)}` : ''}${r.parcela ? `, parcela de ${brl2(r.parcela)}` : ''}.${r.condicao && st !== 'reprovada' ? ' Condição: ' + r.condicao : ''}`;
+    if (await anGravar({ status:st, resultado:r, docs, respondidaEm:a.respondidaEm || Date.now(), pendencia:'' }, 'resultado', txt)) { fechar('anRespModal'); toast('Resultado enviado ao corretor ✓'); }
+  } catch(e) { toast('Erro: ' + e.message); }
+  $('anRBt').disabled = false;
+};
+window.abrirVerificacao = () => {
+  const a = anAtual(); if (!a) return; const v = a.verificacao || {};
+  $('anVCca').value = v.cca || 'nao'; $('anVCcaQ').value = v.ccaQual || ''; $('anVRest').value = v.restricao || 'nao'; $('anVRestQ').value = v.restricaoQual || '';
+  $('anVParc').value = v.parcela ? String(v.parcela).replace('.', ',') : ''; $('anVPrazo').value = v.prazo || ''; $('anVRenda').value = v.renda ? fmtValorInput(v.renda) : ''; $('anVObs').value = v.obs || '';
+  abrir('anVerifModal');
+};
+window.enviarVerificacao = async () => {
+  const a = anAtual(); if (!a) return;
+  const v = { cca:$('anVCca').value, ccaQual:$('anVCcaQ').value.trim(), restricao:$('anVRest').value, restricaoQual:$('anVRestQ').value.trim(), parcela:Math.round(lerDec($('anVParc').value) * 100) / 100, prazo:Number($('anVPrazo').value) || 0, renda:lerValor($('anVRenda').value), obs:$('anVObs').value.trim(), por:perfil.nome, em:Date.now() };
+  const txt = `🔍 Outro CCA: ${simNao(v.cca)}${v.ccaQual ? ' (' + v.ccaQual + ')' : ''} · Restrição: ${simNao(v.restricao)}${v.restricaoQual ? ' (' + v.restricaoQual + ')' : ''}${v.parcela ? ` · análise válida: ${brl2(v.parcela)}${v.prazo ? ' em ' + v.prazo + ' meses' : ''}` : ''}${v.renda ? ' · renda cadastrada ' + brl(v.renda) : ''}`;
+  $('anVBt').disabled = true;
+  if (await anGravar({ status:'verificada', verificacao:v, respondidaEm:a.respondidaEm || Date.now(), pendencia:'' }, 'resultado', txt)) { fechar('anVerifModal'); toast('Resposta enviada ao corretor ✓'); }
+  $('anVBt').disabled = false;
+};
+// a verificação deu certo: o corretor completa os dados e manda para análise na mesma pasta
+window.anVirarAnalise = () => { const a = anAtual(); if (!a) return; fecharPasta(); anEdit = a.id; anVirando = true; $('anFTit').textContent = 'Análise de crédito · ' + (a.cliente?.nome || ''); anPreencher(a); document.querySelector('input[name=anTipo][value=analise]').checked = true; anTipoVis(); $('anTipoBox').classList.add('hide'); $('anEnviarBt').textContent = 'Enviar para análise'; abrir('anModal'); };
+window.anPrimeAnexa = async inp => {
+  const a = anAtual(), f = inp.files && inp.files[0]; inp.value = ''; if (!a || !f) return;
+  if (f.size > 10 * 1048576) { toast('Arquivo grande demais (máximo 10 MB)'); return; }
+  toast('Enviando o arquivo…');
+  try { const d = await anSubirArq(f, 'resposta', a); await anGravar({ docs:[...(a.docs || []), d] }, 'msg', '📎 A Prime anexou um arquivo: ' + (f.name || 'arquivo')); toast('Arquivo anexado ✓'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// ---- arquivos (em pedaços no Firestore, como as notas fiscais) ----
+async function anSubirArq(f, tipo, a){
+  let blob = f, mime = f.type || 'application/octet-stream';
+  if (mime.startsWith('image/') && mime !== 'image/gif') { const durl = await comprimirFoto(f, 1800, 0.8); blob = await (await fetch(durl)).blob(); mime = 'image/jpeg'; }
+  const b64 = await new Promise((ok, erro) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = erro; r.readAsDataURL(blob); });
+  const id = 'ad_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), P = 900000, n = Math.ceil(b64.length / P);
+  for (let i = 0; i < n; i++) await setDoc(doc(db,'analise_docs', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime, analiseId:a.id, corretorUid:a.corretorUid, equipe:a.equipe || '', porUid:uidAtual });
+  return { id, n, mime, tipo, nome:f.name || 'arquivo', tamanho:blob.size, em:Date.now(), por:perfil.nome, porPapel:perfil.papel };
+}
+async function anApagarArq(d){ if (d && d.id && d.n) for (let i = 0; i < d.n; i++) await deleteDoc(doc(db,'analise_docs', d.id + '_' + i)).catch(() => {}); }
+window.anAbrirDoc = async i => {
+  const a = anAtual(), d = a?.docs?.[i]; if (!d) return;
+  $('axTit').textContent = anDocNome(d.tipo) + ' · ' + (a.cliente?.nome || ''); $('axCorpo').innerHTML = '<div class="ax-load">Carregando o documento…</div>'; $('axPe').innerHTML = ''; abrir('anexoModal');
+  try { const partes = [];
+    for (let k = 0; k < d.n; k++) { const s = await getDoc(doc(db,'analise_docs', d.id + '_' + k)); if (!s.exists()) throw new Error('arquivo incompleto'); partes.push(s.data().d); }
+    const bin = atob(partes.join('')), u8 = new Uint8Array(bin.length); for (let k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
+    const url = URL.createObjectURL(new Blob([u8], { type:d.mime || 'application/octet-stream' })), nome = (a.cliente?.nome || 'cliente').split(' ')[0] + ' - ' + anDocNome(d.tipo).split(' (')[0] + ((d.mime || '').startsWith('image/') ? '.jpg' : d.mime === 'application/pdf' ? '.pdf' : '');
+    $('axCorpo').innerHTML = (d.mime || '').startsWith('image/') ? `<img src="${url}" alt="" class="ax-img">` : d.mime === 'application/pdf' ? `<iframe src="${url}" class="ax-pdf" title="Documento"></iframe>` : `<div class="ax-load">📎 ${esc(d.nome || '')}</div>`;
+    $('axPe').innerHTML = `<a class="btn btn-ghost" href="${url}" target="_blank" rel="noopener">Abrir em outra aba</a><a class="btn btn-primary" href="${url}" download="${esc(nome)}">⬇ Baixar</a>`;
+  } catch(e) { $('axCorpo').innerHTML = `<div class="ax-load">Não deu para abrir: ${esc(e.message)}</div>`; }
+};
+// ---- formulário da pasta (corretor) ----
+let anVirando = false;
+const anTipoForm = () => document.querySelector('input[name=anTipo]:checked')?.value || 'analise';
+window.anTipoVis = () => { const v = anTipoForm() === 'verificacao'; $('anSoAnalise').classList.toggle('hide', v); };
+let anTipoAlvo = '';
+window.anAnexar = tipo => { anTipoAlvo = tipo; $('anArq').click(); };
+window.anEscolheu = inp => { const fs = [...(inp.files || [])]; inp.value = ''; for (const f of fs) { if (f.size > 10 * 1048576) { toast(`${f.name}: grande demais (máximo 10 MB)`); continue; } anNovos.push({ tipo:anTipoAlvo, file:f }); } anDocsVis(); };
+window.anTiraNovo = i => { anNovos.splice(i, 1); anDocsVis(); };
+window.anTiraExist = id => { anTirar.push(id); anDocsVis(); };
+function anDocsVis(){
+  const a = anEdit ? analises.find(x => x.id === anEdit) : null, exist = (a?.docs || []).filter(d => !anTirar.includes(d.id));
+  $('anDocsBox').innerHTML = AN_DOCS.map(([k, nome, obr]) => {
+    const ex = exist.filter(d => d.tipo === k), nv = anNovos.map((x, i) => ({ ...x, i })).filter(x => x.tipo === k), tem = ex.length + nv.length;
+    return `<div class="an-dl ${tem ? 'tem' : ''}"><div class="an-dl-t"><b>${tem ? '✅' : obr ? '⬜' : '▫️'} ${nome}${obr ? ' *' : ''}</b><button type="button" class="btn btn-ghost" onclick="anAnexar('${k}')">📎 ${tem ? 'Mais' : 'Anexar'}</button></div>
+      ${tem ? `<div class="an-dl-arqs">${ex.map(d => `<span>${(d.mime || '').startsWith('image/') ? '🖼️' : '📄'} ${esc(d.nome || '')}<button type="button" onclick="anTiraExist('${d.id}')" aria-label="Tirar">✕</button></span>`).join('')}${nv.map(x => `<span class="novo">${x.file.type.startsWith('image/') ? '🖼️' : '📄'} ${esc(x.file.name)}<button type="button" onclick="anTiraNovo(${x.i})" aria-label="Tirar">✕</button></span>`).join('')}</div>` : ''}</div>`;
+  }).join('');
+}
+function anPreencher(a){
+  const c = a?.cliente || {};
+  document.querySelectorAll('input[name=anTipo]').forEach(i => i.checked = i.value === (a?.tipo || 'analise')); $('anTipoBox').classList.toggle('hide', !!a); anTipoVis();
+  $('anNome').value = c.nome || ''; $('anCpf').value = c.cpf || ''; $('anFone').value = c.telefone || ''; $('anEmail').value = c.email || ''; $('anProf').value = c.profissao || '';
+  $('anRendaF').value = c.rendaFormal ? fmtValorInput(c.rendaFormal) : ''; $('anRendaT').value = c.renda ? fmtValorInput(c.renda) : ''; $('anCivil').value = c.civil || ''; $('anMais3').value = c.mais3 || ''; $('anDep').value = c.dep || '';
+  $('anEmp').value = a?.imovel?.empreendimento || ''; $('anObs').value = a?.obs || '';
+  $('anEmps').innerHTML = [...new Set([...empreendimentos.map(e => e.nome), ...visitas.map(v => v.empreendimento)].filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
+  anNovos = []; anTirar = []; anDocsVis(); $('anProg').textContent = '';
+  $('anRascBt').classList.toggle('hide', !!a && a.status !== 'rascunho');
+  $('anEnviarBt').textContent = a?.status === 'pendencia' ? 'Salvar e reenviar' : a && a.status !== 'rascunho' ? 'Salvar' : 'Enviar para a Prime';
+}
+window.novaPasta = () => { if (!anPodeCriar()) return; anEdit = null; anVirando = false; $('anFTit').textContent = 'Nova pasta para a Prime'; anPreencher(null); abrir('anModal'); setTimeout(() => $('anNome').focus(), 120); };
+window.editarPasta = id => { const a = analises.find(x => x.id === id); if (!a) return; fecharPasta(); anEdit = id; anVirando = false; $('anFTit').textContent = 'Editar pasta · ' + (a.cliente?.nome || ''); anPreencher(a); abrir('anModal'); };
+window.salvarPasta = async enviar => {
+  const a = anEdit ? analises.find(x => x.id === anEdit) : null;
+  const tipo = anVirando ? 'analise' : a ? (a.tipo || 'analise') : anTipoForm(), ehV = tipo === 'verificacao';
+  const cliente = { nome:$('anNome').value.trim(), cpf:fmtCpf($('anCpf').value), telefone:$('anFone').value.trim(),
+    ...(ehV ? {} : { email:$('anEmail').value.trim(), profissao:$('anProf').value.trim(), rendaFormal:lerValor($('anRendaF').value), renda:lerValor($('anRendaT').value) || lerValor($('anRendaF').value), civil:$('anCivil').value, mais3:$('anMais3').value, dep:$('anDep').value }) };
+  const conjuge = null;
+  if (!cliente.nome) { toast('Informe o nome do cliente'); $('anNome').focus(); return; }
+  if (enviar || (a && a.status !== 'rascunho')) {
+    if (soDig(cliente.cpf).length !== 11) { toast('Confira o CPF do cliente'); $('anCpf').focus(); return; }
+    if (!ehV) {
+      if (!cliente.renda) { toast('Informe a renda do cliente'); $('anRendaT').focus(); return; }
+      const exist = (a?.docs || []).filter(d => !anTirar.includes(d.id)), falta = AN_DOCS.filter(([k, , obr]) => obr && !exist.some(d => d.tipo === k) && !anNovos.some(x => x.tipo === k));
+      if (falta.length) { toast('Faltam documentos obrigatórios: ' + falta.map(d => d[1].split(' (')[0]).join(', ')); return; }
+    }
+  }
+  const bts = [$('anRascBt'), $('anEnviarBt')]; bts.forEach(b => b.disabled = true);
+  try {
+    const ref = a ? doc(db,'analises', a.id) : doc(collection(db,'analises')), id = a ? a.id : ref.id;
+    const base = a || { id, corretorUid:uidAtual, equipe:perfil.equipe || '' };
+    const docs = (a?.docs || []).filter(d => !anTirar.includes(d.id));
+    for (let i = 0; i < anNovos.length; i++) { $('anProg').textContent = `Enviando documento ${i + 1} de ${anNovos.length}…`; docs.push(await anSubirArq(anNovos[i].file, anNovos[i].tipo, { ...base, id })); }
+    $('anProg').textContent = 'Salvando…';
+    const agora = Date.now(), dados = { tipo, cliente, conjuge, imovel:{ empreendimento:ehV ? '' : $('anEmp').value.trim(), valor:0 }, obs:$('anObs').value.trim(), docs, atualizadoEm:agora };
+    let evento = '';
+    if (!a) { const st = enviar ? 'enviada' : 'rascunho';
+      await setDoc(ref, { ...dados, vistoPor:{ [uidAtual]:agora }, corretorUid:uidAtual, corretorNome:perfil.nome, equipe:perfil.equipe || '', status:st, enviada:enviar, criadoEm:agora, ...(enviar ? { enviadaEm:agora } : {}),
+        msgs:enviar ? [anMsgSis('📨 Pasta enviada para a Prime.')] : [], ultimo:{ em:agora, uid:uidAtual, texto:enviar ? 'Pasta nova' : 'Rascunho' } });
+      evento = enviar ? 'enviada' : '';
+    } else {
+      const upd = { ...dados, ['vistoPor.' + uidAtual]:agora };
+      if (enviar && a.status === 'rascunho') { Object.assign(upd, { status:'enviada', enviada:true, enviadaEm:agora, msgs:[...(a.msgs || []), anMsgSis('📨 Pasta enviada para a Prime.')], ultimo:{ em:agora, uid:uidAtual, texto:'Pasta nova' } }); evento = 'enviada'; }
+      else if (anVirando) { Object.assign(upd, { status:'enviada', enviadaEm:agora, emAnaliseEm:null, respondidaEm:null, msgs:[...(a.msgs || []), anMsgSis('📋 CPF verificado. Agora vai para análise de crédito com a documentação.')], ultimo:{ em:agora, uid:uidAtual, texto:'Pasta para análise' } }); evento = 'enviada'; }
+      else if (enviar && a.status === 'pendencia') { Object.assign(upd, { status:'enviada', reenviadaEm:agora, msgs:[...(a.msgs || []), anMsgSis('📨 Pendência resolvida. Pasta reenviada.')], ultimo:{ em:agora, uid:uidAtual, texto:'Pasta reenviada' } }); evento = 'reenviada'; }
+      await updateDoc(ref, upd);
+      for (const d of (a.docs || []).filter(d => anTirar.includes(d.id))) await anApagarArq(d);
+    }
+    if (evento) { avisarCarteiro('analise', id, true, { evento }); festejar(evento === 'reenviada' ? '📨 Pasta reenviada para a Prime!' : '📨 Pasta enviada para a Prime!'); } else toast('Pasta salva ✓');
+    anVirando = false; fechar('anModal');
+  } catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'sem permissão (confira as regras novas do Firebase)' : e.message)); }
+  $('anProg').textContent = ''; bts.forEach(b => b.disabled = false);
+};
+// ---- quem participa do teste (dono) ----
+window.abrirTestadores = () => {
+  const c = anCfg(), sel = new Set(c.testadores || []);
+  $('anTodos').checked = !!c.todos;
+  $('anTestLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+    .map(p => `<label class="fv-chk"><input type="checkbox" value="${p.uid}" ${sel.has(p.uid) ? 'checked' : ''}> ${esc(p.nome)} <small class="muted">${esc(eqNome(p.equipe))}</small></label>`).join('');
+  abrir('anTestModal');
+};
+window.salvarTestadores = async () => {
+  const testadores = [...document.querySelectorAll('#anTestLista input:checked')].map(i => i.value);
+  try { await gravar(setDoc(doc(db,'config','app'), { analises:{ todos:$('anTodos').checked, testadores } }, { merge:true })); fechar('anTestModal'); toast('Teste atualizado ✓'); } catch(e) { toast('Erro: ' + e.message); }
+};
+
 // =====================================================================
 // ============ AULAS (vídeos de treinamento) · v79 ============
 // =====================================================================
@@ -6874,7 +7361,7 @@ function htmlCheckinHoje(){
 function htmlCiGestao(){
   if (!podeGerir()) return '';
   const o = ordemFila(), ext = checkinsHoje.filter(ciFora), sairam = checkinsHoje.filter(c => c.saida);
-  const nome = u => checkinsHoje.find(c => c.uid === u)?.nome || perfisLista.find(p => p.uid === u)?.nome || '?';
+  const nome = u => checkinsHoje.find(c => c.uid === u)?.nome || perfisTodos.find(p => p.uid === u)?.nome || '?';
   const faltam = pessoasPresenca().filter(p => ciMinhaVisao(p) && p.uid !== uidAtual).filter(p => !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status));
   const mapa = l => l ? ` · <a href="https://maps.google.com/?q=${l.lat},${l.lng}" target="_blank" rel="noopener">ver no mapa</a>` : '';
   return `<div class="ci-g"><div class="rep-sec" style="margin:0 0 6px">${souGerente() ? 'No escritório' : 'No escritório · sua equipe'} (ordem de chegada)</div>
@@ -7272,6 +7759,7 @@ function renderExtrato(){ renderPrefNotif();
   if ($('ciGestao')) { const h = view === 'corretores' ? htmlCiGestao() : ''; if ($('ciGestao')._h !== h) { $('ciGestao').innerHTML = h; $('ciGestao')._h = h; } }
   if ($('ciCfgBox') && view === 'config' && !$('ciCfgBox').contains(document.activeElement)) $('ciCfgBox').innerHTML = htmlCiConfig();
   if (view === 'recepcao') iniciarRecepcao();
+  renderAnalises();
   renderAulas(); if (auAberta && $('auVerModal').classList.contains('open')) pintarInfoAula();
   if ($('aulasHoje')) { const h = view === 'hoje' ? htmlAulasHoje() : ''; if ($('aulasHoje')._h !== h) { $('aulasHoje').innerHTML = h; $('aulasHoje')._h = h; } }
   if ($('cAulas')) { const n = auPendentes().length; $('cAulas').textContent = n; $('cAulas').classList.toggle('hide', !n); }
@@ -8076,7 +8564,7 @@ window.salvarFin = async () => {
   if (!descricao && !categoria) { toast('Escreva uma descrição'); return; }
   if (valor <= 0) { toast('Coloque o valor'); return; }
   if (!data) { toast('Escolha a data'); return; }
-  const uidC = $('finCor').value, pc = perfisLista.find(p => p.uid === uidC);
+  const uidC = $('finCor').value, pc = perfisTodos.find(p => p.uid === uidC);
   const d = { tipo:$('finTipoSel').value, descricao, categoria, valor, data, pago:$('finPago').checked, obs:$('finObs').value.trim(), conta:$('finConta').value, corretorUid:uidC || '', corretorNome:pc ? pc.nome : '', atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
   if ($('finPago').checked) d.pagoEm = finLanc.find(x => x.id === finEdit)?.pagoEm || Date.now();
   try {
@@ -8319,7 +8807,7 @@ window.zapNova = async () => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.zapAssumir = async (id, uid) => {
-  const p = perfisLista.find(x => x.uid === uid);
+  const p = perfisTodos.find(x => x.uid === uid);
   try { await gravar(setDoc(doc(db,'zap_conversas',id), { corretorUid:uid || '', corretorNome:p ? p.nome : '', equipe:p ? (p.equipe || '') : '' }, { merge:true })); toast(p ? 'Conversa passada para ' + primeiro(p.nome) : 'Conversa sem responsável'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
@@ -8822,9 +9310,9 @@ function calcDesempenho(de, ate){
   const chaveDe = (uid, nome) => uid ? 'u' + uid : 'n' + chaveNomeLead(nome || '?');
   const pega = (uid, nome, equipe) => {
     nome = consertaTexto(nome);
-    if (!uid && nome) { const pf = perfisLista.find(p => p.status === 'ativo' && chaveNomeLead(p.nome) === chaveNomeLead(nome)); if (pf) uid = pf.uid; }
+    if (!uid && nome) { const pf = perfisTodos.find(p => p.status === 'ativo' && chaveNomeLead(p.nome) === chaveNomeLead(nome)); if (pf) uid = pf.uid; }
     const k = chaveDe(uid, nome);
-    if (!linhas.has(k)) { const pf = uid ? perfisLista.find(p => p.uid === uid) : null;
+    if (!linhas.has(k)) { const pf = uid ? perfisTodos.find(p => p.uid === uid) : null;
       linhas.set(k, { uid:uid || '', nome:pf?.nome || nomeBonito(nome) || '?', equipe:pf?.equipe || equipe || '', ligado:!!uid, leads:0, docs:0, aprov:0, cond:0, reprov:0, vendas:0 }); }
     return linhas.get(k);
   };
@@ -9231,7 +9719,7 @@ function assinarSdr(){
   else if (souSdr()) q = query(collection(db,'sdr_resumos'), where('sdrUid','==',uidAtual));
   if (q) subsPapel.push(onSnapshot(q, s => { sdrResumos = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
 }
-const coordDaEquipe = eq => perfisLista.find(p => p.papel === 'coordenador' && p.equipe === eq && p.status === 'ativo');
+const coordDaEquipe = eq => perfisTodos.find(p => p.papel === 'coordenador' && p.equipe === eq && p.status === 'ativo');
 
 // ---------- mensagem para o corretor/coordenador (formato das SDRs) ----------
 function textoVisitaSdr(v){
@@ -9258,7 +9746,7 @@ window.avisarPeloWhats = v => {
 function sdrEscolhido(){
   const q = $('sdrQuem').value;
   if (q === '__livre') return { uid:'', nome:$('sdrLivre').value.trim() };
-  const p = q ? perfisLista.find(x => x.uid === q) : null;
+  const p = q ? perfisTodos.find(x => x.uid === q) : null;
   return p ? { uid:p.uid, nome:p.nome, telefone:p.telefone || '', equipe:p.equipe } : { uid:'', nome:'' };
 }
 window.sdrAtualizaTexto = () => { const v = window._sdrVis, e = sdrEscolhido(); $('sdrTxt').value = textoVisitaSdr({ ...v, corretorNome:e.nome }); };
@@ -9279,7 +9767,7 @@ window.enviarSdrMsg = async () => {
       window._sdrVis = { ...dados, id:v.id }; if (e.uid) avisarCarteiro('visita', v.id, false); syncPlanilha('visitas', v.id); }
     catch(err) { toast('Mensagem aberta, mas não consegui salvar o corretor: ' + err.message); }
   }
-  if (e.uid && tel && !perfisLista.find(x => x.uid === e.uid)?.telefone) {} // o telefone do corretor é dele; não gravamos por ele
+  if (e.uid && tel && !perfisTodos.find(x => x.uid === e.uid)?.telefone) {} // o telefone do corretor é dele; não gravamos por ele
 };
 window.copiarSdrMsg = async () => { const t = $('sdrTxt').value; try { await navigator.clipboard.writeText(t); toast('Mensagem copiada ✓'); } catch(e) { prompt('Copie a mensagem:', t); } };
 
@@ -9287,7 +9775,7 @@ window.copiarSdrMsg = async () => { const t = $('sdrTxt').value; try { await nav
 // visita conta para a SDR só se quem marcou é SDR hoje (perfil trocado para corretor volta a contar como visita normal)
 function visitaDeSdr(r){
   if (!r.sdrUid) return false;
-  const p = perfisLista.find(x => x.uid === r.sdrUid);
+  const p = perfisTodos.find(x => x.uid === r.sdrUid);
   return !p || p.papel === 'sdr';
 }
 window.visitaDeSdr = visitaDeSdr;
