@@ -1422,6 +1422,24 @@ html[data-theme="dark"] .an-alerta{background:#2a1a0c;border-color:#7c2d12;color
 .an-res-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:14px}.an-res-kpis div{border-radius:14px;padding:10px 12px;background:color-mix(in srgb,var(--c) 9%,var(--card));display:grid}.an-res-kpis b{font-size:24px;color:var(--c)}.an-res-kpis span{font-size:12px;color:var(--text2)}
 .tbl-wrap{overflow-x:auto}.an-tab td.ok{color:var(--ok);font-weight:700}.an-tab td.ruim{color:var(--danger);font-weight:700}.an-tab tr.tot td{font-weight:800;border-top:2px solid var(--border)}.an-res-nota{font-size:12px;color:var(--muted);margin:10px 0 0}
 @media(max-width:760px){.an-res-kpis{grid-template-columns:repeat(3,1fr)}}
+.fv-desc-l{display:grid;grid-template-columns:auto 1fr auto 110px auto;gap:6px;align-items:center;margin-bottom:6px}.fv-desc-l select,.fv-desc-l input{min-width:0}.fv-desc-s{display:block;font-size:11px;color:var(--muted);font-weight:500}
+.hist-it{border-bottom:1px solid var(--border);padding:10px 0}.hist-c{font-size:13.5px}.hist-c small{display:block;color:var(--muted);font-size:12px}.hist-it ul{margin:6px 0 0;padding-left:18px;font-size:13px}.hist-it li span{color:var(--muted)}.hist-it s{color:var(--danger);opacity:.8}
+.hist-busca{width:100%;margin-bottom:8px}.hist-l{font-size:13px;color:var(--muted)}
+.bz-card{background:var(--card);border:1px solid var(--border);border-left:4px solid #2563eb;border-radius:16px;padding:13px 15px;display:grid;gap:7px;--c:#2563eb}.bz-card.perdido{border-left-color:#d97706;--c:#d97706}.bz-card.meu{border-left-color:var(--ok);--c:var(--ok)}
+.bz-card .btn{justify-self:start}.bz-lig{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}.bz-lig .snooze{height:auto;min-height:0;writing-mode:horizontal-tb;padding:8px 12px;font-size:13px;flex:0 0 auto}.bz-res{display:flex;gap:6px}.bz-res select{flex:1}.bz-card .link{justify-self:start;font-size:12.5px;color:var(--muted)}
+.bz-lim{font-size:13.5px;color:var(--text2);margin-bottom:12px}.bz-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:12px}.bz-kpis div{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 10px;display:grid}.bz-kpis b{font-size:20px}.bz-kpis span{font-size:11.5px;color:var(--muted)}
+.bz-pl span{display:grid}.bz-pl small{color:var(--muted)}
+@media(max-width:700px){.bz-kpis{grid-template-columns:repeat(3,1fr)}}
+.sx-pub{margin-bottom:16px}.sx-pub-g{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px}.sx-pub-l{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--border)}.sx-pub-l:last-child{border:0}
+.sx-pub-l>span:last-child{display:grid}.sx-pub-l small{color:var(--muted)}.sx-pub-d{font-size:12px;color:var(--muted);width:40px}.sx-pub-top{background:var(--card2);border-radius:12px;padding:10px 12px}.sx-pub-top div{display:flex;gap:8px;padding:3px 0;font-size:13.5px}.sx-pub-top div span:nth-child(2){flex:1}
+.lig-par{display:inline-flex;gap:4px;align-items:center;flex-wrap:nowrap}.lig-par .snooze{display:inline-flex;align-items:center;white-space:nowrap}.lig.lig-zap{color:#128c4b}.zap-bt{color:#128c4b;white-space:nowrap}
+@media(max-width:700px){.sx-pub-g{grid-template-columns:1fr}}
+.bv-meu{display:flex;align-items:center;gap:12px;background:linear-gradient(120deg,color-mix(in srgb,var(--ok) 12%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ok) 35%,var(--border));border-radius:16px;padding:12px 14px;margin-bottom:14px}.bv-meu>span{font-size:26px}.bv-meu div{display:grid}.bv-meu small{color:var(--muted)}
+.bv-fx{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:13px}.bv-fx input{width:90px}.bv-cab{display:flex;justify-content:space-between;margin:14px 0 8px}
+.ex-desc{display:block;color:var(--danger);font-size:12px;margin:-2px 0 2px}
+.fv-parc-bar{height:6px;background:var(--border);border-radius:9px;overflow:hidden;margin:4px 0}.fv-parc-bar i{display:block;height:100%;background:var(--ok)}
+.bg-imp{display:block;margin-top:6px;color:#fde68a}
+@media(max-width:620px){.fv-desc-l{grid-template-columns:1fr 1fr}.fv-desc-l .fv-desc-v{grid-column:1}}
 .an-tipo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.an-tipo input{display:none}.an-tipo span{display:grid;gap:2px;border:1.5px solid var(--border);border-radius:14px;padding:11px 13px;cursor:pointer;height:100%;box-sizing:border-box}
 .an-tipo small{color:var(--muted);font-size:12px}.an-tipo input:checked+span{border-color:var(--accent);background:var(--accent-soft)}
 .an-tipo-tag{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:-4px}
@@ -1698,6 +1716,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
       <button data-view="whatsapp" class="gerente-only hide" onclick="setView('whatsapp')"><i data-ic="zap"></i>WhatsApp <small class="zap-teste">teste</small><span class="count red hide" id="cZap">0</span></button>
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
+      <button data-view="bolsao" onclick="setView('bolsao')"><i data-ic="users"></i>Bolsão<span class="count hide" id="cBolsao">0</span></button>
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <div class="nav-title" style="margin-top:14px">Resultados</div>
       <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
@@ -1873,7 +1892,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
               <select id="rEquipe" onchange="rankEquipe=this.value;render()"></select>
             </div>
             <div class="janela" id="janelaRank"></div>
-            <div id="podio"></div><div class="battle" id="battle"></div>
+            <div id="sorteiosRank"></div><div id="podio"></div><div class="battle" id="battle"></div>
             <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2></div><div id="rankLista"></div>
               <details class="info-tog" style="margin-top:12px"><summary>ⓘ Como é contado</summary><div class="hint" style="margin-top:6px" id="rankNota"></div></details></div>
           </div>
@@ -1965,7 +1984,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <section class="view" id="v-financeiro">
         <div class="page-head"><div><h1>Financeiro</h1><div class="sub">Só a gerência e o CEO veem esta tela.</div></div>
           <div class="ph-acoes fin-acoes"><select id="finMesSel" onchange="finMes=this.value;render()"></select><button class="btn btn-primary" onclick="editarFin()">+ Lançamento</button>
-            <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
+            <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas e parcelamentos</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="abrirBonus()">🎯 Bônus por visitas</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
         <div id="finKpis"></div>
         <div id="finAviso"></div>
         <div class="seg pn-abas" id="finAbas"><button data-a="geral" onclick="finAba='geral';render()">Visão geral</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões</button><button data-a="notas" onclick="finAba='notas';render()">Notas fiscais</button><button data-a="lanc" onclick="finAba='lanc';render()">Entradas e saídas</button><button data-a="salarios" onclick="finAba='salarios';render()">Salários</button></div>
@@ -1973,6 +1992,13 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       </section>
 
       <!-- VENDAS (RESERVAS) -->
+      <section class="view" id="v-bolsao">
+        <div class="an-topo"><div><h1>Bolsão de clientes</h1><p class="an-sub">Leads sem dono e clientes perdidos para tentar de novo. Pegue um, ligue e conte o que aconteceu.</p></div>
+          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="bzPerdBt" onclick="abrirPerdidos()">Trazer clientes perdidos</button><button class="btn btn-primary hide" id="bzNovoBt" onclick="abrirBolsaoNovo()">+ Adicionar</button></div></div>
+        <div class="an-tabs" id="bzTabs" style="margin-bottom:14px"></div>
+        <div id="bzLista"></div>
+      </section>
+
       <section class="view" id="v-analises">
         <div class="an-topo"><div><h1 id="anTit">Correspondente</h1><p class="an-sub" id="anSub"></p></div>
           <div class="an-topo-bts"><button class="btn btn-ghost hide" id="anTestBt" onclick="abrirTestadores()">Quem participa do teste</button><button class="btn btn-primary hide" id="anNovaBt" onclick="novaPasta()">+ Nova pasta</button></div></div>
@@ -2011,6 +2037,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
           <aside class="card sx-cfg">
             <div class="fg"><label>Nome do sorteio</label><input id="sxNomeI" maxlength="80" value="Sorteio Frade" oninput="sxPinta()"></div>
             <div class="fg"><label>Prêmio (opcional)</label><input id="sxPremio" maxlength="80" placeholder="Ex.: Kit churrasco" oninput="sxPinta()"></div>
+            <label class="fv-chk"><input type="checkbox" id="sxAvisar" checked> Avisar a equipe no celular quem ganhou</label>
             <div class="fg"><label>Quem participa</label><select id="sxFonte" onchange="sxPinta()"><option value="cor">Corretores ativos</option><option value="pres">Quem está no escritório hoje</option><option value="cli">Clientes com reserva no mês</option><option value="lista">Lista que eu colar</option></select></div>
             <div class="fg hide" id="sxListaBox"><label>Um nome por linha</label><textarea id="sxLista" rows="6" oninput="sxPinta()"></textarea></div>
             <div class="row2"><div class="fg"><label>Ganhadores</label><input id="sxQtd" type="number" min="1" max="30" value="1" oninput="sxPinta()"></div><div class="fg"><label>Suspense</label><select id="sxTempo"><option value="2500">Rápido</option><option value="4500" selected>Normal</option><option value="7000">Longo</option></select></div></div>
@@ -2104,7 +2131,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- CORRETORES (gestão) -->
       <section class="view" id="v-corretores">
         <div class="page-head"><div><h1>Corretores</h1><div class="sub" id="corSub"></div></div>
-          <select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div>
+          <div class="ph-acoes"><button class="btn btn-ghost gerente-only hide" onclick="verHistorico()">🕘 Histórico de edições</button><select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div></div>
         <div class="janela" id="janelaCor"></div>
         <div class="card gest hide" id="cardCheckin" style="margin-bottom:20px"><div class="card-head"><h2>🏢 Presença de hoje</h2><button class="btn btn-ghost" onclick="setView('recepcao')">Abrir a tela da recepção</button></div><div id="ciGestao"></div></div>
         <div class="card hide" id="cardPresenca" style="margin-bottom:20px">
@@ -2419,7 +2446,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <span></span><button class="btn btn-danger" onclick="excluirVisita(visitaAtualId(),true)">Arquivar</button>
       </div>
     </div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('visModal')">Cancelar</button><button class="btn btn-primary" id="vmSalvar" onclick="salvarVisita()">Salvar visita</button></div>
+    <div class="sheet-foot"><button class="link hide hist-l" id="vmHist" onclick="verHistorico('visitas', window._histRef)">🕘 Histórico</button><span style="flex:1"></span><button class="btn btn-ghost" onclick="fechar('visModal')">Cancelar</button><button class="btn btn-primary" id="vmSalvar" onclick="salvarVisita()">Salvar visita</button></div>
   </div>
 </div>
 
@@ -2449,7 +2476,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="fg"><label>Observação</label><textarea id="cmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <div class="row2" id="cmExcluir"><button class="btn btn-ghost" onclick="abrirMensagens('c',cartaAtualId())">Mensagens prontas</button><button class="btn btn-danger" onclick="excluirCarta(cartaAtualId(),true)">Arquivar carta</button></div>
     </div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('cartaModal')">Cancelar</button><button class="btn btn-primary" id="cmSalvar" onclick="salvarCarta()">Salvar carta</button></div>
+    <div class="sheet-foot"><button class="link hide hist-l" id="cmHist" onclick="verHistorico('cartas', window._histRef)">🕘 Histórico</button><span style="flex:1"></span><button class="btn btn-ghost" onclick="fechar('cartaModal')">Cancelar</button><button class="btn btn-primary" id="cmSalvar" onclick="salvarCarta()">Salvar carta</button></div>
   </div>
 </div>
 
@@ -2542,6 +2569,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="fg"><label>Observação</label><textarea id="rvObs" style="min-height:60px"></textarea></div>
       <div class="row2"><button class="btn btn-ghost" id="rvCaiuBtn" onclick="vendaCaiu()">Venda caiu</button><button class="btn btn-ghost" onclick="copiarTextoReserva()">📋 Copiar texto para o WhatsApp</button></div>
       <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="salvarReserva()">Salvar reserva</button>
+      <button class="link hide hist-l" id="rvHist" style="margin-top:8px" onclick="verHistorico('reservas', window._histRef)">🕘 Histórico de edições desta reserva</button>
     </div>
   </div>
 </div>
@@ -2652,7 +2680,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   <div class="sheet" style="width:min(640px,100%)">
     <div class="sheet-head"><div><h2 id="fvTit">Venda</h2><div class="muted" style="font-size:13px;margin-top:3px" id="fvSub"></div></div><button class="icon-btn" onclick="fechar('fvModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="fvCorpo"></div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="excluirVendaFin()" style="color:var(--danger)">Excluir</button><button class="btn btn-ghost" onclick="fechar('fvModal')">Cancelar</button><button class="btn btn-primary" id="fvSalvar" onclick="salvarVendaFin()">Salvar</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="excluirVendaFin()" style="color:var(--danger)">Excluir</button><button class="link hist-l" onclick="verHistorico('fin_vendas', window._fvId)">🕘 Histórico</button><button class="btn btn-ghost" onclick="fechar('fvModal')">Cancelar</button><button class="btn btn-primary" id="fvSalvar" onclick="salvarVendaFin()">Salvar</button></div>
   </div>
 </div>
 <div class="modal" id="consModal">
@@ -2665,7 +2693,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <div class="modal" id="fixasModal">
   <div class="sheet" style="width:min(560px,100%)">
-    <div class="sheet-head"><h2>Despesas fixas</h2><button class="icon-btn" onclick="fechar('fixasModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><h2>Despesas fixas e parcelamentos</h2><button class="icon-btn" onclick="fechar('fixasModal')" data-ic="x"></button></div>
     <div class="sheet-body"><div class="hint" style="margin:0 0 12px">Cadastre uma vez: todo mês elas entram sozinhas em “Entradas e saídas”. Mude o nome ou o valor direto na linha.</div>
       <div id="fixasLista"></div>
       <details class="fx-nova"><summary>+ Nova despesa fixa</summary>
@@ -2673,6 +2701,12 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="row2"><div class="fg"><input id="fxValor" inputmode="decimal" placeholder="Valor (R$)"></div><div class="fg"><input id="fxDia" type="number" min="1" max="28" placeholder="Dia do vencimento (1 a 28)"></div></div>
       <div class="fg"><select id="fxCat"><option>Folha de pagamento</option><option>Pró-labore / sócios</option><option>Impostos</option><option selected>Infraestrutura</option><option>Marketing e tecnologia</option><option>Financeiro / outros</option><option>Despesa operacional</option></select></div>
       <button class="btn btn-primary btn-block" onclick="salvarFixa()">Adicionar</button></details>
+      <details class="fx-nova"><summary>+ Novo parcelamento (imposto ou dívida parcelada)</summary>
+      <div class="hint" style="margin:10px 0 8px">Ex.: parcelamento do Simples Nacional. Entra sozinho todo mês em “Entradas e saídas” com o número da parcela e para depois da última.</div>
+      <div class="fg"><input id="pzDesc" placeholder="Ex.: Parcelamento Simples Nacional" maxlength="100"></div>
+      <div class="row2"><div class="fg"><input id="pzValor" inputmode="decimal" placeholder="Valor da parcela (R$)"></div><div class="fg"><input id="pzDia" type="number" min="1" max="28" placeholder="Dia do vencimento"></div></div>
+      <div class="row2"><div class="fg"><input id="pzTotal" type="number" min="2" max="240" placeholder="Total de parcelas (ex.: 60)"></div><div class="fg"><input id="pzAtual" type="number" min="1" max="240" placeholder="Parcela deste mês (ex.: 12)"></div></div>
+      <button class="btn btn-primary btn-block" onclick="salvarParcelamento()">Adicionar parcelamento</button></details>
       <div class="fx-imp"><button class="link" onclick="document.getElementById('fxArq').click()">📥 Trazer da planilha (despesas-fixas.json)</button><input type="file" id="fxArq" class="hide" accept=".json,application/json" onchange="importarFixas(this)"></div></div>
   </div>
 </div>
@@ -2752,6 +2786,48 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="fg"><label>Observação (opcional)</label><textarea id="anVObs" rows="2" maxlength="800"></textarea></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anVerifModal')">Cancelar</button><button class="btn btn-primary" id="anVBt" onclick="enviarVerificacao()">Enviar resposta</button></div>
+  </div>
+</div>
+<div class="modal" id="bonusModal">
+  <div class="sheet" style="width:min(640px,100%)">
+    <div class="sheet-head"><h2>🎯 Bônus por visitas</h2><button class="icon-btn" onclick="fechar('bonusModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <details class="fx-nova" id="bvRegraBox"><summary>Regra do bônus</summary>
+        <label class="fv-chk" style="margin-top:10px"><input type="checkbox" id="bvAtivo"> Bônus ligado</label>
+        <div class="fg"><label>Como funciona</label><select id="bvModo" onchange="bvModoVis()"><option value="por_visita">Valor fixo por visita realizada</option><option value="meta">Prêmio ao bater uma meta de visitas</option><option value="faixas">Faixas (quanto mais visitas, maior o bônus)</option></select></div>
+        <div id="bvPorVisita" class="fg"><label>Valor por visita realizada (R$)</label><input id="bvValor" inputmode="decimal" placeholder="Ex.: 10"></div>
+        <div id="bvMeta" class="row2"><div class="fg"><label>Meta de visitas no mês</label><input id="bvMetaN" type="number" min="1" placeholder="Ex.: 20"></div><div class="fg"><label>Prêmio (R$)</label><input id="bvPremio" inputmode="decimal" placeholder="Ex.: 200"></div></div>
+        <div id="bvFaixas"><div class="hint" style="margin:0 0 6px">Cada linha: a partir de quantas visitas, quanto ganha. Vale a maior faixa alcançada.</div><div id="bvFaixasL"></div><button type="button" class="btn btn-ghost" onclick="bvFaixaAdd()">+ Faixa</button></div>
+        <div class="fg" style="margin-top:8px"><label>Quem participa</label><select id="bvQuem"><option value="corretores">Corretores e coordenadores</option><option value="so_corretores">Só corretores</option></select></div>
+        <button class="btn btn-primary btn-block" onclick="salvarBonus()">Salvar regra</button></details>
+      <div id="bvTabela"></div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="bzModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><h2>Colocar no bolsão</h2><button class="icon-btn" onclick="fechar('bzModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label>Tipo</label><select id="bzOrigem"><option value="lead">Lead sem dono</option><option value="perdido">Cliente perdido</option></select></div>
+      <div class="fg"><label>Um ou vários (um por linha: nome e telefone)</label><textarea id="bzLinhas" rows="6" placeholder="Maria Souza 83 99999-0000&#10;João Lima - (83) 98888-1111"></textarea></div>
+      <div class="row2"><div class="fg"><label>Motivo / de onde veio (opcional)</label><input id="bzMotivo" maxlength="80" placeholder="Ex.: Instagram, desistiu, reprovado em 2025"></div><div class="fg"><label>Empreendimento (opcional)</label><input id="bzEmp" maxlength="80"></div></div>
+      <div class="fg"><label>Observação (opcional)</label><input id="bzObs" maxlength="200"></div>
+      <label class="fv-chk"><input type="checkbox" id="bzAvisar" checked> Avisar os corretores</label>
+    </div>
+    <div class="sheet-foot"><span class="an-prog" id="bzPrev"></span><span style="flex:1"></span><button class="btn btn-ghost" onclick="fechar('bzModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarBolsao()">Colocar no bolsão</button></div>
+  </div>
+</div>
+<div class="modal" id="bzPerdModal">
+  <div class="sheet" style="width:min(600px,100%)">
+    <div class="sheet-head"><h2>Clientes perdidos</h2><button class="icon-btn" onclick="fechar('bzPerdModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="hint" style="margin:0 0 10px">Cartas que desistiram ou venceram e pastas reprovadas pela Prime. Marque quem vai para o bolsão.</div><div id="bzPerdLista"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('bzPerdModal')">Cancelar</button><button class="btn btn-primary" onclick="mandarPerdidos()">Colocar no bolsão</button></div>
+  </div>
+</div>
+<div class="modal" id="edHistModal">
+  <div class="sheet" style="width:min(640px,100%)">
+    <div class="sheet-head"><h2 id="histTit">Histórico de edições</h2><button class="icon-btn" onclick="fechar('edHistModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="histCorpo"></div>
   </div>
 </div>
 <div class="modal" id="anTestModal">
@@ -2860,6 +2936,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button class="so-ceo" onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
       <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
+      <button onclick="fechar('menuModal');setView('bolsao')"><i data-ic="users"></i>Bolsão de clientes</button>
       <button onclick="fechar('menuModal');setView('aulas')"><i data-ic="play"></i>Aulas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
       <button class="cor-only hide" onclick="fechar('menuModal');setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
@@ -3204,7 +3281,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -3695,7 +3772,7 @@ window.souDono = souDono;
 // CEO: só visualiza os números e resultados; a agenda pessoal dele é particular. Só o gestor tem acesso a tudo.
 const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
-const VIEWS_CEO = ['analises','painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
+const VIEWS_CEO = ['bolsao','analises','painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
 const souCorresp = () => souAtivo() && perfil.papel === 'correspondente';
@@ -4069,7 +4146,7 @@ function membrosSelecionaveis(){
   return m.sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
 }
 function abrirFormVisita(v, dataPadrao){
-  vEditId = v?.id || null; vOrig = v || null;
+  vEditId = v?.id || null; vOrig = v || null; window._histRef = vEditId; $('vmHist')?.classList.toggle('hide', !(souGerente() && v));
   $('vmTitulo').textContent = v ? 'Editar visita' : 'Nova visita';
   $('vmData').value = v?.date || dataPadrao || (view === 'calendario' ? diaSel : hojeISO());
   $('vmHora').value = v?.time || '09:00';
@@ -4141,6 +4218,7 @@ window.salvarVisita = async () => {
     b.set(doc(db,'visitas',id), dados);
     b.set(doc(db,'ranking',id), rankingDe(dados));
     await gravar(b.commit());
+    if (vOrig) logEdicao('visitas', id, dados.cliente, vOrig, dados, ROT_V, dados.equipe);
     if (!vOrig) avisarCarteiro('visita', id, true); // visita nova: corretor (se foi outra pessoa), coordenador da equipe e gerentes
     else if (dados.corretorUid !== uidAtual && (vOrig.corretorUid !== dados.corretorUid || vOrig.date !== dados.date || vOrig.time !== dados.time)) avisarCarteiro('visita', id, false);
     syncPlanilha('visitas', id);
@@ -4157,7 +4235,7 @@ window.mudarStatus = async (id, st, motivo) => {
   try {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
-    await gravar(b.commit()); syncPlanilha('visitas', id);
+    await gravar(b.commit()); syncPlanilha('visitas', id); logEdicao('visitas', id, v.cliente, v, dados, ROT_V, v.equipe);
     if (st === 'Realizada' && v.status !== 'Realizada') comemorar(ptsDe('vRealizada'), 'Visita realizada', v.corretorNome);
     else if (st === 'Confirmada' && v.status !== 'Confirmada') comemorar(ptsDe('vConfirmada'), 'Visita confirmada', v.corretorNome, 0);
     else toast('Visita marcada como ' + st.toLowerCase());
@@ -4607,7 +4685,7 @@ window.filtrarVencendo = () => { cFil.periodo = 'todas'; cFil.status = ''; rende
 
 let cPre = null, cDocs = {};
 function abrirFormCarta(c, pre){
-  cEditId = c?.id || null; cOrig = c || null; cPre = pre || null;
+  cEditId = c?.id || null; cOrig = c || null; cPre = pre || null; window._histRef = cEditId; $('cmHist')?.classList.toggle('hide', !(souGerente() && c));
   cDocs = { ...(c?.docs || {}) }; desenharDocs();
   $('cmTitulo').textContent = c ? 'Editar carta' : 'Nova carta aprovada';
   $('cmCliente').value = c?.cliente || pre?.cliente || ''; $('cmFone').value = c?.telefone || pre?.telefone || '';
@@ -4663,6 +4741,7 @@ window.salvarCarta = async () => {
     const b = writeBatch(db);
     b.set(doc(db,'cartas',id), dados); b.set(doc(db,'ranking_cartas',id), rankingCartaDe(dados));
     await gravar(b.commit());
+    if (cOrig) logEdicao('cartas', id, dados.cliente, cOrig, dados, ROT_C, dados.equipe);
     const virouVenda = dados.status === 'Venda fechada' && cOrig?.status !== 'Venda fechada';
     const docsCompletou = docsOk(dados) === DOCS.length && (!cOrig || docsOk(cOrig) < DOCS.length);
     if (virouVenda) avisarCarteiro('venda', id);
@@ -5015,7 +5094,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 83;
+const APP_VERSAO = 84;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5277,7 +5356,7 @@ function assinarEtapa1(){
       origens: d.origens?.length ? (d.origens.includes('CRM') ? d.origens : ['CRM', ...d.origens]) : CFG_PADRAO.origens,
       motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
       abasIgnoradas: Array.isArray(d.abasIgnoradas) ? d.abasIgnoradas : ABAS_IGNORADAS_PADRAO,
-      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null };
+      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null, bonusVisitas: d.bonusVisitas || null };
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     carregado.cfg = true; render(); fecharMesesPendentes();
   }, e => { carregado.cfg = true; silencio(e); }));
@@ -6627,7 +6706,7 @@ function assinarEtapa4(){
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
-  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); conferirLinkCheckin();
+  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); conferirLinkCheckin();
 }
 // a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
 async function presencaNoRanking(uid, dia, presente){
@@ -6659,8 +6738,16 @@ async function sincPresencaRanking(){
 // ---------- ligar pelo app: abre o discador e registra sozinho ----------
 function htmlLigar(tel, cliente, origem){
   if (!soDig(tel)) return '';
-  return `<button class="snooze lig" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarBtn(this)" title="Ligar pelo app (conta pontos)">📞 Ligar</button>`;
+  return `<span class="lig-par"><button class="snooze lig" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarBtn(this)" title="Ligar pelo telefone (conta pontos)">📞 Ligar</button><button class="snooze lig lig-zap" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarZapBtn(this)" title="Ligar pelo WhatsApp (conta pontos)">📲 Zap</button></span>`;
 }
+// ligação pelo WhatsApp: abre a conversa (é só tocar no telefone dela para chamar) e conta como ligação
+const telZap = tel => { let n = soDig(tel); if (n.startsWith('55') && n.length >= 12) n = n.slice(2); n = n.replace(/^0+/, ''); return n.length >= 10 ? '55' + n : ''; };
+window.ligarZap = (tel, cliente, origem) => {
+  const n = telZap(tel); if (!n) { toast('Telefone incompleto'); return; }
+  const a = document.createElement('a'); a.href = 'https://wa.me/' + n; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
+  registrarLigacao(tel, cliente, (origem ? origem + ' · ' : '') + 'whatsapp').catch(e => console.warn('Ligação:', e.message));
+};
+window.ligarZapBtn = b => ligarZap(b.dataset.tel, b.dataset.cli, b.dataset.or);
 window.htmlLigar = htmlLigar;
 window.ligarBtn = b => ligar(b.dataset.tel, b.dataset.cli, b.dataset.or);
 window.ligar = (tel, cliente, origem) => {
@@ -6686,6 +6773,7 @@ async function registrarLigacao(tel, cliente, origem){
   await gravar(b.commit());
   toast(rec ? '🔁 Recontato registrado. Conta pontos no ranking.' : '📞 Ligação registrada. Conta pontos no ranking.');
 }
+window.ligarDiscadorZap = () => { const v = $('discNum').value; if (soDig(v).length < 10) { toast('Digite o número com DDD'); return; } ligarZap(v, '', 'discador'); $('discNum').value = ''; };
 window.ligarDiscador = () => { const v = $('discNum').value; if (soDig(v).length < 8) { toast('Digite o número com DDD'); return; } ligar(v, '', 'discador'); $('discNum').value = ''; };
 // card "Meus leads de hoje" na tela Hoje
 function htmlMeusLeads(){
@@ -6699,7 +6787,7 @@ function htmlMeusLeads(){
       <div class="ml-acoes">${ok ? '<span class="pill-ok">✓ ligou</span>' : ''}${htmlLigar(tel, e.cliente, 'lead')}${tel ? `<button class="snooze wa" onclick="abrirWhats('${esc(soDig(tel))}')" title="WhatsApp">${IC.wa}WhatsApp</button>` : ''}</div></div>`;
   }).join('');
   return `<div class="card ml-card"><div class="card-head"><h2>📞 Ligações de hoje</h2><span class="muted">${lig} ligaç${lig === 1 ? 'ão' : 'ões'} · ${rec} recontato${rec === 1 ? '' : 's'}</span></div>
-    <div class="ml-disc"><input id="discNum" inputmode="tel" placeholder="Ligar para um número (com DDD)" onkeydown="if(event.key==='Enter')ligarDiscador()"><button class="btn btn-primary" onclick="ligarDiscador()">📞 Ligar</button></div>
+    <div class="ml-disc"><input id="discNum" inputmode="tel" placeholder="Ligar para um número (com DDD)" onkeydown="if(event.key==='Enter')ligarDiscador()"><button class="btn btn-primary" onclick="ligarDiscador()">📞 Ligar</button><button class="btn btn-ghost zap-bt" onclick="ligarDiscadorZap()" title="Ligar pelo WhatsApp">📲 Zap</button></div>
     ${l.length ? `<div class="rep-sec" style="margin:14px 0 6px">Seus leads de hoje (${l.length})</div>${linhas}` : '<div class="muted" style="font-size:13.5px;margin-top:10px">Os leads que o CRM passar para você hoje aparecem aqui com o botão de ligar.</div>'}
     <details class="info-tog" style="margin-top:8px"><summary>ⓘ Como conta</summary><div class="hint" style="margin-top:6px">Ligue sempre pelo botão 📞 do app: a ligação é registrada sozinha. Primeira vez para um número conta como <b>ligação</b>; ligar de novo para o mesmo número em outro dia conta como <b>recontato</b>. Cada número conta uma vez por dia.</div></details></div>`;
 }
@@ -6789,7 +6877,9 @@ function sincExtrato(){
       const v = vendaFin(r), uids = (r.corretorUids || (r.manual ? corretoresDaReserva(r.corretorTexto).map(c => c.uid) : [])).filter(Boolean); if (!uids.length) return;
       const excl = !!(r.caiu || finVendas[r.id]?.excluida), qtd = Math.max(1, v.cor.length || uids.length);
       const d = { corretorUids:uids, cliente:r.cliente || '', dia:r.dia || '', empreendimento:r.empreendimento || '', construtora:v.cons || '', corretores:v.cor.map(c => c.nome).join(' + ') || r.corretorTexto || '',
-        valorTotalCor:Math.round(v.valCor * 100) / 100, valorCada:Math.round(v.valCor / qtd * 100) / 100, etapa:v.etapa, etapaNome:v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída',
+        valorTotalCor:Math.round(v.valCor * 100) / 100, valorCada:Math.round(v.valCorBruto / qtd * 100) / 100,
+        descontos:uids.reduce((o, u) => { const t = v.descontos.reduce((a, x) => a + (x.uid ? (x.uid === u ? Number(x.valor) : 0) : Number(x.valor) / qtd), 0); if (t) o[u] = Math.round(t * 100) / 100; return o; }, {}),
+        descontosTxt:v.descontos.map(x => `${x.descricao || (x.tipo === 'adiantamento' ? 'Adiantamento' : 'Desconto')}`).join(', '), etapa:v.etapa, etapaNome:v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída',
         recebida:!!v.ok.recebida, corPago:!!v.f.corPago, previsao:(!v.ok.recebida ? (v.tipo === 'adiantamento' && !v.f.recAdiant ? v.prevA : v.prevR) : '') || '', processo:v.f.processo || '', caiu:excl };
       const a = extratoTodos[r.id], comp = o => JSON.stringify(Object.keys(d).map(k => o?.[k] ?? null));
       if (!a || comp(a) !== comp(d)) { if (n < 400) { b.set(doc(db,'extrato',r.id), { ...d, atualizadoEm:Date.now() }); n++; } }
@@ -6800,10 +6890,11 @@ function sincExtrato(){
 function htmlExtrato(){
   const l = extratoMeu.filter(x => !x.caiu).sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
   if (!l.length) return vazio('Nenhuma venda sua ainda', 'Quando você tiver uma reserva, ela aparece aqui com a comissão e a etapa em que está.');
-  const aRec = l.filter(x => !x.corPago), pagos = l.filter(x => x.corPago), soma = a => a.reduce((t,x) => t + (Number(x.valorCada) || 0), 0);
+  const minha = x => Math.round(((Number(x.valorCada) || 0) - (Number(x.descontos?.[uidAtual]) || 0)) * 100) / 100;
+  const aRec = l.filter(x => !x.corPago), pagos = l.filter(x => x.corPago), soma = a => a.reduce((t,x) => t + minha(x), 0);
   const ano = hojeISO().slice(0,4), pagosAno = pagos.filter(x => (x.dia || '').startsWith(ano));
   const dots = x => `<div class="ex-dots">${ETAPAS_FIN.map((e, i) => `<i class="${i < x.etapa ? 'ok' : i === x.etapa ? 'at' : ''}" title="${e[1]}"></i>`).join('')}</div>`;
-  const card = x => `<div class="ex-card ${x.corPago ? 'pago' : ''}"><div class="ex-l1"><b>${esc(x.cliente || 'Cliente')}</b><span class="ex-val">${brl2(x.valorCada)}</span></div>
+  const card = x => `<div class="ex-card ${x.corPago ? 'pago' : ''}"><div class="ex-l1"><b>${esc(x.cliente || 'Cliente')}</b><span class="ex-val">${brl2(minha(x))}</span></div>${x.descontos?.[uidAtual] ? `<small class="ex-desc">${brl2(x.valorCada)} − ${brl2(x.descontos[uidAtual])} de desconto${x.descontosTxt ? ' (' + esc(x.descontosTxt) + ')' : ''}</small>` : ''}
     <small>${[dataBR(x.dia), x.empreendimento, x.construtora].filter(Boolean).map(esc).join(' · ')}${(x.corretores || '').includes('+') ? ' · em parceria' : ''}</small>
     ${dots(x)}<div class="ex-st">${x.corPago ? '✅ Comissão paga' : x.recebida ? '💰 A construtora já pagou · sua parte entra no próximo pagamento' : `📍 ${esc(x.etapaNome || '')}${x.processo ? ' · ' + esc(x.processo) : ''}${x.previsao ? ' · previsão ' + dataBR(x.previsao) : ''}`}</div></div>`;
   return `<div class="ex-resumo"><div><span>A receber</span><b>${brl2(soma(aRec))}</b><em>${aRec.length} venda${aRec.length === 1 ? '' : 's'}</em></div><div><span>Recebido em ${ano}</span><b class="fin-pos">${brl2(soma(pagosAno))}</b><em>${pagosAno.length} venda${pagosAno.length === 1 ? '' : 's'}</em></div></div>
@@ -6856,6 +6947,192 @@ window.abrirHistoricoFin = async () => {
 // =====================================================================
 // ============ CÓPIAS DE SEGURANÇA · v76 ============
 // =====================================================================
+// =====================================================================
+// ============ HISTÓRICO DE EDIÇÕES · v84 ============
+// =====================================================================
+const ROT_V = { cliente:'Cliente', telefone:'Telefone', date:'Data', time:'Hora', status:'Status', empreendimento:'Empreendimento', corretorNome:'Corretor', origem:'Origem', obs:'Observação', motivoPerda:'Motivo da perda' };
+const ROT_C = { cliente:'Cliente', telefone:'Telefone', cpf:'CPF', valor:'Valor financiado', subsidio:'Subsídio', renda:'Renda', data:'Data', validade:'Validade', banco:'Banco', empreendimento:'Empreendimento', status:'Status', corretorNome:'Corretor', obs:'Observação', motivoPerda:'Motivo da perda' };
+const ROT_R = { dia:'Data', cliente:'Cliente', cpf:'CPF', telefone:'Telefone', corretorTexto:'Corretor', empreendimento:'Empreendimento', construtora:'Construtora', valor:'Valor', entrada:'Entrada', comissao:'Comissão', percentual:'Percentual', origem:'Origem', previsao:'Previsão', obs:'Observação' };
+const ROT_F = { construtora:'Construtora', tipo:'Como paga', pctImob:'% sobre o imóvel', pctCor:'% do corretor', comissao:'Comissão bruta', valCor:'Comissão do corretor', impostoV:'Imposto (R$)', pctImposto:'% de imposto', sinalPago:'Sinal pago', sinalValor:'Valor do sinal', sinalForma:'Forma do sinal', entradaValor:'Valor da entrada', entradaForma:'Forma da entrada', entradaParcelas:'Parcelas da entrada', entradaPaga:'Entrada paga', identificada:'Identificada', assinaturaEm:'Assinatura', faturada:'Faturada', recAdiant:'Adiantamento recebido', recRestante:'Comissão recebida', corPago:'Corretor pago', descontos:'Descontos', processo:'Andamento', obs:'Observação' };
+const histVal = v => v === true ? 'Sim' : v === false ? 'Não' : v == null || v === '' ? '—' : Array.isArray(v) ? (v.length ? v.map(x => x && typeof x === 'object' ? (x.descricao || x.tipo || '') + (x.valor ? ' ' + brl2(x.valor) : '') : String(x)).join(', ') : '—') : typeof v === 'object' ? JSON.stringify(v) : String(v);
+function logEdicao(col, id, titulo, antes, depois, rot, equipe){
+  if (!antes || !depois || !uidAtual) return;
+  const calc = ['tipo','pctImob','pctCor','pctImposto','construtora'];
+  const campos = Object.keys(rot).filter(k => k in depois && histVal(antes[k]) !== histVal(depois[k]) && !(col === 'fin_vendas' && calc.includes(k) && antes[k] == null) && !((antes[k] == null || antes[k] === '' || antes[k] === false || antes[k] === 0) && (depois[k] === '' || depois[k] === false || depois[k] === 0 || depois[k] == null)))
+    .map(k => ({ c:rot[k], de:histVal(antes[k]).slice(0, 80), para:histVal(depois[k]).slice(0, 80) }));
+  if (!campos.length) return;
+  setDoc(doc(collection(db,'edicoes')), { col, refId:id, titulo:String(titulo || '').slice(0, 80), campos:campos.slice(0, 25), por:perfil.nome, porUid:uidAtual, papel:perfil.papel, equipe:equipe || perfil.equipe || '', em:Date.now() }).catch(e => console.warn('historico', e.code || e.message));
+}
+const HIST_COL = { visitas:'🏠 Visita', cartas:'📄 Carta', reservas:'🔑 Reserva', fin_vendas:'💰 Venda (financeiro)' };
+let _histLista = [], _histFiltro = '';
+window.verHistorico = async (col, id) => {
+  $('histTit').textContent = id ? 'Histórico de edições' : 'Histórico de edições (todas)'; $('histCorpo').innerHTML = '<div class="ax-load">Carregando…</div>'; abrir('edHistModal');
+  try { const q = id ? query(collection(db,'edicoes'), where('refId','==',id)) : query(collection(db,'edicoes'), orderBy('em','desc'), limit(300));
+    _histLista = (await getDocs(q)).docs.map(d => d.data()).filter(x => !id || x.col === col).sort((a, b) => b.em - a.em); _histFiltro = ''; pintarHistorico(!id); }
+  catch(e) { $('histCorpo').innerHTML = `<div class="ax-load">Não deu para carregar (${esc(e.code || e.message)}). Publique as regras novas do Firebase.</div>`; }
+};
+function pintarHistorico(comBusca){
+  const t = norm(_histFiltro), l = _histLista.filter(x => !t || norm([x.titulo, x.por, HIST_COL[x.col], ...(x.campos || []).map(c => c.c + ' ' + c.de + ' ' + c.para)].join(' ')).includes(t));
+  $('histCorpo').innerHTML = (comBusca ? `<input class="hist-busca" placeholder="Buscar cliente, pessoa ou campo" value="${esc(_histFiltro)}" oninput="histBuscar(this.value)">` : '') + (l.length ? l.map(x => `<div class="hist-it"><div class="hist-c"><b>${esc(x.por || '')}</b> mudou ${HIST_COL[x.col] || x.col} <b>${esc(x.titulo || '')}</b><small>${new Date(x.em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' })}</small></div>
+    <ul>${(x.campos || []).map(c => `<li><span>${esc(c.c)}:</span> <s>${esc(c.de)}</s> → <b>${esc(c.para)}</b></li>`).join('')}</ul></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhuma edição registrada ainda. A partir de agora, toda mudança fica guardada aqui.</div>');
+  if (comBusca) { const i = document.querySelector('.hist-busca'); if (i && _histFiltro) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
+}
+window.histBuscar = v => { _histFiltro = v; pintarHistorico(true); };
+
+// =====================================================================
+// ============ BOLSÃO DE LEADS E CLIENTES PERDIDOS · v84 ============
+// =====================================================================
+let bolsao = [], bzAba = 'livres';
+const BZ_LIMITE = () => Number(appCfg.bolsaoLimite) || 5;
+const BZ_RES = [['agendou','📅 Agendou visita'], ['retornar','🔁 Retornar depois'], ['sem_interesse','🙅 Sem interesse'], ['nao_atende','📵 Não atende'], ['numero_errado','❌ Número errado'], ['comprou','🏠 Já comprou']];
+function assinarBolsao(){
+  bolsao = []; if (!souAtivo() || souCorresp()) return;
+  const junta = (k, l) => { window['_bz_' + k] = l; const m = new Map(); ['a','b','c'].forEach(x => (window['_bz_' + x] || []).forEach(d => m.set(d.id, d))); bolsao = [...m.values()]; render(); };
+  ['a','b','c'].forEach(x => window['_bz_' + x] = []);
+  const sub = (k, q) => subsPapel.push(onSnapshot(q, s => junta(k, s.docs.map(d => ({ id:d.id, ...d.data() }))), e => console.warn('bolsao', e.code || e.message)));
+  if (souGerente()) sub('a', collection(db,'bolsao'));
+  else { sub('a', query(collection(db,'bolsao'), where('status','==','livre'))); sub('b', query(collection(db,'bolsao'), where('pegoPor','==',uidAtual)));
+    if (souCoord()) sub('c', query(collection(db,'bolsao'), where('equipe','==', perfil.equipe || '-'))); }
+}
+const bzLivres = () => bolsao.filter(x => x.status === 'livre');
+const bzMeus = () => bolsao.filter(x => x.pegoPor === uidAtual && x.status === 'pego');
+const nomeCurto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : p[0] || 'Cliente'; };
+function renderBolsao(){
+  const n = bzLivres().length; if ($('cBolsao')) { $('cBolsao').textContent = n; $('cBolsao').classList.toggle('hide', !n || souCorresp()); }
+  if (view !== 'bolsao' || !$('bzLista')) return;
+  const gere = (souGerente() && !souCeo()) || souCoord();
+  $('bzNovoBt').classList.toggle('hide', !gere); $('bzPerdBt').classList.toggle('hide', !gere);
+  const abas = [['livres', 'Disponíveis', bzLivres().length], ['meus', 'Os que eu peguei', bzMeus().length], ...(podeGerir() ? [['todos', 'Acompanhar', bolsao.filter(x => x.status !== 'livre').length]] : [])];
+  $('bzTabs').innerHTML = abas.map(([k, r, q]) => `<button class="${bzAba === k ? 'on' : ''}" onclick="bzVerAba('${k}')">${r}${q ? ` <i>${q}</i>` : ''}</button>`).join('');
+  const tempo = ms => anTempo(ms);
+  if (bzAba === 'livres') {
+    const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador'].includes(perfil.papel);
+    $('bzLista').innerHTML = (podePegar ? `<div class="bz-lim">Você está com <b>${meus}</b> de ${BZ_LIMITE()} clientes do bolsão. ${meus >= BZ_LIMITE() ? 'Dê o resultado de algum para pegar outro.' : ''}</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
+      <b class="an-cli">${esc(nomeCurto(x.nome))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.tentativas ? `<span>${x.tentativas}ª tentativa</span>` : ''}</div>
+      ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>Pegar este cliente</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
+  } else if (bzAba === 'meus') {
+    const l = bzMeus();
+    $('bzLista').innerHTML = l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card meu"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead'}</span><small>peguei ${tempo(x.pegoEm)}</small></div>
+      <b class="an-cli">${esc(x.nome || 'Cliente')}</b><div class="an-c2"><span>📱 ${esc(x.telefone || '')}</span>${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}</div>${x.obs ? `<div class="an-c3">${esc(x.obs)}</div>` : ''}
+      <div class="bz-lig">${htmlLigar(x.telefone, x.nome, 'bolsão')}</div>
+      <div class="bz-res"><select id="bzRes_${x.id}"><option value="">Como foi?</option>${BZ_RES.map(([k, n]) => `<option value="${k}">${n}</option>`).join('')}</select><button class="btn btn-ghost" onclick="resultadoBolsao('${x.id}')">Salvar</button></div>
+      <button class="link" onclick="devolverBolsao('${x.id}')">Devolver ao bolsão</button></div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Você não pegou nenhum cliente do bolsão</b><p>Vá em “Disponíveis” e toque em “Pegar este cliente”.</p></div>`;
+  } else {
+    const l = bolsao.filter(x => x.status !== 'livre').sort((a, b) => (b.resultadoEm || b.pegoEm || 0) - (a.resultadoEm || a.pegoEm || 0));
+    const res = {}; l.filter(x => x.resultado).forEach(x => res[x.resultado] = (res[x.resultado] || 0) + 1);
+    $('bzLista').innerHTML = `<div class="bz-kpis">${BZ_RES.map(([k, n]) => `<div><b>${res[k] || 0}</b><span>${n}</span></div>`).join('')}</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Cliente</th><th>Corretor</th><th>Situação</th><th></th></tr></thead><tbody>${l.slice(0, 200).map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span><small class="muted"> ${esc(x.telefone || '')}</small></td><td>${esc(primeiro(x.pegoNome || ''))}</td><td>${x.status === 'pego' ? `em atendimento · ${tempo(x.pegoEm)}` : esc((BZ_RES.find(r => r[0] === x.resultado) || [, 'encerrado'])[1])}</td><td>${souGerente() && !souCeo() ? `<button class="link" onclick="voltarBolsao('${x.id}')">voltar ao bolsão</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Ninguém pegou cliente do bolsão ainda.</div>');
+  }
+}
+window.bzVerAba = k => { bzAba = k; renderBolsao(); };
+const bzHist = (x, txt) => [...(x.historico || []).slice(-30), { em:Date.now(), por:perfil.nome, txt }];
+window.pegarBolsao = async id => {
+  const x = bolsao.find(b => b.id === id); if (!x) return;
+  if (bzMeus().length >= BZ_LIMITE()) { toast(`Você já está com ${BZ_LIMITE()} clientes do bolsão. Dê o resultado de algum antes.`); return; }
+  try { await updateDoc(doc(db,'bolsao', id), { status:'pego', pegoPor:uidAtual, pegoNome:perfil.nome, pegoEm:Date.now(), equipe:perfil.equipe || '', historico:bzHist(x, 'pegou') });
+    bzAba = 'meus'; toast('🎣 Cliente é seu! Ligue agora.'); vibrar(15); render(); }
+  catch(e) { toast(e.code === 'permission-denied' ? 'Alguém pegou esse cliente antes de você.' : 'Erro: ' + e.message); }
+};
+window.resultadoBolsao = async id => {
+  const x = bolsao.find(b => b.id === id), r = $('bzRes_' + id)?.value; if (!x || !r) { toast('Escolha como foi'); return; }
+  const fim = !['retornar'].includes(r);
+  try { await updateDoc(doc(db,'bolsao', id), { status:fim ? 'encerrado' : 'pego', resultado:r, resultadoEm:Date.now(), historico:bzHist(x, (BZ_RES.find(b => b[0] === r) || [, r])[1]) });
+    toast(r === 'agendou' ? '📅 Boa! Cadastre a visita.' : 'Resultado salvo ✓');
+    if (r === 'agendou') { novaVisita(); setTimeout(() => { $('vmCliente').value = x.nome || ''; $('vmFone').value = x.telefone || ''; if (x.empreendimento) $('vmImovel').value = x.empreendimento; }, 60); } }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.devolverBolsao = async id => {
+  const x = bolsao.find(b => b.id === id); if (!x) return; const mot = prompt('Por que está devolvendo? (opcional)') ; if (mot === null) return;
+  try { await updateDoc(doc(db,'bolsao', id), { status:'livre', pegoPor:'', pegoNome:'', pegoEm:0, tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'devolveu' + (mot ? ': ' + mot : '')) }); toast('Devolvido ao bolsão'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.voltarBolsao = async id => { const x = bolsao.find(b => b.id === id); if (!x) return;
+  try { await updateDoc(doc(db,'bolsao', id), { status:'livre', pegoPor:'', pegoNome:'', pegoEm:0, resultado:'', tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'gerência voltou ao bolsão') }); toast('Voltou ao bolsão'); } catch(e) { toast('Erro: ' + e.message); } };
+// separa "nome telefone" de cada linha
+function bzLerLinhas(txt){
+  return String(txt || '').split(/\n+/).map(l => l.trim()).filter(Boolean).map(l => { const m = l.match(/(\+?\(?\d[\d\s().-]{7,}\d)/); const tel = m ? m[1].trim() : ''; const nome = (m ? l.replace(m[1], '') : l).replace(/[-;,|:()]+/g, ' ').replace(/\s+/g, ' ').trim(); return { nome, telefone:tel }; }).filter(x => x.nome || x.telefone);
+}
+window.abrirBolsaoNovo = () => { ['bzLinhas','bzMotivo','bzEmp','bzObs'].forEach(i => $(i).value = ''); $('bzOrigem').value = 'lead'; $('bzPrev').textContent = ''; $('bzLinhas').oninput = () => { const n = bzLerLinhas($('bzLinhas').value).length; $('bzPrev').textContent = n ? n + ' cliente' + (n > 1 ? 's' : '') : ''; }; abrir('bzModal'); };
+async function bzGravar(itens, avisar){
+  const tels = new Set(bolsao.filter(x => x.status !== 'encerrado').map(x => chaveTel(x.telefone)).filter(Boolean)); let n = 0, rep = 0;
+  for (let i = 0; i < itens.length; i += 400) { const b = writeBatch(db);
+    itens.slice(i, i + 400).forEach(x => { const t = chaveTel(x.telefone); if (t && tels.has(t)) { rep++; return; } if (t) tels.add(t);
+      b.set(doc(collection(db,'bolsao')), { nome:String(x.nome || '').slice(0, 80), telefone:String(x.telefone || '').slice(0, 25), origem:x.origem, motivo:String(x.motivo || '').slice(0, 80), empreendimento:String(x.empreendimento || '').slice(0, 80), obs:String(x.obs || '').slice(0, 200), ref:x.ref || '', status:'livre', pegoPor:'', criadoEm:Date.now(), criadoPor:uidAtual, criadoNome:perfil.nome, tentativas:0 }); n++; });
+    await b.commit(); }
+  if (n && avisar) avisarCarteiro('bolsao', '', true, { n });
+  return { n, rep };
+}
+window.salvarBolsao = async () => {
+  const l = bzLerLinhas($('bzLinhas').value); if (!l.length) { toast('Escreva pelo menos um nome e telefone'); return; }
+  const base = { origem:$('bzOrigem').value, motivo:$('bzMotivo').value.trim(), empreendimento:$('bzEmp').value.trim(), obs:$('bzObs').value.trim() };
+  try { const r = await bzGravar(l.map(x => ({ ...base, ...x })), $('bzAvisar').checked); fechar('bzModal'); toast(`${r.n} no bolsão ✓${r.rep ? ` · ${r.rep} já estava${r.rep > 1 ? 'm' : ''} lá` : ''}`); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+// clientes perdidos: cartas que desistiram/venceram e pastas reprovadas pela Prime
+window.abrirPerdidos = () => {
+  const ja = new Set(bolsao.map(x => x.ref).filter(Boolean));
+  const c = cartas.filter(x => PERDA_C.includes(x.status) && !ja.has('carta_' + x.id)).map(x => ({ ref:'carta_' + x.id, nome:x.cliente, telefone:x.telefone, motivo:x.status + (x.motivoPerda ? ' · ' + x.motivoPerda : ''), empreendimento:x.empreendimento, de:x.corretorNome }));
+  const a = (typeof analises !== 'undefined' ? analises : []).filter(x => x.status === 'reprovada' && !ja.has('analise_' + x.id)).map(x => ({ ref:'analise_' + x.id, nome:x.cliente?.nome, telefone:x.cliente?.telefone, motivo:'Reprovado na Prime' + (x.resultado?.condicao ? ' · ' + x.resultado.condicao : ''), empreendimento:x.imovel?.empreendimento || '', de:x.corretorNome }));
+  window._bzPerd = [...c, ...a].filter(x => x.nome);
+  $('bzPerdLista').innerHTML = window._bzPerd.length ? window._bzPerd.map((x, i) => `<label class="fv-chk bz-pl"><input type="checkbox" value="${i}"> <span><b>${esc(x.nome)}</b><small>${esc(x.motivo)}${x.de ? ' · era de ' + esc(primeiro(x.de)) : ''}</small></span></label>`).join('') : '<div class="muted">Nenhum cliente perdido para trazer.</div>';
+  abrir('bzPerdModal');
+};
+window.mandarPerdidos = async () => {
+  const sel = [...document.querySelectorAll('#bzPerdLista input:checked')].map(i => window._bzPerd[Number(i.value)]); if (!sel.length) { toast('Marque pelo menos um'); return; }
+  try { const r = await bzGravar(sel.map(x => ({ ...x, origem:'perdido' })), true); fechar('bzPerdModal'); toast(`${r.n} cliente${r.n > 1 ? 's' : ''} no bolsão ✓`); } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// =====================================================================
+// ============ BÔNUS POR VISITAS · v84 ============
+// =====================================================================
+const bvCfg = () => ({ ativo:false, modo:'por_visita', valor:0, meta:0, premio:0, faixas:[], quem:'corretores', ...(appCfg.bonusVisitas || {}) });
+function bonusDe(n, c = bvCfg()){
+  if (!c.ativo || !n) return 0;
+  if (c.modo === 'por_visita') return Math.round(n * (Number(c.valor) || 0) * 100) / 100;
+  if (c.modo === 'meta') return n >= (Number(c.meta) || Infinity) ? Number(c.premio) || 0 : 0;
+  const f = (c.faixas || []).filter(x => n >= Number(x.min)).sort((a, b) => b.min - a.min)[0]; return f ? Number(f.valor) || 0 : 0;
+}
+function bvProxima(n, c = bvCfg()){
+  if (c.modo === 'meta') return n < c.meta ? `faltam ${c.meta - n} visita${c.meta - n > 1 ? 's' : ''} para ganhar ${brl(c.premio)}` : '';
+  if (c.modo === 'faixas') { const f = (c.faixas || []).filter(x => Number(x.min) > n).sort((a, b) => a.min - b.min)[0]; return f ? `faltam ${f.min - n} para a próxima faixa (${brl(f.valor)})` : ''; }
+  return '';
+}
+const visitasRealizadas = (uid, m) => visitas.filter(v => v.corretorUid === uid && v.status === 'Realizada' && (v.date || '').slice(0, 7) === m).length;
+function htmlBonusMeu(){
+  const c = bvCfg(); if (!c.ativo || !['corretor','coordenador'].includes(perfil?.papel) || (c.quem === 'so_corretores' && perfil.papel !== 'corretor')) return '';
+  const m = mesAtual(), n = visitasRealizadas(uidAtual, m), b = bonusDe(n, c), prox = bvProxima(n, c);
+  return `<div class="bv-meu"><span>🎯</span><div><b>Bônus por visitas de ${nomeMes(m).split(' de ')[0].toLowerCase()}: ${brl2(b)}</b><small>${n} visita${n === 1 ? '' : 's'} realizada${n === 1 ? '' : 's'}${c.modo === 'por_visita' ? ` · ${brl2(c.valor)} por visita` : ''}${prox ? ' · ' + prox : ''}</small></div></div>`;
+}
+window.bvModoVis = () => { const m = $('bvModo').value; $('bvPorVisita').classList.toggle('hide', m !== 'por_visita'); $('bvMeta').classList.toggle('hide', m !== 'meta'); $('bvFaixas').classList.toggle('hide', m !== 'faixas'); };
+function bvFaixasDesenha(){ $('bvFaixasL').innerHTML = (window._bvF || []).map((f, i) => `<div class="bv-fx"><span>a partir de</span><input type="number" min="1" value="${f.min || ''}" oninput="_bvF[${i}].min=Number(this.value)||0"><span>visitas →</span><input inputmode="decimal" placeholder="R$" value="${f.valor ? String(f.valor).replace('.', ',') : ''}" oninput="_bvF[${i}].valor=lerDec(this.value)"><button type="button" class="icon-btn del" onclick="_bvF.splice(${i},1);bvFaixasDesenha()" aria-label="Tirar faixa">🗑️</button></div>`).join(''); }
+window.bvFaixasDesenha = bvFaixasDesenha;
+window.bvFaixaAdd = () => { (window._bvF ||= []).push({ min:0, valor:0 }); bvFaixasDesenha(); };
+window.abrirBonus = () => {
+  const c = bvCfg(); $('bvAtivo').checked = !!c.ativo; $('bvModo').value = c.modo; $('bvValor').value = c.valor ? String(c.valor).replace('.', ',') : ''; $('bvMetaN').value = c.meta || ''; $('bvPremio').value = c.premio ? String(c.premio).replace('.', ',') : ''; $('bvQuem').value = c.quem || 'corretores';
+  window._bvF = (c.faixas || []).map(x => ({ ...x })); if (!window._bvF.length) window._bvF = [{ min:10, valor:100 }, { min:20, valor:250 }, { min:30, valor:400 }];
+  bvFaixasDesenha(); bvModoVis(); $('bvRegraBox').open = !c.ativo; $('bvRegraBox').classList.toggle('hide', !souDono()); desenharBonus(); abrir('bonusModal');
+};
+window.salvarBonus = async () => {
+  const d = { ativo:$('bvAtivo').checked, modo:$('bvModo').value, valor:lerDec($('bvValor').value) || 0, meta:Number($('bvMetaN').value) || 0, premio:lerDec($('bvPremio').value) || 0, quem:$('bvQuem').value,
+    faixas:(window._bvF || []).filter(f => f.min > 0 && f.valor > 0).sort((a, b) => a.min - b.min) };
+  try { await gravar(setDoc(doc(db,'config','app'), { bonusVisitas:d }, { merge:true })); appCfg.bonusVisitas = d; toast('Regra do bônus salva ✓'); desenharBonus(); } catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'só o gestor muda a regra' : e.message)); }
+};
+function desenharBonus(){
+  const c = bvCfg(), m = finMes || mesAtual();
+  if (!c.ativo) { $('bvTabela').innerHTML = '<div class="muted" style="font-size:13.5px;margin-top:10px">O bônus está desligado. Abra “Regra do bônus”, escolha como funciona e ligue.</div>'; return; }
+  const ps = perfisLista.filter(p => p.status === 'ativo' && (c.quem === 'so_corretores' ? p.papel === 'corretor' : ['corretor','coordenador'].includes(p.papel)))
+    .map(p => { const n = visitasRealizadas(p.uid, m), b = bonusDe(n, c), l = finLanc.find(x => x.id === 'bv_' + m + '_' + p.uid); return { p, n, b, l }; })
+    .sort((a, b) => b.n - a.n || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
+  const tot = ps.reduce((a, x) => a + x.b, 0);
+  $('bvTabela').innerHTML = `<div class="bv-cab"><b>${nomeMes(m)}</b><span>Total: <b>${brl2(tot)}</b></span></div><div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Visitas realizadas</th><th>Bônus</th><th></th></tr></thead><tbody>
+    ${ps.map(x => `<tr><td><span class="nm">${esc(x.p.nome)}</span></td><td>${x.n}</td><td><b>${brl2(x.b)}</b></td><td>${!x.b ? '' : x.l ? (x.l.pago ? '<span class="fin-pos">✓ pago</span>' : '<span class="muted">lançado</span>') : (souGerente() && !souCeo() ? `<button class="link" onclick="lancarBonus('${x.p.uid}')">lançar pagamento</button>` : '')}</td></tr>`).join('')}</tbody></table></div>
+    <p class="hint" style="margin-top:8px">Conta as visitas marcadas como <b>Realizada</b> no mês escolhido no Financeiro. “Lançar pagamento” cria a saída em “Entradas e saídas”.</p>`;
+}
+window.lancarBonus = async uid => {
+  const c = bvCfg(), m = finMes || mesAtual(), p = perfisLista.find(x => x.uid === uid); if (!p) return;
+  const n = visitasRealizadas(uid, m), b = bonusDe(n, c); if (!b) return;
+  try { await gravar(setDoc(doc(db,'fin_lanc','bv_' + m + '_' + uid), { tipo:'saida', categoria:'Comissão de corretor', descricao:`Bônus por visitas · ${p.nome} · ${nomeMes(m).toLowerCase()} (${n} visitas)`, valor:b, data:hojeISO(), pago:false, bonusUid:uid, criadoEm:Date.now(), criadoPor:perfil.nome }));
+    toast('Pagamento do bônus lançado ✓'); setTimeout(desenharBonus, 400); } catch(e) { toast('Erro: ' + e.message); }
+};
+
 // =====================================================================
 // ============ CORRESPONDENTE (PRIME) · pastas de crédito · v82 (teste) ============
 // =====================================================================
@@ -7566,8 +7843,8 @@ function avisarSubiuRanking(lista, pos){
 // ---------- sorteio dentro do app ----------
 let sxHistorico = [], sxGirando = false, sxSessao = [];
 function assinarSorteios(){
-  sxHistorico = []; if (!podeGerir()) return;
-  subsPapel.push(onSnapshot(collection(db,'sorteios'), s => { sxHistorico = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (b.em || 0) - (a.em || 0)).slice(0, 30); if (view === 'sorteio') sxPintaHist(); }, e => console.warn('sorteios', e.code || e.message)));
+  sxHistorico = []; if (!souAtivo() || souCorresp()) return;
+  subsPapel.push(onSnapshot(collection(db,'sorteios'), s => { sxHistorico = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (b.em || 0) - (a.em || 0)).slice(0, 30); if (view === 'sorteio') sxPintaHist(); render(); }, e => console.warn('sorteios', e.code || e.message)));
 }
 const sxRand = n => { const max = Math.floor(0x100000000 / n) * n, a = new Uint32Array(1); let x; do { crypto.getRandomValues(a); x = a[0]; } while (x >= max); return x % n; };
 function sxParticipantes(){
@@ -7589,6 +7866,15 @@ window.sxPinta = () => {
   $('sxBt').disabled = !d.length || sxGirando; $('sxBt').textContent = q > 1 ? `🎲 Sortear ${q}` : '🎲 Sortear';
   $('sxPart').innerHTML = t.length ? `<div class="sx-part-t">${t.length} participante${t.length > 1 ? 's' : ''}</div><div class="sx-chips">${t.slice(0, 80).map(n => `<span class="${d.includes(n) ? '' : 'off'}">${esc(n)}</span>`).join('')}${t.length > 80 ? `<span>+${t.length - 80}</span>` : ''}</div>` : '<div class="muted" style="font-size:13px">Ninguém nessa lista ainda.</div>';
 };
+// ganhadores dos sorteios, para todo mundo ver (aba Ranking)
+function htmlSorteiosPub(){
+  const l = sxHistorico.filter(x => (x.ganhadores || []).length); if (!l.length) return '';
+  const cont = {}; l.forEach(x => (x.ganhadores || []).forEach(g => { const n = String(g); cont[n] = (cont[n] || 0) + 1; }));
+  const top = Object.entries(cont).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  return `<div class="card sx-pub"><div class="card-head"><h2>🎁 Sorteios</h2><small class="muted">${l.length} sorteio${l.length > 1 ? 's' : ''}</small></div>
+    <div class="sx-pub-g"><div>${l.slice(0, 5).map(x => `<div class="sx-pub-l"><span class="sx-pub-d">${new Date(x.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })}</span><span><b>${(x.ganhadores || []).map(esc).join(', ')}</b><small>${esc(x.titulo || 'Sorteio')}${x.premio ? ' · ganhou ' + esc(x.premio) : ''}</small></span></div>`).join('')}</div>
+    ${top.length > 1 ? `<div class="sx-pub-top"><b>Quem mais ganhou</b>${top.map(([n, q], i) => `<div><span>${['🥇','🥈','🥉','4º','5º'][i]}</span><span>${esc(n)}</span><b>${q}×</b></div>`).join('')}</div>` : ''}</div></div>`;
+}
 function sxPintaHist(){
   if (!$('sxHist')) return;
   $('sxHist').innerHTML = sxHistorico.length ? sxHistorico.map(x => `<div class="sx-h"><span class="sx-hq">${new Date(x.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })} ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</span><span><b>${(x.ganhadores || []).map(esc).join(', ')}</b><small>${esc(x.titulo || '')}${x.premio ? ' · 🎁 ' + esc(x.premio) : ''} · ${x.participantes || 0} participantes · por ${esc(primeiro(x.por || ''))}</small></span></div>`).join('') : '<div class="muted" style="font-size:13.5px">Os ganhadores ficam guardados aqui.</div>';
@@ -7612,7 +7898,7 @@ window.sortearApp = async () => {
     if (i < esc2.length - 1) await new Promise(r => setTimeout(r, 1500));
   }
   sxGirando = false; sxPinta();
-  try { await setDoc(doc(collection(db,'sorteios')), { titulo:$('sxNomeI').value.trim() || 'Sorteio Frade', premio:$('sxPremio').value.trim(), ganhadores:esc2, participantes:pool.length, fonte:$('sxFonte').value, em:Date.now(), por:perfil.nome, porUid:uidAtual }); } catch(e) { console.warn('sorteio', e.message); }
+  try { const ref = doc(collection(db,'sorteios')); await setDoc(ref, { titulo:$('sxNomeI').value.trim() || 'Sorteio Frade', premio:$('sxPremio').value.trim(), ganhadores:esc2, participantes:pool.length, fonte:$('sxFonte').value, em:Date.now(), por:perfil.nome, porUid:uidAtual }); if ($('sxAvisar')?.checked !== false) avisarCarteiro('sorteio', ref.id); } catch(e) { console.warn('sorteio', e.message); }
 };
 window.sxCopiar = async () => {
   const u = sxHistorico[0]; if (!u) { toast('Ainda não tem ganhador'); return; }
@@ -7738,7 +8024,7 @@ window.baixarBackup = async (id, n) => {
 // =====================================================================
 // ================= FINANCEIRO (só gerência e CEO) ====================
 // =====================================================================
-let finLanc = [], finCfg = { pctImob:5, pctCor:1.5 }, finEdit = null;
+let finLanc = [], finCfg = { pctImob:5, pctCor:1.5, pctImposto:15.7 }, finEdit = null;
 window.finMes = ''; window.finAba = 'geral'; window.finBusca = ''; window.finTipo = '';
 const FIN_CONTAS = ['PJ Principal (66)', 'PB Frade (69)', 'Pessoa Física'];
 const FIN_CATS = { entrada:['Comissão de venda','Recebimento imobiliária','Recebimento parcelado','Sinal / reserva','Resgate de aplicação','Devolução de adiantamento','Outros recebimentos'],
@@ -7749,7 +8035,7 @@ function assinarFinanceiro(){
   if (!souGerente()) return;
   const silencio = e => console.warn('Financeiro:', e.code || e.message);
   subsPapel.push(onSnapshot(collection(db,'fin_lanc'), s => { finLanc = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
-  subsPapel.push(onSnapshot(doc(db,'fin_config','geral'), s => { if (s.exists()) finCfg = { ...finCfg, ...s.data() }; render(); }, silencio));
+  subsPapel.push(onSnapshot(doc(db,'fin_config','geral'), s => { if (s.exists()) finCfg = { ...finCfg, ...s.data() }; render(); setTimeout(corrigirImposto157, 3000); }, silencio));
 }
 const finDoMes = m => finLanc.filter(x => (x.data || '').slice(0,7) === m);
 window.renderFinanceiro = () => renderFinanceiro();
@@ -7759,14 +8045,15 @@ function renderExtrato(){ renderPrefNotif();
   if ($('ciGestao')) { const h = view === 'corretores' ? htmlCiGestao() : ''; if ($('ciGestao')._h !== h) { $('ciGestao').innerHTML = h; $('ciGestao')._h = h; } }
   if ($('ciCfgBox') && view === 'config' && !$('ciCfgBox').contains(document.activeElement)) $('ciCfgBox').innerHTML = htmlCiConfig();
   if (view === 'recepcao') iniciarRecepcao();
-  renderAnalises();
+  renderAnalises(); renderBolsao();
+  if ($('sorteiosRank')) { const h = view === 'ranking' ? htmlSorteiosPub() : ''; if ($('sorteiosRank')._h !== h) { $('sorteiosRank').innerHTML = h; $('sorteiosRank')._h = h; } }
   renderAulas(); if (auAberta && $('auVerModal').classList.contains('open')) pintarInfoAula();
   if ($('aulasHoje')) { const h = view === 'hoje' ? htmlAulasHoje() : ''; if ($('aulasHoje')._h !== h) { $('aulasHoje').innerHTML = h; $('aulasHoje')._h = h; } }
   if ($('cAulas')) { const n = auPendentes().length; $('cAulas').textContent = n; $('cAulas').classList.toggle('hide', !n); }
   if (view === 'sorteio' && $('sxPalco') && !sxGirando && !$('sxPalco').contains(document.activeElement) && !document.querySelector('.sx-cfg')?.contains(document.activeElement)) { sxPinta(); sxPintaHist(); }
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
-  if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlExtrato(); }
+  if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlBonusMeu() + htmlExtrato(); }
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
   if (!finMes) window.finMes = mesAtual();
@@ -7817,7 +8104,7 @@ function htmlFinGeral(l){
   // 1. saldo
   const saldo = `<div class="bg-card bg-saldo ${p.saldo >= 0 ? '' : 'neg'}"><span class="bg-rot">Saldo previsto de ${mN}</span><b class="bg-big">${brl2(p.saldo)}</b>
     <div class="bg-chips"><span class="bg-chip up"><i>↗</i>${brl(ent)}<small>entra</small></span><span class="bg-chip down"><i>↘</i>${brl(sai)}<small>sai</small></span></div>
-    <small class="bg-nota">${brl(p.entrou)} já entrou · ${brl(p.pago)} já pago</small></div>`;
+    <small class="bg-nota">${brl(p.entrou)} já entrou · ${brl(p.pago)} já pago</small>${(() => { const im = impostoDoMes(finMes); return im.valor ? `<small class="bg-nota bg-imp">🧾 Reserve ${brl2(im.valor)} para o imposto das notas${im.recolhido ? ' · ✓ recolhido' : ''}</small>` : ''; })()}</div>`;
   // 2. gráfico 6 meses
   const ms = mesesAte(m, 6), dados = ms.map(x => { const q = previsaoMes(x); return { m:x, e:q.entrou + q.vaiEntrar, s:q.pago + q.aPagar }; });
   const W = 520, H = 170, pad = 14, mx = Math.max(1, ...dados.flatMap(d => [d.e, d.s]));
@@ -7902,7 +8189,8 @@ const CONST_PADRAO = [{ nome:'Tenda', tipo:'adiantamento', pctAdiant:30, diasAdi
 const NF_EMISSORES = ['','Frade 66 (PJ principal)','Frade 69 (PB)','CNPJ do corretor'];
 const NF_ST = { a_emitir:'a emitir', emitida:'emitida, esperando pagamento', paga:'paga', cancelada:'cancelada' };
 const ETAPAS_FIN = [['reserva','Reserva e sinal'], ['entrada','Entrada'], ['identificacao','Identificação'], ['assinatura','Assinatura Caixa'], ['faturada','Comissão faturada'], ['recebida','Comissão recebida'], ['paga','Corretor pago']];
-const FORMAS_ENT = [['','—'], ['pix','Pix / à vista'], ['boleto','Boleto'], ['cartao_construtora','Cartão da construtora'], ['cartao_imobiliaria','Cartão da imobiliária']];
+const FORMAS_ENT = [['','—'], ['pix','Pix / à vista'], ['boleto','Boleto'], ['cartao_construtora','Cartão de crédito (construtora)'], ['cartao_imobiliaria','Cartão de crédito (imobiliária)']];
+const FORMAS_SINAL = [['','—'], ['pix','Pix'], ['dinheiro','Dinheiro'], ['boleto','Boleto'], ['cartao','Cartão de crédito'], ['debito','Cartão de débito']];
 const construtoras = () => (finCfg.construtoras && finCfg.construtoras.length ? finCfg.construtoras : CONST_PADRAO);
 function regraConst(nome){ const n = norm(nome || ''), l = construtoras(); return l.find(c => n && norm(c.nome) && (n.includes(norm(c.nome)) || norm(c.nome).includes(n))) || { ...(l.find(c => c.tipo === 'integral') || CONST_PADRAO[1]), nome:'', obs:'' }; }
 function assinarFin2(){
@@ -7932,14 +8220,16 @@ function vendaFin(r){
   const total = f.comissao != null && f.comissao !== '' ? Number(f.comissao) : (brutaRes || Math.round(vgv * pctImob) / 100);
   const pctA = tipo === 'adiantamento' ? Number(f.pctAdiant ?? rg.pctAdiant) || 0 : 0;
   const adiant = Math.round(total * pctA) / 100, rest = Math.round((total - adiant) * 100) / 100;
-  const pctNF = f.nota === 'sem' ? 0 : Number(f.pctImposto ?? finCfg.pctImposto ?? 16) || 0, imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : Math.round(total * pctNF) / 100, liquido = Math.round((total - imposto) * 100) / 100;
-  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number(f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0, valCor = f.valCor != null && f.valCor !== '' ? Number(f.valCor) : Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCor) * 100) / 100;
+  const pctNF = f.nota === 'sem' ? 0 : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7) || 0, imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : Math.round(total * pctNF) / 100, liquido = Math.round((total - imposto) * 100) / 100;
+  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number(f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0, valCorBruto = f.valCor != null && f.valCor !== '' ? Number(f.valCor) : Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCorBruto) * 100) / 100;
+  // adiantamento/vale e descontos avulsos saem da parte do corretor (a divisão é sempre sobre o líquido)
+  const descontos = (f.descontos || []).filter(x => Number(x.valor) > 0), descTotal = Math.round(descontos.reduce((a, x) => a + Number(x.valor), 0) * 100) / 100, valCor = Math.round((valCorBruto - descTotal) * 100) / 100;
   const prevA = f.prevAdiant || somaDiasISO(r.dia, rg.diasAdiant), prevR = f.prevRestante || (f.assinaturaEm ? somaDiasISO(f.assinaturaEm, rg.diasRestante) : '');
   const ok = { reserva:!!f.sinalPago, entrada:f.geraEntrada === 'nao' || !!f.entradaPaga, identificacao:!!f.identificada, assinatura:!!f.assinaturaEm, faturada:!!f.faturada,
     recebida: tipo === 'adiantamento' ? !!(f.recAdiant && f.recRestante) : !!f.recRestante, paga:!!f.corPago };
   const etapa = ETAPAS_FIN.findIndex(([k]) => !ok[k]);
   const aReceber = (tipo === 'adiantamento' && !f.recAdiant ? adiant : 0) + (!f.recRestante ? rest : 0);
-  return { r, f, cons, rg, tipo, pctImob, vgv, total, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
+  return { r, f, cons, rg, tipo, pctImob, vgv, total, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valCorBruto, descontos, descTotal, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
 }
 // o que entra e o que sai em um mês (para o golpe de vista)
 function previsaoMes(m){
@@ -7956,12 +8246,19 @@ function previsaoMes(m){
   return { entrou, vaiEntrar, semData, pago, aPagar: aPagar + corPrev, saldo: entrou + vaiEntrar - pago - aPagar - corPrev, fontes };
 }
 // despesas fixas: viram lançamentos do mês sozinhas
+// parcelamento (ex.: imposto parcelado): 0 = despesa fixa comum; -1 = fora do período; n = número da parcela
+function parcelaNoMes(x, m){
+  if (!Number(x.parcelas) || !x.inicio) return 0;
+  const [a1, m1] = x.inicio.split('-').map(Number), [a2, m2] = m.split('-').map(Number), k = (a2 - a1) * 12 + (m2 - m1) + 1;
+  return k < 1 || k > Number(x.parcelas) ? -1 : k;
+}
 async function gerarFixasDoMes(m){
   if (!souGerente() || _fixasFeitas === m || m < mesAtual()) return;
   _fixasFeitas = m;
   const b = writeBatch(db); let n = 0;
   finFixas.filter(x => x.ativo !== false && Number(x.valor) > 0).forEach(x => { const id = 'fx_' + x.id + '_' + m; if (finLanc.some(l => l.id === id)) return;
-    b.set(doc(db,'fin_lanc',id), { tipo:'saida', categoria:x.categoria || 'Despesa operacional', descricao:x.descricao, valor:Number(x.valor) || 0, varia:!!x.varia, data:m + '-' + String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2,'0'), pago:false, fixa:x.id, criadoEm:Date.now(), criadoPor:'Despesa fixa' }); n++; });
+    const k = parcelaNoMes(x, m); if (k === -1) return;
+    b.set(doc(db,'fin_lanc',id), { tipo:'saida', categoria:x.categoria || 'Despesa operacional', descricao:x.descricao + (k ? ` (parcela ${k} de ${x.parcelas})` : ''), valor:Number(x.valor) || 0, varia:!!x.varia, data:m + '-' + String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2,'0'), pago:false, fixa:x.id, criadoEm:Date.now(), criadoPor:'Despesa fixa' }); n++; });
   if (n) try { await b.commit(); } catch(e) { _fixasFeitas = ''; console.warn('fixas', e.message); }
 }
 function htmlGolpe(m, mm){
@@ -8012,7 +8309,7 @@ function htmlNotas2(){
     <button class="nf-box ${pend.length ? 'alerta' : ''}" onclick="document.getElementById('nfPend')?.scrollIntoView({behavior:'smooth',block:'center'})"><span>Para emitir</span><b>${pend.length}</b><em>${pend.length ? brl(pend.reduce((a,v) => a + (v.tipo === 'adiantamento' && !v.f.recAdiant && !v.ok.assinatura ? v.adiant : v.aReceber), 0)) + ' em comissão' : 'nada pendente'}</em></button>
     <button class="nf-box" onclick="nfFiltro='abertas';render()"><span>Esperando pagamento</span><b>${abertas.length}</b><em>${brl(soma(abertas))}</em></button>
     <div class="nf-box"><span>Emitidas em ${nomeMes(m).split(' de ')[0].toLowerCase()}</span><b>${doMes.filter(n => n.status !== 'cancelada').length}</b><em>${brl(soma(doMes.filter(n => n.status !== 'cancelada')))}</em></div>
-    <div class="nf-box"><span>Imposto das notas do mês</span><b class="fin-neg">${brl(impMes)}</b><em>pelas notas emitidas</em></div></div>`;
+    ${(() => { const im = impostoDoMes(m); return `<div class="nf-box nf-imp ${im.valor && !im.recolhido ? 'alerta' : ''}"><span>Imposto a recolher (${String(finCfg.pctImposto ?? 15.7).replace('.', ',')}%)</span><b class="fin-neg">${brl2(im.valor)}</b><em>${!im.valor ? 'nenhuma nota no mês' : im.recolhido ? '✓ recolhido' : im.lanc ? 'lançado · falta pagar' : `<button class="link" onclick="event.stopPropagation();lancarImposto('${m}')">guardar e lançar o DAS</button>`}</em></div>`; })()}</div>`;
   const pendH = pend.length ? `<div class="nf-pend" id="nfPend"><h4>Vendas que precisam de nota</h4>${pend.map(v => `<div class="nf-pl"><div><b>${esc(v.r.cliente || 'Cliente')}</b><small>${esc(v.cons || 'sem construtora')} · ${v.ok.assinatura ? 'assinou' : 'adiantamento'} · ${brl2(v.tipo === 'adiantamento' && !v.f.recAdiant && !v.ok.assinatura ? v.adiant : v.aReceber)}${v.rg.obs ? ' · ⚠️ ' + esc(v.rg.obs) : ''}</small></div><button class="btn btn-ghost" onclick="editarNota(null,'${v.r.id}')">Registrar nota</button></div>`).join('')}</div>` : '';
   const filtros = [['','Do mês'],['abertas','Esperando pagamento'],['todas','Todas']];
   const cab = `<div class="fin-filtros"><div class="seg">${filtros.map(([k,n]) => `<button class="${window.nfFiltro === k ? 'on' : ''}" onclick="nfFiltro='${k}';render()">${n}</button>`).join('')}</div><input id="finBuscaI" placeholder="Buscar número, construtora ou cliente..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"><button class="btn btn-primary" onclick="editarNota()">+ Nota fiscal</button></div>`;
@@ -8023,7 +8320,31 @@ function htmlNotas2(){
     : vazio(window.nfFiltro === 'abertas' ? 'Nenhuma nota esperando pagamento' : 'Nenhuma nota fiscal ' + (window.nfFiltro === 'todas' ? 'ainda' : 'neste mês'), 'Toque em “+ Nota fiscal” ou em “Registrar nota” numa venda. A nota fica ligada à venda e aparece no funil das comissões.');
   return resumo + pendH + cab + linhas;
 }
-const nfImposto = n => n.status === 'cancelada' ? 0 : Math.round((Number(n.valor) || 0) * (Number(n.pctImposto ?? finCfg.pctImposto ?? 16) || 0)) / 100;
+// o imposto das notas é 15,7% (as que ficaram com 16% são corrigidas uma vez só)
+let _imp157 = false;
+async function corrigirImposto157(){
+  if (_imp157 || !souGerente() || souCeo() || finCfg.imp157 || !window.finNotas) return; _imp157 = true;
+  try { const b = writeBatch(db); let n = 0;
+    window.finNotas.filter(x => Number(x.pctImposto) === 16).forEach(x => { b.set(doc(db,'fin_notas',x.id), { pctImposto:15.7 }, { merge:true }); n++; });
+    Object.entries(finVendas).filter(([, f]) => Number(f.pctImposto) === 16).forEach(([id]) => { b.set(doc(db,'fin_vendas',id), { pctImposto:15.7 }, { merge:true }); n++; });
+    b.set(doc(db,'fin_config','geral'), { pctImposto:15.7, imp157:true }, { merge:true }); await b.commit();
+    if (n) toast(`Imposto das notas corrigido para 15,7% (${n} registro${n > 1 ? 's' : ''})`);
+  } catch(e) { _imp157 = false; console.warn('imp157', e.code || e.message); }
+}
+// reserva para os impostos: o imposto das notas emitidas no mês que ainda falta recolher
+function impostoDoMes(m){
+  const notas = (window.finNotas || []).filter(n => (n.emitidaEm || '').slice(0,7) === m && !['cancelada','a_emitir'].includes(n.status));
+  const valor = Math.round(notas.reduce((a,n) => a + nfImposto(n), 0) * 100) / 100, lanc = finLanc.find(x => x.id === 'imp_' + m);
+  return { valor, notas:notas.length, lanc, recolhido:!!lanc?.pago };
+}
+window.lancarImposto = async m => {
+  const im = impostoDoMes(m); if (!im.valor) { toast('Nenhum imposto de nota neste mês'); return; }
+  const [a, mm] = m.split('-').map(Number);
+  const vencISO = (mm === 12 ? (a + 1) : a) + '-' + pad(mm === 12 ? 1 : mm + 1) + '-20';
+  try { await gravar(setDoc(doc(db,'fin_lanc','imp_' + m), { tipo:'saida', categoria:'Imposto / tributo', descricao:`Imposto das notas de ${nomeMes(m).toLowerCase()} (DAS)`, valor:im.valor, data:vencISO, pago:false, impMes:m, criadoEm:Date.now(), criadoPor:perfil.nome }, { merge:true }));
+    toast('Imposto lançado em “Entradas e saídas” para o dia 20. Marque como pago quando recolher.'); } catch(e) { toast('Erro: ' + e.message); }
+};
+const nfImposto = n => n.status === 'cancelada' ? 0 : Math.round((Number(n.valor) || 0) * (Number(n.pctImposto ?? finCfg.pctImposto ?? 15.7) || 0)) / 100;
 window.nfImpCalc = () => { const v = lerDec($('nfValor').value), p = lerDec($('nfPct').value); $('nfImp').innerHTML = v ? `Imposto da nota: <b>${brl2(Math.round(v * p) / 100)}</b> · fica líquido <b>${brl2(v - Math.round(v * p) / 100)}</b>` : ''; };
 function nfStVis(){ const st = $('nfSt').value; $('nfStBtns').innerHTML = [['a_emitir','A emitir'],['emitida','Emitida'],['paga','Paga'],['cancelada','Cancelada']].map(([k,n]) => `<button type="button" class="${st === k ? 'on' : ''}" onclick="document.getElementById('nfSt').value='${k}';nfStVis()">${n}</button>`).join(''); $('nfPagaBox').classList.toggle('hide', st !== 'paga'); if (st === 'paga' && !$('nfPagaEm').value) $('nfPagaEm').value = hojeISO(); }
 window.nfStVis = nfStVis;
@@ -8072,7 +8393,7 @@ window.editarNota = (id, vendaId) => {
   $('nfVenda').value = n?.vendaId || vendaId || '';
   $('nfNum').value = n?.numero || ''; $('nfData').value = n?.emitidaEm || hojeISO(); $('nfEmissor').value = n?.emissor || '';
   $('nfTomador').value = n?.tomador || ''; $('nfValor').value = n?.valor ? String(n.valor).replace('.', ',') : '';
-  $('nfPct').value = n?.pctImposto ?? finCfg.pctImposto ?? 16; $('nfPagaEm').value = n?.pagaEm || ''; $('nfLink').value = n?.link || ''; $('nfObs').value = n?.obs || '';
+  $('nfPct').value = n?.pctImposto ?? finCfg.pctImposto ?? 15.7; $('nfPagaEm').value = n?.pagaEm || ''; $('nfLink').value = n?.link || ''; $('nfObs').value = n?.obs || '';
   $('nfSt').value = n?.status || (vendaId ? 'emitida' : 'emitida'); nfStVis();
   if (!n && vendaId) nfVendaMudou(); nfImpCalc();
   nfArquivo = null; nfTirarAnexo = false; nfAnexoVis();
@@ -8127,7 +8448,7 @@ window.voltarVendaFin = async id => {
   try { await gravar(setDoc(doc(db,'fin_vendas',id), { excluida:false }, { merge:true })); toast('Venda de volta no funil'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.abrirVendaFin = (id, semAbrir) => {
-  const r = vendasFin().find(x => x.id === id); if (!r) return; finVEdit = id;
+  const r = vendasFin().find(x => x.id === id); if (!r) return; finVEdit = id; window._fvId = id;
   const v = vendaFin(r), f = v.f, ro = '';
   const chk = (idc, val, txt) => `<label class="fv-chk"><input type="checkbox" id="${idc}" ${val ? 'checked' : ''} ${ro}> ${txt}</label>`;
   $('fvTit').textContent = r.cliente || 'Venda';
@@ -8138,7 +8459,7 @@ window.abrirVendaFin = (id, semAbrir) => {
     return `<details class="fv-et ${feito ? 'feito' : ''}" ${i === atual ? 'open' : ''}><summary><i>${feito ? '✓' : i + 1}</i><span><b>${titulo}</b>${resumo ? `<small>${resumo}</small>` : ''}</span></summary><div class="fv-et-in">${corpo}</div></details>`; };
   const notasV = (window.finNotas || []).filter(n => n.vendaId === r.id);
   $('fvCorpo').innerHTML = `
-    <div class="fv-topo"><div><span>Comissão bruta</span><b>${brl2(v.total)}</b></div><div><span>Imposto (${v.pctNF}%)</span><b class="fin-neg">− ${brl2(v.imposto)}</b></div><div><span>Corretor</span><b>${brl2(v.valCor)}</b></div><div><span>Fica na imobiliária</span><b class="fin-pos">${brl2(v.valImob)}</b></div></div>
+    <div class="fv-topo"><div><span>Comissão bruta</span><b>${brl2(v.total)}</b></div><div><span>Imposto (${String(v.pctNF).replace('.', ',')}%)</span><b class="fin-neg">− ${brl2(v.imposto)}</b></div><div><span>Corretor${v.descTotal ? ' (já com descontos)' : ''}</span><b>${brl2(v.valCor)}</b>${v.descTotal ? `<small class="fv-desc-s">${brl2(v.valCorBruto)} − ${brl2(v.descTotal)}</small>` : ''}</div><div><span>Fica na imobiliária</span><b class="fin-pos">${brl2(v.valImob)}</b></div></div>
     ${v.tipo === 'adiantamento' ? `<div class="fv-parc">Adiantamento <b>${brl2(v.adiant)}</b>${v.prevA ? ' em ' + dataBR(v.prevA) : ''} · restante <b>${brl2(v.rest)}</b>${v.prevR ? ' em ' + dataBR(v.prevR) : ' depois da assinatura'}</div>` : `<div class="fv-parc">Paga tudo de uma vez${v.prevR ? ' em ' + dataBR(v.prevR) : ', depois da assinatura'}</div>`}
     <div class="fv-bloco"><h4>Comissão</h4>
       <div class="row2"><div class="fg"><label>Construtora</label><input id="fvCons" list="fvConsL" value="${esc(v.cons)}" oninput="fvTipoAuto()"><datalist id="fvConsL">${construtoras().map(c => `<option value="${esc(c.nome)}">`).join('')}</datalist></div>
@@ -8151,15 +8472,18 @@ window.abrirVendaFin = (id, semAbrir) => {
         <div class="hint" style="margin:0">Deixe em branco para o app calcular sozinho.</div></details>
       <div class="fg" style="margin-top:10px"><label>Andamento do processo</label><select id="fvProc">${['','Formulário','Avaliação do imóvel','Conformidade','Extrato','Aguardando unidade','Obra','Suspensiva','Assinatura agendada','Assinou'].map(x => `<option ${f.processo === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
     <div class="fv-etapas"><h4>Etapas</h4>
-    ${sec(0, 'Reserva e sinal', f.sinalPago ? 'sinal pago' + (f.sinalValor ? ' · ' + brl2(f.sinalValor) : '') : '', `${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="fg"><label>Valor do sinal</label><input id="fvSinalV" inputmode="decimal" value="${f.sinalValor ? val(f.sinalValor) : ''}"></div>`)}
+    ${sec(0, 'Reserva e sinal', f.sinalPago ? 'sinal pago' + (f.sinalValor ? ' · ' + brl2(f.sinalValor) : '') : '', `${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="row2"><div class="fg"><label>Valor do sinal</label><input id="fvSinalV" inputmode="decimal" value="${f.sinalValor ? val(f.sinalValor) : ''}"></div><div class="fg"><label>Data do pagamento</label><input id="fvSinalD" type="date" value="${f.sinalData || ''}"></div></div>
+      <div class="row2"><div class="fg"><label>Como pagou</label><select id="fvSinalF">${FORMAS_SINAL.map(([k,n]) => `<option value="${k}" ${f.sinalForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg"><label>Quem recebeu</label><select id="fvSinalQ"><option value="">—</option><option value="construtora" ${f.sinalQuem === 'construtora' ? 'selected' : ''}>Construtora</option><option value="imobiliaria" ${f.sinalQuem === 'imobiliaria' ? 'selected' : ''}>Imobiliária</option></select></div></div>`)}
     ${sec(1, 'Entrada', f.geraEntrada === 'nao' ? 'não tem entrada' : f.entradaPaga ? 'entrada paga' : '', `<div class="row2"><div class="fg"><label>Vai gerar entrada?</label><select id="fvGera"><option value="">—</option><option value="sim" ${f.geraEntrada === 'sim' ? 'selected' : ''}>Sim</option><option value="nao" ${f.geraEntrada === 'nao' ? 'selected' : ''}>Não</option></select></div>
       <div class="fg"><label>Valor da entrada</label><input id="fvEntV" inputmode="decimal" value="${f.entradaValor ? val(f.entradaValor) : (r.entrada || '')}"></div></div>
-      <div class="row2"><div class="fg"><label>Como vai pagar</label><select id="fvForma">${FORMAS_ENT.map(([k,n]) => `<option value="${k}" ${f.entradaForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg" style="align-self:end">${chk('fvEntPaga', f.entradaPaga, 'Entrada paga')}</div></div>`)}
+      <div class="row2"><div class="fg"><label>Como vai pagar</label><select id="fvForma">${FORMAS_ENT.map(([k,n]) => `<option value="${k}" ${f.entradaForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg" style="align-self:end">${chk('fvEntPaga', f.entradaPaga, 'Entrada paga')}</div></div>
+      <div class="row2"><div class="fg"><label>Em quantas vezes</label><input id="fvEntParc" type="number" min="1" max="60" value="${f.entradaParcelas || ''}" placeholder="1"></div><div class="fg"><label>Parcelas já pagas</label><input id="fvEntPagas" type="number" min="0" max="60" value="${f.entradaPagas || ''}" placeholder="0"></div></div>
+      ${Number(f.entradaParcelas) > 1 ? `<div class="fv-parc-bar"><i style="width:${Math.min(100, Math.round((Number(f.entradaPagas) || 0) / f.entradaParcelas * 100))}%"></i></div><small class="muted">${Number(f.entradaPagas) || 0} de ${f.entradaParcelas} parcelas pagas${f.entradaValor ? ' · ' + brl2(f.entradaValor / f.entradaParcelas) + ' cada' : ''}</small>` : ''}`)}
     ${sec(2, 'Identificação', f.identificada ? 'identificada' : '', chk('fvIdent', f.identificada, 'Venda identificada no nome do corretor na construtora'))}
     ${sec(3, 'Assinatura com a Caixa', f.assinaturaEm ? 'assinou em ' + dataBR(f.assinaturaEm) : '', `<div class="fg"><label>Data da assinatura</label><input id="fvAss" type="date" value="${f.assinaturaEm || ''}"></div>`)}
     ${sec(4, 'Nota fiscal e cobrança', f.faturada ? 'faturada' + (f.nf ? ' · NF ' + esc(f.nf) : '') : '', `<div class="row2"><div class="fg"><label>Nota fiscal</label><select id="fvNota"><option value="">—</option><option value="com" ${f.nota === 'com' ? 'selected' : ''}>Com nota</option><option value="sem" ${f.nota === 'sem' ? 'selected' : ''}>Sem nota</option></select></div>
         <div class="fg"><label>Emitida por</label><select id="fvEmissor">${NF_EMISSORES.map(x => `<option ${f.emissor === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
-      <div class="row2"><div class="fg"><label>Número da nota</label><input id="fvNF" value="${esc(f.nf || '')}"></div><div class="fg"><label>% de imposto da nota</label><input id="fvPctNF" type="number" step="0.01" value="${Number(f.pctImposto ?? finCfg.pctImposto ?? 16)}"></div></div>
+      <div class="row2"><div class="fg"><label>Número da nota</label><input id="fvNF" value="${esc(f.nf || '')}"></div><div class="fg"><label>% de imposto da nota</label><input id="fvPctNF" type="number" step="0.01" value="${Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7)}"></div></div>
       ${chk('fvFat', f.faturada, 'Comissão faturada / cobrada da construtora')}
       <div class="fv-notas">${notasV.map(n => `<span class="fv-nota-l"><button class="fv-nota" onclick="fechar('fvModal');editarNota('${n.id}')">🧾 NF ${esc(n.numero || 's/ nº')} · ${brl2(n.valor)} · ${NF_ST[n.status] || ''}</button>${n.anexo ? `<button class="link" onclick="abrirAnexoNota('${n.id}')">📎 ver</button>` : ''}</span>`).join('')}<button class="link" onclick="fechar('fvModal');editarNota(null,'${r.id}')">+ Registrar nota fiscal desta venda</button></div>`)}
     ${sec(5, 'Comissão recebida', v.ok.recebida ? 'recebida' : '', `<div id="fvBoxA" class="${v.tipo === 'adiantamento' ? '' : 'hide'}"><div class="row2"><div class="fg"><label>Adiantamento previsto para</label><input id="fvPrevA" type="date" value="${v.prevA || ''}"></div><div class="fg" style="align-self:end">${chk('fvRecA', f.recAdiant, 'Adiantamento recebido')}</div></div></div>
@@ -8167,7 +8491,9 @@ window.abrirVendaFin = (id, semAbrir) => {
       <div class="hint" style="margin:0">Marcando como recebida, a entrada vai sozinha para “Entradas e saídas”.</div>`)}
     ${sec(6, 'Corretor pago', f.corPago ? 'pago' : '', chk('fvCorP', f.corPago, `Comissão do corretor paga (${brl2(v.valCor)})`))}
     </div>
+    <div class="fv-bloco fv-descs"><h4>Descontos na comissão do corretor</h4><div class="hint" style="margin:0 0 8px">Adiantamento, vale ou outro desconto. Sai da parte do corretor (a divisão com a imobiliária é sempre sobre o valor líquido, depois do imposto).</div><div id="fvDescLista"></div><button type="button" class="btn btn-ghost" onclick="fvDescAdd()">+ Adicionar desconto</button></div>
     <div class="fg"><label>Observação</label><textarea id="fvObs" rows="2">${esc(f.obs || '')}</textarea></div>`;
+  window._fvDesc = (f.descontos || []).map(x => ({ ...x })); window._fvCor = v.cor; fvDescDesenha();
   if (!semAbrir) abrir('fvModal');
 };
 function lancImp(d, n, r, b){
@@ -8231,6 +8557,15 @@ window.moverVendaFin = async (id, alvo) => {
   document.addEventListener('touchcancel', limpar);
   document.addEventListener('contextmenu', e => { if (e.target.closest && e.target.closest('.fv-funil .fv-card')) e.preventDefault(); });
 })();
+const DESC_TIPOS = [['adiantamento','Adiantamento / vale'], ['avulso','Desconto avulso']];
+function fvDescDesenha(){
+  const box = $('fvDescLista'); if (!box) return; const cor = window._fvCor || [];
+  box.innerHTML = (window._fvDesc || []).map((x, i) => `<div class="fv-desc-l"><select onchange="_fvDesc[${i}].tipo=this.value">${DESC_TIPOS.map(([k,n]) => `<option value="${k}" ${x.tipo === k ? 'selected' : ''}>${n}</option>`).join('')}</select>
+    <input placeholder="Descrição" value="${esc(x.descricao || '')}" oninput="_fvDesc[${i}].descricao=this.value">${cor.length > 1 ? `<select onchange="_fvDesc[${i}].uid=this.value"><option value="">Dividir entre todos</option>${cor.filter(c => c.uid).map(c => `<option value="${c.uid}" ${x.uid === c.uid ? 'selected' : ''}>${esc(primeiro(c.nome))}</option>`).join('')}</select>` : ''}
+    <input class="fv-desc-v" inputmode="decimal" placeholder="R$" value="${x.valor ? String(x.valor).replace('.', ',') : ''}" oninput="_fvDesc[${i}].valor=lerDec(this.value)"><button type="button" class="icon-btn del" onclick="_fvDesc.splice(${i},1);fvDescDesenha()" aria-label="Tirar desconto">🗑️</button></div>`).join('') || '<div class="muted" style="font-size:13px;margin-bottom:8px">Nenhum desconto.</div>';
+}
+window.fvDescDesenha = fvDescDesenha;
+window.fvDescAdd = () => { (window._fvDesc ||= []).push({ tipo:'adiantamento', descricao:'', valor:0, uid:'' }); fvDescDesenha(); };
 window.fvTipoAuto = () => { const rg = regraConst($('fvCons').value); $('fvTipo').value = rg.tipo; };
 window.salvarVendaFin = async () => {
   const r = vendasFin().find(x => x.id === finVEdit); if (!r) return;
@@ -8238,7 +8573,9 @@ window.salvarVendaFin = async () => {
   const bruta = $('fvBruta').value.trim();
   const d = { reservaId:r.id, cliente:r.cliente || '', construtora:$('fvCons').value.trim(), tipo:$('fvTipo').value, pctImob:Number($('fvPct').value) || 0, pctAdiant:Number($('fvPctA').value) || 0, pctCor:Number($('fvPctC').value) || 0,
     comissao:bruta ? lerDec(bruta) : '', valCor:$('fvValCor').value.trim() ? lerDec($('fvValCor').value) : '', impostoV:$('fvImpV').value.trim() ? lerDec($('fvImpV').value) : '', processo:$('fvProc').value, emissor:$('fvEmissor').value, nf:$('fvNF').value.trim(), pctImposto:Number($('fvPctNF').value) || 0,
-    sinalPago:$('fvSinal').checked, sinalValor:num('fvSinalV'), geraEntrada:$('fvGera').value, entradaValor:num('fvEntV'), entradaForma:$('fvForma').value, entradaPaga:$('fvEntPaga').checked,
+    sinalPago:$('fvSinal').checked, sinalValor:num('fvSinalV'), sinalData:$('fvSinalD').value, sinalForma:$('fvSinalF').value, sinalQuem:$('fvSinalQ').value,
+    geraEntrada:$('fvGera').value, entradaValor:num('fvEntV'), entradaForma:$('fvForma').value, entradaPaga:$('fvEntPaga').checked, entradaParcelas:Number($('fvEntParc').value) || 0, entradaPagas:Number($('fvEntPagas').value) || 0,
+    descontos:(window._fvDesc || []).filter(x => Number(x.valor) > 0).map(x => ({ tipo:x.tipo || 'avulso', descricao:String(x.descricao || '').trim().slice(0, 100), valor:Math.round(Number(x.valor) * 100) / 100, uid:x.uid || '' })),
     identificada:$('fvIdent').checked, assinaturaEm:$('fvAss').value, nota:$('fvNota').value, faturada:$('fvFat').checked,
     prevAdiant:$('fvPrevA').value, prevRestante:$('fvPrevR').value, recAdiant:$('fvTipo').value === 'adiantamento' && $('fvRecA').checked, recRestante:$('fvRecR').checked, corPago:$('fvCorP').checked,
     obs:$('fvObs').value.trim(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
@@ -8248,6 +8585,7 @@ window.salvarVendaFin = async () => {
   if (d.assinaturaEm && d.prevRestante === somaDiasISO(d.assinaturaEm, rg.diasRestante)) d.prevRestante = '';
   if (!v0.f.assinaturaEm && d.assinaturaEm && d.prevRestante && d.prevRestante === v0.prevR) d.prevRestante = '';
   try {
+    logEdicao('fin_vendas', r.id, r.cliente, v0.f, d, ROT_F);
     const b = writeBatch(db); b.set(doc(db,'fin_vendas',r.id), d, { merge:true });
     const v = vendaFin({ ...r }); Object.assign(finVendas, { [r.id]:{ ...(finVendas[r.id] || {}), ...d } }); const n = vendaFin(r);
     const lanc = (suf, on, dados) => { const ref = doc(db,'fin_lanc','cv_' + r.id + '_' + suf); const tem = finLanc.some(x => x.id === 'cv_' + r.id + '_' + suf);
@@ -8287,7 +8625,7 @@ function desenharFixas(){
   const outras = finFixas.filter(x => !ehFolha(x)), folha = finFixas.filter(ehFolha);
   const grupos = {}; outras.forEach(x => (grupos[x.categoria || 'Outras'] = grupos[x.categoria || 'Outras'] || []).push(x));
   const tot = finFixas.reduce((a,x) => a + (Number(x.valor) || 0), 0);
-  const linha = x => `<div class="fx-row"><div class="fx-i"><input class="fx-nome" value="${esc(x.descricao)}" onchange="renomearFixa('${x.id}', this.value)" title="Mudar o nome"><small>todo dia ${x.dia || 5}${x.varia ? ' · valor muda todo mês' : ''}</small></div><span class="fx-rs">R$</span><input class="fx-val" inputmode="decimal" value="${String(x.valor || 0).replace('.', ',')}" onchange="valorFixa('${x.id}', this.value)" title="Mudar o valor"><button class="icon-btn del" onclick="excluirFixa('${x.id}')">🗑️</button></div>`;
+  const linha = x => `<div class="fx-row"><div class="fx-i"><input class="fx-nome" value="${esc(x.descricao)}" onchange="renomearFixa('${x.id}', this.value)" title="Mudar o nome"><small>todo dia ${x.dia || 5}${x.varia ? ' · valor muda todo mês' : ''}${Number(x.parcelas) ? (() => { const k = parcelaNoMes(x, mesAtual()); return ` · ${k === -1 ? (x.inicio > mesAtual() ? 'começa em ' + nomeMes(x.inicio).toLowerCase() : '✓ parcelamento quitado') : `parcela ${k} de ${x.parcelas}`}`; })() : ''}</small></div><span class="fx-rs">R$</span><input class="fx-val" inputmode="decimal" value="${String(x.valor || 0).replace('.', ',')}" onchange="valorFixa('${x.id}', this.value)" title="Mudar o valor"><button class="icon-btn del" onclick="excluirFixa('${x.id}')">🗑️</button></div>`;
   $('fixasLista').innerHTML = finFixas.length ? `<div class="fx-total"><span>Total por mês</span><b>${brl2(tot)}</b></div>`
     + (folha.length ? `<div class="fx-grupo"><div class="fx-gh"><b>Folha e pró-labore</b><span>${brl2(folha.reduce((a,x) => a + (Number(x.valor) || 0), 0))}</span></div><div class="fx-folha">${folha.length} pessoa${folha.length > 1 ? 's' : ''}. O salário de cada uma é calculado na aba <button class="link" onclick="fechar('fixasModal');finAba='salarios';render()">Salários</button>.</div></div>` : '')
     + Object.keys(grupos).sort((a,b) => a.localeCompare(b, 'pt-BR')).map(g => `<div class="fx-grupo"><div class="fx-gh"><b>${esc(g)}</b><span>${brl2(grupos[g].reduce((a,x) => a + (Number(x.valor) || 0), 0))}</span></div>${grupos[g].sort((a,b) => (a.dia || 0) - (b.dia || 0)).map(linha).join('')}</div>`).join('')
@@ -8297,6 +8635,15 @@ window.salvarFixa = async () => {
   const descricao = $('fxDesc').value.trim(), valor = lerDec($('fxValor').value) || 0, dia = Math.min(28, Math.max(1, Number($('fxDia').value) || 5));
   if (!descricao || !valor) { toast('Preencha a descrição e o valor'); return; }
   try { await gravar(setDoc(doc(collection(db,'fin_fixas')), { descricao, valor, dia, categoria:$('fxCat').value, ativo:true, criadoEm:Date.now(), criadoPor:perfil.nome })); $('fxDesc').value = ''; $('fxValor').value = ''; _fixasFeitas = ''; toast('Despesa fixa salva. Ela aparece todo mês nos lançamentos.'); setTimeout(desenharFixas, 300); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+window.salvarParcelamento = async () => {
+  const descricao = $('pzDesc').value.trim(), valor = lerDec($('pzValor').value) || 0, dia = Math.min(28, Math.max(1, Number($('pzDia').value) || 20)), parcelas = Number($('pzTotal').value) || 0, atual = Math.max(1, Number($('pzAtual').value) || 1);
+  if (!descricao || !valor || parcelas < 2) { toast('Preencha a descrição, o valor da parcela e o total de parcelas'); return; }
+  if (atual > parcelas) { toast('A parcela deste mês não pode passar do total'); return; }
+  const [a, m] = mesAtual().split('-').map(Number), d = new Date(a, m - 1 - (atual - 1), 1), inicio = d.getFullYear() + '-' + pad(d.getMonth() + 1);
+  try { await gravar(setDoc(doc(collection(db,'fin_fixas')), { descricao, valor, dia, categoria:'Imposto / tributo', parcelas, inicio, ativo:true, criadoEm:Date.now(), criadoPor:perfil.nome }));
+    ['pzDesc','pzValor','pzDia','pzTotal','pzAtual'].forEach(i => $(i).value = ''); _fixasFeitas = ''; toast(`Parcelamento salvo: parcela ${atual} de ${parcelas} neste mês`); setTimeout(desenharFixas, 400); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.valorFixa = async (id, v) => { try { await gravar(setDoc(doc(db,'fin_fixas',id), { valor:lerDec(v) }, { merge:true })); _fixasFeitas = ''; toast('Valor atualizado. Vale a partir do próximo mês (o deste mês você muda no lançamento).'); } catch(e) { toast('Erro: ' + e.message); } };
@@ -9045,7 +9392,7 @@ window.lerTextoReserva = () => {
 };
 window.editarReserva = id => {
   if (!souGerente() && (id || !['corretor','coordenador'].includes(perfil?.papel))) return;
-  const r = id ? reservasTodas.find(x => x.id === id) : null; rvId = r ? r.id : null;
+  const r = id ? reservasTodas.find(x => x.id === id) : null; rvId = r ? r.id : null; window._histRef = rvId; $('rvHist')?.classList.toggle('hide', !(souGerente() && r));
   $('rvTitulo').textContent = r ? 'Editar reserva' : 'Nova reserva';
   const v = (k, x) => { $(k).value = x ?? ''; };
   v('rvDia', r?.dia || hojeISO()); v('rvCor', r?.corretorTexto); v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
@@ -9077,7 +9424,9 @@ window.salvarReserva = async () => {
   }
   const id = rvId || ('r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36))));
   if (!rvId && reservasTodas.some(x => x.id === id)) { if (!confirm('Já existe uma reserva desse cliente. Atualizar a que existe?')) return; }
+  const rAntes = rvId ? reservasTodas.find(x => x.id === rvId) : null;
   try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓');
+    if (rAntes) logEdicao('reservas', id, d.cliente, rAntes, d, ROT_R);
     const rx = reservasTodas.find(x => x.id === id); if (rvId && rx && rx.fonte === 'corretor' && !rx.avisadoOk) avisarCarteiro('reserva_ok', id); }
   catch(e) { toast('Erro: ' + e.message); }
 };
