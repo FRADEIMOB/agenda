@@ -3695,7 +3695,7 @@ window.souDono = souDono;
 // CEO: só visualiza os números e resultados; a agenda pessoal dele é particular. Só o gestor tem acesso a tudo.
 const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
-const VIEWS_CEO = ['painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
+const VIEWS_CEO = ['analises','painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const podeGerir = () => souGerente() || souCoord();
 const souCorresp = () => souAtivo() && perfil.papel === 'correspondente';
@@ -5015,7 +5015,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 82;
+const APP_VERSAO = 83;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -6908,7 +6908,7 @@ const AN_DOCS = [['identidade','RG e CPF, ou CNH', true], ['residencia','Comprov
   ['conjuge','Documentos do 2º proponente', false], ['outro','Outros documentos', false]];
 const anDocNome = t => (AN_DOCS.find(d => d[0] === t) || [, t === 'resposta' ? 'Carta / simulação da Prime' : 'Documento'])[1];
 const anCfg = () => appCfg.analises || { todos:false, testadores:[] };
-function anVisivel(){ if (!souAtivo()) return false; if (souCorresp() || souGerente()) return true; const c = anCfg(); return (!!c.todos && ['corretor','coordenador'].includes(perfil.papel)) || (c.testadores || []).includes(uidAtual); }
+function anVisivel(){ if (!souAtivo()) return false; if (souCorresp() || souGerente() || souCoord()) return true; const c = anCfg(); return (!!c.todos && ['corretor','coordenador'].includes(perfil.papel)) || (c.testadores || []).includes(uidAtual); }
 window.anVisivel = anVisivel;
 const anPodeCriar = () => anVisivel() && !souCorresp() && !souCeo() && perfil.papel !== 'sdr';
 function assinarAnalises(){
