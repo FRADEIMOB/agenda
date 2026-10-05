@@ -4872,7 +4872,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 80;
+const APP_VERSAO = 81;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -6567,7 +6567,7 @@ function htmlMeusLeads(){
 let notifs = [], _notifPrimeira = true, _notifVistas = new Set();
 const NOTIF_CATS = [
   ['aulas', '🎓 Aula nova publicada', p => true],
-  ['checkin', '🏢 Presença no escritório (lembrete, atrasos, atendimento externo)', p => p !== 'sdr'],
+  ['checkin', '🏢 Presença no escritório (lembrete, atrasos, atendimento externo)', p => true],
   ['leads', '📞 Lead novo para você', p => ['corretor','coordenador'].includes(p)],
   ['visitas', '🏠 Visitas (marcada para você, lembrete 1 hora antes, confirmar as de amanhã)', p => p !== 'gerente' || true],
   ['cartas', '📄 Cartas e avaliações (mudou de status, aprovada, perto de vencer)', p => p !== 'sdr'],
@@ -6853,11 +6853,11 @@ function posicaoMinha(){ if (souGerente()) { const i = checkinsHoje.filter(c => 
 function htmlCiResumoGestor(){
   if (!podeGerir() || !ciCfg().dias.includes(new Date().getDay())) return '';
   const outros = checkinsHoje.filter(c => c.uid !== uidAtual), dentro = outros.filter(ciNoEscritorio).length, fora = outros.filter(ciFora).length, atr = outros.filter(ciAtrasado).length;
-  const faltam = pessoasPlantao().filter(p => (souGerente() || p.equipe === perfil.equipe) && p.uid !== uidAtual && !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status)).length;
+  const faltam = pessoasPresenca().filter(p => ciMinhaVisao(p) && p.uid !== uidAtual && !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status)).length;
   return `<div class="ci-res" onclick="setView('corretores')"><span>🏢</span><div><b>Presença${souGerente() ? '' : ' da sua equipe'}</b><small>${dentro} no escritório${fora ? ` · ${fora} em atendimento externo` : ''}${atr ? ` · <em class="ci-atr">${atr} atrasado${atr > 1 ? 's' : ''}</em>` : ''}${faltam ? ` · ${faltam} sem check-in` : ''}</small></div><button class="link">Ver</button></div>`;
 }
 function htmlCheckinHoje(){
-  if (!['corretor','coordenador'].includes(perfil?.papel)) return htmlCiResumoGestor();
+  if (!['corretor','coordenador','sdr'].includes(perfil?.papel)) return htmlCiResumoGestor();
   const c = meuCheckin, cfg = ciCfg(), diaSem = new Date().getDay();
   if (!c) { if (!cfg.dias.includes(diaSem)) return '';
     const atras = hm(Date.now()) > cfg.hora;
@@ -6875,7 +6875,7 @@ function htmlCiGestao(){
   if (!podeGerir()) return '';
   const o = ordemFila(), ext = checkinsHoje.filter(ciFora), sairam = checkinsHoje.filter(c => c.saida);
   const nome = u => checkinsHoje.find(c => c.uid === u)?.nome || perfisLista.find(p => p.uid === u)?.nome || '?';
-  const faltam = pessoasPlantao().filter(p => (souGerente() || p.equipe === perfil.equipe) && p.uid !== uidAtual).filter(p => !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status));
+  const faltam = pessoasPresenca().filter(p => ciMinhaVisao(p) && p.uid !== uidAtual).filter(p => !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status));
   const mapa = l => l ? ` · <a href="https://maps.google.com/?q=${l.lat},${l.lng}" target="_blank" rel="noopener">ver no mapa</a>` : '';
   return `<div class="ci-g"><div class="rep-sec" style="margin:0 0 6px">${souGerente() ? 'No escritório' : 'No escritório · sua equipe'} (ordem de chegada)</div>
     ${o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="ci-l"><span class="ci-pos">${i + 1}º</span><b>${esc(nome(u))}</b><span class="ci-h"><span title="como marcou">${CI_MEIO[c.via] || ''}</span> ${hm(ciChegada(c))}${ciAtrasado(c) ? ' · <em class="ci-atr">atrasado</em>' : ''}${(c.externos || []).length ? ` · ${c.externos.length} saída${c.externos.length > 1 ? 's' : ''} para atendimento` : ''}</span></div>`; }).join('') : '<div class="muted" style="font-size:13px">Ninguém no escritório agora.</div>'}
@@ -8365,6 +8365,9 @@ function enviarWhats(tel, txt){
 }
 // ---------- presença (o gerente marca) ----------
 const PRES_OP = [['presente','✅ Presente','var(--ok)'], ['falta','❌ Faltou','var(--danger)'], ['folga','🌴 Folga','#64748b']];
+// presença no escritório: corretores, coordenadores e SDRs (o coordenador vê só os corretores da equipe dele)
+function pessoasPresenca(){ return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel)).sort((a,b) => (eqNome(a.equipe)).localeCompare(eqNome(b.equipe),'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR')); }
+const ciMinhaVisao = p => souGerente() || (p.papel === 'corretor' && p.equipe === perfil.equipe);
 function pessoasPlantao(){ return perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'gerente' && p.papel !== 'sdr').sort((a,b) => (eqNome(a.equipe)).localeCompare(eqNome(b.equipe),'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR')); }
 function renderPresenca(){
   const card = $('cardPresenca'); if (!card) return;
@@ -8372,7 +8375,7 @@ function renderPresenca(){
   if (!souGerente()) return;
   if (!presDia) window.presDia = hojeISO();
   $('presData').value = presDia;
-  const m = presencas[presDia]?.marcados || {}, ps = pessoasPlantao();
+  const m = presencas[presDia]?.marcados || {}, ps = pessoasPresenca();
   const n = st => ps.filter(p => m[p.uid]?.status === st).length;
   $('presResumo').textContent = `${n('presente')} presente${n('presente')!==1?'s':''} · ${n('falta')} falta${n('falta')!==1?'s':''} · ${n('folga')} de folga · ${ps.length - n('presente') - n('falta') - n('folga')} sem marcar`;
   let eqAnt = null;
