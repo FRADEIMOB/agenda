@@ -1389,6 +1389,10 @@ button.bg-card{cursor:pointer;transition:border-color .15s}button.bg-card:hover{
 .ci-l{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px dashed var(--border);font-size:14px}.ci-l:last-of-type{border:0}
 .ci-pos{width:30px;font-weight:800;color:var(--accent)}.ci-h{margin-left:auto;color:var(--muted);font-size:12.5px;text-align:right}
 .ci-res{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:11px 14px;margin-bottom:12px;cursor:pointer}.ci-res>span{font-size:22px}.ci-res div{flex:1;display:grid}.ci-res small{color:var(--muted)}
+.ci-card.fora{background:var(--card);border-color:color-mix(in srgb,#2563eb 35%,var(--border))}
+.ci-card .ci-qr{flex-basis:100%;text-align:left;font-size:12.5px}
+.ci-leg{font-size:11.5px;color:var(--muted);margin-top:10px}
+.ci-locbox{display:grid;gap:8px;padding:12px;border:1px dashed var(--border);border-radius:12px;margin-bottom:12px;font-size:13.5px}.ci-ok{color:var(--ok);font-weight:600}
 .ci-sairam,.ci-faltam{font-size:12.5px;color:var(--muted);margin-top:8px}.ci-faltam{color:var(--danger)}
 .ci-cfg{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px}.ci-cfg>label{display:grid;gap:4px;font-size:12.5px;color:var(--muted)}.ci-cfg input[type=time]{width:130px}
 .ci-dias{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}.ci-dias label{display:flex;align-items:center;gap:4px}.ci-dias input{width:auto}
@@ -1923,7 +1927,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div class="rc" id="rcTela">
           <div class="rc-qr"><div class="rc-marca"><b>Frade <span>Imóveis</span></b><small>Check-in no escritório</small></div>
             <div class="rc-codigo" id="rcQr"><div class="rc-load">Gerando o código…</div></div>
-            <p>Abra o app, toque em <b>📷 Fazer check-in</b> e aponte para este código.</p><div class="rc-tempo"><i id="rcBarra"></i></div></div>
+            <p>Abra o app e toque em <b>🏢 Cheguei no escritório</b>, ou aponte a câmera do celular para este código.</p><div class="rc-tempo"><i id="rcBarra"></i></div></div>
           <div class="rc-lado"><div class="rc-hora"><b id="rcRelogio">--:--</b><span id="rcData"></span></div>
             <div class="rc-prox" id="rcProx"></div>
             <div class="rc-fila"><h3>No escritório agora · ordem de chegada</h3><div id="rcFila"></div></div>
@@ -2038,7 +2042,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div class="page-head"><div><h1>Corretores</h1><div class="sub" id="corSub"></div></div>
           <select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div>
         <div class="janela" id="janelaCor"></div>
-        <div class="card gest hide" id="cardCheckin" style="margin-bottom:20px"><div class="card-head"><h2>📷 Check-in de hoje</h2><button class="btn btn-ghost" onclick="setView('recepcao')">Abrir a tela da recepção</button></div><div id="ciGestao"></div></div>
+        <div class="card gest hide" id="cardCheckin" style="margin-bottom:20px"><div class="card-head"><h2>🏢 Presença de hoje</h2><button class="btn btn-ghost" onclick="setView('recepcao')">Abrir a tela da recepção</button></div><div id="ciGestao"></div></div>
         <div class="card hide" id="cardPresenca" style="margin-bottom:20px">
           <div class="card-head pt-head"><h2>Presença no escritório</h2><input type="date" id="presData" onchange="mudarDiaPresenca(this.value)" style="width:auto"></div>
           <div class="hint" style="margin-top:0" id="presResumo"></div>
@@ -2137,7 +2141,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- CONFIGURAÇÕES -->
       <section class="view" id="v-config">
         <div class="page-head"><div><h1>Configurações</h1><div class="sub">Personalize a sua agenda. <span class="ver-app" id="verApp"></span></div></div></div>
-        <div class="card gerente-only hide" style="margin-bottom:20px"><div class="card-head"><h2>📷 Check-in no escritório</h2></div><div class="hint" style="margin:0 0 10px">A partir deste horário, quem chegar entra como atrasado, e quem ainda não fez o check-in recebe um aviso 10 minutos depois.</div><div id="ciCfgBox"></div></div>
+        <div class="card gerente-only hide" style="margin-bottom:20px"><div class="card-head"><h2>🏢 Presença no escritório</h2></div><div class="hint" style="margin:0 0 10px">O corretor marca a presença pelo botão <b>Cheguei no escritório</b> (o app confere se ele está perto do escritório), pelo código da tela da recepção ou como <b>atendimento externo</b>. Quem chegar depois do horário entra como atrasado, e quem ainda não marcou recebe um aviso 10 minutos depois.</div><div id="ciCfgBox"></div></div>
         <div class="card" id="cfgNotif" style="margin-bottom:20px"><div class="card-head"><h2>🔔 Quais avisos você quer receber</h2></div><div class="hint" style="margin:0 0 10px">Tudo aparece no sino 🔔 lá em cima. Os que estiverem ligados também chegam no celular, se as notificações estiverem ativadas no aparelho.</div><div id="prefNotif"></div></div>
         <div class="set-grid">
           <div class="card">
@@ -2658,11 +2662,11 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <div class="modal" id="ciExtModal">
   <div class="sheet" style="width:min(460px,100%)">
-    <div class="sheet-head"><h2>Estou fora, atendendo</h2><button class="icon-btn" onclick="fechar('ciExtModal')" data-ic="x"></button></div>
-    <div class="sheet-body"><div class="hint" style="margin:0 0 10px">Use quando você começar o dia fora do escritório: visita, empreendimento, cartório, atendimento. Conta como dia de trabalho e a gerência vê onde você está.</div>
-      <div class="fg"><label>Onde você está?</label><input id="ciExtOnde" maxlength="120" placeholder="Ex.: visita no Residencial Colibris com a cliente Ana"></div>
+    <div class="sheet-head"><h2>🚗 Atendimento externo</h2><button class="icon-btn" onclick="fechar('ciExtModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="hint" style="margin:0 0 10px">Visita, empreendimento, cartório, Caixa, atendimento na casa do cliente… Conta como presença e a gerência e o seu coordenador veem onde você está. Quando voltar, toque em <b>Cheguei no escritório</b>.</div>
+      <div class="fg"><label>Onde você vai estar?</label><input id="ciExtOnde" maxlength="120" placeholder="Ex.: visita no Residencial Colibris com a cliente Ana"></div>
       <label class="fv-chk"><input type="checkbox" id="ciExtGps" checked> Mandar a minha localização</label></div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('ciExtModal')">Cancelar</button><button class="btn btn-primary" id="ciExtBt" onclick="checkinExterno()">Fazer check-in</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('ciExtModal')">Cancelar</button><button class="btn btn-primary" id="ciExtBt" onclick="checkinExterno()">Marcar presença externa</button></div>
   </div>
 </div>
 <div class="modal" id="metasModal">
@@ -4868,7 +4872,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 79;
+const APP_VERSAO = 80;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -6563,7 +6567,7 @@ function htmlMeusLeads(){
 let notifs = [], _notifPrimeira = true, _notifVistas = new Set();
 const NOTIF_CATS = [
   ['aulas', '🎓 Aula nova publicada', p => true],
-  ['checkin', '📷 Check-in (lembrete de quem ainda não chegou)', p => p !== 'sdr'],
+  ['checkin', '🏢 Presença no escritório (lembrete, atrasos, atendimento externo)', p => p !== 'sdr'],
   ['leads', '📞 Lead novo para você', p => ['corretor','coordenador'].includes(p)],
   ['visitas', '🏠 Visitas (marcada para você, lembrete 1 hora antes, confirmar as de amanhã)', p => p !== 'gerente' || true],
   ['cartas', '📄 Cartas e avaliações (mudou de status, aprovada, perto de vencer)', p => p !== 'sdr'],
@@ -6820,6 +6824,17 @@ const ciHoje = () => hojeISO(), ciId = (uid, dia = ciHoje()) => dia + '_' + uid;
 const ciCfg = () => ({ hora:'08:30', dias:[1,2,3,4,5,6], ...(appCfg.checkin || {}) });
 const hm = ms => { const d = new Date(ms); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
 const ciAtrasado = c => !!c && c.via !== 'externo' && hm(c.entrada) > ciCfg().hora;
+// fora = começou o dia fora (e ainda não chegou) ou saiu para um atendimento e ainda não voltou
+const ciFora = c => !!c && !c.saida && (!!c.externoAgora || (c.via === 'externo' && !c.chegouEscritorio));
+const ciNoEscritorio = c => !!c && !c.saida && !ciFora(c);
+const ciOnde = c => c.externoAgora?.onde || c.onde || '';
+const ciDesde = c => c.externoAgora?.desde || c.entrada;
+const ciChegada = c => c.via === 'externo' ? (c.chegouEscritorio || c.entrada) : c.entrada;
+const CI_MEIO = { qr:'📷', gps:'📍', manual:'✋', externo:'🚗' };
+function distanciaM(a, b){ const R = 6371000, r = x => x * Math.PI / 180, dLat = r(b.lat - a.lat), dLng = r(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLng / 2) ** 2; return Math.round(2 * R * Math.asin(Math.sqrt(h))); }
+const pegarGps = () => new Promise(ok => { if (!navigator.geolocation) return ok(null);
+  navigator.geolocation.getCurrentPosition(p => ok({ lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6), prec:Math.round(p.coords.accuracy) }), () => ok(null), { timeout:12000, enableHighAccuracy:true, maximumAge:0 }); });
 function assinarCheckins(){
   checkinsHoje = []; meuCheckin = null; filaHoje = null; checkinsMes = [];
   if (!souAtivo()) return;
@@ -6832,38 +6847,42 @@ function assinarCheckins(){
 }
 // quem está no escritório agora, pela ordem de chegada
 function ordemFila(){
-  const presentes = checkinsHoje.filter(c => !c.saida && c.via !== 'externo').sort((a,b) => (a.entrada || 0) - (b.entrada || 0)).map(c => c.uid);
-  return presentes;
+  return checkinsHoje.filter(ciNoEscritorio).sort((a,b) => ciChegada(a) - ciChegada(b)).map(c => c.uid);
 }
 function posicaoMinha(){ if (souGerente()) { const i = checkinsHoje.filter(c => c.via !== 'externo').sort((a,b) => a.entrada - b.entrada).findIndex(c => c.uid === uidAtual); return i + 1; } return filaHoje?.ordem ? (filaHoje.ordem.indexOf(uidAtual) + 1) : 0; }
 function htmlCiResumoGestor(){
   if (!podeGerir() || !ciCfg().dias.includes(new Date().getDay())) return '';
-  const chegaram = checkinsHoje.filter(c => c.via !== 'externo' && c.uid !== uidAtual).length, fora = checkinsHoje.filter(c => c.via === 'externo').length, atr = checkinsHoje.filter(ciAtrasado).length;
+  const outros = checkinsHoje.filter(c => c.uid !== uidAtual), dentro = outros.filter(ciNoEscritorio).length, fora = outros.filter(ciFora).length, atr = outros.filter(ciAtrasado).length;
   const faltam = pessoasPlantao().filter(p => (souGerente() || p.equipe === perfil.equipe) && p.uid !== uidAtual && !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status)).length;
-  return `<div class="ci-res" onclick="setView('corretores')"><span>📷</span><div><b>Check-in${souGerente() ? '' : ' da sua equipe'}</b><small>${chegaram} chegaram${fora ? ` · ${fora} fora atendendo` : ''}${atr ? ` · <em class="ci-atr">${atr} atrasado${atr > 1 ? 's' : ''}</em>` : ''}${faltam ? ` · ${faltam} sem check-in` : ''}</small></div><button class="link">Ver</button></div>`;
+  return `<div class="ci-res" onclick="setView('corretores')"><span>🏢</span><div><b>Presença${souGerente() ? '' : ' da sua equipe'}</b><small>${dentro} no escritório${fora ? ` · ${fora} em atendimento externo` : ''}${atr ? ` · <em class="ci-atr">${atr} atrasado${atr > 1 ? 's' : ''}</em>` : ''}${faltam ? ` · ${faltam} sem check-in` : ''}</small></div><button class="link">Ver</button></div>`;
 }
 function htmlCheckinHoje(){
   if (!['corretor','coordenador'].includes(perfil?.papel)) return htmlCiResumoGestor();
   const c = meuCheckin, cfg = ciCfg(), diaSem = new Date().getDay();
   if (!c) { if (!cfg.dias.includes(diaSem)) return '';
     const atras = hm(Date.now()) > cfg.hora;
-    return htmlCiResumoGestor() + `<div class="ci-card ${atras ? 'atras' : ''}"><div class="ci-txt"><b>${atras ? '⏰ Você ainda não fez o check-in' : '👋 Chegou na Frade?'}</b><small>Entrada às ${cfg.hora}. Faça o check-in pelo código da recepção.</small></div>
-      <div class="ci-bts"><button class="btn btn-primary ci-bt" onclick="abrirCamera()">📷 Fazer check-in</button><button class="link" onclick="abrir('ciExtModal')">Estou fora, atendendo</button></div></div>`; }
+    return htmlCiResumoGestor() + `<div class="ci-card ${atras ? 'atras' : ''}"><div class="ci-txt"><b>${atras ? '⏰ Você ainda não marcou a presença' : '👋 Bom dia! Marque a sua presença'}</b><small>Entrada às ${cfg.hora}.</small></div>
+      <div class="ci-bts"><button class="btn btn-primary ci-bt" id="ciBtEsc" onclick="chegueiEscritorio()">🏢 Cheguei no escritório</button><button class="btn btn-ghost ci-bt" onclick="abrirExterno()">🚗 Estou em atendimento externo</button></div>
+      <button class="link ci-qr" onclick="abrirCamera()">📷 Ou leia o código da recepção</button></div>`; }
+  if (c.saida) return `<div class="ci-card feito"><div class="ci-txt"><b>👋 Até amanhã!</b><small>Chegou às ${hm(c.entrada)} e encerrou o dia às ${hm(c.saida)}.</small></div></div>`;
+  if (ciFora(c)) return htmlCiResumoGestor() + `<div class="ci-card fora"><div class="ci-txt"><b>🚗 Em atendimento externo desde ${hm(ciDesde(c))}</b><small>${esc(ciOnde(c))}</small></div>
+    <div class="ci-bts"><button class="btn btn-primary" id="ciBtEsc" onclick="chegueiEscritorio()">🏢 Cheguei no escritório</button><button class="btn btn-ghost" onclick="fazerCheckout()">Encerrar o dia 👋</button></div></div>`;
   const pos = posicaoMinha();
-  if (c.saida) return `<div class="ci-card feito"><div class="ci-txt"><b>👋 Até amanhã!</b><small>Chegou às ${hm(c.entrada)} e saiu às ${hm(c.saida)}.</small></div></div>`;
-  return htmlCiResumoGestor() + `<div class="ci-card feito"><div class="ci-txt"><b>${c.via === 'externo' ? '📍 Check-in fora do escritório' : '✅ Check-in feito'} às ${hm(c.entrada)}${ciAtrasado(c) ? ' <em class="ci-atr">atrasado</em>' : ''}</b><small>${c.via === 'externo' ? esc(c.onde || '') : pos ? `Você foi o <b>${pos}º</b> a chegar hoje.` : 'Bom trabalho!'}</small></div>
-    <div class="ci-bts"><button class="btn btn-ghost" onclick="fazerCheckout()">Saindo 👋</button></div></div>`;
+  return htmlCiResumoGestor() + `<div class="ci-card feito"><div class="ci-txt"><b>✅ No escritório desde ${hm(ciChegada(c))}${ciAtrasado(c) ? ' <em class="ci-atr">atrasado</em>' : ''}</b><small>${pos ? `Você foi o <b>${pos}º</b> a chegar hoje.` : 'Bom trabalho!'}</small></div>
+    <div class="ci-bts"><button class="btn btn-ghost" onclick="abrirExterno()">🚗 Sair para atendimento</button><button class="btn btn-ghost" onclick="fazerCheckout()">Encerrar o dia 👋</button></div></div>`;
 }
 function htmlCiGestao(){
   if (!podeGerir()) return '';
-  const o = ordemFila(), ext = checkinsHoje.filter(c => c.via === 'externo' && !c.saida), sairam = checkinsHoje.filter(c => c.saida);
+  const o = ordemFila(), ext = checkinsHoje.filter(ciFora), sairam = checkinsHoje.filter(c => c.saida);
   const nome = u => checkinsHoje.find(c => c.uid === u)?.nome || perfisLista.find(p => p.uid === u)?.nome || '?';
   const faltam = pessoasPlantao().filter(p => (souGerente() || p.equipe === perfil.equipe) && p.uid !== uidAtual).filter(p => !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status));
+  const mapa = l => l ? ` · <a href="https://maps.google.com/?q=${l.lat},${l.lng}" target="_blank" rel="noopener">ver no mapa</a>` : '';
   return `<div class="ci-g"><div class="rep-sec" style="margin:0 0 6px">${souGerente() ? 'No escritório' : 'No escritório · sua equipe'} (ordem de chegada)</div>
-    ${o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="ci-l"><span class="ci-pos">${i + 1}º</span><b>${esc(nome(u))}</b><span class="ci-h">${hm(c.entrada)}${ciAtrasado(c) ? ' · <em class="ci-atr">atrasado</em>' : ''}</span></div>`; }).join('') : '<div class="muted" style="font-size:13px">Ninguém fez check-in ainda.</div>'}
-    ${ext.length ? `<div class="rep-sec" style="margin:10px 0 6px">Fora, atendendo</div>${ext.map(c => `<div class="ci-l"><span class="ci-pos">📍</span><b>${esc(c.nome)}</b><span class="ci-h">${hm(c.entrada)} · ${esc(c.onde || '')}${c.local ? ` · <a href="https://maps.google.com/?q=${c.local.lat},${c.local.lng}" target="_blank" rel="noopener">ver no mapa</a>` : ''}</span></div>`).join('')}` : ''}
-    ${sairam.length ? `<div class="ci-sairam">Já saíram: ${sairam.map(c => `${esc(primeiro(c.nome))} (${hm(c.saida)})`).join(', ')}</div>` : ''}
-    ${faltam.length ? `<div class="ci-faltam">Ainda sem check-in: ${faltam.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}</div>`;
+    ${o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="ci-l"><span class="ci-pos">${i + 1}º</span><b>${esc(nome(u))}</b><span class="ci-h"><span title="como marcou">${CI_MEIO[c.via] || ''}</span> ${hm(ciChegada(c))}${ciAtrasado(c) ? ' · <em class="ci-atr">atrasado</em>' : ''}${(c.externos || []).length ? ` · ${c.externos.length} saída${c.externos.length > 1 ? 's' : ''} para atendimento` : ''}</span></div>`; }).join('') : '<div class="muted" style="font-size:13px">Ninguém no escritório agora.</div>'}
+    ${ext.length ? `<div class="rep-sec" style="margin:10px 0 6px">Em atendimento externo</div>${ext.map(c => `<div class="ci-l"><span class="ci-pos">🚗</span><b>${esc(c.nome)}</b><span class="ci-h">desde ${hm(ciDesde(c))} · ${esc(ciOnde(c))}${mapa(c.externoAgora?.local || c.local)}</span></div>`).join('')}` : ''}
+    ${sairam.length ? `<div class="ci-sairam">Já encerraram o dia: ${sairam.map(c => `${esc(primeiro(c.nome))} (${hm(c.saida)})`).join(', ')}</div>` : ''}
+    ${faltam.length ? `<div class="ci-faltam">Ainda sem presença: ${faltam.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}
+    <div class="ci-leg">📷 código da recepção · 📍 localização confirmada · ✋ sem localização · 🚗 começou fora</div></div>`;
 }
 // ---- câmera (lê o código da recepção) ----
 let _ciStream = null, _ciLoop = 0;
@@ -6888,27 +6907,57 @@ window.abrirCamera = async () => {
 };
 window.fecharCamera = () => { clearTimeout(_ciLoop); if (_ciStream) { _ciStream.getTracks().forEach(t => t.stop()); _ciStream = null; } fechar('ciCamModal'); };
 async function fazerCheckin(token){
-  if (meuCheckin) { toast('Você já fez o check-in hoje ✓'); return; }
+  if (meuCheckin) { if (ciFora(meuCheckin)) return voltarEscritorio('qr'); toast('Você já marcou a presença hoje ✓'); return; }
   const agora = Date.now();
   try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'qr', token });
-    avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Check-in feito às ${hm(agora)}!`); }
+    avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Código vencido ou inválido. Aponte de novo para o código da recepção.' : 'Erro: ' + e.message); }
 }
 window.fazerCheckin = fazerCheckin;
+// "Cheguei no escritório": confere pela localização do celular quando a gerência cadastrou o endereço
+window.chegueiEscritorio = async () => {
+  const bt = $('ciBtEsc'); if (bt) { bt.disabled = true; bt.textContent = 'Conferindo a localização…'; }
+  const cfg = ciCfg(), gps = await pegarGps();
+  const volta = () => { if (bt) { bt.disabled = false; bt.textContent = '🏢 Cheguei no escritório'; } };
+  let via = 'manual', dist = null;
+  if (cfg.local?.lat) {
+    if (!gps) { volta(); toast('Ative a localização do celular para marcar a presença (ou leia o código da recepção).'); return; }
+    dist = distanciaM(gps, cfg.local);
+    if (dist > (Number(cfg.raio) || 150) + Math.min(gps.prec || 0, 100)) { volta(); toast(`Você está a ${dist >= 1000 ? (dist / 1000).toFixed(1).replace('.', ',') + ' km' : dist + ' m'} do escritório. Marque quando chegar, ou use "Estou em atendimento externo".`); return; }
+    via = 'gps';
+  } else if (gps) via = 'gps';
+  if (meuCheckin) return voltarEscritorio(via, gps, dist);
+  const agora = Date.now();
+  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via, ...(gps ? { local:gps } : {}), ...(dist !== null ? { dist } : {}) });
+    avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
+  catch(e) { volta(); toast('Erro: ' + e.message); }
+};
+async function voltarEscritorio(via, gps, dist){
+  const c = meuCheckin; if (!c || !ciFora(c)) return;
+  const agora = Date.now(), upd = {};
+  if (c.externoAgora) { upd.externos = [...(c.externos || []), { ...c.externoAgora, voltou:agora }]; upd.externoAgora = deleteField(); }
+  if (c.via === 'externo' && !c.chegouEscritorio) { upd.chegouEscritorio = agora; upd.chegouVia = via; }
+  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), upd); toast(`🏢 De volta ao escritório às ${hm(agora)}`); } catch(e) { toast('Erro: ' + e.message); }
+}
+window.abrirExterno = () => { $('ciExtOnde').value = ''; $('ciExtBt').textContent = meuCheckin ? 'Sair para o atendimento' : 'Marcar presença externa'; abrir('ciExtModal'); setTimeout(() => $('ciExtOnde').focus(), 200); };
 window.checkinExterno = async () => {
-  const onde = $('ciExtOnde').value.trim(); if (!onde) { toast('Diga onde você está'); return; }
+  const onde = $('ciExtOnde').value.trim(); if (!onde) { toast('Diga onde você vai estar'); return; }
   $('ciExtBt').disabled = true;
-  let local = null;
-  if ($('ciExtGps').checked && navigator.geolocation) local = await new Promise(ok => navigator.geolocation.getCurrentPosition(p => ok({ lat:+p.coords.latitude.toFixed(5), lng:+p.coords.longitude.toFixed(5), prec:Math.round(p.coords.accuracy) }), () => ok(null), { timeout:8000, enableHighAccuracy:true }));
-  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:Date.now(), via:'externo', onde, ...(local ? { local } : {}) });
-    avisarCarteiro('checkin', ciId(uidAtual)); fechar('ciExtModal'); toast('📍 Check-in fora do escritório feito'); }
-  catch(e) { toast('Erro: ' + e.message); }
+  const local = $('ciExtGps').checked ? await pegarGps() : null, agora = Date.now(), ext = { onde, desde:agora, ...(local ? { local } : {}) };
+  try {
+    if (!meuCheckin) { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'externo', onde, externoAgora:ext, ...(local ? { local } : {}) });
+      avisarCarteiro('checkin', ciId(uidAtual)); toast('🚗 Presença externa marcada'); }
+    else { await updateDoc(doc(db,'checkins', ciId(uidAtual)), { externoAgora:ext }); avisarCarteiro('externo', ciId(uidAtual)); toast('🚗 Bom atendimento! Toque em "Cheguei no escritório" quando voltar.'); }
+    fechar('ciExtModal');
+  } catch(e) { toast('Erro: ' + e.message); }
   $('ciExtBt').disabled = false;
 };
 window.fazerCheckout = async () => {
   if (!meuCheckin || meuCheckin.saida) return;
-  if (!confirm('Registrar a sua saída agora?')) return;
-  try { await updateDoc(doc(db,'checkins', meuCheckin.id), { saida:Date.now() }); toast('👋 Saída registrada. Até amanhã!'); } catch(e) { toast('Erro: ' + e.message); }
+  if (!confirm('Encerrar o seu dia agora?')) return;
+  const upd = { saida:Date.now() };
+  if (meuCheckin.externoAgora) { upd.externos = [...(meuCheckin.externos || []), { ...meuCheckin.externoAgora, voltou:upd.saida }]; upd.externoAgora = deleteField(); }
+  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), upd); toast('👋 Dia encerrado. Até amanhã!'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // veio pelo link do código (câmera do celular)
 function conferirLinkCheckin(){
@@ -6945,21 +6994,30 @@ window.pararRecepcao = pararRecepcao;
 function pintarRecepcao(){
   if (view !== 'recepcao' || !$('rcFila')) return;
   const o = ordemFila(), nome = u => checkinsHoje.find(c => c.uid === u)?.nome || '?';
-  const fora = checkinsHoje.filter(c => c.via === 'externo' && !c.saida).length, sairam = checkinsHoje.filter(c => c.saida).length;
-  $('rcProx').innerHTML = `<div class="rc-nums"><div><b>${o.length}</b><span>no escritório</span></div><div><b>${fora}</b><span>fora, atendendo</span></div><div><b>${sairam}</b><span>já saíram</span></div></div>`;
-  $('rcFila').innerHTML = o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="rc-l ${i === 0 ? 'vez' : ''}"><i>${i + 1}º</i><b>${esc(nome(u))}</b><span>${hm(c.entrada)}</span></div>`; }).join('') : '<div class="rc-vazio">Os corretores aparecem aqui na ordem em que fizerem o check-in.</div>';
-  const ext = checkinsHoje.filter(c => c.via === 'externo' && !c.saida); if (ext.length) $('rcFila').innerHTML += `<div class="rc-ext">📍 Fora, atendendo: ${ext.map(c => esc(primeiro(c.nome))).join(', ')}</div>`;
+  const fora = checkinsHoje.filter(ciFora).length, sairam = checkinsHoje.filter(c => c.saida).length;
+  $('rcProx').innerHTML = `<div class="rc-nums"><div><b>${o.length}</b><span>no escritório</span></div><div><b>${fora}</b><span>em atendimento externo</span></div><div><b>${sairam}</b><span>já saíram</span></div></div>`;
+  $('rcFila').innerHTML = o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="rc-l"><i>${i + 1}º</i><b>${esc(nome(u))}</b><span>${hm(ciChegada(c))}</span></div>`; }).join('') : '<div class="rc-vazio">Os corretores aparecem aqui na ordem em que chegarem.</div>';
+  const ext = checkinsHoje.filter(ciFora); if (ext.length) $('rcFila').innerHTML += `<div class="rc-ext">🚗 Em atendimento externo: ${ext.map(c => esc(primeiro(c.nome))).join(', ')}</div>`;
 }
 window.recepcaoCheia = async () => { try { if (!document.fullscreenElement) await $('rcTela').requestFullscreen(); else await document.exitFullscreen(); } catch(e) {} };
 // ---- configuração (gerência) ----
 function htmlCiConfig(){
   if (!souGerente() || souCeo()) return '';
   const c = ciCfg(), D = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  return `<div class="ci-cfg"><label>Horário de entrada<input type="time" id="ciHora" value="${c.hora}"></label><div class="ci-dias">${D.map((d, i) => `<label><input type="checkbox" data-d="${i}" ${c.dias.includes(i) ? 'checked' : ''}> ${d}</label>`).join('')}</div><button class="btn btn-ghost" onclick="salvarCiCfg()">Salvar</button></div>`;
+  const loc = c.local?.lat ? `<span class="ci-ok">✓ Endereço do escritório cadastrado</span> <a href="https://maps.google.com/?q=${c.local.lat},${c.local.lng}" target="_blank" rel="noopener">ver no mapa</a>` : '<span class="ci-faltam" style="margin:0">Ainda sem endereço: o botão "Cheguei no escritório" funciona, mas sem conferir onde a pessoa está.</span>';
+  return `<div class="ci-locbox"><b>Onde fica o escritório</b><div>${loc}</div><div class="ci-cfg"><button class="btn btn-ghost" id="ciLocBt" onclick="definirLocalEscritorio()">📍 Estou no escritório: usar a minha localização</button><label>Distância aceita (metros)<input type="number" id="ciRaio" min="50" max="1000" step="10" value="${Number(c.raio) || 150}"></label></div></div>
+    <div class="ci-cfg"><label>Horário de entrada<input type="time" id="ciHora" value="${c.hora}"></label><div class="ci-dias">${D.map((d, i) => `<label><input type="checkbox" data-d="${i}" ${c.dias.includes(i) ? 'checked' : ''}> ${d}</label>`).join('')}</div><button class="btn btn-ghost" onclick="salvarCiCfg()">Salvar</button></div>`;
 }
 window.salvarCiCfg = async () => {
-  const hora = $('ciHora').value || '08:30', dias = [...document.querySelectorAll('.ci-dias input:checked')].map(i => Number(i.dataset.d));
-  try { await gravar(setDoc(doc(db,'config','app'), { checkin:{ hora, dias } }, { merge:true })); toast('Horário do check-in salvo ✓'); } catch(e) { toast('Erro: ' + e.message); }
+  const hora = $('ciHora').value || '08:30', dias = [...document.querySelectorAll('.ci-dias input:checked')].map(i => Number(i.dataset.d)), raio = Math.min(1000, Math.max(50, Number($('ciRaio').value) || 150));
+  try { await gravar(setDoc(doc(db,'config','app'), { checkin:{ hora, dias, raio } }, { merge:true })); toast('Presença: configuração salva ✓'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.definirLocalEscritorio = async () => {
+  const bt = $('ciLocBt'); bt.disabled = true; bt.textContent = 'Pegando a localização…';
+  const g = await pegarGps(); bt.disabled = false; bt.textContent = '📍 Estou no escritório: usar a minha localização';
+  if (!g) { toast('Não deu para pegar a localização. Libere a localização para o app e tente de novo.'); return; }
+  if (g.prec > 200) toast(`Localização com pouca precisão (${g.prec} m). Se puder, tente de novo perto de uma janela.`);
+  try { await gravar(setDoc(doc(db,'config','app'), { checkin:{ local:{ lat:g.lat, lng:g.lng, prec:g.prec } } }, { merge:true })); toast('📍 Endereço do escritório salvo ✓'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // ---- resumo do mês: atrasos e chegada média ----
 function ciResumoMes(uid){
