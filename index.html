@@ -1352,6 +1352,9 @@ button.bg-card{cursor:pointer;transition:border-color .15s}button.bg-card:hover{
 .nf-anexar{width:100%;display:grid;gap:2px;justify-items:center;border:1.5px dashed color-mix(in srgb,var(--accent) 45%,var(--border));background:color-mix(in srgb,var(--accent) 5%,transparent);border-radius:12px;padding:14px;cursor:pointer;font:inherit;color:var(--accent)}.nf-anexar small{color:var(--muted);font-size:12px}.nf-anexar:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .nf-arq{display:flex;align-items:center;gap:10px;background:var(--card2);border-radius:12px;padding:10px 12px}.nf-arq i{font-style:normal;font-size:20px}.nf-arq span{flex:1;display:grid;min-width:0}.nf-arq b{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nf-arq small{font-size:12px;color:var(--muted)}.nf-arq .link{font-size:13px}
 .nf-ver{font-size:12.5px;padding:0}.nf-sem{color:var(--warn)}.fv-nota-l{display:flex;gap:10px;align-items:center}
+/* contagem do CRM */
+.crm-stats{display:block;width:100%}.crm-dia{border-bottom:1px solid var(--border);padding:6px 0}.crm-dia summary{cursor:pointer;display:flex;gap:10px;font-size:13px;align-items:baseline}.crm-dia summary span{color:var(--text2)}
+.crm-m{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--muted);padding:3px 0 3px 46px}.crm-m b{color:var(--text)}
 /* v77 · fluidez */
 .ml-acoes .snooze svg,.ml-acoes .wa svg{width:16px!important;height:16px!important;flex:none}.ml-acoes .snooze.wa{display:inline-flex;align-items:center;gap:5px;padding:6px 10px}
 .btn,.icon-btn,.stat,.fv-card,.fl-row,.bg-card,.sino-item,.fin-tipo button,.seg button{transition:transform .14s var(--ease, ease),background .15s,border-color .15s,box-shadow .15s}
@@ -1371,6 +1374,78 @@ button.bg-card{cursor:pointer;transition:border-color .15s}button.bg-card:hover{
 @media(max-width:760px){.modal.open .sheet{animation:sheetSobe .3s cubic-bezier(.2,.9,.25,1) both}@keyframes sheetSobe{from{transform:translateY(40%);opacity:.4}to{transform:none;opacity:1}}}
 @media(prefers-reduced-motion:reduce){.btn:active,.icon-btn:active,.stat:active{transform:none}.modal.open .sheet{animation:none}}
 /* sorteio */
+/* ===== check-in (v79) ===== */
+.ci-card{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 10%,var(--card)),var(--card) 70%);border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:18px;padding:14px 16px;margin-bottom:14px}
+.ci-card.atras{background:linear-gradient(120deg,color-mix(in srgb,var(--danger) 12%,var(--card)),var(--card) 70%);border-color:color-mix(in srgb,var(--danger) 35%,var(--border))}
+.ci-card.feito{background:var(--card);border-color:color-mix(in srgb,var(--ok) 35%,var(--border))}
+.ci-txt{flex:1;min-width:200px;display:grid;gap:2px}.ci-txt b{font-size:15px}.ci-txt small{color:var(--muted);font-size:13px}
+.ci-bts{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.ci-bt{font-size:15px;padding:11px 18px}
+.ci-atr{font-style:normal;font-size:11px;font-weight:700;color:var(--danger);background:var(--danger-soft);border-radius:99px;padding:2px 8px;margin-left:4px}
+.ci-cam{position:relative;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:3/4;max-height:60vh;margin:auto}
+.ci-cam video{width:100%;height:100%;object-fit:cover;display:block}
+.ci-mira{position:absolute;inset:18%;border:3px solid rgba(255,255,255,.9);border-radius:18px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+.ci-dica{text-align:center;color:var(--muted);font-size:13.5px;margin:12px 0 0}
+.ci-g{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.ci-l{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px dashed var(--border);font-size:14px}.ci-l:last-of-type{border:0}
+.ci-pos{width:30px;font-weight:800;color:var(--accent)}.ci-h{margin-left:auto;color:var(--muted);font-size:12.5px;text-align:right}
+.ci-res{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:11px 14px;margin-bottom:12px;cursor:pointer}.ci-res>span{font-size:22px}.ci-res div{flex:1;display:grid}.ci-res small{color:var(--muted)}
+.ci-sairam,.ci-faltam{font-size:12.5px;color:var(--muted);margin-top:8px}.ci-faltam{color:var(--danger)}
+.ci-cfg{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px}.ci-cfg>label{display:grid;gap:4px;font-size:12.5px;color:var(--muted)}.ci-cfg input[type=time]{width:130px}
+.ci-dias{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}.ci-dias label{display:flex;align-items:center;gap:4px}.ci-dias input{width:auto}
+#v-recepcao.active{display:block}
+.rc{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;min-height:calc(100vh - 140px);background:var(--marinho);color:#fff;border-radius:26px;padding:28px}
+.rc:fullscreen{border-radius:0;min-height:100vh;padding:4vh 4vw}
+.rc-qr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center}
+.rc-marca b{font-size:26px;letter-spacing:-.02em}.rc-marca b span{color:#ff8a3d}.rc-marca small{display:block;opacity:.7;font-size:14px}
+.rc-codigo{background:#fff;border-radius:22px;padding:14px;width:min(46vh,100%);aspect-ratio:1;display:grid;place-items:center}
+.rc-codigo svg{width:100%;height:100%}.rc-load{color:#334155;font-size:14px;padding:20px}
+.rc-qr p{opacity:.85;font-size:15px;max-width:360px;margin:0}
+.rc-tempo{width:min(46vh,100%);height:5px;background:rgba(255,255,255,.15);border-radius:9px;overflow:hidden}.rc-tempo i{display:block;height:100%;background:#ff8a3d;width:100%}
+.rc-lado{display:flex;flex-direction:column;gap:16px;min-width:0}
+.rc-hora b{font-size:clamp(44px,7vw,84px);font-weight:800;letter-spacing:-.04em;line-height:1}.rc-hora span{display:block;opacity:.7;text-transform:capitalize}
+.rc-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.rc-nums div{display:grid}.rc-nums b{font-size:clamp(30px,4vw,48px);line-height:1}.rc-nums span{opacity:.75;font-size:13px}
+.rc-prox{background:rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;display:grid;gap:6px}.rc-prox span{opacity:.75;font-size:13px}.rc-prox b{font-size:clamp(24px,3vw,36px)}.rc-prox .btn{justify-self:start}
+.rc-fila{flex:1;overflow:auto}.rc-fila h3{margin:0 0 8px;font-size:15px;opacity:.8}
+.rc-l{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;font-size:18px}.rc-l i{font-style:normal;font-weight:800;width:34px;color:#ff8a3d}.rc-l span{margin-left:auto;opacity:.65;font-size:14px}
+.rc-l.vez{background:rgba(255,138,61,.16)}.rc-vazio,.rc-ext{opacity:.7;font-size:14px;padding:8px 2px}
+.rc-acoes .btn{color:#fff;background:transparent;border:1px solid rgba(255,255,255,.3)}.rc-acoes .btn:hover{background:rgba(255,255,255,.08)}
+@media(max-width:820px){.rc{grid-template-columns:1fr;padding:18px}}
+/* ===== aulas (v79) ===== */
+.au-topo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.au-prog{flex:1;min-width:220px;display:grid;gap:6px}.au-prog b{font-size:17px}.au-prog small{color:var(--muted)}
+.au-barra{height:8px;background:var(--border);border-radius:9px;overflow:hidden;max-width:380px}.au-barra i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .5s}
+.au-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}.au-tabs:empty{display:none}
+.au-tabs button{border:1px solid var(--border);background:var(--card);border-radius:99px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--text2);cursor:pointer}
+.au-tabs button.on{background:var(--marinho);color:#fff;border-color:var(--marinho)}
+.au-trilha{margin-bottom:26px}.au-trilha h3{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:18px}
+.au-trilha h3 span{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);font-size:17px}
+.au-trilha h3 small{font-weight:500;color:var(--muted);font-size:13px}
+.au-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.au-card{all:unset;cursor:pointer;background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.au-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.au-card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.au-capa{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 45%,#0b1d33));display:grid;place-items:center;overflow:hidden}
+.au-capa img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.au-ic{font-size:42px}
+.au-play{position:absolute;width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(4px)}
+.au-play::after{content:"";position:absolute;left:21px;top:16px;border-left:15px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.au-capa em{position:absolute;font-style:normal;font-size:11.5px;font-weight:700;border-radius:99px;padding:3px 9px}
+.au-dur{right:8px;bottom:8px;background:rgba(0,0,0,.7);color:#fff}
+.au-ok{left:8px;top:8px;background:var(--ok);color:#fff}.au-meio{left:8px;top:8px;background:var(--warn);color:#fff}.au-nova{left:8px;top:8px;background:var(--accent);color:#fff}
+.au-txt{padding:12px 14px 14px;display:grid;gap:3px}.au-txt b{font-size:15px;line-height:1.3}.au-txt>span{color:var(--muted);font-size:13px}
+.au-quem{height:5px;border-radius:9px;background:var(--border);margin-top:8px;overflow:hidden}.au-quem i{display:block;height:100%;background:var(--ok)}.au-qt{color:var(--muted);font-size:12px}
+.au-vazio{text-align:center;padding:50px 20px;background:var(--card);border:1px dashed var(--border);border-radius:20px}.au-vazio span{font-size:44px}.au-vazio b{display:block;font-size:17px;margin:8px 0 4px}.au-vazio p{color:var(--muted);max-width:420px;margin:auto}
+.au-hoje{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;margin-bottom:14px;cursor:pointer}
+.au-hoje>span{font-size:26px}.au-hoje div{flex:1;min-width:0;display:grid}.au-hoje small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.au-sheet{width:min(960px,100%)}
+.au-video{aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden}.au-video iframe,.au-video video{width:100%;height:100%;border:0;display:block}
+.au-semv{color:#fff;padding:30px;text-align:center}.au-semv a{color:#ff8a3d}
+.au-meta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:14px 0 6px;font-size:13.5px;color:var(--text2)}
+.au-tag{background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c);font-weight:700;border-radius:99px;padding:4px 10px;font-size:12.5px}
+.au-desc{color:var(--text2);font-size:14px;line-height:1.55;margin:8px 0}
+.au-acoes{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}.au-feito{color:var(--ok);font-weight:700}
+.au-gest{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}.au-gest b{font-size:12.5px;color:var(--muted)}.au-gest>div>div{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.au-p{font-size:12px;border-radius:99px;padding:3px 9px;background:var(--card2);border:1px solid var(--border)}.au-p.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}.au-p.nao{color:var(--muted)}
+.au-previa{display:flex;gap:10px;align-items:center;margin-top:8px}.au-previa:empty{display:none}.au-previa img{width:120px;border-radius:8px}.au-pv{font-size:12.5px;color:var(--ok);font-weight:600}.au-pv.erro{color:var(--danger)}
+@media(max-width:700px){.au-gest{grid-template-columns:1fr}.au-grade{grid-template-columns:1fr}}
 .sx-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
 .sx-palco{position:relative;overflow:hidden;border-radius:24px;background:radial-gradient(120% 90% at 85% 0%,color-mix(in srgb,#f97316 28%,#12355b) 0%,#12355b 46%,#0b2340 100%);color:#fff;padding:24px 26px;min-height:420px;display:flex;flex-direction:column;gap:12px}
 .sx-palco::after{content:"";position:absolute;right:-90px;bottom:-120px;width:340px;height:340px;border-radius:50%;border:44px solid rgba(255,255,255,.05);pointer-events:none}
@@ -1578,7 +1653,9 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
+      <button data-view="aulas" onclick="setView('aulas')"><i data-ic="play"></i>Aulas<span class="count hide" id="cAulas">0</span></button>
       <button data-view="sorteio" class="gest hide" onclick="setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
+      <button data-view="recepcao" class="gest hide" onclick="setView('recepcao')"><i data-ic="tela"></i>Tela da recepção</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -1611,6 +1688,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div id="alertasHoje"></div>
         <div id="conviteNotif"></div>
         <div class="mural" id="mural"></div>
+        <div id="checkinHoje"></div>
+        <div id="aulasHoje"></div>
         <div id="metaHoje"></div>
         <div class="stats hide" id="statsPapel"></div>
         <div id="ligHoje"></div>
@@ -1834,8 +1913,26 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       </section>
 
       <!-- VENDAS (RESERVAS) -->
+      <section class="view" id="v-aulas">
+        <div class="au-topo"><div class="au-prog" id="auProg"></div><button class="btn btn-primary hide" id="auNovaBt" onclick="novaAula()">+ Nova aula</button></div>
+        <div class="au-tabs" id="auTabs"></div>
+        <div id="auLista"></div>
+      </section>
+
+      <section class="view" id="v-recepcao">
+        <div class="rc" id="rcTela">
+          <div class="rc-qr"><div class="rc-marca"><b>Frade <span>Imóveis</span></b><small>Check-in no escritório</small></div>
+            <div class="rc-codigo" id="rcQr"><div class="rc-load">Gerando o código…</div></div>
+            <p>Abra o app, toque em <b>📷 Fazer check-in</b> e aponte para este código.</p><div class="rc-tempo"><i id="rcBarra"></i></div></div>
+          <div class="rc-lado"><div class="rc-hora"><b id="rcRelogio">--:--</b><span id="rcData"></span></div>
+            <div class="rc-prox" id="rcProx"></div>
+            <div class="rc-fila"><h3>No escritório agora · ordem de chegada</h3><div id="rcFila"></div></div>
+            <div class="rc-acoes"><button class="btn btn-ghost" onclick="recepcaoCheia()">⛶ Tela cheia</button></div></div>
+        </div>
+      </section>
+
       <section class="view" id="v-sorteio">
-        <div class="page-head"><div><h1>Sorteio</h1><div class="sub">Sorteie entre os corretores, quem está no plantão, os clientes do mês ou uma lista sua.</div></div><div class="ph-acoes"><button class="btn btn-ghost" onclick="sorteioCheia()">⛶ Tela cheia</button></div></div>
+        <div class="page-head"><div><h1>Sorteio</h1><div class="sub">Sorteie entre os corretores, quem está no escritório, os clientes do mês ou uma lista sua.</div></div><div class="ph-acoes"><button class="btn btn-ghost" onclick="sorteioCheia()">⛶ Tela cheia</button></div></div>
         <div class="sx-grid">
           <section class="sx-palco" id="sxPalco">
             <div class="sx-top"><div><small id="sxOrigem">Sorteio</small><h2 id="sxTitulo">Sorteio Frade</h2></div><span class="sx-premio hide" id="sxPremioB">🎁 <span id="sxPremioT"></span></span></div>
@@ -1846,7 +1943,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
           <aside class="card sx-cfg">
             <div class="fg"><label>Nome do sorteio</label><input id="sxNomeI" maxlength="80" value="Sorteio Frade" oninput="sxPinta()"></div>
             <div class="fg"><label>Prêmio (opcional)</label><input id="sxPremio" maxlength="80" placeholder="Ex.: Kit churrasco" oninput="sxPinta()"></div>
-            <div class="fg"><label>Quem participa</label><select id="sxFonte" onchange="sxPinta()"><option value="cor">Corretores ativos</option><option value="pres">Quem está no plantão hoje</option><option value="cli">Clientes com reserva no mês</option><option value="lista">Lista que eu colar</option></select></div>
+            <div class="fg"><label>Quem participa</label><select id="sxFonte" onchange="sxPinta()"><option value="cor">Corretores ativos</option><option value="pres">Quem está no escritório hoje</option><option value="cli">Clientes com reserva no mês</option><option value="lista">Lista que eu colar</option></select></div>
             <div class="fg hide" id="sxListaBox"><label>Um nome por linha</label><textarea id="sxLista" rows="6" oninput="sxPinta()"></textarea></div>
             <div class="row2"><div class="fg"><label>Ganhadores</label><input id="sxQtd" type="number" min="1" max="30" value="1" oninput="sxPinta()"></div><div class="fg"><label>Suspense</label><select id="sxTempo"><option value="2500">Rápido</option><option value="4500" selected>Normal</option><option value="7000">Longo</option></select></div></div>
             <label class="fv-chk"><input type="checkbox" id="sxSemRep" checked onchange="sxPinta()"> Quem já ganhou hoje não entra de novo</label>
@@ -1941,8 +2038,9 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div class="page-head"><div><h1>Corretores</h1><div class="sub" id="corSub"></div></div>
           <select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div>
         <div class="janela" id="janelaCor"></div>
+        <div class="card gest hide" id="cardCheckin" style="margin-bottom:20px"><div class="card-head"><h2>📷 Check-in de hoje</h2><button class="btn btn-ghost" onclick="setView('recepcao')">Abrir a tela da recepção</button></div><div id="ciGestao"></div></div>
         <div class="card hide" id="cardPresenca" style="margin-bottom:20px">
-          <div class="card-head pt-head"><h2>Plantão</h2><input type="date" id="presData" onchange="mudarDiaPresenca(this.value)" style="width:auto"></div>
+          <div class="card-head pt-head"><h2>Presença no escritório</h2><input type="date" id="presData" onchange="mudarDiaPresenca(this.value)" style="width:auto"></div>
           <div class="hint" style="margin-top:0" id="presResumo"></div>
           <div id="presLista"></div>
           <div class="rep-sec" style="margin:16px 0 8px">Resumo do mês</div>
@@ -2039,6 +2137,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- CONFIGURAÇÕES -->
       <section class="view" id="v-config">
         <div class="page-head"><div><h1>Configurações</h1><div class="sub">Personalize a sua agenda. <span class="ver-app" id="verApp"></span></div></div></div>
+        <div class="card gerente-only hide" style="margin-bottom:20px"><div class="card-head"><h2>📷 Check-in no escritório</h2></div><div class="hint" style="margin:0 0 10px">A partir deste horário, quem chegar entra como atrasado, e quem ainda não fez o check-in recebe um aviso 10 minutos depois.</div><div id="ciCfgBox"></div></div>
         <div class="card" id="cfgNotif" style="margin-bottom:20px"><div class="card-head"><h2>🔔 Quais avisos você quer receber</h2></div><div class="hint" style="margin:0 0 10px">Tudo aparece no sino 🔔 lá em cima. Os que estiverem ligados também chegam no celular, se as notificações estiverem ativadas no aparelho.</div><div id="prefNotif"></div></div>
         <div class="set-grid">
           <div class="card">
@@ -2088,7 +2187,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
             <div class="int-bloco"><b>1. Chave de segurança</b><span>Só quem tem esta chave consegue mandar dados para o app. Ela vai no ajudante da planilha e no endereço do CRM.</span>
               <div class="int-linha"><code id="intChave"></code><button class="btn btn-ghost" onclick="copiarTexto('intChave')">Copiar</button><button class="btn btn-ghost" id="btnGerarChave" onclick="gerarChave()">Gerar chave</button></div></div>
             <div class="int-bloco"><b>2. CRM (Dynamus)</b><span>Endereço para colar na ação <b>Webhook</b> do fluxo novo. O CRM só avisa o app; nada muda lá dentro.</span>
-              <div class="int-linha"><code id="intCrmUrl"></code><button class="btn btn-ghost" onclick="copiarTexto('intCrmUrl')">Copiar</button></div><span class="muted" id="intUltLead"></span></div>
+              <div class="int-linha"><code id="intCrmUrl"></code><button class="btn btn-ghost" onclick="copiarTexto('intCrmUrl')">Copiar</button></div><span class="muted" id="intUltLead"></span><div id="crmStats" class="crm-stats"></div></div>
             <div class="int-bloco"><b>3. Ajudante da planilha (Google)</b><span>Endereço que o Google mostra depois de implantar o ajudante. Ele lê a planilha de avaliações, mantém a planilha do app e envia os e-mails.</span>
               <div class="int-linha"><input id="intScript" placeholder="https://script.google.com/macros/s/.../exec"><button class="btn btn-ghost" onclick="salvarScript()">Salvar</button><button class="btn btn-ghost" onclick="testarAjudante()">Testar</button></div>
               <div class="int-linha"><span class="muted" id="intUltSync"></span><button class="link" onclick="lerPlanilhaAgora()">Ler a planilha agora</button></div></div>
@@ -2526,6 +2625,46 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   </div>
 </div>
 <input type="file" id="vaArq" class="hide" accept=".json,application/json" onchange="lerVendasAntigas(this)">
+<div class="modal" id="auVerModal">
+  <div class="sheet au-sheet">
+    <div class="sheet-head"><h2 id="auVerTit">Aula</h2><button class="icon-btn" onclick="fecharAula()" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="au-video" id="auVideo"></div><div id="auVerInfo"></div></div>
+  </div>
+</div>
+<div class="modal" id="auEdModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><h2 id="auEdTit">Nova aula</h2><button class="icon-btn" onclick="fechar('auEdModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label>Link do vídeo</label><input id="auUrl" placeholder="Cole o link do YouTube, Google Drive ou Vimeo" oninput="auPrevia()"><div class="au-previa" id="auPrevia"></div></div>
+      <div class="fg"><label>Título</label><input id="auTitulo" maxlength="100" placeholder="Ex.: Como cadastrar e acompanhar um lead no CRM"></div>
+      <div class="row2"><div class="fg"><label>Assunto</label><select id="auTema"><option value="crm">CRM</option><option value="financiamento">Financiamento</option><option value="geral">Outros assuntos</option></select></div>
+        <div class="fg"><label>Quem dá a aula</label><input id="auProf" maxlength="60" list="auProfs"><datalist id="auProfs"></datalist></div></div>
+      <div class="row2"><div class="fg"><label>Duração (opcional)</label><input id="auDur" maxlength="20" placeholder="Ex.: 18 min"></div>
+        <div class="fg"><label>Ordem na lista</label><input id="auOrdem" type="number" min="1" placeholder="1"></div></div>
+      <div class="fg"><label>Sobre a aula (opcional)</label><textarea id="auDesc" rows="3" maxlength="1500" placeholder="O que o corretor vai aprender, materiais de apoio…"></textarea></div>
+      <label class="fv-chk"><input type="checkbox" id="auObrig" checked> Todos precisam assistir (aparece no Hoje de quem ainda não viu)</label>
+      <label class="fv-chk"><input type="checkbox" id="auAvisar" checked> Avisar a equipe no celular</label>
+      <div class="hint" style="margin-top:10px">Para vídeos do YouTube, envie como <b>Não listado</b>: só quem tem o link (o app) consegue ver. No Google Drive, deixe o compartilhamento em <b>qualquer pessoa com o link</b>.</div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost hide" style="color:var(--danger)" id="auExcluir" onclick="excluirAula()">Excluir</button><span style="flex:1"></span><button class="btn btn-ghost" onclick="fechar('auEdModal')">Cancelar</button><button class="btn btn-primary" id="auSalvarBt" onclick="salvarAula()">Publicar aula</button></div>
+  </div>
+</div>
+<div class="modal" id="ciCamModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-head"><h2>Check-in</h2><button class="icon-btn" onclick="fecharCamera()" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="ci-cam"><video id="ciVideo" playsinline muted></video><div class="ci-mira"></div></div>
+      <p class="ci-dica" id="ciCamTxt">Aponte para o código na tela da recepção.</p></div>
+  </div>
+</div>
+<div class="modal" id="ciExtModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-head"><h2>Estou fora, atendendo</h2><button class="icon-btn" onclick="fechar('ciExtModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="hint" style="margin:0 0 10px">Use quando você começar o dia fora do escritório: visita, empreendimento, cartório, atendimento. Conta como dia de trabalho e a gerência vê onde você está.</div>
+      <div class="fg"><label>Onde você está?</label><input id="ciExtOnde" maxlength="120" placeholder="Ex.: visita no Residencial Colibris com a cliente Ana"></div>
+      <label class="fv-chk"><input type="checkbox" id="ciExtGps" checked> Mandar a minha localização</label></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('ciExtModal')">Cancelar</button><button class="btn btn-primary" id="ciExtBt" onclick="checkinExterno()">Fazer check-in</button></div>
+  </div>
+</div>
 <div class="modal" id="metasModal">
   <div class="sheet" style="width:min(620px,100%)">
     <div class="sheet-head"><h2 id="metasTit">Metas do mês</h2><button class="icon-btn" onclick="fechar('metasModal')" data-ic="x"></button></div>
@@ -2584,6 +2723,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button class="so-ceo" onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
       <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
+      <button onclick="fechar('menuModal');setView('aulas')"><i data-ic="play"></i>Aulas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
       <button class="cor-only hide" onclick="fechar('menuModal');setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
       <button onclick="fechar('menuModal');setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
@@ -2596,6 +2736,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
+      <button class="gest hide" onclick="fechar('menuModal');setView('recepcao')"><i data-ic="tela"></i>Tela da recepção (check-in)</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><i data-ic="phone"></i>Instalar aplicativo</button>
       <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
       <button onclick="fechar('menuModal');sair()"><i data-ic="logout"></i>Sair</button>
@@ -2611,7 +2752,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc, updateDoc, increment, deleteField, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc, updateDoc, addDoc, increment, deleteField, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -2639,6 +2780,7 @@ const IC = {
   painel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="15" width="7.5" height="6" rx="1.5"/></svg>',
   trofeu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
   trend:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="M10 9.2v5.6l4.6-2.8z" fill="currentColor"/></svg>',
   tela:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8 21h8M12 16.5V21M7 12.5l3-3 2.5 2.5L17 7.5"/></svg>',
   spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8zM5 3.5l.6 1.4 1.4.6-1.4.6L5 7.5l-.6-1.4L3 5.5l1.4-.6z"/></svg>',
   nota:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
@@ -2923,7 +3065,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -2936,6 +3078,8 @@ window.setView = v => {
   if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
   if (v === 'comissoes' && !['corretor','coordenador'].includes(perfil?.papel)) v = souGerente() ? 'financeiro' : 'hoje';
   if (v === 'sorteio' && !podeGerir()) v = 'hoje';
+  if (v === 'recepcao' && !podeGerir()) v = 'hoje';
+  if (v !== 'recepcao') pararRecepcao();
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
   if (souCeo() && !VIEWS_CEO.includes(v)) v = 'painel';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
@@ -3124,7 +3268,7 @@ function render(){
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
   if (!window._hashZap && souGerente() && !souCeo() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
-  if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo'].includes(location.hash)) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
+  if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
   if (souSdr()) { const ontem = somaDias(hojeISO(), -1); $('cResumo').classList.toggle('hide', sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem)); }
@@ -4724,7 +4868,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 77;
+const APP_VERSAO = 79;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -4920,7 +5064,7 @@ const PONTOS_ITENS = [
   ['carta','📄 Carta aprovada'],
   ['docs','🗂️ Documentação completa'],
   ['venda','🎉 Venda fechada'],
-  ['presenca','🙋 Presença no plantão'],
+  ['presenca','🙋 Presença no escritório'],
   ['ligacao','📞 Ligação (1ª vez para o número)'],
   ['recontato','🔁 Recontato (ligou de novo outro dia)']
 ];
@@ -4986,7 +5130,7 @@ function assinarEtapa1(){
       origens: d.origens?.length ? (d.origens.includes('CRM') ? d.origens : ['CRM', ...d.origens]) : CFG_PADRAO.origens,
       motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
       abasIgnoradas: Array.isArray(d.abasIgnoradas) ? d.abasIgnoradas : ABAS_IGNORADAS_PADRAO,
-      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO };
+      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null };
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     carregado.cfg = true; render(); fecharMesesPendentes();
   }, e => { carregado.cfg = true; silencio(e); }));
@@ -5591,6 +5735,7 @@ function renderIntegracoes(){
   $('btnGerarChave').textContent = tem ? 'Trocar chave' : 'Gerar chave';
   $('intCrmUrl').textContent = tem ? urlCrm() : 'Gere a chave primeiro';
   $('intUltLead').textContent = integ.ultimoLead ? 'Último aviso do CRM: ' + new Date(integ.ultimoLead).toLocaleString('pt-BR') : 'Nenhum aviso do CRM recebido ainda.';
+  carregarCrmStats();
   $('intScript').value = integ.scriptUrl || '';
   $('intUltSync').textContent = integ.ultimaSync ? 'Última leitura da planilha: ' + new Date(integ.ultimaSync).toLocaleString('pt-BR') : 'A planilha de avaliações ainda não foi lida.';
   const pessoas = perfisLista.filter(p => p.status === 'ativo').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
@@ -5605,6 +5750,18 @@ function renderIntegracoes(){
   renderGruposAdm();
 }
 if (document.getElementById('impAte') && !document.getElementById('impAte').value) document.getElementById('impAte').value = somaDias(hojeISO(), -1);
+// o que o CRM mandou nos últimos dias (para conferir com o número do CRM)
+let _crmStatsEm = 0;
+async function carregarCrmStats(){
+  if (!souGerente() || Date.now() - _crmStatsEm < 60000 || !$('crmStats')) return; _crmStatsEm = Date.now();
+  try { const s = await getDocs(query(collection(db,'crm_stats'), where('dia','>=', somaDias(hojeISO(), -6)))); const l = s.docs.map(d => d.data()).sort((a,b) => b.dia.localeCompare(a.dia));
+    if (!l.length) { $('crmStats').innerHTML = '<div class="muted" style="font-size:12.5px;margin-top:6px">A partir de agora o app conta tudo o que o CRM mandar, para você conferir com o número do CRM.</div>'; return; }
+    $('crmStats').innerHTML = `<div class="rep-sec" style="margin:12px 0 6px">O que o CRM mandou (últimos 7 dias)</div>` + l.map(x => { const ms = Object.entries(x.motivos || {}).sort((a,b) => b[1] - a[1]), cont = (x.motivos || {}).contou || 0;
+      const ld = leadsDias.find(d => d.dia === x.dia);
+      return `<details class="crm-dia"><summary><b>${dataBR(x.dia).slice(0,5)}</b><span>${x.total || 0} aviso${x.total === 1 ? '' : 's'} do CRM · <b>${ms.filter(([k]) => k.startsWith('contou')).reduce((a,[,n]) => a + n, 0)}</b> contaram como lead${ld ? ` · no app: ${ld.total ?? ''}` : ''}</span></summary>${ms.map(([k, n]) => `<div class="crm-m"><span>${esc((x.rotulos || {})[k] || k)}</span><b>${n}</b></div>`).join('')}</details>`; }).join('')
+      + '<div class="hint" style="margin-top:6px">Se o CRM mostra mais leads do que os avisos daqui, o CRM não está mandando o aviso de todos os leads: confira a automação (webhook) no CRM.</div>'; }
+  catch(e) { $('crmStats').innerHTML = `<div class="muted" style="font-size:12.5px">Não deu para ler a contagem do CRM (${esc(e.code || e.message)}).</div>`; }
+}
 window.gerarChave = async () => {
   if (integ.chave && !confirm('Trocar a chave? Depois será preciso colar a chave nova no ajudante da planilha e o endereço novo no CRM.')) return;
   try { await gravar(setDoc(doc(db,'config','integracao'), { chave:novaChave(), chaveEm:Date.now() }, { merge:true })); integAssin = ''; toast('Chave gerada ✓'); }
@@ -6323,7 +6480,7 @@ function assinarEtapa4(){
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
-  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios();
+  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); conferirLinkCheckin();
 }
 // a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
 async function presencaNoRanking(uid, dia, presente){
@@ -6405,6 +6562,8 @@ function htmlMeusLeads(){
 // =====================================================================
 let notifs = [], _notifPrimeira = true, _notifVistas = new Set();
 const NOTIF_CATS = [
+  ['aulas', '🎓 Aula nova publicada', p => true],
+  ['checkin', '📷 Check-in (lembrete de quem ainda não chegou)', p => p !== 'sdr'],
   ['leads', '📞 Lead novo para você', p => ['corretor','coordenador'].includes(p)],
   ['visitas', '🏠 Visitas (marcada para você, lembrete 1 hora antes, confirmar as de amanhã)', p => p !== 'gerente' || true],
   ['cartas', '📄 Cartas e avaliações (mudou de status, aprovada, perto de vencer)', p => p !== 'sdr'],
@@ -6549,6 +6708,265 @@ window.abrirHistoricoFin = async () => {
 // =====================================================================
 // ============ CÓPIAS DE SEGURANÇA · v76 ============
 // =====================================================================
+// =====================================================================
+// ============ AULAS (vídeos de treinamento) · v79 ============
+// =====================================================================
+let aulas = [], aulasVistas = [], auTema = 'todas', auAberta = null;
+const AU_TEMAS = { crm:{ nome:'CRM', ic:'📇', cor:'#2563eb' }, financiamento:{ nome:'Financiamento', ic:'🏦', cor:'#0f9d76' }, geral:{ nome:'Outros assuntos', ic:'🎓', cor:'#7c3aed' } };
+function assinarAulas(){
+  aulas = []; aulasVistas = []; if (!souAtivo()) return;
+  subsPapel.push(onSnapshot(collection(db,'aulas'), s => { aulas = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.tema || '').localeCompare(b.tema || '') || (a.ordem || 99) - (b.ordem || 99) || (a.criadoEm || 0) - (b.criadoEm || 0)); render(); }, e => console.warn('aulas', e.code || e.message)));
+  const q = podeGerir() ? collection(db,'aulas_vistas') : query(collection(db,'aulas_vistas'), where('uid','==',uidAtual));
+  subsPapel.push(onSnapshot(q, s => { aulasVistas = s.docs.map(d => d.data()); render(); }, e => console.warn('aulas_vistas', e.code || e.message)));
+}
+// entende o link colado (YouTube, Drive, Vimeo ou arquivo .mp4)
+function auVideo(url){
+  const u = String(url || '').trim(); let m;
+  if ((m = u.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/))) return { tipo:'youtube', id:m[1], src:`https://www.youtube-nocookie.com/embed/${m[1]}?rel=0&modestbranding=1&playsinline=1`, capa:`https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg` };
+  if ((m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:.*&)?id=)([A-Za-z0-9_-]{20,})/))) return { tipo:'drive', id:m[1], src:`https://drive.google.com/file/d/${m[1]}/preview` };
+  if ((m = u.match(/vimeo\.com\/(?:video\/)?(\d{6,})/))) return { tipo:'vimeo', id:m[1], src:`https://player.vimeo.com/video/${m[1]}` };
+  if (/^https:\/\/\S+\.(mp4|webm|mov)(\?\S*)?$/i.test(u)) return { tipo:'arquivo', src:u };
+  return null;
+}
+const auVista = (aId, uid = uidAtual) => aulasVistas.find(v => v.aulaId === aId && v.uid === uid);
+const auAssistiu = (aId, uid = uidAtual) => !!auVista(aId, uid)?.assistiu;
+const auPublico = () => perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel));
+const auPendentes = () => ['corretor','coordenador','sdr'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && !auAssistiu(a.id)) : [];
+function htmlAulaCard(a){
+  const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), abriu = !!auVista(a.id);
+  let rodape = '';
+  if (podeGerir()) { const pub = auPublico(), n = pub.filter(p => auAssistiu(a.id, p.uid)).length; rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(n / pub.length * 100) : 0}%"></i></div><small class="au-qt">${n} de ${pub.length} da equipe assistiram</small>`; }
+  return `<button class="au-card" onclick="abrirAula('${a.id}')">
+    <div class="au-capa" style="--c:${t.cor}">${v?.capa ? `<img src="${v.capa}" alt="" loading="lazy" onerror="this.remove()">` : `<span class="au-ic">${t.ic}</span>`}<span class="au-play"></span>${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${viu ? '<em class="au-ok">✓ Assistida</em>' : abriu ? '<em class="au-meio">Começou</em>' : a.obrigatoria ? '<em class="au-nova">Para assistir</em>' : ''}</div>
+    <div class="au-txt"><b>${esc(a.titulo)}</b><span>com ${esc(a.professor || '—')}</span>${rodape}</div></button>`;
+}
+function renderAulas(){
+  if (view !== 'aulas' || !$('auLista')) return;
+  $('auNovaBt').classList.toggle('hide', !(souGerente() && !souCeo()));
+  const meus = ['corretor','coordenador','sdr'].includes(perfil?.papel), tot = aulas.length, vi = aulas.filter(a => auAssistiu(a.id)).length;
+  $('auProg').innerHTML = !tot ? '<b>Aulas da Frade</b><small>Treinamentos em vídeo para a equipe.</small>' : meus ? `<b>Você assistiu ${vi} de ${tot} aula${tot > 1 ? 's' : ''}</b><div class="au-barra"><i style="width:${Math.round(vi / tot * 100)}%"></i></div>` : `<b>${tot} aula${tot > 1 ? 's' : ''} publicada${tot > 1 ? 's' : ''}</b><small>Toque numa aula para ver quem já assistiu.</small>`;
+  const temas = Object.keys(AU_TEMAS).filter(k => aulas.some(a => (a.tema || 'geral') === k));
+  $('auTabs').innerHTML = temas.length > 1 ? ['todas', ...temas].map(k => `<button class="${auTema === k ? 'on' : ''}" onclick="auFiltro('${k}')">${k === 'todas' ? 'Todas' : AU_TEMAS[k].ic + ' ' + AU_TEMAS[k].nome}</button>`).join('') : '';
+  if (!tot) { $('auLista').innerHTML = `<div class="au-vazio"><span>🎬</span><b>Nenhuma aula ainda</b><p>${souGerente() && !souCeo() ? 'Toque em <b>+ Nova aula</b> e cole o link do vídeo (YouTube não listado ou Google Drive).' : 'Quando a gerência publicar uma aula, ela aparece aqui e você recebe um aviso.'}</p></div>`; return; }
+  $('auLista').innerHTML = (auTema === 'todas' ? temas : [auTema]).map(k => { const l = aulas.filter(a => (a.tema || 'geral') === k); if (!l.length) return ''; const t = AU_TEMAS[k];
+    return `<section class="au-trilha"><h3><span style="--c:${t.cor}">${t.ic}</span>${t.nome}<small>${l.length} aula${l.length > 1 ? 's' : ''}${meus ? ` · ${l.filter(a => auAssistiu(a.id)).length} assistida${l.filter(a => auAssistiu(a.id)).length === 1 ? '' : 's'}` : ''}</small></h3><div class="au-grade">${l.map(htmlAulaCard).join('')}</div></section>`; }).join('');
+}
+window.auFiltro = k => { auTema = k; renderAulas(); };
+function htmlAulasHoje(){
+  const p = auPendentes(); if (!p.length) return '';
+  const a = p[0];
+  return `<div class="au-hoje" onclick="abrirAula('${a.id}')"><span>🎓</span><div><b>${p.length > 1 ? `Você tem ${p.length} aulas para assistir` : 'Aula para você assistir'}</b><small>${esc(a.titulo)} · com ${esc(a.professor || '')}</small></div><button class="btn btn-primary">Assistir</button></div>`;
+}
+window.abrirAula = async id => {
+  const a = aulas.find(x => x.id === id); if (!a) return; auAberta = id;
+  const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral;
+  $('auVerTit').textContent = a.titulo;
+  $('auVideo').innerHTML = !v ? `<div class="au-semv">Não deu para abrir este vídeo aqui. <a href="${esc(a.url)}" target="_blank" rel="noopener">Abrir o vídeo</a></div>`
+    : v.tipo === 'arquivo' ? `<video src="${esc(v.src)}" controls playsinline preload="metadata"></video>`
+    : `<iframe src="${v.src}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  pintarInfoAula();
+  abrir('auVerModal');
+  if (['corretor','coordenador','sdr'].includes(perfil?.papel) && !auVista(id)) { try { await setDoc(doc(db,'aulas_vistas', id + '_' + uidAtual), { aulaId:id, uid:uidAtual, nome:perfil.nome, abriu:Date.now() }, { merge:true }); } catch(e) {} }
+};
+function pintarInfoAula(){
+  const a = aulas.find(x => x.id === auAberta); if (!a || !$('auVerInfo')) return;
+  const t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), meus = ['corretor','coordenador','sdr'].includes(perfil?.papel);
+  let quem = '';
+  if (podeGerir()) { const pub = auPublico(), sim = pub.filter(p => auAssistiu(a.id, p.uid)), meio = pub.filter(p => !auAssistiu(a.id, p.uid) && auVista(a.id, p.uid)), nao = pub.filter(p => !auVista(a.id, p.uid));
+    const lista = (l, cls) => l.map(p => `<span class="au-p ${cls}">${esc(primeiro(p.nome))}</span>`).join('') || '<span class="muted">ninguém</span>';
+    quem = `<div class="au-gest"><div><b>✓ Assistiram (${sim.length})</b><div>${lista(sim, 'ok')}</div></div><div><b>Começaram (${meio.length})</b><div>${lista(meio, 'meio')}</div></div><div><b>Ainda não abriram (${nao.length})</b><div>${lista(nao, 'nao')}</div></div></div>`; }
+  $('auVerInfo').innerHTML = `<div class="au-meta"><span class="au-tag" style="--c:${t.cor}">${t.ic} ${t.nome}</span><span>com <b>${esc(a.professor || '—')}</b></span>${a.duracao ? `<span>${esc(a.duracao)}</span>` : ''}</div>
+    ${a.descricao ? `<p class="au-desc">${esc(a.descricao).replace(/\n/g, '<br>')}</p>` : ''}
+    <div class="au-acoes">${meus ? (viu ? '<span class="au-feito">✓ Você já assistiu esta aula</span>' : `<button class="btn btn-primary" onclick="marcarAssistida('${a.id}')">✓ Terminei de assistir</button>`) : ''}${souGerente() && !souCeo() ? `<button class="btn btn-ghost" onclick="editarAula('${a.id}')">Editar</button>` : ''}</div>${quem}`;
+}
+window.fecharAula = () => { $('auVideo').innerHTML = ''; auAberta = null; fechar('auVerModal'); };
+window.marcarAssistida = async id => {
+  try { await setDoc(doc(db,'aulas_vistas', id + '_' + uidAtual), { aulaId:id, uid:uidAtual, nome:perfil.nome, assistiu:Date.now() }, { merge:true }); festejar('🎓 Aula concluída!'); } catch(e) { toast('Erro: ' + e.message); }
+};
+let auEditando = null;
+function auPreencherProfs(){ const nomes = [...new Set([...aulas.map(a => a.professor).filter(Boolean), ...perfisLista.filter(p => p.papel === 'gerente' && p.status === 'ativo').map(p => p.nome)])]; $('auProfs').innerHTML = nomes.map(n => `<option value="${esc(n)}">`).join(''); }
+window.novaAula = () => { auEditando = null; $('auEdTit').textContent = 'Nova aula'; $('auSalvarBt').textContent = 'Publicar aula'; $('auExcluir').classList.add('hide');
+  ['auUrl','auTitulo','auDur','auDesc','auOrdem'].forEach(i => $(i).value = ''); $('auTema').value = auTema !== 'todas' ? auTema : 'crm'; $('auProf').value = perfil.nome || ''; $('auObrig').checked = true; $('auAvisar').checked = true; $('auAvisar').closest('label').classList.remove('hide');
+  auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
+window.editarAula = id => { const a = aulas.find(x => x.id === id); if (!a) return; fecharAula(); auEditando = id;
+  $('auEdTit').textContent = 'Editar aula'; $('auSalvarBt').textContent = 'Salvar'; $('auExcluir').classList.remove('hide');
+  $('auUrl').value = a.url || ''; $('auTitulo').value = a.titulo || ''; $('auTema').value = a.tema || 'geral'; $('auProf').value = a.professor || ''; $('auDur').value = a.duracao || ''; $('auOrdem').value = a.ordem || ''; $('auDesc').value = a.descricao || ''; $('auObrig').checked = !!a.obrigatoria; $('auAvisar').checked = false; $('auAvisar').closest('label').classList.add('hide');
+  auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
+window.auPrevia = () => { const v = auVideo($('auUrl').value); const u = $('auUrl').value.trim();
+  $('auPrevia').innerHTML = !u ? '' : !v ? '<span class="au-pv erro">Não reconheci este link. Use um link do YouTube, Google Drive ou Vimeo.</span>' : v.capa ? `<img src="${v.capa}" alt=""><span class="au-pv">✓ Vídeo do YouTube reconhecido</span>` : `<span class="au-pv">✓ Vídeo do ${v.tipo === 'drive' ? 'Google Drive' : v.tipo === 'vimeo' ? 'Vimeo' : 'arquivo'} reconhecido</span>`; };
+window.salvarAula = async () => {
+  const url = $('auUrl').value.trim(), titulo = $('auTitulo').value.trim();
+  if (!auVideo(url)) { toast('Cole um link de vídeo válido (YouTube, Google Drive ou Vimeo)'); return; }
+  if (!titulo) { toast('Dê um título para a aula'); return; }
+  const d = { url, titulo, tema:$('auTema').value, professor:$('auProf').value.trim(), duracao:$('auDur').value.trim(), ordem:Number($('auOrdem').value) || 99, descricao:$('auDesc').value.trim(), obrigatoria:$('auObrig').checked, atualizadoEm:Date.now() };
+  $('auSalvarBt').disabled = true;
+  try {
+    if (auEditando) { await updateDoc(doc(db,'aulas', auEditando), d); toast('Aula salva ✓'); }
+    else { const r = await addDoc(collection(db,'aulas'), { ...d, criadoEm:Date.now(), porUid:uidAtual, porNome:perfil.nome }); if ($('auAvisar').checked) avisarCarteiro('aula', r.id, true); toast('🎬 Aula publicada!'); }
+    fechar('auEdModal');
+  } catch(e) { toast('Erro: ' + e.message); }
+  $('auSalvarBt').disabled = false;
+};
+window.excluirAula = async () => {
+  if (!auEditando || !confirm('Excluir esta aula? O vídeo continua no YouTube/Drive, só sai do app.')) return;
+  try { await deleteDoc(doc(db,'aulas', auEditando)); fechar('auEdModal'); toast('Aula excluída'); } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// =====================================================================
+// ============ CHECK-IN NO ESCRITÓRIO (presença) · v79 ============
+// =====================================================================
+let checkinsHoje = [], meuCheckin = null, filaHoje = null, checkinsMes = [];
+const ciHoje = () => hojeISO(), ciId = (uid, dia = ciHoje()) => dia + '_' + uid;
+const ciCfg = () => ({ hora:'08:30', dias:[1,2,3,4,5,6], ...(appCfg.checkin || {}) });
+const hm = ms => { const d = new Date(ms); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const ciAtrasado = c => !!c && c.via !== 'externo' && hm(c.entrada) > ciCfg().hora;
+function assinarCheckins(){
+  checkinsHoje = []; meuCheckin = null; filaHoje = null; checkinsMes = [];
+  if (!souAtivo()) return;
+  if (podeGerir()) {
+    const daEquipe = souCoord() && !souGerente() ? [where('equipe','==', perfil.equipe || '')] : [];
+    subsPapel.push(onSnapshot(query(collection(db,'checkins'), where('dia','==',ciHoje()), ...daEquipe), s => { checkinsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); meuCheckin = checkinsHoje.find(c => c.uid === uidAtual) || null; render(); pintarRecepcao(); }, e => console.warn('checkins', e.code || e.message)));
+    subsPapel.push(onSnapshot(query(collection(db,'checkins'), where('mes','==', mesAtual()), ...daEquipe), s => { checkinsMes = s.docs.map(d => d.data()); }, () => {}));
+  } else subsPapel.push(onSnapshot(doc(db,'checkins', ciId(uidAtual)), s => { meuCheckin = s.exists() ? { id:s.id, ...s.data() } : null; render(); }, e => console.warn('checkin', e.code || e.message)));
+  subsPapel.push(onSnapshot(doc(db,'fila', ciHoje()), s => { filaHoje = s.exists() ? s.data() : null; render(); pintarRecepcao(); }, () => {}));
+}
+// quem está no escritório agora, pela ordem de chegada
+function ordemFila(){
+  const presentes = checkinsHoje.filter(c => !c.saida && c.via !== 'externo').sort((a,b) => (a.entrada || 0) - (b.entrada || 0)).map(c => c.uid);
+  return presentes;
+}
+function posicaoMinha(){ if (souGerente()) { const i = checkinsHoje.filter(c => c.via !== 'externo').sort((a,b) => a.entrada - b.entrada).findIndex(c => c.uid === uidAtual); return i + 1; } return filaHoje?.ordem ? (filaHoje.ordem.indexOf(uidAtual) + 1) : 0; }
+function htmlCiResumoGestor(){
+  if (!podeGerir() || !ciCfg().dias.includes(new Date().getDay())) return '';
+  const chegaram = checkinsHoje.filter(c => c.via !== 'externo' && c.uid !== uidAtual).length, fora = checkinsHoje.filter(c => c.via === 'externo').length, atr = checkinsHoje.filter(ciAtrasado).length;
+  const faltam = pessoasPlantao().filter(p => (souGerente() || p.equipe === perfil.equipe) && p.uid !== uidAtual && !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status)).length;
+  return `<div class="ci-res" onclick="setView('corretores')"><span>📷</span><div><b>Check-in${souGerente() ? '' : ' da sua equipe'}</b><small>${chegaram} chegaram${fora ? ` · ${fora} fora atendendo` : ''}${atr ? ` · <em class="ci-atr">${atr} atrasado${atr > 1 ? 's' : ''}</em>` : ''}${faltam ? ` · ${faltam} sem check-in` : ''}</small></div><button class="link">Ver</button></div>`;
+}
+function htmlCheckinHoje(){
+  if (!['corretor','coordenador'].includes(perfil?.papel)) return htmlCiResumoGestor();
+  const c = meuCheckin, cfg = ciCfg(), diaSem = new Date().getDay();
+  if (!c) { if (!cfg.dias.includes(diaSem)) return '';
+    const atras = hm(Date.now()) > cfg.hora;
+    return htmlCiResumoGestor() + `<div class="ci-card ${atras ? 'atras' : ''}"><div class="ci-txt"><b>${atras ? '⏰ Você ainda não fez o check-in' : '👋 Chegou na Frade?'}</b><small>Entrada às ${cfg.hora}. Faça o check-in pelo código da recepção.</small></div>
+      <div class="ci-bts"><button class="btn btn-primary ci-bt" onclick="abrirCamera()">📷 Fazer check-in</button><button class="link" onclick="abrir('ciExtModal')">Estou fora, atendendo</button></div></div>`; }
+  const pos = posicaoMinha();
+  if (c.saida) return `<div class="ci-card feito"><div class="ci-txt"><b>👋 Até amanhã!</b><small>Chegou às ${hm(c.entrada)} e saiu às ${hm(c.saida)}.</small></div></div>`;
+  return htmlCiResumoGestor() + `<div class="ci-card feito"><div class="ci-txt"><b>${c.via === 'externo' ? '📍 Check-in fora do escritório' : '✅ Check-in feito'} às ${hm(c.entrada)}${ciAtrasado(c) ? ' <em class="ci-atr">atrasado</em>' : ''}</b><small>${c.via === 'externo' ? esc(c.onde || '') : pos ? `Você foi o <b>${pos}º</b> a chegar hoje.` : 'Bom trabalho!'}</small></div>
+    <div class="ci-bts"><button class="btn btn-ghost" onclick="fazerCheckout()">Saindo 👋</button></div></div>`;
+}
+function htmlCiGestao(){
+  if (!podeGerir()) return '';
+  const o = ordemFila(), ext = checkinsHoje.filter(c => c.via === 'externo' && !c.saida), sairam = checkinsHoje.filter(c => c.saida);
+  const nome = u => checkinsHoje.find(c => c.uid === u)?.nome || perfisLista.find(p => p.uid === u)?.nome || '?';
+  const faltam = pessoasPlantao().filter(p => (souGerente() || p.equipe === perfil.equipe) && p.uid !== uidAtual).filter(p => !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status));
+  return `<div class="ci-g"><div class="rep-sec" style="margin:0 0 6px">${souGerente() ? 'No escritório' : 'No escritório · sua equipe'} (ordem de chegada)</div>
+    ${o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="ci-l"><span class="ci-pos">${i + 1}º</span><b>${esc(nome(u))}</b><span class="ci-h">${hm(c.entrada)}${ciAtrasado(c) ? ' · <em class="ci-atr">atrasado</em>' : ''}</span></div>`; }).join('') : '<div class="muted" style="font-size:13px">Ninguém fez check-in ainda.</div>'}
+    ${ext.length ? `<div class="rep-sec" style="margin:10px 0 6px">Fora, atendendo</div>${ext.map(c => `<div class="ci-l"><span class="ci-pos">📍</span><b>${esc(c.nome)}</b><span class="ci-h">${hm(c.entrada)} · ${esc(c.onde || '')}${c.local ? ` · <a href="https://maps.google.com/?q=${c.local.lat},${c.local.lng}" target="_blank" rel="noopener">ver no mapa</a>` : ''}</span></div>`).join('')}` : ''}
+    ${sairam.length ? `<div class="ci-sairam">Já saíram: ${sairam.map(c => `${esc(primeiro(c.nome))} (${hm(c.saida)})`).join(', ')}</div>` : ''}
+    ${faltam.length ? `<div class="ci-faltam">Ainda sem check-in: ${faltam.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}</div>`;
+}
+// ---- câmera (lê o código da recepção) ----
+let _ciStream = null, _ciLoop = 0;
+async function carregarJsQR(){
+  if (window.jsQR) return;
+  for (const u of ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js']) { try { await new Promise((ok, erro) => { const sc = document.createElement('script'); sc.src = u; sc.onload = ok; sc.onerror = erro; document.head.appendChild(sc); }); if (window.jsQR) return; } catch(e) {} }
+}
+window.abrirCamera = async () => {
+  abrir('ciCamModal'); $('ciCamTxt').textContent = 'Abrindo a câmera…';
+  try { _ciStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment' }, audio:false });
+    const v = $('ciVideo'); v.srcObject = _ciStream; await v.play(); $('ciCamTxt').textContent = 'Aponte para o código na tela da recepção.';
+    const det = ('BarcodeDetector' in window) ? new BarcodeDetector({ formats:['qr_code'] }) : null; if (!det) await carregarJsQR();
+    const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently:true });
+    const ler = async () => { if (!_ciStream) return;
+      try { let txt = '';
+        if (det) { const r = await det.detect(v); txt = r[0]?.rawValue || ''; }
+        else if (window.jsQR && v.videoWidth) { cv.width = v.videoWidth; cv.height = v.videoHeight; cx.drawImage(v, 0, 0); const r = jsQR(cx.getImageData(0, 0, cv.width, cv.height).data, cv.width, cv.height); txt = r?.data || ''; }
+        const m = txt.match(/#ci-([A-Za-z0-9]{8,40})/); if (m) { fecharCamera(); fazerCheckin(m[1]); return; } } catch(e) {}
+      _ciLoop = setTimeout(ler, 250); };
+    ler();
+  } catch(e) { $('ciCamTxt').innerHTML = 'Não deu para abrir a câmera. Libere a câmera para o app nas configurações do celular, ou aponte a <b>câmera do celular</b> para o código: ele abre o app e faz o check-in.'; }
+};
+window.fecharCamera = () => { clearTimeout(_ciLoop); if (_ciStream) { _ciStream.getTracks().forEach(t => t.stop()); _ciStream = null; } fechar('ciCamModal'); };
+async function fazerCheckin(token){
+  if (meuCheckin) { toast('Você já fez o check-in hoje ✓'); return; }
+  const agora = Date.now();
+  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'qr', token });
+    avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Check-in feito às ${hm(agora)}!`); }
+  catch(e) { toast(e.code === 'permission-denied' ? 'Código vencido ou inválido. Aponte de novo para o código da recepção.' : 'Erro: ' + e.message); }
+}
+window.fazerCheckin = fazerCheckin;
+window.checkinExterno = async () => {
+  const onde = $('ciExtOnde').value.trim(); if (!onde) { toast('Diga onde você está'); return; }
+  $('ciExtBt').disabled = true;
+  let local = null;
+  if ($('ciExtGps').checked && navigator.geolocation) local = await new Promise(ok => navigator.geolocation.getCurrentPosition(p => ok({ lat:+p.coords.latitude.toFixed(5), lng:+p.coords.longitude.toFixed(5), prec:Math.round(p.coords.accuracy) }), () => ok(null), { timeout:8000, enableHighAccuracy:true }));
+  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:Date.now(), via:'externo', onde, ...(local ? { local } : {}) });
+    avisarCarteiro('checkin', ciId(uidAtual)); fechar('ciExtModal'); toast('📍 Check-in fora do escritório feito'); }
+  catch(e) { toast('Erro: ' + e.message); }
+  $('ciExtBt').disabled = false;
+};
+window.fazerCheckout = async () => {
+  if (!meuCheckin || meuCheckin.saida) return;
+  if (!confirm('Registrar a sua saída agora?')) return;
+  try { await updateDoc(doc(db,'checkins', meuCheckin.id), { saida:Date.now() }); toast('👋 Saída registrada. Até amanhã!'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// veio pelo link do código (câmera do celular)
+function conferirLinkCheckin(){
+  const m = location.hash.match(/^#ci-([A-Za-z0-9]{8,40})$/); if (!m || !perfil || !souAtivo()) return;
+  history.replaceState(null, '', location.pathname); setView('hoje'); setTimeout(() => fazerCheckin(m[1]), 600);
+}
+// ---- tela da recepção: código que muda a cada 30 segundos ----
+let _rcTimer = 0, _rcRel = 0, _rcToken = '';
+async function carregarQrGen(){
+  if (window.qrcode) return;
+  for (const u of ['https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js', 'https://unpkg.com/qrcode-generator@1.4.4/qrcode.js']) { try { await new Promise((ok, erro) => { const sc = document.createElement('script'); sc.src = u; sc.onload = ok; sc.onerror = erro; document.head.appendChild(sc); }); if (window.qrcode) return; } catch(e) {} }
+}
+const ciToken = () => { const a = new Uint8Array(12); crypto.getRandomValues(a); return [...a].map(x => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[x % 56]).join(''); };
+async function girarCodigo(){
+  if (view !== 'recepcao') return;
+  const t = ciToken(), ant = _rcToken; _rcToken = t;
+  try { await setDoc(doc(db,'checkin_qr','atual'), { token:t, anterior:ant || t, exp:Date.now() + 75000, em:Date.now(), por:perfil.nome }); } catch(e) { $('rcQr').innerHTML = `<div class="rc-load">Não deu para gerar o código (${esc(e.code || e.message)}). Publique as regras novas do Firebase.</div>`; return; }
+  await carregarQrGen();
+  if (!window.qrcode) { $('rcQr').innerHTML = '<div class="rc-load">Sem internet para desenhar o código.</div>'; return; }
+  const q = qrcode(0, 'M'); q.addData(location.origin + location.pathname + '#ci-' + t); q.make();
+  $('rcQr').innerHTML = q.createSvgTag({ cellSize:8, margin:2, scalable:true });
+  const b = $('rcBarra'); if (b) { b.style.transition = 'none'; b.style.width = '100%'; void b.offsetWidth; b.style.transition = 'width 30s linear'; b.style.width = '0%'; }
+}
+function iniciarRecepcao(){
+  if (_rcTimer) return;
+  _rcTimer = setInterval(girarCodigo, 30000); girarCodigo();
+  const rel = () => { if ($('rcRelogio')) { const d = new Date(); $('rcRelogio').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()); $('rcData').textContent = d.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' }); } };
+  rel(); _rcRel = setInterval(rel, 15000);
+  try { navigator.wakeLock?.request('screen').then(w => window._rcWake = w).catch(() => {}); } catch(e) {}
+  pintarRecepcao();
+}
+function pararRecepcao(){ if (_rcTimer) { clearInterval(_rcTimer); clearInterval(_rcRel); _rcTimer = 0; _rcToken = ''; try { window._rcWake?.release(); } catch(e) {} } }
+window.pararRecepcao = pararRecepcao;
+function pintarRecepcao(){
+  if (view !== 'recepcao' || !$('rcFila')) return;
+  const o = ordemFila(), nome = u => checkinsHoje.find(c => c.uid === u)?.nome || '?';
+  const fora = checkinsHoje.filter(c => c.via === 'externo' && !c.saida).length, sairam = checkinsHoje.filter(c => c.saida).length;
+  $('rcProx').innerHTML = `<div class="rc-nums"><div><b>${o.length}</b><span>no escritório</span></div><div><b>${fora}</b><span>fora, atendendo</span></div><div><b>${sairam}</b><span>já saíram</span></div></div>`;
+  $('rcFila').innerHTML = o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="rc-l ${i === 0 ? 'vez' : ''}"><i>${i + 1}º</i><b>${esc(nome(u))}</b><span>${hm(c.entrada)}</span></div>`; }).join('') : '<div class="rc-vazio">Os corretores aparecem aqui na ordem em que fizerem o check-in.</div>';
+  const ext = checkinsHoje.filter(c => c.via === 'externo' && !c.saida); if (ext.length) $('rcFila').innerHTML += `<div class="rc-ext">📍 Fora, atendendo: ${ext.map(c => esc(primeiro(c.nome))).join(', ')}</div>`;
+}
+window.recepcaoCheia = async () => { try { if (!document.fullscreenElement) await $('rcTela').requestFullscreen(); else await document.exitFullscreen(); } catch(e) {} };
+// ---- configuração (gerência) ----
+function htmlCiConfig(){
+  if (!souGerente() || souCeo()) return '';
+  const c = ciCfg(), D = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  return `<div class="ci-cfg"><label>Horário de entrada<input type="time" id="ciHora" value="${c.hora}"></label><div class="ci-dias">${D.map((d, i) => `<label><input type="checkbox" data-d="${i}" ${c.dias.includes(i) ? 'checked' : ''}> ${d}</label>`).join('')}</div><button class="btn btn-ghost" onclick="salvarCiCfg()">Salvar</button></div>`;
+}
+window.salvarCiCfg = async () => {
+  const hora = $('ciHora').value || '08:30', dias = [...document.querySelectorAll('.ci-dias input:checked')].map(i => Number(i.dataset.d));
+  try { await gravar(setDoc(doc(db,'config','app'), { checkin:{ hora, dias } }, { merge:true })); toast('Horário do check-in salvo ✓'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// ---- resumo do mês: atrasos e chegada média ----
+function ciResumoMes(uid){
+  const l = checkinsMes.filter(c => c.uid === uid && c.via !== 'externo'); if (!l.length) return { n:0, atr:0, media:'' };
+  const min = l.map(c => { const d = new Date(c.entrada); return d.getHours() * 60 + d.getMinutes(); }), med = Math.round(min.reduce((a,b) => a + b, 0) / min.length);
+  return { n:checkinsMes.filter(c => c.uid === uid).length, atr:l.filter(ciAtrasado).length, media:pad(Math.floor(med / 60)) + ':' + pad(med % 60) };
+}
 // ---------- fluidez e comemorações · v77 ----------
 const _semMov = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 // números contando até o valor quando a tela abre
@@ -6792,6 +7210,13 @@ const finDoMes = m => finLanc.filter(x => (x.data || '').slice(0,7) === m);
 window.renderFinanceiro = () => renderFinanceiro();
 function renderPrefNotif(){ if (view === 'config' && $('prefNotif') && !$('prefNotif').contains(document.activeElement)) $('prefNotif').innerHTML = htmlPrefNotif(); }
 function renderExtrato(){ renderPrefNotif();
+  if ($('checkinHoje')) { const h = view === 'hoje' ? htmlCheckinHoje() : ''; if ($('checkinHoje')._h !== h) { $('checkinHoje').innerHTML = h; $('checkinHoje')._h = h; } }
+  if ($('ciGestao')) { const h = view === 'corretores' ? htmlCiGestao() : ''; if ($('ciGestao')._h !== h) { $('ciGestao').innerHTML = h; $('ciGestao')._h = h; } }
+  if ($('ciCfgBox') && view === 'config' && !$('ciCfgBox').contains(document.activeElement)) $('ciCfgBox').innerHTML = htmlCiConfig();
+  if (view === 'recepcao') iniciarRecepcao();
+  renderAulas(); if (auAberta && $('auVerModal').classList.contains('open')) pintarInfoAula();
+  if ($('aulasHoje')) { const h = view === 'hoje' ? htmlAulasHoje() : ''; if ($('aulasHoje')._h !== h) { $('aulasHoje').innerHTML = h; $('aulasHoje')._h = h; } }
+  if ($('cAulas')) { const n = auPendentes().length; $('cAulas').textContent = n; $('cAulas').classList.toggle('hide', !n); }
   if (view === 'sorteio' && $('sxPalco') && !sxGirando && !$('sxPalco').contains(document.activeElement) && !document.querySelector('.sx-cfg')?.contains(document.activeElement)) { sxPinta(); sxPintaHist(); }
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
@@ -7902,7 +8327,7 @@ function renderPresenca(){
   const [mi, mf] = faixa('mes'), dias = Object.keys(presencas).filter(d => d >= mi && d <= mf);
   const cont = {}; dias.forEach(d => Object.entries(presencas[d].marcados || {}).forEach(([u, x]) => { cont[u] = cont[u] || { p:0, f:0 }; if (x.status === 'presente') cont[u].p++; if (x.status === 'falta') cont[u].f++; }));
   const top = ps.filter(p => cont[p.uid]).sort((a,b) => cont[b.uid].p - cont[a.uid].p);
-  $('presMes').innerHTML = top.length ? `<table class="rank"><thead><tr><th>Corretor</th><th>Plantões no mês</th><th>Faltas</th></tr></thead><tbody>${top.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span></td><td class="tot">${cont[p.uid].p}</td><td>${cont[p.uid].f || ''}</td></tr>`).join('')}</tbody></table>` : '<div class="muted" style="font-size:13px">Nenhuma presença marcada neste mês ainda.</div>';
+  $('presMes').innerHTML = top.length ? `<table class="rank"><thead><tr><th>Corretor</th><th>Dias no escritório</th><th>Faltas</th><th>Atrasos</th><th class="hide-m">Chegada média</th></tr></thead><tbody>${top.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span></td><td class="tot">${cont[p.uid].p}</td><td>${cont[p.uid].f || ''}</td><td>${ciResumoMes(p.uid).atr || ''}</td><td class="hide-m">${ciResumoMes(p.uid).media || '—'}</td></tr>`).join('')}</tbody></table>` : '<div class="muted" style="font-size:13px">Nenhuma presença marcada neste mês ainda.</div>';
 }
 window.mudarDiaPresenca = v => { window.presDia = v || hojeISO(); render(); };
 window.marcarPresenca = async (uid, st) => {
@@ -7951,7 +8376,7 @@ function htmlLeadsHoje(){
       ${Object.keys(x.origens).length ? `<div class="lh-orig">${Object.entries(x.origens).sort((a,b) => b[1]-a[1]).map(([o,q]) => `<i>${esc(o)} ${q}</i>`).join('')}</div>` : ''}</div>
       <div class="lh-bar"><i style="width:${x.n/max*100}%"></i></div><b class="lh-q">${x.n} <button class="link" title="Corrigir o número" onclick="ajustarLeads('${esc(x.chave)}')">✏️</button></b></div>`).join('')
       : `<div class="muted" style="font-size:13.5px;padding:6px 0">${ehHoje ? 'Nenhum lead chegou hoje ainda. Assim que o CRM passar um lead para alguém, aparece aqui na hora.' : 'Nenhum lead registrado nesse dia.'}</div>`}
-    ${parados.length ? `<div class="lh-parados">⏸️ No plantão e sem lead hoje: ${parados.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}`;
+    ${parados.length ? `<div class="lh-parados">⏸️ No escritório e sem lead hoje: ${parados.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}`;
 }
 
 // ---------- pesquisa de atendimento ----------
@@ -8261,7 +8686,7 @@ function renderPainel(){
     ${kpi('🎉','Vendas', A.vendas, B.vendas, `reservas + cartas vendidas${A.valorVendido ? ' · ' + brl(A.valorVendido) : ''}`)}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
     <div class="pd-kpi"><span>Nota do atendimento</span><b>${(() => { const l = pesquisas.filter(p => p.respondida && typeof p.nota === 'number' && iso(new Date(p.respondidaEm || 0)) >= de && iso(new Date(p.respondidaEm || 0)) <= ate); return l.length ? mediaNotas(l).toLocaleString('pt-BR') : '–'; })()}</b><em>média das pesquisas após a visita</em></div>
-    <div class="pd-kpi"><span>Plantão</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
+    <div class="pd-kpi"><span>Presença</span><b>${A.presMedia === null ? '–' : A.presMedia.toLocaleString('pt-BR')}</b><small class="var">antes ${B.presMedia === null ? '–' : B.presMedia.toLocaleString('pt-BR')}</small><em>corretores por dia</em></div>
   </div></details>`;
   // equipes
   const eqs = listaEquipes().map(e => {
@@ -8292,7 +8717,7 @@ function renderPainel(){
   html += `<div class="card"><div class="card-head"><h2>Destaques do mês</h2><span class="muted">por pontos</span></div>${top.length ? top.map((x,i) => `<div class="pt-row"><span>${MEDALHA(i)} ${esc(x.nome)} <small class="muted">${esc(eqNome(x.equipe))}</small></span><b>${x.pontos} pts · ${x.vendas} venda${x.vendas!==1?'s':''}</b></div>`).join('') : '<div class="muted" style="font-size:13.5px">Sem pontos no período. Defina a pontuação em Configurações.</div>'}</div></div>`;
   // ao vivo + notas
   html += '<!--SEC:operacao-->';
-  if (atual) html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>Leads por dia <span class="ao-vivo">ao vivo</span></h2><button class="link" onclick="setView('corretores')">Plantão</button></div>${htmlLeadsHoje()}</div>
+  if (atual) html += `<div class="pd-grid"><div class="card"><div class="card-head"><h2>Leads por dia <span class="ao-vivo">ao vivo</span></h2><button class="link" onclick="setView('corretores')">Presença</button></div>${htmlLeadsHoje()}</div>
     <div class="card"><div class="card-head"><h2>Nota do atendimento</h2><span class="muted">pesquisa após a visita</span></div>${htmlNotas(de, ate)}</div></div>`;
   else html += `<div class="card"><div class="card-head"><h2>Nota do atendimento</h2></div>${htmlNotas(de, ate)}</div>`;
   html += `<div class="card" style="margin-bottom:20px"><div class="card-head"><h2>SDRs</h2><span class="muted">visitas marcadas e resumo do dia</span></div>${tabelaSdr(de, ate)}</div>`;
