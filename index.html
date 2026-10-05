@@ -1347,6 +1347,95 @@ button.bg-card{cursor:pointer;transition:border-color .15s}button.bg-card:hover{
 .bg-alerta{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;gap:8px;align-items:center;background:var(--danger-soft);color:var(--danger);font-weight:600;font-size:13.5px;border-radius:14px;padding:10px 16px;margin-bottom:14px}.bg-alerta span{margin-left:auto}
 @media(max-width:1100px){.bg-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"a c" "b c" "d e" "f f"}}
 @media(max-width:700px){.bg-grid{grid-template-columns:1fr;grid-template-areas:"a" "c" "b" "d" "e" "f";gap:12px}.bg-card{padding:16px;border-radius:18px}.bg-big{font-size:32px}.bg-etapas>div{grid-template-columns:110px 1fr 18px}.bg-donut{width:120px;height:120px}}
+
+#axPe a{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.ax-pdf{width:100%;height:min(70vh,720px);border:0;border-radius:12px;background:var(--card2)}.ax-img{max-width:100%;border-radius:12px;display:block;margin:0 auto}.ax-load{padding:40px 10px;text-align:center;color:var(--muted)}
+.nf-anexar{width:100%;display:grid;gap:2px;justify-items:center;border:1.5px dashed color-mix(in srgb,var(--accent) 45%,var(--border));background:color-mix(in srgb,var(--accent) 5%,transparent);border-radius:12px;padding:14px;cursor:pointer;font:inherit;color:var(--accent)}.nf-anexar small{color:var(--muted);font-size:12px}.nf-anexar:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.nf-arq{display:flex;align-items:center;gap:10px;background:var(--card2);border-radius:12px;padding:10px 12px}.nf-arq i{font-style:normal;font-size:20px}.nf-arq span{flex:1;display:grid;min-width:0}.nf-arq b{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nf-arq small{font-size:12px;color:var(--muted)}.nf-arq .link{font-size:13px}
+.nf-ver{font-size:12.5px;padding:0}.nf-sem{color:var(--warn)}.fv-nota-l{display:flex;gap:10px;align-items:center}
+/* v77 · fluidez */
+.ml-acoes .snooze svg,.ml-acoes .wa svg{width:16px!important;height:16px!important;flex:none}.ml-acoes .snooze.wa{display:inline-flex;align-items:center;gap:5px;padding:6px 10px}
+.btn,.icon-btn,.stat,.fv-card,.fl-row,.bg-card,.sino-item,.fin-tipo button,.seg button{transition:transform .14s var(--ease, ease),background .15s,border-color .15s,box-shadow .15s}
+.btn:active,.icon-btn:active,.fin-tipo button:active,.seg button:active{transform:scale(.96)}
+.stat:active,.fv-card:active,button.bg-card:active{transform:scale(.985)}
+@media(hover:hover){.stat:hover,.ex-card:hover{box-shadow:0 10px 28px rgba(15,35,60,.10)}}
+.ptr{position:fixed;left:50%;top:calc(6px + env(safe-area-inset-top,0px));z-index:9500;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--border);box-shadow:0 8px 24px rgba(15,23,42,.18);display:grid;place-items:center;opacity:0;pointer-events:none;transform:translate(-50%,0)}
+.ptr i{font-style:normal;font-size:20px;color:var(--muted);font-weight:700}.ptr.pronto i{color:var(--accent)}.ptr.girando{animation:gira .6s linear infinite;opacity:1!important}
+.fl-row.desl{transition:none;background:linear-gradient(90deg,var(--ok-soft),var(--card) 140px)}.fl-row.desl-ok{background:linear-gradient(90deg,color-mix(in srgb,var(--ok) 30%,transparent),var(--card) 160px)}
+.podio{display:flex;justify-content:center;align-items:flex-end;gap:16px;margin:0 0 18px;padding:18px 12px 0;width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px}
+.pd-deg{display:grid;justify-items:center;gap:3px;width:clamp(90px,26%,170px);text-align:center}
+.pd-av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;color:#fff;background:linear-gradient(140deg,var(--accent),#0b2340);box-shadow:0 8px 20px rgba(15,35,60,.2)}
+.pd-deg.p1 .pd-av{width:64px;height:64px;font-size:24px;background:linear-gradient(140deg,#f59e0b,#f97316)}.pd-deg.eu .pd-av{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
+.pd-deg b{font-size:14.5px}.pd-deg span{font-size:12.5px;color:var(--muted);font-weight:600}
+.pd-col{width:100%;border-radius:14px 14px 4px 4px;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 18%,var(--card)),var(--card2));border:1px solid var(--border);display:grid;place-items:center;margin-top:4px}
+.pd-col i{font-style:normal;font-size:26px}.p1 .pd-col{height:110px;background:linear-gradient(180deg,color-mix(in srgb,#f59e0b 28%,var(--card)),var(--card2))}.p2 .pd-col{height:80px}.p3 .pd-col{height:60px}
+@media(max-width:760px){.modal.open .sheet{animation:sheetSobe .3s cubic-bezier(.2,.9,.25,1) both}@keyframes sheetSobe{from{transform:translateY(40%);opacity:.4}to{transform:none;opacity:1}}}
+@media(prefers-reduced-motion:reduce){.btn:active,.icon-btn:active,.stat:active{transform:none}.modal.open .sheet{animation:none}}
+/* sorteio */
+.sx-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+.sx-palco{position:relative;overflow:hidden;border-radius:24px;background:radial-gradient(120% 90% at 85% 0%,color-mix(in srgb,#f97316 28%,#12355b) 0%,#12355b 46%,#0b2340 100%);color:#fff;padding:24px 26px;min-height:420px;display:flex;flex-direction:column;gap:12px}
+.sx-palco::after{content:"";position:absolute;right:-90px;bottom:-120px;width:340px;height:340px;border-radius:50%;border:44px solid rgba(255,255,255,.05);pointer-events:none}
+.sx-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;position:relative;z-index:1}.sx-top small{font-size:12.5px;color:rgba(255,255,255,.7);font-weight:700;letter-spacing:.05em;text-transform:uppercase}.sx-top h2{margin:2px 0 0;font-size:26px;letter-spacing:-.02em;color:#fff}
+.sx-premio{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:7px 13px;font-weight:600;font-size:14px;align-self:flex-start}
+.sx-janela{flex:1;display:grid;place-items:center;text-align:center;position:relative;z-index:1;min-height:190px}
+.sx-nome{font-weight:800;letter-spacing:-.03em;line-height:1.05;font-size:clamp(32px,5.6vw,68px);overflow-wrap:anywhere;color:#fff}
+.sx-nome.ganhou{text-shadow:0 6px 40px rgba(249,115,22,.7);animation:sxPop .55s cubic-bezier(.2,1.4,.4,1)}@keyframes sxPop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.sx-sub{margin-top:8px;color:rgba(255,255,255,.78);font-size:15px}
+.sx-agora{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1}.sx-agora span{background:#fff;color:#0b2340;border-radius:99px;padding:6px 12px;font-weight:700;font-size:14px}.sx-agora i{font-style:normal;color:#f97316;margin-right:5px}
+.sx-pe{display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:relative;z-index:1}.sx-pe span{font-size:13.5px;color:rgba(255,255,255,.75)}
+.sx-bt{background:#f97316;border:0;color:#fff;font-size:18px;padding:16px 26px;border-radius:16px;box-shadow:0 10px 30px rgba(249,115,22,.45)}.sx-bt[disabled]{opacity:.5}
+.sx-cfg{display:grid;gap:4px}.sx-part{margin-top:8px}.sx-part-t{font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.sx-chips{display:flex;flex-wrap:wrap;gap:5px;max-height:180px;overflow-y:auto}.sx-chips span{font-size:12px;background:var(--card2);border-radius:99px;padding:3px 9px}.sx-chips span.off{opacity:.4;text-decoration:line-through}
+.sx-h{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.sx-h:last-child{border:0}.sx-hq{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}.sx-h b{display:block}.sx-h small{font-size:12.5px;color:var(--muted)}
+.sx-palco:fullscreen{border-radius:0;padding:40px 56px}.sx-palco:fullscreen .sx-nome{font-size:clamp(56px,9vw,150px)}
+@media(max-width:900px){.sx-grid{grid-template-columns:1fr}.sx-palco{min-height:360px;padding:20px}.sx-bt{width:100%}}
+/* metas */
+.meta-card{background:linear-gradient(140deg,color-mix(in srgb,var(--accent) 12%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:18px;padding:14px 18px;margin-bottom:16px;display:grid;gap:8px}
+.meta-card.bateu{background:linear-gradient(140deg,color-mix(in srgb,var(--ok) 16%,var(--card)),var(--card));border-color:color-mix(in srgb,var(--ok) 35%,var(--border))}
+.meta-l1{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.meta-l1 span{font-weight:700;font-size:14.5px}.meta-l1 b{font-size:22px;font-variant-numeric:tabular-nums}.meta-l1 b small{font-size:13px;color:var(--muted);font-weight:600}
+.meta-card>small{font-size:12.5px;color:var(--text2)}
+.meta-bar{height:10px;border-radius:99px;background:color-mix(in srgb,var(--text) 9%,transparent);overflow:hidden}.meta-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),#f97316);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.meta-card.bateu .meta-bar i{background:var(--ok)}
+.metas-res{margin-bottom:20px}.metas-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.metas-top>div{background:var(--card2);border-radius:12px;padding:10px 14px;display:grid}.metas-top b{font-size:22px}.metas-top span{font-size:12.5px;color:var(--muted)}
+.metas-lista{display:grid;gap:7px}.mt-l{display:grid;grid-template-columns:110px 1fr 54px;gap:10px;align-items:center;font-size:13.5px}.mt-l b{text-align:right;font-variant-numeric:tabular-nums}.mt-l .meta-bar{height:8px}
+.mt-ed{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}.mt-ed span{display:grid;font-size:14px;font-weight:600}.mt-ed small{font-size:12px;color:var(--muted);font-weight:500}.mt-ed input{width:80px;text-align:center}
+/* vendas antigas */
+.va-res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.va-res>div{background:var(--card2);border-radius:12px;padding:10px 12px;display:grid}.va-res b{font-size:20px}.va-res span{font-size:12px;color:var(--muted)}
+.va-lista{max-height:46vh;overflow-y:auto;border:1px solid var(--border);border-radius:12px;padding:0 12px}.va-l{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}.va-l:last-child{border:0}
+.va-l span{display:grid;min-width:0}.va-l small{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.va-l em{font-style:normal;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}.va-l.dup{opacity:.5}
+.fv-tag{font-style:normal;font-size:10.5px;font-weight:700;background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn);border-radius:99px;padding:1px 6px}
+/* sino de notificações */
+.sino-w{position:relative}.sino{position:relative}.sino.on{background:var(--card2);color:var(--text)}
+.sino-n{position:absolute;top:3px;right:2px;min-width:17px;height:17px;border-radius:99px;background:var(--danger);color:#fff;font-size:10.5px;font-weight:800;display:grid;place-items:center;padding:0 4px;border:2px solid var(--bg)}
+.sino-painel{position:absolute;right:-60px;top:calc(100% + 8px);width:min(400px,calc(100vw - 24px));max-height:min(70vh,560px);display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.22);z-index:40;overflow:hidden;animation:sinoIn .18s ease-out}
+@keyframes sinoIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.sino-cab{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--border)}.sino-cab b{font-size:15px}.sino-cab span{display:flex;gap:12px}.sino-cab .link{font-size:12.5px}
+.sino-lista{overflow-y:auto;padding:6px;overscroll-behavior:contain}
+.sino-item{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;color:var(--text)}.sino-item:hover{background:var(--card2)}
+.sino-item.nova{background:color-mix(in srgb,var(--accent) 7%,transparent)}.sino-item.nova .sino-t b::after{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:6px;vertical-align:middle}
+.sino-t{flex:1;min-width:0;display:grid;gap:2px}.sino-t b{font-size:13.5px}.sino-t small{font-size:12.5px;color:var(--muted);line-height:1.35}.sino-item em{font-style:normal;font-size:11.5px;color:var(--muted);white-space:nowrap}
+.sino-vazio{padding:30px 18px;text-align:center;display:grid;gap:4px}.sino-vazio span{font-size:13px;color:var(--muted)}
+@media(max-width:640px){.sino-painel{position:fixed;left:12px;right:12px;width:auto;top:calc(60px + env(safe-area-inset-top,0px))}}
+.pref-n{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;cursor:pointer}.pref-n:last-child{border:0}
+.pref-n .sw{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:99px;background:var(--border);position:relative;flex:none;cursor:pointer;transition:background .15s;margin:0}
+.pref-n .sw::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.pref-n .sw:checked{background:var(--ok)}.pref-n .sw:checked::after{transform:translateX(18px)}
+/* extrato do corretor */
+.ex-resumo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.ex-resumo>div{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;display:grid;gap:2px}
+.ex-resumo span{font-size:13px;font-weight:600;color:var(--muted)}.ex-resumo b{font-size:26px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}.ex-resumo em{font-style:normal;font-size:12.5px;color:var(--muted)}
+.ex-resumo>div:first-child{background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 14%,var(--card)),var(--card));border-color:transparent}
+.ex-sec{font-size:13px;font-weight:700;color:var(--muted);margin:14px 2px 8px}
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:grid;gap:4px}.ex-card.pago{opacity:.85}
+.ex-l1{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.ex-l1 b{font-size:15px}.ex-val{font-weight:800;font-variant-numeric:tabular-nums}.ex-card small{font-size:12.5px;color:var(--muted)}
+.ex-dots{display:flex;gap:5px;margin:6px 0 2px}.ex-dots i{flex:1;height:6px;border-radius:99px;background:var(--card2)}.ex-dots i.ok{background:var(--ok)}.ex-dots i.at{background:var(--accent)}
+.ex-st{font-size:13px;color:var(--text2)}
+/* histórico e cópias */
+.hist-l{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13.5px}.hist-q{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12.5px}
+.bk-l{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}.bk-l>div{display:grid;gap:2px;min-width:0}.bk-l small{font-size:12.5px;color:var(--muted)}
+@media(max-width:520px){.bk-l{flex-wrap:wrap}.ex-resumo b{font-size:20px}}
+/* aviso de versão nova */
+.nova-versao{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:9000;border:0;border-radius:14px;padding:12px 18px;background:var(--accent);color:#fff;font:600 14px/1.3 inherit;font-family:inherit;box-shadow:0 12px 30px rgba(15,23,42,.3);cursor:pointer;max-width:calc(100% - 32px)}
+@media(min-width:900px){.nova-versao{bottom:24px}}
+.ver-app{font-size:12px;opacity:.75;margin-left:6px}
 /* ===== Financeiro v72: mais limpo ===== */
 .fv-dica{font-size:12.5px;color:var(--muted)}@media(max-width:640px){.fv-dica{flex-basis:100%}}
 .fv-funil .fv-card{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:grab}
@@ -1481,6 +1570,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button data-view="vendas" class="nao-sdr" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
+      <button data-view="comissoes" class="cor-only hide" onclick="setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
       <button data-view="financeiro" class="gerente-only hide" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
       <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
       <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
@@ -1488,6 +1578,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
+      <button data-view="sorteio" class="gest hide" onclick="setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
       <button data-view="corretores" class="gest hide" onclick="setView('corretores')"><i data-ic="users"></i>Corretores<span class="count red hide" id="cPend">0</span></button>
       <div class="nav-title" style="margin-top:14px">Conta</div>
       <button data-view="config" onclick="setView('config')"><i data-ic="gear"></i>Configurações</button>
@@ -1505,6 +1596,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="search" id="searchBox"><i data-ic="search"></i><input id="busca" placeholder="Buscar cliente, CPF, telefone, tarefa..." oninput="buscar(this.value)" autocomplete="off"><div class="busca-res hide" id="buscaRes"></div><kbd class="hide-m">/</kbd></div>
       <div class="top-actions">
         <button class="icon-btn m-only" id="btnBuscaM" onclick="abrirBuscaM()" title="Buscar" data-ic="search" style="display:none"></button>
+        <div class="sino-w"><button class="icon-btn sino" id="btnSino" onclick="abrirSino(event)" title="Notificações" aria-label="Notificações"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="sino-n hide" id="sinoN">0</span></button>
+          <div class="sino-painel hide" id="sinoPainel" onclick="event.stopPropagation()"><div class="sino-cab"><b>Notificações</b><span><button class="link" onclick="marcarTodasLidas()">marcar todas como lidas</button><button class="link" onclick="fecharSino();setView('config');setTimeout(()=>{const c=document.getElementById('cfgNotif');if(c){c.classList.add('aberto');c.scrollIntoView({behavior:'smooth'});}},300)">ajustar</button></span></div><div class="sino-lista" id="sinoLista"></div></div></div>
         <button class="icon-btn" onclick="alternarTema()" title="Modo claro/escuro" id="btnTema"></button>
         <button class="btn btn-primary hide-m" id="btnTopo" onclick="acaoPrincipal()"><i data-ic="plus" style="width:17px;height:17px;display:grid"></i><span id="btnNovoTxt">Nova tarefa</span></button>
       </div>
@@ -1516,10 +1609,11 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">Publicar aviso</button></div>
         <div id="bannerHoje"></div>
         <div id="alertasHoje"></div>
-        <div id="ligHoje"></div>
         <div id="conviteNotif"></div>
         <div class="mural" id="mural"></div>
+        <div id="metaHoje"></div>
         <div class="stats hide" id="statsPapel"></div>
+        <div id="ligHoje"></div>
         <div class="stats" id="statsTarefas">
           <div class="stat" onclick="setView('hoje')"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="cal"></div><div><b id="sHoje">0</b><span>Tarefas hoje</span></div></div>
           <div class="stat" onclick="irFiltro('concluidas')"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="check"></div><div><b id="sFeitas">0</b><span>Concluídas hoje</span></div></div>
@@ -1640,7 +1734,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
               <select id="rEquipe" onchange="rankEquipe=this.value;render()"></select>
             </div>
             <div class="janela" id="janelaRank"></div>
-            <div class="battle" id="battle"></div>
+            <div id="podio"></div><div class="battle" id="battle"></div>
             <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2></div><div id="rankLista"></div>
               <details class="info-tog" style="margin-top:12px"><summary>ⓘ Como é contado</summary><div class="hint" style="margin-top:6px" id="rankNota"></div></details></div>
           </div>
@@ -1732,7 +1826,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <section class="view" id="v-financeiro">
         <div class="page-head"><div><h1>Financeiro</h1><div class="sub">Só a gerência e o CEO veem esta tela.</div></div>
           <div class="ph-acoes fin-acoes"><select id="finMesSel" onchange="finMes=this.value;render()"></select><button class="btn btn-primary" onclick="editarFin()">+ Lançamento</button>
-            <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="exportarFin()">⬇ Exportar planilha</button></div></div></div></div>
+            <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
         <div id="finKpis"></div>
         <div id="finAviso"></div>
         <div class="seg pn-abas" id="finAbas"><button data-a="geral" onclick="finAba='geral';render()">Visão geral</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões</button><button data-a="notas" onclick="finAba='notas';render()">Notas fiscais</button><button data-a="lanc" onclick="finAba='lanc';render()">Entradas e saídas</button><button data-a="salarios" onclick="finAba='salarios';render()">Salários</button></div>
@@ -1740,6 +1834,33 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       </section>
 
       <!-- VENDAS (RESERVAS) -->
+      <section class="view" id="v-sorteio">
+        <div class="page-head"><div><h1>Sorteio</h1><div class="sub">Sorteie entre os corretores, quem está no plantão, os clientes do mês ou uma lista sua.</div></div><div class="ph-acoes"><button class="btn btn-ghost" onclick="sorteioCheia()">⛶ Tela cheia</button></div></div>
+        <div class="sx-grid">
+          <section class="sx-palco" id="sxPalco">
+            <div class="sx-top"><div><small id="sxOrigem">Sorteio</small><h2 id="sxTitulo">Sorteio Frade</h2></div><span class="sx-premio hide" id="sxPremioB">🎁 <span id="sxPremioT"></span></span></div>
+            <div class="sx-janela"><div><div class="sx-nome" id="sxNome">Pronto para sortear</div><div class="sx-sub" id="sxSub">Escolha quem participa e toque em Sortear.</div></div></div>
+            <div class="sx-agora" id="sxAgora"></div>
+            <div class="sx-pe"><button class="btn sx-bt" id="sxBt" onclick="sortearApp()">🎲 Sortear</button><span id="sxInfo"></span></div>
+          </section>
+          <aside class="card sx-cfg">
+            <div class="fg"><label>Nome do sorteio</label><input id="sxNomeI" maxlength="80" value="Sorteio Frade" oninput="sxPinta()"></div>
+            <div class="fg"><label>Prêmio (opcional)</label><input id="sxPremio" maxlength="80" placeholder="Ex.: Kit churrasco" oninput="sxPinta()"></div>
+            <div class="fg"><label>Quem participa</label><select id="sxFonte" onchange="sxPinta()"><option value="cor">Corretores ativos</option><option value="pres">Quem está no plantão hoje</option><option value="cli">Clientes com reserva no mês</option><option value="lista">Lista que eu colar</option></select></div>
+            <div class="fg hide" id="sxListaBox"><label>Um nome por linha</label><textarea id="sxLista" rows="6" oninput="sxPinta()"></textarea></div>
+            <div class="row2"><div class="fg"><label>Ganhadores</label><input id="sxQtd" type="number" min="1" max="30" value="1" oninput="sxPinta()"></div><div class="fg"><label>Suspense</label><select id="sxTempo"><option value="2500">Rápido</option><option value="4500" selected>Normal</option><option value="7000">Longo</option></select></div></div>
+            <label class="fv-chk"><input type="checkbox" id="sxSemRep" checked onchange="sxPinta()"> Quem já ganhou hoje não entra de novo</label>
+            <div class="sx-part" id="sxPart"></div>
+          </aside>
+        </div>
+        <div class="card" style="margin-top:18px"><div class="card-head"><h2>Ganhadores</h2><button class="link" onclick="sxCopiar()">Copiar para o WhatsApp</button></div><div id="sxHist"></div></div>
+      </section>
+
+      <section class="view" id="v-comissoes">
+        <div class="page-head"><div><h1>Minhas comissões</h1><div class="sub">As suas vendas e em que pé está a comissão de cada uma. Só você vê.</div></div></div>
+        <div id="extratoCorpo"></div>
+      </section>
+
       <section class="view" id="v-vendas">
         <div class="page-head"><div><h1>Vendas</h1><div class="sub" id="vendSub">Reservas feitas. Cada reserva conta como venda.</div></div>
           <button class="btn btn-primary nao-sdr nao-ceo" onclick="editarReserva()">+ Nova reserva</button></div>
@@ -1783,7 +1904,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- DESEMPENHO POR CORRETOR -->
       <section class="view" id="v-desempenho">
         <div class="page-head"><div><h1>Desempenho</h1><div class="sub" id="desSub"></div></div>
-          <div class="ph-acoes"><div class="seg" id="desSeg"></div></div></div>
+          <div class="ph-acoes"><button class="btn btn-ghost gerente-only hide" onclick="abrirMetas()">🎯 Metas do mês</button><div class="seg" id="desSeg"></div></div></div>
+        <div id="metasResumo"></div>
         <div id="desConteudo"></div>
       </section>
 
@@ -1916,7 +2038,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 
       <!-- CONFIGURAÇÕES -->
       <section class="view" id="v-config">
-        <div class="page-head"><div><h1>Configurações</h1><div class="sub">Personalize a sua agenda.</div></div></div>
+        <div class="page-head"><div><h1>Configurações</h1><div class="sub">Personalize a sua agenda. <span class="ver-app" id="verApp"></span></div></div></div>
+        <div class="card" id="cfgNotif" style="margin-bottom:20px"><div class="card-head"><h2>🔔 Quais avisos você quer receber</h2></div><div class="hint" style="margin:0 0 10px">Tudo aparece no sino 🔔 lá em cima. Os que estiverem ligados também chegam no celular, se as notificações estiverem ativadas no aparelho.</div><div id="prefNotif"></div></div>
         <div class="set-grid">
           <div class="card">
             <div class="card-head"><h2>Perfil</h2></div>
@@ -2402,6 +2525,40 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('finModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarFin()">Salvar</button></div>
   </div>
 </div>
+<input type="file" id="vaArq" class="hide" accept=".json,application/json" onchange="lerVendasAntigas(this)">
+<div class="modal" id="metasModal">
+  <div class="sheet" style="width:min(620px,100%)">
+    <div class="sheet-head"><h2 id="metasTit">Metas do mês</h2><button class="icon-btn" onclick="fechar('metasModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="metasCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('metasModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarMetas()">Salvar metas</button></div>
+  </div>
+</div>
+<div class="modal" id="vaModal">
+  <div class="sheet" style="width:min(640px,100%)">
+    <div class="sheet-head"><h2>Vendas antigas da planilha</h2><button class="icon-btn" onclick="fechar('vaModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="vaCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('vaModal')">Cancelar</button><button class="btn btn-primary" id="vaOk" onclick="importarVendasAntigas()">Trazer para o funil</button></div>
+  </div>
+</div>
+<div class="modal" id="histModal">
+  <div class="sheet" style="width:min(620px,100%)">
+    <div class="sheet-head"><h2>Histórico de mudanças</h2><button class="icon-btn" onclick="fechar('histModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="histCorpo"></div>
+  </div>
+</div>
+<div class="modal" id="bkModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><h2>Cópias de segurança</h2><button class="icon-btn" onclick="fechar('bkModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="bkCorpo"></div>
+  </div>
+</div>
+<div class="modal" id="anexoModal">
+  <div class="sheet" style="width:min(820px,100%)">
+    <div class="sheet-head"><h2 id="axTit">Nota fiscal</h2><button class="icon-btn" onclick="fechar('anexoModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="axCorpo"></div>
+    <div class="sheet-foot" id="axPe"></div>
+  </div>
+</div>
 <div class="modal" id="notaModal">
   <div class="sheet" style="width:min(540px,100%)">
     <div class="sheet-head"><h2 id="notaTit">Nota fiscal</h2><button class="icon-btn" onclick="fechar('notaModal')" data-ic="x"></button></div>
@@ -2413,7 +2570,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="row2"><div class="fg"><label>Valor da nota (R$)</label><input id="nfValor" inputmode="decimal" placeholder="0,00" oninput="nfImpCalc()"></div><div class="fg"><label>% de imposto</label><input id="nfPct" type="number" step="0.01" oninput="nfImpCalc()"></div></div>
       <div class="nf-imp" id="nfImp"></div>
       <div class="fg" id="nfPagaBox"><label>Data em que foi paga</label><input id="nfPagaEm" type="date"></div>
-      <div class="fg"><label>Link do PDF da nota (opcional)</label><input id="nfLink" type="url" placeholder="Cole o link do Drive ou do site da prefeitura"></div>
+      <div class="fg"><label>Arquivo da nota (PDF ou foto)</label><div class="nf-anexo" id="nfAnexoBox"></div><input type="file" id="nfArq" class="hide" accept="application/pdf,image/*,.xml" onchange="nfEscolheuArquivo(this)"></div>
+      <details class="fv-manual"><summary>Ou colar um link</summary><div class="fg" style="margin-top:6px"><input id="nfLink" type="url" placeholder="Link do Drive ou do site da prefeitura"></div></details>
       <div class="fg"><label>Observação</label><textarea id="nfObs" rows="2" maxlength="400"></textarea></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost hide" id="nfExcluir" onclick="excluirNota()" style="color:var(--danger)">Excluir</button><button class="btn btn-ghost" onclick="fechar('notaModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarNota()">Salvar</button></div>
@@ -2427,6 +2585,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button class="so-ceo" onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
       <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
+      <button class="cor-only hide" onclick="fechar('menuModal');setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
       <button onclick="fechar('menuModal');setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
@@ -2436,6 +2595,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
+      <button class="gest hide" onclick="fechar('menuModal');setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><i data-ic="phone"></i>Instalar aplicativo</button>
       <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
       <button onclick="fechar('menuModal');sair()"><i data-ic="logout"></i>Sair</button>
@@ -2763,7 +2923,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => {
   if (v === 'corretores' && !podeGerir()) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -2774,6 +2934,9 @@ window.setView = v => {
   if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
   if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
   if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
+  if (v === 'comissoes' && !['corretor','coordenador'].includes(perfil?.papel)) v = souGerente() ? 'financeiro' : 'hoje';
+  if (v === 'sorteio' && !podeGerir()) v = 'hoje';
+  if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
   if (souCeo() && !VIEWS_CEO.includes(v)) v = 'painel';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
@@ -2783,6 +2946,7 @@ window.setView = v => {
   document.title = TITULOS[v] + ' · Minha Agenda';
   if (window.lenis) window.lenis.scrollTo(0, { immediate:true }); else window.scrollTo(0,0);
   render();
+  setTimeout(() => contarNumeros(document.getElementById('v-' + v)), 40);
 };
 window.irFiltro = f => { filtro = f; filtroCat = ''; setView('tarefas'); };
 window.buscar = v => { termo = v.trim().toLowerCase(); render(); buscaGlobal(v); };
@@ -2954,12 +3118,13 @@ function render(){
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
   if (view === 'config') renderAdm();
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
-  renderEmp(); renderFinanceiro(); renderZap();
+  renderEmp(); renderFinanceiro(); renderZap(); renderExtrato();
   if ($('cZap')) { const nz = zapConvs.filter(c => c.naoLidas > 0).length; $('cZap').textContent = nz; $('cZap').classList.toggle('hide', !nz); $('zapFabN').textContent = nz; $('zapFabN').classList.toggle('hide', !nz); }
   if ($('zapFab')) $('zapFab').classList.toggle('hide', !souGerente() || souCeo() || view === 'whatsapp' || !$('app') || $('app').classList.contains('hide'));
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
   if (!window._hashZap && souGerente() && !souCeo() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
+  if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo'].includes(location.hash)) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
   if (souSdr()) { const ontem = somaDias(hojeISO(), -1); $('cResumo').classList.toggle('hide', sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem)); }
@@ -3226,6 +3391,7 @@ const EMAIL_ANTIGO_TENDA = 'tropatenda@fradeimoveis.com';
 
 let uidAtual = '', perfil = null, perfilOk = false, instalacao = null, instOk = false;
 let equipes = {}, visitas = [], rankingDocs = [], perfisLista = [], visitasBrutas = [];
+window.visitaPorId = id => visitas.find(x => x.id === id);
 let subsBase = [], subsPapel = [], chaveSubs = '', cadDispensado = false;
 let visAba = 'lista', vFil = { busca:'', periodo:'proximas', status:'', equipe:'', corretor:'' };
 window.rankPeriodo = 'mes'; window.rankEquipe = ''; window.corPeriodo = 'mes';
@@ -3432,8 +3598,8 @@ function cardVisita(v, compacto){
   if (v.status === 'Realizada' && !cartas.some(c => c.visitaId === v.id)) acoes.push(`<button class="snooze" onclick="cartaDaVisita('${v.id}')">+ Carta aprovada</button>`);
   if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">Não veio</button>`);
   if (!compacto) {
-    acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitas.find(x=>x.id==='${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
-    if (souSdr()) acoes.push(`<button class="icon-btn" onclick="avisarPeloWhats(visitas.find(x=>x.id==='${v.id}'))" title="Avisar o corretor pelo WhatsApp">📲</button>`);
+    acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitaPorId('${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
+    if (souSdr()) acoes.push(`<button class="icon-btn" onclick="avisarPeloWhats(visitaPorId('${v.id}'))" title="Avisar o corretor pelo WhatsApp">📲</button>`);
     if (v.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('v','${v.id}')" title="Mensagens prontas">💬</button>`);
     acoes.push(`<button class="icon-btn del" onclick="excluirVisita('${v.id}')" title="Arquivar">🗄️</button>`);
   }
@@ -3468,6 +3634,7 @@ function renderPapel(){
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr'));
+  document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && ['corretor','coordenador'].includes(perfil?.papel))));
 }
 function bannerAcesso(){
   if (!perfilOk || !instOk) return '';
@@ -3582,7 +3749,7 @@ function renderRanking(){
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
-  $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos');
+  $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos'); if ($('podio')) $('podio').innerHTML = '';
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
   if (rankTipo === 'vgv') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'VGV = soma do valor das vendas (reservas) pela data da reserva. Venda em parceria divide o valor entre os corretores. Vendas que caíram não entram.'; renderRankingVgv(); return; }
@@ -4035,9 +4202,9 @@ function assinarCartas(erro){
   else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
   if (qc) subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
   // resumo das vendas para o ranking de VGV de todos (sem dados do cliente); a gestão mantém ele em dia
-  subsPapel.push(onSnapshot(collection(db,'ranking_vendas'), s => { rankingVendas = s.docs.map(d => ({ id:d.id, ...d.data() })); window._rvOk = true; render(); sincVendasRanking(); }, e => console.warn('ranking_vendas:', e.code || e.message)));
+  subsPapel.push(onSnapshot(collection(db,'ranking_vendas'), s => { rankingVendas = s.docs.map(d => ({ id:d.id, ...d.data() })); window._rvOk = true; render(); sincVendasRanking(); sincExtrato(); conferirMetasBatidas(); }, e => console.warn('ranking_vendas:', e.code || e.message)));
   if (!souGerente() && ['corretor','coordenador'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'reservas'), where('corretorUids','array-contains',uidAtual)), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('minhas reservas:', e.code || e.message)));
-  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); sincVendasRanking(); }, e => console.warn('reservas:', e.code || e.message)));
+  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); sincVendasRanking(); sincExtrato(); }, e => console.warn('reservas:', e.code || e.message)));
   subsPapel.push(onSnapshot(souGerente() || historicoCompleto ? collection(db,'ranking_cartas') : query(collection(db,'ranking_cartas'), where('data','>=', somaMeses(mesAtual() + '-01', -6))), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
 }
 
@@ -4537,7 +4704,7 @@ function comTempo(p, ms = 30000){
   return Promise.race([p, new Promise((_, erro) => setTimeout(() => { const e = new Error('o Firebase não respondeu. Pode ser o limite grátis do dia; tente de novo mais tarde'); e.code = 'tempo'; erro(e); }, ms))]);
 }
 function gravar(p){
-  if (navigator.onLine) return p;
+  if (navigator.onLine) return Promise.resolve(p).then(r => { try { gravouFin(); } catch(e) {} return r; });
   p.catch(e => toast('Erro ao sincronizar: ' + e.message));
   toast('Salvo no aparelho. Vai para a nuvem quando a internet voltar.');
   return Promise.resolve();
@@ -4556,6 +4723,21 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 // Mostra o botão em qualquer celular que ainda não instalou (se o Chrome não liberar a instalação direta, o botão ensina o caminho)
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+// versão do app: aparece em Configurações e avisa quando sai uma versão nova
+const APP_VERSAO = 77;
+(() => {
+  const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
+  let avisado = false;
+  const conferir = async () => {
+    if (avisado || location.protocol !== 'https:') return;
+    try { const t = await (await fetch('sw.js?v=' + Date.now(), { cache:'no-store' })).text(); const m = t.match(/minha-agenda-v(\d+)/);
+      if (m && Number(m[1]) > APP_VERSAO) { avisado = true; const b = document.createElement('button'); b.className = 'nova-versao'; b.innerHTML = '✨ Saiu uma versão nova do app · <b>Atualizar agora</b>';
+        b.onclick = async () => { b.textContent = 'Atualizando…'; try { const r = await navigator.serviceWorker?.getRegistration(); await r?.update(); } catch(e) {} location.reload(); };
+        document.body.appendChild(b); } } catch(e) {}
+  };
+  setTimeout(conferir, 8000); setInterval(conferir, 10 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') conferir(); });
+})();
 window.instalarApp = async () => {
   if (pedidoInstalar) { pedidoInstalar.prompt(); const r = await pedidoInstalar.userChoice; if (r.outcome === 'accepted') mostrarInstalar(false); pedidoInstalar = null; return; }
   if (ehIOS) { alert('Para instalar no iPhone:\n\n1. Toque no botão Compartilhar (quadrado com a seta para cima)\n2. Escolha "Adicionar à Tela de Início"\n3. Toque em "Adicionar"'); return; }
@@ -4894,6 +5076,9 @@ function renderRankingPontos(){
   $('rankTit').textContent = 'Ranking de pontos · ' + nomeMes(m);
   if (!lista.length) { $('rankLista').innerHTML = vazio('Ninguém pontuou ainda neste mês', 'Visitas, cartas e vendas geram pontos. O ranking aparece aqui.'); return; }
   const pos = posicoes(lista);
+  const top = lista.slice(0, 3);
+  $('podio').innerHTML = top.length >= 2 ? `<div class="podio">${[1, 0, 2].filter(i => top[i]).map(i => `<div class="pd-deg p${i + 1} ${top[i].uid === uidAtual ? 'eu' : ''}"><div class="pd-av">${esc((top[i].nome || '?').trim()[0])}</div><b>${esc(primeiro(top[i].nome))}</b><span>${top[i].pontos} pts</span><div class="pd-col"><i>${MEDALHA(pos[i])}</i></div></div>`).join('')}</div>` : '';
+  avisarSubiuRanking(lista, pos);
   $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Presenças</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
     lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
   }</tbody><tfoot></tfoot></table>
@@ -5645,6 +5830,7 @@ function renderEtapa2(){
 
 // ---------- importar leads antigos (planilha exportada do CRM) ----------
 let impLeads = null;
+window.impLeadsCol = (k, v) => { if (impLeads) { impLeads.col[k] = v; previaLeads(); } };
 function dataDeCelula(v){
   if (v instanceof Date && !isNaN(v)) return iso(v);
   const t = String(v || '').trim(); if (!t) return '';
@@ -5668,9 +5854,9 @@ window.lerArquivoLeads = async input => {
     impLeads = { cab, dados:linhas.slice(hi + 1).filter(l => l.some(c => String(c).trim())),
       col:{ data:achar([/data de cria|criad|created|date added|adicionad/, /^data|date/]), corretor:achar([/atribu|assigned|responsav|proprietar|owner/, /usuario|user|corretor/]), contato:achar([/id do contato|contact id|contato id/, /telefone|phone|celular/, /^nome|contact name|name/]) } };
     const op = sel => '<option value="-1">— escolha —</option>' + cab.map((c,i) => `<option value="${i}" ${impLeads.col[sel]===i?'selected':''}>${esc(c || 'coluna ' + (i+1))}</option>`).join('');
-    $('impLeadsCols').innerHTML = `<div class="pt-row"><span>📅 Data em que o lead chegou</span><select onchange="impLeads.col.data=+this.value;previaLeads()">${op('data')}</select></div>
-      <div class="pt-row"><span>👤 Corretor responsável</span><select onchange="impLeads.col.corretor=+this.value;previaLeads()">${op('corretor')}</select></div>
-      <div class="pt-row"><span>🔑 Contato (ID, telefone ou nome)</span><select onchange="impLeads.col.contato=+this.value;previaLeads()">${op('contato')}</select></div>`;
+    $('impLeadsCols').innerHTML = `<div class="pt-row"><span>📅 Data em que o lead chegou</span><select onchange="impLeadsCol(\'data\',+this.value)">${op('data')}</select></div>
+      <div class="pt-row"><span>👤 Corretor responsável</span><select onchange="impLeadsCol(\'corretor\',+this.value)">${op('corretor')}</select></div>
+      <div class="pt-row"><span>🔑 Contato (ID, telefone ou nome)</span><select onchange="impLeadsCol(\'contato\',+this.value)">${op('contato')}</select></div>`;
     previaLeads();
   } catch(e) { $('impLeadsInfo').textContent = 'Não consegui ler: ' + e.message; }
 };
@@ -5775,6 +5961,7 @@ const linkOk = u => /^https?:\/\/\S+$/i.test(String(u || '').trim());
 // foto de capa: a primeira foto enviada; sem foto, a miniatura de um link do Drive marcado como Fotos
 const driveId = u => (String(u || '').match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]{20,})/) || [])[1] || '';
 const capaDe = e => e.capa || (() => { const m = (e.materiais || []).find(x => x.tipo === 'fotos' && driveId(x.link)); return m ? `https://drive.google.com/thumbnail?id=${driveId(m.link)}&sz=w800` : ''; })();
+window.renderEmp = () => renderEmp();
 function renderEmp(){
   if (view !== 'empreendimentos') return;
   const t = norm(window.empFiltro || '');
@@ -6009,6 +6196,7 @@ window.lerImpEmp = async input => {
     renderImpEmp();
   } catch(e) { $('empImpInfo').textContent = 'Não consegui ler: ' + e.message; }
 };
+window.renderImpEmp = () => renderImpEmp();
 function renderImpEmp(){
   $('empImpLista').innerHTML = empImp.map((g, i) => `<div class="emp-imp ${g.marcado ? '' : 'off'}">
     <label class="emp-imp-t"><input type="checkbox" ${g.marcado ? 'checked' : ''} onchange="empImp[${i}].marcado=this.checked;renderImpEmp()"><input class="emp-imp-nome" value="${esc(g.nome)}" maxlength="80" onchange="empImp[${i}].nome=this.value.trim()"></label>
@@ -6135,7 +6323,7 @@ function assinarEtapa4(){
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
-  assinarFinanceiro(); assinarFin2(); assinarZap();
+  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios();
 }
 // a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
 async function presencaNoRanking(uid, dia, presente){
@@ -6213,6 +6401,378 @@ function htmlMeusLeads(){
 }
 
 // =====================================================================
+// ============ NOTIFICAÇÕES (sino) · v76 ============
+// =====================================================================
+let notifs = [], _notifPrimeira = true, _notifVistas = new Set();
+const NOTIF_CATS = [
+  ['leads', '📞 Lead novo para você', p => ['corretor','coordenador'].includes(p)],
+  ['visitas', '🏠 Visitas (marcada para você, lembrete 1 hora antes, confirmar as de amanhã)', p => p !== 'gerente' || true],
+  ['cartas', '📄 Cartas e avaliações (mudou de status, aprovada, perto de vencer)', p => p !== 'sdr'],
+  ['vendas', '🔑 Vendas (reserva nova, reserva conferida, venda fechada, meta batida)', p => p !== 'sdr'],
+  ['comissoes', '💰 Suas comissões (a construtora pagou, comissão paga)', p => ['corretor','coordenador'].includes(p)],
+  ['avisos', '📣 Avisos da gerência', () => true],
+  ['equipe', '👥 Equipe (corretor sem atividade, cadastro novo, cliente repetido)', p => ['gerente','coordenador'].includes(p)],
+  ['financeiro', '🧾 Financeiro (contas vencendo, comissão atrasada, venda parada, nota para emitir, fechamento)', p => p === 'gerente'],
+  ['resumos', '📊 Resumos (fim do dia, relatórios da semana e do mês)', () => true],
+  ['pesquisa', '⭐ Nota do cliente na pesquisa de atendimento', p => p !== 'sdr'],
+  ['whatsapp', '💬 Mensagens no WhatsApp', p => p === 'gerente'],
+];
+function assinarNotifs(){
+  notifs = []; _notifPrimeira = true;
+  if (!uidAtual) return;
+  subsPapel.push(onSnapshot(query(collection(db,'notificacoes'), where('uid','==',uidAtual)), s => {
+    const novas = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (b.em || 0) - (a.em || 0));
+    if (!_notifPrimeira) novas.filter(n => !n.lida && !_notifVistas.has(n.id) && Date.now() - (n.em || 0) < 120000).slice(0, 2).forEach(n => { toast((n.titulo || '') + (n.texto ? ' · ' + n.texto.slice(0, 70) : '')); try { navigator.vibrate?.(30); } catch(e) {} });
+    novas.forEach(n => _notifVistas.add(n.id));
+    if (_notifPrimeira) { _notifPrimeira = false; limparNotifsVelhas(novas); }
+    notifs = novas.slice(0, 60); pintarSino();
+  }, e => console.warn('notificações', e.code || e.message)));
+}
+async function limparNotifsVelhas(l){
+  const velhas = l.filter(n => Date.now() - (n.em || 0) > 45 * 864e5).slice(0, 200); if (!velhas.length) return;
+  try { const b = writeBatch(db); velhas.forEach(n => b.delete(doc(db,'notificacoes',n.id))); await b.commit(); } catch(e) {}
+}
+const tempoAtras = ms => { const m = Math.round((Date.now() - ms) / 60000); if (m < 1) return 'agora'; if (m < 60) return m + ' min'; const h = Math.round(m / 60); if (h < 24) return h + ' h'; const d = Math.round(h / 24); return d === 1 ? 'ontem' : d + ' dias'; };
+function pintarSino(){
+  const nl = notifs.filter(n => !n.lida).length, el = $('sinoN'); if (!el) return;
+  el.textContent = nl > 9 ? '9+' : nl; el.classList.toggle('hide', !nl);
+  if (!$('sinoPainel').classList.contains('hide')) $('sinoLista').innerHTML = htmlSino();
+}
+function htmlSino(){
+  if (!notifs.length) return '<div class="sino-vazio"><b>Nada por aqui ainda</b><span>Os avisos do app aparecem aqui: leads, visitas, vendas, comissões e lembretes.</span></div>';
+  return notifs.slice(0, 40).map(n => `<button class="sino-item ${n.lida ? '' : 'nova'}" onclick="abrirNotif('${n.id}')"><span class="sino-t"><b>${esc(n.titulo || '')}</b><small>${esc(n.texto || '')}</small></span><em>${tempoAtras(n.em || 0)}</em></button>`).join('');
+}
+window.abrirSino = e => { e?.stopPropagation(); const p = $('sinoPainel'), abrir = p.classList.contains('hide'); p.classList.toggle('hide', !abrir); $('btnSino').classList.toggle('on', abrir); if (abrir) $('sinoLista').innerHTML = htmlSino(); };
+window.fecharSino = () => { $('sinoPainel')?.classList.add('hide'); $('btnSino')?.classList.remove('on'); };
+document.addEventListener('click', () => { if ($('sinoPainel') && !$('sinoPainel').classList.contains('hide')) fecharSino(); });
+window.marcarTodasLidas = async () => { const l = notifs.filter(n => !n.lida).slice(0, 200); if (!l.length) return; try { const b = writeBatch(db); l.forEach(n => b.update(doc(db,'notificacoes',n.id), { lida:true })); await b.commit(); } catch(e) { toast('Erro: ' + e.message); } };
+window.abrirNotif = async id => {
+  const n = notifs.find(x => x.id === id); if (!n) return; fecharSino();
+  if (!n.lida) updateDoc(doc(db,'notificacoes',id), { lida:true }).catch(() => {});
+  const h = String(n.link || '').split('#')[1] || '';
+  if (h === 'comissoes' && souGerente()) { window.finAba = 'comissoes'; setView('financeiro'); return; }
+  if (h && TITULOS[h]) setView(h);
+};
+// preferências de notificação (Configurações)
+function htmlPrefNotif(){
+  const papel = perfil?.papel || 'corretor', off = new Set(perfil?.notifOff || []);
+  return NOTIF_CATS.filter(c => c[2](papel)).map(([k, rot]) => `<label class="pref-n"><span>${rot}</span><input type="checkbox" class="sw" ${off.has(k) ? '' : 'checked'} onchange="prefNotif('${k}', this.checked)"></label>`).join('');
+}
+window.prefNotif = async (k, ligado) => {
+  const off = new Set(perfil?.notifOff || []); if (ligado) off.delete(k); else off.add(k);
+  try { await gravar(updateDoc(doc(db,'perfis',uidAtual), { notifOff:[...off] })); perfil.notifOff = [...off]; toast(ligado ? 'Aviso ligado' : 'Aviso desligado'); } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// =====================================================================
+// ============ EXTRATO DO CORRETOR · v76 ============
+// =====================================================================
+let extratoMeu = [], extratoTodos = {};
+function assinarExtrato(){
+  extratoMeu = []; extratoTodos = {};
+  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'extrato'), s => { extratoTodos = {}; s.docs.forEach(d => extratoTodos[d.id] = d.data()); sincExtrato(); }, e => console.warn('extrato', e.code || e.message)));
+  else if (['corretor','coordenador'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'extrato'), where('corretorUids','array-contains',uidAtual)), s => { extratoMeu = s.docs.map(d => ({ id:d.id, ...d.data() })); if (view === 'comissoes') render(); }, e => console.warn('extrato', e.code || e.message)));
+}
+// a gerência mantém o extrato de cada venda em dia (o corretor só lê o dele)
+let _extT = null;
+function sincExtrato(){
+  if (!souGerente() || !window._rvOk) return;
+  clearTimeout(_extT); _extT = setTimeout(async () => {
+    const b = writeBatch(db); let n = 0;
+    [...reservasTodas, ...vendasFin().filter(r => r.manual)].forEach(r => {
+      const v = vendaFin(r), uids = (r.corretorUids || (r.manual ? corretoresDaReserva(r.corretorTexto).map(c => c.uid) : [])).filter(Boolean); if (!uids.length) return;
+      const excl = !!(r.caiu || finVendas[r.id]?.excluida), qtd = Math.max(1, v.cor.length || uids.length);
+      const d = { corretorUids:uids, cliente:r.cliente || '', dia:r.dia || '', empreendimento:r.empreendimento || '', construtora:v.cons || '', corretores:v.cor.map(c => c.nome).join(' + ') || r.corretorTexto || '',
+        valorTotalCor:Math.round(v.valCor * 100) / 100, valorCada:Math.round(v.valCor / qtd * 100) / 100, etapa:v.etapa, etapaNome:v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída',
+        recebida:!!v.ok.recebida, corPago:!!v.f.corPago, previsao:(!v.ok.recebida ? (v.tipo === 'adiantamento' && !v.f.recAdiant ? v.prevA : v.prevR) : '') || '', processo:v.f.processo || '', caiu:excl };
+      const a = extratoTodos[r.id], comp = o => JSON.stringify(Object.keys(d).map(k => o?.[k] ?? null));
+      if (!a || comp(a) !== comp(d)) { if (n < 400) { b.set(doc(db,'extrato',r.id), { ...d, atualizadoEm:Date.now() }); n++; } }
+    });
+    if (n) try { await b.commit(); } catch(e) { console.warn('sinc extrato', e.code || e.message); }
+  }, 2500);
+}
+function htmlExtrato(){
+  const l = extratoMeu.filter(x => !x.caiu).sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
+  if (!l.length) return vazio('Nenhuma venda sua ainda', 'Quando você tiver uma reserva, ela aparece aqui com a comissão e a etapa em que está.');
+  const aRec = l.filter(x => !x.corPago), pagos = l.filter(x => x.corPago), soma = a => a.reduce((t,x) => t + (Number(x.valorCada) || 0), 0);
+  const ano = hojeISO().slice(0,4), pagosAno = pagos.filter(x => (x.dia || '').startsWith(ano));
+  const dots = x => `<div class="ex-dots">${ETAPAS_FIN.map((e, i) => `<i class="${i < x.etapa ? 'ok' : i === x.etapa ? 'at' : ''}" title="${e[1]}"></i>`).join('')}</div>`;
+  const card = x => `<div class="ex-card ${x.corPago ? 'pago' : ''}"><div class="ex-l1"><b>${esc(x.cliente || 'Cliente')}</b><span class="ex-val">${brl2(x.valorCada)}</span></div>
+    <small>${[dataBR(x.dia), x.empreendimento, x.construtora].filter(Boolean).map(esc).join(' · ')}${(x.corretores || '').includes('+') ? ' · em parceria' : ''}</small>
+    ${dots(x)}<div class="ex-st">${x.corPago ? '✅ Comissão paga' : x.recebida ? '💰 A construtora já pagou · sua parte entra no próximo pagamento' : `📍 ${esc(x.etapaNome || '')}${x.processo ? ' · ' + esc(x.processo) : ''}${x.previsao ? ' · previsão ' + dataBR(x.previsao) : ''}`}</div></div>`;
+  return `<div class="ex-resumo"><div><span>A receber</span><b>${brl2(soma(aRec))}</b><em>${aRec.length} venda${aRec.length === 1 ? '' : 's'}</em></div><div><span>Recebido em ${ano}</span><b class="fin-pos">${brl2(soma(pagosAno))}</b><em>${pagosAno.length} venda${pagosAno.length === 1 ? '' : 's'}</em></div></div>
+    ${aRec.length ? `<div class="ex-sec">Em andamento</div>${aRec.map(card).join('')}` : ''}${pagos.length ? `<div class="ex-sec">Pagas</div>${pagos.slice(0, 30).map(card).join('')}` : ''}
+    <div class="hint" style="margin-top:12px">Os valores são uma previsão. O valor final é confirmado pela gerência no pagamento.</div>`;
+}
+
+// =====================================================================
+// ============ HISTÓRICO DO FINANCEIRO · v76 ============
+// =====================================================================
+let _logPend = null;
+function logFin(acao){ if (_logPend && Date.now() - _logPend.em < 1500) return; _logPend = { acao:String(acao).slice(0, 220), em:Date.now() }; }
+function gravouFin(){
+  if (!_logPend || Date.now() - _logPend.em > 20000) { _logPend = null; return; }
+  const x = _logPend; _logPend = null;
+  setDoc(doc(collection(db,'fin_log')), { ...x, por:perfil?.nome || '', porUid:uidAtual }).catch(() => {});
+}
+const LOG_FIN = {
+  salvarFin: () => `${finEdit ? 'Editou' : 'Lançou'} ${$('finTipoSel')?.value === 'entrada' ? 'a entrada' : 'a saída'} “${$('finDesc')?.value || $('finCat')?.value || ''}” de ${brl2(lerDec($('finValor')?.value))}`,
+  excluirFin: id => { const x = finLanc.find(l => l.id === id); return `Excluiu o lançamento “${x?.descricao || x?.categoria || ''}” de ${brl2(x?.valor)}`; },
+  alternarPagoFin: id => { const x = finLanc.find(l => l.id === id); return `${x?.pago ? 'Desmarcou o pagamento de' : 'Marcou como pago'} “${x?.descricao || x?.categoria || ''}” (${brl2(x?.valor)})`; },
+  salvarVendaFin: () => `Atualizou a venda de ${vendasFin().find(r => r.id === finVEdit)?.cliente || ''} no funil`,
+  moverVendaFin: (id, alvo) => `Moveu a venda de ${vendasFin().find(r => r.id === id)?.cliente || ''} para “${alvo < ETAPAS_FIN.length ? ETAPAS_FIN[alvo][1] : 'Concluídas'}”`,
+  excluirVendaFin: () => `Excluiu do financeiro a venda de ${vendasFin().find(r => r.id === finVEdit)?.cliente || ''}`,
+  voltarVendaFin: id => `Voltou para o funil a venda de ${vendasFin().find(r => r.id === id)?.cliente || ''}`,
+  salvarNota: () => `Salvou a nota fiscal ${$('nfNum')?.value || 's/ nº'} de ${brl2(lerDec($('nfValor')?.value))} (${$('nfSt')?.value || ''})`,
+  excluirNota: () => `Excluiu a nota fiscal ${finNotas.find(n => n.id === nfEdit)?.numero || ''}`,
+  salvarFixa: () => `Cadastrou a despesa fixa “${$('fxDesc')?.value || ''}” de ${brl2(lerDec($('fxValor')?.value))}`,
+  excluirFixa: id => `Tirou a despesa fixa “${finFixas.find(f => f.id === id)?.descricao || ''}”`,
+  valorFixa: (id, v) => `Mudou o valor de “${finFixas.find(f => f.id === id)?.descricao || ''}” para ${brl2(lerDec(v))}`,
+  renomearFixa: (id, n) => `Renomeou “${finFixas.find(f => f.id === id)?.descricao || ''}” para “${n}”`,
+  salvarRegra: id => `Mudou o salário de ${finFixas.find(f => f.id === id)?.descricao || ''}`,
+  excluirDaFolha: id => `Tirou ${finFixas.find(f => f.id === id)?.descricao || ''} da folha`,
+  novoFuncionario: () => 'Adicionou um funcionário na folha',
+  lancarSalarios: () => `Lançou os salários de ${nomeMes(finMes)}`,
+  salvarConstrutoras: () => 'Mudou as regras das construtoras',
+  salvarVT: () => `Mudou o vale-transporte (passagem ${$('vtPassagem')?.value || ''})`,
+};
+function ligarLogFin(){
+  Object.entries(LOG_FIN).forEach(([fn, desc]) => { const orig = window[fn]; if (typeof orig !== 'function' || orig._log) return;
+    const w = function(...a){ try { logFin(desc(...a)); } catch(e) {} return orig.apply(this, a); }; w._log = true; window[fn] = w; });
+}
+window.abrirHistoricoFin = async () => {
+  $('histCorpo').innerHTML = '<div class="ax-load">Carregando…</div>'; abrir('histModal');
+  try { const s = await getDocs(query(collection(db,'fin_log'), orderBy('em','desc'), limit(150))); const l = s.docs.map(d => d.data());
+    $('histCorpo').innerHTML = l.length ? l.map(x => `<div class="hist-l"><span class="hist-q">${new Date(x.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })} ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</span><span><b>${esc(primeiro(x.por || ''))}</b> ${esc(x.acao || '')}</span></div>`).join('') : '<div class="ax-load">Nenhuma mudança registrada ainda. A partir de agora, tudo o que mudar no financeiro aparece aqui.</div>'; }
+  catch(e) { $('histCorpo').innerHTML = `<div class="ax-load">Não deu para carregar: ${esc(e.message)}</div>`; }
+};
+
+// =====================================================================
+// ============ CÓPIAS DE SEGURANÇA · v76 ============
+// =====================================================================
+// ---------- fluidez e comemorações · v77 ----------
+const _semMov = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+// números contando até o valor quando a tela abre
+function contarNumeros(raiz){
+  if (_semMov() || !raiz) return;
+  raiz.querySelectorAll('.stat b, .fr-item b, .bg-big, .bg-mid, .ex-resumo b, .hx-num b, .hx-lado b, .pd-kpi b, .nf-box b, .meta-l1 b, .metas-top b, .fp-nums b, .fc-et b').forEach(el => {
+    if (el.children.length > 1 || el._contou === el.textContent) return;
+    const t = el.firstChild && el.firstChild.nodeType === 3 ? el.firstChild : null; if (!t) return;
+    const txt = t.textContent, m = txt.match(/-?\d{1,3}(?:\.\d{3})*(?:,\d+)?|-?\d+(?:,\d+)?/); if (!m) return;
+    const alvo = parseFloat(m[0].replace(/\./g, '').replace(',', '.')); if (!isFinite(alvo) || Math.abs(alvo) < 2) { el._contou = el.textContent; return; }
+    const dec = (m[0].split(',')[1] || '').length, antes = txt.slice(0, m.index), depois = txt.slice(m.index + m[0].length), t0 = performance.now(), dur = 650;
+    const fmt = v => v.toLocaleString('pt-BR', { minimumFractionDigits:dec, maximumFractionDigits:dec });
+    const passo = agora => { const p = Math.min(1, (agora - t0) / dur), e = 1 - Math.pow(1 - p, 3); t.textContent = antes + fmt(alvo * e) + depois; if (p < 1) requestAnimationFrame(passo); else { t.textContent = txt; el._contou = el.textContent; } };
+    requestAnimationFrame(passo);
+  });
+}
+window.contarNumeros = contarNumeros;
+// vibração leve ao confirmar
+const vibrar = (ms = 12) => { try { navigator.vibrate?.(ms); } catch(e) {} };
+document.addEventListener('pointerdown', e => { const b = e.target.closest && e.target.closest('.btn-primary, .fin-tipo button, .sx-bt'); if (b && e.pointerType === 'touch') vibrar(8); }, { passive:true });
+// arrastar para baixo no topo da tela atualiza o app (celular)
+(function puxarParaAtualizar(){
+  let y0 = null, puxou = 0, el = null;
+  const noTopo = () => (window.lenis ? window.lenis.scroll : window.scrollY) <= 2;
+  document.addEventListener('touchstart', e => { if (e.touches.length !== 1 || !noTopo() || document.querySelector('.modal.open') || e.target.closest('.fv-funil, .zap, .sino-painel, input, textarea, select')) { y0 = null; return; } y0 = e.touches[0].clientY; puxou = 0; }, { passive:true });
+  document.addEventListener('touchmove', e => { if (y0 === null) return; const d = e.touches[0].clientY - y0; if (d <= 0) { if (el) el.style.opacity = 0; return; }
+    puxou = Math.min(110, d * .5); if (!el) { el = document.createElement('div'); el.className = 'ptr'; el.innerHTML = '<i>↻</i>'; document.body.appendChild(el); }
+    el.style.opacity = Math.min(1, puxou / 60); el.style.transform = `translate(-50%, ${puxou}px) rotate(${puxou * 3}deg)`; el.classList.toggle('pronto', puxou >= 70); }, { passive:true });
+  document.addEventListener('touchend', () => { if (y0 === null || !el) { y0 = null; return; } if (puxou >= 70) { el.classList.add('girando'); vibrar(15); setTimeout(() => location.reload(), 350); } else { el.remove(); el = null; } y0 = null; });
+})();
+// deslizar um lançamento para o lado marca como pago (celular)
+(function deslizarPago(){
+  let x0 = 0, y0 = 0, row = null, dx = 0, travou = '';
+  document.addEventListener('touchstart', e => { row = e.target.closest && e.target.closest('.fl-row:not(.nf-row)'); if (!row) return; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; dx = 0; travou = ''; }, { passive:true });
+  document.addEventListener('touchmove', e => { if (!row) return; const mx = e.touches[0].clientX - x0, my = e.touches[0].clientY - y0;
+    if (!travou) { if (Math.abs(mx) > 10 && Math.abs(mx) > Math.abs(my)) travou = 'x'; else if (Math.abs(my) > 10) { travou = 'y'; row = null; return; } }
+    if (travou === 'x') { dx = Math.max(0, Math.min(140, mx)); row.style.transform = `translateX(${dx}px)`; row.classList.add('desl'); row.classList.toggle('desl-ok', dx > 90); } }, { passive:true });
+  document.addEventListener('touchend', () => { if (!row) return; const r = row; r.style.transform = ''; r.classList.remove('desl', 'desl-ok');
+    if (dx > 90) { const id = (r.getAttribute('onclick') || '').match(/editarFin\('([^']+)'\)/); if (id) { vibrar(20); window._semEditar = true; setTimeout(() => window._semEditar = false, 400); alternarPagoFin(id[1]); } }
+    row = null; dx = 0; });
+  document.addEventListener('click', e => { if (window._semEditar && e.target.closest && e.target.closest('.fl-row')) { e.stopPropagation(); e.preventDefault(); } }, true);
+})();
+// comemorações
+function festejar(msg){ try { soltarConfete(160); } catch(e) {} vibrar([30, 50, 30]); if (msg) toast(msg); }
+window.festejar = festejar;
+function avisarSubiuRanking(lista, pos){
+  if (!['corretor','coordenador'].includes(perfil?.papel)) return;
+  const i = lista.findIndex(x => x.uid === uidAtual); if (i < 0) return;
+  const k = 'rankPos_' + mesAtual(), agora = pos[i] + 1; let antes = 0; try { antes = Number(localStorage.getItem(k)) || 0; localStorage.setItem(k, agora); } catch(e) {}
+  if (antes && agora < antes) festejar(`🚀 Você subiu para ${agora}º no ranking!`);
+}
+// ---------- sorteio dentro do app ----------
+let sxHistorico = [], sxGirando = false, sxSessao = [];
+function assinarSorteios(){
+  sxHistorico = []; if (!podeGerir()) return;
+  subsPapel.push(onSnapshot(collection(db,'sorteios'), s => { sxHistorico = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (b.em || 0) - (a.em || 0)).slice(0, 30); if (view === 'sorteio') sxPintaHist(); }, e => console.warn('sorteios', e.code || e.message)));
+}
+const sxRand = n => { const max = Math.floor(0x100000000 / n) * n, a = new Uint32Array(1); let x; do { crypto.getRandomValues(a); x = a[0]; } while (x >= max); return x % n; };
+function sxParticipantes(){
+  const f = $('sxFonte')?.value || 'cor';
+  if (f === 'cor') return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel) && (souGerente() || p.equipe === perfil.equipe)).map(p => p.nome);
+  if (f === 'pres') { const m = presencas[hojeISO()]?.marcados || {}; return perfisLista.filter(p => m[p.uid]?.status === 'presente').map(p => p.nome); }
+  if (f === 'cli') { const mi = mesAtual(); return [...new Set(reservas.filter(r => (r.dia || '').slice(0,7) === mi).map(r => (r.cliente || '').trim()).filter(Boolean))]; }
+  return [...new Set(($('sxLista')?.value || '').split(/\r?\n/).map(x => x.replace(/^[\s\-–•*\d.)]+(?=\D)/, '').trim()).filter(Boolean))];
+}
+function sxDisponiveis(){ const t = sxParticipantes(); if (!$('sxSemRep')?.checked) return t; const g = new Set(sxSessao.map(x => norm(x))); return t.filter(n => !g.has(norm(n))); }
+window.sxPinta = () => {
+  if (!$('sxPalco')) return;
+  $('sxListaBox').classList.toggle('hide', $('sxFonte').value !== 'lista');
+  $('sxTitulo').textContent = $('sxNomeI').value || 'Sorteio Frade';
+  $('sxPremioB').classList.toggle('hide', !$('sxPremio').value.trim()); $('sxPremioT').textContent = $('sxPremio').value.trim();
+  $('sxOrigem').textContent = $('sxFonte').selectedOptions[0].textContent;
+  const t = sxParticipantes(), d = sxDisponiveis(), q = Math.max(1, Math.min(30, Number($('sxQtd').value) || 1));
+  $('sxInfo').textContent = d.length ? `${d.length} na disputa${t.length !== d.length ? ` · ${t.length - d.length} já ganharam` : ''}` : 'Ninguém na disputa';
+  $('sxBt').disabled = !d.length || sxGirando; $('sxBt').textContent = q > 1 ? `🎲 Sortear ${q}` : '🎲 Sortear';
+  $('sxPart').innerHTML = t.length ? `<div class="sx-part-t">${t.length} participante${t.length > 1 ? 's' : ''}</div><div class="sx-chips">${t.slice(0, 80).map(n => `<span class="${d.includes(n) ? '' : 'off'}">${esc(n)}</span>`).join('')}${t.length > 80 ? `<span>+${t.length - 80}</span>` : ''}</div>` : '<div class="muted" style="font-size:13px">Ninguém nessa lista ainda.</div>';
+};
+function sxPintaHist(){
+  if (!$('sxHist')) return;
+  $('sxHist').innerHTML = sxHistorico.length ? sxHistorico.map(x => `<div class="sx-h"><span class="sx-hq">${new Date(x.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })} ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</span><span><b>${(x.ganhadores || []).map(esc).join(', ')}</b><small>${esc(x.titulo || '')}${x.premio ? ' · 🎁 ' + esc(x.premio) : ''} · ${x.participantes || 0} participantes · por ${esc(primeiro(x.por || ''))}</small></span></div>`).join('') : '<div class="muted" style="font-size:13.5px">Os ganhadores ficam guardados aqui.</div>';
+}
+function sxRolar(pool, final, dur, rot){
+  return new Promise(res => { const el = $('sxNome'), t0 = performance.now(); let ult = 0; el.classList.remove('ganhou'); el.classList.add('girando'); $('sxSub').textContent = 'Sorteando' + (rot ? ' · ' + rot : '') + '…';
+    const passo = agora => { const p = Math.min(1, (agora - t0) / dur), iv = 45 + Math.pow(p, 2.6) * 420;
+      if (agora - ult >= iv) { ult = agora; el.textContent = pool[sxRand(pool.length)]; try { navigator.vibrate?.(5); } catch(e) {} }
+      if (p < 1) requestAnimationFrame(passo); else { el.textContent = final; el.classList.remove('girando'); void el.offsetWidth; el.classList.add('ganhou'); $('sxSub').textContent = '🎉 ' + ($('sxPremio').value.trim() ? 'Ganhou: ' + $('sxPremio').value.trim() : 'Parabéns!') + (rot ? ' · ' + rot : ''); res(); } };
+    requestAnimationFrame(passo); });
+}
+window.sortearApp = async () => {
+  const pool = sxDisponiveis(); if (!pool.length || sxGirando) return;
+  const semRep = $('sxSemRep').checked, q = Math.max(1, Math.min(30, Number($('sxQtd').value) || 1, semRep ? pool.length : 30)), dur = Number($('sxTempo').value) || 4500;
+  sxGirando = true; sxPinta(); $('sxAgora').innerHTML = '';
+  const resto = pool.slice(), esc2 = []; for (let i = 0; i < q; i++) { const k = sxRand(resto.length); esc2.push(semRep ? resto.splice(k, 1)[0] : resto[k]); }
+  for (let i = 0; i < esc2.length; i++) {
+    await sxRolar(pool, esc2[i], i ? Math.max(1600, dur * .6) : dur, q > 1 ? `${i + 1}º de ${q}` : '');
+    sxSessao.push(esc2[i]); const sp = document.createElement('span'); sp.innerHTML = `<i>${sxSessao.length}º</i>${esc(esc2[i])}`; $('sxAgora').appendChild(sp);
+    try { soltarConfete(140); } catch(e) {} try { navigator.vibrate?.([40, 60, 40]); } catch(e) {}
+    if (i < esc2.length - 1) await new Promise(r => setTimeout(r, 1500));
+  }
+  sxGirando = false; sxPinta();
+  try { await setDoc(doc(collection(db,'sorteios')), { titulo:$('sxNomeI').value.trim() || 'Sorteio Frade', premio:$('sxPremio').value.trim(), ganhadores:esc2, participantes:pool.length, fonte:$('sxFonte').value, em:Date.now(), por:perfil.nome, porUid:uidAtual }); } catch(e) { console.warn('sorteio', e.message); }
+};
+window.sxCopiar = async () => {
+  const u = sxHistorico[0]; if (!u) { toast('Ainda não tem ganhador'); return; }
+  const txt = `🎉 *${u.titulo}*${u.premio ? `\n🎁 ${u.premio}` : ''}\n\n` + (u.ganhadores || []).map((g, i) => `${i + 1}º ${g}`).join('\n') + `\n\n_Frade Imóveis · ${new Date(u.em).toLocaleDateString('pt-BR')}_`;
+  try { await navigator.clipboard.writeText(txt); toast('Resultado copiado. É só colar no WhatsApp.'); } catch(e) { toast('Não deu para copiar'); }
+};
+window.sorteioCheia = async () => { const on = !document.body.classList.contains('sx-cheia'); document.body.classList.toggle('sx-cheia', on); try { if (on) await $('sxPalco').requestFullscreen?.(); else if (document.fullscreenElement) await document.exitFullscreen(); } catch(e) {} };
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) document.body.classList.remove('sx-cheia'); });
+document.addEventListener('keydown', e => { if (document.fullscreenElement && document.fullscreenElement.id === 'sxPalco' && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); sortearApp(); } });
+// ---------- metas do mês (vendas por corretor) ----------
+let metasMes = null;
+function assinarMetas(){
+  metasMes = null; if (!souAtivo()) return;
+  subsPapel.push(onSnapshot(doc(db,'metas', mesAtual()), s => { metasMes = s.exists() ? s.data() : null; render(); conferirMetasBatidas(); }, e => console.warn('metas', e.code || e.message)));
+}
+const metaDe = uid => { if (!metasMes) return 0; const o = (metasMes.porUid || {})[uid]; return o === 0 ? 0 : Number(o ?? metasMes.padrao ?? 0) || 0; };
+function vendasNoMes(uid, mes = mesAtual()){
+  return (rankingVendas || []).filter(v => !v.caiu && (v.dia || '').slice(0,7) === mes && (v.corretores || []).some(c => c.uid === uid))
+    .reduce((a, v) => a + 1 / Math.max(1, (v.corretores || []).length), 0);
+}
+function diasUteisRestantes(){ const h = new Date(), fim = new Date(h.getFullYear(), h.getMonth() + 1, 0); let n = 0; for (let d = new Date(h); d <= fim; d.setDate(d.getDate() + 1)) if (d.getDay() !== 0) n++; return n; }
+function htmlMetaHoje(){
+  if (!['corretor','coordenador'].includes(perfil?.papel)) return '';
+  const meta = metaDe(uidAtual); if (!meta) return '';
+  const feito = vendasNoMes(uidAtual), pct = Math.min(100, Math.round(feito / meta * 100)), falta = Math.max(0, meta - feito), bateu = feito >= meta;
+  const mesN = nomeMes(mesAtual()).split(' de ')[0].toLowerCase();
+  return `<div class="meta-card ${bateu ? 'bateu' : ''}"><div class="meta-l1"><span>🎯 Sua meta de ${mesN}</span><b>${fmtVendas(feito)} <small>de ${meta} venda${meta > 1 ? 's' : ''}</small></b></div>
+    <div class="meta-bar"><i style="width:${pct}%"></i></div>
+    <small>${bateu ? '🏆 Meta batida! Cada venda a mais conta no ranking.' : `Faltam ${fmtVendas(falta)} venda${falta > 1 ? 's' : ''} · ${diasUteisRestantes()} dias de trabalho até o fim do mês`}</small></div>`;
+}
+function htmlMetasResumo(){
+  if (!souGerente() || !metasMes) return '';
+  const pessoas = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).map(p => ({ p, meta:metaDe(p.uid), feito:vendasNoMes(p.uid) })).filter(x => x.meta);
+  if (!pessoas.length) return '';
+  const bateram = pessoas.filter(x => x.feito >= x.meta).length, totMeta = pessoas.reduce((a,x) => a + x.meta, 0), totFeito = pessoas.reduce((a,x) => a + x.feito, 0);
+  return `<div class="card metas-res"><div class="card-head"><h2>🎯 Metas de ${nomeMes(mesAtual()).split(' de ')[0].toLowerCase()}</h2><button class="link" onclick="abrirMetas()">mudar</button></div>
+    <div class="metas-top"><div><b>${fmtVendas(totFeito)}</b><span>de ${totMeta} vendas da equipe</span></div><div><b>${bateram}</b><span>de ${pessoas.length} já bateram a meta</span></div></div>
+    <div class="metas-lista">${pessoas.sort((a,b) => b.feito / b.meta - a.feito / a.meta).map(x => `<div class="mt-l"><span>${esc(primeiro(x.p.nome))} ${x.feito >= x.meta ? '🏆' : ''}</span><div class="meta-bar"><i style="width:${Math.min(100, x.feito / x.meta * 100)}%"></i></div><b>${fmtVendas(x.feito)}/${x.meta}</b></div>`).join('')}</div></div>`;
+}
+window.abrirMetas = () => {
+  const m = mesAtual(), pessoas = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  const por = (metasMes && metasMes.porUid) || {};
+  $('metasTit').textContent = 'Metas de ' + nomeMes(m).split(' de ')[0].toLowerCase();
+  $('metasCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Quantas vendas cada um deve fazer no mês. Coloque a meta de todos e mude só quem for diferente. Venda em parceria conta meio para cada um. Quando alguém bater a meta, chega um aviso para ele e para a gerência.</div>
+    <div class="fg"><label>Meta de todos (vendas no mês)</label><input id="metaPadrao" type="number" min="0" step="1" value="${metasMes?.padrao ?? ''}" placeholder="Ex.: 3"></div>
+    <div class="rep-sec" style="margin:14px 0 6px">Mudar para alguém (deixe vazio para usar a de todos; 0 = sem meta)</div>
+    ${pessoas.map(p => `<div class="mt-ed"><span>${esc(p.nome)}<small>${fmtVendas(vendasNoMes(p.uid))} venda${vendasNoMes(p.uid) === 1 ? '' : 's'} até agora</small></span><input type="number" min="0" step="1" data-uid="${p.uid}" value="${por[p.uid] ?? ''}" placeholder="—"></div>`).join('')}`;
+  abrir('metasModal');
+};
+window.salvarMetas = async () => {
+  const padrao = $('metaPadrao').value === '' ? 0 : Math.max(0, Number($('metaPadrao').value) || 0), porUid = {};
+  document.querySelectorAll('#metasCorpo .mt-ed input').forEach(i => { if (i.value !== '') porUid[i.dataset.uid] = Math.max(0, Number(i.value) || 0); });
+  try { await gravar(setDoc(doc(db,'metas', mesAtual()), { mes:mesAtual(), padrao, porUid, atualizadoEm:Date.now(), atualizadoPor:perfil.nome })); fechar('metasModal'); toast('Metas salvas ✓'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// quem bateu a meta: o app da gerência pede o aviso ao carteiro (ele manda uma vez só)
+function conferirMetasBatidas(){
+  if (!souGerente() || souCeo() || !metasMes || !window._rvOk) return;
+  const m = mesAtual();
+  perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).forEach(p => {
+    const meta = metaDe(p.uid), feito = vendasNoMes(p.uid); if (!meta || feito < meta) return;
+    const k = 'metaAvisada_' + m + '_' + p.uid; try { if (localStorage.getItem(k)) return; localStorage.setItem(k, '1'); } catch(e) {}
+    avisarCarteiro('meta', '', false, { uid:p.uid, mes:m, meta, feito:fmtVendas(feito), unid:'vendas', equipe:p.equipe || '' });
+  });
+}
+// ---------- vendas antigas da planilha (aba CONFERÊNCIA) ----------
+let _vaLista = [];
+window.lerVendasAntigas = inp => {
+  const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { try { const j = JSON.parse(rd.result); if (j.tipo !== 'frade-vendas-antigas' || !Array.isArray(j.vendas)) throw new Error('arquivo errado: escolha o vendas-antigas.json');
+      const jaTem = new Set([...reservasTodas.map(r => norm(r.cliente)), ...Object.values(finVendas).filter(f => f.manual && f.r).map(f => norm(f.r.cliente))]);
+      _vaLista = j.vendas.map(v => ({ ...v, dup:jaTem.has(norm(v.cliente)) }));
+      const novas = _vaLista.filter(v => !v.dup), soma = novas.reduce((a,v) => a + (Number(v.comissao) || 0), 0);
+      $('vaCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Vendas da aba CONFERÊNCIA que ainda <b>não foram pagas</b> (as pagas e as que caíram ficaram de fora). Elas entram só no financeiro: não mudam o ranking nem as vendas dos meses.</div>
+        <div class="va-res"><div><b>${novas.length}</b><span>vendas para trazer</span></div><div><b>${brl(soma)}</b><span>em comissão (bruta)</span></div><div><b>${_vaLista.length - novas.length}</b><span>já estão no app (mesmo cliente)</span></div></div>
+        <div class="va-lista">${_vaLista.map(v => `<div class="va-l ${v.dup ? 'dup' : ''}"><span><b>${esc(v.cliente)}</b><small>${esc([v.corretorTexto, v.empreendimento, v.processo || v.status, v.prevRestante ? 'previsão ' + dataBR(v.prevRestante) : ''].filter(Boolean).join(' · '))}</small></span><em>${v.dup ? 'já está' : brl(v.comissao)}</em></div>`).join('')}</div>
+        <div class="hint" style="margin:10px 0 0">Depois de trazer, confira cada uma no funil: as que estão como “parte pago” na planilha precisam do valor que falta receber.</div>`;
+      $('vaOk').disabled = !novas.length; abrir('vaModal'); } catch(e) { toast('Erro: ' + e.message); } };
+  rd.readAsText(f);
+};
+window.importarVendasAntigas = async () => {
+  const novas = _vaLista.filter(v => !v.dup); if (!novas.length) return;
+  $('vaOk').disabled = true; $('vaOk').textContent = 'Trazendo…';
+  try { const b = writeBatch(db); let n = 0;
+    novas.forEach((v, i) => { const id = 'pl_' + (v.n || 'x' + i) + '_' + norm(v.cliente).replace(/[^a-z0-9]/g, '').slice(0, 20);
+      const assinou = ['Assinou'].includes(v.processo) || v.status === 'PARTE PAGO';
+      b.set(doc(db,'fin_vendas',id), { manual:true, r:{ dia:v.dia, cliente:v.cliente, corretorTexto:v.corretorTexto || '', empreendimento:v.empreendimento || '', construtora:v.construtora || '', comissao:v.comissao || '', valor:0, origem:'planilha' },
+        reservaId:id, cliente:v.cliente, construtora:v.construtora || '', comissao:v.comissao || '', valCor:v.valCor || '', ...(v.pctCor ? { pctCor:v.pctCor } : {}), processo:v.processo || '',
+        sinalPago:true, geraEntrada:'nao', identificada:assinou, assinaturaEm:assinou ? v.dia : '', faturada:v.status === 'PARTE PAGO', prevRestante:v.prevRestante || '',
+        obs:[v.status === 'PARTE PAGO' ? 'PARTE JÁ PAGA (confira quanto falta)' : '', v.obs].filter(Boolean).join(' · ').slice(0, 900), etapaDesde:hojeISO(), importadoEm:Date.now(), importadoPor:perfil.nome, atualizadoEm:Date.now() }); n++; });
+    logFin(`Trouxe ${n} vendas antigas da planilha para o funil`);
+    await gravar(b.commit()); fechar('vaModal'); finAba = 'comissoes'; render(); toast(`${n} vendas antigas no funil ✓ Elas aparecem com a etiqueta “planilha”.`); }
+  catch(e) { toast('Erro: ' + e.message); }
+  $('vaOk').textContent = 'Trazer para o funil';
+};
+window.abrirBackups = async () => {
+  $('bkCorpo').innerHTML = '<div class="ax-load">Carregando…</div>'; abrir('bkModal');
+  try { const s = await getDoc(doc(db,'backups_idx','lista')); const l = (s.exists() ? s.data().itens : []) || [];
+    $('bkCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Toda segunda-feira de manhã o app guarda uma cópia de tudo do financeiro e das vendas. Ficam as 10 últimas. Se algo for apagado por engano, baixe a cópia e me mande que eu ajudo a recuperar.</div>`
+      + (l.length ? l.map(x => `<div class="bk-l"><div><b>${new Date(x.em).toLocaleDateString('pt-BR', { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' })}${x.manual ? ' · feita na mão' : ''}</b><small>${x.contagem ? `${x.contagem.fin_lanc || 0} lançamentos · ${x.contagem.reservas || 0} vendas · ${x.contagem.fin_notas || 0} notas · ${x.contagem.fin_fixas || 0} despesas fixas` : ''}</small></div><button class="btn btn-ghost" onclick="baixarBackup('${x.id}',${x.n || 1})">⬇ Baixar planilha</button></div>`).join('') : '<div class="ax-load">Ainda não tem nenhuma cópia. A primeira sai na próxima segunda, ou toque em “Fazer uma cópia agora”.</div>')
+      + (souDono() ? `<button class="btn btn-primary btn-block" style="margin-top:14px" id="bkAgora" onclick="backupAgora()">🛟 Fazer uma cópia agora</button>` : ''); }
+  catch(e) { $('bkCorpo').innerHTML = `<div class="ax-load">Não deu para carregar: ${esc(e.message)}</div>`; }
+};
+window.backupAgora = async () => {
+  const b = $('bkAgora'); if (b) { b.disabled = true; b.textContent = 'Fazendo a cópia…'; }
+  try { const r = await chamarCarteiro({ tipo:'backup' }); if (!r?.ok) throw new Error(r?.erro || 'não foi possível'); toast('Cópia feita ✓'); abrirBackups(); }
+  catch(e) { toast('Erro: ' + e.message + '. Confira se o carteiro novo já foi implantado.'); if (b) { b.disabled = false; b.textContent = '🛟 Fazer uma cópia agora'; } }
+};
+window.baixarBackup = async (id, n) => {
+  toast('Montando a planilha…');
+  try { const partes = []; for (let i = 0; i < n; i++) { const s = await getDoc(doc(db,'backups', id + '_' + i)); if (!s.exists()) throw new Error('cópia incompleta'); partes.push(s.data().d); }
+    const dados = JSON.parse(partes.join('')).colecoes || {}; await carregarExcelJS();
+    const wb = new ExcelJS.Workbook(), NOMES = { fin_lanc:'Lançamentos', fin_vendas:'Funil das comissões', fin_fixas:'Despesas fixas', fin_notas:'Notas fiscais', fin_config:'Configuração', reservas:'Vendas (reservas)', metas:'Metas' };
+    Object.entries(dados).forEach(([col, docs]) => { if (!docs || !docs.length) return; const ws = wb.addWorksheet(NOMES[col] || col);
+      const chaves = [...new Set(docs.flatMap(d => Object.keys(d)))].filter(k => k !== 'anexo'); ws.addRow(chaves); ws.getRow(1).font = { bold:true };
+      docs.forEach(d => ws.addRow(chaves.map(k => { const v = d[k]; return v === null || v === undefined ? '' : typeof v === 'object' ? JSON.stringify(v) : v; })));
+      ws.columns.forEach(c => c.width = 18); });
+    const buf = await wb.xlsx.writeBuffer(), url = URL.createObjectURL(new Blob([buf], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    const a = document.createElement('a'); a.href = url; a.download = `copia-financeiro-${id.slice(0,10)}.xlsx`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
+  } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// =====================================================================
 // ================= FINANCEIRO (só gerência e CEO) ====================
 // =====================================================================
 let finLanc = [], finCfg = { pctImob:5, pctCor:1.5 }, finEdit = null;
@@ -6230,6 +6790,12 @@ function assinarFinanceiro(){
 }
 const finDoMes = m => finLanc.filter(x => (x.data || '').slice(0,7) === m);
 window.renderFinanceiro = () => renderFinanceiro();
+function renderPrefNotif(){ if (view === 'config' && $('prefNotif') && !$('prefNotif').contains(document.activeElement)) $('prefNotif').innerHTML = htmlPrefNotif(); }
+function renderExtrato(){ renderPrefNotif();
+  if (view === 'sorteio' && $('sxPalco') && !sxGirando && !$('sxPalco').contains(document.activeElement) && !document.querySelector('.sx-cfg')?.contains(document.activeElement)) { sxPinta(); sxPintaHist(); }
+  if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
+      if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
+  if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlExtrato(); }
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
   if (!finMes) window.finMes = mesAtual();
@@ -6307,7 +6873,7 @@ function htmlFinGeral(l){
     <div class="bg-sec"><b>A pagar</b>${aPag.length ? aPag.map(x => item('🧾', x.data && x.data < h ? 'atr' : 'down', brl2(x.valor), esc(x.descricao || x.categoria), (x.data ? (x.data < h ? 'venceu ' : 'vence ') + dataBR(x.data).slice(0,5) : ''), `editarFin('${x.id}')`)).join('') : '<div class="bg-vazio">Tudo pago. 🎉</div>'}
       ${saidas.filter(x => !x.pago).length > 5 ? `<button class="link bg-mais" onclick="finAba='lanc';finTipo='aberto';render()">ver todas as ${saidas.filter(x => !x.pago).length} contas em aberto</button>` : ''}</div></div>`;
   // 4. comissões por etapa
-  const vs = reservas.filter(r => !finVendas[r.id]?.excluida).map(vendaFin), and = vs.filter(v => v.aReceber > 0);
+  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin), and = vs.filter(v => v.aReceber > 0);
   const porEt = ETAPAS_FIN.map(([k, n], i) => [n, vs.filter(v => v.etapa === i).length]), mxE = Math.max(1, ...porEt.map(x => x[1]));
   const com = `<button class="bg-card bg-com" onclick="finAba='comissoes';render()"><div class="bg-h"><b>Comissões</b><span class="bg-ver">abrir funil ›</span></div>
     <b class="bg-mid">${brl(and.reduce((a,v) => a + v.aReceber, 0))}</b><small class="bg-nota">a receber de ${and.length} venda${and.length === 1 ? '' : 's'}</small>
@@ -6340,7 +6906,7 @@ function htmlFinCats(l){
 }
 function htmlFinComissoes(){
   const de = finMes + '-01', ate = fimDoMes(finMes);
-  const vs = reservas.filter(r => r.dia >= de && r.dia <= ate).sort((a,b) => (a.dia || '').localeCompare(b.dia || ''));
+  const vs = vendasFin().filter(r => r.dia >= de && r.dia <= ate).sort((a,b) => (a.dia || '').localeCompare(b.dia || ''));
   const pi = Number(finCfg.pctImob) || 0, pc = Number(finCfg.pctCor) || 0;
   const cfg = `<div class="card fin-cfg"><div><b>Percentuais padrão</b><div class="muted" style="font-size:13px">Usados para calcular a comissão quando você lança uma venda. Dá para ajustar cada lançamento depois.</div></div>
     <label>Imobiliária recebe (%)<input id="finPctImob" type="number" step="0.01" value="${pi}" ${souCeo() ? 'disabled' : ''}></label>
@@ -6367,18 +6933,23 @@ const NF_ST = { a_emitir:'a emitir', emitida:'emitida, esperando pagamento', pag
 const ETAPAS_FIN = [['reserva','Reserva e sinal'], ['entrada','Entrada'], ['identificacao','Identificação'], ['assinatura','Assinatura Caixa'], ['faturada','Comissão faturada'], ['recebida','Comissão recebida'], ['paga','Corretor pago']];
 const FORMAS_ENT = [['','—'], ['pix','Pix / à vista'], ['boleto','Boleto'], ['cartao_construtora','Cartão da construtora'], ['cartao_imobiliaria','Cartão da imobiliária']];
 const construtoras = () => (finCfg.construtoras && finCfg.construtoras.length ? finCfg.construtoras : CONST_PADRAO);
-function regraConst(nome){ const n = norm(nome || ''), l = construtoras(); return l.find(c => n && norm(c.nome) && (n.includes(norm(c.nome)) || norm(c.nome).includes(n))) || l.find(c => c.tipo === 'integral') || CONST_PADRAO[1]; }
+function regraConst(nome){ const n = norm(nome || ''), l = construtoras(); return l.find(c => n && norm(c.nome) && (n.includes(norm(c.nome)) || norm(c.nome).includes(n))) || { ...(l.find(c => c.tipo === 'integral') || CONST_PADRAO[1]), nome:'', obs:'' }; }
 function assinarFin2(){
   finVendas = {}; finFixas = []; _fixasFeitas = '';
   if (!souGerente()) return;
   const silencio = e => console.warn('Financeiro 2:', e.code || e.message);
-  subsPapel.push(onSnapshot(collection(db,'fin_vendas'), s => { finVendas = {}; s.docs.forEach(d => finVendas[d.id] = d.data()); render(); }, silencio));
+  subsPapel.push(onSnapshot(collection(db,'fin_vendas'), s => { finVendas = {}; s.docs.forEach(d => finVendas[d.id] = d.data()); render(); sincExtrato(); }, silencio));
   subsPapel.push(onSnapshot(collection(db,'fin_fixas'), s => { finFixas = s.docs.map(d => ({ id:d.id, ...d.data() })); _fixasFeitas = ''; render(); }, silencio));
   subsPapel.push(onSnapshot(collection(db,'fin_notas'), s => { window.finNotas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
 }
 window.finNotas = [];
 document.addEventListener('click', () => document.querySelectorAll('.fin-mais.ab').forEach(m => m.classList.remove('ab')));
 const somaDiasISO = (d, n) => d ? somaDias(d, Number(n) || 0) : '';
+// vendas do financeiro = reservas do app + vendas antigas trazidas da planilha (ficam só no financeiro, não contam no ranking)
+function vendasFin(){
+  const man = Object.entries(finVendas).filter(([, f]) => f.manual && f.r).map(([id, f]) => ({ id, ...f.r, manual:true }));
+  return man.length ? [...reservas, ...man] : reservas;
+}
 // tudo o que se sabe da comissão de uma venda (reserva + acompanhamento financeiro)
 function vendaFin(r){
   const f = finVendas[r.id] || {}, cons = f.construtora || r.construtora || '', rg = regraConst(cons);
@@ -6405,12 +6976,12 @@ function previsaoMes(m){
   const lM = finDoMes(m), auto = id => /^cv_/.test(id);
   let entrou = 0, vaiEntrar = 0, semData = 0; const fontes = [];
   lM.filter(x => x.tipo === 'entrada').forEach(x => { if (x.pago) entrou += Number(x.valor) || 0; else if (!auto(x.id)) vaiEntrar += Number(x.valor) || 0; });
-  reservas.forEach(r => { if (finVendas[r.id]?.excluida) return; const v = vendaFin(r);
+  vendasFin().forEach(r => { if (finVendas[r.id]?.excluida) return; const v = vendaFin(r);
     if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant) { if (noM(v.prevA) || (v.prevA && v.prevA < de && m === mesAtual())) { vaiEntrar += v.adiant; fontes.push(v); } }
     if (!v.f.recRestante && v.rest) { if (!v.prevR) semData += v.rest; else if (noM(v.prevR) || (v.prevR < de && m === mesAtual())) { vaiEntrar += v.rest; fontes.push(v); } } });
   const sai = lM.filter(x => x.tipo === 'saida'), pago = sai.filter(x => x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0), aPagar = sai.filter(x => !x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0);
   // pagamento dos corretores previsto (vendas recebidas e corretor ainda não pago)
-  const corPrev = reservas.filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0);
+  const corPrev = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0);
   return { entrou, vaiEntrar, semData, pago, aPagar: aPagar + corPrev, saldo: entrou + vaiEntrar - pago - aPagar - corPrev, fontes };
 }
 // despesas fixas: viram lançamentos do mês sozinhas
@@ -6424,7 +6995,7 @@ async function gerarFixasDoMes(m){
 }
 function htmlGolpe(m, mm){
   const p = previsaoMes(m), cor = p.saldo >= 0 ? 'var(--ok)' : 'var(--danger)';
-  const andamento = reservas.filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
+  const andamento = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
   const ass = andamento.filter(v => !v.ok.assinatura), somaAss = ass.reduce((a,v) => a + v.rest, 0);
   const aviso = p.saldo < 0 && ass.length ? `<div class="fin-dica">💡 ${ass.length} venda${ass.length > 1 ? 's' : ''} esperando assinatura somam ${brl(somaAss)} em comissão. Assinar logo faz o dinheiro entrar.</div>` : '';
   return `<div class="fin-resumo">
@@ -6436,7 +7007,7 @@ function htmlGolpe(m, mm){
 // resumo do financeiro no Painel executivo (gerência e CEO)
 function htmlFinPainel(m){
   const p = previsaoMes(m), hoje = hojeISO();
-  const andamento = reservas.filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
+  const andamento = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
   if (!finLanc.length && !andamento.length) return '';
   const lM = finDoMes(m), venc = lM.filter(x => x.tipo === 'saida' && !x.pago && x.data && x.data < hoje);
   const prox = [];
@@ -6454,7 +7025,7 @@ function htmlFinPainel(m){
 // ---------- notas fiscais ----------
 window.nfFiltro = '';
 function vendasSemNota(){
-  return reservas.filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.f.nota !== 'sem' && !v.ok.recebida
+  return vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.f.nota !== 'sem' && !v.ok.recebida
     && (v.ok.assinatura || (v.tipo === 'adiantamento' && !v.f.recAdiant))
     && !finNotas.some(n => n.vendaId === v.r.id && n.status !== 'cancelada'));
 }
@@ -6475,7 +7046,7 @@ function htmlNotas2(){
   const filtros = [['','Do mês'],['abertas','Esperando pagamento'],['todas','Todas']];
   const cab = `<div class="fin-filtros"><div class="seg">${filtros.map(([k,n]) => `<button class="${window.nfFiltro === k ? 'on' : ''}" onclick="nfFiltro='${k}';render()">${n}</button>`).join('')}</div><input id="finBuscaI" placeholder="Buscar número, construtora ou cliente..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"><button class="btn btn-primary" onclick="editarNota()">+ Nota fiscal</button></div>`;
   const linhas = lista.length ? `<div class="fl-lista">${lista.map(n => `<div class="fl-row nf-row" onclick="editarNota('${n.id}')"><div class="fl-data"><b>${(n.emitidaEm || '').slice(8,10) || '—'}</b><span>${n.emitidaEm ? ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][Number(n.emitidaEm.slice(5,7)) - 1] : ''}</span></div>
-      <div class="fl-txt"><b>NF ${esc(n.numero || 's/ nº')} · ${esc(n.tomador || 'sem tomador')}</b><small>${[n.cliente, n.emissor].filter(Boolean).map(esc).join(' · ')}${n.link ? ` · <a href="${esc(n.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">abrir PDF</a>` : ''}</small></div>
+      <div class="fl-txt"><b>NF ${esc(n.numero || 's/ nº')} · ${esc(n.tomador || 'sem tomador')}</b><small>${[n.cliente, n.emissor].filter(Boolean).map(esc).join(' · ')}${n.anexo ? ` · <button class="link nf-ver" onclick="event.stopPropagation();abrirAnexoNota('${n.id}')">📎 ver nota</button>` : n.link ? ` · <a href="${esc(n.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 ver nota</a>` : ' · <span class="nf-sem">sem arquivo</span>'}</small></div>
       <div class="fl-val">${brl2(n.valor)}<small>imposto ${brl2(nfImposto(n))}</small></div>
       <span class="fin-st nf-${n.status}">${{ a_emitir:'A emitir', emitida:'Emitida', paga:'✓ Paga', cancelada:'Cancelada' }[n.status] || '—'}</span></div>`).join('')}</div>`
     : vazio(window.nfFiltro === 'abertas' ? 'Nenhuma nota esperando pagamento' : 'Nenhuma nota fiscal ' + (window.nfFiltro === 'todas' ? 'ainda' : 'neste mês'), 'Toque em “+ Nota fiscal” ou em “Registrar nota” numa venda. A nota fica ligada à venda e aparece no funil das comissões.');
@@ -6485,17 +7056,47 @@ const nfImposto = n => n.status === 'cancelada' ? 0 : Math.round((Number(n.valor
 window.nfImpCalc = () => { const v = lerDec($('nfValor').value), p = lerDec($('nfPct').value); $('nfImp').innerHTML = v ? `Imposto da nota: <b>${brl2(Math.round(v * p) / 100)}</b> · fica líquido <b>${brl2(v - Math.round(v * p) / 100)}</b>` : ''; };
 function nfStVis(){ const st = $('nfSt').value; $('nfStBtns').innerHTML = [['a_emitir','A emitir'],['emitida','Emitida'],['paga','Paga'],['cancelada','Cancelada']].map(([k,n]) => `<button type="button" class="${st === k ? 'on' : ''}" onclick="document.getElementById('nfSt').value='${k}';nfStVis()">${n}</button>`).join(''); $('nfPagaBox').classList.toggle('hide', st !== 'paga'); if (st === 'paga' && !$('nfPagaEm').value) $('nfPagaEm').value = hojeISO(); }
 window.nfStVis = nfStVis;
-window.nfVendaMudou = () => { const id = $('nfVenda').value; if (!id) return; const r = reservas.find(x => x.id === id); if (!r) return; const v = vendaFin(r);
+window.nfVendaMudou = () => { const id = $('nfVenda').value; if (!id) return; const r = vendasFin().find(x => x.id === id); if (!r) return; const v = vendaFin(r);
   if (!$('nfTomador').value) $('nfTomador').value = v.cons || '';
   if (!$('nfValor').value) $('nfValor').value = String(v.tipo === 'adiantamento' && !v.f.recAdiant && !v.ok.assinatura ? v.adiant : (v.aReceber || v.total)).replace('.', ',');
   if (!$('nfEmissor').value && v.f.emissor) $('nfEmissor').value = v.f.emissor; nfImpCalc(); };
-let nfEdit = null;
+let nfEdit = null, nfArquivo = null, nfTirarAnexo = false;
+function nfAnexoVis(){
+  const n = nfEdit ? finNotas.find(x => x.id === nfEdit) : null, a = n?.anexo && !nfTirarAnexo ? n.anexo : null;
+  $('nfAnexoBox').innerHTML = nfArquivo ? `<div class="nf-arq"><i>📎</i><span><b>${esc(nfArquivo.name)}</b><small>${Math.max(1, Math.round(nfArquivo.size / 1024))} KB · será salvo ao tocar em Salvar</small></span><button class="link" onclick="nfSetArq(null,false)">tirar</button></div>`
+    : a ? `<div class="nf-arq"><i>📎</i><span><b>${esc(a.nome || 'nota')}</b><small>${Math.max(1, Math.round((a.tamanho || 0) / 1024))} KB</small></span><button class="link" onclick="abrirAnexoNota('${n.id}')">abrir</button><button class="link" onclick="document.getElementById('nfArq').click()">trocar</button><button class="link" style="color:var(--danger)" onclick="nfSetArq(null,true)">tirar</button></div>`
+    : `<button type="button" class="nf-anexar" onclick="document.getElementById('nfArq').click()"><b>📎 Anexar a nota emitida</b><small>PDF, XML ou foto · até 8 MB</small></button>`;
+}
+window.nfAnexoVis = nfAnexoVis;
+window.nfSetArq = (f, tirar) => { nfArquivo = f; nfTirarAnexo = !!tirar; nfAnexoVis(); };
+window.nfEscolheuArquivo = inp => { const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return; if (f.size > 8 * 1048576) { toast('Arquivo grande demais (máximo 8 MB)'); return; } nfArquivo = f; nfTirarAnexo = false; nfAnexoVis(); };
+async function subirAnexo(f){
+  let blob = f, mime = f.type || 'application/octet-stream';
+  if (mime.startsWith('image/') && mime !== 'image/gif') { const durl = await comprimirFoto(f, 2000, 0.85); blob = await (await fetch(durl)).blob(); mime = 'image/jpeg'; }
+  const b64 = await new Promise((ok, erro) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = erro; r.readAsDataURL(blob); });
+  const id = 'ax_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), P = 900000, n = Math.ceil(b64.length / P);
+  for (let i = 0; i < n; i++) await setDoc(doc(db,'fin_anexos', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime });
+  return { id, n, mime, nome:f.name || 'nota', tamanho:blob.size };
+}
+async function apagarAnexo(a){ if (a && a.id && a.n) for (let i = 0; i < a.n; i++) await deleteDoc(doc(db,'fin_anexos', a.id + '_' + i)).catch(() => {}); }
+window.abrirAnexoNota = async id => {
+  const n = finNotas.find(x => x.id === id), a = n?.anexo; if (!a) return;
+  $('axTit').textContent = 'Nota ' + (n.numero || '') + (n.tomador ? ' · ' + n.tomador : ''); $('axCorpo').innerHTML = '<div class="ax-load">Carregando a nota…</div>'; $('axPe').innerHTML = ''; abrir('anexoModal');
+  try { const partes = [];
+    for (let i = 0; i < a.n; i++) { const s = await getDoc(doc(db,'fin_anexos', a.id + '_' + i)); if (!s.exists()) throw new Error('arquivo incompleto'); partes.push(s.data().d); }
+    const bin = atob(partes.join('')), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    const url = URL.createObjectURL(new Blob([u8], { type:a.mime || 'application/octet-stream' })), nome = a.nome || 'nota';
+    $('axCorpo').innerHTML = (a.mime || '').startsWith('image/') ? `<img src="${url}" alt="Nota fiscal" class="ax-img">` : a.mime === 'application/pdf' ? `<iframe src="${url}" class="ax-pdf" title="Nota fiscal"></iframe>` : `<div class="ax-load">📎 ${esc(nome)}<br><small>Use “Baixar” para abrir este arquivo.</small></div>`;
+    $('axPe').innerHTML = `<a class="btn btn-ghost" href="${url}" target="_blank" rel="noopener">Abrir em outra aba</a><a class="btn btn-primary" href="${url}" download="${esc(nome)}">⬇ Baixar</a>`;
+  } catch(e) { $('axCorpo').innerHTML = `<div class="ax-load">Não deu para abrir: ${esc(e.message)}</div>`; }
+};
+
 window.editarNota = (id, vendaId) => {
   const n = id ? finNotas.find(x => x.id === id) : null; nfEdit = n ? n.id : null;
   $('notaTit').textContent = n ? 'Nota fiscal ' + (n.numero || '') : 'Nova nota fiscal';
   $('nfEmissor').innerHTML = NF_EMISSORES.map(x => `<option value="${x}">${x || '—'}</option>`).join('');
   $('fvConsL2').innerHTML = construtoras().map(c => `<option value="${esc(c.nome)}">`).join('');
-  const vs = reservas.filter(r => !finVendas[r.id]?.excluida).sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
+  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida).sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
   $('nfVenda').innerHTML = '<option value="">Nenhuma (nota avulsa)</option>' + vs.map(r => `<option value="${r.id}">${esc(r.cliente || 'Cliente')} · ${dataBR(r.dia)}</option>`).join('');
   $('nfVenda').value = n?.vendaId || vendaId || '';
   $('nfNum').value = n?.numero || ''; $('nfData').value = n?.emitidaEm || hojeISO(); $('nfEmissor').value = n?.emissor || '';
@@ -6503,36 +7104,39 @@ window.editarNota = (id, vendaId) => {
   $('nfPct').value = n?.pctImposto ?? finCfg.pctImposto ?? 16; $('nfPagaEm').value = n?.pagaEm || ''; $('nfLink').value = n?.link || ''; $('nfObs').value = n?.obs || '';
   $('nfSt').value = n?.status || (vendaId ? 'emitida' : 'emitida'); nfStVis();
   if (!n && vendaId) nfVendaMudou(); nfImpCalc();
+  nfArquivo = null; nfTirarAnexo = false; nfAnexoVis();
   $('nfExcluir').classList.toggle('hide', !n); abrir('notaModal');
 };
 window.salvarNota = async () => {
   const valor = lerDec($('nfValor').value); if (!valor) { toast('Coloque o valor da nota'); return; }
-  const vendaId = $('nfVenda').value, r = vendaId ? reservas.find(x => x.id === vendaId) : null, st = $('nfSt').value;
+  const vendaId = $('nfVenda').value, r = vendaId ? vendasFin().find(x => x.id === vendaId) : null, st = $('nfSt').value;
   const d = { numero:$('nfNum').value.trim(), emitidaEm:$('nfData').value, emissor:$('nfEmissor').value, tomador:$('nfTomador').value.trim(), valor, pctImposto:lerDec($('nfPct').value), status:st,
     pagaEm:st === 'paga' ? $('nfPagaEm').value : '', link:$('nfLink').value.trim(), obs:$('nfObs').value.trim(), vendaId:vendaId || '', cliente:r?.cliente || '', atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
   if (d.link && !/^https?:\/\//i.test(d.link)) d.link = 'https://' + d.link;
-  const id = nfEdit || 'nf_' + Date.now().toString(36);
+  const id = nfEdit || 'nf_' + Date.now().toString(36), antiga = nfEdit ? finNotas.find(x => x.id === nfEdit) : null;
   try {
+    if (nfArquivo) { toast('Enviando o arquivo da nota…'); d.anexo = await subirAnexo(nfArquivo); }
+    else if (nfTirarAnexo) d.anexo = null;
     const b = writeBatch(db); b.set(doc(db,'fin_notas',id), nfEdit ? d : { ...d, criadoEm:Date.now(), criadoPor:perfil.nome }, { merge:true });
     if (r && st !== 'cancelada' && st !== 'a_emitir') b.set(doc(db,'fin_vendas',r.id), { reservaId:r.id, nota:'com', nf:d.numero, emissor:d.emissor, pctImposto:d.pctImposto, faturada:true, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true });
-    await gravar(b.commit()); fechar('notaModal'); toast('Nota fiscal salva ✓');
+    await gravar(b.commit()); if ((nfArquivo || nfTirarAnexo) && antiga?.anexo) apagarAnexo(antiga.anexo); nfArquivo = null; nfTirarAnexo = false; fechar('notaModal'); toast('Nota fiscal salva ✓');
     if (r && st === 'paga') { const v = vendaFin(r); if (!v.ok.recebida && confirm('A nota foi paga. Quer marcar a comissão desta venda como recebida? (o dinheiro entra em “Entradas e saídas”)')) abrirVendaFin(r.id); }
   } catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirNota = async () => {
   const n = finNotas.find(x => x.id === nfEdit); if (!n) return;
   if (!confirm(`Excluir a nota ${n.numero || ''} de ${brl2(n.valor)}? Se ela foi cancelada na prefeitura, prefira marcar como “Cancelada”.`)) return;
-  try { await gravar(deleteDoc(doc(db,'fin_notas',n.id))); fechar('notaModal'); toast('Nota excluída'); } catch(e) { toast('Erro: ' + e.message); }
+  try { await gravar(deleteDoc(doc(db,'fin_notas',n.id))); apagarAnexo(n.anexo); fechar('notaModal'); toast('Nota excluída'); } catch(e) { toast('Erro: ' + e.message); }
 };
 function htmlFunil(){
-  const tiradas = reservas.filter(r => finVendas[r.id]?.excluida);
-  const vs = reservas.filter(r => !finVendas[r.id]?.excluida).sort((a,b) => (b.dia || '').localeCompare(a.dia || '')).map(vendaFin);
+  const tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
+  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida).sort((a,b) => (b.dia || '').localeCompare(a.dia || '')).map(vendaFin);
   const t = norm(finBusca), filtradas = vs.filter(v => !t || norm([v.r.cliente, v.r.corretorTexto, v.cons, v.r.empreendimento].join(' ')).includes(t));
   const cols = [...ETAPAS_FIN, ['fim','Concluídas']];
   const cards = i => filtradas.filter(v => v.etapa === i);
   const card = v => { const prox = v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : '';
     const prev = v.tipo === 'adiantamento' && !v.f.recAdiant ? `Adiant. ${brl(v.adiant)} ${v.prevA ? 'em ' + dataBR(v.prevA) : ''}` : !v.f.recRestante ? `${v.tipo === 'adiantamento' ? 'Restante' : 'Comissão'} ${brl(v.rest)} ${v.prevR ? 'em ' + dataBR(v.prevR) : '(após assinatura)'}` : '';
-    return `<button class="fv-card" data-id="${v.r.id}" onclick="if(!window._fvArrastou)abrirVendaFin('${v.r.id}')"><b class="fv-nome">${esc(v.r.cliente || 'Cliente')}</b><span class="fv-val">${brl(v.total)}<em>${v.tipo === 'adiantamento' ? 'adiant. + restante' : 'integral'}</em></span><small>${esc((v.cor.map(c => primeiro(c.nome)).join(' + ')) || v.r.corretorTexto || '—')} · ${esc(v.cons || 'sem construtora')}</small>${v.f.processo && !v.ok.assinatura ? `<small class="fv-proc">📋 ${esc(v.f.processo)}</small>` : ''}${prev ? `<small class="fv-prev">💰 ${prev}</small>` : ''}</button>`; };
+    return `<button class="fv-card" data-id="${v.r.id}" onclick="if(!window._fvArrastou)abrirVendaFin('${v.r.id}')"><b class="fv-nome">${esc(v.r.cliente || 'Cliente')}</b><span class="fv-val">${brl(v.total)}<em>${v.tipo === 'adiantamento' ? 'adiant. + restante' : 'integral'}</em></span><small>${esc((v.cor.map(c => primeiro(c.nome)).join(' + ')) || v.r.corretorTexto || '—')} · ${esc(v.cons || 'sem construtora')}${v.r.manual ? ' · <i class="fv-tag">planilha</i>' : ''}</small>${v.f.processo && !v.ok.assinatura ? `<small class="fv-proc">📋 ${esc(v.f.processo)}</small>` : ''}${prev ? `<small class="fv-prev">💰 ${prev}</small>` : ''}</button>`; };
   return `<div class="fin-filtros"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"><span class="fv-dica">✋ Segure e arraste uma venda para mudar de etapa</span></div>
     <div class="fv-funil">${cols.map(([k,n], i) => { const l = cards(i), soma = l.reduce((a,v) => a + (i === ETAPAS_FIN.length ? v.total : v.aReceber || v.total), 0);
       return `<div class="fv-col" data-col="${i}"><div class="fv-head"><b>${n}</b><span>${l.length} · ${brl(soma)}</span></div>${l.map(card).join('') || '<div class="fv-vazio">—</div>'}</div>`; }).join('')}</div>
@@ -6542,7 +7146,7 @@ function htmlFunil(){
 }
 window.finVerTiradas = false;
 window.excluirVendaFin = async () => {
-  const r = reservas.find(x => x.id === finVEdit); if (!r) return;
+  const r = vendasFin().find(x => x.id === finVEdit); if (!r) return;
   const lancs = finLanc.filter(x => x.vendaId === r.id || (x.id || '').startsWith('cv_' + r.id + '_'));
   if (!confirm(`Excluir a venda de ${r.cliente || 'cliente'} do financeiro?\n\nEla sai do funil${lancs.length ? ` e ${lancs.length} lançamento(s) dela saem de Entradas e saídas` : ''}. A reserva continua em Vendas e dá para voltar com ela depois.`)) return;
   try { const b = writeBatch(db); b.set(doc(db,'fin_vendas',r.id), { excluida:true, excluidaEm:Date.now(), excluidaPor:perfil.nome }, { merge:true });
@@ -6552,7 +7156,7 @@ window.voltarVendaFin = async id => {
   try { await gravar(setDoc(doc(db,'fin_vendas',id), { excluida:false }, { merge:true })); toast('Venda de volta no funil'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.abrirVendaFin = (id, semAbrir) => {
-  const r = reservas.find(x => x.id === id); if (!r) return; finVEdit = id;
+  const r = vendasFin().find(x => x.id === id); if (!r) return; finVEdit = id;
   const v = vendaFin(r), f = v.f, ro = '';
   const chk = (idc, val, txt) => `<label class="fv-chk"><input type="checkbox" id="${idc}" ${val ? 'checked' : ''} ${ro}> ${txt}</label>`;
   $('fvTit').textContent = r.cliente || 'Venda';
@@ -6586,7 +7190,7 @@ window.abrirVendaFin = (id, semAbrir) => {
         <div class="fg"><label>Emitida por</label><select id="fvEmissor">${NF_EMISSORES.map(x => `<option ${f.emissor === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
       <div class="row2"><div class="fg"><label>Número da nota</label><input id="fvNF" value="${esc(f.nf || '')}"></div><div class="fg"><label>% de imposto da nota</label><input id="fvPctNF" type="number" step="0.01" value="${Number(f.pctImposto ?? finCfg.pctImposto ?? 16)}"></div></div>
       ${chk('fvFat', f.faturada, 'Comissão faturada / cobrada da construtora')}
-      <div class="fv-notas">${notasV.map(n => `<button class="fv-nota" onclick="fechar('fvModal');editarNota('${n.id}')">🧾 NF ${esc(n.numero || 's/ nº')} · ${brl2(n.valor)} · ${NF_ST[n.status] || ''}</button>`).join('')}<button class="link" onclick="fechar('fvModal');editarNota(null,'${r.id}')">+ Registrar nota fiscal desta venda</button></div>`)}
+      <div class="fv-notas">${notasV.map(n => `<span class="fv-nota-l"><button class="fv-nota" onclick="fechar('fvModal');editarNota('${n.id}')">🧾 NF ${esc(n.numero || 's/ nº')} · ${brl2(n.valor)} · ${NF_ST[n.status] || ''}</button>${n.anexo ? `<button class="link" onclick="abrirAnexoNota('${n.id}')">📎 ver</button>` : ''}</span>`).join('')}<button class="link" onclick="fechar('fvModal');editarNota(null,'${r.id}')">+ Registrar nota fiscal desta venda</button></div>`)}
     ${sec(5, 'Comissão recebida', v.ok.recebida ? 'recebida' : '', `<div id="fvBoxA" class="${v.tipo === 'adiantamento' ? '' : 'hide'}"><div class="row2"><div class="fg"><label>Adiantamento previsto para</label><input id="fvPrevA" type="date" value="${v.prevA || ''}"></div><div class="fg" style="align-self:end">${chk('fvRecA', f.recAdiant, 'Adiantamento recebido')}</div></div></div>
       <div class="row2"><div class="fg"><label>${v.tipo === 'adiantamento' ? 'Restante' : 'Comissão'} prevista para</label><input id="fvPrevR" type="date" value="${v.prevR || ''}"></div><div class="fg" style="align-self:end">${chk('fvRecR', f.recRestante, v.tipo === 'adiantamento' ? 'Restante recebido' : 'Comissão recebida')}</div></div>
       <div class="hint" style="margin:0">Marcando como recebida, a entrada vai sozinha para “Entradas e saídas”.</div>`)}
@@ -6604,7 +7208,7 @@ function lancImp(d, n, r, b){
 }
 // ---------- arrastar a venda de uma etapa para outra ----------
 window.moverVendaFin = async (id, alvo) => {
-  const r = reservas.find(x => x.id === id); if (!r) return;
+  const r = vendasFin().find(x => x.id === id); if (!r) return;
   const v0 = vendaFin(r); if (v0.etapa === alvo) return;
   const nomeAlvo = alvo < ETAPAS_FIN.length ? ETAPAS_FIN[alvo][1] : 'Concluídas';
   const vaiReceber = alvo > 5 && !v0.ok.recebida, vaiPagar = alvo > 6 && !v0.ok.paga;
@@ -6658,7 +7262,7 @@ window.moverVendaFin = async (id, alvo) => {
 })();
 window.fvTipoAuto = () => { const rg = regraConst($('fvCons').value); $('fvTipo').value = rg.tipo; };
 window.salvarVendaFin = async () => {
-  const r = reservas.find(x => x.id === finVEdit); if (!r) return;
+  const r = vendasFin().find(x => x.id === finVEdit); if (!r) return;
   const num = id => lerDec($(id).value) || 0, v0 = vendaFin(r);
   const bruta = $('fvBruta').value.trim();
   const d = { reservaId:r.id, cliente:r.cliente || '', construtora:$('fvCons').value.trim(), tipo:$('fvTipo').value, pctImob:Number($('fvPct').value) || 0, pctAdiant:Number($('fvPctA').value) || 0, pctCor:Number($('fvPctC').value) || 0,
@@ -6682,7 +7286,10 @@ window.salvarVendaFin = async () => {
     else { lanc('int', d.recRestante, { tipo:'entrada', categoria:'Comissão de venda', descricao:`Comissão · ${r.cliente || ''}`, valor:n.total, data:hoje }); lanc('adiant', false, {}); lanc('rest', false, {}); }
     if (n.imposto) lancImp(d, n, r, b);
     lanc('cor', d.corPago, { tipo:'saida', categoria:'Comissão de corretor', descricao:`Comissão do corretor · ${r.cliente || ''} (${n.cor.map(c => primeiro(c.nome)).join(' + ') || r.corretorTexto || ''})`, valor:n.valCor, data:hoje });
+    if (n.etapa !== v0.etapa) { b.set(doc(db,'fin_vendas',r.id), { etapa:n.etapa, etapaDesde:hojeISO() }, { merge:true }); }
     await gravar(b.commit()); fechar('fvModal'); toast('Venda atualizada ✓');
+    if (!v0.ok.recebida && n.ok.recebida) avisarCarteiro('comissao', r.id, false, { evento:'recebida' });
+    if (!v0.f.corPago && d.corPago) avisarCarteiro('comissao', r.id, false, { evento:'paga' });
   } catch(e) { toast('Erro: ' + e.message); }
 };
 // ---------- construtoras e prazos ----------
@@ -7058,6 +7665,7 @@ window.abrirConversa = abrirConversa;
 window.zapVoltar = () => { document.getElementById('v-whatsapp')?.classList.remove('zap-chat-aberto'); };
 const _zapCache = {};
 function zapPor(el, html){ const e = $(el); if (!e) return false; if (_zapCache[el] === html) return false; _zapCache[el] = html; e.innerHTML = html; return true; }
+window.renderZap = () => renderZap();
 function renderZap(){
   if (view !== 'whatsapp' || !souGerente()) return;
   // no celular a conversa fica numa tela fixa, entre a barra de cima e o menu de baixo
@@ -7489,13 +8097,14 @@ window.salvarReserva = async () => {
     const uids = [...new Set([uidAtual, ...corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean)])];
     const idc = 'r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36)));
     try { await gravar(setDoc(doc(db,'reservas',idc), { ...d, corretorUids:uids, criadoPor:uidAtual, fonte:'corretor', criadoEm:Date.now(), caiu:false }));
-      fechar('resvModal'); avisarCarteiro('reserva', idc); copiarTextoReserva(d, true); }
+      fechar('resvModal'); avisarCarteiro('reserva', idc); copiarTextoReserva(d, true); setTimeout(() => festejar(), 300); }
     catch(e) { toast(e.code === 'permission-denied' ? 'Esse cliente já tem reserva cadastrada. Fale com a gerência.' : 'Erro: ' + e.message); }
     return;
   }
   const id = rvId || ('r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36))));
   if (!rvId && reservasTodas.some(x => x.id === id)) { if (!confirm('Já existe uma reserva desse cliente. Atualizar a que existe?')) return; }
-  try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓'); }
+  try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓');
+    const rx = reservasTodas.find(x => x.id === id); if (rvId && rx && rx.fonte === 'corretor' && !rx.avisadoOk) avisarCarteiro('reserva_ok', id); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.vendaCaiu = async () => {
