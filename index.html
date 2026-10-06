@@ -1681,6 +1681,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   .fin-filtros .seg{width:100%;overflow-x:auto;flex-wrap:nowrap}.fin-filtros .seg button{flex:none}
   .nf-pl{flex-wrap:wrap}
 }
+.fv-topo>div{cursor:pointer;transition:box-shadow .15s}.fv-topo>div:hover{box-shadow:0 0 0 2px #1f5f8b44}.fv-manual>summary{font-weight:700;cursor:pointer;padding:6px 0}
 </style>
 </head>
 <body>
@@ -5122,7 +5123,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 87;
+const APP_VERSAO = 88;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8336,13 +8337,18 @@ function vendasFin(){
   return man.length ? [...reservas, ...man] : reservas;
 }
 // tudo o que se sabe da comissão de uma venda (reserva + acompanhamento financeiro)
+window.fvEditar = id => { const el = document.getElementById(id); if (!el) return; const d = el.closest('details'); if (d) d.open = true;
+  el.scrollIntoView({ block:'center', behavior:'smooth' }); setTimeout(() => { el.focus(); if (el.select) el.select(); }, 300); };
 function vendaFin(r){
   const f = finVendas[r.id] || {}, cons = f.construtora || r.construtora || '', rg = regraConst(cons);
   const tipo = f.tipo || rg.tipo, vgv = Number(r.valor) || 0;
   // o "percentual" da reserva: até 10 é % sobre o imóvel; acima disso (ou 0,5 / 0,6) é a parte do corretor
   const pr = lerDec(r.percentual), prCor = pr > 0 && pr <= 1 ? pr * 100 : pr > 10 ? pr : 0, prImo = pr > 1 && pr <= 10 ? pr : 0;
   const pctImob = Number(f.pctImob ?? (prImo || finCfg.pctImob || 5)) || 0;
-  const brutaRes = lerDec(r.comissao);
+  // comissão escrita na reserva: vale o maior valor plausível (1% a 15% do imóvel); textos como "5%" ou "entre 10k e 11.250" caem no cálculo
+  const brutaRes = (() => { const t = String(r.comissao || ''); if (!t || /%/.test(t)) return 0;
+    const nums = (t.match(/\d[\d.,]*\s*(?:k|mil)?/gi) || []).map(x => { const k = /k|mil/i.test(x); const y = x.replace(/k|mil/gi, '').trim(); let v = !y.includes(',') && /^\d{1,3}(\.\d{3})+$/.test(y) ? Number(y.replace(/\./g, '')) : lerDec(y); if (k) v *= 1000; return v; }).filter(v => v > 0);
+    const ok = nums.filter(v => vgv && v >= vgv * 0.01 && v <= vgv * 0.15); return ok.length ? Math.max(...ok) : 0; })();
   const total = f.comissao != null && f.comissao !== '' ? Number(f.comissao) : (brutaRes || Math.round(vgv * pctImob) / 100);
   const pctA = tipo === 'adiantamento' ? Number(f.pctAdiant ?? rg.pctAdiant) || 0 : 0;
   const adiant = Math.round(total * pctA) / 100, rest = Math.round((total - adiant) * 100) / 100;
@@ -8585,14 +8591,14 @@ window.abrirVendaFin = (id, semAbrir) => {
     return `<details class="fv-et ${feito ? 'feito' : ''}" ${i === atual ? 'open' : ''}><summary><i>${feito ? '✓' : i + 1}</i><span><b>${titulo}</b>${resumo ? `<small>${resumo}</small>` : ''}</span></summary><div class="fv-et-in">${corpo}</div></details>`; };
   const notasV = (window.finNotas || []).filter(n => n.vendaId === r.id);
   $('fvCorpo').innerHTML = `
-    <div class="fv-topo"><div><span>Comissão bruta</span><b>${brl2(v.total)}</b></div><div><span>Imposto (${String(v.pctNF).replace('.', ',')}%)</span><b class="fin-neg">− ${brl2(v.imposto)}</b></div><div><span>Corretor${v.descTotal ? ' (já com descontos)' : ''}</span><b>${brl2(v.valCor)}</b>${v.descTotal ? `<small class="fv-desc-s">${brl2(v.valCorBruto)} − ${brl2(v.descTotal)}</small>` : ''}</div><div><span>Fica na imobiliária</span><b class="fin-pos">${brl2(v.valImob)}</b></div></div>
+    <div class="fv-topo" title="Toque num valor para editar"><div onclick="fvEditar('fvBruta')"><span>Comissão bruta ✏️</span><b>${brl2(v.total)}</b></div><div onclick="fvEditar('fvImpV')"><span>Imposto (${String(v.pctNF).replace('.', ',')}%) ✏️</span><b class="fin-neg">− ${brl2(v.imposto)}</b></div><div onclick="fvEditar('fvValCor')"><span>Corretor${v.descTotal ? ' (já com descontos)' : ''} ✏️</span><b>${brl2(v.valCor)}</b>${v.descTotal ? `<small class="fv-desc-s">${brl2(v.valCorBruto)} − ${brl2(v.descTotal)}</small>` : ''}</div><div onclick="fvEditar('fvPctC')"><span>Fica na imobiliária ✏️</span><b class="fin-pos">${brl2(v.valImob)}</b></div></div>
     ${v.tipo === 'adiantamento' ? `<div class="fv-parc">Adiantamento <b>${brl2(v.adiant)}</b>${v.prevA ? ' em ' + dataBR(v.prevA) : ''} · restante <b>${brl2(v.rest)}</b>${v.prevR ? ' em ' + dataBR(v.prevR) : ' depois da assinatura'}</div>` : `<div class="fv-parc">Paga tudo de uma vez${v.prevR ? ' em ' + dataBR(v.prevR) : ', depois da assinatura'}</div>`}
     <div class="fv-bloco"><h4>Comissão</h4>
       <div class="row2"><div class="fg"><label>Construtora</label><input id="fvCons" list="fvConsL" value="${esc(v.cons)}" oninput="fvTipoAuto()"><datalist id="fvConsL">${construtoras().map(c => `<option value="${esc(c.nome)}">`).join('')}</datalist></div>
       <div class="fg"><label>Como paga</label><select id="fvTipo"><option value="integral" ${v.tipo === 'integral' ? 'selected' : ''}>Tudo de uma vez</option><option value="adiantamento" ${v.tipo === 'adiantamento' ? 'selected' : ''}>Adiantamento + restante</option></select></div></div>
       ${v.rg.obs ? `<div class="fv-obs">⚠️ ${esc(v.rg.obs)}</div>` : ''}
       <div class="row2"><div class="fg"><label>% sobre o imóvel</label><input id="fvPct" type="number" step="0.01" value="${v.pctImob}"></div><div class="fg"><label>% do corretor (sobre o líquido)</label><input id="fvPctC" type="number" step="0.01" value="${v.pctCor}"></div></div>
-      <details class="fv-manual"><summary>Trocar valores na mão</summary>
+      <details class="fv-manual"><summary>✏️ Editar valores (comissão, imposto, corretor)</summary>
         <div class="row2"><div class="fg"><label>Comissão bruta (R$)</label><input id="fvBruta" inputmode="decimal" value="${val(f.comissao)}" placeholder="${val(v.total)}"></div><div class="fg"><label>% do adiantamento</label><input id="fvPctA" type="number" step="1" value="${v.tipo === 'adiantamento' ? v.pctA : (regraConst('Tenda').pctAdiant || 30)}"></div></div>
         <div class="row2"><div class="fg"><label>Comissão do corretor (R$)</label><input id="fvValCor" inputmode="decimal" value="${val(f.valCor)}" placeholder="${val(Math.round(v.liquido * v.pctCor) / 100)}"></div><div class="fg"><label>Imposto da nota (R$)</label><input id="fvImpV" inputmode="decimal" value="${val(f.impostoV)}" placeholder="${val(Math.round(v.total * v.pctNF) / 100)}"></div></div>
         <div class="hint" style="margin:0">Deixe em branco para o app calcular sozinho.</div></details>
