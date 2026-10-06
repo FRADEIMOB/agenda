@@ -314,7 +314,7 @@ html[data-theme="dark"] .wa:hover{background:#0f2a1b!important}
 .sheet-foot{display:flex;gap:10px;padding:16px 22px;border-top:1px solid var(--border)}
 .sheet-foot .btn{flex:1}
 .title-in{font-size:17px;font-weight:600;padding:13px 14px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}@media(max-width:560px){.row3{grid-template-columns:1fr}}
 .fg{margin-bottom:16px}
 .prio-sel{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .prio-sel button{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:9px 4px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--text2)}
@@ -1518,6 +1518,21 @@ html[data-theme="dark"] .an-alerta{background:#2a1a0c;border-color:#7c2d12;color
 .au-vazio{text-align:center;padding:50px 20px;background:var(--card);border:1px dashed var(--border);border-radius:20px}.au-vazio span{font-size:44px}.au-vazio b{display:block;font-size:17px;margin:8px 0 4px}.au-vazio p{color:var(--muted);max-width:420px;margin:auto}
 .au-hoje{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;margin-bottom:14px;cursor:pointer}
 .au-hoje>span{font-size:26px}.au-hoje div{flex:1;min-width:0;display:grid}.au-hoje small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.au-capa-ler{background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 40%,#1f1406));flex-direction:column;gap:6px;padding:14px;text-align:center}.au-capa-ler .au-ic{font-size:34px}.au-ler-tit{color:#fff;font-weight:800;font-size:16px;line-height:1.2;max-width:90%}
+.au-ler-sheet{width:min(860px,100%);height:min(92vh,900px);display:flex;flex-direction:column}.au-ler-sheet .sheet-body{flex:1;overflow:auto}
+.al-nav{padding:0 22px 10px;border-bottom:1px solid var(--border)}.al-prog{height:5px;background:var(--border);border-radius:9px;overflow:hidden;margin-bottom:10px}.al-prog i{display:block;height:100%;background:var(--ok)}
+.al-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}.al-chips button{flex:0 0 auto;border:1px solid var(--border);background:var(--card);border-radius:99px;padding:6px 11px;font-size:12.5px;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap}
+.al-chips button.lido{color:var(--ok)}.al-chips button.on{background:var(--marinho);color:#fff;border-color:var(--marinho)}.al-chips .al-prova-chip{border-color:#b45309;color:#b45309}.al-chips .al-prova-chip.trava{opacity:.65}
+.al-texto{max-width:680px;margin:0 auto;font-size:15.5px;line-height:1.65;color:var(--text)}.al-texto h2{font-size:24px;margin:2px 0 14px;letter-spacing:-.01em}.al-texto h3{font-size:17px;margin:22px 0 8px;color:#b45309}.al-mod{font-size:12px;color:var(--muted);font-weight:700}
+.al-texto p{margin:0 0 10px}.al-texto ul,.al-texto ol{margin:0 0 12px;padding-left:22px}.al-texto li{margin:4px 0}
+.al-texto blockquote{margin:12px 0;padding:10px 14px;border-left:4px solid #b45309;background:color-mix(in srgb,#b45309 8%,var(--card));border-radius:0 12px 12px 0;font-size:14.5px}
+.al-tab{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 14px}.al-tab th,.al-tab td{border:1px solid var(--border);padding:7px 9px;text-align:left;vertical-align:top}.al-tab th{background:var(--card2)}
+.al-trava{text-align:center;padding:40px 16px}.al-trava span{font-size:42px}.al-trava b{display:block;font-size:17px;margin:8px 0 4px}.al-trava p{color:var(--muted)}
+.al-prova{max-width:680px;margin:0 auto}.al-prova h2{margin:0 0 4px}.al-q{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin:12px 0}.al-q>b{display:block;margin-bottom:8px;font-size:15px}
+.al-op{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:10px;cursor:pointer;font-size:14.5px;border:1px solid transparent}.al-op input{width:auto;margin-top:3px}.al-op.on{background:var(--accent-soft);border-color:var(--accent)}
+.al-nota{max-width:480px;margin:20px auto;text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:24px}.al-nota span{color:var(--muted)}.al-nota b{display:block;font-size:64px;line-height:1;margin:6px 0;color:var(--danger)}.al-nota.ok b{color:var(--ok)}.al-nota em{font-style:normal;color:var(--text2)}.al-nota p{margin:12px 0 0}
+.al-res-eq{margin-bottom:16px}.al-res-eq h3{margin:0 0 8px}
+@media(max-width:700px){.au-ler-sheet{height:100%}.al-texto{font-size:15px}}
 .au-sheet{width:min(960px,100%)}
 .au-video{aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden}.au-video iframe,.au-video video{width:100%;height:100%;border:0;display:block}
 .au-semv{color:#fff;padding:30px;text-align:center}.au-semv a{color:#ff8a3d}
@@ -2014,7 +2029,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       </section>
 
       <section class="view" id="v-aulas">
-        <div class="au-topo"><div class="au-prog" id="auProg"></div><button class="btn btn-primary hide" id="auNovaBt" onclick="novaAula()">+ Nova aula</button></div>
+        <div class="au-topo"><div class="au-prog" id="auProg"></div><button class="btn btn-ghost hide" id="auImpBt" onclick="document.getElementById('auImpArq').click()">📥 Importar material de estudo</button><input type="file" id="auImpArq" class="hide" accept=".json,application/json" onchange="importarMaterial(this)"><button class="btn btn-primary hide" id="auNovaBt" onclick="novaAula()">+ Nova aula</button></div>
         <div class="au-tabs" id="auTabs"></div>
         <div id="auLista"></div>
       </section>
@@ -2744,7 +2759,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="row2"><div class="fg"><label>CPF</label><input id="anCpf" inputmode="numeric" maxlength="14" oninput="this.value=mascCpf(this.value)"></div><div class="fg"><label>Telefone</label><input id="anFone" inputmode="tel" maxlength="20"></div></div>
       <div id="anSoAnalise">
         <div class="row2"><div class="fg"><label>E-mail</label><input id="anEmail" type="email" maxlength="100"></div><div class="fg"><label>Profissão</label><input id="anProf" maxlength="60"></div></div>
-        <div class="row2"><div class="fg"><label>Renda formal</label><input id="anRendaF" inputmode="decimal" placeholder="R$ 0,00"></div><div class="fg"><label>Renda total</label><input id="anRendaT" inputmode="decimal" placeholder="R$ 0,00"></div></div>
+        <div class="row3"><div class="fg"><label>Renda formal</label><input id="anRendaF" inputmode="decimal" placeholder="R$ 0,00" oninput="anSomaRenda()"></div><div class="fg"><label>Renda informal</label><input id="anRendaI" inputmode="decimal" placeholder="R$ 0,00" oninput="anSomaRenda()"></div><div class="fg"><label>Renda total</label><input id="anRendaT" inputmode="decimal" placeholder="R$ 0,00" oninput="this.dataset.mexeu='1'"></div></div>
         <div class="row3"><div class="fg"><label>Estado civil</label><select id="anCivil"><option value="">—</option><option>Solteiro(a)</option><option>Casado(a)</option><option>União estável</option><option>Divorciado(a)</option><option>Viúvo(a)</option></select></div>
           <div class="fg"><label>Mais de 3 anos</label><select id="anMais3"><option value="">—</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
           <div class="fg"><label>Dependente</label><select id="anDep"><option value="">—</option><option value="sim">Sim</option><option value="nao">Não</option></select></div></div>
@@ -2843,6 +2858,14 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anTestModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarTestadores()">Salvar</button></div>
   </div>
 </div>
+<div class="modal" id="auLerModal">
+  <div class="sheet au-ler-sheet">
+    <div class="sheet-head"><h2 id="alTit">Material de estudo</h2><button class="icon-btn" onclick="fecharLeitura()" data-ic="x"></button></div>
+    <div class="al-nav" id="alNav"></div>
+    <div class="sheet-body" id="alCorpo"></div>
+    <div class="sheet-foot" id="alPe"></div>
+  </div>
+</div>
 <div class="modal" id="auVerModal">
   <div class="sheet au-sheet">
     <div class="sheet-head"><h2 id="auVerTit">Aula</h2><button class="icon-btn" onclick="fecharAula()" data-ic="x"></button></div>
@@ -2855,7 +2878,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-body">
       <div class="fg"><label>Link do vídeo</label><input id="auUrl" placeholder="Cole o link do YouTube, Google Drive ou Vimeo" oninput="auPrevia()"><div class="au-previa" id="auPrevia"></div></div>
       <div class="fg"><label>Título</label><input id="auTitulo" maxlength="100" placeholder="Ex.: Como cadastrar e acompanhar um lead no CRM"></div>
-      <div class="row2"><div class="fg"><label>Assunto</label><select id="auTema"><option value="crm">CRM</option><option value="financiamento">Financiamento</option><option value="geral">Outros assuntos</option></select></div>
+      <div class="row2"><div class="fg"><label>Assunto</label><select id="auTema"><option value="crm">CRM</option><option value="financiamento">Financiamento</option><option value="estudo">Material de estudo</option><option value="geral">Outros assuntos</option></select></div>
         <div class="fg"><label>Quem dá a aula</label><input id="auProf" maxlength="60" list="auProfs"><datalist id="auProfs"></datalist></div></div>
       <div class="row2"><div class="fg"><label>Duração (opcional)</label><input id="auDur" maxlength="20" placeholder="Ex.: 18 min"></div>
         <div class="fg"><label>Ordem na lista</label><input id="auOrdem" type="number" min="1" placeholder="1"></div></div>
@@ -5099,7 +5122,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 86;
+const APP_VERSAO = 87;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7182,7 +7205,7 @@ function anTextoGrupo(a){
   if (anVerif(a)) { const v = a.verificacao || {};
     return ['❌❌❌❌❌❌❌❌', 'Verificar CPF', '', `Nome: ${c.nome || ''}`, `Telefone: ${c.telefone || ''}`, `CPF: ${c.cpf || ''}`, `Está em outro CCA? ${v.cca ? simNao(v.cca) + (v.ccaQual ? ' (' + v.ccaQual + ')' : '') : ''}`, `Ver se tem Restrição?: ${v.restricao ? simNao(v.restricao) + (v.restricaoQual ? ' (' + v.restricaoQual + ')' : '') : ''}`,
       `Parcela e prazo se tiver análise válida: ${v.parcela ? brl2(v.parcela) + (v.prazo ? ' em ' + v.prazo + ' meses' : '') : ''}`, `Renda cadastrada: ${v.renda ? brl(v.renda) : ''}`].join('\n'); }
-  return ['❌❌❌❌❌❌❌❌', 'Análise de Crédito:', '', `Nome: ${c.nome || ''}`, `CPF: ${c.cpf || ''}`, `Telefone: ${c.telefone || ''}`, `Email: ${c.email || ''}`, `Profissão: ${c.profissao || ''}`, `Renda formal: ${c.rendaFormal ? brl(c.rendaFormal) : ''}`, `Renda Total: ${c.renda ? brl(c.renda) : ''}`, `Estado Civil: ${c.civil || ''}`, `Mais de 3 anos: ${simNao(c.mais3)}`, `Dependente: ${simNao(c.dep)}`].join('\n');
+  return ['❌❌❌❌❌❌❌❌', 'Análise de Crédito:', '', `Nome: ${c.nome || ''}`, `CPF: ${c.cpf || ''}`, `Telefone: ${c.telefone || ''}`, `Email: ${c.email || ''}`, `Profissão: ${c.profissao || ''}`, `Renda formal: ${c.rendaFormal ? brl(c.rendaFormal) : ''}`, `Renda informal: ${c.rendaInformal ? brl(c.rendaInformal) : ''}`, `Renda Total: ${c.renda ? brl(c.renda) : ''}`, `Estado Civil: ${c.civil || ''}`, `Mais de 3 anos: ${simNao(c.mais3)}`, `Dependente: ${simNao(c.dep)}`].join('\n');
 }
 window.anCopiarGrupo = async () => { const a = anAtual(); if (!a) return; try { await navigator.clipboard.writeText(anTextoGrupo(a)); toast('📋 Copiado no formato do grupo'); } catch(e) { toast('Não deu para copiar'); } };
 const AN_DOCS = [['identidade','RG e CPF, ou CNH', false], ['residencia','Comprovante de residência', false], ['renda','Comprovante de renda (contracheques, extratos ou declaração)', false],
@@ -7282,7 +7305,7 @@ function pintarPasta(){
       ${r.restricao ? '<p><b>⛔ Cliente com restrição no CPF</b></p>' : ''}${r.condicao ? `<p><b>${a.status === 'reprovada' ? 'Motivo' : 'Condição'}:</b> ${esc(r.condicao)}</p>` : ''}${r.obs ? `<p>${esc(r.obs)}</p>` : ''}</div>` : ''}
     ${acoes.length ? `<div class="an-acoes">${acoes.join('')}</div>` : ''}
     <div class="an-v-grade">
-      <div class="an-box"><h3>${ehV ? '🔍 Verificar CPF' : '📋 Análise de crédito'}</h3><div class="an-dados">${linha('Nome', esc(c.nome || ''))}${linha('CPF', esc(c.cpf || ''))}${linha('Telefone', esc(c.telefone || ''))}${linha('E-mail', esc(c.email || ''))}${linha('Profissão', esc(c.profissao || ''))}${linha('Renda formal', c.rendaFormal ? brl(c.rendaFormal) : '')}${linha('Renda total', !ehV && c.renda ? brl(c.renda) : '')}${linha('Estado civil', esc(c.civil || ''))}${linha('Mais de 3 anos', simNao(c.mais3))}${linha('Dependente', simNao(c.dep))}</div>
+      <div class="an-box"><h3>${ehV ? '🔍 Verificar CPF' : '📋 Análise de crédito'}</h3><div class="an-dados">${linha('Nome', esc(c.nome || ''))}${linha('CPF', esc(c.cpf || ''))}${linha('Telefone', esc(c.telefone || ''))}${linha('E-mail', esc(c.email || ''))}${linha('Profissão', esc(c.profissao || ''))}${linha('Renda formal', c.rendaFormal ? brl(c.rendaFormal) : '')}${linha('Renda informal', c.rendaInformal ? brl(c.rendaInformal) : '')}${linha('Renda total', !ehV && c.renda ? brl(c.renda) : '')}${linha('Estado civil', esc(c.civil || ''))}${linha('Mais de 3 anos', simNao(c.mais3))}${linha('Dependente', simNao(c.dep))}</div>
         ${cj?.nome ? `<h3 style="margin-top:12px">2º proponente</h3><div class="an-dados">${linha('Nome', esc(cj.nome))}${linha('CPF', esc(cj.cpf || ''))}${linha('Renda bruta', cj.renda ? brl(cj.renda) : '')}${linha('Tipo de renda', esc(cj.tipoRenda || ''))}</div>` : ''}
         ${a.imovel?.empreendimento || a.imovel?.valor ? `<h3 style="margin-top:12px">Imóvel</h3><div class="an-dados">${linha('Empreendimento', esc(a.imovel.empreendimento || ''))}${linha('Valor', a.imovel.valor ? brl(a.imovel.valor) : '')}</div>` : ''}
         ${a.obs ? `<div class="an-obs">💬 ${esc(a.obs)}</div>` : ''}</div>
@@ -7401,6 +7424,8 @@ window.anAbrirDoc = async i => {
 // ---- formulário da pasta (corretor) ----
 let anVirando = false;
 const anTipoForm = () => document.querySelector('input[name=anTipo]:checked')?.value || 'analise';
+// a renda total soma a formal e a informal (dá para mudar na mão)
+window.anSomaRenda = () => { if ($('anRendaT').dataset.mexeu) return; const t = lerValor($('anRendaF').value) + lerValor($('anRendaI').value); $('anRendaT').value = t ? fmtValorInput(t) : ''; };
 window.anTipoVis = () => { const v = anTipoForm() === 'verificacao'; $('anSoAnalise').classList.toggle('hide', v); };
 let anTipoAlvo = '';
 window.anAnexar = tipo => { anTipoAlvo = tipo; $('anArq').click(); };
@@ -7420,7 +7445,7 @@ function anPreencher(a){
   const c = a?.cliente || {};
   document.querySelectorAll('input[name=anTipo]').forEach(i => i.checked = i.value === (a?.tipo || 'analise')); $('anTipoBox').classList.toggle('hide', !!a); anTipoVis();
   $('anNome').value = c.nome || ''; $('anCpf').value = c.cpf || ''; $('anFone').value = c.telefone || ''; $('anEmail').value = c.email || ''; $('anProf').value = c.profissao || '';
-  $('anRendaF').value = c.rendaFormal ? fmtValorInput(c.rendaFormal) : ''; $('anRendaT').value = c.renda ? fmtValorInput(c.renda) : ''; $('anCivil').value = c.civil || ''; $('anMais3').value = c.mais3 || ''; $('anDep').value = c.dep || '';
+  $('anRendaF').value = c.rendaFormal ? fmtValorInput(c.rendaFormal) : ''; $('anRendaI').value = c.rendaInformal ? fmtValorInput(c.rendaInformal) : ''; $('anRendaT').value = c.renda ? fmtValorInput(c.renda) : ''; $('anRendaT').dataset.mexeu = ''; $('anCivil').value = c.civil || ''; $('anMais3').value = c.mais3 || ''; $('anDep').value = c.dep || '';
   $('anEmp').value = a?.imovel?.empreendimento || ''; $('anObs').value = a?.obs || '';
   $('anEmps').innerHTML = [...new Set([...empreendimentos.map(e => e.nome), ...visitas.map(v => v.empreendimento)].filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
   anNovos = []; anTirar = []; anDocsVis(); $('anProg').textContent = '';
@@ -7433,7 +7458,7 @@ window.salvarPasta = async enviar => {
   const a = anEdit ? analises.find(x => x.id === anEdit) : null;
   const tipo = anVirando ? 'analise' : a ? (a.tipo || 'analise') : anTipoForm(), ehV = tipo === 'verificacao';
   const cliente = { nome:$('anNome').value.trim(), cpf:fmtCpf($('anCpf').value), telefone:$('anFone').value.trim(),
-    ...(ehV ? {} : { email:$('anEmail').value.trim(), profissao:$('anProf').value.trim(), rendaFormal:lerValor($('anRendaF').value), renda:lerValor($('anRendaT').value) || lerValor($('anRendaF').value), civil:$('anCivil').value, mais3:$('anMais3').value, dep:$('anDep').value }) };
+    ...(ehV ? {} : { email:$('anEmail').value.trim(), profissao:$('anProf').value.trim(), rendaFormal:lerValor($('anRendaF').value), rendaInformal:lerValor($('anRendaI').value), renda:lerValor($('anRendaT').value) || (lerValor($('anRendaF').value) + lerValor($('anRendaI').value)), civil:$('anCivil').value, mais3:$('anMais3').value, dep:$('anDep').value }) };
   const conjuge = null;
   if (!cliente.nome) { toast('Informe o nome do cliente'); $('anNome').focus(); return; }
   if (enviar || (a && a.status !== 'rascunho')) {
@@ -7486,7 +7511,7 @@ window.salvarTestadores = async () => {
 // ============ AULAS (vídeos de treinamento) · v79 ============
 // =====================================================================
 let aulas = [], aulasVistas = [], auTema = 'todas', auAberta = null;
-const AU_TEMAS = { crm:{ nome:'CRM', ic:'📇', cor:'#2563eb' }, financiamento:{ nome:'Financiamento', ic:'🏦', cor:'#0f9d76' }, geral:{ nome:'Outros assuntos', ic:'🎓', cor:'#7c3aed' } };
+const AU_TEMAS = { estudo:{ nome:'Material de estudo', ic:'📖', cor:'#b45309' }, crm:{ nome:'CRM', ic:'📇', cor:'#2563eb' }, financiamento:{ nome:'Financiamento', ic:'🏦', cor:'#0f9d76' }, geral:{ nome:'Outros assuntos', ic:'🎓', cor:'#7c3aed' } };
 function assinarAulas(){
   aulas = []; aulasVistas = []; if (!souAtivo()) return;
   subsPapel.push(onSnapshot(collection(db,'aulas'), s => { aulas = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.tema || '').localeCompare(b.tema || '') || (a.ordem || 99) - (b.ordem || 99) || (a.criadoEm || 0) - (b.criadoEm || 0)); render(); }, e => console.warn('aulas', e.code || e.message)));
@@ -7507,8 +7532,13 @@ const auAssistiu = (aId, uid = uidAtual) => !!auVista(aId, uid)?.assistiu;
 const auPublico = () => perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel));
 const auPendentes = () => ['corretor','coordenador','sdr'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && !auAssistiu(a.id)) : [];
 function htmlAulaCard(a){
-  const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), abriu = !!auVista(a.id);
+  const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), abriu = !!auVista(a.id), ler = a.tipo === 'leitura';
   let rodape = '';
+  if (ler) { const vv = auVista(a.id) || {}, nm = (a.modulos || []).length, nl = Object.keys(vv.lidos || {}).length;
+    if (podeGerir()) { const pub = auPublico(), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((t, p) => t + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
+      rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(fez.length / pub.length * 100) : 0}%"></i></div><small class="au-qt">${fez.length} de ${pub.length} fizeram a prova${fez.length ? ' · média ' + med.toFixed(1).replace('.', ',') : ''}</small>`; }
+    return `<button class="au-card" onclick="abrirAula('${a.id}')"><div class="au-capa au-capa-ler" style="--c:${t.cor}"><span class="au-ic">📖</span><span class="au-ler-tit">${esc(a.titulo)}</span>${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${vv.prova ? `<em class="au-ok">✓ Nota ${String(vv.prova.melhor).replace('.', ',')}</em>` : nl ? `<em class="au-meio">Lendo · ${nl} de ${nm}</em>` : a.obrigatoria ? '<em class="au-nova">Para estudar</em>' : ''}</div>
+      <div class="au-txt"><b>${esc(a.titulo)}</b><span>${esc(a.professor || '')}</span>${rodape}</div></button>`; }
   if (podeGerir()) { const pub = auPublico(), n = pub.filter(p => auAssistiu(a.id, p.uid)).length; rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(n / pub.length * 100) : 0}%"></i></div><small class="au-qt">${n} de ${pub.length} da equipe assistiram</small>`; }
   return `<button class="au-card" onclick="abrirAula('${a.id}')">
     <div class="au-capa" style="--c:${t.cor}">${v?.capa ? `<img src="${v.capa}" alt="" loading="lazy" onerror="this.remove()">` : `<span class="au-ic">${t.ic}</span>`}<span class="au-play"></span>${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${viu ? '<em class="au-ok">✓ Assistida</em>' : abriu ? '<em class="au-meio">Começou</em>' : a.obrigatoria ? '<em class="au-nova">Para assistir</em>' : ''}</div>
@@ -7516,7 +7546,7 @@ function htmlAulaCard(a){
 }
 function renderAulas(){
   if (view !== 'aulas' || !$('auLista')) return;
-  $('auNovaBt').classList.toggle('hide', !(souGerente() && !souCeo()));
+  $('auNovaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('auImpBt').classList.toggle('hide', !(souGerente() && !souCeo()));
   const meus = ['corretor','coordenador','sdr'].includes(perfil?.papel), tot = aulas.length, vi = aulas.filter(a => auAssistiu(a.id)).length;
   $('auProg').innerHTML = !tot ? '<b>Aulas da Frade</b><small>Treinamentos em vídeo para a equipe.</small>' : meus ? `<b>Você assistiu ${vi} de ${tot} aula${tot > 1 ? 's' : ''}</b><div class="au-barra"><i style="width:${Math.round(vi / tot * 100)}%"></i></div>` : `<b>${tot} aula${tot > 1 ? 's' : ''} publicada${tot > 1 ? 's' : ''}</b><small>Toque numa aula para ver quem já assistiu.</small>`;
   const temas = Object.keys(AU_TEMAS).filter(k => aulas.some(a => (a.tema || 'geral') === k));
@@ -7532,7 +7562,9 @@ function htmlAulasHoje(){
   return `<div class="au-hoje" onclick="abrirAula('${a.id}')"><span>🎓</span><div><b>${p.length > 1 ? `Você tem ${p.length} aulas para assistir` : 'Aula para você assistir'}</b><small>${esc(a.titulo)} · com ${esc(a.professor || '')}</small></div><button class="btn btn-primary">Assistir</button></div>`;
 }
 window.abrirAula = async id => {
-  const a = aulas.find(x => x.id === id); if (!a) return; auAberta = id;
+  const a = aulas.find(x => x.id === id); if (!a) return;
+  if (a.tipo === 'leitura') return abrirLeitura(id);
+  auAberta = id;
   const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral;
   $('auVerTit').textContent = a.titulo;
   $('auVideo').innerHTML = !v ? `<div class="au-semv">Não deu para abrir este vídeo aqui. <a href="${esc(a.url)}" target="_blank" rel="noopener">Abrir o vídeo</a></div>`
@@ -7553,26 +7585,114 @@ function pintarInfoAula(){
     ${a.descricao ? `<p class="au-desc">${esc(a.descricao).replace(/\n/g, '<br>')}</p>` : ''}
     <div class="au-acoes">${meus ? (viu ? '<span class="au-feito">✓ Você já assistiu esta aula</span>' : `<button class="btn btn-primary" onclick="marcarAssistida('${a.id}')">✓ Terminei de assistir</button>`) : ''}${souGerente() && !souCeo() ? `<button class="btn btn-ghost" onclick="editarAula('${a.id}')">Editar</button>` : ''}</div>${quem}`;
 }
+// ---- material de estudo (leitura em módulos + prova no final) · v87 ----
+let alAula = null, alPos = 0, alResp = {}, alResultado = null;
+const alMeu = () => ['corretor','coordenador','sdr'].includes(perfil?.papel);
+function mdHtml(t){
+  const inl = x => esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const linhas = String(t || '').split('\n'); let h = '', lista = '', tab = [];
+  const fechaLista = () => { if (lista) { h += `</${lista}>`; lista = ''; } };
+  const fechaTab = () => { if (tab.length) { const rows = tab.filter(r => !/^\|[\s:|-]+\|$/.test(r)).map(r => r.replace(/^\||\|$/g, '').split('|').map(c => c.trim()));
+      h += `<div class="tbl-wrap"><table class="al-tab"><thead><tr>${rows[0].map(c => `<th>${inl(c)}</th>`).join('')}</tr></thead><tbody>${rows.slice(1).map(r => `<tr>${r.map(c => `<td>${inl(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; tab = []; } };
+  for (const l of linhas) {
+    if (/^\|/.test(l.trim())) { fechaLista(); tab.push(l.trim()); continue; } fechaTab();
+    if (!l.trim()) { fechaLista(); continue; }
+    let m;
+    if ((m = l.match(/^## (.+)/))) { fechaLista(); h += `<h3>${inl(m[1])}</h3>`; }
+    else if ((m = l.match(/^> (.+)/))) { fechaLista(); h += `<blockquote>${inl(m[1])}</blockquote>`; }
+    else if ((m = l.match(/^- (.+)/))) { if (lista !== 'ul') { fechaLista(); h += '<ul>'; lista = 'ul'; } h += `<li>${inl(m[1])}</li>`; }
+    else if ((m = l.match(/^\d+\. (.+)/))) { if (lista !== 'ol') { fechaLista(); h += '<ol>'; lista = 'ol'; } h += `<li>${inl(m[1])}</li>`; }
+    else { fechaLista(); h += `<p>${inl(l)}</p>`; }
+  }
+  fechaLista(); fechaTab(); return h;
+}
+window.abrirLeitura = async id => {
+  const a = aulas.find(x => x.id === id); if (!a) return; alAula = id; alResp = {}; alResultado = null;
+  const vv = auVista(id) || {}, lidos = vv.lidos || {}, n = (a.modulos || []).length;
+  alPos = Math.min(n, Object.keys(lidos).length && !vv.prova ? (a.modulos.findIndex((_, i) => !lidos[i]) + n + 1) % (n + 1) : 0);
+  pintarLeitura(); abrir('auLerModal');
+  if (alMeu() && !auVista(id)) { try { await setDoc(doc(db,'aulas_vistas', id + '_' + uidAtual), { aulaId:id, uid:uidAtual, nome:perfil.nome, abriu:Date.now() }, { merge:true }); } catch(e) {} }
+};
+window.fecharLeitura = () => { fechar('auLerModal'); alAula = null; };
+function pintarLeitura(){
+  const a = aulas.find(x => x.id === alAula); if (!a || !$('alCorpo')) return;
+  const mods = a.modulos || [], n = mods.length, vv = auVista(a.id) || {}, lidos = vv.lidos || {}, nl = mods.filter((_, i) => lidos[i]).length, todos = nl >= n || !alMeu();
+  $('alTit').textContent = a.titulo;
+  $('alNav').innerHTML = `<div class="al-prog"><i style="width:${Math.round(nl / Math.max(1, n) * 100)}%"></i></div><div class="al-chips">${mods.map((m, i) => `<button class="${i === alPos ? 'on' : ''} ${lidos[i] ? 'lido' : ''}" onclick="alIr(${i})">${lidos[i] ? '✓ ' : ''}${esc(m.titulo.replace(/^\d+\.\s*/, (x) => x))}</button>`).join('')}<button class="al-prova-chip ${alPos === n ? 'on' : ''} ${todos ? '' : 'trava'}" onclick="alIr(${n})">${todos ? '📝' : '🔒'} Prova final${vv.prova ? ' · ' + String(vv.prova.melhor).replace('.', ',') : ''}</button></div>`;
+  if (alPos < n) {
+    const m = mods[alPos];
+    $('alCorpo').innerHTML = `<article class="al-texto"><span class="al-mod">Parte ${alPos + 1} de ${n}</span><h2>${esc(m.titulo)}</h2>${mdHtml(m.texto)}</article>`;
+    $('alPe').innerHTML = `<button class="btn btn-ghost" ${alPos ? '' : 'disabled'} onclick="alIr(${alPos - 1})">← Anterior</button><span style="flex:1"></span><button class="btn btn-primary" onclick="alLido()">${alPos === n - 1 ? 'Li tudo · ir para a prova' : lidos[alPos] ? 'Próximo →' : 'Li este módulo · próximo →'}</button>`;
+  } else pintarProva(a, todos);
+  $('alCorpo').scrollTop = 0; const ch = document.querySelector('.al-chips .on'); ch?.scrollIntoView({ block:'nearest', inline:'center' });
+}
+window.alIr = i => { alPos = i; alResultado = null; pintarLeitura(); };
+window.alLido = async () => {
+  const a = aulas.find(x => x.id === alAula); if (!a) return; const i = alPos;
+  if (alMeu() && !(auVista(a.id)?.lidos || {})[i]) { try { await setDoc(doc(db,'aulas_vistas', a.id + '_' + uidAtual), { aulaId:a.id, uid:uidAtual, nome:perfil.nome, lidos:{ [i]:true } }, { merge:true }); } catch(e) { toast('Erro: ' + e.message); return; } }
+  alPos = Math.min(i + 1, (a.modulos || []).length); pintarLeitura();
+};
+const alNivel = n => n >= 10 ? 'Especialista' : n >= 7 ? 'Profissional' : n >= 6 ? 'Intermediário' : 'Amador';
+function pintarProva(a, liberada){
+  const q = a.prova?.perguntas || [], vv = auVista(a.id) || {}, mods = a.modulos || [];
+  let topo = '';
+  if (podeGerir()) { const pub = auPublico().sort((x, y) => (auVista(a.id, y.uid)?.prova?.melhor ?? -1) - (auVista(a.id, x.uid)?.prova?.melhor ?? -1));
+    topo = `<div class="al-res-eq"><h3>Resultado da equipe</h3><div class="tbl-wrap"><table class="rank"><thead><tr><th>Pessoa</th><th>Módulos lidos</th><th>Nota</th><th>Nível</th><th class="hide-m">Tentativas</th></tr></thead><tbody>${pub.map(p => { const x = auVista(a.id, p.uid) || {}, nl = Object.keys(x.lidos || {}).length;
+      return `<tr><td><span class="nm">${esc(p.nome)}</span></td><td>${nl} de ${mods.length}</td><td><b>${x.prova ? String(x.prova.melhor).replace('.', ',') : '—'}</b></td><td>${x.prova ? alNivel(x.prova.melhor) : '<span class="muted">não fez</span>'}</td><td class="hide-m">${x.prova?.tentativas || 0}</td></tr>`; }).join('')}</tbody></table></div></div>`; }
+  if (!liberada) { $('alCorpo').innerHTML = topo + `<div class="al-trava"><span>🔒</span><b>A prova libera quando você ler todos os módulos</b><p>Faltam ${mods.filter((_, i) => !(vv.lidos || {})[i]).length} módulo(s). Toque nos que ainda não têm ✓.</p></div>`; $('alPe').innerHTML = ''; return; }
+  if (alResultado) {
+    const r = alResultado;
+    $('alCorpo').innerHTML = topo + `<div class="al-nota ${r.nota >= (a.prova?.minimo || 7) ? 'ok' : ''}"><span>Sua nota</span><b>${String(r.nota).replace('.', ',')}</b><em>${r.acertos} de ${q.length} acertos · nível ${alNivel(r.nota)}</em>${r.nota >= 10 ? '<p>🏆 Gabaritou! Parabéns!</p>' : r.erros.length ? `<p>Reveja: ${[...new Set(r.erros.map(e => q[e].mod))].sort((x, y) => x - y).map(m => `<button class="link" onclick="alIr(${m})">${esc(mods[m]?.titulo || '')}</button>`).join(', ')}</p>` : ''}</div>`;
+    $('alPe').innerHTML = `<span style="flex:1"></span><button class="btn btn-ghost" onclick="alRefazer()">Refazer a prova</button><button class="btn btn-primary" onclick="fecharLeitura()">Fechar</button>`; return;
+  }
+  $('alCorpo').innerHTML = topo + `<div class="al-prova"><h2>📝 Prova final</h2><p class="muted">${q.length} perguntas. Escolha uma resposta em cada. ${vv.prova ? `Sua melhor nota até agora: <b>${String(vv.prova.melhor).replace('.', ',')}</b>.` : ''}</p>
+    ${q.map((x, i) => `<div class="al-q" id="alQ${i}"><b>${i + 1}. ${esc(x.p)}</b>${x.ops.map((o, j) => `<label class="al-op ${alResp[i] === j ? 'on' : ''}"><input type="radio" name="alq${i}" ${alResp[i] === j ? 'checked' : ''} onchange="alMarca(${i},${j})"> <span>${esc(o)}</span></label>`).join('')}</div>`).join('')}</div>`;
+  $('alPe').innerHTML = `<span class="an-prog">${Object.keys(alResp).length} de ${q.length} respondidas</span><span style="flex:1"></span><button class="btn btn-primary" id="alEnviar" onclick="alEnviar()">Enviar respostas</button>`;
+}
+window.alMarca = (i, j) => { alResp[i] = j; document.querySelectorAll(`#alQ${i} .al-op`).forEach((l, k) => l.classList.toggle('on', k === j)); const a = aulas.find(x => x.id === alAula); document.querySelector('#alPe .an-prog').textContent = `${Object.keys(alResp).length} de ${(a?.prova?.perguntas || []).length} respondidas`; };
+window.alRefazer = () => { alResp = {}; alResultado = null; pintarLeitura(); };
+const sha20 = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)))].map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 20);
+window.alEnviar = async () => {
+  const a = aulas.find(x => x.id === alAula); if (!a) return; const q = a.prova?.perguntas || [];
+  const falta = q.findIndex((_, i) => alResp[i] === undefined); if (falta >= 0) { toast(`Falta responder a pergunta ${falta + 1}`); $('alQ' + falta)?.scrollIntoView({ behavior:'smooth', block:'center' }); return; }
+  $('alEnviar').disabled = true;
+  const erros = []; for (let i = 0; i < q.length; i++) if (await sha20(q[i].s + ':' + alResp[i]) !== q[i].k) erros.push(i);
+  const acertos = q.length - erros.length, nota = Math.round(acertos / q.length * 100) / 10; alResultado = { nota, acertos, erros };
+  if (alMeu()) { const ant = auVista(a.id)?.prova || {};
+    const prova = { ultima:nota, melhor:Math.max(nota, ant.melhor || 0), tentativas:(ant.tentativas || 0) + 1, em:Date.now() };
+    try { await setDoc(doc(db,'aulas_vistas', a.id + '_' + uidAtual), { aulaId:a.id, uid:uidAtual, nome:perfil.nome, prova, assistiu:Date.now() }, { merge:true }); } catch(e) { toast('Erro ao salvar a nota: ' + e.message); } }
+  if (nota >= (a.prova?.minimo || 7)) festejar(nota >= 10 ? '🏆 Gabaritou!' : `🎓 Nota ${String(nota).replace('.', ',')}!`);
+  pintarLeitura();
+};
+window.importarMaterial = async inp => {
+  const f = inp.files?.[0]; inp.value = ''; if (!f) return;
+  try { const j = JSON.parse(await f.text());
+    if (j.formato !== 'frade-material-v1' || !Array.isArray(j.modulos) || !j.modulos.length) throw new Error('arquivo não é um material de estudo da Frade');
+    if (aulas.some(x => x.tipo === 'leitura' && x.titulo === j.titulo) && !confirm('Já existe um material com esse nome. Importar mesmo assim?')) return;
+    const r = await addDoc(collection(db,'aulas'), { tipo:'leitura', titulo:j.titulo, descricao:j.descricao || '', professor:j.professor || '', tema:j.tema || 'estudo', duracao:j.duracao || '', modulos:j.modulos, prova:j.prova || null, obrigatoria:true, ordem:1, criadoEm:Date.now(), porUid:uidAtual, porNome:perfil.nome });
+    avisarCarteiro('aula', r.id, true); toast('📖 Material publicado! A equipe recebe o aviso.');
+  } catch(e) { toast('Não consegui importar: ' + e.message); }
+};
 window.fecharAula = () => { $('auVideo').innerHTML = ''; auAberta = null; fechar('auVerModal'); };
 window.marcarAssistida = async id => {
   try { await setDoc(doc(db,'aulas_vistas', id + '_' + uidAtual), { aulaId:id, uid:uidAtual, nome:perfil.nome, assistiu:Date.now() }, { merge:true }); festejar('🎓 Aula concluída!'); } catch(e) { toast('Erro: ' + e.message); }
 };
 let auEditando = null;
 function auPreencherProfs(){ const nomes = [...new Set([...aulas.map(a => a.professor).filter(Boolean), ...perfisLista.filter(p => p.papel === 'gerente' && p.status === 'ativo').map(p => p.nome)])]; $('auProfs').innerHTML = nomes.map(n => `<option value="${esc(n)}">`).join(''); }
-window.novaAula = () => { auEditando = null; $('auEdTit').textContent = 'Nova aula'; $('auSalvarBt').textContent = 'Publicar aula'; $('auExcluir').classList.add('hide');
+window.novaAula = () => { auEditando = null; $('auUrl').closest('.fg').classList.remove('hide'); $('auEdTit').textContent = 'Nova aula'; $('auSalvarBt').textContent = 'Publicar aula'; $('auExcluir').classList.add('hide');
   ['auUrl','auTitulo','auDur','auDesc','auOrdem'].forEach(i => $(i).value = ''); $('auTema').value = auTema !== 'todas' ? auTema : 'crm'; $('auProf').value = perfil.nome || ''; $('auObrig').checked = true; $('auAvisar').checked = true; $('auAvisar').closest('label').classList.remove('hide');
   auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
 window.editarAula = id => { const a = aulas.find(x => x.id === id); if (!a) return; fecharAula(); auEditando = id;
-  $('auEdTit').textContent = 'Editar aula'; $('auSalvarBt').textContent = 'Salvar'; $('auExcluir').classList.remove('hide');
+  $('auEdTit').textContent = 'Editar aula'; $('auSalvarBt').textContent = 'Salvar'; $('auExcluir').classList.remove('hide'); $('auUrl').closest('.fg').classList.toggle('hide', a.tipo === 'leitura');
   $('auUrl').value = a.url || ''; $('auTitulo').value = a.titulo || ''; $('auTema').value = a.tema || 'geral'; $('auProf').value = a.professor || ''; $('auDur').value = a.duracao || ''; $('auOrdem').value = a.ordem || ''; $('auDesc').value = a.descricao || ''; $('auObrig').checked = !!a.obrigatoria; $('auAvisar').checked = false; $('auAvisar').closest('label').classList.add('hide');
   auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
 window.auPrevia = () => { const v = auVideo($('auUrl').value); const u = $('auUrl').value.trim();
   $('auPrevia').innerHTML = !u ? '' : !v ? '<span class="au-pv erro">Não reconheci este link. Use um link do YouTube, Google Drive ou Vimeo.</span>' : v.capa ? `<img src="${v.capa}" alt=""><span class="au-pv">✓ Vídeo do YouTube reconhecido</span>` : `<span class="au-pv">✓ Vídeo do ${v.tipo === 'drive' ? 'Google Drive' : v.tipo === 'vimeo' ? 'Vimeo' : 'arquivo'} reconhecido</span>`; };
 window.salvarAula = async () => {
-  const url = $('auUrl').value.trim(), titulo = $('auTitulo').value.trim();
-  if (!auVideo(url)) { toast('Cole um link de vídeo válido (YouTube, Google Drive ou Vimeo)'); return; }
+  const url = $('auUrl').value.trim(), titulo = $('auTitulo').value.trim(), ehLer = auEditando && aulas.find(x => x.id === auEditando)?.tipo === 'leitura';
+  if (!ehLer && !auVideo(url)) { toast('Cole um link de vídeo válido (YouTube, Google Drive ou Vimeo)'); return; }
   if (!titulo) { toast('Dê um título para a aula'); return; }
-  const d = { url, titulo, tema:$('auTema').value, professor:$('auProf').value.trim(), duracao:$('auDur').value.trim(), ordem:Number($('auOrdem').value) || 99, descricao:$('auDesc').value.trim(), obrigatoria:$('auObrig').checked, atualizadoEm:Date.now() };
+  const d = { ...(ehLer ? {} : { url }), titulo, tema:$('auTema').value, professor:$('auProf').value.trim(), duracao:$('auDur').value.trim(), ordem:Number($('auOrdem').value) || 99, descricao:$('auDesc').value.trim(), obrigatoria:$('auObrig').checked, atualizadoEm:Date.now() };
   $('auSalvarBt').disabled = true;
   try {
     if (auEditando) { await updateDoc(doc(db,'aulas', auEditando), d); toast('Aula salva ✓'); }
