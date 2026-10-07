@@ -967,9 +967,9 @@ html.modo-ceo .nav [data-view="hoje"],html.modo-ceo .nav [data-view="visitas"],h
 html.modo-ceo .nav [data-view="relatorios"],html.modo-ceo .nav [data-view="corretores"],
 html.modo-ceo .mobilebar [data-view="calendario"],
 html.modo-ceo #menuModal [onclick*="'avaliacoes'"],html.modo-ceo #menuModal [onclick*="'relatorios'"],html.modo-ceo #menuModal [onclick*="'corretores'"],html.modo-ceo #menuModal [onclick*="'vendas'"],html.modo-ceo #menuModal [onclick*="'painel'"],html.modo-ceo #menuModal [onclick*="'desempenho'"],
-html.modo-ceo [onclick^="editarReserva()"],html.modo-ceo [onclick^="vendaCaiu"],html.modo-ceo [onclick^="restaurarReserva"],html.modo-ceo [onclick^="novaCarta"],
+html.modo-ceo [onclick^="editarReserva()"],html.modo-ceo .v-actions [onclick^="vendaCaiu"],html.modo-ceo .v-actions [onclick^="restaurarReserva"],html.modo-ceo .v-actions [onclick^="editarReserva"],html.modo-ceo [onclick^="novaCarta"],
 html.modo-ceo [onclick^="publicarAviso"],html.modo-ceo .card-head [onclick="setView('corretores')"],html.modo-ceo [onclick^="excluirCadastro"],html.modo-ceo [onclick^="importar"],
-html.modo-ceo #cartaModal .btn-primary,html.modo-ceo #resvModal .btn-primary,html.modo-ceo #visModal .btn-primary{display:none!important}
+html.modo-ceo #cartaModal .btn-primary,html.modo-ceo #visModal .btn-primary{display:none!important}
 html.modo-ceo:not([data-view="tarefas"]):not([data-view="calendario"]) #btnTopo,
 html.modo-ceo:not([data-view="tarefas"]):not([data-view="calendario"]) #fab{display:none!important}
 
@@ -1682,6 +1682,13 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   .nf-pl{flex-wrap:wrap}
 }
 .fv-topo>div{cursor:pointer;transition:box-shadow .15s}.fv-topo>div:hover{box-shadow:0 0 0 2px #1f5f8b44}.fv-manual>summary{font-weight:700;cursor:pointer;padding:6px 0}
+.rv-doc{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--border)}.rv-doc:last-child{border-bottom:0}
+.rv-doc b{flex:1;min-width:150px;font-size:13.5px;font-weight:600}.rv-doc .rv-st{font-size:12px;color:var(--muted)}.rv-doc.ok .rv-st{color:var(--ok);font-weight:700}
+.rv-chip{display:inline-flex;align-items:center;gap:4px;background:var(--bg2,#eef2f6);border-radius:999px;padding:3px 9px;font-size:12px;cursor:pointer;max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rv-chip.novo{background:#fff4e5}.rv-chip button{border:0;background:transparent;color:var(--danger);cursor:pointer;font-size:13px;padding:0 0 0 2px}
+#resvModal.rv-ro .sheet-body input:not([type=file]),#resvModal.rv-ro .sheet-body textarea,#resvModal.rv-ro .sheet-body select{pointer-events:none;background:var(--bg2,#f4f6f8);color:var(--text2)}
+#resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
+.v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
 </head>
 <body>
@@ -2292,6 +2299,12 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
             <div id="admPontos"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarPontuacao()">Salvar pontuação</button>
           </div>
+          <div class="card dono-only hide" id="cardAbas" style="grid-column:1/-1">
+            <div class="card-head"><h2>Abas por cargo</h2><span class="muted">Só o gestor</span></div>
+            <div class="hint" style="margin:0 0 10px">Marcado = a aba aparece para aquele cargo. Desmarque para esconder. Gerentes e CEO não mudam.</div>
+            <div id="admAbas"></div>
+            <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarAbas()">Salvar abas</button>
+          </div>
           <div class="card dono-only hide" id="cardAdmListas">
             <div class="card-head"><h2>Listas do app</h2><span class="muted">Só o gestor</span></div>
             <div class="fg"><label>Origens do cliente <span class="muted" style="font-weight:500">(uma por linha)</span></label><textarea id="admOrigens" style="min-height:120px"></textarea></div>
@@ -2589,8 +2602,11 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="row2 fg"><div><label>Criativo (se do CRM)</label><input id="rvCriativo"></div><div><label>Número da construtora</label><input id="rvNumConst" inputmode="tel"></div></div>
       <div class="fg"><label>Emissão parte da nota CNPJ corretor (sim/não)</label><input id="rvNota" placeholder="sim ou não"></div>
       <div class="fg"><label>Observação</label><textarea id="rvObs" style="min-height:60px"></textarea></div>
-      <div class="row2"><button class="btn btn-ghost" id="rvCaiuBtn" onclick="vendaCaiu()">Venda caiu</button><button class="btn btn-ghost" onclick="copiarTextoReserva()">📋 Copiar texto para o WhatsApp</button></div>
-      <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="salvarReserva()">Salvar reserva</button>
+      <div class="fg rv-docs-box"><label>📎 Documentação do cliente <span class="muted" id="rvDocsCont" style="font-weight:500"></span></label>
+        <div class="hint" style="margin:0 0 8px">Anexe o que já tiver. O resto você completa depois, abrindo a reserva em Vendas.</div>
+        <div id="rvDocs"></div><input type="file" id="rvArq" class="hide" multiple accept="image/*,application/pdf" onchange="rvEscolheu(this)"></div>
+      <div class="row2 rv-so-edita"><button class="btn btn-ghost" id="rvCaiuBtn" onclick="vendaCaiu()">Venda caiu</button><button class="btn btn-ghost" onclick="copiarTextoReserva()">📋 Copiar texto para o WhatsApp</button></div>
+      <button class="btn btn-primary btn-block" id="rvSalvarBtn" style="margin-top:8px" onclick="salvarReserva()">Salvar reserva</button>
       <button class="link hide hist-l" id="rvHist" style="margin-top:8px" onclick="verHistorico('reservas', window._histRef)">🕘 Histórico de edições desta reserva</button>
     </div>
   </div>
@@ -3331,6 +3347,7 @@ window.setView = v => {
   if (v === 'analises' && !anVisivel()) v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
+  if (v !== 'hoje' && v !== 'config' && abaOculta(v)) v = 'hoje';
   view = v; document.documentElement.dataset.view = v;
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-'+v));
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
@@ -4032,6 +4049,7 @@ function renderPapel(){
   document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr'));
   document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && ['corretor','coordenador'].includes(perfil?.papel))));
+  aplicarAbasOcultas();
 }
 function bannerAcesso(){
   if (!perfilOk || !instOk) return '';
@@ -4471,7 +4489,7 @@ window.abrirRelatorio = async uid => {
   } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
 };
 setTimeout(() => {
-  const bloq = ['zapLimpar','zapApagarConversa','salvarZapCfg','zapAnexar','zapGravar','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','restaurarReserva','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarReserva','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria','vendaCaiu'];
+  const bloq = ['zapLimpar','zapApagarConversa','salvarZapCfg','zapAnexar','zapGravar','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria'];
   bloq.forEach(n => { const f = window[n]; if (typeof f !== 'function' || f._ceo) return;
     const g = function(...a){ if (souCeo()) { toast('Perfil CEO: só visualização'); return; } return f.apply(this, a); }; g._ceo = true; window[n] = g; });
 }, 0);
@@ -5123,7 +5141,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 88;
+const APP_VERSAO = 89;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5360,6 +5378,20 @@ function filtrarAvaliacoes(){
   avaliacoesTodas.forEach(a => { if (a.origem !== 'whatsapp') { if (a.cpfNorm) naPlan.add('c' + a.cpfNorm); if (a.telNorm) naPlan.add('t' + a.telNorm); } });
   avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba)) && !(a.origem === 'whatsapp' && ((a.cpfNorm && naPlan.has('c' + a.cpfNorm)) || (a.telNorm && naPlan.has('t' + a.telNorm)))));
 }
+// abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
+const ABAS_OCULTAS_PADRAO = { corretor:['analises','bolsao','empreendimentos'], coordenador:[], sdr:[] };
+const ABAS_CARGO = [['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_DO_CARGO = { corretor:['tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
+  coordenador:['tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
+  sdr:['tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'] };
+const abaOculta = v => { const l = (appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO)[perfil?.papel]; return Array.isArray(l) && l.includes(v); };
+window.abaOculta = abaOculta;
+function aplicarAbasOcultas(){
+  let st = document.getElementById('abasOcCss'); if (!st) { st = document.createElement('style'); st.id = 'abasOcCss'; document.head.appendChild(st); }
+  const l = ((appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO)[perfil?.papel] || []).filter(v => ABAS_CARGO.some(([k]) => k === v));
+  st.textContent = l.map(v => `.nav [data-view="${v}"],.mobilebar [data-view="${v}"],#menuModal [onclick*="'${v}'"]{display:none!important}`).join('\n');
+  if (l.includes(view)) setTimeout(() => setView('hoje'), 0);
+}
 let appCfg = { ...JSON.parse(JSON.stringify(CFG_PADRAO)), mensagens:MSG_PADRAO }, repetidos = [], pontosMeses = {}, carregado = {};
 window.ptMesSel = ''; window.origPer = 'mes'; window.arqAba = 'visitas';
 const mesAtual = () => hojeISO().slice(0,7);
@@ -5385,7 +5417,8 @@ function assinarEtapa1(){
       origens: d.origens?.length ? (d.origens.includes('CRM') ? d.origens : ['CRM', ...d.origens]) : CFG_PADRAO.origens,
       motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
       abasIgnoradas: Array.isArray(d.abasIgnoradas) ? d.abasIgnoradas : ABAS_IGNORADAS_PADRAO,
-      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null, bonusVisitas: d.bonusVisitas || null };
+      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null, bonusVisitas: d.bonusVisitas || null, abasOcultas: d.abasOcultas || ABAS_OCULTAS_PADRAO };
+    aplicarAbasOcultas();
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     carregado.cfg = true; render(); fecharMesesPendentes();
   }, e => { carregado.cfg = true; silencio(e); }));
@@ -5714,8 +5747,22 @@ window.restaurar = async (tipo, id) => {
 
 // ---------- administração (Configurações, só gerente) ----------
 let admAssin = '';
+function renderAbasAdm(){
+  const el = $('admAbas'); if (!el || el.contains(document.activeElement)) return;
+  const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, cargos = [['corretor','Corretor'],['coordenador','Coordenador'],['sdr','SDR']];
+  el.innerHTML = `<div class="tbl-wrap"><table class="rank ab-tab"><thead><tr><th>Aba</th>${cargos.map(([,n]) => `<th style="text-align:center">${n}</th>`).join('')}</tr></thead><tbody>${
+    ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center">${ABAS_DO_CARGO[c].includes(k) ? `<input type="checkbox" data-c="${c}" data-a="${k}" ${(oc[c] || []).includes(k) ? '' : 'checked'}>` : '<span class="muted">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+window.salvarAbas = async () => {
+  if (!souDono()) return;
+  const oc = { corretor:[], coordenador:[], sdr:[] };
+  document.querySelectorAll('#admAbas input[data-c]').forEach(i => { if (!i.checked) oc[i.dataset.c].push(i.dataset.a); });
+  try { await gravar(setDoc(doc(db,'config','app'), { abasOcultas:oc, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); toast('Abas salvas. Já valem para todos.'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 function renderAdm(){
   if (!souDono()) return;
+  renderAbasAdm();
   const ass = JSON.stringify(appCfg);
   const ativoEl = document.activeElement;
   if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
@@ -8854,6 +8901,7 @@ function calcSalario(rg, n){
   const pr = q('pctCRM') > 50 && v('porReservaCRM') ? v('porReservaCRM') : v('porReserva');
   if (pr && q('reservas')) partes.push([`${q('reservas')} reservas × ${brl(pr)}${q('pctCRM') > 50 && v('porReservaCRM') ? ' (mais da metade do CRM)' : ''}`, pr * q('reservas')]);
   if (v('porDoc') && q('docs')) { const ok = !v('docMediaMax') || (q('media') > 0 && q('media') < v('docMediaMax')); partes.push([`${q('docs')} docs × ${brl(v('porDoc'))}${v('docMediaMax') ? (ok ? ` (média ${q('media')} abaixo de ${v('docMediaMax')})` : ` — não vale: média ${q('media') || '—'} não ficou abaixo de ${v('docMediaMax')}`) : ''}`, ok ? v('porDoc') * q('docs') : 0]); }
+  if (v('porDiaMedia') && q('diasMedia')) partes.push([`${q('diasMedia')} dias na média (até ${v('diaMediaMax') || SDR_MEDIA_PADRAO} leads novos por doc/CPF, dias com ${SDR_MIN_LEADS}+ leads) × ${brl(v('porDiaMedia'))}${(n.diasMediaLista || []).length ? ' · dias ' + n.diasMediaLista.join(', ') : ''}`, v('porDiaMedia') * q('diasMedia')]);
   if (v('porVisita') && q('visitas')) partes.push([`${q('visitas')} visitas × ${brl(v('porVisita'))}`, v('porVisita') * q('visitas')]);
   if (v('porRecontato') && q('recontatos')) partes.push([`${q('recontatos')} recontatos × ${brl(v('porRecontato'))}`, v('porRecontato') * q('recontatos')]);
   if (v('porSemana') && q('semanas')) partes.push([`${q('semanas')} semanas sem roxo × ${brl(v('porSemana'))}`, v('porSemana') * q('semanas')]);
@@ -8871,7 +8919,8 @@ function salNumsDe(x){
   // SDR: puxa docs, média, visitas realizadas e recontatos do resumo do dia
   const nm = norm(nomeDaFixa(x.descricao)).split(' ')[0];
   const sdr = rankingSdr(salMes + '-01', fimDoMes(salMes)).find(s => norm(s.nome).split(' ')[0] === nm);
-  if (sdr) Object.assign(n, { docs:sdr.docs, media: sdr.docs ? Math.round(sdr.leads / sdr.docs * 100) / 100 : 0, visitas:sdr.realizadas, recontatos:sdr.recup });
+  if (sdr) { const dm = diasNaMedia(sdr.dias, x.regra?.diaMediaMax);
+    Object.assign(n, { docs:sdr.docs, media: sdr.docs ? Math.round(sdr.leads / sdr.docs * 100) / 100 : 0, visitas:sdr.realizadas, recontatos:sdr.recup, diasMedia:dm.length, diasMediaLista:dm.map(d => d.dia.slice(8,10) + '/' + d.dia.slice(5,7)) }); }
   return (salNums[x.id] = n);
 }
 // ---------- regras de salário: uma frase por regra ----------
@@ -8880,6 +8929,7 @@ const REGRAS_SAL = [
   { id:'reserva', nome:'Por reserva', campos:['porReserva'], frase:'R$ {porReserva} por reserva' },
   { id:'reservaCRM', nome:'Por reserva (quando mais da metade vem do CRM)', campos:['porReservaCRM'], frase:'R$ {porReservaCRM} por reserva quando mais da metade vier do CRM' },
   { id:'doc', nome:'Por documentação', campos:['porDoc','docMediaMax'], frase:'R$ {porDoc} por documentação, só se a média lead/doc ficar abaixo de {docMediaMax}', opc:['docMediaMax'] },
+  { id:'diaMedia', nome:'Por dia na média lead/doc (SDR)', campos:['porDiaMedia','diaMediaMax'], frase:'R$ {porDiaMedia} por dia em que a média ficar em até {diaMediaMax} leads por doc', opc:['diaMediaMax'] },
   { id:'visita', nome:'Por visita que veio ao escritório', campos:['porVisita'], frase:'R$ {porVisita} por visita que veio ao escritório' },
   { id:'recontato', nome:'Por recontato', campos:['porRecontato'], frase:'R$ {porRecontato} por recontato' },
   { id:'semana', nome:'Por semana sem roxo no desempenho', campos:['porSemana'], frase:'R$ {porSemana} por semana sem roxo no desempenho' },
@@ -8894,7 +8944,7 @@ function resumoRegra(rg){
   if (_num(rg.vtDia)) t.push(`VT ${_fmt(rg.vtDia)} passagens/dia`); else if (_num(rg.vt)) t.push('VT ' + brl(_num(rg.vt)));
   REGRAS_SAL.forEach(r => { if (!r.campos.some(k => _num(rg[k]) && !(r.opc || []).includes(k))) return;
     let f = r.frase; (r.opc || []).forEach(k => { if (!_num(rg[k])) f = f.replace(/, só se[^{]*\{\w+\}/, ''); });
-    t.push(f.replace(/\{(\w+)\}/g, (m, k) => _fmt(rg[k]))); });
+    t.push(f.replace(/\{(\w+)\}/g, (m, k) => k === 'diaMediaMax' && !_num(rg[k]) ? String(SDR_MEDIA_PADRAO) : _fmt(rg[k]))); });
   return t;
 }
 function htmlRegraPessoa(x){
@@ -8904,7 +8954,7 @@ function htmlRegraPessoa(x){
       <div class="rg-chips">${t.length ? t.map(c => `<span>${esc(c)}</span>`).join('') : '<em>Sem salário definido. Toque em Editar.</em>'}</div></div>`; }
   const rg = ed.rg, inp = (k, ph, w) => `<input class="rg-in${w ? ' rg-curto' : ''}" inputmode="decimal" value="${rg[k] === undefined || rg[k] === '' ? '' : String(rg[k]).replace('.', ',')}" placeholder="${ph || '0'}" oninput="_salRasc['${x.id}'].rg.${k}=this.value">`;
   const vtModo = ed.vt;
-  const linhas = REGRAS_SAL.filter(r => ed.ativas.includes(r.id)).map(r => `<div class="rg-linha"><span>${r.frase.replace(/\{(\w+)\}/g, (m, k) => inp(k, (r.opc || []).includes(k) ? '—' : '0', r.frase.indexOf('R$ {' + k + '}') < 0))}</span><button class="icon-btn" title="Tirar esta regra" onclick="tirarRegraSal('${x.id}','${r.id}')">✕</button></div>`).join('');
+  const linhas = REGRAS_SAL.filter(r => ed.ativas.includes(r.id)).map(r => `<div class="rg-linha"><span>${r.frase.replace(/\{(\w+)\}/g, (m, k) => inp(k, k === 'diaMediaMax' ? String(SDR_MEDIA_PADRAO) : (r.opc || []).includes(k) ? '—' : '0', r.frase.indexOf('R$ {' + k + '}') < 0))}</span><button class="icon-btn" title="Tirar esta regra" onclick="tirarRegraSal('${x.id}','${r.id}')">✕</button></div>`).join('');
   const faltam = REGRAS_SAL.filter(r => !ed.ativas.includes(r.id));
   return `<div class="rg-pessoa rg-edit" id="salr_${x.id}">
     <div class="rg-cab"><input class="fx-nome" value="${esc(x.descricao)}" onchange="renomearFixa('${x.id}', this.value)" title="Mudar o nome"></div>
@@ -9487,8 +9537,8 @@ function renderVendas(){
   $('vendLista').innerHTML = (vFil.caidas ? `<div class="hint" style="margin:0 0 10px">Mostrando as vendas que caíram. <button class="link" onclick="vSet('caidas',false)">Voltar para as vendas</button></div>` : '')
     + (l.length ? l.map(r => `<div class="vcard" style="--vc:${r.caiu ? 'var(--danger)' : 'var(--ok)'}">
       <div class="v-time"><b style="font-size:15px">${r.dia ? r.dia.slice(8,10) + '/' + r.dia.slice(5,7) : '--'}</b><span>${r.caiu ? 'caiu' : 'reserva'}</span></div>
-      <div class="v-body" ${g ? `onclick="editarReserva('${r.id}')"` : 'style="cursor:default"'}>
-        <div class="v-top"><b>${esc(nomeBonito(r.cliente) || 'Sem nome')}</b>${r.caiu ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">Venda caiu</span>' : '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">Vendida</span>'}</div>
+      <div class="v-body" ${g || (r.corretorUids || []).includes(uidAtual) ? `onclick="editarReserva('${r.id}')"` : 'style="cursor:default"'}>
+        <div class="v-top"><b>${esc(nomeBonito(r.cliente) || 'Sem nome')}</b>${r.caiu ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">Venda caiu</span>' : '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">Vendida</span>'}<span class="v-docs ${rvTiposFeitos(r) >= 6 ? 'ok' : ''}" title="Tipos de documento anexados">📎 ${rvTiposFeitos(r)}/${DOCS_RES.length}</span></div>
         <div class="v-meta">${r.valor ? `<span style="color:var(--text);font-weight:700">💰 ${brl(r.valor)}</span>` : ''}<span>👤 ${esc(r.cor.map(c => c.nome).join(' / ') || r.corretorTexto || '—')}</span>${r.empreendimento ? `<span>🏠 ${esc(r.empreendimento)}</span>` : ''}${r.construtora ? `<span>🏗️ ${esc(r.construtora)}</span>` : ''}${r.previsao ? `<span>✍️ ${esc(r.previsao)}</span>` : ''}${r.cpf ? `<span>🪪 ${cpfOculto(r.cpf)}</span>` : ''}</div>
         ${r.caiu && r.motivoCaiu ? `<div class="v-obs">✖ ${esc(r.motivoCaiu)}</div>` : r.obs ? `<div class="v-obs">📝 ${esc(r.obs)}</div>` : ''}
       </div>
@@ -9522,10 +9572,62 @@ window.lerTextoReserva = () => {
   });
   toast(n ? `${n} campos preenchidos. Confira e salve.` : 'Não reconheci o texto. Ele precisa ter "CLIENTE:", "CPF:" etc.');
 };
+// ---------- documentação do cliente na reserva ----------
+const DOCS_RES = [['identidade','RG ou CNH'],['cpf','CPF'],['estado_civil','Certidão de nascimento ou casamento'],['residencia','Comprovante de residência'],['renda','Comprovante de renda'],['ctps','Carteira de trabalho'],['ir','Declaração de Imposto de Renda'],['fgts','Extrato do FGTS'],['conjuge','Documentos do cônjuge'],['outros','Outros documentos']];
+const rvDocNome = t => (DOCS_RES.find(([k]) => k === t) || [, 'Documento'])[1];
+let rvDocsAtuais = [], rvNovos = [], rvTirar = [], rvTipoAlvo = '';
+const rvTiposFeitos = r => new Set((r?.docs || []).map(d => d.tipo)).size;
+window.rvDocsVis = () => {
+  const el = $('rvDocs'); if (!el) return;
+  const atuais = rvDocsAtuais.filter(d => !rvTirar.includes(d.id));
+  el.innerHTML = DOCS_RES.map(([k, n]) => { const ex = atuais.filter(d => d.tipo === k), nv = rvNovos.map((x, i) => ({ ...x, i })).filter(x => x.tipo === k), tem = ex.length + nv.length;
+    return `<div class="rv-doc ${tem ? 'ok' : ''}"><b>${n}</b><span class="rv-st">${tem ? '✓ ' + tem + (tem > 1 ? ' arquivos' : ' arquivo') : 'pendente'}</span>
+      ${ex.map(d => `<span class="rv-chip" onclick="rvAbrirDoc('${d.id}')" title="Ver">📄 ${esc(d.nome || 'arquivo')}<button onclick="event.stopPropagation();rvTiraExist('${d.id}')" title="Tirar">✕</button></span>`).join('')}
+      ${nv.map(x => `<span class="rv-chip novo">⏳ ${esc(x.file.name || 'arquivo')}<button onclick="rvTiraNovo(${x.i})" title="Tirar">✕</button></span>`).join('')}
+      <button class="btn btn-ghost" style="padding:4px 10px;font-size:12.5px" onclick="rvAnexar('${k}')">📎 Anexar</button></div>`; }).join('');
+  const feitos = new Set([...atuais.map(d => d.tipo), ...rvNovos.map(x => x.tipo)]).size;
+  $('rvDocsCont').textContent = `· ${feitos} de ${DOCS_RES.length}`;
+};
+window.rvAnexar = tipo => { rvTipoAlvo = tipo; $('rvArq').click(); };
+window.rvEscolheu = inp => { const fs = [...(inp.files || [])]; inp.value = ''; for (const f of fs) { if (f.size > 10 * 1048576) { toast(`${f.name}: grande demais (máximo 10 MB)`); continue; } rvNovos.push({ tipo:rvTipoAlvo, file:f }); } rvDocsVis(); };
+window.rvTiraNovo = i => { rvNovos.splice(i, 1); rvDocsVis(); };
+window.rvTiraExist = id => { if (!confirm('Tirar este documento da reserva?')) return; rvTirar.push(id); rvDocsVis(); };
+async function rvSubirArq(f, tipo, rid, uids){
+  let blob = f, mime = f.type || 'application/octet-stream';
+  if (mime.startsWith('image/') && mime !== 'image/gif') { const durl = await comprimirFoto(f, 1800, 0.8); blob = await (await fetch(durl)).blob(); mime = 'image/jpeg'; }
+  const b64 = await new Promise((ok, erro) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = erro; r.readAsDataURL(blob); });
+  const id = 'rd_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), P = 900000, n = Math.ceil(b64.length / P);
+  for (let i = 0; i < n; i++) await setDoc(doc(db,'reserva_docs', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime, reservaId:rid, corretorUids:uids || [], porUid:uidAtual });
+  return { id, n, mime, tipo, nome:f.name || 'arquivo', tamanho:blob.size, em:Date.now(), por:perfil.nome };
+}
+// sobe os novos, tira os removidos e devolve a lista final + os tipos que entraram agora
+async function rvGravarDocs(rid, uids){
+  const ficam = rvDocsAtuais.filter(d => !rvTirar.includes(d.id)), sai = rvDocsAtuais.filter(d => rvTirar.includes(d.id)), novos = [];
+  for (let i = 0; i < rvNovos.length; i++) { toast(`Enviando documento ${i + 1} de ${rvNovos.length}…`); novos.push(await rvSubirArq(rvNovos[i].file, rvNovos[i].tipo, rid, uids)); }
+  for (const d of sai) for (let k = 0; k < (d.n || 0); k++) await deleteDoc(doc(db,'reserva_docs', d.id + '_' + k)).catch(() => {});
+  return { docs:[...ficam, ...novos], tiposNovos:[...new Set(novos.map(d => d.tipo))].filter(t => !ficam.some(d => d.tipo === t)) };
+}
+window.rvAbrirDoc = async did => {
+  const d = rvDocsAtuais.find(x => x.id === did); if (!d) return;
+  $('axTit').textContent = rvDocNome(d.tipo) + ' · ' + ($('rvCli').value || ''); $('axCorpo').innerHTML = '<div class="ax-load">Carregando o documento…</div>'; $('axPe').innerHTML = ''; abrir('anexoModal');
+  try { const partes = [];
+    for (let k = 0; k < d.n; k++) { const sn = await getDoc(doc(db,'reserva_docs', d.id + '_' + k)); if (!sn.exists()) throw new Error('arquivo incompleto'); partes.push(sn.data().d); }
+    const bin = atob(partes.join('')), u8 = new Uint8Array(bin.length); for (let k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
+    const url = URL.createObjectURL(new Blob([u8], { type:d.mime || 'application/octet-stream' })), nome = ($('rvCli').value || 'cliente').split(' ')[0] + ' - ' + rvDocNome(d.tipo) + ((d.mime || '').startsWith('image/') ? '.jpg' : d.mime === 'application/pdf' ? '.pdf' : '');
+    $('axCorpo').innerHTML = (d.mime || '').startsWith('image/') ? `<img src="${url}" alt="" class="ax-img">` : d.mime === 'application/pdf' ? `<iframe src="${url}" class="ax-pdf" title="Documento"></iframe>` : `<div class="ax-load">📎 ${esc(d.nome || '')}</div>`;
+    $('axPe').innerHTML = `<a class="btn btn-ghost" href="${url}" target="_blank" rel="noopener">Abrir em outra aba</a><a class="btn btn-primary" href="${url}" download="${esc(nome)}">⬇ Baixar</a>`;
+  } catch(e) { $('axCorpo').innerHTML = `<div class="ax-load">Não deu para abrir: ${esc(e.message)}</div>`; }
+};
 window.editarReserva = id => {
-  if (!souGerente() && (id || !['corretor','coordenador'].includes(perfil?.papel))) return;
-  const r = id ? reservasTodas.find(x => x.id === id) : null; rvId = r ? r.id : null; window._histRef = rvId; $('rvHist')?.classList.toggle('hide', !(souGerente() && r));
-  $('rvTitulo').textContent = r ? 'Editar reserva' : 'Nova reserva';
+  const rr = id ? reservasTodas.find(x => x.id === id) : null;
+  const minha = !!rr && (rr.corretorUids || []).includes(uidAtual);
+  if (!souGerente() && (id ? !minha : !['corretor','coordenador'].includes(perfil?.papel))) return;
+  const r = rr; rvId = r ? r.id : null;
+  rvDocsAtuais = [...(r?.docs || [])]; rvNovos = []; rvTirar = [];
+  const so = !souGerente() && !!r; // corretor abrindo a própria reserva: só mexe na documentação
+  $('resvModal').classList.toggle('rv-ro', so); $('rvSalvarBtn').textContent = so ? 'Salvar documentos' : 'Salvar reserva';
+  setTimeout(rvDocsVis, 0); window._histRef = rvId; $('rvHist')?.classList.toggle('hide', !(souGerente() && r));
+  $('rvTitulo').textContent = r ? (souGerente() ? 'Editar reserva' : 'Sua reserva') : 'Nova reserva';
   const v = (k, x) => { $(k).value = x ?? ''; };
   v('rvDia', r?.dia || hojeISO()); v('rvCor', r?.corretorTexto); v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
   v('rvEmp', r?.empreendimento); v('rvConst', r?.construtora); v('rvValor', r?.valor ? fmtValorInput(r.valor) : ''); v('rvEntrada', r?.entrada); v('rvCom', r?.comissao); v('rvPerc', r?.percentual);
@@ -9537,6 +9639,17 @@ window.editarReserva = id => {
   abrir('resvModal');
 };
 window.salvarReserva = async () => {
+  if (!souGerente() && rvId) {
+    const r = reservasTodas.find(x => x.id === rvId); if (!r) return;
+    if (!rvNovos.length && !rvTirar.length) { fechar('resvModal'); return; }
+    const btn = $('rvSalvarBtn'); btn.disabled = true;
+    try { const { docs, tiposNovos } = await rvGravarDocs(rvId, r.corretorUids || [uidAtual]);
+      await gravar(updateDoc(doc(db,'reservas',rvId), { docs, docsEm:Date.now() }));
+      fechar('resvModal'); toast('Documentos salvos ✓');
+      if (tiposNovos.length || rvNovos.length) avisarCarteiro('reserva_docs', rvId, false, { tipos:tiposNovos.map(rvDocNome), qtd:rvNovos.length, feitos:new Set(docs.map(d => d.tipo)).size, total:DOCS_RES.length }); }
+    catch(e) { toast('Erro: ' + e.message); }
+    btn.disabled = false; return;
+  }
   const cli = $('rvCli').value.trim(), dia = $('rvDia').value;
   if (!cli || !dia) { toast('Preencha a data e o cliente'); return; }
   const cpf = soDig($('rvCpf').value), tel = $('rvTel').value.trim();
@@ -9550,13 +9663,16 @@ window.salvarReserva = async () => {
     const uids = [...new Set([uidAtual, ...corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean)])];
     const idc = 'r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36)));
     try { await gravar(setDoc(doc(db,'reservas',idc), { ...d, corretorUids:uids, criadoPor:uidAtual, fonte:'corretor', criadoEm:Date.now(), caiu:false }));
-      fechar('resvModal'); avisarCarteiro('reserva', idc); copiarTextoReserva(d, true); setTimeout(() => festejar(), 300); }
+      let feitos = 0;
+      if (rvNovos.length) { try { const { docs } = await rvGravarDocs(idc, uids); await gravar(updateDoc(doc(db,'reservas',idc), { docs, docsEm:Date.now() })); feitos = new Set(docs.map(x => x.tipo)).size; } catch(e) { toast('A reserva foi salva, mas os documentos não subiram: ' + e.message); } }
+      fechar('resvModal'); avisarCarteiro('reserva', idc, false, { feitos, total:DOCS_RES.length }); copiarTextoReserva(d, true); setTimeout(() => festejar(), 300); }
     catch(e) { toast(e.code === 'permission-denied' ? 'Esse cliente já tem reserva cadastrada. Fale com a gerência.' : 'Erro: ' + e.message); }
     return;
   }
   const id = rvId || ('r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36))));
   if (!rvId && reservasTodas.some(x => x.id === id)) { if (!confirm('Já existe uma reserva desse cliente. Atualizar a que existe?')) return; }
   const rAntes = rvId ? reservasTodas.find(x => x.id === rvId) : null;
+  if (rvNovos.length || rvTirar.length) { try { const { docs } = await rvGravarDocs(id, rAntes?.corretorUids || corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean)); d.docs = docs; d.docsEm = Date.now(); } catch(e) { toast('Erro nos documentos: ' + e.message); return; } }
   try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓');
     if (rAntes) logEdicao('reservas', id, d.cliente, rAntes, d, ROT_R);
     const rx = reservasTodas.find(x => x.id === id); if (rvId && rx && rx.fonte === 'corretor' && !rx.avisadoOk) avisarCarteiro('reserva_ok', id); }
@@ -10260,9 +10376,16 @@ function visitaDeSdr(r){
   return !p || p.papel === 'sdr';
 }
 window.visitaDeSdr = visitaDeSdr;
+// média lead/doc do dia = leads NOVOS (CRM + Instagram) ÷ docs (N° DOC + N° CPF, novos e recuperados, CRM e Instagram).
+// Só conta o dia em que a SDR pegou pelo menos 10 leads novos. Dia "na média" = média até o limite (padrão 3).
+const SDR_MEDIA_PADRAO = 3, SDR_MIN_LEADS = 10;
+function diasNaMedia(dias, max){ const lim = Number(max) || SDR_MEDIA_PADRAO, por = {};
+  (dias || []).forEach(d => { const o = por[d.dia] || (por[d.dia] = { dia:d.dia, leads:0, docs:0 }); o.leads += d.leads; o.docs += d.docs; });
+  return Object.values(por).filter(d => d.leads >= SDR_MIN_LEADS && d.docs > 0 && d.leads / d.docs <= lim).sort((a,b) => a.dia.localeCompare(b.dia)); }
+window.diasNaMedia = diasNaMedia;
 function rankingSdr(de, ate){
   const g = new Map();
-  const pega = (uid, nome) => { const k = uid || 'n:' + norm(nome); if (!g.has(k)) g.set(k, { uid, nome:nome || 'SDR', visitas:0, confirmadas:0, realizadas:0, faltas:0, pontos:0, leads:0, docs:0, cpfs:0, recup:0, aprov:0, outroCca:0 }); return g.get(k); };
+  const pega = (uid, nome) => { const k = uid || 'n:' + norm(nome); if (!g.has(k)) g.set(k, { uid, nome:nome || 'SDR', visitas:0, confirmadas:0, realizadas:0, faltas:0, pontos:0, leads:0, docs:0, cpfs:0, recup:0, aprov:0, outroCca:0, dias:[] }); return g.get(k); };
   const n = k => Number(appCfg.pontos[k]) || 0;
   rankingDocs.filter(r => visitaDeSdr(r) && r.date >= de && r.date <= ate && r.status !== 'Cancelada' && !r.semPontos).forEach(r => {
     const x = pega(r.sdrUid, r.sdrNome); x.visitas++;
@@ -10276,16 +10399,18 @@ function rankingSdr(de, ate){
     const soma = (o, k) => (Number(o.crm?.[k]) || 0) + (Number(o.insta?.[k]) || 0);
     x.leads += soma(nv, 'lead'); x.docs += soma(nv, 'doc') + soma(rc, 'doc'); x.cpfs += soma(nv, 'cpf') + soma(rc, 'cpf'); x.recup += soma(rc, 'lead');
     x.aprov += Number(s.aprovDia) || 0; x.outroCca += Number(s.aprovOutroCca) || 0;
+    x.dias.push({ dia:s.dia, leads:soma(nv, 'lead'), docs:soma(nv, 'doc') + soma(rc, 'doc') + soma(nv, 'cpf') + soma(rc, 'cpf') });
   });
+  g.forEach(x => { x.diasMedia = diasNaMedia(x.dias, SDR_MEDIA_PADRAO).length; });
   return [...g.values()].sort((a,b) => b.pontos - a.pontos || b.realizadas - a.realizadas || b.visitas - a.visitas);
 }
 function tabelaSdr(de, ate){
   const l = rankingSdr(de, ate);
   if (!l.length) return '<div class="muted" style="font-size:13.5px">Nenhuma visita marcada por SDR e nenhum resumo do dia no período.</div>';
   const pos = posicoes(l);
-  return `<div style="overflow-x:auto"><table class="rank"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th class="hide-m">Docs</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
-    l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td class="hide-m">${x.docs}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
-    <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam.</div></details>`;
+  return `<div style="overflow-x:auto"><table class="rank"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th>Docs</th><th title="Dias com média de até 3 leads por doc">Dias na média</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
+    l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td>${x.docs}</td><td>${x.diasMedia || 0}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
+    <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam. Dias na média: dias com pelo menos ${SDR_MIN_LEADS} leads novos em que a média ficou em até ${SDR_MEDIA_PADRAO} (leads novos ÷ docs + CPFs do dia, novos e recuperados).</div></details>`;
 }
 
 // ---------- resumo do dia das SDRs ----------
@@ -10353,7 +10478,10 @@ function renderResumoView(){
   $('resAviso').innerHTML = feito ? `<div class="hint" style="margin:0 0 12px;color:var(--ok)">✓ Resumo de ontem (${dataBR(ontem)}) enviado.</div>` : `<div class="hint late" style="margin:0 0 12px">Falta o resumo de ontem (${dataBR(ontem)}).</div>`;
   const v = x => x === '' || x === undefined || x === null ? '–' : x, so = (o, k) => (Number(o?.crm?.[k]) || 0) + (Number(o?.insta?.[k]) || 0);
   const meus = sdrResumos.filter(x => x.sdrUid === uidAtual).sort((a,b) => b.dia.localeCompare(a.dia)).slice(0, 31);
-  $('resLista').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc')} docs · ${so(r.novos,'cpf') + so(r.recuperados,'cpf')} CPFs · ${v(r.aprovDia)} aprov.</b></div>`).join('')
+  { const m0 = mesAtual() + '-01', eu = rankingSdr(m0, fimDoMes(mesAtual())).find(x => x.uid === uidAtual);
+    $('resAviso').innerHTML += `<div class="ci-resumo" style="margin:0 0 12px;font-size:14px">📊 <b>${nomeMes(mesAtual())}:</b> ${eu ? eu.docs : 0} docs · <b>${eu ? eu.diasMedia : 0} dias na média</b> <span class="muted">(até ${SDR_MEDIA_PADRAO} leads novos por doc/CPF, nos dias com ${SDR_MIN_LEADS}+ leads)</span></div>`; }
+  const naMedia = r => { const d = so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf'), l = so(r.novos,'lead'); return l >= SDR_MIN_LEADS && d > 0 && l / d <= SDR_MEDIA_PADRAO; };
+  $('resLista').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}${naMedia(r) ? ' <span style="color:var(--ok);font-weight:700">✓ na média</span>' : ''}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc')} docs · ${so(r.novos,'cpf') + so(r.recuperados,'cpf')} CPFs · ${v(r.aprovDia)} aprov.</b></div>`).join('')
     : '<div class="muted" style="font-size:13.5px">Nenhum resumo ainda.</div>';
 }
 window.abrirColarSdr = () => {
