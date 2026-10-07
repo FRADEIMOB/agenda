@@ -1141,6 +1141,7 @@ html[data-theme="dark"] .emp-preco strong{color:#9CC7EA}
 .pn-abas{display:flex;flex-wrap:wrap;margin:4px 0 14px;max-width:100%}
 .pn-abas button{flex:1 1 auto;white-space:nowrap}
 @media (max-width:640px){.pn-abas{overflow-x:auto;flex-wrap:nowrap}.pn-abas button{padding:8px 10px;font-size:12.5px}}
+.ml-extra{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}.ml-extra .btn{padding:9px 12px}.funil-ok{color:var(--ok);font-weight:600;font-size:13.5px}
 .ml-card .ml-disc{display:flex;gap:8px}.ml-card .ml-disc input{flex:1;min-width:0}
 @media (max-width:900px){
   .ml-card .ml-disc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1263,7 +1264,7 @@ html,body{overflow-x:clip;touch-action:manipulation}
   .fab-menu span{background:var(--card,#fff);color:var(--text);font-weight:700;font-size:15px;padding:8px 14px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   .fab-menu i{position:relative;display:grid;place-items:center;width:52px;height:52px;margin-right:2px;border-radius:50%;color:#fff;font-style:normal;box-shadow:0 8px 20px rgba(0,0,0,.25)}
   .fab-menu i svg{width:24px;height:24px}
-  .fab-menu .fm-lig i{background:#1f6feb}.fab-menu .fm-zap i{background:#25d366}.fab-menu .fm-add i{background:var(--destaque,#f5841f);font-size:28px;font-weight:400}
+  .fab-menu .fm-lig i{background:#1f6feb}.fab-menu .fm-ind i{background:#7c3aed}.fab-menu .fm-zap i{background:#25d366}.fab-menu .fm-add i{background:var(--destaque,#f5841f);font-size:28px;font-weight:400}
   .fab-menu b{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;padding:0 5px}
   .fab-menu b:empty{display:none}
   #fab svg{transition:transform .18s}
@@ -2338,7 +2339,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
           </div>
           <div class="card dono-only hide" id="cardAbas" style="grid-column:1/-1">
             <div class="card-head"><h2>Abas por cargo</h2><span class="muted">Só o gestor</span></div>
-            <div class="hint" style="margin:0 0 10px">Marcado = a aba aparece para aquele cargo. Desmarque para esconder. Gerentes e CEO não mudam.</div>
+            <div class="hint" style="margin:0 0 10px">Marcado = a aba aparece para aquele cargo. Desmarque para esconder. Uma aba liberada para um cargo novo mostra só o que esse cargo tem permissão de ver. Gerentes e CEO não mudam.</div>
             <div id="admAbas"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarAbas()">Salvar abas</button>
           </div>
@@ -2418,7 +2419,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <div class="fab-fundo" onclick="fabFechar()"></div>
-<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
+<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
 <button class="fab hide" id="fab" onclick="fabClique()" title="Adicionar" data-ic="plus"></button>
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
@@ -2548,6 +2549,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="fg hide"><label>Empreendimento de interesse (opcional)</label><input id="cmImovel" placeholder="Nome do empreendimento" list="listaImoveis2"><datalist id="listaImoveis2"></datalist></div>
       <div class="fg" id="cmCorWrap"><label>Corretor</label><select id="cmCorretor"></select></div>
       <div class="fg"><label>Documentos recebidos <span class="muted" id="cmDocsQt" style="font-weight:500"></span></label><div class="docs-grid" id="cmDocs"></div></div>
+      <label class="fg" style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="cmInd" style="width:auto"> Cliente veio por indicação</label>
       <div class="fg"><label>Observação</label><textarea id="cmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <div class="row2" id="cmExcluir"><button class="btn btn-ghost" onclick="abrirMensagens('c',cartaAtualId())">Mensagens prontas</button><button class="btn btn-danger" onclick="excluirCarta(cartaAtualId(),true)">Arquivar carta</button></div>
     </div>
@@ -2993,24 +2995,36 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <div class="modal" id="discModal">
   <div class="sheet" style="width:min(420px,100%)">
-    <div class="sheet-head"><h2>📞 Ligar</h2><button class="icon-btn" onclick="fechar('discModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><h2>Ligar</h2><button class="icon-btn" onclick="fechar('discModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <input id="discFabNum" inputmode="tel" autocomplete="off" placeholder="Número com DDD" style="font-size:22px;text-align:center;letter-spacing:.5px" onkeydown="if(event.key==='Enter')ligarDoFab()">
-      <button class="btn btn-block disc-ligar" style="margin-top:12px" onclick="ligarDoFab()">📲 Ligar pelo WhatsApp</button>
+      <button class="btn btn-block disc-ligar" style="margin-top:12px" onclick="ligarDoFab()">Ligar pelo WhatsApp</button>
       <div class="hint" style="margin-top:12px" id="discRegra"></div>
     </div>
   </div>
 </div>
+<div class="modal" id="indModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><h2>Indicação recebida</h2><button class="icon-btn" onclick="fechar('indModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label>Nome do indicado</label><input id="indNome" autocomplete="off" placeholder="Nome"></div>
+      <div class="fg"><label>Telefone</label><input id="indTel" inputmode="tel" autocomplete="off" placeholder="Com DDD"></div>
+      <div class="fg"><label>Quem indicou (opcional)</label><input id="indPor" autocomplete="off" placeholder="Cliente que indicou"></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('indModal')">Cancelar</button><button class="btn btn-primary" id="indBt" onclick="salvarIndicacao()">Salvar indicação</button></div>
+  </div>
+</div>
 <div class="modal" id="ligConfModal">
   <div class="sheet" style="width:min(420px,100%)">
-    <div class="sheet-head"><h2>📞 Como foi a ligação?</h2></div>
-    <div class="sheet-body"><p id="ligConfTxt" style="font-size:15.5px;line-height:1.45"></p></div>
+    <div class="sheet-head"><h2>Como foi a ligação?</h2></div>
+    <div class="sheet-body"><p id="ligConfTxt" style="font-size:15.5px;line-height:1.45"></p>
+      <label id="ligConfProRow" style="display:flex;gap:10px;align-items:center;margin-top:14px;font-weight:600"><input type="checkbox" id="ligConfPro" style="width:20px;height:20px"> Cliente com perfil e interesse (prospecto)</label></div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="ligConfResp(false)">Não atendeu</button><button class="btn btn-primary" onclick="ligConfResp(true)">Sim, atendeu</button></div>
   </div>
 </div>
 <div class="modal" id="ligListaModal">
   <div class="sheet" style="width:min(760px,100%)">
-    <div class="sheet-head"><h2>📞 Ligações registradas</h2><button class="icon-btn" onclick="fechar('ligListaModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><h2>Ligações registradas</h2><button class="icon-btn" onclick="fechar('ligListaModal')" data-ic="x"></button></div>
     <div class="sheet-body"><input type="date" id="ligListaDia" onchange="carregarLigLista()" style="max-width:200px"><div id="ligListaCorpo" style="margin-top:12px"></div></div>
   </div>
 </div>
@@ -3393,25 +3407,25 @@ function toast(texto, acao, fn){
 // ================= Navegação =================
 const TITULOS = {bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
-  if (v === 'corretores' && !podeGerir()) v = 'hoje';
+  if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
-  if (v === 'desempenho' && !podeGerir()) v = 'hoje';
-  if (v === 'vendas' && !souGerente() && !['corretor','coordenador'].includes(perfil?.papel)) v = 'hoje';
+  if (v === 'desempenho' && !podeGerir() && !abaLiberada('desempenho')) v = 'hoje';
+  if (v === 'vendas' && !souGerente() && !['corretor','coordenador'].includes(perfil?.papel) && !abaLiberada('vendas')) v = 'hoje';
   if (v === 'financeiro' && !souGerente()) v = 'hoje';
-  if (v === 'whatsapp' && !podeZap()) v = 'hoje';
+  if (v === 'whatsapp' && !podeZap() && !abaLiberada('whatsapp')) v = 'hoje';
   if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
   if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
-  if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
-  if (v === 'comissoes' && !['corretor','coordenador'].includes(perfil?.papel)) v = souGerente() ? 'financeiro' : 'hoje';
-  if (v === 'sorteio' && !podeGerir()) v = 'hoje';
-  if (v === 'recepcao' && !podeGerir()) v = 'hoje';
+  if (v === 'resumo' && perfil?.papel !== 'sdr' && !abaLiberada('resumo')) v = 'hoje';
+  if (v === 'comissoes' && !['corretor','coordenador'].includes(perfil?.papel) && !abaLiberada('comissoes')) v = souGerente() ? 'financeiro' : 'hoje';
+  if (v === 'sorteio' && !podeGerir() && !abaLiberada('sorteio')) v = 'hoje';
+  if (v === 'recepcao' && !podeGerir() && !abaLiberada('recepcao')) v = 'hoje';
   if (v !== 'recepcao') pararRecepcao();
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
   if (souCeo() && !VIEWS_CEO.includes(v)) v = 'painel';
   if (souCorresp() && !['analises','config'].includes(v)) v = 'analises';
-  if (v === 'analises' && !anVisivel()) v = 'hoje';
+  if (v === 'analises' && !anVisivel() && !abaLiberada('analises')) v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
-  if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr') v = 'hoje';
+  if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr' && !abaLiberada(v)) v = 'hoje';
   if (v !== 'hoje' && v !== 'config' && abaOculta(v)) v = 'hoje';
   view = v; document.documentElement.dataset.view = v;
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-'+v));
@@ -4106,19 +4120,19 @@ function renderPapel(){
     else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
     else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Gestor' : perfil.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : perfil.papel === 'correspondente' ? '🏦 Correspondente' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
-  document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir()));
+  document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir() && !(e.dataset.view && abaLiberada(e.dataset.view)) && !abaLiberada(((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1])));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
   document.querySelectorAll('.direcao-only').forEach(e => e.classList.toggle('hide', !souDirecao()));
   document.documentElement.classList.toggle('modo-ceo', souCeo());
   if (souCeo() && !VIEWS_CEO.includes(view)) setTimeout(() => setView('painel'), 0);
   document.documentElement.classList.toggle('modo-corresp', souCorresp());
   if (souCorresp() && !['analises','config'].includes(view)) setTimeout(() => setView('analises'), 0);
-  document.querySelectorAll('.an-nav').forEach(e => e.classList.toggle('hide', !anVisivel()));
+  document.querySelectorAll('.an-nav').forEach(e => e.classList.toggle('hide', !anVisivel() && !abaLiberada('analises')));
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
-  document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
-  document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr'));
-  document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && ['corretor','coordenador'].includes(perfil?.papel))));
-  document.querySelectorAll('.zap-nav').forEach(e => e.classList.toggle('hide', !podeZap()));
+  document.querySelectorAll('.nao-sdr').forEach(e => { const v = e.dataset.view || ((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1]; e.classList.toggle('hide', perfil?.papel === 'sdr' && !abaLiberada(v)); });
+  document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr' && !abaLiberada('resumo')));
+  document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && (['corretor','coordenador'].includes(perfil?.papel) || abaLiberada('comissoes')))));
+  document.querySelectorAll('.zap-nav').forEach(e => e.classList.toggle('hide', !podeZap() && !abaLiberada('whatsapp')));
   aplicarAbasOcultas();
 }
 function bannerAcesso(){
@@ -4670,7 +4684,7 @@ const lerValor = s => { const t = String(s||'').replace(/[^\d,]/g,'').replace(',
 const fmtValorInput = n => n ? (Number(n)).toLocaleString('pt-BR') : '';
 function cStCls(st){ return 'cst-' + norm(st).replace(/[^a-z0-9]+/g,'-'); }
 function rankingCartaDe(c){ return { equipe:c.equipe||'', corretorUid:c.corretorUid||'', corretorNome:c.corretorNome||'', data:c.data||'', status:c.status||'', valor:c.valor||0,
-  vendaEm:c.vendaEm||'', docsCompletos: docsOk(c) === DOCS.length, semPontos:!!c.semPontos }; }
+  vendaEm:c.vendaEm||'', docsCompletos: docsOk(c) === DOCS.length, semPontos:!!c.semPontos, indicacao:!!c.indicacao }; }
 // a carta vale 6 meses a partir da aprovação
 function somaMeses(isoD, n){ if (!isoD) return ''; const [a, m, d] = isoD.split('-').map(Number); const x = new Date(a, m - 1 + n, d); if (x.getDate() !== d) x.setDate(0); return iso(x); }
 const validadeDe = c => c.validade || somaMeses(c.data, 6);
@@ -4811,7 +4825,7 @@ function abrirFormCarta(c, pre){
   $('cmData').value = c?.data || hojeISO(); $('cmValidade').value = c?.validade || '';
   $('cmValor').value = fmtValorInput(c?.valor); $('cmSubsidio').value = fmtValorInput(c?.subsidio); $('cmRenda').value = fmtValorInput(c?.renda || lerValor(pre?.renda || ''));
   $('cmBanco').innerHTML = BANCOS.map(b => `<option ${ (c?.banco||'Caixa')===b?'selected':''}>${b}</option>`).join('');
-  $('cmImovel').value = c?.empreendimento || pre?.empreendimento || ''; $('cmObs').value = c?.obs || '';
+  $('cmImovel').value = c?.empreendimento || pre?.empreendimento || ''; $('cmObs').value = c?.obs || ''; $('cmInd').checked = !!(c ? c.indicacao : (pre?.visitaId && (visitas.find(v => v.id === pre.visitaId) || {}).origem === 'Indicação'));
   $('cmStatus').innerHTML = C_STATUS.map(s => `<option ${ (c?.status||'Aprovada')===s?'selected':''}>${s}</option>`).join('');
   $('listaImoveis2').innerHTML = [...new Set([...visitas.map(x => x.empreendimento), ...cartas.map(x => x.empreendimento)].filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
   $('cmCorWrap').classList.toggle('hide', !podeGerir());
@@ -4834,7 +4848,7 @@ window.editarCarta = id => { const c = cartas.find(x => x.id === id); if (c) abr
 window.salvarCarta = async () => {
   const d = { cliente:$('cmCliente').value.trim(), telefone:$('cmFone').value.trim(), cpf:fmtCpf($('cmCpf').value), data:$('cmData').value, validade:$('cmValidade').value,
     valor:lerValor($('cmValor').value), subsidio:lerValor($('cmSubsidio').value), renda:lerValor($('cmRenda').value), banco:$('cmBanco').value,
-    empreendimento:$('cmImovel').value.trim(), status:$('cmStatus').value, obs:$('cmObs').value.trim(),
+    empreendimento:$('cmImovel').value.trim(), status:$('cmStatus').value, obs:$('cmObs').value.trim(), indicacao:$('cmInd').checked,
     motivoPerda: PERDA_C.includes($('cmStatus').value) ? $('cmMotivo').value : '' };
   d.telNorm = chaveTel(d.telefone); d.cpfNorm = soDig(d.cpf).length === 11 ? soDig(d.cpf) : '';
   if (PERDA_C.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('cmMotivo').focus(); return; }
@@ -5186,8 +5200,9 @@ $('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classLi
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
   const lig = $('discFab') && !$('discFab').classList.contains('hide'), zap = $('zapFab') && !$('zapFab').classList.contains('hide');
-  if (!lig && !zap || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
-  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap);
+  const ind = ligaPontua();
+  if (!lig && !zap && !ind || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
+  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind);
   $('fmZapN').textContent = $('zapFabN') && !$('zapFabN').classList.contains('hide') ? $('zapFabN').textContent : '';
   document.documentElement.classList.toggle('fab-aberto');
 };
@@ -5219,7 +5234,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 93;
+const APP_VERSAO = 94;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5403,22 +5418,29 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:1, recontato:1, ligLimite:30, ligMinutos:2 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:1, recontato:1, ligLimite:30, ligMinutos:2, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, ligBloco:1, atrasoTol:0, funilHora:18 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
 const PONTOS_ITENS = [
-  ['vPendente','🏠 Visita marcada (pendente ou reagendada)'],
-  ['vConfirmada','✅ Visita confirmada'],
-  ['vRealizada','⭐ Visita realizada'],
-  ['vFalta','🚫 Cliente não compareceu'],
-  ['carta','📄 Carta aprovada'],
-  ['docs','🗂️ Documentação completa'],
-  ['venda','🎉 Venda fechada'],
-  ['presenca','🙋 Presença no escritório'],
-  ['ligacao','📞 Ligação (1ª vez para o número)'],
-  ['recontato','🔁 Recontato (ligou de novo outro dia)']
+  ['vPendente','Visita marcada (pendente ou reagendada)'],
+  ['vConfirmada','Visita confirmada'],
+  ['vRealizada','Visita realizada'],
+  ['vFalta','Cliente não compareceu'],
+  ['carta','Carta aprovada'],
+  ['docs','Documentação completa (marcada na carta)'],
+  ['docsAnexados','Documentação anexada na reserva (RG, CPF, renda e residência)'],
+  ['venda','Venda de lead'],
+  ['vendaInd','Venda por indicação'],
+  ['indicacao','Indicação recebida (nome e telefone)'],
+  ['prospecto','Prospecto (cliente com perfil e interesse)'],
+  ['presenca','Presença no escritório'],
+  ['ligacao','Ligação (1ª vez para o número) · vale por bloco'],
+  ['recontato','Recontato (ligou de novo outro dia)'],
+  ['atraso','Chegar atrasado (use número negativo, ex.: -10)'],
+  ['funil','Não preencher o funil até o horário (use número negativo, ex.: -20)']
 ];
+const PONTOS_EXTRAS = ['ligLimite','ligBloco','atrasoTol','funilHora'];
 const MSG_PADRAO = [
   { id:'confirmar', tipo:'visita', titulo:'✅ Confirmar a visita', texto:'Olá, {cliente}! Tudo bem? Aqui é {corretor}, da Frade Imóveis. Passando para confirmar a sua visita {dia} às {hora}. Posso confirmar?' },
   { id:'lembrete', tipo:'visita', titulo:'⏰ Lembrete no dia', texto:'Bom dia, {cliente}! Aqui é {corretor}, da Frade Imóveis. Só lembrando da nossa visita hoje às {hora}. Estou te esperando! 😊' },
@@ -5458,12 +5480,14 @@ function filtrarAvaliacoes(){
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
 const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
-const ABAS_CARGO = [['whatsapp','WhatsApp (aba e botão verde)'],['discador','📞 Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_CARGO = [['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
 const ABAS_DO_CARGO = { corretor:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
   coordenador:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
   sdr:['discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'] };
 const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador'].includes(perfil?.papel));
 window.podeZap = podeZap;
+const abaLiberada = v => { const l = (appCfg?.abasLiberadas || {})[perfil?.papel]; return Array.isArray(l) && l.includes(v); };
+window.abaLiberada = abaLiberada;
 const abaOculta = v => { const l = (appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO)[perfil?.papel]; return Array.isArray(l) && l.includes(v); };
 window.abaOculta = abaOculta;
 function aplicarAbasOcultas(){
@@ -5497,7 +5521,7 @@ function assinarEtapa1(){
       origens: d.origens?.length ? (d.origens.includes('CRM') ? d.origens : ['CRM', ...d.origens]) : CFG_PADRAO.origens,
       motivos: d.motivos?.length ? d.motivos : CFG_PADRAO.motivos,
       abasIgnoradas: Array.isArray(d.abasIgnoradas) ? d.abasIgnoradas : ABAS_IGNORADAS_PADRAO,
-      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null, bonusVisitas: d.bonusVisitas || null, abasOcultas: d.abasOcultas || ABAS_OCULTAS_PADRAO };
+      mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null, bonusVisitas: d.bonusVisitas || null, abasOcultas: d.abasOcultas || ABAS_OCULTAS_PADRAO, abasLiberadas: d.abasLiberadas || {} };
     aplicarAbasOcultas();
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     carregado.cfg = true; render(); fecharMesesPendentes();
@@ -5534,14 +5558,20 @@ function pontosDoMes(m, val){
     if (!aprov && !venda) return;
     const x = pega(r);
     if (aprov) { x.cartas++; x.pontos += n('carta'); if (r.docsCompletos) { x.docs++; x.pontos += n('docs'); } }
-    if (venda) { x.vendas++; x.pontos += n('venda'); }
+    if (venda) { x.vendas++; x.pontos += n(r.indicacao ? 'vendaInd' : 'venda'); }
   });
   // presença no plantão, ligações e recontatos (resumo por corretor e mês, sem dados de cliente)
   rankingAtiv.filter(r => r.mes === m && r.uid).forEach(r => {
     const x = pega({ corretorUid:r.uid, corretorNome:(perfisTodos.find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const pr = Object.keys(r.pres || {}).length, l = somaCap(r.lig, val), c = somaCap(r.rec, val);
     x.presencas += pr; x.ligacoes += l; x.recontatos += c;
-    x.pontos += pr * n('presenca') + l * n('ligacao') + c * n('recontato');
+    const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0), bloco = Math.max(1, n('ligBloco') || 1);
+    const pro = soma(r.pro), ind = soma(r.ind), doca = Object.keys(r.doca || {}).length, atr = Object.keys(r.atr || {}).length;
+    const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
+    const semFunil = n('funil') ? Object.keys(r.pres || {}).filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
+    x.prospectos = (x.prospectos || 0) + pro; x.indicacoes = (x.indicacoes || 0) + ind; x.atrasos = (x.atrasos || 0) + atr; x.semFunil = (x.semFunil || 0) + semFunil;
+    x.pontos += pr * n('presenca') + Math.floor(l / bloco) * n('ligacao') + c * n('recontato')
+      + pro * n('prospecto') + ind * n('indicacao') + doca * n('docsAnexados') + atr * n('atraso') + semFunil * n('funil');
   });
   return [...g.values()].sort((a,b) => b.pontos-a.pontos || b.vendas-a.vendas || b.cartas-a.cartas || a.nome.localeCompare(b.nome,'pt-BR'));
 }
@@ -5595,7 +5625,7 @@ function renderRankingPontos(){
     lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
   }</tbody><tfoot></tfoot></table>
   ${rankingSdr(...faixa('mes')).length ? `<div class="rep-sec" style="margin:18px 0 8px">📞 Ranking das SDRs</div>${tabelaSdr(...faixa('mes'))}` : ''}
-  <details class="info-tog" style="margin-top:10px"><summary>ⓘ Quanto vale cada ação</summary><div class="hint" style="margin-top:6px">Valem: ${PONTOS_ITENS.map(([k,n]) => `${n.replace(/^\S+\s/,'').toLowerCase()} <b>${appCfg.pontos[k]}</b>`).join(' · ')}${ligLimite() ? ` · até ${ligLimite()} ligações e ${ligLimite()} recontatos pontuam por dia (cada número conta uma vez por dia)` : ''}</div></details>`;
+  <details class="info-tog" style="margin-top:10px"><summary>ⓘ Quanto vale cada ação</summary><div class="hint" style="margin-top:6px">Valem: ${PONTOS_ITENS.map(([k,n]) => `${n.replace(/^[^\p{L}]+/u,'').toLowerCase()} <b>${appCfg.pontos[k]}</b>`).join(' · ')}${ligLimite() ? ` · até ${ligLimite()} ligações e ${ligLimite()} recontatos pontuam por dia (cada número conta uma vez por dia)` : ''}</div></details>`;
 }
 
 // ---------- relatórios de gestão ----------
@@ -5829,15 +5859,17 @@ window.restaurar = async (tipo, id) => {
 let admAssin = '';
 function renderAbasAdm(){
   const el = $('admAbas'); if (!el || el.contains(document.activeElement)) return;
-  const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, cargos = [['corretor','Corretor'],['coordenador','Coordenador'],['sdr','SDR']];
+  const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, lib = appCfg.abasLiberadas || {}, cargos = [['corretor','Corretor'],['coordenador','Coordenador'],['sdr','SDR']];
+  const marcada = (c, k) => ABAS_DO_CARGO[c].includes(k) ? !(oc[c] || []).includes(k) : (lib[c] || []).includes(k);
   el.innerHTML = `<div class="tbl-wrap"><table class="rank ab-tab"><thead><tr><th>Aba</th>${cargos.map(([,n]) => `<th style="text-align:center">${n}</th>`).join('')}</tr></thead><tbody>${
-    ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center">${ABAS_DO_CARGO[c].includes(k) ? `<input type="checkbox" data-c="${c}" data-a="${k}" ${(oc[c] || []).includes(k) ? '' : 'checked'}>` : '<span class="muted">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center"><input type="checkbox" data-c="${c}" data-a="${k}" ${marcada(c, k) ? 'checked' : ''} title="${ABAS_DO_CARGO[c].includes(k) ? '' : 'Fora do padrão deste cargo: a tela mostra só o que esse cargo tem permissão de ver'}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 window.salvarAbas = async () => {
   if (!souDono()) return;
-  const oc = { corretor:[], coordenador:[], sdr:[] };
-  document.querySelectorAll('#admAbas input[data-c]').forEach(i => { if (!i.checked) oc[i.dataset.c].push(i.dataset.a); });
-  try { await gravar(setDoc(doc(db,'config','app'), { abasOcultas:oc, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); toast('Abas salvas. Já valem para todos.'); }
+  const oc = { corretor:[], coordenador:[], sdr:[] }, lib = { corretor:[], coordenador:[], sdr:[] };
+  document.querySelectorAll('#admAbas input[data-c]').forEach(i => { const c = i.dataset.c, a = i.dataset.a;
+    if (ABAS_DO_CARGO[c].includes(a)) { if (!i.checked) oc[c].push(a); } else if (i.checked) lib[c].push(a); });
+  try { await gravar(setDoc(doc(db,'config','app'), { abasOcultas:oc, abasLiberadas:lib, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); toast('Abas salvas. Já valem para todos.'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 function renderAdm(){
@@ -5849,8 +5881,11 @@ function renderAdm(){
   admAssin = ass;
   $('admPontos').innerHTML = PONTOS_ITENS.map(([k,n]) => `<div class="pt-row"><span>${n}</span><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}"></div>`).join('')
     + `<div class="pt-row"><span>📵 Máximo de ligações e de recontatos que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
-    + `<div class="pt-row"><span>⏱️ Duração mínima da ligação para pontuar (minutos)</span><input type="number" step="0.5" min="0" id="pt_ligMinutos" value="${ligMinutos()}"></div>`
-    + `<button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="abrirLigLista()">📋 Ver e conferir as ligações</button>`;
+    + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
+    + `<div class="pt-row"><span>Tolerância para atraso (minutos depois do horário de entrada)</span><input type="number" step="1" min="0" id="pt_atrasoTol" value="${Number(appCfg.pontos.atrasoTol) || 0}"></div>`
+    + `<div class="pt-row"><span>Horário limite do funil (hora, ex.: 18)</span><input type="number" step="1" min="0" max="23" id="pt_funilHora" value="${Number(appCfg.pontos.funilHora) || 18}"></div>`
+    + `<div class="pt-row"><span>Duração mínima da ligação para pontuar (minutos)</span><input type="number" step="0.5" min="0" id="pt_ligMinutos" value="${ligMinutos()}"></div>`
+    + `<button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="abrirLigLista()">Ver e conferir as ligações</button>`;
   $('admOrigens').value = appCfg.origens.join('\n');
   rascMsgs = JSON.parse(JSON.stringify(appCfg.mensagens || MSG_PADRAO)); desenharModelos();
   $('admMotivos').value = appCfg.motivos.join('\n');
@@ -5877,7 +5912,8 @@ window.salvarModelos = async () => {
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
 window.salvarPontuacao = async () => {
-  const pontos = {}; [...PONTOS_ITENS.map(x => x[0]), 'ligLimite'].forEach(k => pontos[k] = Math.round(Number($('pt_' + k).value) || 0));
+  const pontos = {}; [...PONTOS_ITENS.map(x => x[0]), ...PONTOS_EXTRAS].forEach(k => pontos[k] = Math.round(Number($('pt_' + k).value) || 0));
+  pontos.ligBloco = Math.max(1, pontos.ligBloco || 1); pontos.funilHora = Math.min(23, Math.max(0, pontos.funilHora || 18));
   pontos.ligMinutos = Math.max(0, Math.round((Number($('pt_ligMinutos').value) || 0) * 2) / 2);
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
@@ -5909,7 +5945,7 @@ window.exportarPontos = async (todos) => {
     const X = await carregarXLSX(), wb = X.utils.book_new();
     meses.forEach(m => {
       const val = (m !== mesAtual() && pontosMeses[m]?.valores) || appCfg.pontos;
-      const dados = [[`Pontos · ${nomeMes(m)}${m === mesAtual() ? ' (em andamento)' : ''}`], [], CAB_PONTOS, ...linhasPlanilha(m), [], ['Pontuação usada'], ...PONTOS_ITENS.map(([k,n]) => [n.replace(/^\S+\s/,''), Number(val[k]) || 0])];
+      const dados = [[`Pontos · ${nomeMes(m)}${m === mesAtual() ? ' (em andamento)' : ''}`], [], CAB_PONTOS, ...linhasPlanilha(m), [], ['Pontuação usada'], ...PONTOS_ITENS.map(([k,n]) => [n.replace(/^[^\p{L}]+/u,''), Number(val[k]) || 0])];
       const ws = X.utils.aoa_to_sheet(dados);
       ws['!cols'] = [{wch:9},{wch:28},{wch:18},{wch:9},{wch:12},{wch:11},{wch:8},{wch:16},{wch:15},{wch:8},{wch:9}];
       X.utils.book_append_sheet(wb, ws, nomeMes(m).replace(' de ', ' ').slice(0,31));
@@ -6918,20 +6954,20 @@ window.ligar = (tel, cliente, origem) => {
   iniciarLigacao(tel, cliente, origem);
   const a = document.createElement('a'); a.href = 'tel:' + n; document.body.appendChild(a); a.click(); a.remove();
 };
-async function registrarLigacao(tel, cliente, origem, durSeg){
+async function registrarLigacao(tel, cliente, origem, durSeg, pro){
   const sdr = !ligaPontua() && ligaSdr();
   if (!ligaPontua() && !sdr) return;
   const t = chaveTel(tel); if (!t) return;
   const h = hojeISO(), m = h.slice(0,7);
-  if (minhasLigHoje.some(x => x.telNorm === t && !x.anulada)) { toast('📞 Esse número já contou hoje. A ligação não soma de novo.'); return; }
+  if (minhasLigHoje.some(x => x.telNorm === t && !x.anulada)) { toast('Esse número já contou hoje. A ligação não soma de novo.'); return; }
   let antes = [];
   try { antes = (await getDocs(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('telNorm','==',t)))).docs.map(d => d.data()); } catch(e) {}
   if (antes.some(x => x.dia === h && !x.anulada)) return;
   const rec = antes.some(x => !x.anulada), b = writeBatch(db);
-  b.set(doc(collection(db,'ligacoes')), { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec, durSeg:Math.round(Number(durSeg) || 0), ...(sdr ? { sdr:true } : {}) });
-  if (!sdr) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [rec ? 'rec' : 'lig']:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true });
+  b.set(doc(collection(db,'ligacoes')), { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec, durSeg:Math.round(Number(durSeg) || 0), ...(sdr ? { sdr:true } : {}), ...(pro && !sdr ? { prospecto:true } : {}) });
+  if (!sdr) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [rec ? 'rec' : 'lig']:{ [h]: increment(1) }, ...(pro ? { pro:{ [h]: increment(1) } } : {}), atualizadoEm:Date.now() }, { merge:true });
   await gravar(b.commit());
-  if (sdr) { toast(rec ? '🔁 Recontato registrado.' : '📞 Ligação registrada.'); return; }
+  if (sdr) { toast(rec ? 'Recontato registrado.' : 'Ligação registrada.'); return; }
   toast(rec ? '🔁 Recontato registrado. Conta pontos no ranking.' : '📞 Ligação registrada. Conta pontos no ranking.');
 }
 // ---------- v90: a ligação só pontua com duração mínima (tempo fora do app + confirmação) ----------
@@ -6946,7 +6982,7 @@ function iniciarLigacao(tel, cliente, origem){
   if (!podeDiscador()) return;
   gravarLigPend({ tel:String(tel || ''), cliente:String(cliente || ''), origem:origem || '', ini:Date.now(), uid:uidAtual, saiu:false });
   const m = ligMinutos();
-  toast(m ? `📞 Faça a ligação e volte para o app. Conta ${ligaSdr() ? 'como ligação' : 'pontos'} a partir de ${fmtDurLig(Math.round(m * 60))}.` : '📞 Faça a ligação e volte para o app.');
+  toast(m ? `Faça a ligação e volte para o app. Conta ${ligaSdr() ? 'como ligação' : 'pontos'} a partir de ${fmtDurLig(Math.round(m * 60))}.` : 'Faça a ligação e volte para o app.');
 }
 function voltouDaLigacao(){
   const p = lerLigPend(); if (!p) return;
@@ -6956,8 +6992,8 @@ function voltouDaLigacao(){
   const seg = Math.round((Date.now() - p.ini) / 1000);
   if (seg > 3 * 3600) return;
   const m = ligMinutos();
-  if (seg < m * 60) { toast(`📞 Ligação de ${fmtDurLig(seg)}: não conta pontos (mínimo ${fmtDurLig(Math.round(m * 60))}).`); return; }
-  _ligConf = { ...p, seg };
+  if (seg < m * 60) { toast(`Ligação de ${fmtDurLig(seg)}: não conta pontos (mínimo ${fmtDurLig(Math.round(m * 60))}).`); return; }
+  _ligConf = { ...p, seg }; $('ligConfPro').checked = false; $('ligConfProRow').classList.toggle('hide', !ligaPontua());
   $('ligConfTxt').innerHTML = `Você ficou <b>${fmtDurLig(seg)}</b> fora do app na ligação para <b>${esc(p.cliente || p.tel)}</b>.<br>O cliente atendeu e vocês conversaram?`;
   abrir('ligConfModal');
 }
@@ -6965,9 +7001,53 @@ document.addEventListener('visibilitychange', voltouDaLigacao);
 window.ligConfResp = async sim => {
   fechar('ligConfModal'); const c = _ligConf; _ligConf = null; if (!c) return;
   if (!sim) { toast('Ok, essa ligação não contou.'); return; }
-  if (!ligaPontua() && !ligaSdr()) { toast(`✓ Teste do gestor: ${fmtDurLig(c.seg)}. Para um corretor, essa ligação contaria pontos.`); return; }
-  try { await registrarLigacao(c.tel, c.cliente, c.origem, c.seg); } catch(e) { toast('Erro ao registrar: ' + e.message); }
+  if (!ligaPontua() && !ligaSdr()) { toast(`Teste do gestor: ${fmtDurLig(c.seg)}. Para um corretor, essa ligação contaria pontos.`); return; }
+  try { await registrarLigacao(c.tel, c.cliente, c.origem, c.seg, $('ligConfPro').checked); } catch(e) { toast('Erro ao registrar: ' + e.message); }
 };
+window.abrirIndicacao = () => { ['indNome','indTel','indPor'].forEach(i => $(i).value = ''); abrir('indModal'); setTimeout(() => $('indNome').focus(), 80); };
+window.salvarIndicacao = async () => {
+  const nome = $('indNome').value.trim(), tel = $('indTel').value.trim(), por = $('indPor').value.trim();
+  if (!nome || soDig(tel).length < 10) { toast('Preencha o nome e o telefone com DDD'); return; }
+  if (!ligaPontua()) { fechar('indModal'); toast('Teste do gestor: para um corretor, essa indicação contaria pontos.'); return; }
+  const h = hojeISO(), m = h.slice(0,7), b = writeBatch(db); $('indBt').disabled = true;
+  b.set(doc(collection(db,'indicacoes')), { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', cliente:nome.slice(0,80), tel:tel.slice(0,25), telNorm:chaveTel(tel), indicadoPor:por.slice(0,80), dia:h, em:Date.now() });
+  b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', ind:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true });
+  try { await gravar(b.commit()); fechar('indModal'); toast('Indicação registrada'); } catch(e) { toast('Erro: ' + e.message); }
+  $('indBt').disabled = false;
+};
+// funil do dia: o corretor marca que preencheu antes do horário limite
+function htmlFunilDia(){
+  if (!ligaPontua() || !(Number(appCfg.pontos.funil) || 0)) return '';
+  const h = hojeISO(), r = rankingAtiv.find(x => x.id === h.slice(0,7) + '_' + uidAtual) || {}, t = (r.fun || {})[h], lim = Number(appCfg.pontos.funilHora) || 18;
+  return t ? `<span class="funil-ok">Funil de hoje preenchido às ${new Date(t).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>`
+    : `<button class="btn btn-primary" onclick="marcarFunil()">Preenchi o funil de hoje</button><span class="muted" style="font-size:12.5px">até as ${lim}h</span>`;
+}
+window.marcarFunil = async () => {
+  const lim = Number(appCfg.pontos.funilHora) || 18;
+  if (new Date().getHours() >= lim) { toast('Passou das ' + lim + 'h: o funil de hoje não conta mais.'); return; }
+  const h = hojeISO(), m = h.slice(0,7);
+  try { await gravar(setDoc(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', fun:{ [h]: Date.now() }, atualizadoEm:Date.now() }, { merge:true })); toast('Funil de hoje marcado'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// atraso: a presença marcada depois do horário de entrada (mais a tolerância) conta como atraso
+async function marcarAtrasoSeFor(agora){
+  if (!ligaPontua()) return;
+  const c = ciCfg(), d = new Date(agora); if (Array.isArray(c.dias) && !c.dias.includes(d.getDay())) return;
+  const [hh, mm] = String(c.hora || '08:30').split(':').map(Number), lim = new Date(d); lim.setHours(hh || 0, (mm || 0) + (Number(appCfg.pontos.atrasoTol) || 0), 0, 0);
+  if (agora <= lim.getTime()) return;
+  const h = hojeISO(), m = h.slice(0,7);
+  try { await setDoc(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', atr:{ [h]: agora }, atualizadoEm:Date.now() }, { merge:true }); } catch(e) { console.warn('Atraso:', e.message); }
+}
+// documentação anexada na reserva: RG, CPF, renda e residência conta uma vez por reserva
+const DOCS_PONTO = ['identidade','cpf','renda','residencia'];
+async function pontuarDocsReserva(rid, docs, uids, jaPontuou){
+  if (jaPontuou || souCeo()) return;
+  const tem = new Set((docs || []).map(x => x.tipo)); if (!DOCS_PONTO.every(t => tem.has(t))) return;
+  const h = hojeISO(), m = h.slice(0,7), quem = souGerente() ? (uids || []) : [uidAtual], b = writeBatch(db);
+  b.update(doc(db,'reservas',rid), { docsPontos:true });
+  quem.filter(Boolean).forEach(u => { const p = perfisTodos.find(x => x.uid === u) || (u === uidAtual ? perfil : {});
+    b.set(doc(db,'ranking_ativ', m + '_' + u), { mes:m, uid:u, nome:p.nome || '', equipe:p.equipe || '', doca:{ [rid]: h }, atualizadoEm:Date.now() }, { merge:true }); });
+  try { await b.commit(); } catch(e) { console.warn('Docs na reserva:', e.message); }
+}
 window.abrirDiscador = () => {
   const m = ligMinutos();
   $('discRegra').innerHTML = `Abre o seu WhatsApp na conversa do número: toque no ícone de telefone de lá para chamar. Ao voltar para o app, a ligação conta pontos se durou ${m ? 'pelo menos <b>' + fmtDurLig(Math.round(m * 60)) + '</b>' : 'qualquer tempo'} e o cliente atendeu. Cada número conta uma vez por dia.`;
@@ -6981,15 +7061,19 @@ window.carregarLigLista = async () => {
   try {
     const l = (await getDocs(query(collection(db,'ligacoes'), where('dia','==',d)))).docs.map(x => ({ id:x.id, ...x.data() })).sort((a,b) => (b.em || 0) - (a.em || 0));
     window._ligLista = l;
-    el.innerHTML = l.length ? `<div style="overflow-x:auto"><table class="lig-tab"><thead><tr><th>Hora</th><th>Corretor</th><th>Número</th><th>Duração</th><th>Tipo</th><th></th></tr></thead><tbody>${l.map(x => `<tr class="${x.anulada ? 'anul' : ''}"><td>${new Date(x.em || 0).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(x.nome || '')}</td><td>${esc(x.cliente ? x.cliente + ' · ' : '')}${esc(x.tel || '')}</td><td>${x.durSeg ? fmtDurLig(x.durSeg) : '<span class="muted">antiga</span>'}</td><td>${x.recontato ? 'Recontato' : 'Ligação'}${x.sdr ? ' · SDR' : ''}</td><td style="white-space:nowrap">${x.anulada ? '<span class="muted">anulada</span> ' : `<button class="btn btn-ghost" style="padding:4px 10px" onclick="anularLig('${x.id}')">Anular</button> `}<button class="icon-btn del" title="Excluir esta ligação" onclick="excluirLig('${x.id}')">🗑️</button></td></tr>`).join('')}</tbody></table></div>
-      <button class="btn btn-ghost btn-block" style="margin-top:12px;color:var(--danger)" onclick="excluirLigDia()">🗑️ Excluir todas as ligações deste dia</button>` : '<div class="muted">Nenhuma ligação neste dia.</div>';
+    setTimeout(async () => { const ei = $('indListaCorpo'); if (!ei) return;
+      try { const li = (await getDocs(query(collection(db,'indicacoes'), where('dia','==',d)))).docs.map(x => ({ id:x.id, ...x.data() })).sort((a,b) => (b.em || 0) - (a.em || 0));
+        ei.innerHTML = `<div class="rep-sec" style="margin-bottom:6px">Indicações recebidas (${li.length})</div>` + (li.length ? `<div style="overflow-x:auto"><table class="lig-tab"><thead><tr><th>Hora</th><th>Corretor</th><th>Indicado</th><th>Quem indicou</th></tr></thead><tbody>${li.map(x => `<tr><td>${new Date(x.em || 0).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(x.nome || '')}</td><td>${esc(x.cliente || '')} · ${esc(x.tel || '')}</td><td>${esc(x.indicadoPor || '')}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Nenhuma indicação neste dia.</div>');
+      } catch(e) { ei.innerHTML = ''; } }, 0);
+    el.innerHTML = l.length ? `<div style="overflow-x:auto"><table class="lig-tab"><thead><tr><th>Hora</th><th>Corretor</th><th>Número</th><th>Duração</th><th>Tipo</th><th></th></tr></thead><tbody>${l.map(x => `<tr class="${x.anulada ? 'anul' : ''}"><td>${new Date(x.em || 0).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(x.nome || '')}</td><td>${esc(x.cliente ? x.cliente + ' · ' : '')}${esc(x.tel || '')}</td><td>${x.durSeg ? fmtDurLig(x.durSeg) : '<span class="muted">antiga</span>'}</td><td>${x.recontato ? 'Recontato' : 'Ligação'}${x.sdr ? ' · SDR' : ''}${x.prospecto ? ' · prospecto' : ''}</td><td style="white-space:nowrap">${x.anulada ? '<span class="muted">anulada</span> ' : `<button class="btn btn-ghost" style="padding:4px 10px" onclick="anularLig('${x.id}')">Anular</button> `}<button class="icon-btn del" title="Excluir esta ligação" onclick="excluirLig('${x.id}')">🗑️</button></td></tr>`).join('')}</tbody></table></div>
+      <button class="btn btn-ghost btn-block" style="margin-top:12px;color:var(--danger)" onclick="excluirLigDia()">Excluir todas as ligações deste dia</button><div id="indListaCorpo" style="margin-top:18px"></div>` : '<div class="muted">Nenhuma ligação neste dia.</div>';
   } catch(e) { el.innerHTML = '<div class="muted">Erro: ' + esc(e.message) + '</div>'; }
 };
 async function apagarLigs(lista){
   const b = writeBatch(db);
   lista.forEach(x => {
     b.delete(doc(db,'ligacoes',x.id));
-    if (!x.anulada && !x.sdr && x.uid && x.dia) b.set(doc(db,'ranking_ativ', x.dia.slice(0,7) + '_' + x.uid), { mes:x.dia.slice(0,7), uid:x.uid, [x.recontato ? 'rec' : 'lig']:{ [x.dia]: increment(-1) }, atualizadoEm:Date.now() }, { merge:true });
+    if (!x.anulada && !x.sdr && x.uid && x.dia) b.set(doc(db,'ranking_ativ', x.dia.slice(0,7) + '_' + x.uid), { mes:x.dia.slice(0,7), uid:x.uid, [x.recontato ? 'rec' : 'lig']:{ [x.dia]: increment(-1) }, ...(x.prospecto ? { pro:{ [x.dia]: increment(-1) } } : {}), atualizadoEm:Date.now() }, { merge:true });
   });
   await gravar(b.commit());
 }
@@ -7008,7 +7092,7 @@ window.anularLig = async id => {
   if (!confirm('Anular esta ligação? Ela deixa de contar pontos para ' + (x.nome || 'o corretor') + '.')) return;
   const b = writeBatch(db), m = x.dia.slice(0,7);
   b.update(doc(db,'ligacoes',id), { anulada:true, anuladaPor:perfil.nome, anuladaEm:Date.now() });
-  if (!x.sdr) b.set(doc(db,'ranking_ativ', m + '_' + x.uid), { mes:m, uid:x.uid, [x.recontato ? 'rec' : 'lig']:{ [x.dia]: increment(-1) }, atualizadoEm:Date.now() }, { merge:true });
+  if (!x.sdr) b.set(doc(db,'ranking_ativ', m + '_' + x.uid), { mes:m, uid:x.uid, [x.recontato ? 'rec' : 'lig']:{ [x.dia]: increment(-1) }, ...(x.prospecto ? { pro:{ [x.dia]: increment(-1) } } : {}), atualizadoEm:Date.now() }, { merge:true });
   try { await gravar(b.commit()); toast('Ligação anulada'); carregarLigLista(); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.ligarDiscadorZap = () => { const v = $('discNum').value; if (soDig(v).length < 10) { toast('Digite o número com DDD'); return; } ligarZap(v, '', 'discador'); $('discNum').value = ''; };
@@ -7026,6 +7110,7 @@ function htmlMeusLeads(){
   }).join('');
   return `<div class="card ml-card"><div class="card-head"><h2>📞 Ligações de hoje</h2><span class="muted">${lig} ligaç${lig === 1 ? 'ão' : 'ões'} · ${rec} recontato${rec === 1 ? '' : 's'}</span></div>
     <div class="ml-disc"><input id="discNum" inputmode="tel" placeholder="Ligar para um número (com DDD)" onkeydown="if(event.key==='Enter')ligarDiscador()"><button class="btn btn-primary" onclick="ligarDiscador()">📞 Ligar</button><button class="btn btn-ghost zap-bt" onclick="ligarDiscadorZap()" title="Ligar pelo WhatsApp">📲 Zap</button></div>
+    <div class="ml-extra"><button class="btn btn-ghost" onclick="abrirIndicacao()">+ Indicação recebida</button>${htmlFunilDia()}</div>
     ${l.length ? `<div class="rep-sec" style="margin:14px 0 6px">Seus leads de hoje (${l.length})</div>${linhas}` : '<div class="muted" style="font-size:13.5px;margin-top:10px">Os leads que o CRM passar para você hoje aparecem aqui com o botão de ligar.</div>'}
     <details class="info-tog" style="margin-top:8px"><summary>ⓘ Como conta</summary><div class="hint" style="margin-top:6px">Ligue sempre pelo app (📞 ou 📲). Ao voltar, a ligação conta se durou pelo menos ${fmtDurLig(Math.round(ligMinutos() * 60))} e o cliente atendeu. Primeira vez para um número conta como <b>ligação</b>; ligar de novo para o mesmo número em outro dia conta como <b>recontato</b>. Cada número conta uma vez por dia.</div></details></div>`;
 }
@@ -8009,7 +8094,7 @@ window.fecharCamera = () => { clearTimeout(_ciLoop); if (_ciStream) { _ciStream.
 async function fazerCheckin(token){
   if (meuCheckin) { if (ciFora(meuCheckin)) return voltarEscritorio('qr'); toast('Você já marcou a presença hoje ✓'); return; }
   const agora = Date.now();
-  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'qr', token });
+  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'qr', token }); marcarAtrasoSeFor(agora);
     avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Código vencido ou inválido. Aponte de novo para o código da recepção.' : 'Erro: ' + e.message); }
 }
@@ -8028,7 +8113,7 @@ window.chegueiEscritorio = async () => {
   } else if (gps) via = 'gps';
   if (meuCheckin) return voltarEscritorio(via, gps, dist);
   const agora = Date.now();
-  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via, ...(gps ? { local:gps } : {}), ...(dist !== null ? { dist } : {}) });
+  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via, ...(gps ? { local:gps } : {}), ...(dist !== null ? { dist } : {}) }); marcarAtrasoSeFor(agora);
     avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
   catch(e) { volta(); toast('Erro: ' + e.message); }
 };
@@ -9821,6 +9906,7 @@ window.salvarReserva = async () => {
     const btn = $('rvSalvarBtn'); btn.disabled = true;
     try { const { docs, tiposNovos } = await rvGravarDocs(rvId, r.corretorUids || [uidAtual]);
       await gravar(updateDoc(doc(db,'reservas',rvId), { docs, docsEm:Date.now() }));
+      pontuarDocsReserva(rvId, docs, r.corretorUids, r.docsPontos);
       fechar('resvModal'); toast('Documentos salvos ✓');
       if (tiposNovos.length || rvNovos.length) avisarCarteiro('reserva_docs', rvId, false, { tipos:tiposNovos.map(rvDocNome), qtd:rvNovos.length, feitos:new Set(docs.map(d => d.tipo)).size, total:DOCS_RES.length }); }
     catch(e) { toast('Erro: ' + e.message); }
@@ -9840,7 +9926,7 @@ window.salvarReserva = async () => {
     const idc = 'r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36)));
     try { await gravar(setDoc(doc(db,'reservas',idc), { ...d, corretorUids:uids, criadoPor:uidAtual, fonte:'corretor', criadoEm:Date.now(), caiu:false }));
       let feitos = 0;
-      if (rvNovos.length) { try { const { docs } = await rvGravarDocs(idc, uids); await gravar(updateDoc(doc(db,'reservas',idc), { docs, docsEm:Date.now() })); feitos = new Set(docs.map(x => x.tipo)).size; } catch(e) { toast('A reserva foi salva, mas os documentos não subiram: ' + e.message); } }
+      if (rvNovos.length) { try { const { docs } = await rvGravarDocs(idc, uids); await gravar(updateDoc(doc(db,'reservas',idc), { docs, docsEm:Date.now() })); feitos = new Set(docs.map(x => x.tipo)).size; pontuarDocsReserva(idc, docs, uids, false); } catch(e) { toast('A reserva foi salva, mas os documentos não subiram: ' + e.message); } }
       fechar('resvModal'); avisarCarteiro('reserva', idc, false, { feitos, total:DOCS_RES.length }); copiarTextoReserva(d, true); setTimeout(() => festejar(), 300); }
     catch(e) { toast(e.code === 'permission-denied' ? 'Esse cliente já tem reserva cadastrada. Fale com a gerência.' : 'Erro: ' + e.message); }
     return;
@@ -9850,6 +9936,7 @@ window.salvarReserva = async () => {
   const rAntes = rvId ? reservasTodas.find(x => x.id === rvId) : null;
   if (rvNovos.length || rvTirar.length) { try { const { docs } = await rvGravarDocs(id, rAntes?.corretorUids || corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean)); d.docs = docs; d.docsEm = Date.now(); } catch(e) { toast('Erro nos documentos: ' + e.message); return; } }
   try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓');
+    if (d.docs) pontuarDocsReserva(id, d.docs, rAntes?.corretorUids || corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean), rAntes?.docsPontos);
     if (rAntes) logEdicao('reservas', id, d.cliente, rAntes, d, ROT_R);
     const rx = reservasTodas.find(x => x.id === id); if (rvId && rx && rx.fonte === 'corretor' && !rx.avisadoOk) avisarCarteiro('reserva_ok', id); }
   catch(e) { toast('Erro: ' + e.message); }
