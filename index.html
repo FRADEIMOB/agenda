@@ -1238,6 +1238,14 @@ html[data-view="whatsapp"] #fab,html[data-view="whatsapp"] #iaBolha{display:none
 }
 #v-whatsapp,#v-whatsapp.on{transform:none!important;animation:none!important;filter:none!important}
 .zap-fab{display:none}
+.disc-fab{display:none}
+@media (max-width:900px){
+  .disc-fab:not(.hide){display:grid;place-items:center;position:fixed;right:86px;bottom:calc(82px + env(safe-area-inset-bottom));width:48px;height:48px;border-radius:50%;border:0;background:#1f6feb;color:#fff;box-shadow:0 8px 20px rgba(31,111,235,.38);z-index:9}
+  .disc-fab.com-zap:not(.hide){right:144px}
+  .disc-fab svg{width:24px;height:24px}
+}
+.disc-ligar{background:#25d366;color:#fff;border:0;font-weight:700}
+.lig-tab{width:100%;border-collapse:collapse;font-size:13.5px}.lig-tab td,.lig-tab th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left}.lig-tab tr.anul td{opacity:.45;text-decoration:line-through}
 @media(max-width:900px){
   .zap-fab:not(.hide){display:grid;place-items:center;position:fixed;right:86px;bottom:calc(82px + env(safe-area-inset-bottom));width:48px;height:48px;border-radius:50%;border:0;background:#25d366;color:#fff;box-shadow:0 8px 20px rgba(37,211,102,.4);z-index:9}
   .zap-fab svg{width:26px;height:26px}
@@ -1743,7 +1751,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button data-view="hoje" onclick="setView('hoje')"><i data-ic="home"></i>Hoje<span class="count" id="cHoje">0</span></button>
       <button data-view="tarefas" onclick="setView('tarefas')"><i data-ic="list"></i>Tarefas<span class="count" id="cTarefas">0</span></button>
       <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Calendário</button>
-      <button data-view="whatsapp" class="gerente-only hide" onclick="setView('whatsapp')"><i data-ic="zap"></i>WhatsApp <small class="zap-teste">teste</small><span class="count red hide" id="cZap">0</span></button>
+      <button data-view="whatsapp" class="zap-nav hide" onclick="setView('whatsapp')"><i data-ic="zap"></i>WhatsApp <small class="zap-teste">teste</small><span class="count red hide" id="cZap">0</span></button>
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="bolsao" onclick="setView('bolsao')"><i data-ic="users"></i>Bolsão<span class="count hide" id="cBolsao">0</span></button>
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
@@ -1998,9 +2006,9 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <section class="view" id="v-whatsapp">
         <div class="zap">
           <div class="zap-col zap-lista-col">
-            <div class="zap-lh"><h2>Conversas</h2><div style="display:flex;gap:4px"><button class="icon-btn" title="Mensagem automática" onclick="zapConfig()">⚙️</button><button class="icon-btn" title="Nova conversa" onclick="zapNova()">✎</button></div></div>
+            <div class="zap-lh"><h2>Conversas</h2><div style="display:flex;gap:4px"><button class="icon-btn zap-so-ger" title="Mensagem automática" onclick="zapConfig()">⚙️</button><button class="icon-btn zap-so-ger" title="Nova conversa" onclick="zapNova()">✎</button></div></div>
             <div class="zap-st"><span id="zapChip" class="zap-chip">●</span><button class="link hide" id="zapSair" onclick="zapDesconectar()">Desconectar</button></div>
-            <div class="zap-abas" id="zapAbas"><button data-a="naoLidas" onclick="zapAba='naoLidas';render()">Não lidas <span class="zap-nl hide" id="zapNl">0</span></button><button data-a="todas" onclick="zapAba='todas';render()">Todas</button><button data-a="semDono" onclick="zapAba='semDono';render()">Sem corretor</button></div>
+            <div class="zap-abas" id="zapAbas"><button data-a="naoLidas" onclick="zapAba='naoLidas';render()">Não lidas <span class="zap-nl hide" id="zapNl">0</span></button><button data-a="todas" onclick="zapAba='todas';render()">Todas</button><button data-a="semDono" class="zap-so-ger" onclick="zapAba='semDono';render()">Sem corretor</button></div>
             <input class="zap-busca" placeholder="Buscar nome, número ou mensagem" oninput="zapBusca=this.value;renderZap()">
             <div class="zap-lista" id="zapLista" data-lenis-prevent></div>
           </div>
@@ -2382,6 +2390,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 <button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <button class="fab hide" id="fab" onclick="abrirMais()" title="Adicionar" data-ic="plus"></button>
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
+<button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
 <nav class="mobilebar hide" id="mobilebar">
   <button data-view="hoje" class="nao-ceo" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
   <button data-view="visitas" class="nao-ceo" onclick="setView('visitas')"><i data-ic="house"></i>Visitas</button>
@@ -2706,6 +2715,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-head"><h2>Mensagem automática</h2><button class="icon-btn" onclick="fechar('zapCfgModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <div class="hint" style="margin:0 0 12px">Sai sozinha, uma vez só, quando um cliente novo manda a primeira mensagem para o número.</div>
+      <label class="chk" style="display:flex;gap:8px;align-items:center;margin:0 0 4px"><input type="checkbox" id="zapRodizio" style="width:auto"> Passar cada cliente novo para um corretor automaticamente</label>
+      <div class="hint" style="margin:0 0 12px">Rodízio igual entre os corretores com presença marcada hoje (check-in). Quem recebeu menos conversas no dia recebe a próxima. Sem ninguém presente, a conversa fica "sem dono" para a gerência passar.</div>
       <label class="chk" style="display:flex;gap:8px;align-items:center;margin:0 0 12px"><input type="checkbox" id="zapBvAtivo" style="width:auto"> Mandar a mensagem de boas-vindas</label>
       <label>Texto</label><textarea id="zapBvTxt" rows="4" maxlength="1000"></textarea>
       <label class="chk" style="display:flex;gap:8px;align-items:center;margin:14px 0 0"><input type="checkbox" id="zapHist" style="width:auto"> Trazer as conversas antigas do celular ao conectar (últimos 3 dias)</label>
@@ -2949,6 +2960,29 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-body" id="bkCorpo"></div>
   </div>
 </div>
+<div class="modal" id="discModal">
+  <div class="sheet" style="width:min(420px,100%)">
+    <div class="sheet-head"><h2>📞 Ligar</h2><button class="icon-btn" onclick="fechar('discModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <input id="discFabNum" inputmode="tel" autocomplete="off" placeholder="Número com DDD" style="font-size:22px;text-align:center;letter-spacing:.5px" onkeydown="if(event.key==='Enter')ligarDoFab()">
+      <button class="btn btn-block disc-ligar" style="margin-top:12px" onclick="ligarDoFab()">📲 Ligar pelo WhatsApp</button>
+      <div class="hint" style="margin-top:12px" id="discRegra"></div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="ligConfModal">
+  <div class="sheet" style="width:min(420px,100%)">
+    <div class="sheet-head"><h2>📞 Como foi a ligação?</h2></div>
+    <div class="sheet-body"><p id="ligConfTxt" style="font-size:15.5px;line-height:1.45"></p></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="ligConfResp(false)">Não atendeu</button><button class="btn btn-primary" onclick="ligConfResp(true)">Sim, atendeu</button></div>
+  </div>
+</div>
+<div class="modal" id="ligListaModal">
+  <div class="sheet" style="width:min(760px,100%)">
+    <div class="sheet-head"><h2>📞 Ligações registradas</h2><button class="icon-btn" onclick="fechar('ligListaModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><input type="date" id="ligListaDia" onchange="carregarLigLista()" style="max-width:200px"><div id="ligListaCorpo" style="margin-top:12px"></div></div>
+  </div>
+</div>
 <div class="modal" id="anexoModal">
   <div class="sheet" style="width:min(820px,100%)">
     <div class="sheet-head"><h2 id="axTit">Nota fiscal</h2><button class="icon-btn" onclick="fechar('anexoModal')" data-ic="x"></button></div>
@@ -2990,7 +3024,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button class="an-nav hide" onclick="fechar('menuModal');setView('analises')"><i data-ic="pasta"></i>Correspondente (teste)</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
-      <button class="gerente-only hide" onclick="fechar('menuModal');setView('whatsapp')"><i data-ic="zap"></i>WhatsApp (teste)</button>
+      <button class="zap-nav hide" onclick="fechar('menuModal');setView('whatsapp')"><i data-ic="zap"></i>WhatsApp (teste)</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
@@ -3333,7 +3367,7 @@ window.setView = v => {
   if (v === 'desempenho' && !podeGerir()) v = 'hoje';
   if (v === 'vendas' && !souGerente() && !['corretor','coordenador'].includes(perfil?.papel)) v = 'hoje';
   if (v === 'financeiro' && !souGerente()) v = 'hoje';
-  if (v === 'whatsapp' && (!souGerente() || souCeo())) v = 'hoje';
+  if (v === 'whatsapp' && !podeZap()) v = 'hoje';
   if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
   if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
   if (v === 'resumo' && perfil?.papel !== 'sdr') v = 'hoje';
@@ -3528,10 +3562,13 @@ function render(){
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
   renderEmp(); renderFinanceiro(); renderZap(); renderExtrato();
   if ($('cZap')) { const nz = zapConvs.filter(c => c.naoLidas > 0).length; $('cZap').textContent = nz; $('cZap').classList.toggle('hide', !nz); $('zapFabN').textContent = nz; $('zapFabN').classList.toggle('hide', !nz); }
-  if ($('zapFab')) $('zapFab').classList.toggle('hide', !souGerente() || souCeo() || view === 'whatsapp' || !$('app') || $('app').classList.contains('hide'));
+  if ($('zapFab')) $('zapFab').classList.toggle('hide', !podeZap() || abaOculta('whatsapp') || view === 'whatsapp' || !$('app') || $('app').classList.contains('hide'));
+  if ($('discFab')) { const zv = $('zapFab') && !$('zapFab').classList.contains('hide');
+    $('discFab').classList.toggle('hide', !ligaPontua() || abaOculta('discador') || view === 'whatsapp' || !$('app') || $('app').classList.contains('hide'));
+    $('discFab').classList.toggle('com-zap', !!zv); }
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
-  if (!window._hashZap && souGerente() && !souCeo() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
+  if (!window._hashZap && podeZap() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
   if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
@@ -4049,6 +4086,7 @@ function renderPapel(){
   document.querySelectorAll('.nao-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel === 'sdr'));
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr'));
   document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && ['corretor','coordenador'].includes(perfil?.papel))));
+  document.querySelectorAll('.zap-nav').forEach(e => e.classList.toggle('hide', !podeZap()));
   aplicarAbasOcultas();
 }
 function bannerAcesso(){
@@ -5141,7 +5179,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 89;
+const APP_VERSAO = 90;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5325,7 +5363,7 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:1, recontato:1, ligLimite:30 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:1, recontato:1, ligLimite:30, ligMinutos:2 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
@@ -5379,11 +5417,13 @@ function filtrarAvaliacoes(){
   avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba)) && !(a.origem === 'whatsapp' && ((a.cpfNorm && naPlan.has('c' + a.cpfNorm)) || (a.telNorm && naPlan.has('t' + a.telNorm)))));
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
-const ABAS_OCULTAS_PADRAO = { corretor:['analises','bolsao','empreendimentos'], coordenador:[], sdr:[] };
-const ABAS_CARGO = [['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
-const ABAS_DO_CARGO = { corretor:['tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
-  coordenador:['tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
+const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
+const ABAS_CARGO = [['whatsapp','WhatsApp (aba e botão verde)'],['discador','📞 Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_DO_CARGO = { corretor:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
+  coordenador:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
   sdr:['tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'] };
+const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador'].includes(perfil?.papel));
+window.podeZap = podeZap;
 const abaOculta = v => { const l = (appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO)[perfil?.papel]; return Array.isArray(l) && l.includes(v); };
 window.abaOculta = abaOculta;
 function aplicarAbasOcultas(){
@@ -5768,7 +5808,9 @@ function renderAdm(){
   if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
   admAssin = ass;
   $('admPontos').innerHTML = PONTOS_ITENS.map(([k,n]) => `<div class="pt-row"><span>${n}</span><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}"></div>`).join('')
-    + `<div class="pt-row"><span>📵 Máximo de ligações e de recontatos que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`;
+    + `<div class="pt-row"><span>📵 Máximo de ligações e de recontatos que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
+    + `<div class="pt-row"><span>⏱️ Duração mínima da ligação para pontuar (minutos)</span><input type="number" step="0.5" min="0" id="pt_ligMinutos" value="${ligMinutos()}"></div>`
+    + `<button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="abrirLigLista()">📋 Ver e conferir as ligações</button>`;
   $('admOrigens').value = appCfg.origens.join('\n');
   rascMsgs = JSON.parse(JSON.stringify(appCfg.mensagens || MSG_PADRAO)); desenharModelos();
   $('admMotivos').value = appCfg.motivos.join('\n');
@@ -5796,6 +5838,7 @@ window.salvarModelos = async () => {
 };
 window.salvarPontuacao = async () => {
   const pontos = {}; [...PONTOS_ITENS.map(x => x[0]), 'ligLimite'].forEach(k => pontos[k] = Math.round(Number($('pt_' + k).value) || 0));
+  pontos.ligMinutos = Math.max(0, Math.round((Number($('pt_ligMinutos').value) || 0) * 2) / 2);
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
@@ -6820,8 +6863,8 @@ function htmlLigar(tel, cliente, origem){
 const telZap = tel => { let n = soDig(tel); if (n.startsWith('55') && n.length >= 12) n = n.slice(2); n = n.replace(/^0+/, ''); return n.length >= 10 ? '55' + n : ''; };
 window.ligarZap = (tel, cliente, origem) => {
   const n = telZap(tel); if (!n) { toast('Telefone incompleto'); return; }
+  iniciarLigacao(tel, cliente, (origem ? origem + ' · ' : '') + 'whatsapp');
   const a = document.createElement('a'); a.href = 'https://wa.me/' + n; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
-  registrarLigacao(tel, cliente, (origem ? origem + ' · ' : '') + 'whatsapp').catch(e => console.warn('Ligação:', e.message));
 };
 window.ligarZapBtn = b => ligarZap(b.dataset.tel, b.dataset.cli, b.dataset.or);
 window.htmlLigar = htmlLigar;
@@ -6832,30 +6875,85 @@ window.ligar = (tel, cliente, origem) => {
   if (n.startsWith('55') && n.length >= 12) n = n.slice(2);       // tira o código do Brasil
   n = n.replace(/^0+/, '');
   if (n.length === 10 && /[6-9]/.test(n[2])) n = n.slice(0,2) + '9' + n.slice(2); // celular sem o 9 (como o WhatsApp guarda)
+  iniciarLigacao(tel, cliente, origem);
   const a = document.createElement('a'); a.href = 'tel:' + n; document.body.appendChild(a); a.click(); a.remove();
-  registrarLigacao(tel, cliente, origem).catch(e => console.warn('Ligação:', e.message));
 };
-async function registrarLigacao(tel, cliente, origem){
+async function registrarLigacao(tel, cliente, origem, durSeg){
   if (!ligaPontua()) return;
   const t = chaveTel(tel); if (!t) return;
   const h = hojeISO(), m = h.slice(0,7);
-  if (minhasLigHoje.some(x => x.telNorm === t)) { toast('📞 Ligando… (esse número já contou hoje)'); return; }
+  if (minhasLigHoje.some(x => x.telNorm === t && !x.anulada)) { toast('📞 Esse número já contou hoje. A ligação não soma de novo.'); return; }
   let antes = [];
   try { antes = (await getDocs(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('telNorm','==',t)))).docs.map(d => d.data()); } catch(e) {}
-  if (antes.some(x => x.dia === h)) return;
-  const rec = antes.length > 0, b = writeBatch(db);
-  b.set(doc(collection(db,'ligacoes')), { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec });
+  if (antes.some(x => x.dia === h && !x.anulada)) return;
+  const rec = antes.some(x => !x.anulada), b = writeBatch(db);
+  b.set(doc(collection(db,'ligacoes')), { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec, durSeg:Math.round(Number(durSeg) || 0) });
   b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [rec ? 'rec' : 'lig']:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true });
   await gravar(b.commit());
   toast(rec ? '🔁 Recontato registrado. Conta pontos no ranking.' : '📞 Ligação registrada. Conta pontos no ranking.');
 }
+// ---------- v90: a ligação só pontua com duração mínima (tempo fora do app + confirmação) ----------
+const ligMinutos = () => { const v = Number(appCfg.pontos.ligMinutos); return isFinite(v) && v >= 0 ? v : 2; };
+const fmtDurLig = seg => seg < 60 ? seg + ' s' : Math.floor(seg / 60) + ' min' + (seg % 60 ? ' ' + (seg % 60) + ' s' : '');
+let _ligPend = null, _ligConf = null;
+function lerLigPend(){ if (_ligPend) return _ligPend; try { return JSON.parse(localStorage.getItem('ligPend') || 'null'); } catch(e) { return null; } }
+function gravarLigPend(p){ _ligPend = p; try { p ? localStorage.setItem('ligPend', JSON.stringify(p)) : localStorage.removeItem('ligPend'); } catch(e) {} }
+function iniciarLigacao(tel, cliente, origem){
+  if (!ligaPontua()) return;
+  gravarLigPend({ tel:String(tel || ''), cliente:String(cliente || ''), origem:origem || '', ini:Date.now(), uid:uidAtual, saiu:false });
+  const m = ligMinutos();
+  toast(m ? `📞 Faça a ligação e volte para o app. Conta pontos a partir de ${fmtDurLig(Math.round(m * 60))}.` : '📞 Faça a ligação e volte para o app.');
+}
+function voltouDaLigacao(){
+  const p = lerLigPend(); if (!p) return;
+  if (document.visibilityState === 'hidden') { if (!p.saiu) gravarLigPend({ ...p, saiu:true }); return; }
+  if (!p.saiu || !perfil || p.uid !== uidAtual) return;
+  gravarLigPend(null);
+  const seg = Math.round((Date.now() - p.ini) / 1000);
+  if (seg > 3 * 3600) return;
+  const m = ligMinutos();
+  if (seg < m * 60) { toast(`📞 Ligação de ${fmtDurLig(seg)}: não conta pontos (mínimo ${fmtDurLig(Math.round(m * 60))}).`); return; }
+  _ligConf = { ...p, seg };
+  $('ligConfTxt').innerHTML = `Você ficou <b>${fmtDurLig(seg)}</b> fora do app na ligação para <b>${esc(p.cliente || p.tel)}</b>.<br>O cliente atendeu e vocês conversaram?`;
+  abrir('ligConfModal');
+}
+document.addEventListener('visibilitychange', voltouDaLigacao);
+window.ligConfResp = async sim => {
+  fechar('ligConfModal'); const c = _ligConf; _ligConf = null; if (!c) return;
+  if (!sim) { toast('Ok, essa ligação não contou.'); return; }
+  try { await registrarLigacao(c.tel, c.cliente, c.origem, c.seg); } catch(e) { toast('Erro ao registrar: ' + e.message); }
+};
+window.abrirDiscador = () => {
+  const m = ligMinutos();
+  $('discRegra').innerHTML = `Abre o seu WhatsApp na conversa do número: toque no ícone de telefone de lá para chamar. Ao voltar para o app, a ligação conta pontos se durou ${m ? 'pelo menos <b>' + fmtDurLig(Math.round(m * 60)) + '</b>' : 'qualquer tempo'} e o cliente atendeu. Cada número conta uma vez por dia.`;
+  $('discFabNum').value = ''; abrir('discModal'); setTimeout(() => $('discFabNum').focus(), 80);
+};
+window.ligarDoFab = () => { const v = $('discFabNum').value; if (soDig(v).length < 10) { toast('Digite o número com DDD'); return; } fechar('discModal'); ligarZap(v, '', 'discador'); };
+// lista para o gestor conferir e anular
+window.abrirLigLista = () => { $('ligListaDia').value = hojeISO(); abrir('ligListaModal'); carregarLigLista(); };
+window.carregarLigLista = async () => {
+  const d = $('ligListaDia').value || hojeISO(), el = $('ligListaCorpo'); el.innerHTML = '<div class="muted">Carregando…</div>';
+  try {
+    const l = (await getDocs(query(collection(db,'ligacoes'), where('dia','==',d)))).docs.map(x => ({ id:x.id, ...x.data() })).sort((a,b) => (b.em || 0) - (a.em || 0));
+    window._ligLista = l;
+    el.innerHTML = l.length ? `<div style="overflow-x:auto"><table class="lig-tab"><thead><tr><th>Hora</th><th>Corretor</th><th>Número</th><th>Duração</th><th>Tipo</th><th></th></tr></thead><tbody>${l.map(x => `<tr class="${x.anulada ? 'anul' : ''}"><td>${new Date(x.em || 0).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(x.nome || '')}</td><td>${esc(x.cliente ? x.cliente + ' · ' : '')}${esc(x.tel || '')}</td><td>${x.durSeg ? fmtDurLig(x.durSeg) : '<span class="muted">antiga</span>'}</td><td>${x.recontato ? 'Recontato' : 'Ligação'}</td><td>${x.anulada ? '<span class="muted">anulada</span>' : `<button class="btn btn-ghost" style="padding:4px 10px" onclick="anularLig('${x.id}')">Anular</button>`}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Nenhuma ligação neste dia.</div>';
+  } catch(e) { el.innerHTML = '<div class="muted">Erro: ' + esc(e.message) + '</div>'; }
+};
+window.anularLig = async id => {
+  const x = (window._ligLista || []).find(y => y.id === id); if (!x || x.anulada) return;
+  if (!confirm('Anular esta ligação? Ela deixa de contar pontos para ' + (x.nome || 'o corretor') + '.')) return;
+  const b = writeBatch(db), m = x.dia.slice(0,7);
+  b.update(doc(db,'ligacoes',id), { anulada:true, anuladaPor:perfil.nome, anuladaEm:Date.now() });
+  b.set(doc(db,'ranking_ativ', m + '_' + x.uid), { mes:m, uid:x.uid, [x.recontato ? 'rec' : 'lig']:{ [x.dia]: increment(-1) }, atualizadoEm:Date.now() }, { merge:true });
+  try { await gravar(b.commit()); toast('Ligação anulada'); carregarLigLista(); } catch(e) { toast('Erro: ' + e.message); }
+};
 window.ligarDiscadorZap = () => { const v = $('discNum').value; if (soDig(v).length < 10) { toast('Digite o número com DDD'); return; } ligarZap(v, '', 'discador'); $('discNum').value = ''; };
 window.ligarDiscador = () => { const v = $('discNum').value; if (soDig(v).length < 8) { toast('Digite o número com DDD'); return; } ligar(v, '', 'discador'); $('discNum').value = ''; };
 // card "Meus leads de hoje" na tela Hoje
 function htmlMeusLeads(){
   if (!ligaPontua() || view !== 'hoje') return '';
-  const lig = minhasLigHoje.filter(x => !x.recontato).length, rec = minhasLigHoje.filter(x => x.recontato).length;
-  const feitos = new Set(minhasLigHoje.map(x => x.telNorm));
+  const valid = minhasLigHoje.filter(x => !x.anulada), lig = valid.filter(x => !x.recontato).length, rec = valid.filter(x => x.recontato).length;
+  const feitos = new Set(valid.map(x => x.telNorm));
   const l = meusLeadsHoje.slice().sort((a,b) => (b.em || 0) - (a.em || 0));
   const linhas = l.map(e => {
     const tel = e.telefone || '', ok = e.telNorm && feitos.has(e.telNorm);
@@ -6865,7 +6963,7 @@ function htmlMeusLeads(){
   return `<div class="card ml-card"><div class="card-head"><h2>📞 Ligações de hoje</h2><span class="muted">${lig} ligaç${lig === 1 ? 'ão' : 'ões'} · ${rec} recontato${rec === 1 ? '' : 's'}</span></div>
     <div class="ml-disc"><input id="discNum" inputmode="tel" placeholder="Ligar para um número (com DDD)" onkeydown="if(event.key==='Enter')ligarDiscador()"><button class="btn btn-primary" onclick="ligarDiscador()">📞 Ligar</button><button class="btn btn-ghost zap-bt" onclick="ligarDiscadorZap()" title="Ligar pelo WhatsApp">📲 Zap</button></div>
     ${l.length ? `<div class="rep-sec" style="margin:14px 0 6px">Seus leads de hoje (${l.length})</div>${linhas}` : '<div class="muted" style="font-size:13.5px;margin-top:10px">Os leads que o CRM passar para você hoje aparecem aqui com o botão de ligar.</div>'}
-    <details class="info-tog" style="margin-top:8px"><summary>ⓘ Como conta</summary><div class="hint" style="margin-top:6px">Ligue sempre pelo botão 📞 do app: a ligação é registrada sozinha. Primeira vez para um número conta como <b>ligação</b>; ligar de novo para o mesmo número em outro dia conta como <b>recontato</b>. Cada número conta uma vez por dia.</div></details></div>`;
+    <details class="info-tog" style="margin-top:8px"><summary>ⓘ Como conta</summary><div class="hint" style="margin-top:6px">Ligue sempre pelo app (📞 ou 📲). Ao voltar, a ligação conta se durou pelo menos ${fmtDurLig(Math.round(ligMinutos() * 60))} e o cliente atendeu. Primeira vez para um número conta como <b>ligação</b>; ligar de novo para o mesmo número em outro dia conta como <b>recontato</b>. Cada número conta uma vez por dia.</div></details></div>`;
 }
 
 // =====================================================================
@@ -9123,8 +9221,18 @@ let zapStatus = null, zapConvs = [], zapMsgs = [], zapSel = null, zapSubMsgs = n
 window.zapAba = 'todas'; window.zapBusca = '';
 function assinarZap(){
   zapStatus = null; zapConvs = []; zapMsgs = []; zapSel = null; if (zapSubMsgs) { zapSubMsgs(); zapSubMsgs = null; } Object.keys(_zapCache).forEach(k => delete _zapCache[k]);
-  if (!souGerente()) return;
+  if (!podeZap()) return;
   const silencio = e => console.warn('WhatsApp:', e.code || e.message);
+  if (!souGerente()) {
+    // corretor: só as conversas dele (coordenador: as da equipe). A gerência vê todas.
+    const ordena = l => l.sort((a,b) => (b.ultimaEm || 0) - (a.ultimaEm || 0));
+    subsPapel.push(onSnapshot(doc(db,'zap_status','robo'), s => { zapStatus = s.exists() ? s.data() : null; render(); }, silencio));
+    const q = perfil.papel === 'coordenador' && perfil.equipe ? query(collection(db,'zap_conversas'), where('equipe','==',perfil.equipe)) : query(collection(db,'zap_conversas'), where('corretorUid','==',uidAtual));
+    subsPapel.push(onSnapshot(q, s => { zapConvs = ordena(s.docs.map(d => ({ id:d.id, ...d.data() }))); render(); }, silencio));
+    subsPapel.push(onSnapshot(query(collection(db,'zap_saida'), where('porUid','==',uidAtual)), s => { zapSaidaPend = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => ['pendente','erro'].includes(x.estado) && Date.now() - (x.criadoEm || 0) < 6 * 3600e3); render(); }, silencio));
+    subsPapel.push(() => { if (zapSubMsgs) { zapSubMsgs(); zapSubMsgs = null; } });
+    return;
+  }
   subsPapel.push(onSnapshot(doc(db,'zap_status','robo'), s => { zapStatus = s.exists() ? s.data() : null; render(); }, silencio));
   subsPapel.push(onSnapshot(doc(db,'zap_config','geral'), s => { if (s.exists()) zapCfg = { ...zapCfg, ...s.data() }; }, silencio));
   subsPapel.push(onSnapshot(query(collection(db,'zap_conversas'), orderBy('ultimaEm','desc'), limit(150)), s => { zapConvs = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
@@ -9167,14 +9275,16 @@ const _zapCache = {};
 function zapPor(el, html){ const e = $(el); if (!e) return false; if (_zapCache[el] === html) return false; _zapCache[el] = html; e.innerHTML = html; return true; }
 window.renderZap = () => renderZap();
 function renderZap(){
-  if (view !== 'whatsapp' || !souGerente()) return;
+  if (view !== 'whatsapp' || !podeZap()) return;
+  const ger = souGerente();
+  document.querySelectorAll('.zap-so-ger').forEach(e => e.classList.toggle('hide', !ger));
   // no celular a conversa fica numa tela fixa, entre a barra de cima e o menu de baixo
   if (innerWidth <= 760) { const tb = document.querySelector('.topbar'), mb = document.querySelector('.mobilebar'), z = document.querySelector('#v-whatsapp .zap');
     if (z) { z.style.setProperty('--zapTop', Math.max(0, tb ? tb.getBoundingClientRect().bottom : 61) + 'px'); z.style.setProperty('--zapBot', (mb && getComputedStyle(mb).display !== 'none' ? mb.getBoundingClientRect().height : 0) + 'px'); } }
   const st = !zapStatus ? 'nunca' : !zapVivo() ? 'off' : zapStatus.estado;
   const chip = { conectado:['ok', '● Conectado · ' + fmtFone(zapStatus?.numero || '')], qr:['warn', '● Aguardando QR Code'], off:['bad', '● Robô desligado'], nunca:['bad', '● Robô não instalado'], reconectando:['warn', '● Reconectando…'], iniciando:['warn', '● Ligando…'], desconectado:['warn', '● Desconectado'] }[st] || ['warn', st];
   $('zapChip').className = 'zap-chip ' + chip[0]; $('zapChip').textContent = chip[1];
-  $('zapSair').classList.toggle('hide', st !== 'conectado' || souCeo());
+  $('zapSair').classList.toggle('hide', st !== 'conectado' || souCeo() || !ger);
   // lista (só redesenha quando muda, para o clique nunca se perder)
   const t = norm(zapBusca);
   let l = zapConvs.filter(c => !t || norm([c.nome, c.numero, c.ultima, c.corretorNome].join(' ')).includes(t) || (soDig(t).length >= 3 && soDig(c.numero).includes(soDig(t))));
@@ -9187,10 +9297,10 @@ function renderZap(){
       <span class="zap-av">${esc(iniciais(zapNome(c)))}</span>
       <span class="zap-it-txt"><b>${esc(zapNome(c))}</b><small>${c.ultimaDe === 'eu' ? '<i>Você:</i> ' : ''}${esc(c.ultima || '')}</small>${c.corretorNome ? `<em>👤 ${esc(primeiro(c.corretorNome))}</em>` : ''}</span>
       <span class="zap-it-dir"><small>${quandoCurto(c.ultimaEm)}</small>${c.naoLidas && c.id !== zapSel ? `<span class="zap-nl">${c.naoLidas}</span>` : ''}</span></button>`).join('')
-    : `<div class="zap-vazio-l">${zapAba === 'naoLidas' ? 'Nenhuma conversa sem ler. 🎉' : zapBusca ? 'Nada encontrado.' : 'As conversas aparecem aqui assim que alguém mandar mensagem para o número conectado.'}</div>`);
+    : `<div class="zap-vazio-l">${zapAba === 'naoLidas' ? 'Nenhuma conversa sem ler. 🎉' : zapBusca ? 'Nada encontrado.' : ger ? 'As conversas aparecem aqui assim que alguém mandar mensagem para o número conectado.' : 'Quando um cliente for passado para você, a conversa aparece aqui e você recebe um aviso.'}</div>`);
   const c = zapConvs.find(x => x.id === zapSel);
   if (!c) {
-    const corpo = st !== 'conectado' ? htmlZapConexao(st) : `<div class="zap-vazio"><div class="zap-vazio-ic">${IC.zap}</div><b>Escolha uma conversa</b><span>ou comece uma nova pelo número do cliente.</span><button class="btn btn-primary" onclick="zapNova()">+ Nova conversa</button></div>`;
+    const corpo = st !== 'conectado' ? htmlZapConexao(st) : `<div class="zap-vazio"><div class="zap-vazio-ic">${IC.zap}</div><b>Escolha uma conversa</b><span>${ger ? 'ou comece uma nova pelo número do cliente.' : 'Aqui aparecem só as conversas dos seus clientes. A gerência acompanha todas.'}</span>${ger ? '<button class="btn btn-primary" onclick="zapNova()">+ Nova conversa</button>' : ''}</div>`;
     zapPor('zapChat', corpo); zapPor('zapDet', ''); return;
   }
   // estrutura da conversa: monta uma vez por conversa (o campo de digitar nunca é apagado)
@@ -9222,7 +9332,7 @@ function renderZap(){
   const noApp = zapNoApp(c);
   if (document.activeElement?.id !== 'zapCorSel') zapPor('zapDet', `<div class="zap-det-card"><span class="zap-av g">${esc(iniciais(zapNome(c)))}</span><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
     <label>Corretor responsável</label>
-    <select id="zapCorSel" onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>
+    ${ger ? `<select id="zapCorSel" onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>${c.atribuidoPor === 'rodízio' ? '<div class="muted" style="font-size:12px;margin-top:4px">Passado pelo rodízio automático</div>' : ''}` : `<div style="font-size:14px;font-weight:600">${esc(c.corretorNome || '—')}</div>`}
     <label>No app</label>${noApp.length ? noApp.map(x => `<div class="zap-tag">${x}</div>`).join('') : '<div class="muted" style="font-size:13px">Esse número ainda não está em visitas, cartas ou na planilha.</div>'}
     <label>Conversa</label><div class="muted" style="font-size:13px">Primeira mensagem guardada: ${c.criadoEm ? new Date(c.criadoEm).toLocaleDateString('pt-BR') : '—'}</div>
     ${c.numero ? `<a class="btn btn-ghost" style="margin-top:12px" href="https://wa.me/${soDig(c.numero)}" target="_blank" rel="noopener">Abrir no WhatsApp do celular</a>` : ''}
@@ -9282,7 +9392,7 @@ async function zapMandarArquivo(f, tipo, nomeArq, voz){
     const ref = doc(collection(db,'zap_saida')), id = 'out_' + ref.id, P = 900000, n = Math.ceil(b64.length / P);
     for (let i = 0; i < n; i++) await setDoc(doc(db,'zap_midia', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime });
     const leg = ($('zapTxt')?.value || '').trim(); if (leg) { $('zapTxt').value = ''; }
-    await setDoc(ref, { jid:c.jid, texto:voz ? '' : leg, midia:{ id, n, mime, nome:nomeArq, tamanho:blob.size, voz:!!voz }, porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() });
+    await setDoc(ref, { jid:c.jid, conversaId:c.id, texto:voz ? '' : leg, midia:{ id, n, mime, nome:nomeArq, tamanho:blob.size, voz:!!voz }, porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() });
     if (voz && leg) $('zapTxt').value = leg;
   } catch(e) { toast('Erro ao enviar: ' + e.message); }
 }
@@ -9310,9 +9420,9 @@ window.zapGravar = async () => {
 window.zapGravFim = enviar => { if (!zapRec) return; zapRec.enviar = enviar; try { zapRec.mr.stop(); } catch(e) {} };
 // ---------- mensagem automática de boas-vindas ----------
 let zapCfg = { boasVindasAtivo:true, boasVindas:'Olá! Seja bem-vindo à Frade Imóveis! Aguarde enquanto damos continuidade ao atendimento.' };
-window.zapConfig = () => { $('zapBvAtivo').checked = zapCfg.boasVindasAtivo !== false; $('zapBvTxt').value = zapCfg.boasVindas || ''; $('zapHist').checked = !!zapCfg.importarHistorico; document.querySelectorAll('#zapCfgModal .dono-only').forEach(e => e.classList.toggle('hide', !souDono())); abrir('zapCfgModal'); };
+window.zapConfig = () => { $('zapRodizio').checked = zapCfg.rodizio !== false; $('zapBvAtivo').checked = zapCfg.boasVindasAtivo !== false; $('zapBvTxt').value = zapCfg.boasVindas || ''; $('zapHist').checked = !!zapCfg.importarHistorico; document.querySelectorAll('#zapCfgModal .dono-only').forEach(e => e.classList.toggle('hide', !souDono())); abrir('zapCfgModal'); };
 window.salvarZapCfg = async () => {
-  try { await gravar(setDoc(doc(db,'zap_config','geral'), { boasVindasAtivo:$('zapBvAtivo').checked, boasVindas:$('zapBvTxt').value.trim().slice(0, 1000), importarHistorico:$('zapHist').checked, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); fechar('zapCfgModal'); toast('Mensagem automática salva'); }
+  try { await gravar(setDoc(doc(db,'zap_config','geral'), { rodizio:$('zapRodizio').checked, boasVindasAtivo:$('zapBvAtivo').checked, boasVindas:$('zapBvTxt').value.trim().slice(0, 1000), importarHistorico:$('zapHist').checked, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); fechar('zapCfgModal'); toast('Mensagem automática salva'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 
@@ -9325,10 +9435,11 @@ window.zapEnviar = async () => {
   const c = zapConvs.find(x => x.id === zapSel), txt = ($('zapTxt')?.value || '').trim();
   if (!c || !txt) return;
   $('zapTxt').value = ''; $('zapTxt').style.height = 'auto';
-  try { await gravar(setDoc(doc(collection(db,'zap_saida')), { jid:c.jid, texto:txt.slice(0, 4000), porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() })); }
+  try { await gravar(setDoc(doc(collection(db,'zap_saida')), { jid:c.jid, conversaId:c.id, texto:txt.slice(0, 4000), porUid:uidAtual, porNome:perfil.nome, estado:'pendente', criadoEm:Date.now() })); }
   catch(e) { toast('Erro: ' + e.message); $('zapTxt').value = txt; }
 };
 window.zapNova = async () => {
+  if (!souGerente()) return;
   const n = prompt('Número do cliente com DDD (ex.: 83 99999-0000):'); if (!n || soDig(n).length < 10) return;
   const txt = prompt('Primeira mensagem:', 'Olá! Aqui é ' + primeiro(perfil.nome) + ', da Frade Imóveis. ');
   if (!txt || !txt.trim()) return;
@@ -9336,6 +9447,7 @@ window.zapNova = async () => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.zapAssumir = async (id, uid) => {
+  if (!souGerente()) return;
   const p = perfisTodos.find(x => x.uid === uid);
   try { await gravar(setDoc(doc(db,'zap_conversas',id), { corretorUid:uid || '', corretorNome:p ? p.nome : '', equipe:p ? (p.equipe || '') : '' }, { merge:true })); toast(p ? 'Conversa passada para ' + primeiro(p.nome) : 'Conversa sem responsável'); }
   catch(e) { toast('Erro: ' + e.message); }
@@ -10479,7 +10591,7 @@ function renderResumoView(){
   const v = x => x === '' || x === undefined || x === null ? '–' : x, so = (o, k) => (Number(o?.crm?.[k]) || 0) + (Number(o?.insta?.[k]) || 0);
   const meus = sdrResumos.filter(x => x.sdrUid === uidAtual).sort((a,b) => b.dia.localeCompare(a.dia)).slice(0, 31);
   { const m0 = mesAtual() + '-01', eu = rankingSdr(m0, fimDoMes(mesAtual())).find(x => x.uid === uidAtual);
-    $('resAviso').innerHTML += `<div class="ci-resumo" style="margin:0 0 12px;font-size:14px">📊 <b>${nomeMes(mesAtual())}:</b> ${eu ? eu.docs : 0} docs · <b>${eu ? eu.diasMedia : 0} dias na média</b> <span class="muted">(até ${SDR_MEDIA_PADRAO} leads novos por doc/CPF, nos dias com ${SDR_MIN_LEADS}+ leads)</span></div>`; }
+    $('resAviso').innerHTML += `<div class="ci-resumo" style="margin:0 0 12px;font-size:14px">📊 <b>${nomeMes(mesAtual())}:</b> ${eu ? eu.docs : 0} docs · <b>${eu ? eu.diasMedia : 0} dia${(eu ? eu.diasMedia : 0) === 1 ? '' : 's'} na média</b> <span class="muted">(até ${SDR_MEDIA_PADRAO} leads novos por doc/CPF, nos dias com ${SDR_MIN_LEADS}+ leads)</span></div>`; }
   const naMedia = r => { const d = so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf'), l = so(r.novos,'lead'); return l >= SDR_MIN_LEADS && d > 0 && l / d <= SDR_MEDIA_PADRAO; };
   $('resLista').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}${naMedia(r) ? ' <span style="color:var(--ok);font-weight:700">✓ na média</span>' : ''}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc')} docs · ${so(r.novos,'cpf') + so(r.recuperados,'cpf')} CPFs · ${v(r.aprovDia)} aprov.</b></div>`).join('')
     : '<div class="muted" style="font-size:13.5px">Nenhum resumo ainda.</div>';
