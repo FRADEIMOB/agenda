@@ -622,6 +622,11 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .grp-row i{width:10px;height:10px;border-radius:50%;flex:none}
 .grp-cab span{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .rel-botoes{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.fl{display:flex;flex-direction:column;gap:8px}.fl-et{display:grid;grid-template-columns:150px 1fr 170px;gap:10px;align-items:center}
+.fl-n{font-size:13.5px;font-weight:600}.fl-bar{position:relative;height:30px;background:var(--bg);border-radius:8px;overflow:hidden}
+.fl-bar i{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,#2a6a9e 35%,transparent);border-radius:8px}.fl-bar i.neg{background:color-mix(in srgb,#c2410c 30%,transparent)}.fl-bar i.fim{background:color-mix(in srgb,#ea7a1e 40%,transparent)}
+.fl-bar b{position:relative;z-index:1;line-height:30px;padding-left:10px;color:var(--text);font-size:14px}.fl-p{font-size:12.5px;color:var(--muted)}
+@media (max-width:640px){.fl-et{grid-template-columns:110px 1fr}.fl-p{grid-column:2;margin-top:-4px}}
 .poup{display:flex;align-items:center;gap:14px;padding:16px 18px;margin-bottom:16px;border-radius:16px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff}
 .poup-ic{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-weight:800;flex:none}
 .poup-tx{min-width:0}.poup-tx small{display:block;font-size:12.5px;opacity:.85}.poup-tx b{display:block;font-size:24px;line-height:1.2}.poup-tx span{display:block;font-size:12.5px;opacity:.9}
@@ -1814,6 +1819,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="nav-title" style="margin-top:14px">Ferramentas</div>
       <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
+      <button data-view="funil" class="funil-nav hide" onclick="setView('funil')"><i data-ic="trend"></i>Funil de ligações</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button data-view="aulas" onclick="setView('aulas')"><i data-ic="play"></i>Aulas<span class="count hide" id="cAulas">0</span></button>
       <button data-view="sorteio" class="gest hide" onclick="setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
@@ -2266,6 +2272,10 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       </section>
 
       <!-- RELATÓRIOS -->
+      <section class="view" id="v-funil">
+        <div class="page-head"><div><h1>Funil de ligações</h1><div class="sub" id="flSub">Da ligação ao fechamento.</div></div><div class="ph-acoes" id="flFiltros"></div></div>
+        <div id="flCorpo"></div>
+      </section>
       <section class="view" id="v-relatorios">
         <div class="page-head"><div><h1>Relatórios</h1><div class="sub" id="relSub">Como anda a sua produtividade.</div></div></div>
         <div id="relGestao" class="gest hide">
@@ -3038,6 +3048,13 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     </div>
   </div>
 </div>
+<div class="modal" id="anjoModal">
+  <div class="sheet" style="width:min(480px,100%)">
+    <div class="sheet-head"><h2 id="anjoTit">Equipe do anjo</h2><button class="icon-btn" onclick="fechar('anjoModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="hint" style="margin:0 0 10px">Marque quem o anjo acompanha. Ele vê o funil e o relatório diário só dessas pessoas.</div><div id="anjoLista" style="display:flex;flex-direction:column;gap:6px;max-height:55vh;overflow:auto"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anjoModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarEquipeAnjo()">Salvar</button></div>
+  </div>
+</div>
 <div class="modal" id="indModal">
   <div class="sheet" style="width:min(440px,100%)">
     <div class="sheet-head"><h2>Indicação recebida</h2><button class="icon-btn" onclick="fechar('indModal')" data-ic="x"></button></div>
@@ -3102,6 +3119,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button onclick="fechar('menuModal');setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
       <button class="an-nav hide" onclick="fechar('menuModal');setView('analises')"><i data-ic="pasta"></i>Correspondente (teste)</button>
+      <button class="funil-nav hide" onclick="fechar('menuModal');setView('funil')"><i data-ic="trend"></i>Funil de ligações</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
       <button class="zap-nav hide" onclick="fechar('menuModal');setView('whatsapp')"><i data-ic="zap"></i>WhatsApp (teste)</button>
@@ -3449,11 +3467,12 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
   if (v === 'desempenho' && !podeGerir() && !abaLiberada('desempenho')) v = 'hoje';
+  if (v === 'funil' && !podeFunil()) v = 'hoje';
   if (v === 'vendas' && !souGerente() && !['corretor','coordenador'].includes(perfil?.papel) && !abaLiberada('vendas')) v = 'hoje';
   if (v === 'financeiro' && !souGerente()) v = 'hoje';
   if (v === 'whatsapp' && !podeZap() && !abaLiberada('whatsapp')) v = 'hoje';
@@ -3647,6 +3666,7 @@ function render(){
 
   // ----- RELATÓRIOS -----
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
+  if (view === 'funil') renderFunilLig();
   if (view === 'config') renderAdm();
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
   renderEmp(); renderFinanceiro(); renderZap(); renderExtrato();
@@ -3908,11 +3928,11 @@ const ST_COR = { Pendente:'#f59e0b', Confirmada:'#10b981', Reagendada:'#3b82f6',
 const stCls = st => 'st-' + norm(st).replace(/[^a-z0-9]+/g,'-');
 const MESES_JANELA = 2; // carrega o mês atual e os 2 anteriores + visitas futuras (economiza o limite gratuito); meses mais antigos vêm pelo seletor
 let historicoCompleto = false, enviadosConf = new Set();
-const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR', correspondente:'Correspondente' };
+const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR', anjo:'Anjo', correspondente:'Correspondente' };
 // lista de perfis na ordem da empresa: CEO, Gerente, Coordenador, Corretor, SDR (CEO = gerente com cargo de direção)
 function opcoesPapel(p, comGerencia){
   const atual = p.papel === 'gerente' && p.cargo === 'dono' ? 'ceo' : p.papel;
-  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR'], ['correspondente','Correspondente (Prime)']];
+  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR'], ['anjo','Anjo'], ['correspondente','Correspondente (Prime)']];
   return ops.map(([k,n]) => `<option value="${k}" ${atual===k?'selected':''}>${n}</option>`).join('');
 }
 const EQUIPES_PADRAO = { raio:{ nome:'Tropa do Raio', icone:'⚡', ordem:1 }, tenda:{ nome:'Tropa Tenda', icone:'🏕️', ordem:2 } };
@@ -3950,6 +3970,8 @@ const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
 const VIEWS_CEO = ['bolsao','analises','painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
+const souAnjo = () => souAtivo() && perfil.papel === 'anjo';
+const membrosAnjo = () => Array.isArray(perfil?.membros) ? perfil.membros : [];
 const podeGerir = () => souGerente() || souCoord();
 const souCorresp = () => souAtivo() && perfil.papel === 'correspondente';
 window.podeGerir = podeGerir;
@@ -4165,7 +4187,7 @@ function renderPapel(){
     el.classList.remove('hide');
     if (perfil.status === 'pendente') el.textContent = '⏳ Aguardando aprovação';
     else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
-    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Gestor' : perfil.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'sdr' ? '📞 SDR' : perfil.papel === 'correspondente' ? '🏦 Correspondente' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
+    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Gestor' : perfil.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'anjo' ? 'Anjo' : perfil.papel === 'sdr' ? '📞 SDR' : perfil.papel === 'correspondente' ? '🏦 Correspondente' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir() && !(e.dataset.view && abaLiberada(e.dataset.view)) && !abaLiberada(((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1])));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
@@ -4180,6 +4202,7 @@ function renderPapel(){
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr' && !abaLiberada('resumo')));
   document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && (['corretor','coordenador'].includes(perfil?.papel) || abaLiberada('comissoes')))));
   document.querySelectorAll('.zap-nav').forEach(e => e.classList.toggle('hide', !podeZap() && !abaLiberada('whatsapp')));
+  document.querySelectorAll('.funil-nav').forEach(e => e.classList.toggle('hide', !podeFunil()));
   aplicarAbasOcultas();
 }
 function bannerAcesso(){
@@ -4488,7 +4511,7 @@ function renderCorretores(){
     if (corEquipeFiltro === '_ger') membros = membros.filter(p => p.papel === 'gerente');
     else if (corEquipeFiltro) membros = membros.filter(p => p.equipe === corEquipeFiltro);
   } else $('corEquipes').innerHTML = '';
-  const ordemPapel = { gerente:0, coordenador:1, corretor:2, sdr:3, correspondente:4 };
+  const ordemPapel = { gerente:0, coordenador:1, anjo:2, corretor:3, sdr:4, correspondente:5 };
   membros.sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
   const totalPer = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada').length;
   $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
@@ -4512,7 +4535,7 @@ function renderCorretores(){
         <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td>${bx}</tr>`;
       if (p.uid === uidAtual || ehDono || (p.papel === 'gerente' && !souDono())) return `<tr><td><b>${esc(p.nome)}${p.uid === uidAtual ? ' (você)' : ''}</b><span>${esc(p.email||'')}</span></td><td>${ehDono ? '👑 Gestor' : p.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente'}</td><td>${p.equipe ? esc(eqNome(p.equipe)) : '—'}${p.uid === uidAtual && souGerente() ? ` <select style="width:auto;margin-left:6px" onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${souDono() ? '' : 'disabled'}>${opEqs(p.equipe)}</select>` : ''}</td><td>${p.status === 'bloqueado' ? '🔒 Bloqueado' : 'Liberado'}${p.papel === 'gerente' && !souDono() && !ehDono && p.uid !== uidAtual ? '<br><small class="muted">só o gestor altera gerentes</small>' : ''}</td><td></td></tr>`;
       return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
-        <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${opcoesPapel(p, souDono())}</select></td>
+        <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${opcoesPapel(p, souDono())}</select>${p.papel === 'anjo' ? `<button class="link" style="display:block;margin-top:4px" onclick="abrirEquipeAnjo('${p.uid}')">Equipe do anjo (${(p.membros || []).length})</button>` : ''}</td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td>${bx}</tr>`;
     }).join('') + '</tbody>';
@@ -4535,7 +4558,8 @@ window.mudarPermissao = async (uid, campo, valor, el) => {
   if (campo === 'papel' && valor === 'gerente') {
     if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo (menos os outros gerentes, que só o gestor altera).`)) { el.value = p.papel; return; }
   }
-  if (campo === 'papel' && valor !== 'gerente' && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
+  if (campo === 'papel' && valor !== 'gerente' && valor !== 'anjo' && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
+  if (campo === 'papel' && valor === 'anjo') setTimeout(() => toast('Agora toque em "Equipe do anjo" para escolher quem ele acompanha.'), 1500);
   if (uid === uidAtual) { try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Equipe atualizada'); } catch(e) { toast('Erro: ' + e.message); } return; }
   if (campo === 'status' && valor === 'bloqueado' && !confirm(`Bloquear o acesso de ${p.nome} às visitas?`)) { el.value = p.status; return; }
   try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Permissão de ' + primeiro(p.nome) + ' atualizada');
@@ -4553,7 +4577,7 @@ window.setCorEq = k => { corEquipeFiltro = k; render(); };
 window.aprovar = async uid => {
   const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
   const escolha = $('pp_' + uid).value, papel = escolha === 'ceo' ? 'gerente' : escolha, equipe = $('pe_' + uid).value;
-  if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
+  if (papel !== 'gerente' && papel !== 'anjo' && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
   try {
     await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now(), ...(papel === 'gerente' ? { cargo: escolha === 'ceo' ? 'dono' : '' } : {}) }, { merge:true });
     // vincula visitas antigas que estão só com o nome desta pessoa
@@ -5284,7 +5308,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 102;
+const APP_VERSAO = 103;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5546,9 +5570,9 @@ function filtrarAvaliacoes(){
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
 const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
-const ABAS_CARGO = [['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_CARGO = [['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
 const ABAS_DO_CARGO = { corretor:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
-  coordenador:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
+  coordenador:['funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
   sdr:['discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'] };
 const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador'].includes(perfil?.papel));
 window.podeZap = podeZap;
@@ -6086,6 +6110,7 @@ function assinarEtapa2(){
   else if (souCoord()) qa = query(collection(db,'avaliacoes'), where('equipe','==',perfil.equipe || '-'));
   else if (perfil.papel !== 'sdr') qa = query(collection(db,'avaliacoes'), where('corretorUid','==',uidAtual));
   const limpa = x => { if (typeof x.aba === 'string') x.aba = x.aba.trim(); if (typeof x.corretorNome === 'string') x.corretorNome = x.corretorNome.trim(); return x; };
+  if (souAnjo()) { const porM = {}; membrosAnjo().slice(0, 60).forEach(u => subsPapel.push(onSnapshot(query(collection(db,'avaliacoes'), where('corretorUid','==',u)), s => { porM[u] = s.docs.map(d => limpa({ id:d.id, ...d.data() })); avaliacoesTodas = Object.values(porM).flat(); filtrarAvaliacoes(); render(); }, silencio))); qa = null; }
   if (qa) subsPapel.push(onSnapshot(qa, s => { avaliacoesTodas = s.docs.map(d => limpa({ id:d.id, ...d.data() })); filtrarAvaliacoes(); render(); }, silencio));
   // ECONOMIA (plano grátis do Firebase: 50 mil leituras por dia): a gerência tem milhares de avaliações.
   // O app usa o que já está guardado no aparelho e só busca na nuvem o que mudou desde a última vez.
@@ -6379,14 +6404,70 @@ function mostrarRelatorio(r){
 }
 // ---------- v95: relatório diário dos corretores na tela inicial (gerência e coordenador) ----------
 let relDia = null, _relDiaUnsub = null, _relDiaChave = '';
+// ---------- v103: funil de ligações (gerência, coordenador e anjo) ----------
+const podeFunil = () => souAtivo() && (souGerente() || souCoord() || souAnjo() || abaLiberada('funil'));
+window.flPer = 'mes'; window.flEq = 'todas';
+function faixaFl(p){ const h = hojeISO(); if (p === 'hoje') return [h, h]; if (p === 'semana') { const d = new Date(); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); return [iso(d), h]; } return [h.slice(0,7) + '-01', h]; }
+function pessoasFunil(){
+  if (souAnjo()) return membrosAnjo().map((u, i) => ({ uid:u, nome:(perfil.membrosNomes || [])[i] || (rankingAtiv.find(r => r.uid === u) || {}).nome || 'Corretor' }));
+  const base = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel));
+  if (souCoord()) return base.filter(p => p.equipe === perfil.equipe);
+  const f = window.flEq;
+  if (f && f.startsWith('anjo:')) { const a = perfisTodos.find(p => p.uid === f.slice(5)); const m = new Set(a?.membros || []); return base.filter(p => m.has(p.uid)); }
+  return f && f !== 'todas' ? base.filter(p => p.equipe === f) : base;
+}
+function numerosFunil(uid, de, ate){
+  const noP = d => !!d && d >= de && d <= ate, soma = mp => Object.entries(mp || {}).filter(([d]) => noP(d)).reduce((a, [, v]) => a + (Number(v) || 0), 0);
+  const ra = rankingAtiv.filter(r => r.uid === uid);
+  const lig = ra.reduce((a, r) => a + soma(r.lig) + soma(r.rec), 0), at = ra.reduce((a, r) => a + soma(r.at), 0), na = ra.reduce((a, r) => a + soma(r.na), 0), pro = ra.reduce((a, r) => a + soma(r.pro), 0);
+  const doc = avaliacoes.filter(a => a.corretorUid === uid && noP(a.data)).length;
+  const aprov = rankingCartas.filter(c => c.corretorUid === uid && noP(c.data)).length;
+  const vs = rankingDocs.filter(r => r.corretorUid === uid && noP(r.date) && r.status !== 'Cancelada');
+  const prop = rankingVendas.filter(v => !v.caiu && noP(v.dia) && (v.corretores || []).some(c => c.uid === uid)).length;
+  const fech = rankingCartas.filter(c => c.corretorUid === uid && c.status === 'Venda fechada' && noP(c.vendaEm || c.data)).length;
+  return { lig, at, pro, na, doc, aprov, agend:vs.length, real:vs.filter(r => r.status === 'Realizada').length, prop, fech };
+}
+const ETAPAS_FL = [['lig','Ligou'],['at','Atendeu'],['pro','Cliente com perfil'],['na','Não atendeu'],['doc','Cliente com doc'],['aprov','Aprovação'],['agend','Agendamento'],['real','Visita realizada'],['prop','Proposta'],['fech','Fechamento']];
+function renderFunilLig(){
+  if (!$('flCorpo')) return;
+  const [de, ate] = faixaFl(window.flPer), gente = pessoasFunil();
+  const linhas = gente.map(p => ({ p, n:numerosFunil(p.uid, de, ate) }));
+  const tot = {}; ETAPAS_FL.forEach(([k]) => tot[k] = linhas.reduce((a, l) => a + l.n[k], 0));
+  const anjos = souGerente() ? perfisTodos.filter(p => p.papel === 'anjo' && p.status === 'ativo') : [];
+  const fFiltro = document.activeElement?.closest?.('#flFiltros');
+  if (!fFiltro) $('flFiltros').innerHTML = `<select class="sel-mes" onchange="flPer=this.value;render()">${[['hoje','Hoje'],['semana','Esta semana'],['mes','Este mês']].map(([k, n]) => `<option value="${k}" ${window.flPer === k ? 'selected' : ''}>${n}</option>`).join('')}</select>`
+    + (souGerente() ? `<select class="sel-mes" onchange="flEq=this.value;render()"><option value="todas">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}" ${window.flEq === e.id ? 'selected' : ''}>${esc(e.nome)}</option>`).join('')}${anjos.map(a => `<option value="anjo:${a.uid}" ${window.flEq === 'anjo:' + a.uid ? 'selected' : ''}>Anjo: ${esc(a.nome)}</option>`).join('')}</select>` : '');
+  $('flSub').textContent = (souAnjo() ? `Sua equipe de anjo · ${gente.length} pessoa${gente.length === 1 ? '' : 's'}` : souCoord() ? 'Sua equipe' : 'Da ligação ao fechamento') + ` · ${dataBR(de)}${de !== ate ? ' a ' + dataBR(ate) : ''}`;
+  const topo = Math.max(1, ...ETAPAS_FL.map(([k]) => tot[k]));
+  const pct = (a, b) => b ? (Math.round(a / b * 1000) / 10).toLocaleString('pt-BR') + '%' : '–';
+  const ref = { at:'lig', pro:'at', na:'lig', doc:'pro', aprov:'doc', agend:'aprov', real:'agend', prop:'real', fech:'prop' };
+  const barras = ETAPAS_FL.map(([k, n]) => `<div class="fl-et"><span class="fl-n">${n}</span><div class="fl-bar"><i style="width:${Math.max(4, tot[k] / topo * 100)}%" class="${k === 'na' ? 'neg' : k === 'fech' ? 'fim' : ''}"></i><b>${tot[k].toLocaleString('pt-BR')}</b></div><span class="fl-p">${ref[k] ? pct(tot[k], tot[ref[k]]) + ' de ' + (ETAPAS_FL.find(e => e[0] === ref[k])[1]).toLowerCase() : ''}</span></div>`).join('');
+  const tabela = linhas.length ? `<div class="tab-rola"><table class="rank"><thead><tr><th>Nome</th>${ETAPAS_FL.map(([, n]) => `<th>${n}</th>`).join('')}</tr></thead><tbody>${linhas.sort((a, b) => b.n.lig - a.n.lig || a.p.nome.localeCompare(b.p.nome, 'pt-BR')).map(l => `<tr><td><span class="nm">${esc(l.p.nome)}</span>${l.p.equipe ? `<span class="eq">${esc(eqNome(l.p.equipe).replace(/^[^\p{L}]+/u, ''))}</span>` : ''}</td>${ETAPAS_FL.map(([k]) => `<td>${l.n[k] || ''}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
+    : `<div class="muted">${souAnjo() ? 'A gerência ainda não escolheu quem é da sua equipe.' : 'Ninguém por aqui.'}</div>`;
+  $('flCorpo').innerHTML = `<div class="card"><div class="card-head"><h2>Funil</h2><span class="muted">"Ligou" conta toda ligação feita pelo app; "atendeu" e "não atendeu" vêm da resposta do corretor ao voltar da ligação.</span></div><div class="fl">${barras}</div></div>
+    <div class="card" style="margin-top:16px"><div class="card-head"><h2>Por pessoa</h2></div>${tabela}</div>`;
+}
+// gestor escolhe quem é da equipe de cada anjo
+window.abrirEquipeAnjo = uid => {
+  const a = perfisTodos.find(p => p.uid === uid); if (!a) return; window._anjoEd = uid;
+  const m = new Set(a.membros || []), gente = perfisTodos.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel)).sort((x, y) => (x.equipe || '').localeCompare(y.equipe || '') || x.nome.localeCompare(y.nome, 'pt-BR'));
+  $('anjoTit').textContent = 'Equipe do anjo ' + primeiro(a.nome);
+  $('anjoLista').innerHTML = gente.map(p => `<label class="fv-chk"><input type="checkbox" value="${p.uid}" ${m.has(p.uid) ? 'checked' : ''}> ${esc(p.nome)} <small class="muted">${esc(PAPEIS[p.papel] || '')}${p.equipe ? ' · ' + esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, '')) : ''}</small></label>`).join('') || '<div class="muted">Nenhum corretor ativo.</div>';
+  abrir('anjoModal');
+};
+window.salvarEquipeAnjo = async () => {
+  const uid = window._anjoEd, sel = [...document.querySelectorAll('#anjoLista input:checked')].map(i => i.value);
+  const nomes = sel.map(u => (perfisTodos.find(p => p.uid === u) || {}).nome || '');
+  try { await gravar(setDoc(doc(db,'perfis',uid), { membros:sel, membrosNomes:nomes }, { merge:true })); fechar('anjoModal'); toast(`Equipe do anjo salva (${sel.length})`); } catch(e) { toast('Erro: ' + e.message); }
+};
 function assinarRelDia(){
-  const ger = souGerente() && !souCeo(), coord = souCoord() && perfil?.equipe;
+  const ger = souGerente() && !souCeo(), coord = souCoord() && perfil?.equipe, anj = souAnjo();
   const ontem = (() => { const d = new Date(); d.setDate(d.getDate() - 1); return iso(d); })();
-  const ch = (ger ? 'g' : coord ? 'c' : '') + ontem;
+  const ch = (ger ? 'g' : coord ? 'c' : anj ? 'a' : '') + ontem;
   if (ch === _relDiaChave) return; _relDiaChave = ch;
   if (_relDiaUnsub) { _relDiaUnsub(); _relDiaUnsub = null; } relDia = null;
-  if (!ger && !coord) return;
-  const ref = ger ? doc(db,'relatorios','dia_' + ontem) : doc(db,'relatorios_equipe','dia_' + ontem + '_' + perfil.equipe);
+  if (!ger && !coord && !anj) return;
+  const ref = ger ? doc(db,'relatorios','dia_' + ontem) : anj ? doc(db,'relatorios_anjo','dia_' + ontem + '_' + uidAtual) : doc(db,'relatorios_equipe','dia_' + ontem + '_' + perfil.equipe);
   _relDiaUnsub = onSnapshot(ref, s => { relDia = s.exists() ? { id:s.id, ...s.data() } : null; render(); }, e => console.warn('relDia', e.code || e.message));
 }
 function htmlRelDia(){
