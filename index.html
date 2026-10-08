@@ -622,6 +622,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .grp-row i{width:10px;height:10px;border-radius:50%;flex:none}
 .grp-cab span{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .rel-botoes{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
 .tvr-bts{display:flex;gap:8px}html.modo-tvr .sidebar,html.modo-tvr .topbar,html.modo-tvr .mobilebar,html.modo-tvr #fab,html.modo-tvr .ia-bolha,html.modo-tvr #zapFab,html.modo-tvr #discFab{display:none!important}
 .tvr{display:none}html.modo-tvr .tvr{display:flex}html.modo-tvr body{overflow:hidden}
 .tvr{position:fixed;inset:0;z-index:60;background:radial-gradient(1200px 600px at 10% -10%,#16405f 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#3a1f12 0%,transparent 55%),#081826;color:#eef4f8;padding:1.6vw 1.8vw;flex-direction:column;gap:1.2vw;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
@@ -633,7 +634,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .tvr-hora{text-align:right}.tvr-hora b{display:block;font:800 2.2vw/1 'Saira Condensed',sans-serif}.tvr-hora small{font-size:.85vw;color:#8fb0c6}.tvr-vivo{display:inline-flex;align-items:center;gap:.4vw;font-size:.8vw;font-weight:700;color:#6ee7a8}.tvr-vivo:before{content:'';width:.55vw;height:.55vw;border-radius:50%;background:#22c55e;box-shadow:0 0 0 .3vw rgba(34,197,94,.2);animation:tvPulso 2s infinite}
 @keyframes tvPulso{50%{box-shadow:0 0 0 .55vw rgba(34,197,94,0)}}
 .tvr-bts button{width:2.4vw;height:2.4vw;min-width:34px;min-height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#cfe0ec;cursor:pointer;font-size:1vw;opacity:.35}.tvr-bts button:hover{opacity:1}
-.tvr-grade{flex:1;min-height:0;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.8vw}
+.tvr-grade{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--n,7),minmax(0,1fr));gap:.8vw}
 .tvr-c{min-height:0;display:flex;flex-direction:column;border-radius:1.1vw;padding:1vw .8vw;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden}
 .tvr-c:before{content:'';position:absolute;left:0;right:0;top:0;height:.32vw;background:var(--c)}
 .tvr-c header{min-height:3.6vw}.tvr-c header h2{font:800 1.45vw/1.05 'Saira Condensed',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em;color:#fff}.tvr-c header span{font-size:.78vw;color:#8fb0c6}
@@ -646,7 +647,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .tvr-r.p1{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.2vw;padding:1vw .6vw .9vw;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 42%,#0b2236),color-mix(in srgb,var(--c) 10%,#0b2236));box-shadow:0 .6vw 1.8vw color-mix(in srgb,var(--c) 28%,transparent)}
 .tvr-1a{position:relative}.tvr-r.p1 .tvr-av{width:3.4vw;height:3.4vw;font-size:1.5vw;background:#f5c542;color:#3a2a00;box-shadow:0 0 0 .3vw rgba(245,197,66,.3)}
 .tvr-coroa{position:absolute;right:-.9vw;top:-.4vw;background:#0b2236;border:1px solid rgba(245,197,66,.6);color:#f5c542;border-radius:99px;padding:0 .35vw;font:800 .75vw/1.5 'Saira Condensed',sans-serif}
-.tvr-1n{font-size:1.15vw;font-weight:800;margin-top:.35vw;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tvr-r.p1 small{font-size:.72vw;color:#bcd0de}.tvr-r.p1 .tvr-v{font-size:2.3vw;line-height:1;margin-top:.2vw}
+.tvr-n small.tvr-anjo{color:#e9c45a}.tvr-r.p1 small.tvr-anjo{color:#f5c542;font-weight:700;margin-top:.15vw}.tvr-1n{font-size:1.15vw;font-weight:800;margin-top:.35vw;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tvr-r.p1 small{font-size:.72vw;color:#bcd0de}.tvr-r.p1 .tvr-v{font-size:2.3vw;line-height:1;margin-top:.2vw}
 .tvr-r.p2 .tvr-pos{color:#e2e8f0}.tvr-r.p3 .tvr-pos{color:#e0a26f}.tvr-r.p2,.tvr-r.p3{background:rgba(255,255,255,.06)}
 .k-vgv .tvr-r:not(.p1) .tvr-v{font-size:.92vw}.k-vgv .tvr-r.p1 .tvr-v{font-size:1.9vw}
 .tve{display:none}html.modo-tvr .tve{display:grid;position:fixed;inset:0;z-index:70;place-items:center;pointer-events:none;opacity:0;transition:opacity .35s}
@@ -2589,6 +2590,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div id="vmIndWrap" class="hide"><label>Indicado por</label><input id="vmIndicado" placeholder="Quem indicou?"></div>
         <div id="vmOutroWrap" class="hide"><label>Qual foi a origem?</label><input id="vmOrigemOutro" placeholder="Ex.: carro de som, placa na obra…"></div></div>
       <div class="fg"><label>Avaliação de crédito <span class="muted" style="font-weight:500">(opcional)</span></label><input id="vmAval" list="listaAval" placeholder="Ex.: aprovado outro cca"><datalist id="listaAval"></datalist></div>
+      <label class="fg vm-feirao"><input type="checkbox" id="vmFeirao"><span><b>Visita do Feirão Tenda</b><small>Marque se o cliente veio para o feirão. Conta no ranking do Feirão da TV.</small></span></label>
       <div class="fg hide" id="vmMotivoWrap"><label>Motivo da perda</label><select id="vmMotivo"></select></div>
       <div class="fg"><label>Observação</label><textarea id="vmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <div class="row2" id="vmExtras">
@@ -3121,7 +3123,10 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   <div class="sheet" style="width:min(420px,100%)">
     <div class="sheet-head"><h2>Como foi a ligação?</h2></div>
     <div class="sheet-body"><p id="ligConfTxt" style="font-size:15.5px;line-height:1.45"></p>
-      <label id="ligConfProRow" style="display:flex;gap:10px;align-items:center;margin-top:14px;font-weight:600"><input type="checkbox" id="ligConfPro" style="width:20px;height:20px"> Cliente com perfil e interesse (prospecto)</label></div>
+      <label id="ligConfProRow" style="display:flex;gap:10px;align-items:center;margin-top:14px;font-weight:600"><input type="checkbox" id="ligConfPro" style="width:20px;height:20px"> Cliente com perfil e interesse (prospecto)</label>
+      <label style="display:flex;gap:10px;align-items:center;margin-top:12px;font-weight:600"><input type="checkbox" id="ligConfVis" style="width:20px;height:20px" onchange="document.getElementById('ligConfFeiRow').classList.toggle('hide',!this.checked)"> Visita marcada</label>
+      <label id="ligConfFeiRow" class="hide" style="display:flex;gap:10px;align-items:center;margin:10px 0 0 30px;font-weight:600"><input type="checkbox" id="ligConfFei" style="width:20px;height:20px;accent-color:#f28c38"> Visita do Feirão Tenda</label>
+      <p class="muted" style="font-size:12.5px;margin-top:8px">Com "Visita marcada", o app abre a visita já preenchida para você salvar. Ela aparece no ranking e na TV.</p></div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="ligConfResp(false)">Não atendeu</button><button class="btn btn-primary" onclick="ligConfResp(true)">Sim, atendeu</button></div>
   </div>
 </div>
@@ -4205,6 +4210,7 @@ function cardVisita(v, compacto){
   if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(v.corretorNome||'Sem corretor')}</span>`);
   if (v.sdrNome && !souSdr()) meta.push(`<span>📞 SDR ${esc(primeiro(v.sdrNome))}</span>`);
   if (v.avaliacao) meta.push(`<span>📋 ${esc(v.avaliacao)}</span>`);
+  if (v.feirao) meta.push(`<span class="tag-feirao">Feirão Tenda</span>`);
   if (souGerente() && !compacto) meta.push(`<span>${esc(eqNome(v.equipe))}</span>`);
   if (v.telefone) meta.push(`<span>📱 ${esc(v.telefone)}</span>`);
   const acoes = [];
@@ -4406,7 +4412,7 @@ function abrirFormVisita(v, dataPadrao){
   $('vmData').value = v?.date || dataPadrao || (view === 'calendario' ? diaSel : hojeISO());
   $('vmHora').value = v?.time || '09:00';
   $('vmCliente').value = v?.cliente || ''; $('vmFone').value = v?.telefone || '';
-  $('vmImovel').value = v?.empreendimento || ''; $('vmObs').value = v?.obs || '';
+  $('vmImovel').value = v?.empreendimento || ''; $('vmObs').value = v?.obs || ''; $('vmFeirao').checked = !!v?.feirao;
   $('vmStatus').innerHTML = STATUS.map(s => `<option ${ (v?.status||'Pendente')===s?'selected':''}>${s}</option>`).join('');
   $('listaImoveis').innerHTML = [...new Set(visitas.map(x => x.empreendimento).filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
   $('vmCorWrap').classList.toggle('hide', !podeGerir() && !souSdr());
@@ -4440,6 +4446,7 @@ function lerVisita(){
     motivoPerda: PERDA_V.includes($('vmStatus').value) ? $('vmMotivo').value : '' };
   d.telNorm = chaveTel(d.telefone);
   d.avaliacao = $('vmAval').value.trim();
+  d.feirao = $('vmFeirao').checked; // v112: visita do Feirão Tenda, marcada pelo corretor
   if (souSdr()) {
     const uid = $('vmCorretor').value, p = uid && uid !== '__livre' ? membrosSelecionaveis().find(x => x.uid === uid) : null;
     d.corretorUid = p ? p.uid : ''; d.corretorNome = p ? p.nome : (uid === '__livre' ? $('vmCorLivre').value.trim() : ''); d.equipe = perfil.equipe || '';
@@ -4455,7 +4462,7 @@ function lerVisita(){
 }
 window.lerVisita = lerVisita;
 function rankingDe(d){ return { equipe:d.equipe||'', corretorUid:d.corretorUid||'', corretorNome:d.corretorNome||'', date:d.date||'', status:d.status||'', semPontos:!!d.semPontos,
-  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'', empreendimento:String(d.empreendimento||'').slice(0,80) }; }
+  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'', empreendimento:String(d.empreendimento||'').slice(0,80), feirao:!!d.feirao }; }
 window.salvarVisita = async () => {
   const d = lerVisita();
   if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
@@ -5362,7 +5369,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 108;
+const APP_VERSAO = 112;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -6530,16 +6537,16 @@ function dadosTvRank(){
   const lig = agrupa(rankingAtiv.filter(r => r.mes === m && (r.lig || r.rec)), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.lig) + soma(r.rec));
   const sab = sabadoFeirao();
   const fonteSab = (souGerente() || souCoord()) && visitas.length ? visitas : rankingDocs;
-  const fei = agrupa(fonteSab.filter(r => r.date === sab && r.status !== 'Cancelada' && visitaDaConstrutora(r, 'Tenda') && !visitaDeSdr(r)), r => r.corretorUid, r => r.corretorNome, r => r.equipe);
+  const fei = agrupa(fonteSab.filter(r => noM(r.date) && r.status !== 'Cancelada' && r.feirao), r => r.corretorUid, r => r.corretorNome, r => r.equipe);
   const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => (Number(r.lig?.[sab]) || 0) + (Number(r.rec?.[sab]) || 0));
-  const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && v.dia === sab).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
+  const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
   const sdr = rankingSdr(de, ate).map(x => ({ uid:x.uid, nome:x.nome, equipe:'', v:Number(x.docs) || 0, sub:'SDR' })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
   const eqs = listaEquipes().map(e => ({ e, n:pontosDoMes(m).filter(x => eqDe(x.uid, x.equipe) === e.id).reduce((a, x) => a + x.pontos, 0) })).sort((a, b) => b.n - a.n);
   const dSab = sab.slice(8,10) + '/' + sab.slice(5,7);
   const feirao = [
-    { k:'flig', t:'Ligações', s:'todas do sábado ' + dSab, c:'#facc15', l:ligSab },
-    { k:'fvis', t:'Visitas Tenda', s:'sábado ' + dSab, c:'#fb7185', l:fei },
-    { k:'fres', t:'Vendas e reservas', s:'sábado ' + dSab, c:'#22c55e', l:resSab, fmt:v => Number.isInteger(v) ? String(v) : v.toLocaleString('pt-BR', { maximumFractionDigits:1 }) } ];
+    { k:'flig', t:'Ligações', s:'geral do mês', c:'#facc15', l:lig }, // v111: no feirão as 3 colunas são gerais do mês
+    { k:'fvis', t:'Visitas do feirão', s:'marcadas como Feirão Tenda', c:'#fb7185', l:fei },
+    { k:'fres', t:'Vendas e reservas', s:'geral do mês', c:'#22c55e', l:resSab, fmt:v => Number.isInteger(v) ? String(v) : v.toLocaleString('pt-BR', { maximumFractionDigits:1 }) } ];
   return { m, sab, eqs, feirao, cols:[
     { k:'pts', t:'Pontos', s:'geral do mês', c:'#f28c38', l:pts },
     { k:'vis', t:'Visitas', s:'realizadas no mês', c:'#38bdf8', l:vis },
@@ -6608,12 +6615,14 @@ const Som = (() => {
 window.Som = Som;
 let tvSom = (() => { try { return localStorage.getItem('tvSom') !== '0'; } catch(e) { return true; } })();
 window.tvTrocaSom = () => { tvSom = !tvSom || !Som.pronto(); try { localStorage.setItem('tvSom', tvSom ? '1' : '0'); } catch(e) {} if (tvSom) Som.festa(); renderTvRank(); };
+// v112: nome do anjo que acompanha a pessoa (o gestor escolhe a equipe do anjo)
+function anjoDe(uid){ if (!uid) return ''; const a = (perfisTodos || []).find(p => p.papel === 'anjo' && p.status === 'ativo' && (p.membros || []).includes(uid)); return a ? a.nome || '' : ''; }
 function mostrarEventoTv(){
   const e = _tvFila.shift(), box = $('tvEvento'); if (!e || !box || view !== 'tvrank') { _tvMostrando = false; if (box) box.classList.remove('on'); return; }
   _tvMostrando = true;
   const p = perfisTodos.find(x => x.uid === e.uid) || {}, ra = rankingAtiv.find(r => r.uid === e.uid) || {}, nome = p.nome || ra.nome || (rankingDocs.find(r => r.corretorUid === e.uid) || {}).corretorNome || 'Corretor';
   const [rot, cor] = TV_EVENTOS[e.tipo] || ['Somou no ranking', '#f28c38'];
-  const eq = eqNome(p.equipe || ra.equipe || '').replace(/^[^\p{L}]+/u, '');
+  const an = anjoDe(e.uid), eq = [eqNome(p.equipe || ra.equipe || '').replace(/^[^\p{L}]+/u, ''), an ? 'Anjo ' + nomeBonito(an) : ''].filter(Boolean).join(' · ');
   box.style.setProperty('--c', cor);
   box.innerHTML = `<div class="tve-card"><div class="tve-raios"></div>${p.foto ? `<img class="tve-foto" src="${p.foto}" alt="">` : `<div class="tve-foto tve-ini">${esc((nome.trim()[0] || '?').toUpperCase())}</div>`}
     <div class="tve-rot">${rot}${e.n > 1 ? ` <span>+${e.n}</span>` : ''}</div><div class="tve-nome">${esc(nomeBonito(nome))}</div>${eq ? `<div class="tve-eq">${esc(eq)}</div>` : ''}
@@ -6628,21 +6637,22 @@ function renderTvRank(){
   if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'mes';
   const fe = window.tvModo === 'feirao', cols = fe ? d.feirao : d.cols;
   const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
-  const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').replace(/^Tropa (do |da |de )?/i, '') : '';
+  const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : ''; // v109: nome da equipe completo, como está cadastrado
+  const anj = uid => { const a = anjoDe(uid); return a ? 'Anjo ' + curto(a) : ''; }; // v112: anjo responsável abaixo da equipe
   const col = c => {
     const l = c.l.slice(0, 8), fmt = c.fmt || (v => Math.round(v).toLocaleString('pt-BR'));
     const linhas = l.length ? l.map((x, i) => i === 0
-      ? `<div class="tvr-r p1"><div class="tvr-1a"><span class="tvr-av">${esc((x.nome || '?').trim()[0] || '?')}</span><span class="tvr-coroa">1º</span></div><b class="tvr-1n">${esc(curto(x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small><span class="tvr-v">${fmt(x.v)}</span></div>`
-      : `<div class="tvr-r p${i + 1}"><span class="tvr-pos">${i + 1}</span><span class="tvr-n"><b>${esc(curto(x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small></span><span class="tvr-v">${fmt(x.v)}</span></div>`).join('')
+      ? `<div class="tvr-r p1"><div class="tvr-1a"><span class="tvr-av">${esc((x.nome || '?').trim()[0] || '?')}</span><span class="tvr-coroa">1º</span></div><b class="tvr-1n">${esc(curto(x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small>${!x.sub && anj(x.uid) ? `<small class="tvr-anjo">${esc(anj(x.uid))}</small>` : ''}<span class="tvr-v">${fmt(x.v)}</span></div>`
+      : `<div class="tvr-r p${i + 1}"><span class="tvr-pos">${i + 1}</span><span class="tvr-n"><b>${esc(curto(x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small>${!x.sub && anj(x.uid) ? `<small class="tvr-anjo">${esc(anj(x.uid))}</small>` : ''}</span><span class="tvr-v">${fmt(x.v)}</span></div>`).join('')
       : `<div class="tvr-vazio">Ainda ninguém<br>neste ranking</div>`;
     return `<section class="tvr-c k-${c.k}" style="--c:${c.c}"><header><h2>${c.t}</h2><span>${c.s}</span></header><div class="tvr-l">${linhas}</div></section>`;
   };
   const maxEq = Math.max(1, ...d.eqs.map(x => x.n));
-  el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo">F</span><div><b>Frade <i>Imóveis</i></b><small>${fe ? 'Feirão Tenda · sábado ' + d.sab.slice(8,10) + '/' + d.sab.slice(5,7) : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
+  el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo">F</span><div><b>Frade <i>Imóveis</i></b><small>${fe ? 'Feirão Tenda · ' + nomeMes(d.m).split(' de ')[0].toLowerCase() : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
     <div class="tvr-eqs">${d.eqs.map((x, i) => `<div class="tvr-eq ${i === 0 && x.n ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><i style="width:${Math.round(x.n / maxEq * 100)}%"></i></div>`).join('')}</div>
     <div class="tvr-hora"><span class="tvr-vivo">ao vivo</span><b>${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</b><small>${dataLonga(hojeISO())}</small></div>
     <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><button class="tvr-modo" onclick="tvModo=tvModo==='feirao'?'mes':'feirao';renderTvRank()" title="Trocar entre o mês e o feirão">${fe ? 'Mês' : 'Feirão'}</button><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
-    <div class="tvr-grade ${fe ? 'tvr-3' : ''}">${cols.map(col).join('')}</div>`;
+    <div class="tvr-grade ${fe ? 'tvr-3' : ''}" style="--n:${cols.length}">${cols.map(col).join('')}</div>`;
   conferirEventosTv();
   if (!_tvRelogio) _tvRelogio = setInterval(() => { if (view === 'tvrank') renderTvRank(); else { clearInterval(_tvRelogio); _tvRelogio = null; } }, 30000);
 }
@@ -7374,20 +7384,24 @@ function voltouDaLigacao(){
   gravarLigPend(null);
   const seg = Math.round((Date.now() - p.ini) / 1000);
   if (seg > 3 * 3600) return;
-  _ligConf = { ...p, seg }; $('ligConfPro').checked = false; $('ligConfProRow').classList.toggle('hide', !ligaPontua());
+  _ligConf = { ...p, seg }; $('ligConfPro').checked = false; $('ligConfVis').checked = false; $('ligConfFei').checked = false; $('ligConfFeiRow').classList.add('hide'); $('ligConfProRow').classList.toggle('hide', !ligaPontua());
   $('ligConfTxt').innerHTML = `Ligação para <b>${esc(p.cliente || p.tel)}</b> · ${fmtDurLig(seg)} fora do app.<br>O cliente atendeu?`;
   abrir('ligConfModal');
 }
 document.addEventListener('visibilitychange', voltouDaLigacao);
 window.ligConfResp = async sim => {
   fechar('ligConfModal'); const c = _ligConf; _ligConf = null; if (!c) return;
-  const pro = sim && $('ligConfPro').checked;
-  if (!ligaPontua() && !ligaSdr()) { toast('Teste do gestor: ' + (sim ? 'atendeu' : 'não atendeu') + '.'); return; }
-  if (!c.id) { toast('A ligação ainda não tinha sido registrada. Tente de novo.'); return; }
+  const pro = sim && $('ligConfPro').checked, vis = sim && $('ligConfVis').checked, fei = vis && $('ligConfFei').checked;
+  // v112: marcou visita na ligação -> abre a visita já preenchida (cliente, telefone, hoje, Feirão)
+  const abreVisita = () => { if (!vis) return; novaVisita(); setTimeout(() => { $('vmCliente').value = c.cliente || ''; $('vmFone').value = c.tel || ''; $('vmFeirao').checked = fei;
+    const o = $('vmOrigem'); if (o && !o.value) { const op = [...o.options].find(x => /liga/i.test(x.value)); if (op) o.value = op.value; } }, 80); };
+  if (!ligaPontua() && !ligaSdr()) { toast('Teste do gestor: ' + (sim ? 'atendeu' : 'não atendeu') + '.'); abreVisita(); return; }
+  if (!c.id) { toast('A ligação ainda não tinha sido registrada. Tente de novo.'); abreVisita(); return; }
   const h = new Date(c.ini); const dia = iso(h), m = dia.slice(0,7), b = writeBatch(db);
   b.update(doc(db,'ligacoes',c.id), { atendeu:!!sim, prospecto:!!pro, durSeg:c.seg });
   if (ligaPontua()) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [sim ? 'at' : 'na']:{ [dia]: increment(1) }, ...(pro ? { pro:{ [dia]: increment(1) } } : {}), atualizadoEm:Date.now() }, { merge:true });
   try { await gravar(b.commit()); toast(sim ? (pro ? 'Atendeu · cliente com perfil' : 'Atendeu') : 'Não atendeu'); } catch(e) { toast('Erro ao registrar: ' + e.message); }
+  abreVisita();
 };
 window.abrirIndicacao = () => { ['indNome','indTel','indPor'].forEach(i => $(i).value = ''); abrir('indModal'); setTimeout(() => $('indNome').focus(), 80); };
 window.salvarIndicacao = async () => {
