@@ -622,6 +622,52 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .grp-row i{width:10px;height:10px;border-radius:50%;flex:none}
 .grp-cab span{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .rel-botoes{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.tvr-bts{display:flex;gap:8px}html.modo-tvr .sidebar,html.modo-tvr .topbar,html.modo-tvr .mobilebar,html.modo-tvr #fab,html.modo-tvr .ia-bolha,html.modo-tvr #zapFab,html.modo-tvr #discFab{display:none!important}
+.tvr{display:none}html.modo-tvr .tvr{display:flex}html.modo-tvr body{overflow:hidden}
+.tvr{position:fixed;inset:0;z-index:60;background:radial-gradient(1200px 600px at 10% -10%,#16405f 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#3a1f12 0%,transparent 55%),#081826;color:#eef4f8;padding:1.6vw 1.8vw;flex-direction:column;gap:1.2vw;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+.tvr-topo{display:grid;grid-template-columns:auto 1fr auto auto;gap:2vw;align-items:center}
+.tvr-marca{display:flex;align-items:center;gap:.9vw}.tvr-logo{width:3vw;height:3vw;min-width:40px;min-height:40px;border-radius:.8vw;background:linear-gradient(135deg,#f5a04d,#e8741d);display:grid;place-items:center;font:800 1.9vw 'Saira Condensed',sans-serif;color:#081826;box-shadow:0 .4vw 1.4vw rgba(242,140,56,.35)}
+.tvr-marca b{display:block;font:800 2vw/1 'Saira Condensed',sans-serif;letter-spacing:.02em}.tvr-marca b i{font-style:normal;color:#f28c38}.tvr-marca small{display:block;font-size:.95vw;color:#8fb0c6;margin-top:.25vw}
+.tvr-eqs{display:flex;gap:.8vw;justify-content:center}.tvr-eq{position:relative;overflow:hidden;min-width:9vw;padding:.55vw 1vw;border-radius:.8vw;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.tvr-eq span{display:block;font-size:.85vw;color:#9fbad0}.tvr-eq b{font:800 1.6vw/1.1 'Saira Condensed',sans-serif}.tvr-eq i{position:absolute;left:0;bottom:0;height:.25vw;background:#f28c38;opacity:.8}.tvr-eq.lider{border-color:rgba(245,197,66,.5);background:rgba(245,197,66,.08)}
+.tvr-hora{text-align:right}.tvr-hora b{display:block;font:800 2.2vw/1 'Saira Condensed',sans-serif}.tvr-hora small{font-size:.85vw;color:#8fb0c6}.tvr-vivo{display:inline-flex;align-items:center;gap:.4vw;font-size:.8vw;font-weight:700;color:#6ee7a8}.tvr-vivo:before{content:'';width:.55vw;height:.55vw;border-radius:50%;background:#22c55e;box-shadow:0 0 0 .3vw rgba(34,197,94,.2);animation:tvPulso 2s infinite}
+@keyframes tvPulso{50%{box-shadow:0 0 0 .55vw rgba(34,197,94,0)}}
+.tvr-bts button{width:2.4vw;height:2.4vw;min-width:34px;min-height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#cfe0ec;cursor:pointer;font-size:1vw;opacity:.35}.tvr-bts button:hover{opacity:1}
+.tvr-grade{flex:1;min-height:0;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.8vw}
+.tvr-c{min-height:0;display:flex;flex-direction:column;border-radius:1.1vw;padding:1vw .8vw;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden}
+.tvr-c:before{content:'';position:absolute;left:0;right:0;top:0;height:.32vw;background:var(--c)}
+.tvr-c header{min-height:3.6vw}.tvr-c header h2{font:800 1.45vw/1.05 'Saira Condensed',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em;color:#fff}.tvr-c header span{font-size:.78vw;color:#8fb0c6}
+.tvr-l{flex:1;display:flex;flex-direction:column;gap:.45vw;margin-top:.8vw;min-height:0}
+.tvr-r{display:grid;grid-template-columns:1.4vw minmax(0,1fr) auto;align-items:center;gap:.5vw;padding:.6vw .6vw;border-radius:.7vw;background:rgba(5,15,25,.45)}
+.tvr-pos{font:800 .95vw 'Saira Condensed',sans-serif;color:#7f9cb2;text-align:center}
+.tvr-av{width:2vw;height:2vw;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.85vw;background:color-mix(in srgb,var(--c) 30%,#0b2236);color:#fff}
+.tvr-n{min-width:0}.tvr-n b{display:block;font-size:.86vw;letter-spacing:-.01em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tvr-n small{display:block;font-size:.68vw;color:#87a6bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tvr-v{font:800 1.15vw 'Saira Condensed',sans-serif;color:#fff}
+.tvr-r.p1{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.2vw;padding:1vw .6vw .9vw;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 42%,#0b2236),color-mix(in srgb,var(--c) 10%,#0b2236));box-shadow:0 .6vw 1.8vw color-mix(in srgb,var(--c) 28%,transparent)}
+.tvr-1a{position:relative}.tvr-r.p1 .tvr-av{width:3.4vw;height:3.4vw;font-size:1.5vw;background:#f5c542;color:#3a2a00;box-shadow:0 0 0 .3vw rgba(245,197,66,.3)}
+.tvr-coroa{position:absolute;right:-.9vw;top:-.4vw;background:#0b2236;border:1px solid rgba(245,197,66,.6);color:#f5c542;border-radius:99px;padding:0 .35vw;font:800 .75vw/1.5 'Saira Condensed',sans-serif}
+.tvr-1n{font-size:1.15vw;font-weight:800;margin-top:.35vw;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tvr-r.p1 small{font-size:.72vw;color:#bcd0de}.tvr-r.p1 .tvr-v{font-size:2.3vw;line-height:1;margin-top:.2vw}
+.tvr-r.p2 .tvr-pos{color:#e2e8f0}.tvr-r.p3 .tvr-pos{color:#e0a26f}.tvr-r.p2,.tvr-r.p3{background:rgba(255,255,255,.06)}
+.k-vgv .tvr-r:not(.p1) .tvr-v{font-size:.92vw}.k-vgv .tvr-r.p1 .tvr-v{font-size:1.9vw}
+.tve{display:none}html.modo-tvr .tve{display:grid;position:fixed;inset:0;z-index:70;place-items:center;pointer-events:none;opacity:0;transition:opacity .35s}
+html.modo-tvr .tve.on{opacity:1;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--c) 30%,transparent),rgba(4,10,18,.88) 60%)}
+.tve-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;transform:scale(.6);transition:transform .5s cubic-bezier(.2,1.4,.4,1)}.tve.on .tve-card{transform:scale(1)}
+.tve-raios{position:absolute;top:-6vw;left:50%;width:44vw;height:44vw;margin-left:-22vw;border-radius:50%;background:repeating-conic-gradient(color-mix(in srgb,var(--c) 22%,transparent) 0 10deg,transparent 10deg 20deg);animation:tveGira 18s linear infinite;mask:radial-gradient(circle,#000 30%,transparent 70%);-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%)}
+@keyframes tveGira{to{transform:rotate(360deg)}}
+.tve-foto{position:relative;width:16vw;height:16vw;border-radius:50%;object-fit:cover;border:.6vw solid var(--c);box-shadow:0 0 0 1vw color-mix(in srgb,var(--c) 25%,transparent),0 2vw 5vw rgba(0,0,0,.5)}
+.tve-ini{display:grid;place-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));color:#0b1e2d;font:800 8vw/1 'Saira Condensed',sans-serif}
+.tve-rot{position:relative;margin-top:2vw;padding:.6vw 2vw;border-radius:99px;background:var(--c);color:#0b1e2d;font:800 2.6vw/1.1 'Saira Condensed',sans-serif;letter-spacing:.04em;text-transform:uppercase}.tve-rot span{opacity:.75}
+.tve-nome{position:relative;margin-top:1.2vw;font:800 6vw/1 'Saira Condensed',sans-serif;color:#fff;text-shadow:0 .4vw 2vw rgba(0,0,0,.5)}.tve-eq{position:relative;margin-top:.6vw;font-size:1.6vw;color:#cfe0ec}
+.tve-conf{position:absolute;inset:-10vw -20vw;overflow:hidden;pointer-events:none}.tve-conf i{position:absolute;top:-2vw;left:var(--x);width:.8vw;height:1.4vw;background:var(--k);border-radius:.2vw;opacity:0;transform:rotate(var(--r))}
+.tve.on .tve-conf i{animation:tveCai 3.2s var(--d) ease-in forwards}@keyframes tveCai{0%{opacity:1;transform:translateY(0) rotate(var(--r))}100%{opacity:0;transform:translateY(60vw) rotate(calc(var(--r) + 540deg))}}
+@media (prefers-reduced-motion:reduce){.tve-raios,.tve.on .tve-conf i{animation:none}.tve-card{transition:none}}
+.tvr-grade.tvr-3{grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4vw}.tvr-3 .tvr-c header h2{font-size:2.6vw}.tvr-3 .tvr-c header span{font-size:1.1vw}.tvr-3 .tvr-c header{min-height:5vw}
+.tvr-3 .tvr-r{grid-template-columns:2.2vw minmax(0,1fr) auto;padding:.9vw 1vw}.tvr-3 .tvr-pos{font-size:1.4vw}.tvr-3 .tvr-n b{font-size:1.35vw}.tvr-3 .tvr-n small{font-size:.9vw}.tvr-3 .tvr-v{font-size:1.9vw}
+.tvr-3 .tvr-r.p1 .tvr-av{width:5vw;height:5vw;font-size:2.2vw}.tvr-3 .tvr-1n{font-size:1.8vw}.tvr-3 .tvr-r.p1 small{font-size:1vw}.tvr-3 .tvr-r.p1 .tvr-v{font-size:3.6vw}.tvr-3 .tvr-coroa{font-size:1vw}
+.tvr-bts .tvr-som.desl{opacity:1;background:#f28c38;color:#fff;border-color:#f28c38;animation:tvrPisca 1.6s ease-in-out infinite}@keyframes tvrPisca{50%{box-shadow:0 0 0 .5vw rgba(242,140,56,.25)}}@media (prefers-reduced-motion:reduce){.tvr-bts .tvr-som.desl{animation:none}}
+.tvr-bts .tvr-modo{width:auto;min-width:0;padding:0 .9vw;border-radius:99px;font-weight:700;font-size:.85vw;opacity:.6}
+.tvr-vazio{margin:auto;text-align:center;color:#6f8ea4;font-size:.85vw}
+@media (max-width:1100px){.tvr-grade{grid-template-columns:repeat(4,1fr);overflow:auto}.tvr{overflow:auto}.tvr-topo{grid-template-columns:1fr auto}.tvr-eqs{display:none}}
 .fl{display:flex;flex-direction:column;gap:8px}.fl-et{display:grid;grid-template-columns:150px 1fr 170px;gap:10px;align-items:center}
 .fl-n{font-size:13.5px;font-weight:600}.fl-bar{position:relative;height:30px;background:var(--bg);border-radius:8px;overflow:hidden}
 .fl-bar i{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,#2a6a9e 35%,transparent);border-radius:8px}.fl-bar i.neg{background:color-mix(in srgb,#c2410c 30%,transparent)}.fl-bar i.fim{background:color-mix(in srgb,#ea7a1e 40%,transparent)}
@@ -1820,6 +1866,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="nav-title" style="margin-top:14px">Ferramentas</div>
       <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
+      <button data-view="tvrank" class="gest hide" onclick="setView('tvrank')"><i data-ic="tela"></i>Rankings na TV</button>
       <button data-view="funil" class="funil-nav hide" onclick="setView('funil')"><i data-ic="trend"></i>Funil de ligações</button>
       <button data-view="relatorios" onclick="setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button data-view="aulas" onclick="setView('aulas')"><i data-ic="play"></i>Aulas<span class="count hide" id="cAulas">0</span></button>
@@ -1985,7 +2032,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
             </div>
             <div class="janela" id="janelaRank"></div>
             <div id="sorteiosRank"></div><div id="podio"></div><div class="battle" id="battle"></div>
-            <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2></div><div id="rankLista"></div>
+            <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2><button class="link gest hide" onclick="setView('tvrank')">Ver todos na TV</button></div><div id="rankLista"></div>
               <details class="info-tog" style="margin-top:12px"><summary>ⓘ Como é contado</summary><div class="hint" style="margin-top:6px" id="rankNota"></div></details></div>
           </div>
         </div>
@@ -2273,6 +2320,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       </section>
 
       <!-- RELATÓRIOS -->
+      <section class="view" id="v-tvrank"></section>
       <section class="view" id="v-funil">
         <div class="page-head"><div><h1>Funil de ligações</h1><div class="sub" id="flSub">Da ligação ao fechamento.</div></div><div class="ph-acoes" id="flFiltros"></div></div>
         <div id="flCorpo"></div>
@@ -3049,6 +3097,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     </div>
   </div>
 </div>
+<div class="tvr" id="tvRank"></div>
+<div class="tve" id="tvEvento" aria-live="polite"></div>
 <div class="modal" id="anjoModal">
   <div class="sheet" style="width:min(480px,100%)">
     <div class="sheet-head"><h2 id="anjoTit">Equipe do anjo</h2><button class="icon-btn" onclick="fechar('anjoModal')" data-ic="x"></button></div>
@@ -3468,12 +3518,14 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
   if (v === 'desempenho' && !podeGerir() && !abaLiberada('desempenho')) v = 'hoje';
   if (v === 'funil' && !podeFunil()) v = 'hoje';
+  if (v === 'tvrank' && !podeGerir() && !abaLiberada('tvrank')) v = 'hoje';
+  document.documentElement.classList.toggle('modo-tvr', v === 'tvrank');
   if (v === 'vendas' && !souGerente() && !['corretor','coordenador'].includes(perfil?.papel) && !abaLiberada('vendas')) v = 'hoje';
   if (v === 'financeiro' && !souGerente()) v = 'hoje';
   if (v === 'whatsapp' && !podeZap() && !abaLiberada('whatsapp')) v = 'hoje';
@@ -3668,6 +3720,7 @@ function render(){
   // ----- RELATÓRIOS -----
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
   if (view === 'funil') renderFunilLig();
+  if (view === 'tvrank') renderTvRank();
   if (view === 'config') renderAdm();
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
   renderEmp(); renderFinanceiro(); renderZap(); renderExtrato();
@@ -4402,7 +4455,7 @@ function lerVisita(){
 }
 window.lerVisita = lerVisita;
 function rankingDe(d){ return { equipe:d.equipe||'', corretorUid:d.corretorUid||'', corretorNome:d.corretorNome||'', date:d.date||'', status:d.status||'', semPontos:!!d.semPontos,
-  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'' }; }
+  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'', empreendimento:String(d.empreendimento||'').slice(0,80) }; }
 window.salvarVisita = async () => {
   const d = lerVisita();
   if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
@@ -5309,7 +5362,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 104;
+const APP_VERSAO = 108;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5571,9 +5624,9 @@ function filtrarAvaliacoes(){
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
 const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
-const ABAS_CARGO = [['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_CARGO = [['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
 const ABAS_DO_CARGO = { corretor:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
-  coordenador:['funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
+  coordenador:['tvrank','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
   sdr:['discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'] };
 const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador'].includes(perfil?.papel));
 window.podeZap = podeZap;
@@ -6461,6 +6514,140 @@ window.salvarEquipeAnjo = async () => {
   const nomes = sel.map(u => (perfisTodos.find(p => p.uid === u) || {}).nome || '');
   try { await gravar(setDoc(doc(db,'perfis',uid), { membros:sel, membrosNomes:nomes }, { merge:true })); fechar('anjoModal'); toast(`Equipe do anjo salva (${sel.length})`); } catch(e) { toast('Erro: ' + e.message); }
 };
+// ---------- v105: rankings na TV (todos lado a lado) ----------
+function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate(d.getDate() + (dow === 0 ? -1 : 6 - dow)); return iso(d); }
+function dadosTvRank(){
+  const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate;
+  const nm = (uid, nome) => (perfisTodos.find(p => p.uid === uid) || {}).nome || nome || '';
+  const eqDe = (uid, eq) => { const p = perfisTodos.find(x => x.uid === uid); return p ? (p.equipe || '') : (eq || ''); };
+  const agrupa = (lista, chave, nome, eq, val = () => 1) => { const g = new Map(); lista.forEach(x => { const k = chave(x) || 'n:' + norm(nome(x)); if (!g.has(k)) g.set(k, { uid:chave(x), nome:nm(chave(x), nome(x)), equipe:eqDe(chave(x), eq(x)), v:0 }); g.get(k).v += val(x); }); return [...g.values()].filter(x => x.v > 0).sort((a, b) => b.v - a.v); };
+  const pts = pontosDoMes(m).filter(x => x.pontos > 0).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:x.pontos }));
+  const vis = agrupa(rankingDocs.filter(r => noM(r.date) && r.status === 'Realizada' && !visitaDeSdr(r)), r => r.corretorUid, r => r.corretorNome, r => r.equipe);
+  const apr = agrupa(rankingCartas.filter(c => noM(c.data) && !c.arquivado), c => c.corretorUid, c => c.corretorNome, c => c.equipe);
+  const vgv = rankingVgv(de, ate, '').filter(x => x.vgv > 0).map(x => ({ uid:x.uid, nome:nm(x.uid, x.nome), equipe:eqDe(x.uid, x.equipe), v:x.vgv }));
+  const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0);
+  const bz = agrupa(rankingAtiv.filter(r => r.mes === m && r.bz), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.bz));
+  const lig = agrupa(rankingAtiv.filter(r => r.mes === m && (r.lig || r.rec)), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.lig) + soma(r.rec));
+  const sab = sabadoFeirao();
+  const fonteSab = (souGerente() || souCoord()) && visitas.length ? visitas : rankingDocs;
+  const fei = agrupa(fonteSab.filter(r => r.date === sab && r.status !== 'Cancelada' && visitaDaConstrutora(r, 'Tenda') && !visitaDeSdr(r)), r => r.corretorUid, r => r.corretorNome, r => r.equipe);
+  const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => (Number(r.lig?.[sab]) || 0) + (Number(r.rec?.[sab]) || 0));
+  const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && v.dia === sab).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
+  const sdr = rankingSdr(de, ate).map(x => ({ uid:x.uid, nome:x.nome, equipe:'', v:Number(x.docs) || 0, sub:'SDR' })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+  const eqs = listaEquipes().map(e => ({ e, n:pontosDoMes(m).filter(x => eqDe(x.uid, x.equipe) === e.id).reduce((a, x) => a + x.pontos, 0) })).sort((a, b) => b.n - a.n);
+  const dSab = sab.slice(8,10) + '/' + sab.slice(5,7);
+  const feirao = [
+    { k:'flig', t:'Ligações', s:'todas do sábado ' + dSab, c:'#facc15', l:ligSab },
+    { k:'fvis', t:'Visitas Tenda', s:'sábado ' + dSab, c:'#fb7185', l:fei },
+    { k:'fres', t:'Vendas e reservas', s:'sábado ' + dSab, c:'#22c55e', l:resSab, fmt:v => Number.isInteger(v) ? String(v) : v.toLocaleString('pt-BR', { maximumFractionDigits:1 }) } ];
+  return { m, sab, eqs, feirao, cols:[
+    { k:'pts', t:'Pontos', s:'geral do mês', c:'#f28c38', l:pts },
+    { k:'vis', t:'Visitas', s:'realizadas no mês', c:'#38bdf8', l:vis },
+    { k:'apr', t:'Aprovações', s:'cartas aprovadas', c:'#a78bfa', l:apr },
+    { k:'vgv', t:'VGV', s:'valor vendido', c:'#22c55e', l:vgv, fmt:v => v >= 1e6 ? (v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits:1 }) + ' mi' : Math.round(v / 1000).toLocaleString('pt-BR') + ' mil' },
+    { k:'bz', t:'Bolsão', s:'leads pegos', c:'#f472b6', l:bz },
+    { k:'lig', t:'Ligações', s:'feitas pelo app', c:'#facc15', l:lig },
+    { k:'sdr', t:'SDRs', s:'documentações', c:'#2dd4bf', l:sdr } ] };
+}
+let _tvRelogio = null;
+// v106: quando alguém soma no ranking, o nome e a foto aparecem grandes na TV
+let _tvBase = null, _tvFila = [], _tvMostrando = false;
+const TV_EVENTOS = { marcada:['Visita marcada','#38bdf8'], realizada:['Visita realizada','#22c55e'], aprovacao:['Carta aprovada','#a78bfa'], venda:['Venda / reserva','#f28c38'], bolsao:['Pegou lead do bolsão','#f472b6'], ligacao:['Ligação feita','#facc15'] };
+function contadoresTv(){
+  const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate, c = {};
+  const soma = (k, uid, n = 1) => { if (!uid) return; c[k + '|' + uid] = (c[k + '|' + uid] || 0) + n; };
+  rankingDocs.filter(r => noM(r.date) && r.status !== 'Cancelada' && !visitaDeSdr(r)).forEach(r => { soma('marcada', r.corretorUid); if (r.status === 'Realizada') soma('realizada', r.corretorUid); });
+  rankingCartas.filter(x => noM(x.data) && !x.arquivado).forEach(x => soma('aprovacao', x.corretorUid));
+  rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => (v.corretores || []).forEach(x => soma('venda', x.uid)));
+  const tot = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0);
+  rankingAtiv.filter(r => r.mes === m).forEach(r => { soma('bolsao', r.uid, tot(r.bz)); soma('ligacao', r.uid, tot(r.lig) + tot(r.rec)); });
+  return c;
+}
+function conferirEventosTv(){
+  const atual = contadoresTv();
+  if (!_tvBase) { _tvBase = atual; return; }
+  Object.entries(atual).forEach(([k, v]) => { const antes = _tvBase[k] || 0; if (v > antes) { const [tipo, uid] = k.split('|');
+    const ja = _tvFila.find(e => e.tipo === tipo && e.uid === uid); if (ja) ja.n += v - antes; else _tvFila.push({ tipo, uid, n:v - antes }); } });
+  _tvBase = atual; if (!_tvMostrando) mostrarEventoTv();
+}
+
+// v108: sons gerados no próprio app (sem arquivos): comemoração da TV e alerta do bolsão
+const Som = (() => {
+  let ctx = null;
+  const c = () => { try { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); } catch(e) {} return ctx; };
+  // o navegador só libera o som depois do primeiro toque na tela
+  ['pointerdown','keydown','touchstart'].forEach(ev => addEventListener(ev, () => c(), { once:true, passive:true }));
+  const nota = (f, t0, dur, { tipo = 'square', vol = .16, ate = 0, ataque = .01 } = {}) => { const a = c(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + t0;
+    o.type = tipo; o.frequency.setValueAtTime(f, t); if (ate) o.frequency.exponentialRampToValueAtTime(ate, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + ataque); g.gain.setValueAtTime(vol, t + Math.max(ataque, dur - .06)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + .02); };
+  const tchum = (t0 = 0, dur = .55) => { const a = c(); if (!a) return; // o "TCHUMMM": sopro de ar descendo + pancada grave
+    const n = a.sampleRate * dur, b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    const src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain(), t = a.currentTime + t0; src.buffer = b;
+    f.type = 'bandpass'; f.Q.value = 1.4; f.frequency.setValueAtTime(5200, t); f.frequency.exponentialRampToValueAtTime(260, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(.55, t + .05); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(f).connect(g).connect(a.destination); src.start(t); src.stop(t + dur);
+    nota(150, t0 + .08, .5, { tipo:'sine', vol:.5, ate:45 }); };
+  return {
+    // comemoração estilo videogame: TCHUM + "ta-ra-ra-RAAAM"
+    festa(){ tchum(0);
+      const L = [[523,.45],[659,.57],[784,.69]]; L.forEach(([f, t]) => { nota(f, t, .11); nota(f / 2, t, .11, { tipo:'triangle', vol:.12 }); });
+      [1047, 1319, 1568].forEach((f, i) => nota(f, .83, 1.1, { tipo: i ? 'triangle' : 'square', vol: i ? .09 : .14, ataque:.02 }));
+      nota(523, .83, 1.1, { tipo:'triangle', vol:.16 });
+      [2093, 2637, 3136, 4186].forEach((f, i) => nota(f, 1.05 + i * .07, .14, { tipo:'sine', vol:.06 })); },
+    // ligação: moedinha curta
+    moeda(){ nota(988, 0, .08, { vol:.35 }); nota(1319, .08, .35, { vol:.35 }); },
+    // bolsão: sirene de alerta "uiu-uiu" + três bipes, bem diferente de qualquer aviso do celular
+    bolsao(){ [0, .32].forEach(t => nota(520, t, .3, { tipo:'sawtooth', vol:.4, ate:1180 }));
+      [.72, .86, 1.0].forEach(t => nota(1760, t, .09, { vol:.38 })); nota(2349, 1.14, .32, { vol:.4 });
+      try { navigator.vibrate && navigator.vibrate([400, 120, 400, 120, 700]); } catch(e) {} },
+    pronto: () => !!ctx && ctx.state === 'running'
+  };
+})();
+window.Som = Som;
+let tvSom = (() => { try { return localStorage.getItem('tvSom') !== '0'; } catch(e) { return true; } })();
+window.tvTrocaSom = () => { tvSom = !tvSom || !Som.pronto(); try { localStorage.setItem('tvSom', tvSom ? '1' : '0'); } catch(e) {} if (tvSom) Som.festa(); renderTvRank(); };
+function mostrarEventoTv(){
+  const e = _tvFila.shift(), box = $('tvEvento'); if (!e || !box || view !== 'tvrank') { _tvMostrando = false; if (box) box.classList.remove('on'); return; }
+  _tvMostrando = true;
+  const p = perfisTodos.find(x => x.uid === e.uid) || {}, ra = rankingAtiv.find(r => r.uid === e.uid) || {}, nome = p.nome || ra.nome || (rankingDocs.find(r => r.corretorUid === e.uid) || {}).corretorNome || 'Corretor';
+  const [rot, cor] = TV_EVENTOS[e.tipo] || ['Somou no ranking', '#f28c38'];
+  const eq = eqNome(p.equipe || ra.equipe || '').replace(/^[^\p{L}]+/u, '');
+  box.style.setProperty('--c', cor);
+  box.innerHTML = `<div class="tve-card"><div class="tve-raios"></div>${p.foto ? `<img class="tve-foto" src="${p.foto}" alt="">` : `<div class="tve-foto tve-ini">${esc((nome.trim()[0] || '?').toUpperCase())}</div>`}
+    <div class="tve-rot">${rot}${e.n > 1 ? ` <span>+${e.n}</span>` : ''}</div><div class="tve-nome">${esc(nomeBonito(nome))}</div>${eq ? `<div class="tve-eq">${esc(eq)}</div>` : ''}
+    <div class="tve-conf">${Array.from({ length:26 }, (_, i) => `<i style="--x:${Math.round(Math.random() * 100)}%;--d:${(Math.random() * .8).toFixed(2)}s;--r:${Math.round(Math.random() * 360)}deg;--k:${['#f28c38','#f5c542','#22c55e','#38bdf8','#f472b6','#a78bfa'][i % 6]}"></i>`).join('')}</div></div>`;
+  box.classList.remove('on'); void box.offsetWidth; box.classList.add('on');
+  if (tvSom) { if (e.tipo === 'ligacao') Som.moeda(); else Som.festa(); }
+  setTimeout(() => { box.classList.remove('on'); setTimeout(mostrarEventoTv, 600); }, e.tipo === 'ligacao' ? 3200 : 5200);
+}
+function renderTvRank(){
+  const el = $('tvRank'); if (!el) return;
+  const d = dadosTvRank(), agora = new Date();
+  if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'mes';
+  const fe = window.tvModo === 'feirao', cols = fe ? d.feirao : d.cols;
+  const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
+  const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').replace(/^Tropa (do |da |de )?/i, '') : '';
+  const col = c => {
+    const l = c.l.slice(0, 8), fmt = c.fmt || (v => Math.round(v).toLocaleString('pt-BR'));
+    const linhas = l.length ? l.map((x, i) => i === 0
+      ? `<div class="tvr-r p1"><div class="tvr-1a"><span class="tvr-av">${esc((x.nome || '?').trim()[0] || '?')}</span><span class="tvr-coroa">1º</span></div><b class="tvr-1n">${esc(curto(x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small><span class="tvr-v">${fmt(x.v)}</span></div>`
+      : `<div class="tvr-r p${i + 1}"><span class="tvr-pos">${i + 1}</span><span class="tvr-n"><b>${esc(curto(x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small></span><span class="tvr-v">${fmt(x.v)}</span></div>`).join('')
+      : `<div class="tvr-vazio">Ainda ninguém<br>neste ranking</div>`;
+    return `<section class="tvr-c k-${c.k}" style="--c:${c.c}"><header><h2>${c.t}</h2><span>${c.s}</span></header><div class="tvr-l">${linhas}</div></section>`;
+  };
+  const maxEq = Math.max(1, ...d.eqs.map(x => x.n));
+  el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo">F</span><div><b>Frade <i>Imóveis</i></b><small>${fe ? 'Feirão Tenda · sábado ' + d.sab.slice(8,10) + '/' + d.sab.slice(5,7) : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
+    <div class="tvr-eqs">${d.eqs.map((x, i) => `<div class="tvr-eq ${i === 0 && x.n ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><i style="width:${Math.round(x.n / maxEq * 100)}%"></i></div>`).join('')}</div>
+    <div class="tvr-hora"><span class="tvr-vivo">ao vivo</span><b>${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</b><small>${dataLonga(hojeISO())}</small></div>
+    <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><button class="tvr-modo" onclick="tvModo=tvModo==='feirao'?'mes':'feirao';renderTvRank()" title="Trocar entre o mês e o feirão">${fe ? 'Mês' : 'Feirão'}</button><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
+    <div class="tvr-grade ${fe ? 'tvr-3' : ''}">${cols.map(col).join('')}</div>`;
+  conferirEventosTv();
+  if (!_tvRelogio) _tvRelogio = setInterval(() => { if (view === 'tvrank') renderTvRank(); else { clearInterval(_tvRelogio); _tvRelogio = null; } }, 30000);
+}
+window.renderTvRank = renderTvRank;
+window.tvCheia = async () => { try { if (!document.fullscreenElement) await document.documentElement.requestFullscreen(); else await document.exitFullscreen(); } catch(e) { toast('Use o modo tela cheia da TV (F11 no computador).'); } };
 function assinarRelDia(){
   const ger = souGerente() && !souCeo(), coord = souCoord() && perfil?.equipe, anj = souAnjo();
   const ontem = (() => { const d = new Date(); d.setDate(d.getDate() - 1); return iso(d); })();
@@ -7505,7 +7692,14 @@ const BZ_LIMITE = () => Number(appCfg.bolsaoLimite) || 5;
 const BZ_RES = [['agendou','📅 Agendou visita'], ['retornar','🔁 Retornar depois'], ['sem_interesse','🙅 Sem interesse'], ['nao_atende','📵 Não atende'], ['numero_errado','❌ Número errado'], ['comprou','🏠 Já comprou']];
 function assinarBolsao(){
   bolsao = []; if (!souAtivo() || souCorresp()) return;
-  const junta = (k, l) => { window['_bz_' + k] = l; const m = new Map(); ['a','b','c'].forEach(x => (window['_bz_' + x] || []).forEach(d => m.set(d.id, d))); bolsao = [...m.values()]; render(); };
+  let vistos = null;
+  const junta = (k, l) => { window['_bz_' + k] = l; const m = new Map(); ['a','b','c'].forEach(x => (window['_bz_' + x] || []).forEach(d => m.set(d.id, d))); bolsao = [...m.values()];
+    // v108: chegou lead novo no bolsão -> sirene + vibração para quem pode pegar
+    const livres = bzLivres().map(x => x.id);
+    if (vistos) { const novos = livres.filter(id => !vistos.has(id)).length, pode = ['corretor','coordenador','sdr'].includes(perfil?.papel) || (souGerente() && !souCeo());
+      if (novos && pode && bzPresente() && view !== 'tvrank') { Som.bolsao(); toast(`${novos} lead${novos > 1 ? 's' : ''} novo${novos > 1 ? 's' : ''} no bolsão. Pegue o seu!`, 'Abrir', () => setView('bolsao')); } }
+    if (k === 'a' || vistos) vistos = new Set([...(vistos || []), ...livres]);
+    render(); };
   ['a','b','c'].forEach(x => window['_bz_' + x] = []);
   const sub = (k, q) => subsPapel.push(onSnapshot(q, s => junta(k, s.docs.map(d => ({ id:d.id, ...d.data() }))), e => console.warn('bolsao', e.code || e.message)));
   if (souGerente()) sub('a', collection(db,'bolsao'));
