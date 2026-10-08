@@ -627,6 +627,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .fl-bar i{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,#2a6a9e 35%,transparent);border-radius:8px}.fl-bar i.neg{background:color-mix(in srgb,#c2410c 30%,transparent)}.fl-bar i.fim{background:color-mix(in srgb,#ea7a1e 40%,transparent)}
 .fl-bar b{position:relative;z-index:1;line-height:30px;padding-left:10px;color:var(--text);font-size:14px}.fl-p{font-size:12.5px;color:var(--muted)}
 @media (max-width:640px){.fl-et{grid-template-columns:110px 1fr}.fl-p{grid-column:2;margin-top:-4px}}
+.bz-card.bz-toca{cursor:pointer}.bz-card.bz-toca:active{transform:scale(.99)}
 .poup{display:flex;align-items:center;gap:14px;padding:16px 18px;margin-bottom:16px;border-radius:16px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff}
 .poup-ic{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-weight:800;flex:none}
 .poup-tx{min-width:0}.poup-tx small{display:block;font-size:12.5px;opacity:.85}.poup-tx b{display:block;font-size:24px;line-height:1.2}.poup-tx span{display:block;font-size:12.5px;opacity:.9}
@@ -5308,7 +5309,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 103;
+const APP_VERSAO = 104;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7513,7 +7514,7 @@ function assinarBolsao(){
 }
 const bzLivres = () => bolsao.filter(x => x.status === 'livre');
 // v97: só vê e pega o bolsão quem marcou presença no escritório hoje
-const bzPresente = () => !['corretor','coordenador'].includes(perfil?.papel) || (!!meuCheckin && !meuCheckin.saida && (meuCheckin.via !== 'externo' || !!meuCheckin.chegouEscritorio));
+const bzPresente = () => !['corretor','coordenador','sdr'].includes(perfil?.papel) || (!!meuCheckin && !meuCheckin.saida && (meuCheckin.via !== 'externo' || !!meuCheckin.chegouEscritorio));
 const bzDisp = () => ({ ativo:true, qtd:3, intervalo:2, max:15, ...(appCfg.bolsaoDisparo || {}) });
 const bzMeus = () => bolsao.filter(x => x.pegoPor === uidAtual && x.status === 'pego');
 const nomeCurto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : p[0] || 'Cliente'; };
@@ -7535,8 +7536,8 @@ function renderBolsao(){
     const c = bzDisp(), l = bolsao.filter(x => x.status === 'fila').sort((a, b) => (a.ordem || 0) - (b.ordem || 0) || (a.criadoEm || 0) - (b.criadoEm || 0));
     $('bzLista').innerHTML = `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th></tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
-    const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador'].includes(perfil.papel);
-    $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar ? `<div class="bz-lim">Você está com <b>${meus}</b> de ${BZ_LIMITE()} clientes do bolsão. ${meus >= BZ_LIMITE() ? 'Dê o resultado de algum para pegar outro.' : ''}</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
+    const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr'].includes(perfil.papel) || (souGerente() && !souCeo());
+    $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar ? `<div class="bz-lim">Você está com <b>${meus}</b> de ${BZ_LIMITE()} clientes do bolsão. ${meus >= BZ_LIMITE() ? 'Dê o resultado de algum para pegar outro.' : ''}</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
       <b class="an-cli">${esc(nomeCurto(x.nome))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.tentativas ? `<span>${x.tentativas}ª tentativa</span>` : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>Pegar e ligar</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
   } else if (bzAba === 'meus') {
