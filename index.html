@@ -2079,7 +2079,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- VENDAS (RESERVAS) -->
       <section class="view" id="v-bolsao">
         <div class="an-topo"><div><h1>Bolsão de clientes</h1><p class="an-sub">Leads sem dono e clientes perdidos para tentar de novo. Pegue um, ligue e conte o que aconteceu.</p></div>
-          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="bzExpBt" onclick="exportarBolsao()">Exportar planilha</button><button class="btn btn-ghost hide" id="bzDispBt" onclick="abrirDisparo()">Disparo</button><button class="btn btn-ghost hide" id="bzPerdBt" onclick="abrirPerdidos()">Trazer clientes perdidos</button><button class="btn btn-primary hide" id="bzNovoBt" onclick="abrirBolsaoNovo()">+ Adicionar</button></div></div>
+          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="bzExpBt" onclick="exportarBolsao()">Exportar planilha</button><button class="btn btn-ghost hide" id="bzDispBt" onclick="abrirDisparo()">Configurar disparo</button><button class="btn btn-primary hide" id="bzDisparaBt" onclick="dispararBolsao()">Disparar</button><button class="btn btn-ghost hide" id="bzPerdBt" onclick="abrirPerdidos()">Trazer clientes perdidos</button><button class="btn btn-primary hide" id="bzNovoBt" onclick="abrirBolsaoNovo()">+ Adicionar</button></div></div>
         <div class="an-tabs" id="bzTabs" style="margin-bottom:14px"></div>
         <div id="bzLista"></div>
       </section>
@@ -2914,7 +2914,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="row2"><div class="fg"><label>Leads por vez</label><input type="number" id="bdQtd" min="1"></div><div class="fg"><label>A cada (minutos)</label><input type="number" id="bdInt" min="1"></div></div>
       <div class="fg"><label>Pausar quando houver quantos livres no bolsão</label><input type="number" id="bdMax" min="1"></div>
     </div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('bzDispModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarDisparo()">Salvar</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" id="bdSoltar" onclick="soltarAgora()">Soltar agora</button><button class="btn btn-primary" onclick="salvarDisparo()">Salvar</button></div>
   </div>
 </div>
 <div class="modal" id="bzModal">
@@ -5284,7 +5284,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 98;
+const APP_VERSAO = 100;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7440,7 +7440,7 @@ function renderBolsao(){
   const n = bzLivres().length; if ($('cBolsao')) { $('cBolsao').textContent = n; $('cBolsao').classList.toggle('hide', !n || souCorresp() || !bzPresente()); }
   if (view !== 'bolsao' || !$('bzLista')) return;
   const gere = (souGerente() && !souCeo()) || souCoord();
-  $('bzNovoBt').classList.toggle('hide', !gere); $('bzPerdBt').classList.toggle('hide', !gere); $('bzExpBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDispBt').classList.toggle('hide', !(souGerente() && !souCeo()));
+  $('bzNovoBt').classList.toggle('hide', !gere); $('bzPerdBt').classList.toggle('hide', !gere); $('bzExpBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDispBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').textContent = _bzTimer ? 'Parar disparo' : 'Disparar'; $('bzDisparaBt').classList.toggle('btn-primary', !_bzTimer); $('bzDisparaBt').classList.toggle('btn-ghost', !!_bzTimer);
   const fila = bolsao.filter(x => x.status === 'fila').length;
   const abas = [['livres', 'Disponíveis', bzLivres().length], ['meus', 'Os que eu peguei', bzMeus().length], ['ranking', 'Ranking', 0], ...(podeGerir() ? [['todos', 'Acompanhar', bolsao.filter(x => x.status !== 'livre' && x.status !== 'fila').length]] : []), ...(souGerente() && !souCeo() ? [['fila', 'Na fila', fila]] : [])];
   $('bzTabs').innerHTML = abas.map(([k, r, q]) => `<button class="${bzAba === k ? 'on' : ''}" onclick="bzVerAba('${k}')">${r}${q ? ` <i>${q}</i>` : ''}</button>`).join('');
@@ -7478,7 +7478,9 @@ window.pegarBolsao = async id => {
   if (bzMeus().length >= BZ_LIMITE()) { toast(`Você já está com ${BZ_LIMITE()} clientes do bolsão. Dê o resultado de algum antes.`); return; }
   if (!bzPresente()) { toast('Marque presença no escritório para pegar leads do bolsão.'); return; }
   const h = hojeISO(), mm = h.slice(0,7);
-  try { await updateDoc(doc(db,'bolsao', id), { status:'pego', pegoPor:uidAtual, pegoNome:perfil.nome, pegoEm:Date.now(), pegoDia:h, equipe:perfil.equipe || '', historico:bzHist(x, 'pegou') });
+  try { const dados = { status:'pego', pegoPor:uidAtual, pegoNome:perfil.nome, pegoEm:Date.now(), pegoDia:h, equipe:perfil.equipe || '', historico:bzHist(x, 'pegou') };
+    // se o Firebase ainda estiver com as regras antigas, tenta sem o campo novo
+    try { await updateDoc(doc(db,'bolsao', id), dados); } catch(e1) { if (e1.code !== 'permission-denied') throw e1; const { pegoDia, ...velho } = dados; await updateDoc(doc(db,'bolsao', id), velho); }
     if (ligaPontua()) setDoc(doc(db,'ranking_ativ', mm + '_' + uidAtual), { mes:mm, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', bz:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('bz ranking', e.message));
     bzAba = 'meus'; toast('🎣 Cliente é seu! Ligue agora.'); vibrar(15); render(); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Alguém pegou esse cliente antes de você.' : 'Erro: ' + e.message); }
@@ -7534,6 +7536,37 @@ window.exportarBolsao = () => {
     l.map(x => [x.nome || '', x.telefone || '', x.criativo || '', x.origem === 'perdido' ? 'Cliente perdido' : 'Lead', x.motivo || '', x.empreendimento || '', ST[x.status] || x.status || '', x.pegoNome || '', (BZ_RES.find(r => r[0] === x.resultado) || [, x.resultado || ''])[1].replace(/^[^\p{L}]+/u, ''), x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR') : '']));
 };
 window.abrirDisparo = () => { const c = bzDisp(); $('bdAtivo').checked = c.ativo !== false; $('bdQtd').value = c.qtd; $('bdInt').value = c.intervalo; $('bdMax').value = c.max; abrir('bzDispModal'); };
+// v99: botão Disparar — solta a primeira leva na hora e segue soltando enquanto o app da gerência estiver aberto
+let _bzTimer = null, _bzProx = 0;
+async function bzSoltarUmaVez(){
+  try {
+    const r = await chamarCarteiro({ tipo:'bolsao_soltar' });
+    if (!(r && typeof r === 'object' && r.versao)) { pararDisparo(); toast('O Carteiro no Cloudflare ainda é o antigo. Cole o carteiro-worker-v98 e implante.'); return; }
+    if (r.n) toast(`${r.n} lead${r.n > 1 ? 's soltos' : ' solto'} · ${r.avisados || 0} avisado${r.avisados === 1 ? '' : 's'} · ${r.naFila} na fila`);
+    else if (r.motivo === 'fila vazia') { pararDisparo(); toast('Fila vazia: disparo encerrado.'); }
+    else toast('Pausado: ' + (r.motivo || '') + '. Volta quando os corretores pegarem.');
+  } catch(e) { toast('Não deu para falar com o Carteiro: ' + e.message); }
+}
+function pararDisparo(){ if (_bzTimer) clearInterval(_bzTimer); _bzTimer = null; render(); }
+window.dispararBolsao = async () => {
+  if (_bzTimer) { pararDisparo(); toast('Disparo parado. O Carteiro segue soltando sozinho se o gatilho do Cloudflare estiver ligado.'); return; }
+  const c = bzDisp();
+  if (!bolsao.some(x => x.status === 'fila')) { toast('A fila está vazia. Adicione leads com "Soltar aos poucos" marcado.'); return; }
+  if (c.ativo === false) { try { await setDoc(doc(db,'config','app'), { bolsaoDisparo:{ ...c, ativo:true } }, { merge:true }); } catch(e) {} }
+  await bzSoltarUmaVez();
+  if (!bolsao.some(x => x.status === 'fila')) return;
+  _bzTimer = setInterval(bzSoltarUmaVez, Math.max(1, Number(c.intervalo) || 2) * 60000); render();
+  toast(`Disparando ${c.qtd} a cada ${c.intervalo} min. Deixe esta tela aberta, ou o Carteiro continua sozinho.`);
+};
+window.soltarAgora = async () => {
+  const bt = $('bdSoltar'); bt.disabled = true;
+  try {
+    const r = await chamarCarteiro({ tipo:'bolsao_soltar' });
+    if (r && typeof r === 'object' && r.versao) toast(r.n ? `${r.n} lead${r.n > 1 ? 's soltos' : ' solto'} · ${r.avisados || 0} corretor${r.avisados === 1 ? '' : 'es'} avisado${r.avisados === 1 ? '' : 's'} · ${r.naFila} na fila` : 'Nada saiu: ' + (r.motivo || 'fila vazia'));
+    else toast('O Carteiro no Cloudflare ainda é o antigo. Cole o carteiro-worker-v98 e implante; sem ele a fila não sai.');
+  } catch(e) { toast('Não deu para falar com o Carteiro: ' + e.message); }
+  bt.disabled = false;
+};
 window.salvarDisparo = async () => {
   const d = { ativo:$('bdAtivo').checked, qtd:Math.max(1, Math.round(Number($('bdQtd').value) || 3)), intervalo:Math.max(1, Math.round(Number($('bdInt').value) || 2)), max:Math.max(1, Math.round(Number($('bdMax').value) || 15)) };
   try { await gravar(setDoc(doc(db,'config','app'), { bolsaoDisparo:d, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); fechar('bzDispModal'); toast('Disparo salvo'); } catch(e) { toast('Erro: ' + e.message); }
