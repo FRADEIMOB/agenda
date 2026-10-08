@@ -1333,7 +1333,7 @@ html,body{overflow-x:clip;touch-action:manipulation}
   .fab-menu span{background:var(--card,#fff);color:var(--text);font-weight:700;font-size:15px;padding:8px 14px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   .fab-menu i{position:relative;display:grid;place-items:center;width:52px;height:52px;margin-right:2px;border-radius:50%;color:#fff;font-style:normal;box-shadow:0 8px 20px rgba(0,0,0,.25)}
   .fab-menu i svg{width:24px;height:24px}
-  .fab-menu .fm-lig i{background:#1f6feb}.fab-menu .fm-ind i{background:#7c3aed}.fab-menu .fm-zap i{background:#25d366}.fab-menu .fm-add i{background:var(--destaque,#f5841f);font-size:28px;font-weight:400}
+  .fab-menu .fm-lig i{background:#1f6feb}.fab-menu .fm-ind i{background:#7c3aed}.fab-menu .fm-bz i{background:#db2777}.fab-menu .fm-zap i{background:#25d366}.fab-menu .fm-add i{background:var(--destaque,#f5841f);font-size:28px;font-weight:400}
   .fab-menu b{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;padding:0 5px}
   .fab-menu b:empty{display:none}
   #fab svg{transition:transform .18s}
@@ -2497,7 +2497,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <div class="fab-fundo" onclick="fabFechar()"></div>
-<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
+<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-bz" id="fmBz" onclick="fabFechar();setView('bolsao')"><span>Bolsão</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="fmBzN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
 <button class="fab hide" id="fab" onclick="fabClique()" title="Adicionar" data-ic="plus"></button>
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
@@ -3531,13 +3531,13 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'funil' && !podeFunil()) v = 'hoje';
   if (v === 'tvrank' && !podeGerir() && !abaLiberada('tvrank')) v = 'hoje';
   document.documentElement.classList.toggle('modo-tvr', v === 'tvrank');
-  if (v === 'vendas' && !souGerente() && !['corretor','coordenador'].includes(perfil?.papel) && !abaLiberada('vendas')) v = 'hoje';
+  if (v === 'vendas' && !souGerente() && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('vendas')) v = 'hoje';
   if (v === 'financeiro' && !souGerente()) v = 'hoje';
   if (v === 'whatsapp' && !podeZap() && !abaLiberada('whatsapp')) v = 'hoje';
   if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
   if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
   if (v === 'resumo' && perfil?.papel !== 'sdr' && !abaLiberada('resumo')) v = 'hoje';
-  if (v === 'comissoes' && !['corretor','coordenador'].includes(perfil?.papel) && !abaLiberada('comissoes')) v = souGerente() ? 'financeiro' : 'hoje';
+  if (v === 'comissoes' && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('comissoes')) v = souGerente() ? 'financeiro' : 'hoje';
   if (v === 'sorteio' && !podeGerir() && !abaLiberada('sorteio')) v = 'hoje';
   if (v === 'recepcao' && !podeGerir() && !abaLiberada('recepcao')) v = 'hoje';
   if (v !== 'recepcao') pararRecepcao();
@@ -4260,7 +4260,7 @@ function renderPapel(){
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => { const v = e.dataset.view || ((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1]; e.classList.toggle('hide', perfil?.papel === 'sdr' && !abaLiberada(v)); });
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr' && !abaLiberada('resumo')));
-  document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && (['corretor','coordenador'].includes(perfil?.papel) || abaLiberada('comissoes')))));
+  document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && (['corretor','coordenador','anjo'].includes(perfil?.papel) || abaLiberada('comissoes')))));
   document.querySelectorAll('.zap-nav').forEach(e => e.classList.toggle('hide', !podeZap() && !abaLiberada('whatsapp')));
   document.querySelectorAll('.funil-nav').forEach(e => e.classList.toggle('hide', !podeFunil()));
   aplicarAbasOcultas();
@@ -4836,7 +4836,7 @@ function assinarCartas(erro){
   if (qc) subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
   // resumo das vendas para o ranking de VGV de todos (sem dados do cliente); a gestão mantém ele em dia
   subsPapel.push(onSnapshot(collection(db,'ranking_vendas'), s => { rankingVendas = s.docs.map(d => ({ id:d.id, ...d.data() })); window._rvOk = true; render(); sincVendasRanking(); sincExtrato(); conferirMetasBatidas(); }, e => console.warn('ranking_vendas:', e.code || e.message)));
-  if (!souGerente() && ['corretor','coordenador'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'reservas'), where('corretorUids','array-contains',uidAtual)), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('minhas reservas:', e.code || e.message)));
+  if (!souGerente() && ['corretor','coordenador','anjo'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'reservas'), where('corretorUids','array-contains',uidAtual)), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('minhas reservas:', e.code || e.message)));
   if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); sincVendasRanking(); sincExtrato(); }, e => console.warn('reservas:', e.code || e.message)));
   subsPapel.push(onSnapshot(souGerente() || historicoCompleto ? collection(db,'ranking_cartas') : query(collection(db,'ranking_cartas'), where('data','>=', somaMeses(mesAtual() + '-01', -6))), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
 }
@@ -5330,12 +5330,15 @@ $('busca').addEventListener('focus', () => buscaGlobal($('busca').value));
 $('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classList.add('hide'), 150));
 
 // ---------- Botão + ----------
+// v113: atalho do bolsão no (+) para quem pode pegar lead (segue o painel de abas por cargo)
+const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente() || (['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) && !abaOculta('bolsao')));
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
   const lig = $('discFab') && !$('discFab').classList.contains('hide'), zap = $('zapFab') && !$('zapFab').classList.contains('hide');
-  const ind = ligaPontua();
-  if (!lig && !zap && !ind || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
-  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind);
+  const ind = ligaPontua(), bz = podeBzMenu();
+  if (!lig && !zap && !ind && !bz || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
+  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !bz);
+  const nBz = bz && bzPresente() ? bzLivres().length : 0; $('fmBzN').textContent = nBz ? String(nBz) : '';
   $('fmZapN').textContent = $('zapFabN') && !$('zapFabN').classList.contains('hide') ? $('zapFabN').textContent : '';
   document.documentElement.classList.toggle('fab-aberto');
 };
@@ -5369,7 +5372,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 112;
+const APP_VERSAO = 113;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5630,20 +5633,22 @@ function filtrarAvaliacoes(){
   avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba)) && !(a.origem === 'whatsapp' && ((a.cpfNorm && naPlan.has('c' + a.cpfNorm)) || (a.telNorm && naPlan.has('t' + a.telNorm)))));
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
-const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
+const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], anjo:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
 const ABAS_CARGO = [['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
 const ABAS_DO_CARGO = { corretor:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
   coordenador:['tvrank','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
-  sdr:['discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'] };
-const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador'].includes(perfil?.papel));
+  sdr:['discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'],
+  anjo:['funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'] }; // v113: anjo tem tudo do corretor + funil da equipe dele
+const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador','anjo'].includes(perfil?.papel));
 window.podeZap = podeZap;
-const abaLiberada = v => { const l = (appCfg?.abasLiberadas || {})[perfil?.papel]; return Array.isArray(l) && l.includes(v); };
+const cfgCargo = (m, pap) => m ? (m[pap] !== undefined ? m[pap] : (pap === 'anjo' ? m.corretor : undefined)) : undefined; // v113: anjo sem config própria segue o corretor
+const abaLiberada = v => { const l = cfgCargo(appCfg?.abasLiberadas || {}, perfil?.papel); return Array.isArray(l) && l.includes(v); };
 window.abaLiberada = abaLiberada;
-const abaOculta = v => { const l = (appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO)[perfil?.papel]; return Array.isArray(l) && l.includes(v); };
+const abaOculta = v => { const l = cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO, perfil?.papel); return Array.isArray(l) && l.includes(v); };
 window.abaOculta = abaOculta;
 function aplicarAbasOcultas(){
   let st = document.getElementById('abasOcCss'); if (!st) { st = document.createElement('style'); st.id = 'abasOcCss'; document.head.appendChild(st); }
-  const l = ((appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO)[perfil?.papel] || []).filter(v => ABAS_CARGO.some(([k]) => k === v));
+  const l = (cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO, perfil?.papel) || []).filter(v => ABAS_CARGO.some(([k]) => k === v));
   st.textContent = l.map(v => `.nav [data-view="${v}"],.mobilebar [data-view="${v}"],#menuModal [onclick*="'${v}'"]{display:none!important}`).join('\n');
   if (l.includes(view)) setTimeout(() => setView('hoje'), 0);
 }
@@ -5735,7 +5740,7 @@ function pontosDoMes(m, val){
   if (n('ausencia')) {
     const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO();
     const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && k < hj && dias.includes(d.getDay())) uteis.push(k); }
-    const quem = perfisTodos.length ? perfisTodos.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
+    const quem = perfisTodos.length ? perfisTodos.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
       const ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
       const x = pega({ corretorUid:p.uid, corretorNome:p.nome, equipe:p.equipe });
@@ -6032,14 +6037,14 @@ window.restaurar = async (tipo, id) => {
 let admAssin = '';
 function renderAbasAdm(){
   const el = $('admAbas'); if (!el || el.contains(document.activeElement)) return;
-  const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, lib = appCfg.abasLiberadas || {}, cargos = [['corretor','Corretor'],['coordenador','Coordenador'],['sdr','SDR']];
-  const marcada = (c, k) => ABAS_DO_CARGO[c].includes(k) ? !(oc[c] || []).includes(k) : (lib[c] || []).includes(k);
+  const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, lib = appCfg.abasLiberadas || {}, cargos = [['corretor','Corretor'],['anjo','Anjo'],['coordenador','Coordenador'],['sdr','SDR']];
+  const marcada = (c, k) => ABAS_DO_CARGO[c].includes(k) ? !(cfgCargo(oc, c) || []).includes(k) : (cfgCargo(lib, c) || []).includes(k);
   el.innerHTML = `<div class="tbl-wrap"><table class="rank ab-tab"><thead><tr><th>Aba</th>${cargos.map(([,n]) => `<th style="text-align:center">${n}</th>`).join('')}</tr></thead><tbody>${
     ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center"><input type="checkbox" data-c="${c}" data-a="${k}" ${marcada(c, k) ? 'checked' : ''} title="${ABAS_DO_CARGO[c].includes(k) ? '' : 'Fora do padrão deste cargo: a tela mostra só o que esse cargo tem permissão de ver'}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 window.salvarAbas = async () => {
   if (!souDono()) return;
-  const oc = { corretor:[], coordenador:[], sdr:[] }, lib = { corretor:[], coordenador:[], sdr:[] };
+  const oc = { corretor:[], anjo:[], coordenador:[], sdr:[] }, lib = { corretor:[], anjo:[], coordenador:[], sdr:[] };
   document.querySelectorAll('#admAbas input[data-c]').forEach(i => { const c = i.dataset.c, a = i.dataset.a;
     if (ABAS_DO_CARGO[c].includes(a)) { if (!i.checked) oc[c].push(a); } else if (i.checked) lib[c].push(a); });
   try { await gravar(setDoc(doc(db,'config','app'), { abasOcultas:oc, abasLiberadas:lib, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); toast('Abas salvas. Já valem para todos.'); }
@@ -6171,7 +6176,7 @@ function assinarEtapa2(){
   else if (souCoord()) qa = query(collection(db,'avaliacoes'), where('equipe','==',perfil.equipe || '-'));
   else if (perfil.papel !== 'sdr') qa = query(collection(db,'avaliacoes'), where('corretorUid','==',uidAtual));
   const limpa = x => { if (typeof x.aba === 'string') x.aba = x.aba.trim(); if (typeof x.corretorNome === 'string') x.corretorNome = x.corretorNome.trim(); return x; };
-  if (souAnjo()) { const porM = {}; membrosAnjo().slice(0, 60).forEach(u => subsPapel.push(onSnapshot(query(collection(db,'avaliacoes'), where('corretorUid','==',u)), s => { porM[u] = s.docs.map(d => limpa({ id:d.id, ...d.data() })); avaliacoesTodas = Object.values(porM).flat(); filtrarAvaliacoes(); render(); }, silencio))); qa = null; }
+  if (souAnjo()) { const porM = {}; [...new Set([uidAtual, ...membrosAnjo()])].slice(0, 60).forEach(u => subsPapel.push(onSnapshot(query(collection(db,'avaliacoes'), where('corretorUid','==',u)), s => { porM[u] = s.docs.map(d => limpa({ id:d.id, ...d.data() })); avaliacoesTodas = Object.values(porM).flat(); filtrarAvaliacoes(); render(); }, silencio))); qa = null; }
   if (qa) subsPapel.push(onSnapshot(qa, s => { avaliacoesTodas = s.docs.map(d => limpa({ id:d.id, ...d.data() })); filtrarAvaliacoes(); render(); }, silencio));
   // ECONOMIA (plano grátis do Firebase: 50 mil leituras por dia): a gerência tem milhares de avaliações.
   // O app usa o que já está guardado no aparelho e só busca na nuvem o que mudou desde a última vez.
@@ -6470,8 +6475,8 @@ const podeFunil = () => souAtivo() && (souGerente() || souCoord() || souAnjo() |
 window.flPer = 'mes'; window.flEq = 'todas';
 function faixaFl(p){ const h = hojeISO(); if (p === 'hoje') return [h, h]; if (p === 'semana') { const d = new Date(); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); return [iso(d), h]; } return [h.slice(0,7) + '-01', h]; }
 function pessoasFunil(){
-  if (souAnjo()) return membrosAnjo().map((u, i) => ({ uid:u, nome:(perfil.membrosNomes || [])[i] || (rankingAtiv.find(r => r.uid === u) || {}).nome || 'Corretor' }));
-  const base = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel));
+  if (souAnjo()) return [{ uid:uidAtual, nome:perfil.nome + ' (você)' }, ...membrosAnjo().map((u, i) => ({ uid:u, nome:(perfil.membrosNomes || [])[i] || (rankingAtiv.find(r => r.uid === u) || {}).nome || 'Corretor' })).filter(x => x.uid !== uidAtual)];
+  const base = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel));
   if (souCoord()) return base.filter(p => p.equipe === perfil.equipe);
   const f = window.flEq;
   if (f && f.startsWith('anjo:')) { const a = perfisTodos.find(p => p.uid === f.slice(5)); const m = new Set(a?.membros || []); return base.filter(p => m.has(p.uid)); }
@@ -6511,7 +6516,7 @@ function renderFunilLig(){
 // gestor escolhe quem é da equipe de cada anjo
 window.abrirEquipeAnjo = uid => {
   const a = perfisTodos.find(p => p.uid === uid); if (!a) return; window._anjoEd = uid;
-  const m = new Set(a.membros || []), gente = perfisTodos.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel)).sort((x, y) => (x.equipe || '').localeCompare(y.equipe || '') || x.nome.localeCompare(y.nome, 'pt-BR'));
+  const m = new Set(a.membros || []), gente = perfisTodos.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)).sort((x, y) => (x.equipe || '').localeCompare(y.equipe || '') || x.nome.localeCompare(y.nome, 'pt-BR'));
   $('anjoTit').textContent = 'Equipe do anjo ' + primeiro(a.nome);
   $('anjoLista').innerHTML = gente.map(p => `<label class="fv-chk"><input type="checkbox" value="${p.uid}" ${m.has(p.uid) ? 'checked' : ''}> ${esc(p.nome)} <small class="muted">${esc(PAPEIS[p.papel] || '')}${p.equipe ? ' · ' + esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, '')) : ''}</small></label>`).join('') || '<div class="muted">Nenhum corretor ativo.</div>';
   abrir('anjoModal');
@@ -7288,7 +7293,7 @@ function somaCap(mapa, val){
   const cap = Math.max(0, Number((val || appCfg.pontos).ligLimite) || 0);
   return Object.values(mapa || {}).reduce((a, n) => a + (cap ? Math.min(Number(n) || 0, cap) : (Number(n) || 0)), 0);
 }
-const ligaPontua = () => souAtivo() && !souCeo() && ['corretor','coordenador','sdr'].includes(perfil?.papel);
+const ligaPontua = () => souAtivo() && !souCeo() && ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
 function assinarEtapa4(){
   rankingAtiv = []; meusLeadsHoje = []; minhasLigHoje = []; _presSinc = false;
   const silencio = e => console.warn('Etapa 4:', e.code || e.message);
@@ -7519,11 +7524,11 @@ const NOTIF_CATS = [
   ['analises', '🏦 Correspondente (pasta enviada, pendência, resultado, mensagens)', p => true],
   ['aulas', '🎓 Aula nova publicada', p => p !== 'correspondente'],
   ['checkin', '🏢 Presença no escritório (lembrete, atrasos, atendimento externo)', p => true],
-  ['leads', '📞 Lead novo para você', p => ['corretor','coordenador'].includes(p)],
+  ['leads', '📞 Lead novo para você', p => ['corretor','coordenador','anjo'].includes(p)],
   ['visitas', '🏠 Visitas (marcada para você, lembrete 1 hora antes, confirmar as de amanhã)', p => p !== 'gerente' || true],
   ['cartas', '📄 Cartas e avaliações (mudou de status, aprovada, perto de vencer)', p => p !== 'sdr'],
   ['vendas', '🔑 Vendas (reserva nova, reserva conferida, venda fechada, meta batida)', p => p !== 'sdr'],
-  ['comissoes', '💰 Suas comissões (a construtora pagou, comissão paga)', p => ['corretor','coordenador'].includes(p)],
+  ['comissoes', '💰 Suas comissões (a construtora pagou, comissão paga)', p => ['corretor','coordenador','anjo'].includes(p)],
   ['avisos', '📣 Avisos da gerência', () => true],
   ['equipe', '👥 Equipe (corretor sem atividade, cadastro novo, cliente repetido)', p => ['gerente','coordenador'].includes(p)],
   ['financeiro', '🧾 Financeiro (contas vencendo, comissão atrasada, venda parada, nota para emitir, fechamento)', p => p === 'gerente'],
@@ -7584,7 +7589,7 @@ let extratoMeu = [], extratoTodos = {};
 function assinarExtrato(){
   extratoMeu = []; extratoTodos = {};
   if (souGerente()) subsPapel.push(onSnapshot(collection(db,'extrato'), s => { extratoTodos = {}; s.docs.forEach(d => extratoTodos[d.id] = d.data()); sincExtrato(); }, e => console.warn('extrato', e.code || e.message)));
-  else if (['corretor','coordenador'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'extrato'), where('corretorUids','array-contains',uidAtual)), s => { extratoMeu = s.docs.map(d => ({ id:d.id, ...d.data() })); if (view === 'comissoes') render(); }, e => console.warn('extrato', e.code || e.message)));
+  else if (['corretor','coordenador','anjo'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'extrato'), where('corretorUids','array-contains',uidAtual)), s => { extratoMeu = s.docs.map(d => ({ id:d.id, ...d.data() })); if (view === 'comissoes') render(); }, e => console.warn('extrato', e.code || e.message)));
 }
 // a gerência mantém o extrato de cada venda em dia (o corretor só lê o dele)
 let _extT = null;
@@ -7710,7 +7715,7 @@ function assinarBolsao(){
   const junta = (k, l) => { window['_bz_' + k] = l; const m = new Map(); ['a','b','c'].forEach(x => (window['_bz_' + x] || []).forEach(d => m.set(d.id, d))); bolsao = [...m.values()];
     // v108: chegou lead novo no bolsão -> sirene + vibração para quem pode pegar
     const livres = bzLivres().map(x => x.id);
-    if (vistos) { const novos = livres.filter(id => !vistos.has(id)).length, pode = ['corretor','coordenador','sdr'].includes(perfil?.papel) || (souGerente() && !souCeo());
+    if (vistos) { const novos = livres.filter(id => !vistos.has(id)).length, pode = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) || (souGerente() && !souCeo());
       if (novos && pode && bzPresente() && view !== 'tvrank') { Som.bolsao(); toast(`${novos} lead${novos > 1 ? 's' : ''} novo${novos > 1 ? 's' : ''} no bolsão. Pegue o seu!`, 'Abrir', () => setView('bolsao')); } }
     if (k === 'a' || vistos) vistos = new Set([...(vistos || []), ...livres]);
     render(); };
@@ -7722,7 +7727,7 @@ function assinarBolsao(){
 }
 const bzLivres = () => bolsao.filter(x => x.status === 'livre');
 // v97: só vê e pega o bolsão quem marcou presença no escritório hoje
-const bzPresente = () => !['corretor','coordenador','sdr'].includes(perfil?.papel) || (!!meuCheckin && !meuCheckin.saida && (meuCheckin.via !== 'externo' || !!meuCheckin.chegouEscritorio));
+const bzPresente = () => !['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) || (!!meuCheckin && !meuCheckin.saida && (meuCheckin.via !== 'externo' || !!meuCheckin.chegouEscritorio));
 const bzDisp = () => ({ ativo:true, qtd:3, intervalo:2, max:15, ...(appCfg.bolsaoDisparo || {}) });
 const bzMeus = () => bolsao.filter(x => x.pegoPor === uidAtual && x.status === 'pego');
 const nomeCurto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : p[0] || 'Cliente'; };
@@ -7744,7 +7749,7 @@ function renderBolsao(){
     const c = bzDisp(), l = bolsao.filter(x => x.status === 'fila').sort((a, b) => (a.ordem || 0) - (b.ordem || 0) || (a.criadoEm || 0) - (b.criadoEm || 0));
     $('bzLista').innerHTML = `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th></tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
-    const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr'].includes(perfil.papel) || (souGerente() && !souCeo());
+    const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
     $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar ? `<div class="bz-lim">Você está com <b>${meus}</b> de ${BZ_LIMITE()} clientes do bolsão. ${meus >= BZ_LIMITE() ? 'Dê o resultado de algum para pegar outro.' : ''}</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
       <b class="an-cli">${esc(nomeCurto(x.nome))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.tentativas ? `<span>${x.tentativas}ª tentativa</span>` : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>Pegar e ligar</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
@@ -7926,7 +7931,7 @@ function visitaDaConstrutora(v, cons){
 const visitasRealizadas = (uid, m, c = bvCfg()) => visitas.filter(v => v.corretorUid === uid && v.status === 'Realizada' && (v.date || '').slice(0, 7) === m && (!c.exigeCarta || visitaComCarta(v)) && visitaDaConstrutora(v, c.construtora)).length;
 // poupança de visitas na tela inicial do corretor, com o "+ R$" subindo quando entra dinheiro
 function htmlPoupanca(){
-  const c = bvCfg(); if (!c.ativo || view !== 'hoje' || !['corretor','coordenador'].includes(perfil?.papel) || (c.quem === 'so_corretores' && perfil.papel !== 'corretor')) return '';
+  const c = bvCfg(); if (!c.ativo || view !== 'hoje' || !['corretor','coordenador','anjo'].includes(perfil?.papel) || (c.quem === 'so_corretores' && !['corretor','anjo'].includes(perfil.papel))) return '';
   const m = mesAtual(), n = visitasRealizadas(uidAtual, m, c), b = bonusDe(n, c), prox = bvProxima(n, c);
   setTimeout(() => conferirPoupanca(m, b), 0);
   return `<div class="poup"><div class="poup-ic">R$</div><div class="poup-tx"><small>Sua poupança de visitas · ${nomeMes(m).split(' de ')[0].toLowerCase()}</small><b>${brl2(b)}</b><span>${n} visita${n === 1 ? '' : 's'}${c.construtora ? ' ' + esc(c.construtora) : ''} realizada${n === 1 ? '' : 's'}${c.exigeCarta ? ' com carta aprovada' : ''}${c.modo === 'por_visita' && c.valor ? ` · ${brl2(c.valor)} cada` : ''}${prox ? ' · ' + prox : ''}</span></div></div>`;
@@ -7942,7 +7947,7 @@ function mostrarGanho(v){
 }
 window.mostrarGanho = mostrarGanho;
 function htmlBonusMeu(){
-  const c = bvCfg(); if (!c.ativo || !['corretor','coordenador'].includes(perfil?.papel) || (c.quem === 'so_corretores' && perfil.papel !== 'corretor')) return '';
+  const c = bvCfg(); if (!c.ativo || !['corretor','coordenador','anjo'].includes(perfil?.papel) || (c.quem === 'so_corretores' && !['corretor','anjo'].includes(perfil.papel))) return '';
   const m = mesAtual(), n = visitasRealizadas(uidAtual, m), b = bonusDe(n, c), prox = bvProxima(n, c);
   return `<div class="bv-meu"><span>🎯</span><div><b>Bônus por visitas de ${nomeMes(m).split(' de ')[0].toLowerCase()}: ${brl2(b)}</b><small>${n} visita${n === 1 ? '' : 's'} realizada${n === 1 ? '' : 's'}${c.modo === 'por_visita' ? ` · ${brl2(c.valor)} por visita` : ''}${prox ? ' · ' + prox : ''}</small></div></div>`;
 }
@@ -7963,7 +7968,7 @@ window.salvarBonus = async () => {
 function desenharBonus(){
   const c = bvCfg(), m = finMes || mesAtual();
   if (!c.ativo) { $('bvTabela').innerHTML = '<div class="muted" style="font-size:13.5px;margin-top:10px">O bônus está desligado. Abra “Regra do bônus”, escolha como funciona e ligue.</div>'; return; }
-  const ps = perfisLista.filter(p => p.status === 'ativo' && (c.quem === 'so_corretores' ? p.papel === 'corretor' : ['corretor','coordenador'].includes(p.papel)))
+  const ps = perfisLista.filter(p => p.status === 'ativo' && (c.quem === 'so_corretores' ? ['corretor','anjo'].includes(p.papel) : ['corretor','coordenador','anjo'].includes(p.papel)))
     .map(p => { const n = visitasRealizadas(p.uid, m), b = bonusDe(n, c), l = finLanc.find(x => x.id === 'bv_' + m + '_' + p.uid); return { p, n, b, l }; })
     .sort((a, b) => b.n - a.n || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
   const tot = ps.reduce((a, x) => a + x.b, 0);
@@ -8031,7 +8036,7 @@ const AN_DOCS = [['identidade','RG e CPF, ou CNH', false], ['residencia','Compro
 const anDocNome = t => (AN_DOCS.find(d => d[0] === t) || [, t === 'resposta' ? 'Carta / simulação da Prime' : 'Documento'])[1];
 const anDocTit = d => d.tipo === 'documento' ? (d.nome || 'Documento') : anDocNome(d.tipo);
 const anCfg = () => appCfg.analises || { todos:false, testadores:[] };
-function anVisivel(){ if (!souAtivo()) return false; if (souCorresp() || souGerente() || souCoord()) return true; const c = anCfg(); return (!!c.todos && ['corretor','coordenador'].includes(perfil.papel)) || (c.testadores || []).includes(uidAtual); }
+function anVisivel(){ if (!souAtivo()) return false; if (souCorresp() || souGerente() || souCoord()) return true; const c = anCfg(); return (!!c.todos && ['corretor','coordenador','anjo'].includes(perfil.papel)) || (c.testadores || []).includes(uidAtual); }
 window.anVisivel = anVisivel;
 const anPodeCriar = () => anVisivel() && !souCorresp() && !souCeo() && perfil.papel !== 'sdr';
 function assinarAnalises(){
@@ -8315,7 +8320,7 @@ window.salvarPasta = async enviar => {
 window.abrirTestadores = () => {
   const c = anCfg(), sel = new Set(c.testadores || []);
   $('anTodos').checked = !!c.todos;
-  $('anTestLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+  $('anTestLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel)).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
     .map(p => `<label class="fv-chk"><input type="checkbox" value="${p.uid}" ${sel.has(p.uid) ? 'checked' : ''}> ${esc(p.nome)} <small class="muted">${esc(eqNome(p.equipe))}</small></label>`).join('');
   abrir('anTestModal');
 };
@@ -8346,8 +8351,8 @@ function auVideo(url){
 }
 const auVista = (aId, uid = uidAtual) => aulasVistas.find(v => v.aulaId === aId && v.uid === uid);
 const auAssistiu = (aId, uid = uidAtual) => !!auVista(aId, uid)?.assistiu;
-const auPublico = () => perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel));
-const auPendentes = () => ['corretor','coordenador','sdr'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && !auAssistiu(a.id)) : [];
+const auPublico = () => perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel));
+const auPendentes = () => ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && !auAssistiu(a.id)) : [];
 function htmlAulaCard(a){
   const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), abriu = !!auVista(a.id), ler = a.tipo === 'leitura';
   let rodape = '';
@@ -8364,7 +8369,7 @@ function htmlAulaCard(a){
 function renderAulas(){
   if (view !== 'aulas' || !$('auLista')) return;
   $('auNovaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('auImpBt').classList.toggle('hide', !(souGerente() && !souCeo()));
-  const meus = ['corretor','coordenador','sdr'].includes(perfil?.papel), tot = aulas.length, vi = aulas.filter(a => auAssistiu(a.id)).length;
+  const meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel), tot = aulas.length, vi = aulas.filter(a => auAssistiu(a.id)).length;
   $('auProg').innerHTML = !tot ? '<b>Aulas da Frade</b><small>Treinamentos em vídeo para a equipe.</small>' : meus ? `<b>Você assistiu ${vi} de ${tot} aula${tot > 1 ? 's' : ''}</b><div class="au-barra"><i style="width:${Math.round(vi / tot * 100)}%"></i></div>` : `<b>${tot} aula${tot > 1 ? 's' : ''} publicada${tot > 1 ? 's' : ''}</b><small>Toque numa aula para ver quem já assistiu.</small>`;
   const temas = Object.keys(AU_TEMAS).filter(k => aulas.some(a => (a.tema || 'geral') === k));
   $('auTabs').innerHTML = temas.length > 1 ? ['todas', ...temas].map(k => `<button class="${auTema === k ? 'on' : ''}" onclick="auFiltro('${k}')">${k === 'todas' ? 'Todas' : AU_TEMAS[k].ic + ' ' + AU_TEMAS[k].nome}</button>`).join('') : '';
@@ -8389,11 +8394,11 @@ window.abrirAula = async id => {
     : `<iframe src="${v.src}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   pintarInfoAula();
   abrir('auVerModal');
-  if (['corretor','coordenador','sdr'].includes(perfil?.papel) && !auVista(id)) { try { await setDoc(doc(db,'aulas_vistas', id + '_' + uidAtual), { aulaId:id, uid:uidAtual, nome:perfil.nome, abriu:Date.now() }, { merge:true }); } catch(e) {} }
+  if (['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) && !auVista(id)) { try { await setDoc(doc(db,'aulas_vistas', id + '_' + uidAtual), { aulaId:id, uid:uidAtual, nome:perfil.nome, abriu:Date.now() }, { merge:true }); } catch(e) {} }
 };
 function pintarInfoAula(){
   const a = aulas.find(x => x.id === auAberta); if (!a || !$('auVerInfo')) return;
-  const t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), meus = ['corretor','coordenador','sdr'].includes(perfil?.papel);
+  const t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
   let quem = '';
   if (podeGerir()) { const pub = auPublico(), sim = pub.filter(p => auAssistiu(a.id, p.uid)), meio = pub.filter(p => !auAssistiu(a.id, p.uid) && auVista(a.id, p.uid)), nao = pub.filter(p => !auVista(a.id, p.uid));
     const lista = (l, cls) => l.map(p => `<span class="au-p ${cls}">${esc(primeiro(p.nome))}</span>`).join('') || '<span class="muted">ninguém</span>';
@@ -8404,7 +8409,7 @@ function pintarInfoAula(){
 }
 // ---- material de estudo (leitura em módulos + prova no final) · v87 ----
 let alAula = null, alPos = 0, alResp = {}, alResultado = null;
-const alMeu = () => ['corretor','coordenador','sdr'].includes(perfil?.papel);
+const alMeu = () => ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
 function mdHtml(t){
   const inl = x => esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
   const linhas = String(t || '').split('\n'); let h = '', lista = '', tab = [];
@@ -8564,7 +8569,7 @@ function htmlCiResumoGestor(){
   return `<div class="ci-res" onclick="setView('corretores')"><span>🏢</span><div><b>Presença${souGerente() ? '' : ' da sua equipe'}</b><small>${dentro} no escritório${fora ? ` · ${fora} em atendimento externo` : ''}${atr ? ` · <em class="ci-atr">${atr} atrasado${atr > 1 ? 's' : ''}</em>` : ''}${faltam ? ` · ${faltam} sem check-in` : ''}</small></div><button class="link">Ver</button></div>`;
 }
 function htmlCheckinHoje(){
-  if (!['corretor','coordenador','sdr'].includes(perfil?.papel)) return htmlCiResumoGestor();
+  if (!['corretor','coordenador','sdr','anjo'].includes(perfil?.papel)) return htmlCiResumoGestor();
   const c = meuCheckin, cfg = ciCfg(), diaSem = new Date().getDay();
   if (!c) { if (!cfg.dias.includes(diaSem)) return '';
     const atras = hm(Date.now()) > cfg.hora;
@@ -8778,7 +8783,7 @@ document.addEventListener('pointerdown', e => { const b = e.target.closest && e.
 function festejar(msg){ try { soltarConfete(160); } catch(e) {} vibrar([30, 50, 30]); if (msg) toast(msg); }
 window.festejar = festejar;
 function avisarSubiuRanking(lista, pos){
-  if (!['corretor','coordenador'].includes(perfil?.papel)) return;
+  if (!['corretor','coordenador','anjo'].includes(perfil?.papel)) return;
   const i = lista.findIndex(x => x.uid === uidAtual); if (i < 0) return;
   const k = 'rankPos_' + mesAtual(), agora = pos[i] + 1; let antes = 0; try { antes = Number(localStorage.getItem(k)) || 0; localStorage.setItem(k, agora); } catch(e) {}
   if (antes && agora < antes) festejar(`🚀 Você subiu para ${agora}º no ranking!`);
@@ -8792,7 +8797,7 @@ function assinarSorteios(){
 const sxRand = n => { const max = Math.floor(0x100000000 / n) * n, a = new Uint32Array(1); let x; do { crypto.getRandomValues(a); x = a[0]; } while (x >= max); return x % n; };
 function sxParticipantes(){
   const f = $('sxFonte')?.value || 'cor';
-  if (f === 'cor') return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel) && (souGerente() || p.equipe === perfil.equipe)).map(p => p.nome);
+  if (f === 'cor') return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel) && (souGerente() || p.equipe === perfil.equipe)).map(p => p.nome);
   if (f === 'pres') { const m = presencas[hojeISO()]?.marcados || {}; return perfisLista.filter(p => m[p.uid]?.status === 'presente').map(p => p.nome); }
   if (f === 'cli') { const mi = mesAtual(); return [...new Set(reservas.filter(r => (r.dia || '').slice(0,7) === mi).map(r => (r.cliente || '').trim()).filter(Boolean))]; }
   return [...new Set(($('sxLista')?.value || '').split(/\r?\n/).map(x => x.replace(/^[\s\-–•*\d.)]+(?=\D)/, '').trim()).filter(Boolean))];
@@ -8864,7 +8869,7 @@ function vendasNoMes(uid, mes = mesAtual()){
 }
 function diasUteisRestantes(){ const h = new Date(), fim = new Date(h.getFullYear(), h.getMonth() + 1, 0); let n = 0; for (let d = new Date(h); d <= fim; d.setDate(d.getDate() + 1)) if (d.getDay() !== 0) n++; return n; }
 function htmlMetaHoje(){
-  if (!['corretor','coordenador'].includes(perfil?.papel)) return '';
+  if (!['corretor','coordenador','anjo'].includes(perfil?.papel)) return '';
   const meta = metaDe(uidAtual); if (!meta) return '';
   const feito = vendasNoMes(uidAtual), pct = Math.min(100, Math.round(feito / meta * 100)), falta = Math.max(0, meta - feito), bateu = feito >= meta;
   const mesN = nomeMes(mesAtual()).split(' de ')[0].toLowerCase();
@@ -8874,7 +8879,7 @@ function htmlMetaHoje(){
 }
 function htmlMetasResumo(){
   if (!souGerente() || !metasMes) return '';
-  const pessoas = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).map(p => ({ p, meta:metaDe(p.uid), feito:vendasNoMes(p.uid) })).filter(x => x.meta);
+  const pessoas = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel)).map(p => ({ p, meta:metaDe(p.uid), feito:vendasNoMes(p.uid) })).filter(x => x.meta);
   if (!pessoas.length) return '';
   const bateram = pessoas.filter(x => x.feito >= x.meta).length, totMeta = pessoas.reduce((a,x) => a + x.meta, 0), totFeito = pessoas.reduce((a,x) => a + x.feito, 0);
   return `<div class="card metas-res"><div class="card-head"><h2>🎯 Metas de ${nomeMes(mesAtual()).split(' de ')[0].toLowerCase()}</h2><button class="link" onclick="abrirMetas()">mudar</button></div>
@@ -8882,7 +8887,7 @@ function htmlMetasResumo(){
     <div class="metas-lista">${pessoas.sort((a,b) => b.feito / b.meta - a.feito / a.meta).map(x => `<div class="mt-l"><span>${esc(primeiro(x.p.nome))} ${x.feito >= x.meta ? '🏆' : ''}</span><div class="meta-bar"><i style="width:${Math.min(100, x.feito / x.meta * 100)}%"></i></div><b>${fmtVendas(x.feito)}/${x.meta}</b></div>`).join('')}</div></div>`;
 }
 window.abrirMetas = () => {
-  const m = mesAtual(), pessoas = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  const m = mesAtual(), pessoas = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel)).sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
   const por = (metasMes && metasMes.porUid) || {};
   $('metasTit').textContent = 'Metas de ' + nomeMes(m).split(' de ')[0].toLowerCase();
   $('metasCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Quantas vendas cada um deve fazer no mês. Coloque a meta de todos e mude só quem for diferente. Venda em parceria conta meio para cada um. Quando alguém bater a meta, chega um aviso para ele e para a gerência.</div>
@@ -8900,7 +8905,7 @@ window.salvarMetas = async () => {
 function conferirMetasBatidas(){
   if (!souGerente() || souCeo() || !metasMes || !window._rvOk) return;
   const m = mesAtual();
-  perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).forEach(p => {
+  perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel)).forEach(p => {
     const meta = metaDe(p.uid), feito = vendasNoMes(p.uid); if (!meta || feito < meta) return;
     const k = 'metaAvisada_' + m + '_' + p.uid; try { if (localStorage.getItem(k)) return; localStorage.setItem(k, '1'); } catch(e) {}
     avisarCarteiro('meta', '', false, { uid:p.uid, mes:m, meta, feito:fmtVendas(feito), unid:'vendas', equipe:p.equipe || '' });
@@ -10166,8 +10171,8 @@ function enviarWhats(tel, txt){
 // ---------- presença (o gerente marca) ----------
 const PRES_OP = [['presente','✅ Presente','var(--ok)'], ['falta','❌ Faltou','var(--danger)'], ['folga','🌴 Folga','#64748b']];
 // presença no escritório: corretores, coordenadores e SDRs (o coordenador vê só os corretores da equipe dele)
-function pessoasPresenca(){ return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr'].includes(p.papel)).sort((a,b) => (eqNome(a.equipe)).localeCompare(eqNome(b.equipe),'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR')); }
-const ciMinhaVisao = p => souGerente() || (p.papel === 'corretor' && p.equipe === perfil.equipe);
+function pessoasPresenca(){ return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)).sort((a,b) => (eqNome(a.equipe)).localeCompare(eqNome(b.equipe),'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR')); }
+const ciMinhaVisao = p => souGerente() || (['corretor','anjo'].includes(p.papel) && p.equipe === perfil.equipe);
 function pessoasPlantao(){ return perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'gerente' && p.papel !== 'sdr').sort((a,b) => (eqNome(a.equipe)).localeCompare(eqNome(b.equipe),'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR')); }
 function renderPresenca(){
   const card = $('cardPresenca'); if (!card) return;
@@ -10404,7 +10409,7 @@ window.rvAbrirDoc = async did => {
 window.editarReserva = id => {
   const rr = id ? reservasTodas.find(x => x.id === id) : null;
   const minha = !!rr && (rr.corretorUids || []).includes(uidAtual);
-  if (!souGerente() && (id ? !minha : !['corretor','coordenador'].includes(perfil?.papel))) return;
+  if (!souGerente() && (id ? !minha : !['corretor','coordenador','anjo'].includes(perfil?.papel))) return;
   const r = rr; rvId = r ? r.id : null;
   rvDocsAtuais = [...(r?.docs || [])]; rvNovos = []; rvTirar = [];
   const so = !souGerente() && !!r; // corretor abrindo a própria reserva: só mexe na documentação
@@ -10417,7 +10422,7 @@ window.editarReserva = id => {
   v('rvOrig', r?.origem); v('rvPrev', r?.previsao); v('rvStImo', r?.statusImovel); v('rvObs', r?.obs);
   v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', r?.notaCnpj); v('rvColar', '');
   if (!r && !souGerente()) v('rvCor', perfil.nome);
-  $('rvCorLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','gerente'].includes(p.papel)).map(p => `<option value="${esc(p.nome)}">`).join('');
+  $('rvCorLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)).map(p => `<option value="${esc(p.nome)}">`).join('');
   $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu);
   abrir('resvModal');
 };
@@ -10710,7 +10715,7 @@ function calcDesempenho(de, ate){
     return linhas.get(k);
   };
   // todos os corretores e coordenadores ativos aparecem, mesmo com zero
-  perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel)).forEach(p => pega(p.uid, p.nome, p.equipe));
+  perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel)).forEach(p => pega(p.uid, p.nome, p.equipe));
   // leads: o que ficou com o corretor no fim de cada dia (hoje: ao vivo)
   for (let d = de; d <= ate; d = somaDias(d, 1)) leadsDoDia(d).forEach(x => { pega(x.uid, x.nome, x.equipe).leads += Number(x.n) || 0; });
   // docs: cada linha da planilha de avaliações, pela data
