@@ -5284,7 +5284,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 100;
+const APP_VERSAO = 102;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7455,9 +7455,9 @@ function renderBolsao(){
     $('bzLista').innerHTML = `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th></tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
     const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador'].includes(perfil.papel);
-    $('bzLista').innerHTML = (podePegar ? `<div class="bz-lim">Você está com <b>${meus}</b> de ${BZ_LIMITE()} clientes do bolsão. ${meus >= BZ_LIMITE() ? 'Dê o resultado de algum para pegar outro.' : ''}</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
+    $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar ? `<div class="bz-lim">Você está com <b>${meus}</b> de ${BZ_LIMITE()} clientes do bolsão. ${meus >= BZ_LIMITE() ? 'Dê o resultado de algum para pegar outro.' : ''}</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
       <b class="an-cli">${esc(nomeCurto(x.nome))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.tentativas ? `<span>${x.tentativas}ª tentativa</span>` : ''}</div>
-      ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>Pegar este cliente</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
+      ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>Pegar e ligar</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
   } else if (bzAba === 'meus') {
     const l = bzMeus();
     $('bzLista').innerHTML = l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card meu"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead'}</span><small>peguei ${tempo(x.pegoEm)}</small></div>
@@ -7482,7 +7482,11 @@ window.pegarBolsao = async id => {
     // se o Firebase ainda estiver com as regras antigas, tenta sem o campo novo
     try { await updateDoc(doc(db,'bolsao', id), dados); } catch(e1) { if (e1.code !== 'permission-denied') throw e1; const { pegoDia, ...velho } = dados; await updateDoc(doc(db,'bolsao', id), velho); }
     if (ligaPontua()) setDoc(doc(db,'ranking_ativ', mm + '_' + uidAtual), { mes:mm, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', bz:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('bz ranking', e.message));
-    bzAba = 'meus'; toast('🎣 Cliente é seu! Ligue agora.'); vibrar(15); render(); }
+    bzAba = 'meus'; vibrar(15); render();
+    // v100: já abre a ligação pelo WhatsApp do corretor (e conta como ligação)
+    const n = telZap(x.telefone || '');
+    if (n) { ligarZap(x.telefone, x.nome, 'bolsão'); toast('Cliente é seu. Se o WhatsApp não abriu, toque em Ligar.', 'Ligar', () => ligarZap(x.telefone, x.nome, 'bolsão')); }
+    else toast('Cliente é seu, mas o telefone está incompleto. Veja em "Os que eu peguei".'); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Alguém pegou esse cliente antes de você.' : 'Erro: ' + e.message); }
 };
 window.resultadoBolsao = async id => {
@@ -7557,6 +7561,15 @@ window.dispararBolsao = async () => {
   if (!bolsao.some(x => x.status === 'fila')) return;
   _bzTimer = setInterval(bzSoltarUmaVez, Math.max(1, Number(c.intervalo) || 2) * 60000); render();
   toast(`Disparando ${c.qtd} a cada ${c.intervalo} min. Deixe esta tela aberta, ou o Carteiro continua sozinho.`);
+};
+// v101: a gerência devolve para a fila os leads já soltos que ninguém pegou (para disparar de novo)
+window.voltarParaFila = async () => {
+  const l = bzLivres(); if (!l.length) return;
+  if (!confirm(`Voltar ${l.length} lead${l.length > 1 ? 's' : ''} disponíve${l.length > 1 ? 'is' : 'l'} para a fila? Eles somem da tela dos corretores e saem de novo no próximo disparo, antes dos outros da fila.`)) return;
+  const base = Date.now() - 1e12;
+  try { for (let i = 0; i < l.length; i += 400) { const b = writeBatch(db); l.slice(i, i + 400).forEach((x, j) => b.update(doc(db,'bolsao', x.id), { status:'fila', ordem:base + i + j, historico:bzHist(x, 'gerência voltou para a fila') })); await gravar(b.commit()); }
+    toast(`${l.length} de volta na fila. Toque em Disparar para soltar de novo.`); }
+  catch(e) { toast('Erro: ' + e.message); }
 };
 window.soltarAgora = async () => {
   const bt = $('bdSoltar'); bt.disabled = true;
