@@ -622,6 +622,9 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .grp-row i{width:10px;height:10px;border-radius:50%;flex:none}
 .grp-cab span{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .rel-botoes{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.poup-ic{font-size:12px;letter-spacing:.02em}.cart-res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2)}.cart-res small{display:block;opacity:.8;font-size:11.5px}.cart-res b{font-size:14px}.cart-pix{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px}.cart-pix small{display:block;color:var(--muted);font-size:12px}.cart-pix b{display:block;word-break:break-all}.cart-pix.falta{flex-direction:column;align-items:flex-start;border-color:#f28c38;background:rgba(242,140,56,.07)}.cart-h{margin:16px 0 2px;font-size:13px;color:var(--muted);font-weight:700}.cart-it.pend span{color:var(--muted)}.cart-st{font-size:12px!important;padding:3px 9px;border-radius:99px;background:rgba(242,140,56,.15);color:#c2410c!important}.cart-st.pago{background:rgba(22,163,74,.15);color:#15803d!important}
+.tg-fundo{position:fixed;inset:0;z-index:9998;display:grid;place-items:center;padding:20px;background:rgba(5,20,14,.55);backdrop-filter:blur(3px);animation:tgIn .25s ease-out}.tg-card{width:min(340px,100%);text-align:center;padding:28px 22px 22px;border-radius:24px;background:linear-gradient(160deg,#0f6b4a,#16a34a 60%,#22c55e);color:#fff;box-shadow:0 30px 70px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;gap:6px;animation:tgPop .5s cubic-bezier(.2,1.4,.4,1)}.tg-moeda{width:74px;height:74px;border-radius:50%;background:#facc15;color:#6b4e00;display:grid;place-items:center;font-weight:900;font-size:26px;box-shadow:0 0 0 8px rgba(250,204,21,.25);animation:tgGira 1s ease-out}.tg-valor{font-size:44px;letter-spacing:-.03em;line-height:1.05;margin-top:10px}.tg-rot{font-weight:700;font-size:16px}.tg-card small{opacity:.85;font-size:13.5px}.tg-bt{margin-top:12px;background:#fff;color:#0f6b4a;font-weight:800;border:0}@keyframes tgIn{from{opacity:0}}@keyframes tgPop{from{transform:scale(.6);opacity:0}}@keyframes tgGira{from{transform:rotateY(540deg) scale(.4)}}@media (prefers-reduced-motion:reduce){.tg-fundo,.tg-card,.tg-moeda{animation:none}}
+button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.poup-ver{margin-left:auto;font-style:normal;font-weight:700;font-size:13px;background:rgba(255,255,255,.18);padding:6px 12px;border-radius:99px;flex:none}.cart-topo{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff;margin-bottom:12px}.cart-topo small{opacity:.85}.cart-topo b{font-size:30px;letter-spacing:-.02em}.cart-it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.cart-it small{display:block;color:var(--muted);font-size:12.5px}.cart-it span{color:#16a34a;font-weight:800;white-space:nowrap}
 .vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
 .tvr-bts{display:flex;gap:8px}html.modo-tvr .sidebar,html.modo-tvr .topbar,html.modo-tvr .mobilebar,html.modo-tvr #fab,html.modo-tvr .ia-bolha,html.modo-tvr #zapFab,html.modo-tvr #discFab{display:none!important}
 .tvr{display:none}html.modo-tvr .tvr{display:flex}html.modo-tvr body{overflow:hidden}
@@ -2958,12 +2961,33 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div id="bvPorVisita" class="fg"><label>Valor por visita realizada (R$)</label><input id="bvValor" inputmode="decimal" placeholder="Ex.: 10"></div>
         <div id="bvMeta" class="row2"><div class="fg"><label>Meta de visitas no mês</label><input id="bvMetaN" type="number" min="1" placeholder="Ex.: 20"></div><div class="fg"><label>Prêmio (R$)</label><input id="bvPremio" inputmode="decimal" placeholder="Ex.: 200"></div></div>
         <div id="bvFaixas"><div class="hint" style="margin:0 0 6px">Cada linha: a partir de quantas visitas, quanto ganha. Vale a maior faixa alcançada.</div><div id="bvFaixasL"></div><button type="button" class="btn btn-ghost" onclick="bvFaixaAdd()">+ Faixa</button></div>
-        <label class="fv-chk" style="margin-top:8px"><input type="checkbox" id="bvCarta"> Só conta visita de cliente com carta aprovada (com perfil)</label>
-        <div class="fg" style="margin-top:8px"><label>Só visitas da construtora (deixe vazio para todas)</label><input id="bvCons" maxlength="40" placeholder="Ex.: Tenda"></div>
+        <label class="fv-chk" id="bvCartaRow" style="margin-top:8px"><input type="checkbox" id="bvCarta"> Só conta visita de cliente com carta aprovada (com perfil)</label>
+        <label class="fv-chk" style="margin-top:8px"><input type="checkbox" id="bvFeirao" onchange="document.getElementById('bvConsWrap').classList.toggle('hide',this.checked);document.getElementById('bvCartaRow').classList.toggle('hide',this.checked)"> Só visitas do Feirão Tenda realizadas no sábado</label>
+        <div class="fg" id="bvConsWrap" style="margin-top:8px"><label>Só visitas da construtora (deixe vazio para todas)</label><input id="bvCons" maxlength="40" placeholder="Ex.: Tenda"></div>
+        <div class="row2"><div class="fg" style="margin-top:8px"><label>Quem recebe os saques</label><input id="bvSaqNome" maxlength="40" placeholder="André"></div><div class="fg" style="margin-top:8px"><label>WhatsApp de quem recebe</label><input id="bvSaqFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
         <div class="fg" style="margin-top:8px"><label>Quem participa</label><select id="bvQuem"><option value="corretores">Corretores e coordenadores</option><option value="so_corretores">Só corretores</option></select></div>
         <button class="btn btn-primary btn-block" onclick="salvarBonus()">Salvar regra</button></details>
       <div id="bvTabela"></div>
     </div>
+  </div>
+</div>
+<div class="modal" id="carteiraModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><h2>Carteira Frade</h2><button class="icon-btn" onclick="fechar('carteiraModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="cart-topo"><small id="cartSub"></small><b id="cartTot"></b><div class="cart-res" id="cartResumo"></div></div>
+      <div id="cartPix"></div>
+      <button class="btn btn-primary btn-block" id="cartSaqueBt" onclick="solicitarSaque()" style="margin:12px 0 4px">Solicitar saque</button>
+      <div id="cartLista"></div><p class="hint" id="cartRegra" style="margin-top:10px"></p></div>
+  </div>
+</div>
+<div class="modal" id="pixModal">
+  <div class="sheet" style="width:min(400px,100%)">
+    <div class="sheet-head"><h2>Seu PIX</h2><button class="icon-btn" onclick="fechar('pixModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><p class="hint" style="margin:0 0 10px">O saque da Carteira Frade é pago nesta chave. Ela vai junto no pedido de saque.</p>
+      <div class="fg"><label>Tipo de chave</label><select id="pixTipo"></select></div>
+      <div class="fg"><label>Chave PIX</label><input id="pixChave" maxlength="80" autocomplete="off" placeholder="Digite a chave"></div>
+      <div class="fg"><label>Nome do titular da conta</label><input id="pixTitular" maxlength="80"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('pixModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarPix()">Salvar PIX</button></div>
   </div>
 </div>
 <div class="modal" id="bzDispModal">
@@ -4485,6 +4509,7 @@ window.salvarVisita = async () => {
     else if (dados.corretorUid !== uidAtual && (vOrig.corretorUid !== dados.corretorUid || vOrig.date !== dados.date || vOrig.time !== dados.time)) avisarCarteiro('visita', id, false);
     syncPlanilha('visitas', id);
     fechar('visModal'); if (vEditId) toast('Visita atualizada'); else comemorar(ptsDe('vPendente'), 'Visita marcada', dados.corretorNome, 0);
+    checarCarteira(vOrig, { ...dados, id });
     if (vOrig && vOrig.status !== dados.status) { if (dados.status === 'Realizada') comemorar(ptsDe('vRealizada'), 'Visita realizada', dados.corretorNome); else if (dados.status === 'Confirmada') comemorar(ptsDe('vConfirmada'), 'Visita confirmada', dados.corretorNome, 0); }
     if (souSdr() && !vOrig) setTimeout(() => avisarPeloWhats({ ...dados, id }), 250);
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
@@ -4498,6 +4523,7 @@ window.mudarStatus = async (id, st, motivo) => {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
     await gravar(b.commit()); syncPlanilha('visitas', id); logEdicao('visitas', id, v.cliente, v, dados, ROT_V, v.equipe);
+    checarCarteira(v, { ...dados, id });
     if (st === 'Realizada' && v.status !== 'Realizada') comemorar(ptsDe('vRealizada'), 'Visita realizada', v.corretorNome);
     else if (st === 'Confirmada' && v.status !== 'Confirmada') comemorar(ptsDe('vConfirmada'), 'Visita confirmada', v.corretorNome, 0);
     else toast('Visita marcada como ' + st.toLowerCase());
@@ -5372,7 +5398,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 113;
+const APP_VERSAO = 117;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5402,6 +5428,26 @@ function comemorar(pts, rotulo, quem, forca = 1){
   try { navigator.vibrate?.(forca > 1 ? [30, 40, 30] : 25); } catch(e) {}
 }
 window.comemorar = comemorar;
+// v115: visita do Feirão Tenda realizada -> sobe a tela "+ R$ 50,00" na hora
+function checarCarteira(antes, depois){
+  const c = bvCfg(); if (!c.ativo) return;
+  if (!visitaVale(depois, c) && visitaPendenteCart(depois, c) && !visitaPendenteCart(antes, c) && !visitaVale(antes, c)) { const v = c.modo === 'por_visita' ? Number(c.valor) || 0 : 0; if (v && depois.corretorUid === uidAtual) setTimeout(() => mostrarGanho(v, 'saldo pendente · vira disponível quando a visita for realizada'), 1400); return; }
+  if (visitaVale(antes, c) || !visitaVale(depois, c)) return;
+  const valor = c.modo === 'por_visita' ? Number(c.valor) || 0 : 0, meu = depois.corretorUid === uidAtual;
+  window._tgAte = Date.now() + 10000; // a tela grande já mostra o ganho; o aviso pequeno da carteira fica quieto
+  setTimeout(() => telaGanho(valor, depois, meu), 1300);
+}
+function telaGanho(valor, v, meu){
+  document.querySelector('.tg-fundo')?.remove();
+  const el = document.createElement('div'); el.className = 'tg-fundo'; el.setAttribute('role', 'status');
+  el.innerHTML = `<div class="tg-card"><div class="tg-moeda">FRD</div><b class="tg-valor">${valor ? '+ ' + frd(valor) : 'Bônus garantido'}</b><span class="tg-rot">Visita do Feirão Tenda realizada · saldo disponível</span>
+    <small>${esc(nomeBonito(v.cliente || 'Cliente'))}${meu ? '' : ' · na carteira de ' + esc(primeiro(v.corretorNome || ''))}</small>
+    ${meu ? '<button class="btn tg-bt" onclick="this.closest(\'.tg-fundo\').remove();abrirCarteira()">Ver minha carteira</button>' : ''}</div>`;
+  el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+  document.body.appendChild(el); soltarConfete(120);
+  try { Som.moeda(); setTimeout(() => Som.moeda(), 180); navigator.vibrate?.([40, 60, 40, 60, 120]); } catch(e) {}
+  setTimeout(() => el.remove(), 5500);
+}
 const ptsDe = k => Number(appCfg?.pontos?.[k]) || 0;
 function soltarConfete(qtd = 160){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -6542,7 +6588,8 @@ function dadosTvRank(){
   const lig = agrupa(rankingAtiv.filter(r => r.mes === m && (r.lig || r.rec)), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.lig) + soma(r.rec));
   const sab = sabadoFeirao();
   const fonteSab = (souGerente() || souCoord()) && visitas.length ? visitas : rankingDocs;
-  const fei = agrupa(fonteSab.filter(r => noM(r.date) && r.status !== 'Cancelada' && r.feirao), r => r.corretorUid, r => r.corretorNome, r => r.equipe);
+  // v114: visitas do feirão contam o mês inteiro, inclusive as marcadas para dias que ainda vão chegar (ex.: o sábado do feirão)
+  const fei = agrupa(fonteSab.filter(r => (r.date || '').slice(0, 7) === m && r.status !== 'Cancelada' && !r.arquivado && r.feirao), r => r.corretorUid, r => r.corretorNome, r => r.equipe);
   const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => (Number(r.lig?.[sab]) || 0) + (Number(r.rec?.[sab]) || 0));
   const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
   const sdr = rankingSdr(de, ate).map(x => ({ uid:x.uid, nome:x.nome, equipe:'', v:Number(x.docs) || 0, sub:'SDR' })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
@@ -6568,7 +6615,7 @@ const TV_EVENTOS = { marcada:['Visita marcada','#38bdf8'], realizada:['Visita re
 function contadoresTv(){
   const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate, c = {};
   const soma = (k, uid, n = 1) => { if (!uid) return; c[k + '|' + uid] = (c[k + '|' + uid] || 0) + n; };
-  rankingDocs.filter(r => noM(r.date) && r.status !== 'Cancelada' && !visitaDeSdr(r)).forEach(r => { soma('marcada', r.corretorUid); if (r.status === 'Realizada') soma('realizada', r.corretorUid); });
+  rankingDocs.filter(r => (r.date || '') >= m + '-01' && r.status !== 'Cancelada' && !visitaDeSdr(r)).forEach(r => { soma('marcada', r.corretorUid); if (r.status === 'Realizada') soma('realizada', r.corretorUid); });
   rankingCartas.filter(x => noM(x.data) && !x.arquivado).forEach(x => soma('aprovacao', x.corretorUid));
   rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => (v.corretores || []).forEach(x => soma('venda', x.uid)));
   const tot = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0);
@@ -7302,7 +7349,7 @@ function assinarEtapa4(){
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
-  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); conferirLinkCheckin();
+  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); assinarSaques(); conferirLinkCheckin();
 }
 // a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
 async function presencaNoRanking(uid, dia, presente){
@@ -7379,7 +7426,7 @@ function iniciarLigacao(tel, cliente, origem){
   if (!podeDiscador()) return;
   const pend = { tel:String(tel || ''), cliente:String(cliente || ''), origem:origem || '', ini:Date.now(), uid:uidAtual, saiu:false, id:'' };
   gravarLigPend(pend);
-  if (ligaPontua() || ligaSdr()) registrarLigacao(tel, cliente, origem).then(id => { const p = lerLigPend(); if (id && p && p.ini === pend.ini) gravarLigPend({ ...p, id }); }).catch(e => console.warn('Ligação:', e.message));
+  if (ligaPontua() || ligaSdr()) registrarLigacao(tel, cliente, origem).then(id => { const p = lerLigPend(); if (id && p && p.ini === pend.ini) gravarLigPend({ ...p, id }); }).catch(e => { console.warn('Ligação:', e.message); toast('A ligação não foi registrada: ' + (e.message || e)); }); // v114: avisa se a ligação não contou
   else toast('Teste do gestor: a ligação não é registrada.');
 }
 function voltouDaLigacao(){
@@ -7708,7 +7755,7 @@ window.histBuscar = v => { _histFiltro = v; pintarHistorico(true); };
 // =====================================================================
 let bolsao = [], bzAba = 'livres';
 const BZ_LIMITE = () => Number(appCfg.bolsaoLimite) || 5;
-const BZ_RES = [['agendou','📅 Agendou visita'], ['retornar','🔁 Retornar depois'], ['sem_interesse','🙅 Sem interesse'], ['nao_atende','📵 Não atende'], ['numero_errado','❌ Número errado'], ['comprou','🏠 Já comprou']];
+const BZ_RES = [['agendou','📅 Agendou visita'], ['acompanhando','👀 Acompanhando'], ['conversando','💬 Conversando'], ['retornar','🔁 Retornar depois'], ['sem_interesse','🙅 Sem interesse'], ['nao_atende','📵 Não atende'], ['numero_errado','❌ Número errado'], ['comprou','🏠 Já comprou']];
 function assinarBolsao(){
   bolsao = []; if (!souAtivo() || souCorresp()) return;
   let vistos = null;
@@ -7788,7 +7835,7 @@ window.resultadoBolsao = async id => {
   const x = bolsao.find(b => b.id === id), r = $('bzRes_' + id)?.value; if (!x || !r) { toast('Escolha como foi'); return; }
   const fim = !['retornar'].includes(r);
   try { await updateDoc(doc(db,'bolsao', id), { status:fim ? 'encerrado' : 'pego', resultado:r, resultadoEm:Date.now(), historico:bzHist(x, (BZ_RES.find(b => b[0] === r) || [, r])[1]) });
-    toast(r === 'agendou' ? '📅 Boa! Cadastre a visita.' : 'Resultado salvo ✓');
+    toast(r === 'agendou' ? '📅 Boa! Cadastre a visita.' : ['acompanhando','conversando'].includes(r) ? 'Salvo. O cliente segue com você e a vaga do bolsão foi liberada.' : 'Resultado salvo ✓');
     if (r === 'agendou') { novaVisita(); setTimeout(() => { $('vmCliente').value = x.nome || ''; $('vmFone').value = x.telefone || ''; if (x.empreendimento) $('vmImovel').value = x.empreendimento; }, 60); } }
   catch(e) { toast('Erro: ' + e.message); }
 };
@@ -7904,7 +7951,11 @@ window.mandarPerdidos = async () => {
 // =====================================================================
 // ============ BÔNUS POR VISITAS · v84 ============
 // =====================================================================
-const bvCfg = () => ({ ativo:false, modo:'por_visita', valor:0, meta:0, premio:0, faixas:[], quem:'corretores', exigeCarta:true, construtora:'Tenda', ...(appCfg.bonusVisitas || {}) });
+const bvCfg = () => ({ ativo:false, modo:'por_visita', valor:0, meta:0, premio:0, faixas:[], quem:'corretores', exigeCarta:true, construtora:'Tenda', soFeirao:true, ...(appCfg.bonusVisitas || {}) });
+// v115: carteira do corretor = visitas realizadas no sábado, marcadas como Feirão Tenda
+const ehSabado = d => !!d && new Date(d + 'T12:00:00').getDay() === 6;
+// no modo Feirão só vale a marcação "Visita do Feirão Tenda" (não pede carta aprovada)
+const visitaVale = (v, c = bvCfg()) => !!v && v.status === 'Realizada' && !v.arquivado && (c.soFeirao ? (!!v.feirao && ehSabado(v.date)) : ((!c.exigeCarta || visitaComCarta(v)) && visitaDaConstrutora(v, c.construtora)));
 function bonusDe(n, c = bvCfg()){
   if (!c.ativo || !n) return 0;
   if (c.modo === 'por_visita') return Math.round(n * (Number(c.valor) || 0) * 100) / 100;
@@ -7928,40 +7979,113 @@ function visitaDaConstrutora(v, cons){
   const e = empreendimentos.find(x => { const n = norm(x.nome || ''); return n && (n === ve || n.includes(ve) || ve.includes(n)); });
   return e ? norm(e.construtora || '').includes(k) : ve.includes(k);
 }
-const visitasRealizadas = (uid, m, c = bvCfg()) => visitas.filter(v => v.corretorUid === uid && v.status === 'Realizada' && (v.date || '').slice(0, 7) === m && (!c.exigeCarta || visitaComCarta(v)) && visitaDaConstrutora(v, c.construtora)).length;
+const visitasQueValem = (uid, m, c = bvCfg()) => visitas.filter(v => v.corretorUid === uid && (v.date || '').slice(0, 7) === m && visitaVale(v, c));
+const visitasRealizadas = (uid, m, c = bvCfg()) => visitasQueValem(uid, m, c).length;
 // poupança de visitas na tela inicial do corretor, com o "+ R$" subindo quando entra dinheiro
+// v117: Carteira Frade em FRD (1 FRD = R$ 1): visita do feirão marcada = saldo pendente; realizada = saldo disponível; saque pelo WhatsApp
+const frd = n => 'FRD ' + (Number(n) || 0).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+let saques = [];
+function assinarSaques(){
+  saques = []; if (!souAtivo() || souCorresp()) return;
+  const q = souGerente() ? collection(db,'saques') : query(collection(db,'saques'), where('uid','==',uidAtual));
+  subsPapel.push(onSnapshot(q, s => { saques = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); if ($('carteiraModal')?.classList.contains('open')) abrirCarteira(true); if ($('bonusModal')?.classList.contains('open')) desenharBonus(); }, e => console.warn('saques', e.code || e.message)));
+}
+const visitaPendenteCart = (v, c = bvCfg()) => !!v && c.soFeirao && !!v.feirao && ehSabado(v.date) && !v.arquivado && v.status !== 'Realizada' && !PERDA_V.includes(v.status);
+function saldoCarteira(uid, c = bvCfg()){
+  const meus = visitas.filter(v => v.corretorUid === uid), vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
+  const porMes = {}; vale.forEach(v => { const m = (v.date || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
+  const ganho = Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0), cada = c.modo === 'por_visita' ? Number(c.valor) || 0 : 0;
+  const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0);
+  return { ganho, cada, vale, pendL, pend:pendL.length * cada, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
+}
+const participaCarteira = (c = bvCfg()) => c.ativo && ['corretor','coordenador','anjo'].includes(perfil?.papel) && !(c.quem === 'so_corretores' && !['corretor','anjo'].includes(perfil.papel));
 function htmlPoupanca(){
-  const c = bvCfg(); if (!c.ativo || view !== 'hoje' || !['corretor','coordenador','anjo'].includes(perfil?.papel) || (c.quem === 'so_corretores' && !['corretor','anjo'].includes(perfil.papel))) return '';
-  const m = mesAtual(), n = visitasRealizadas(uidAtual, m, c), b = bonusDe(n, c), prox = bvProxima(n, c);
-  setTimeout(() => conferirPoupanca(m, b), 0);
-  return `<div class="poup"><div class="poup-ic">R$</div><div class="poup-tx"><small>Sua poupança de visitas · ${nomeMes(m).split(' de ')[0].toLowerCase()}</small><b>${brl2(b)}</b><span>${n} visita${n === 1 ? '' : 's'}${c.construtora ? ' ' + esc(c.construtora) : ''} realizada${n === 1 ? '' : 's'}${c.exigeCarta ? ' com carta aprovada' : ''}${c.modo === 'por_visita' && c.valor ? ` · ${brl2(c.valor)} cada` : ''}${prox ? ' · ' + prox : ''}</span></div></div>`;
+  const c = bvCfg(); if (view !== 'hoje' || !participaCarteira(c)) return '';
+  const k = saldoCarteira(uidAtual, c);
+  setTimeout(() => conferirPoupanca(mesAtual(), k.ganho), 0);
+  return `<button type="button" class="poup" onclick="abrirCarteira()"><div class="poup-ic">FRD</div><div class="poup-tx"><small>Carteira Frade · saldo disponível</small><b>${frd(k.disponivel)}</b><span>${k.pend ? `Pendente: ${frd(k.pend)} · ` : ''}${c.soFeirao ? 'visitas do Feirão Tenda' : 'visitas realizadas'}${k.cada ? ` · ${frd(k.cada)} cada` : ''}</span></div><i class="poup-ver">Abrir</i></button>`;
 }
 function conferirPoupanca(m, b){
-  let antes = null; const k = 'poup_' + uidAtual + '_' + m;
+  let antes = null; const k = 'poup_' + uidAtual + '_tot';
   try { const v = localStorage.getItem(k); antes = v === null ? null : Number(v); localStorage.setItem(k, String(b)); } catch(e) { return; }
-  if (antes !== null && b > antes) mostrarGanho(b - antes);
+  if (antes !== null && b > antes && !(window._tgAte > Date.now())) mostrarGanho(b - antes);
 }
-function mostrarGanho(v){
-  const el = document.createElement('div'); el.className = 'ganho-voa'; el.innerHTML = `<b>+ ${brl2(v)}</b><span>na sua poupança</span>`;
+function mostrarGanho(v, rot){
+  const el = document.createElement('div'); el.className = 'ganho-voa'; el.innerHTML = `<b>+ ${frd(v)}</b><span>${rot || 'na sua carteira'}</span>`;
   document.body.appendChild(el); vibrar(25); setTimeout(() => el.remove(), 2600);
 }
 window.mostrarGanho = mostrarGanho;
 function htmlBonusMeu(){
-  const c = bvCfg(); if (!c.ativo || !['corretor','coordenador','anjo'].includes(perfil?.papel) || (c.quem === 'so_corretores' && !['corretor','anjo'].includes(perfil.papel))) return '';
-  const m = mesAtual(), n = visitasRealizadas(uidAtual, m), b = bonusDe(n, c), prox = bvProxima(n, c);
-  return `<div class="bv-meu"><span>🎯</span><div><b>Bônus por visitas de ${nomeMes(m).split(' de ')[0].toLowerCase()}: ${brl2(b)}</b><small>${n} visita${n === 1 ? '' : 's'} realizada${n === 1 ? '' : 's'}${c.modo === 'por_visita' ? ` · ${brl2(c.valor)} por visita` : ''}${prox ? ' · ' + prox : ''}</small></div></div>`;
+  const c = bvCfg(); if (!participaCarteira(c)) return '';
+  const k = saldoCarteira(uidAtual, c);
+  return `<div class="bv-meu"><span>FRD</span><div><b>Carteira Frade: ${frd(k.disponivel)} disponível</b><small>${k.pend ? 'Pendente: ' + frd(k.pend) + ' · ' : ''}${k.cada ? frd(k.cada) + ' por visita' : ''}</small></div></div>`;
 }
+const PIX_TIPOS = [['cpf','CPF'], ['telefone','Telefone'], ['email','E-mail'], ['aleatoria','Chave aleatória'], ['cnpj','CNPJ']];
+window.abrirCarteira = (soAtualiza) => {
+  const c = bvCfg(), k = saldoCarteira(uidAtual, c), pix = perfil?.pix || null, ult = k.saques.sort((a, b) => (b.em || 0) - (a.em || 0));
+  const item = (v, tipo) => `<div class="cart-it ${tipo}"><div><b>${esc(nomeBonito(v.cliente || 'Cliente'))}</b><small>${dataBR(v.date)}${v.time ? ' às ' + esc(v.time) : ''} · ${tipo === 'pend' ? 'aguardando a visita ser realizada' : 'visita realizada'}</small></div>${k.cada ? `<span>${tipo === 'pend' ? '' : '+ '}${frd(k.cada)}</span>` : ''}</div>`;
+  $('cartTot').textContent = frd(k.disponivel);
+  $('cartSub').textContent = 'Saldo disponível';
+  $('cartResumo').innerHTML = `<div><small>Pendente</small><b>${frd(k.pend)}</b></div><div><small>Já sacado</small><b>${frd(k.sacado)}</b></div><div><small>Total ganho</small><b>${frd(k.ganho)}</b></div>`;
+  $('cartPix').innerHTML = pix && pix.chave
+    ? `<div class="cart-pix"><div><small>Seu PIX</small><b>${esc((PIX_TIPOS.find(t => t[0] === pix.tipo) || [, 'Chave'])[1])}: ${esc(pix.chave)}</b><small>Titular: ${esc(pix.titular || perfil.nome)}</small></div><button class="link" onclick="editarPix()">Trocar</button></div>`
+    : `<div class="cart-pix falta"><b>Cadastre seu PIX para poder sacar</b><small>O pedido de saque já vai com a sua chave.</small><button class="btn btn-ghost" onclick="editarPix()">Cadastrar PIX</button></div>`;
+  const pode = k.disponivel > 0;
+  $('cartSaqueBt').disabled = !pode; $('cartSaqueBt').textContent = pode ? `Solicitar saque de ${frd(k.disponivel)}` : 'Sem saldo para sacar';
+  $('cartLista').innerHTML = (k.pendL.length ? `<h4 class="cart-h">Pendente</h4>` + k.pendL.sort((a, b) => (a.date || '').localeCompare(b.date || '')).map(v => item(v, 'pend')).join('') : '')
+    + (k.vale.length ? `<h4 class="cart-h">Visitas realizadas</h4>` + k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(v => item(v, 'ok')).join('') : '')
+    + (ult.length ? `<h4 class="cart-h">Saques</h4>` + ult.map(x => `<div class="cart-it"><div><b>${frd(x.valor)}</b><small>${new Date(x.em).toLocaleDateString('pt-BR')} · pedido nº ${esc(x.cod || '')}</small></div><span class="cart-st ${x.status}">${x.status === 'pago' ? 'Pago' : 'Solicitado'}</span></div>`).join('') : '')
+    || `<div class="muted" style="padding:14px 0">Ainda não tem saldo. ${c.soFeirao ? 'Marque a visita como <b>Visita do Feirão Tenda</b>: ela entra como pendente e vira saldo disponível quando for <b>realizada</b> no sábado.' : ''}</div>`;
+  $('cartRegra').innerHTML = c.soFeirao ? `Visita do Feirão Tenda marcada para sábado entra como <b>pendente</b>. Quando ela é marcada como <b>Realizada</b>, o valor vai para o <b>saldo disponível</b>. 1 FRD = R$ 1,00.` : '1 FRD = R$ 1,00.';
+  if (!soAtualiza) abrir('carteiraModal');
+};
+window.editarPix = () => {
+  const p = perfil?.pix || {}; $('pixTipo').innerHTML = PIX_TIPOS.map(([k, n]) => `<option value="${k}" ${p.tipo === k ? 'selected' : ''}>${n}</option>`).join('');
+  $('pixChave').value = p.chave || ''; $('pixTitular').value = p.titular || perfil?.nome || ''; abrir('pixModal'); setTimeout(() => $('pixChave').focus(), 80);
+};
+window.salvarPix = async () => {
+  const pix = { tipo:$('pixTipo').value, chave:$('pixChave').value.trim().slice(0, 80), titular:$('pixTitular').value.trim().slice(0, 80) };
+  if (pix.chave.length < 5) { toast('Digite a sua chave PIX'); $('pixChave').focus(); return; }
+  if (!pix.titular) { toast('Digite o nome do titular da conta'); return; }
+  try { await gravar(updateDoc(doc(db,'perfis',uidAtual), { pix })); perfil.pix = pix; fechar('pixModal'); toast('PIX salvo'); abrirCarteira(true); }
+  catch(e) { toast('Não foi possível salvar o PIX: ' + e.message); }
+};
+window.solicitarSaque = () => {
+  const c = bvCfg(), k = saldoCarteira(uidAtual, c), pix = perfil?.pix;
+  if (!(k.disponivel > 0)) { toast('Você ainda não tem saldo disponível'); return; }
+  if (!pix || !pix.chave) { toast('Cadastre seu PIX antes de sacar'); editarPix(); return; }
+  const fone = telZap(c.saqueFone || ''); if (!fone) { toast('A gerência ainda não cadastrou o WhatsApp que recebe os saques'); return; }
+  const ref = doc(collection(db,'saques')), cod = ref.id.slice(0, 6).toUpperCase(), agora = new Date(), quem = c.saqueNome || 'André';
+  const nVis = k.cada ? Math.round(k.disponivel / k.cada) : k.vale.length, vis = k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, Math.max(0, nVis));
+  const tipoPix = (PIX_TIPOS.find(t => t[0] === pix.tipo) || [, 'Chave'])[1], eq = eqNome(perfil.equipe || '').replace(/^[^\p{L}]+/u, '');
+  const msg = `Olá, ${quem}! Tudo bem?\n\nAqui é *${nomeBonito(perfil.nome)}*${eq ? ' (' + eq + ')' : ''}. Pelo App Frade, estou fazendo uma *solicitação de saque* do meu saldo da Carteira Frade.\n\n`
+    + `*Valor do saque:* ${frd(k.disponivel)} (R$ ${k.disponivel.toLocaleString('pt-BR', { minimumFractionDigits:2 })})\n`
+    + `*Origem:* ${nVis} visita${nVis === 1 ? '' : 's'} realizada${nVis === 1 ? '' : 's'} no Feirão Tenda\n`
+    + vis.map(v => `• ${dataBR(v.date).slice(0, 5)} · ${nomeBonito(v.cliente || 'Cliente')}`).join('\n') + (vis.length ? '\n' : '')
+    + `\n*Dados para o PIX*\nChave (${tipoPix}): ${pix.chave}\nTitular: ${pix.titular || perfil.nome}\n\n`
+    + `Pedido nº ${cod} · ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}.\nQuando o PIX for feito, é só me avisar por aqui. Obrigado!`;
+  // abre o WhatsApp primeiro (o celular só deixa abrir logo depois do toque) e registra o pedido em seguida
+  const a = document.createElement('a'); a.href = 'https://wa.me/' + fone + '?text=' + encodeURIComponent(msg); a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
+  gravar(setDoc(ref, { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', valor:k.disponivel, visitas:nVis, pix:{ tipo:pix.tipo || '', chave:pix.chave, titular:pix.titular || '' }, cod, status:'solicitado', em:Date.now(), dia:hojeISO() }))
+    .then(() => toast('Saque solicitado. A mensagem foi para ' + quem + ' no WhatsApp.'))
+    .catch(e => toast('O WhatsApp abriu, mas o pedido não ficou registrado no app: ' + e.message));
+};
+window.marcarSaque = async (id, st) => {
+  if (!souGerente()) return;
+  try { await gravar(updateDoc(doc(db,'saques',id), { status:st, [st === 'pago' ? 'pagoEm' : 'recusadoEm']:Date.now(), porNome:perfil.nome })); toast(st === 'pago' ? 'Saque marcado como pago' : 'Saque recusado: o valor volta para a carteira'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 window.bvModoVis = () => { const m = $('bvModo').value; $('bvPorVisita').classList.toggle('hide', m !== 'por_visita'); $('bvMeta').classList.toggle('hide', m !== 'meta'); $('bvFaixas').classList.toggle('hide', m !== 'faixas'); };
 function bvFaixasDesenha(){ $('bvFaixasL').innerHTML = (window._bvF || []).map((f, i) => `<div class="bv-fx"><span>a partir de</span><input type="number" min="1" value="${f.min || ''}" oninput="_bvF[${i}].min=Number(this.value)||0"><span>visitas →</span><input inputmode="decimal" placeholder="R$" value="${f.valor ? String(f.valor).replace('.', ',') : ''}" oninput="_bvF[${i}].valor=lerDec(this.value)"><button type="button" class="icon-btn del" onclick="_bvF.splice(${i},1);bvFaixasDesenha()" aria-label="Tirar faixa">🗑️</button></div>`).join(''); }
 window.bvFaixasDesenha = bvFaixasDesenha;
 window.bvFaixaAdd = () => { (window._bvF ||= []).push({ min:0, valor:0 }); bvFaixasDesenha(); };
 window.abrirBonus = () => {
-  const c = bvCfg(); $('bvAtivo').checked = !!c.ativo; $('bvModo').value = c.modo; $('bvValor').value = c.valor ? String(c.valor).replace('.', ',') : ''; $('bvMetaN').value = c.meta || ''; $('bvPremio').value = c.premio ? String(c.premio).replace('.', ',') : ''; $('bvQuem').value = c.quem || 'corretores'; $('bvCarta').checked = c.exigeCarta !== false; $('bvCons').value = c.construtora || '';
+  const c = bvCfg(); $('bvAtivo').checked = !!c.ativo; $('bvModo').value = c.modo; $('bvValor').value = c.valor ? String(c.valor).replace('.', ',') : ''; $('bvMetaN').value = c.meta || ''; $('bvPremio').value = c.premio ? String(c.premio).replace('.', ',') : ''; $('bvQuem').value = c.quem || 'corretores'; $('bvCarta').checked = c.exigeCarta !== false; $('bvCons').value = c.construtora || ''; $('bvFeirao').checked = c.soFeirao !== false; $('bvSaqNome').value = c.saqueNome || 'André'; $('bvSaqFone').value = c.saqueFone || ''; $('bvConsWrap').classList.toggle('hide', c.soFeirao !== false); $('bvCartaRow').classList.toggle('hide', c.soFeirao !== false);
   window._bvF = (c.faixas || []).map(x => ({ ...x })); if (!window._bvF.length) window._bvF = [{ min:10, valor:100 }, { min:20, valor:250 }, { min:30, valor:400 }];
   bvFaixasDesenha(); bvModoVis(); $('bvRegraBox').open = !c.ativo; $('bvRegraBox').classList.toggle('hide', !souDono()); desenharBonus(); abrir('bonusModal');
 };
 window.salvarBonus = async () => {
-  const d = { ativo:$('bvAtivo').checked, modo:$('bvModo').value, valor:lerDec($('bvValor').value) || 0, meta:Number($('bvMetaN').value) || 0, premio:lerDec($('bvPremio').value) || 0, quem:$('bvQuem').value, exigeCarta:$('bvCarta').checked, construtora:$('bvCons').value.trim(),
+  const d = { ativo:$('bvAtivo').checked, modo:$('bvModo').value, valor:lerDec($('bvValor').value) || 0, meta:Number($('bvMetaN').value) || 0, premio:lerDec($('bvPremio').value) || 0, quem:$('bvQuem').value, exigeCarta:$('bvCarta').checked, construtora:$('bvCons').value.trim(), soFeirao:$('bvFeirao').checked, saqueNome:$('bvSaqNome').value.trim() || 'André', saqueFone:$('bvSaqFone').value.trim(),
     faixas:(window._bvF || []).filter(f => f.min > 0 && f.valor > 0).sort((a, b) => a.min - b.min) };
   try { await gravar(setDoc(doc(db,'config','app'), { bonusVisitas:d }, { merge:true })); appCfg.bonusVisitas = d; toast('Regra do bônus salva ✓'); desenharBonus(); } catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'só o gestor muda a regra' : e.message)); }
 };
@@ -7974,7 +8098,9 @@ function desenharBonus(){
   const tot = ps.reduce((a, x) => a + x.b, 0);
   $('bvTabela').innerHTML = `<div class="bv-cab"><b>${nomeMes(m)}</b><span>Total: <b>${brl2(tot)}</b></span></div><div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Visitas realizadas</th><th>Bônus</th><th></th></tr></thead><tbody>
     ${ps.map(x => `<tr><td><span class="nm">${esc(x.p.nome)}</span></td><td>${x.n}</td><td><b>${brl2(x.b)}</b></td><td>${!x.b ? '' : x.l ? (x.l.pago ? '<span class="fin-pos">✓ pago</span>' : '<span class="muted">lançado</span>') : (souGerente() && !souCeo() ? `<button class="link" onclick="lancarBonus('${x.p.uid}')">lançar pagamento</button>` : '')}</td></tr>`).join('')}</tbody></table></div>
-    <p class="hint" style="margin-top:8px">Conta as visitas marcadas como <b>Realizada</b> no mês escolhido no Financeiro. “Lançar pagamento” cria a saída em “Entradas e saídas”.</p>`;
+    <p class="hint" style="margin-top:8px">Conta as visitas marcadas como <b>Realizada</b> no mês escolhido no Financeiro${c.soFeirao ? ', só as do <b>Feirão Tenda em sábado</b>' : ''}. “Lançar pagamento” cria a saída em “Entradas e saídas”.</p>`;
+  const sq = saques.slice().sort((x, y) => (x.status === 'solicitado' ? 0 : 1) - (y.status === 'solicitado' ? 0 : 1) || (y.em || 0) - (x.em || 0)).slice(0, 40);
+  $('bvTabela').insertAdjacentHTML('beforeend', `<h3 style="margin:18px 0 6px;font-size:15px">Pedidos de saque da Carteira Frade</h3>` + (sq.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Valor</th><th>PIX</th><th>Pedido</th><th></th></tr></thead><tbody>${sq.map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span></td><td><b>${frd(x.valor)}</b></td><td style="word-break:break-all">${esc((x.pix || {}).chave || '')}<br><small class="muted">${esc((x.pix || {}).titular || '')}</small></td><td>${new Date(x.em).toLocaleDateString('pt-BR')}<br><small class="muted">nº ${esc(x.cod || '')}</small></td><td>${x.status === 'solicitado' ? (souGerente() && !souCeo() ? `<button class="link" onclick="marcarSaque('${x.id}','pago')">marcar pago</button><br><button class="link" style="color:var(--danger)" onclick="marcarSaque('${x.id}','recusado')">recusar</button>` : 'solicitado') : x.status === 'pago' ? '<span class="fin-pos">pago</span>' : '<span class="muted">recusado</span>'}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted" style="font-size:13.5px">Nenhum pedido de saque ainda.</div>'));
 }
 window.lancarBonus = async uid => {
   const c = bvCfg(), m = finMes || mesAtual(), p = perfisLista.find(x => x.uid === uid); if (!p) return;
