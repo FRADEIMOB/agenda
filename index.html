@@ -622,10 +622,12 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .grp-row i{width:10px;height:10px;border-radius:50%;flex:none}
 .grp-cab span{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .rel-botoes{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.poup-ic{font-size:12px;letter-spacing:.02em}.cart-res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2)}.cart-res small{display:block;opacity:.8;font-size:11.5px}.cart-res b{font-size:14px}.cart-pix{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px}.cart-pix small{display:block;color:var(--muted);font-size:12px}.cart-pix b{display:block;word-break:break-all}.cart-pix.falta{flex-direction:column;align-items:flex-start;border-color:#f28c38;background:rgba(242,140,56,.07)}.cart-h{margin:16px 0 2px;font-size:13px;color:var(--muted);font-weight:700}.cart-it.pend span{color:var(--muted)}.cart-st{font-size:12px!important;padding:3px 9px;border-radius:99px;background:rgba(242,140,56,.15);color:#c2410c!important}.cart-st.pago{background:rgba(22,163,74,.15);color:#15803d!important}
+.poup-ic{font-size:12px;letter-spacing:.02em}.cart-res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2)}.cart-res small{display:block;opacity:.8;font-size:11.5px}.cart-res b{font-size:15px;white-space:nowrap;letter-spacing:0}.cart-pix{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px}.cart-pix small{display:block;color:var(--muted);font-size:12px}.cart-pix b{display:block;word-break:break-all}.cart-pix.falta{flex-direction:column;align-items:flex-start;border-color:#f28c38;background:rgba(242,140,56,.07)}.cart-h{margin:16px 0 2px;font-size:13px;color:var(--muted);font-weight:700}.cart-it.pend span{color:var(--muted)}.cart-st{font-size:12px!important;padding:3px 9px;border-radius:99px;background:rgba(242,140,56,.15);color:#c2410c!important}.cart-st.pago{background:rgba(22,163,74,.15);color:#15803d!important}
 .tg-fundo{position:fixed;inset:0;z-index:9998;display:grid;place-items:center;padding:20px;background:rgba(5,20,14,.55);backdrop-filter:blur(3px);animation:tgIn .25s ease-out}.tg-card{width:min(340px,100%);text-align:center;padding:28px 22px 22px;border-radius:24px;background:linear-gradient(160deg,#0f6b4a,#16a34a 60%,#22c55e);color:#fff;box-shadow:0 30px 70px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;gap:6px;animation:tgPop .5s cubic-bezier(.2,1.4,.4,1)}.tg-moeda{width:74px;height:74px;border-radius:50%;background:#facc15;color:#6b4e00;display:grid;place-items:center;font-weight:900;font-size:26px;box-shadow:0 0 0 8px rgba(250,204,21,.25);animation:tgGira 1s ease-out}.tg-valor{font-size:44px;letter-spacing:-.03em;line-height:1.05;margin-top:10px}.tg-rot{font-weight:700;font-size:16px}.tg-card small{opacity:.85;font-size:13.5px}.tg-bt{margin-top:12px;background:#fff;color:#0f6b4a;font-weight:800;border:0}@keyframes tgIn{from{opacity:0}}@keyframes tgPop{from{transform:scale(.6);opacity:0}}@keyframes tgGira{from{transform:rotateY(540deg) scale(.4)}}@media (prefers-reduced-motion:reduce){.tg-fundo,.tg-card,.tg-moeda{animation:none}}
-button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.poup-ver{margin-left:auto;font-style:normal;font-weight:700;font-size:13px;background:rgba(255,255,255,.18);padding:6px 12px;border-radius:99px;flex:none}.cart-topo{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff;margin-bottom:12px}.cart-topo small{opacity:.85}.cart-topo b{font-size:30px;letter-spacing:-.02em}.cart-it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.cart-it small{display:block;color:var(--muted);font-size:12.5px}.cart-it span{color:#16a34a;font-weight:800;white-space:nowrap}
-.vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
+
+.cart-dois{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}.cart-dois b{display:block;font-size:clamp(19px,6vw,26px);letter-spacing:-.02em;white-space:nowrap}.cart-pend{padding:8px 10px;border-radius:12px;background:rgba(250,204,21,.18);box-shadow:inset 0 0 0 1px rgba(250,204,21,.45)}.cart-pend small{color:#fde68a}.cart-pend b{color:#fde047}.poup-pend{display:inline-block;font-style:normal;font-weight:800;font-size:13px;color:#3a2a00;background:#fde047;padding:3px 9px;border-radius:99px;margin:3px 0 2px}.poup-tx span{display:block}
+button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.poup-ver{margin-left:auto;font-style:normal;font-weight:700;font-size:13px;background:rgba(255,255,255,.18);padding:6px 12px;border-radius:99px;flex:none}.cart-topo{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff;margin-bottom:12px}.cart-topo small{opacity:.85}.cart-it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.cart-it small{display:block;color:var(--muted);font-size:12.5px}.cart-it span{color:#16a34a;font-weight:800;white-space:nowrap}
+.rk-toca{cursor:pointer}.vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
 .tvr-bts{display:flex;gap:8px}html.modo-tvr .sidebar,html.modo-tvr .topbar,html.modo-tvr .mobilebar,html.modo-tvr #fab,html.modo-tvr .ia-bolha,html.modo-tvr #zapFab,html.modo-tvr #discFab{display:none!important}
 .tvr{display:none}html.modo-tvr .tvr{display:flex}html.modo-tvr body{overflow:hidden}
 .tvr{position:fixed;inset:0;z-index:60;background:radial-gradient(1200px 600px at 10% -10%,#16405f 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#3a1f12 0%,transparent 55%),#081826;color:#eef4f8;padding:1.6vw 1.8vw;flex-direction:column;gap:1.2vw;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
@@ -2974,7 +2976,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 <div class="modal" id="carteiraModal">
   <div class="sheet" style="width:min(440px,100%)">
     <div class="sheet-head"><h2>Carteira Frade</h2><button class="icon-btn" onclick="fechar('carteiraModal')" data-ic="x"></button></div>
-    <div class="sheet-body"><div class="cart-topo"><small id="cartSub"></small><b id="cartTot"></b><div class="cart-res" id="cartResumo"></div></div>
+    <div class="sheet-body"><div class="cart-topo"><div class="cart-dois"><div><small id="cartSub"></small><b id="cartTot"></b></div><div class="cart-pend"><small>Saldo pendente</small><b id="cartPend"></b></div></div><div class="cart-res" id="cartResumo"></div></div>
       <div id="cartPix"></div>
       <button class="btn btn-primary btn-block" id="cartSaqueBt" onclick="solicitarSaque()" style="margin:12px 0 4px">Solicitar saque</button>
       <div id="cartLista"></div><p class="hint" id="cartRegra" style="margin-top:10px"></p></div>
@@ -2988,6 +2990,12 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="fg"><label>Chave PIX</label><input id="pixChave" maxlength="80" autocomplete="off" placeholder="Digite a chave"></div>
       <div class="fg"><label>Nome do titular da conta</label><input id="pixTitular" maxlength="80"></div></div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('pixModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarPix()">Salvar PIX</button></div>
+  </div>
+</div>
+<div class="modal" id="ptDetModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-head"><h2 id="ptDetTit">Pontos</h2><button class="icon-btn" onclick="fechar('ptDetModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div style="font-size:26px;font-weight:800;margin-bottom:10px" id="ptDetTot"></div><div class="tbl-wrap" id="ptDetLista"></div><p class="hint" id="ptDetObs" style="margin-top:10px"></p></div>
   </div>
 </div>
 <div class="modal" id="bzDispModal">
@@ -5401,7 +5409,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 118;
+const APP_VERSAO = 120;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5434,9 +5442,9 @@ window.comemorar = comemorar;
 // v115: visita do Feirão Tenda realizada -> sobe a tela "+ R$ 50,00" na hora
 function checarCarteira(antes, depois){
   const c = bvCfg(); if (!c.ativo) return;
-  if (!visitaVale(depois, c) && visitaPendenteCart(depois, c) && !visitaPendenteCart(antes, c) && !visitaVale(antes, c)) { const v = c.modo === 'por_visita' ? Number(c.valor) || 0 : 0; if (v && depois.corretorUid === uidAtual) setTimeout(() => mostrarGanho(v, 'saldo pendente · vira disponível quando a visita for realizada'), 1400); return; }
+  if (!visitaVale(depois, c) && visitaPendenteCart(depois, c) && !visitaPendenteCart(antes, c) && !visitaVale(antes, c)) { const v = valorVisitaCart(c); if (v && depois.corretorUid === uidAtual) setTimeout(() => mostrarGanho(v, 'saldo pendente · vira disponível quando a visita for realizada'), 1400); return; }
   if (visitaVale(antes, c) || !visitaVale(depois, c)) return;
-  const valor = c.modo === 'por_visita' ? Number(c.valor) || 0 : 0, meu = depois.corretorUid === uidAtual;
+  const valor = valorVisitaCart(c), meu = depois.corretorUid === uidAtual;
   window._tgAte = Date.now() + 10000; // a tela grande já mostra o ganho; o aviso pequeno da carteira fica quieto
   setTimeout(() => telaGanho(valor, depois, meu), 1300);
 }
@@ -5616,7 +5624,7 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:1, recontato:0, ligLimite:0, ligMinutos:0, ausencia:0, ausenciaDesde:'2026-10-07', agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, ligBloco:1, atrasoTol:0, funilHora:18 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:0, ausenciaDesde:'2026-10-07', agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
@@ -5730,6 +5738,8 @@ function assinarEtapa1(){
     aplicarAbasOcultas();
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     carregado.cfg = true; render(); fecharMesesPendentes();
+    // v120: pedido do Allan: cada 10 ligações valem 2 pontos (ajusta uma vez; depois ele muda em Pontuação quando quiser)
+    if (souDono() && s.exists() && !d.migrLig120) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ligacao:2, ligBloco:10 }, migrLig120:true }, { merge:true }).catch(e => console.warn('pontos ligação', e.message));
   }, e => { carregado.cfg = true; silencio(e); }));
   subsPapel.push(onSnapshot(collection(db,'pontos_meses'), s => {
     pontosMeses = {}; s.docs.forEach(d => pontosMeses[d.id] = d.data());
@@ -5803,6 +5813,25 @@ function pontosDoMes(m, val){
   return [...g.values()].sort((a,b) => b.pontos-a.pontos || b.vendas-a.vendas || b.cartas-a.cartas || a.nome.localeCompare(b.nome,'pt-BR'));
 }
 window.pontosDoMes = pontosDoMes;
+// v120: toque no nome do ranking mostra a conta dos pontos, item por item
+window.verPontosDe = i => {
+  const x = (window._rkLista || [])[i]; if (!x) return; const P = appCfg.pontos, n = k => Number(P[k]) || 0, bloco = Math.max(1, n('ligBloco') || 1);
+  const pend = Math.max(0, (x.visitas || 0) - (x.confirmadas || 0) - (x.realizadas || 0) - (x.faltas || 0)), blocos = Math.floor((x.ligacoes || 0) / bloco);
+  const L = [
+    ['Presenças', x.presencas, n('presenca'), (x.presencas || 0) * n('presenca')],
+    [`Ligações (${x.ligacoes || 0} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
+    ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
+    ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
+    ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', x.docs, n('docs'), (x.docs || 0) * n('docs')], ['Vendas', x.vendas, null, null],
+    ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
+    ['Ausências', x.ausencias, n('ausencia'), (x.ausencias || 0) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
+    ['Visitas agendadas (SDR)', x.agendSdr, n('agendSdr'), null]
+  ].filter(r => Number(r[1]));
+  $('ptDetTit').textContent = x.nome; $('ptDetTot').textContent = x.pontos + ' ponto' + (x.pontos === 1 ? '' : 's');
+  $('ptDetLista').innerHTML = L.length ? `<table class="rank"><thead><tr><th>O quê</th><th>Qtd.</th><th>Vale</th><th>Pontos</th></tr></thead><tbody>${L.map(r => `<tr><td>${esc(r[0])}</td><td>${r[1]}</td><td>${r[2] === null ? '—' : r[2]}</td><td><b>${r[3] === null ? '—' : r[3]}</b></td></tr>`).join('')}</tbody></table>` : '<div class="muted">Nada registrado neste mês.</div>';
+  $('ptDetObs').innerHTML = n('ligacao') ? '' : '<b>Atenção:</b> "Ligações" está valendo 0 em Configurações → Pontuação, por isso as ligações não dão ponto.';
+  abrir('ptDetModal');
+};
 function linhasDoMes(m){
   if (m !== mesAtual() && pontosMeses[m]) return pontosMeses[m].linhas || [];
   return pontosDoMes(m);
@@ -5848,8 +5877,9 @@ function renderRankingPontos(){
   const top = lista.slice(0, 3);
   $('podio').innerHTML = top.length >= 2 ? `<div class="podio">${[1, 0, 2].filter(i => top[i]).map(i => `<div class="pd-deg p${i + 1} ${top[i].uid === uidAtual ? 'eu' : ''}"><div class="pd-av">${esc((top[i].nome || '?').trim()[0])}</div><b>${esc(primeiro(top[i].nome))}</b><span>${top[i].pontos} pts</span><div class="pd-col"><i>${MEDALHA(pos[i])}</i></div></div>`).join('')}</div>` : '';
   avisarSubiuRanking(lista, pos);
+  window._rkLista = lista;
   $('rankLista').innerHTML = `<table class="rank"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Presenças</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
-    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
+    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
   }</tbody><tfoot></tfoot></table>
   ${rankingSdr(...faixa('mes')).length ? `<div class="rep-sec" style="margin:18px 0 8px">📞 Ranking das SDRs</div>${tabelaSdr(...faixa('mes'))}` : ''}
   <details class="info-tog" style="margin-top:10px"><summary>ⓘ Quanto vale cada ação</summary><div class="hint pt-vale" style="margin-top:6px">${PONTOS_ITENS.filter(([k]) => Number(appCfg.pontos[k])).map(([k]) => `<div><b>${esc(nomePonto(k))}</b> <span class="pt-vv">${Number(appCfg.pontos[k]) > 0 ? '+' : ''}${appCfg.pontos[k]}</span>${descPonto(k) ? `<small>${esc(descPonto(k))}</small>` : ''}</div>`).join('') || 'Nenhuma ação vale pontos ainda.'}${ligLimite() ? `<div class="muted" style="margin-top:6px">Até ${ligLimite()} ligações e ${ligLimite()} recontatos pontuam por dia (cada número conta uma vez por dia).</div>` : ''}</div></details>`;
@@ -7993,11 +8023,15 @@ function assinarSaques(){
   const q = souGerente() ? collection(db,'saques') : query(collection(db,'saques'), where('uid','==',uidAtual));
   subsPapel.push(onSnapshot(q, s => { saques = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); if ($('carteiraModal')?.classList.contains('open')) abrirCarteira(true); if ($('bonusModal')?.classList.contains('open')) desenharBonus(); }, e => console.warn('saques', e.code || e.message)));
 }
-const visitaPendenteCart = (v, c = bvCfg()) => !!v && c.soFeirao && !!v.feirao && ehSabado(v.date) && !v.arquivado && v.status !== 'Realizada' && !PERDA_V.includes(v.status);
+const valorVisitaCart = (c = bvCfg()) => c.soFeirao ? ((c.modo === 'por_visita' && Number(c.valor)) || 50) : (c.modo === 'por_visita' ? Number(c.valor) || 0 : 0);
+// pendente até 2 dias depois do sábado; se a visita não foi feita (faltou, cancelou ou passou do prazo) sai do pendente e não vale nada
+const visitaPendenteCart = (v, c = bvCfg()) => !!v && c.soFeirao && !!v.feirao && ehSabado(v.date) && !v.arquivado && v.status !== 'Realizada' && !PERDA_V.includes(v.status) && v.date >= somaDias(hojeISO(), -2);
 function saldoCarteira(uid, c = bvCfg()){
   const meus = visitas.filter(v => v.corretorUid === uid), vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
   const porMes = {}; vale.forEach(v => { const m = (v.date || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
-  const ganho = Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0), cada = c.modo === 'por_visita' ? Number(c.valor) || 0 : 0;
+  // v119: no modo Feirão cada visita vale o valor fixo (padrão FRD 50), mesmo sem regra preenchida
+  const cada = valorVisitaCart(c);
+  const ganho = c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0);
   const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0);
   return { ganho, cada, vale, pendL, pend:pendL.length * cada, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
 }
@@ -8006,7 +8040,7 @@ function htmlPoupanca(){
   const c = bvCfg(); if (view !== 'hoje' || !participaCarteira(c)) return '';
   const k = saldoCarteira(uidAtual, c);
   setTimeout(() => conferirPoupanca(mesAtual(), k.ganho), 0);
-  return `<button type="button" class="poup" onclick="abrirCarteira()"><div class="poup-ic">FRD</div><div class="poup-tx"><small>Carteira Frade · saldo disponível</small><b>${frd(k.disponivel)}</b><span>${k.pend ? `Pendente: ${frd(k.pend)} · ` : ''}${c.soFeirao ? 'visitas do Feirão Tenda' : 'visitas realizadas'}${k.cada ? ` · ${frd(k.cada)} cada` : ''}</span></div><i class="poup-ver">Abrir</i></button>`;
+  return `<button type="button" class="poup" onclick="abrirCarteira()"><div class="poup-ic">FRD</div><div class="poup-tx"><small>Carteira Frade · saldo disponível</small><b>${frd(k.disponivel)}</b>${k.pend ? `<em class="poup-pend">+ ${frd(k.pend)} pendente</em>` : ''}<span>${c.soFeirao ? 'visitas do Feirão Tenda' : 'visitas realizadas'}${k.cada ? ` · ${frd(k.cada)} cada` : ''}</span></div><i class="poup-ver">Abrir</i></button>`;
 }
 function conferirPoupanca(m, b){
   let antes = null; const k = 'poup_' + uidAtual + '_tot';
@@ -8029,7 +8063,8 @@ window.abrirCarteira = (soAtualiza) => {
   const item = (v, tipo) => `<div class="cart-it ${tipo}"><div><b>${esc(nomeBonito(v.cliente || 'Cliente'))}</b><small>${dataBR(v.date)}${v.time ? ' às ' + esc(v.time) : ''} · ${tipo === 'pend' ? 'aguardando a visita ser realizada' : 'visita realizada'}</small></div>${k.cada ? `<span>${tipo === 'pend' ? '' : '+ '}${frd(k.cada)}</span>` : ''}</div>`;
   $('cartTot').textContent = frd(k.disponivel);
   $('cartSub').textContent = 'Saldo disponível';
-  $('cartResumo').innerHTML = `<div><small>Pendente</small><b>${frd(k.pend)}</b></div><div><small>Já sacado</small><b>${frd(k.sacado)}</b></div><div><small>Total ganho</small><b>${frd(k.ganho)}</b></div>`;
+  $('cartPend').textContent = frd(k.pend);
+  $('cartResumo').innerHTML = `<div><small>Visitas pendentes</small><b>${k.pendL.length}</b></div><div><small>Já sacado</small><b>${frd(k.sacado)}</b></div><div><small>Total ganho</small><b>${frd(k.ganho)}</b></div>`;
   $('cartPix').innerHTML = pix && pix.chave
     ? `<div class="cart-pix"><div><small>Seu PIX</small><b>${esc((PIX_TIPOS.find(t => t[0] === pix.tipo) || [, 'Chave'])[1])}: ${esc(pix.chave)}</b><small>Titular: ${esc(pix.titular || perfil.nome)}</small></div><button class="link" onclick="editarPix()">Trocar</button></div>`
     : `<div class="cart-pix falta"><b>Cadastre seu PIX para poder sacar</b><small>O pedido de saque já vai com a sua chave.</small><button class="btn btn-ghost" onclick="editarPix()">Cadastrar PIX</button></div>`;
@@ -8039,7 +8074,7 @@ window.abrirCarteira = (soAtualiza) => {
     + (k.vale.length ? `<h4 class="cart-h">Visitas realizadas</h4>` + k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(v => item(v, 'ok')).join('') : '')
     + (ult.length ? `<h4 class="cart-h">Saques</h4>` + ult.map(x => `<div class="cart-it"><div><b>${frd(x.valor)}</b><small>${new Date(x.em).toLocaleDateString('pt-BR')} · pedido nº ${esc(x.cod || '')}</small></div><span class="cart-st ${x.status}">${x.status === 'pago' ? 'Pago' : 'Solicitado'}</span></div>`).join('') : '')
     || `<div class="muted" style="padding:14px 0">Ainda não tem saldo. ${c.soFeirao ? 'Marque a visita como <b>Visita do Feirão Tenda</b>: ela entra como pendente e vira saldo disponível quando for <b>realizada</b> no sábado.' : ''}</div>`;
-  $('cartRegra').innerHTML = c.soFeirao ? `Visita do Feirão Tenda marcada para sábado entra como <b>pendente</b>. Quando ela é marcada como <b>Realizada</b>, o valor vai para o <b>saldo disponível</b>. 1 FRD = R$ 1,00.` : '1 FRD = R$ 1,00.';
+  $('cartRegra').innerHTML = c.soFeirao ? `Visita do Feirão Tenda marcada para sábado entra como <b>pendente</b>. Quando ela é marcada como <b>Realizada</b>, o valor vai na hora para o <b>saldo disponível</b> e já pode ser sacado. Se a visita não acontecer (não compareceu, cancelada ou sem atualização até 2 dias depois), ela sai do pendente e não vale nada. 1 FRD = R$ 1,00.` : '1 FRD = R$ 1,00.';
   if (!soAtualiza) abrir('carteiraModal');
 };
 window.editarPix = () => {
