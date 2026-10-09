@@ -641,7 +641,7 @@ button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.pou
 @media (min-width:901px){#iaBolha{right:24px;bottom:24px;width:54px;height:54px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);justify-content:center}#iaBolha .ia-btx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}#iaBolha:hover{padding:0;transform:translateY(-2px)}}
 .fab-menu .fm-sim i{background:#0891b2}
 .sim-form{display:grid;gap:4px}.sim-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 14px}.sim-g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
-@media (max-width:760px){.sim-g3{grid-template-columns:1fr}.sim-g4{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.sim-g3{grid-template-columns:1fr 1fr}.sim-form>.sim-g3:first-child>.fg:first-child{grid-column:1/-1}.sim-g4{grid-template-columns:1fr 1fr}}
 .sim-sw{display:flex;flex-wrap:wrap;gap:10px 24px;margin:4px 0 10px}.sim-chk{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;cursor:pointer}.sim-chk input{width:20px;height:20px;flex:none;accent-color:var(--accent)}.sim-chk small{color:var(--muted);font-weight:500}
 .sim-part{border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:6px 0}.sim-part b{font-size:13px}.sim-part .sim-chk{margin-top:22px}
 .sim-mais{margin:6px 0}.sim-mais summary{cursor:pointer;color:var(--muted);font-size:13.5px;font-weight:600}.sim-mais .sim-chk{margin-top:8px}
@@ -655,6 +655,8 @@ button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.pou
 .sim-hist{margin:8px 0;padding:10px 12px;border-radius:12px;border:1px dashed var(--border);font-size:13px}.sim-hist b{display:block;margin-bottom:4px}.sim-hist .g-reprovado{color:#dc2626}.sim-hist .g-aprovado{color:#16a34a}
 .sim-aviso{margin-top:6px;padding:8px 12px;border-radius:10px;font-size:13px;background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
 .sim-bloq{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--danger) 10%,transparent);border:1px solid color-mix(in srgb,var(--danger) 30%,transparent);font-size:14px;display:grid;gap:4px}
+.sim-cx{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px}.sim-cx td{padding:9px 8px;border-bottom:1px dashed var(--border)}.sim-cx tr:nth-child(odd) td{background:var(--card2)}.sim-cx td:nth-child(odd){text-align:right;color:var(--muted);width:24%}.sim-cx td:nth-child(even){font-weight:700}.sim-or{color:#f28c38}.sim-sub{margin:18px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.sim-pr{width:100%;border-collapse:collapse;font-size:13.5px}.sim-pr th{background:var(--card2);font-weight:600;color:var(--muted);padding:8px}.sim-pr td{text-align:center;padding:9px;border-bottom:1px dashed var(--border);font-weight:700}
+@media (max-width:760px){.sim-cx,.sim-cx tbody,.sim-cx tr{display:block}.sim-cx tr{display:grid;grid-template-columns:1fr auto}.sim-cx td{width:auto!important}.sim-cx td:nth-child(odd){text-align:left}.sim-cx td:nth-child(even){text-align:right}}
 .sim-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.sim-obs{margin-top:10px}.sim-h{margin:14px 0 4px;font-size:13px;color:var(--muted)}.sim-par{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 @media (max-width:760px){.sim-topo{flex-direction:column}.sim-nota{width:auto;display:flex;align-items:center;gap:10px;justify-content:center}.sim-nota b{font-size:24px}}
 .hoje-topo{display:grid;gap:12px;margin-bottom:14px}.hoje-topo:empty,.hoje-topo>div:empty{display:none}
@@ -2384,12 +2386,18 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
             <div class="fg"><label>CPF</label><input id="simCpf" inputmode="numeric" autocomplete="off" placeholder="Só números" oninput="this.value=fmtCpf(this.value)"></div>
             <div class="fg"><label>Data de nascimento</label><input type="date" id="simNasc"></div>
             <div class="fg"><label>Renda mensal</label><input id="simRenda" inputmode="decimal" placeholder="R$"></div>
-            <div class="fg"><label>Tipo de renda</label><select id="simTipo"><option value="formal">Formal (carteira assinada)</option><option value="mista">Mista</option><option value="informal">Informal</option></select></div>
+            <div class="fg"><label>Tipo de renda</label><select id="simTipo"><option value="formal">Formal</option><option value="mista">Mista</option><option value="informal">Informal</option></select></div>
             <div class="fg"><label>Valor do imóvel <span class="muted">(opcional)</span></label><input id="simValor" inputmode="decimal" placeholder="R$"></div>
           </div>
           <div class="sim-sw">
             <label class="sim-chk"><input type="checkbox" id="simFgts" onchange="simFgtsVis()"> 3 anos ou mais de FGTS <small>(carteira assinada ou contribuição)</small></label>
             <label class="sim-chk"><input type="checkbox" id="simDep"> Possui dependente <small>(fator social)</small></label>
+            <label class="sim-chk"><input type="checkbox" id="simCond" onchange="document.getElementById('simCondW').classList.toggle('hide',!this.checked)"> Carta condicionada <small>(a Caixa já deu a parcela)</small></label>
+          </div>
+          <div class="sim-g3 hide" id="simCondW">
+            <div class="fg"><label>Parcela condicionada</label><input id="simCondVal" inputmode="decimal" placeholder="R$ (valor da carta)"></div>
+            <div class="fg"><label>Prazo da carta <span class="muted">(meses, se tiver)</span></label><input id="simCondPrazo" inputmode="numeric" placeholder="Ex.: 420"></div>
+            <div class="fg"><label>Renda da carta <span class="muted">(se for outra)</span></label><input id="simCondRenda" inputmode="decimal" placeholder="R$"></div>
           </div>
           <div class="sim-g3">
             <div class="fg hide" id="simFgtsSaldoW"><label>Saldo do FGTS <span class="muted">(se souber)</span></label><input id="simFgtsSaldo" inputmode="decimal" placeholder="R$"></div>
@@ -3042,7 +3050,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <label class="fv-chk" style="margin-top:8px"><input type="checkbox" id="bvFeirao" onchange="document.getElementById('bvConsWrap').classList.toggle('hide',this.checked);document.getElementById('bvCartaRow').classList.toggle('hide',this.checked)"> Só visitas do Feirão Tenda realizadas no sábado</label>
         <div class="fg" id="bvConsWrap" style="margin-top:8px"><label>Só visitas da construtora (deixe vazio para todas)</label><input id="bvCons" maxlength="40" placeholder="Ex.: Tenda"></div>
         <div class="row2"><div class="fg" style="margin-top:8px"><label>Quem recebe os saques</label><input id="bvSaqNome" maxlength="40" placeholder="André"></div><div class="fg" style="margin-top:8px"><label>WhatsApp de quem recebe</label><input id="bvSaqFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
-        <div class="fg" style="margin-top:8px"><label>Quem participa</label><select id="bvQuem"><option value="corretores">Corretores e coordenadores</option><option value="so_corretores">Só corretores</option></select></div>
+        <div class="fg hide" style="margin-top:8px"><label>Quem participa</label><select id="bvQuem"><option value="corretores">Corretores e coordenadores</option><option value="so_corretores">Só corretores</option></select></div>
         <button class="btn btn-primary btn-block" onclick="salvarBonus()">Salvar regra</button></details>
       <div id="bvTabela"></div>
     </div>
@@ -4237,7 +4245,11 @@ function configurarAcesso(){
   else if (souCoord()) qv = query(collection(db,'visitas'), where('equipe','==',perfil.equipe||'-'));
   else if (perfil.papel === 'sdr') qv = query(collection(db,'visitas'), where('criadoPor','==',uidAtual));
   else qv = query(collection(db,'visitas'), where('corretorUid','==',uidAtual));
-  subsPapel.push(onSnapshot(qv, s => { visitasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); visitas = visitasBrutas.filter(x => !x.arquivado); render(); }, erro));
+  // v133: a SDR também vê as visitas em que ela é a SDR (inclusive as importadas pela gerência), para a carteira e o ranking
+  let _vA = [], _vB = [];
+  const juntaVis = () => { const m = new Map(); [..._vA, ..._vB].forEach(x => m.set(x.id, x)); visitasBrutas = [...m.values()]; visitas = visitasBrutas.filter(x => !x.arquivado); render(); };
+  subsPapel.push(onSnapshot(qv, s => { _vA = s.docs.map(d => ({ id:d.id, ...d.data() })); juntaVis(); }, erro));
+  if (perfil.papel === 'sdr') subsPapel.push(onSnapshot(query(collection(db,'visitas'), where('sdrUid','==',uidAtual)), s => { _vB = s.docs.map(d => ({ id:d.id, ...d.data() })); juntaVis(); }, e => console.warn('visitas da SDR', e.code || e.message)));
   // ECONOMIA: corretor, SDR e coordenador só precisam do ranking do mês (e da semana); a gerência carrega a janela toda
   const qr = historicoCompleto ? collection(db,'ranking') : query(collection(db,'ranking'), where('date','>=', souGerente() ? inicioJanela() : inicioRankingEquipe()));
   subsPapel.push(onSnapshot(qr, s => { rankingDocs = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.ranking = true; render(); fecharMesesPendentes(); }, erro));
@@ -5465,7 +5477,7 @@ $('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classLi
 // ---------- Botão + ----------
 // v113: atalho do bolsão no (+) para quem pode pegar lead (segue o painel de abas por cargo)
 // v118: Carteira Frade no (+) (corretor, coordenador e anjo com o bônus ligado; a gerência vê sempre, para testar)
-const podeCartMenu = () => souAtivo() && !souCeo() && (participaCarteira() || souGerente());
+const podeCartMenu = () => souAtivo() && !souCorresp() && (participaCarteira() || souGerente());
 const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente() || (['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) && !abaOculta('bolsao')));
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
@@ -5509,7 +5521,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 129;
+const APP_VERSAO = 133;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5542,9 +5554,9 @@ window.comemorar = comemorar;
 // v115: visita do Feirão Tenda realizada -> sobe a tela "+ R$ 50,00" na hora
 function checarCarteira(antes, depois){
   const c = bvCfg(); if (!c.ativo) return;
-  if (!visitaVale(depois, c) && visitaPendenteCart(depois, c) && !visitaPendenteCart(antes, c) && !visitaVale(antes, c)) { const v = valorVisitaCart(c); if (v && depois.corretorUid === uidAtual) setTimeout(() => mostrarGanho(v, 'saldo pendente · vira disponível quando a visita for realizada'), 1400); return; }
+  if (!visitaVale(depois, c) && visitaPendenteCart(depois, c) && !visitaPendenteCart(antes, c) && !visitaVale(antes, c)) { const v = valorVisitaCart(c); if (v && (depois.corretorUid === uidAtual || depois.sdrUid === uidAtual)) setTimeout(() => mostrarGanho(v, 'saldo pendente · vira disponível quando a visita for realizada'), 1400); return; }
   if (visitaVale(antes, c) || !visitaVale(depois, c)) return;
-  const valor = valorVisitaCart(c), meu = depois.corretorUid === uidAtual;
+  const valor = valorVisitaCart(c), meu = depois.corretorUid === uidAtual || depois.sdrUid === uidAtual;
   window._tgAte = Date.now() + 10000; // a tela grande já mostra o ganho; o aviso pequeno da carteira fica quieto
   setTimeout(() => telaGanho(valor, depois, meu), 1300);
 }
@@ -5724,7 +5736,7 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:0, ausenciaDesde:'2026-10-07', agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:-15, ausenciaDesde:'2026-10-07', agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
@@ -5743,6 +5755,7 @@ const PONTOS_ITENS = [
   ['presenca','Presença (escritório ou externa)'],
   ['agendSdr','Visita agendada pela SDR (os pontos vão para a SDR)'],
   ['agendSdrReal','Visita agendada pela SDR e realizada (para a SDR)'],
+  ['docSdr','Documentação no resumo do dia da SDR (cada uma)'],
   ['ligacao','Ligações (vale por bloco, repetidas também)'],
   ['ausencia','Ausência (dia de trabalho sem presença; use número negativo, ex.: -10)'],
   ['funil','Não preencher o funil até o horário (use número negativo, ex.: -20)']
@@ -5840,6 +5853,7 @@ function assinarEtapa1(){
     if (typeof montarResumosSdr === 'function') montarResumosSdr();
     carregado.cfg = true; render(); fecharMesesPendentes();
     // v120: pedido do Allan: cada 10 ligações valem 2 pontos (ajusta uma vez; depois ele muda em Pontuação quando quiser)
+    if (souDono() && s.exists() && d.migrLig120 && !d.migrAus132 && !Number((d.pontos || {}).ausencia)) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ausencia:-15 }, migrAus132:true }, { merge:true }).catch(e => console.warn('ausência', e.message));
     if (souDono() && s.exists() && !d.migrLig120) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ligacao:2, ligBloco:10 }, migrLig120:true }, { merge:true }).catch(e => console.warn('pontos ligação', e.message));
   }, e => { carregado.cfg = true; silencio(e); }));
   subsPapel.push(onSnapshot(collection(db,'pontos_meses'), s => {
@@ -5865,8 +5879,16 @@ function pontosDoMes(m, val){
   // v97: visitas que a SDR agendou pontuam para a SDR
   rankingDocs.filter(r => noMes(r.date) && !r.semPontos && r.sdrUid && visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
     const ps = perfisTodos.find(p => p.uid === r.sdrUid) || {}, x = pega({ corretorUid:r.sdrUid, corretorNome:ps.nome || r.sdrNome || 'SDR', equipe:ps.equipe || r.sdrEquipe || '' });
-    x.agendSdr = (x.agendSdr || 0) + 1; x.pontos += n('agendSdr') + (r.status === 'Realizada' ? n('agendSdrReal') : 0);
+    x.agendSdr = (x.agendSdr || 0) + 1;
+    // v131: se a pontuação própria da SDR não foi definida, a visita dela vale o mesmo que a do corretor
+    if (n('agendSdr') || n('agendSdrReal')) x.pontos += n('agendSdr') + (r.status === 'Realizada' ? n('agendSdrReal') : 0);
+    else { if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); } else if (r.status === 'Realizada') { x.realizadas++; x.pontos += n('vRealizada'); } else if (r.status === 'Não compareceu') { x.faltas++; x.pontos += n('vFalta'); } else x.pontos += n('vPendente'); }
+    x.visitas++;
   });
+  // v131: documentações do resumo do dia da SDR (ficam no resumo do ranking para todos verem o mesmo número)
+  const docPts = val.docSdr !== undefined && val.docSdr !== '' ? n('docSdr') : n('docs');
+  rankingAtiv.filter(r => r.mes === m && r.uid && r.sdoc).forEach(r => { const q = Object.values(r.sdoc).reduce((a, v) => a + (Number(v) || 0), 0); if (!q) return;
+    const ps = perfisTodos.find(p => p.uid === r.uid) || {}, x = pega({ corretorUid:r.uid, corretorNome:ps.nome || r.nome, equipe:ps.equipe || r.equipe || '' }); x.docsSdr = (x.docsSdr || 0) + q; x.docs += q; x.pontos += q * docPts; });
   rankingDocs.filter(r => noMes(r.date) && !r.semPontos && !visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
     const x = pega(r); x.visitas++;
     if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); }
@@ -5904,7 +5926,8 @@ function pontosDoMes(m, val){
     if (uteis.length) quem.forEach(p => {
       const ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
       const x = pega({ corretorUid:p.uid, corretorNome:p.nome, equipe:p.equipe });
-      const aus = uteis.filter(d => d >= ini && !(x._pres && x._pres.has(d))).length;
+      const folga = d => ['folga','ferias','atestado'].includes((typeof presencas !== 'undefined' && presencas[d]?.marcados?.[p.uid]?.status) || '');
+      const aus = uteis.filter(d => d >= ini && !(x._pres && x._pres.has(d)) && !folga(d)).length;
       x.ausencias = aus; x.pontos += aus * n('ausencia');
     });
   }
@@ -5923,7 +5946,8 @@ window.verPontosDe = i => {
     [`Ligações (${x.ligacoes || 0} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
-    ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', x.docs, n('docs'), (x.docs || 0) * n('docs')], ['Vendas', x.vendas, null, null],
+    ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
+    ['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))], ['Vendas', x.vendas, null, null],
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ['Ausências', x.ausencias, n('ausencia'), (x.ausencias || 0) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
     ['Visitas agendadas (SDR)', x.agendSdr, n('agendSdr'), null]
@@ -8143,7 +8167,7 @@ function visitaDaConstrutora(v, cons){
   const e = empreendimentos.find(x => { const n = norm(x.nome || ''); return n && (n === ve || n.includes(ve) || ve.includes(n)); });
   return e ? norm(e.construtora || '').includes(k) : ve.includes(k);
 }
-const visitasQueValem = (uid, m, c = bvCfg()) => visitas.filter(v => v.corretorUid === uid && (v.date || '').slice(0, 7) === m && visitaVale(v, c));
+const visitasQueValem = (uid, m, c = bvCfg()) => visitas.filter(v => (v.corretorUid === uid || v.sdrUid === uid) && (v.date || '').slice(0, 7) === m && visitaVale(v, c));
 const visitasRealizadas = (uid, m, c = bvCfg()) => visitasQueValem(uid, m, c).length;
 // poupança de visitas na tela inicial do corretor, com o "+ R$" subindo quando entra dinheiro
 // v117: Carteira Frade em FRD (1 FRD = R$ 1): visita do feirão marcada = saldo pendente; realizada = saldo disponível; saque pelo WhatsApp
@@ -8158,7 +8182,7 @@ const valorVisitaCart = (c = bvCfg()) => c.soFeirao ? ((c.modo === 'por_visita' 
 // pendente até 2 dias depois do sábado; se a visita não foi feita (faltou, cancelou ou passou do prazo) sai do pendente e não vale nada
 const visitaPendenteCart = (v, c = bvCfg()) => !!v && c.soFeirao && !!v.feirao && ehSabado(v.date) && !v.arquivado && v.status !== 'Realizada' && !PERDA_V.includes(v.status) && v.date >= somaDias(hojeISO(), -2);
 function saldoCarteira(uid, c = bvCfg()){
-  const meus = visitas.filter(v => v.corretorUid === uid), vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
+  const meus = visitas.filter(v => v.corretorUid === uid || v.sdrUid === uid), vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
   const porMes = {}; vale.forEach(v => { const m = (v.date || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
   // v119: no modo Feirão cada visita vale o valor fixo (padrão FRD 50), mesmo sem regra preenchida
   const cada = valorVisitaCart(c);
@@ -8166,7 +8190,8 @@ function saldoCarteira(uid, c = bvCfg()){
   const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0);
   return { ganho, cada, vale, pendL, pend:pendL.length * cada, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
 }
-const participaCarteira = (c = bvCfg()) => c.ativo && ['corretor','coordenador','anjo'].includes(perfil?.papel) && !(c.quem === 'so_corretores' && !['corretor','anjo'].includes(perfil.papel));
+// v133: a carteira vale para todos os perfis (corretor, coordenador, SDR, anjo e gerência); só o correspondente fica de fora
+const participaCarteira = (c = bvCfg()) => c.ativo && souAtivo() && !souCorresp();
 function htmlPoupanca(){
   const c = bvCfg(); if (view !== 'hoje' || !participaCarteira(c)) return '';
   const k = saldoCarteira(uidAtual, c);
@@ -8261,7 +8286,7 @@ window.salvarBonus = async () => {
 function desenharBonus(){
   const c = bvCfg(), m = finMes || mesAtual();
   if (!c.ativo) { $('bvTabela').innerHTML = '<div class="muted" style="font-size:13.5px;margin-top:10px">O bônus está desligado. Abra “Regra do bônus”, escolha como funciona e ligue.</div>'; return; }
-  const ps = perfisLista.filter(p => p.status === 'ativo' && (c.quem === 'so_corretores' ? ['corretor','anjo'].includes(p.papel) : ['corretor','coordenador','anjo'].includes(p.papel)))
+  const ps = perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'correspondente')
     .map(p => { const n = visitasRealizadas(p.uid, m), b = bonusDe(n, c), l = finLanc.find(x => x.id === 'bv_' + m + '_' + p.uid); return { p, n, b, l }; })
     .sort((a, b) => b.n - a.n || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
   const tot = ps.reduce((a, x) => a + x.b, 0);
@@ -8830,7 +8855,8 @@ let checkinsHoje = [], meuCheckin = null, filaHoje = null, checkinsMes = [];
 const ciHoje = () => hojeISO(), ciId = (uid, dia = ciHoje()) => dia + '_' + uid;
 const ciCfg = () => ({ hora:'08:30', dias:[1,2,3,4,5,6], ...(appCfg.checkin || {}) });
 const hm = ms => { const d = new Date(ms); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
-const ciAtrasado = c => !!c && c.via !== 'externo' && hm(c.entrada) > ciCfg().hora;
+// v132: não existe mais "atrasado": marcou presença, está certo. Só conta quem ficou o dia sem marcar (ausência)
+const ciAtrasado = c => false;
 // fora = começou o dia fora (e ainda não chegou) ou saiu para um atendimento e ainda não voltou
 const ciFora = c => !!c && !c.saida && (!!c.externoAgora || (c.via === 'externo' && !c.chegouEscritorio));
 const ciNoEscritorio = c => !!c && !c.saida && !ciFora(c);
@@ -11423,6 +11449,16 @@ function montarResumosSdr(){
     const p = perfisLista.find(y => y.uid === uid) || {}; out.push({ ...x, sdrUid:uid, sdrNome:p.nome || x.sdrNome, equipe:p.equipe || x.equipe || '', doWhats:x.sdrNome });
   });
   sdrResumos = out;
+  clearTimeout(window._sdocT); window._sdocT = setTimeout(sincDocsSdr, 4000);
+}
+// v131: a gerência deixa o resumo do ranking igual aos resumos das SDRs (inclusive os importados e vinculados)
+async function sincDocsSdr(){
+  if (!souGerente() || souCeo() || !sdrResumos.length) return;
+  const meses = [mesAtual(), mesAnterior(1)], porDoc = new Map();
+  sdrResumos.filter(x => !ehWa(x.sdrUid) && meses.includes((x.dia || '').slice(0, 7))).forEach(x => { const k = x.dia.slice(0, 7) + '_' + x.sdrUid; if (!porDoc.has(k)) porDoc.set(k, { m:x.dia.slice(0, 7), uid:x.sdrUid, nome:x.sdrNome, equipe:x.equipe, dias:{} }); porDoc.get(k).dias[x.dia] = docsDoResumo(x); });
+  const ops = [];
+  porDoc.forEach((v, k) => { const atual = (rankingAtiv.find(r => r.id === k) || {}).sdoc || {}; const muda = Object.entries(v.dias).some(([d, q]) => Number(atual[d] || 0) !== q); if (muda) ops.push([k, v]); });
+  for (let i = 0; i < ops.length; i += 200) { const b = writeBatch(db); ops.slice(i, i + 200).forEach(([k, v]) => b.set(doc(db,'ranking_ativ', k), { mes:v.m, uid:v.uid, nome:v.nome || '', equipe:v.equipe || '', sdoc:v.dias, atualizadoEm:Date.now() }, { merge:true })); try { await b.commit(); } catch(e) { console.warn('sinc docs SDR', e.message); return; } }
 }
 window.montarResumosSdr = montarResumosSdr;
 function assinarSdr(){
@@ -11651,13 +11687,13 @@ window.salvarVinculoWa = async () => {
 const SIM_PADRAO = {
   faixas:[{ n:1, ate:3200 }, { n:2, ate:5000 }, { n:3, ate:9600 }, { n:4, ate:13000 }],
   // taxa nominal ao ano para NÃO cotista no Nordeste (cotista FGTS: menos "redCotista")
-  taxas:[{ ate:2000, taxa:4.50 }, { ate:3200, taxa:5.00 }, { ate:4000, taxa:5.25 }, { ate:4500, taxa:6.00 }, { ate:5000, taxa:6.75 }, { ate:9600, taxa:8.16 }, { ate:13000, taxa:10.00 }],
-  redCotista:0.5, cotistaAteFaixa:3, comprometimento:30, prazoMax:420, idadeMax:80.5, cota:80,
+  taxas:[{ ate:2000, taxa:4.50 }, { ate:3200, taxa:4.75 }, { ate:4000, taxa:5.25 }, { ate:4500, taxa:6.00 }, { ate:5000, taxa:6.75 }, { ate:9600, taxa:8.16 }, { ate:13000, taxa:10.00 }],
+  redCotista:0.5, cotistaAteFaixa:3, comprometimento:30, reservaParcela:30, dfi:0.0064, mip:[{ ate:30, p:0.0098 }, { ate:35, p:0.0120 }, { ate:40, p:0.0153 }, { ate:45, p:0.0200 }, { ate:50, p:0.0280 }, { ate:55, p:0.0420 }, { ate:60, p:0.0600 }, { ate:65, p:0.0900 }, { ate:200, p:0.1300 }], prazoMax:420, idadeMax:80.5, cota:80,
   tetos:{ 1:275000, 2:275000, 3:400000, 4:600000 },
   subsidioAte:4000, subsidioMin:1500, redUnipessoal:70,
   curva:[{ renda:1750, valor:55000 }, { renda:2200, valor:45000 }, { renda:2600, valor:32000 }, { renda:3000, valor:18000 }, { renda:3500, valor:6000 }, { renda:4000, valor:1500 }]
 };
-const simCfg = () => { const c = appCfg.simulador || {}; return { ...SIM_PADRAO, ...c, tetos:{ ...SIM_PADRAO.tetos, ...(c.tetos || {}) } }; };
+const simCfg = () => { const c = appCfg.simulador || {}; return { ...SIM_PADRAO, ...c, tetos:{ ...SIM_PADRAO.tetos, ...(c.tetos || {}) }, mip:c.mip || SIM_PADRAO.mip, reservaParcela:c.reservaParcela ?? SIM_PADRAO.reservaParcela, dfi:c.dfi ?? SIM_PADRAO.dfi }; };
 let simulacoes = [], simUlt = null, simPart = [];
 function assinarSimulacoes(){
   simulacoes = []; if (!souAtivo() || souCorresp()) return;
@@ -11683,16 +11719,24 @@ function simCalcular(e){
   if (!idades.length) bloqueios.push('Informe a data de nascimento.');
   const maisVelho = idades.length ? Math.max(...idades) : 0;
   if (idades.some(x => x < 216)) bloqueios.push('Todo participante precisa ter 18 anos ou mais.');
-  const prazo = Math.max(0, Math.min(c.prazoMax, Math.floor(c.idadeMax * 12 - maisVelho)));
+  let prazo = Math.max(0, Math.min(c.prazoMax, Math.floor(c.idadeMax * 12 - maisVelho)));
+  const cond = e.cond && e.condVal > 0; // carta condicionada: vale a parcela (e o prazo) que a Caixa aprovou
+  if (cond && e.condPrazo) prazo = Math.min(prazo || e.condPrazo, e.condPrazo);
+  if (e.cond && !e.condVal) avisos.push('Carta condicionada marcada sem o valor da parcela: usei os 30% da renda.');
   if (idades.length && prazo < 60) bloqueios.push('Pela idade do participante mais velho, o prazo fica curto demais para financiar.');
   else if (idades.length && prazo < c.prazoMax) avisos.push(`Prazo reduzido para ${prazo} meses por causa da idade (o financiamento termina até ${String(c.idadeMax).replace('.5', ' anos e 6 meses').replace(/^(\d+)$/, '$1 anos')}).`);
   const cotista = parts.some(p => p.fgts);
   const tx = (c.taxas.find(t => renda <= t.ate) || c.taxas[c.taxas.length - 1] || { taxa:10 }).taxa;
   const taxa = Math.max(0, tx - (cotista && faixa && faixa <= c.cotistaAteFaixa ? c.redCotista : 0));
   const i = taxa / 100 / 12, n = prazo;
-  const parcelaMax = renda * c.comprometimento / 100;
-  const pvPrice = p => i ? p * (1 - Math.pow(1 + i, -n)) / i : p * n;
-  const finPriceRenda = n ? pvPrice(parcelaMax) : 0, finSacRenda = n ? parcelaMax / (1 / n + i) : 0;
+  const parcelaMax = cond ? e.condVal : (e.cond && e.condRenda ? e.condRenda : renda) * c.comprometimento / 100;
+  const fator = n ? (i ? (1 - Math.pow(1 + i, -n)) / i : n) : 0;
+  // seguros da Caixa dentro da prestação: MIP (morte e invalidez, pela idade do mais velho, sobre o financiamento) e DFI (danos ao imóvel, sobre o valor)
+  const idadeAnos = Math.floor(maisVelho / 12), mip = ((c.mip.find(m => idadeAnos <= m.ate) || c.mip[c.mip.length - 1]).p || 0) / 100, dfi = (Number(c.dfi) || 0) / 100;
+  const valorRef = Number(e.valor) || 0, capPrest = Math.max(0, parcelaMax - (cond ? 0 : Number(c.reservaParcela) || 0));
+  const finCap = (vRef, sac) => { if (!n) return 0; const d = vRef * dfi; return Math.max(0, (capPrest - d) / ((sac ? 1 / n + i : 1 / fator) + mip)); };
+  let finPriceRenda = finCap(valorRef), finSacRenda = finCap(valorRef, true);
+  if (!valorRef) { for (let k = 0; k < 3; k++) { finPriceRenda = finCap(finPriceRenda / (c.cota / 100)); } finSacRenda = finCap(finPriceRenda / (c.cota / 100), true); }
   const teto = faixa ? Number(c.tetos[faixa]) || 0 : 0;
   // subsídio estimado (faixas 1 e 2, renda até o limite, imóvel dentro do teto)
   let subsidio = 0;
@@ -11714,10 +11758,13 @@ function simCalcular(e){
     entradaFalta = Math.max(0, valor - fin - subsidio - fgtsSaldo - entradaTem);
   }
   valorCabe = Math.min(teto || Infinity, (finPriceRenda / (c.cota / 100)), finPriceRenda + subsidio + fgtsSaldo + entradaTem);
-  const parcPrice = n ? (i ? fin * i / (1 - Math.pow(1 + i, -n)) : fin / n) : 0, parcSac1 = n ? fin / n + fin * i : 0;
+  const seg = fin * mip + (valor || fin / (c.cota / 100)) * dfi;
+  const parcPrice = n ? fin / fator + seg : 0, parcSac1 = n ? fin / n + fin * i + seg : 0;
+  const efetiva = (Math.pow(1 + i, 12) - 1) * 100, comprom = renda ? parcPrice / renda * 100 : 0, cotaUsada = valor ? fin / valor * 100 : null;
   if (e.tipoRenda === 'informal') avisos.push('Renda informal: a Caixa pede comprovação (extratos) e pode considerar um valor menor.');
   if (e.pcd) avisos.push('PNE/PCD tem prioridade nos empreendimentos do programa.');
-  return { renda, faixa, taxa, cotista, prazo, parcelaMax, finPriceRenda, finSacRenda, fin, subsidio, teto, valor, entradaFalta, valorCabe, parcPrice, parcSac1, avisos, bloqueios, partes:parts.length };
+  if (cond) avisos.push(`Carta condicionada: parcela de ${brl2(e.condVal)}${e.condPrazo ? ' em ' + e.condPrazo + ' meses' : ''}. O financiamento foi calculado em cima dela.`);
+  return { cond, condVal:e.condVal, renda, faixa, taxa, cotista, prazo, parcelaMax, finPriceRenda, finSacRenda, fin, subsidio, teto, valor, entradaFalta, valorCabe, parcPrice, parcSac1, efetiva, comprom, cotaUsada, seg, descTaxa:cotista && faixa && faixa <= c.cotistaAteFaixa ? c.redCotista : 0, avisos, bloqueios, partes:parts.length };
 }
 // histórico do CPF na Prime e nas cartas do app
 function simHistCpf(cpf){
@@ -11743,7 +11790,7 @@ function simNota(e, r, hist){
 function simLer(){
   const v = id => ($(id)?.value || '').trim();
   return { nome:v('simNome'), cpf:v('simCpf'), nasc:v('simNasc'), renda:lerReais(v('simRenda')) || 0, tipoRenda:v('simTipo') || 'formal', fgts:$('simFgts').checked, fgtsSaldo:lerReais(v('simFgtsSaldo')) || 0,
-    dependente:$('simDep').checked, valor:lerReais(v('simValor')) || 0, entrada:lerReais(v('simEntrada')) || 0, possuiImovel:$('simImovel').checked, pcd:$('simPcd').checked,
+    dependente:$('simDep').checked, cond:$('simCond').checked, condVal:lerReais(v('simCondVal')) || 0, condPrazo:Math.round(Number(soDig(v('simCondPrazo')))) || 0, condRenda:lerReais(v('simCondRenda')) || 0, valor:lerReais(v('simValor')) || 0, entrada:lerReais(v('simEntrada')) || 0, possuiImovel:$('simImovel').checked, pcd:$('simPcd').checked,
     parts:simPart.map((p, k) => ({ nasc:v('simPN' + k), renda:lerReais(v('simPR' + k)) || 0, fgts:$('simPF' + k)?.checked || false })).filter(p => p.nasc || p.renda) };
 }
 function htmlSimPart(){
@@ -11761,30 +11808,42 @@ window.simular = () => {
   simUlt = { e, r, hist, nota, em:Date.now(), salvo:false };
   $('simRes').innerHTML = htmlSimResultado(simUlt); $('simRes').scrollIntoView({ behavior:'smooth', block:'start' });
 };
+function simLinhasCaixa(r){
+  const ent = r.valor ? Math.max(0, r.valor - r.fin - r.subsidio) : null;
+  return [
+    ['Valor de avaliação', r.valor ? brl2(r.valor) : 'não informado', 'Valor da entrada', ent !== null ? brl2(ent) : '—'],
+    ['Valor do financiamento', brl2(r.valor ? r.fin : r.finPriceRenda), 'Cota máxima de financiamento', r.cotaUsada !== null ? pctBR(r.cotaUsada) : pctBR(simCfg().cota)],
+    ['Valor do subsídio (complemento)', r.subsidio ? brl2(r.subsidio) : 'R$ 0,00', 'Prazo máximo', simCfg().prazoMax + ' meses'],
+    ['Comprometimento da renda', pctBR(r.comprom), 'Prazo', r.prazo + ' meses'],
+    ['1ª prestação', brl2(r.parcPrice), 'Sistema de amortização', 'PRICE / TR - Tabela Price'],
+    ['Juros nominais', 'TR + ' + r.taxa.toLocaleString('pt-BR', { minimumFractionDigits:4 }) + '% a.a.', 'Juros efetivos', 'TR + ' + r.efetiva.toLocaleString('pt-BR', { minimumFractionDigits:4, maximumFractionDigits:4 }) + '% a.a.'],
+    ['% desconto taxa de juros', r.descTaxa ? r.descTaxa.toLocaleString('pt-BR') + '%' : '0%', 'Faixa do programa', 'Faixa ' + r.faixa],
+    ['Carta', r.cond ? 'Condicionada' : 'Não condicionada', r.cond ? 'Parcela condicionada' : 'Parcela máxima (30%)', brl2(r.parcelaMax)]
+  ];
+}
+function simProponentes(e, r){
+  const ps = [{ nasc:e.nasc, renda:e.renda }, ...e.parts].filter(p => p.nasc || p.renda);
+  return ps.map(p => ({ nasc:p.nasc, renda:Number(p.renda) || 0, part:r.renda ? (Number(p.renda) || 0) / r.renda * 100 : 0 }));
+}
 function htmlSimResultado(s){
-  const { e, r, hist, nota } = s, cfg = simCfg();
+  const { e, r, hist, nota } = s;
   if (r.bloqueios.length) return `<div class="card sim-res"><div class="sim-bloq"><b>Não dá para seguir pelo Minha Casa Minha Vida</b>${r.bloqueios.map(x => `<div>${esc(x)}</div>`).join('')}</div>${r.avisos.map(x => `<div class="sim-aviso">${esc(x)}</div>`).join('')}</div>`;
-  const ent = r.valor ? (r.entradaFalta > 0 ? `<div class="sim-k"><small>Entrada que falta</small><b class="neg">${brl2(r.entradaFalta)}</b><span>imóvel de ${brl2(r.valor)}</span></div>` : `<div class="sim-k"><small>Entrada que falta</small><b class="pos">Nada</b><span>imóvel de ${brl2(r.valor)} cabe</span></div>`) : `<div class="sim-k"><small>Imóvel que cabe</small><b>até ${brl2(r.valorCabe)}</b><span>financiamento + desconto${e.entrada || e.fgtsSaldo ? ' + entrada' : ''}</span></div>`;
   return `<div class="card sim-res">
-    <div class="sim-topo"><div><small>${esc(nomeBonito(e.nome))}${e.cpf ? ' · CPF ' + esc(fmtCpf(e.cpf)) : ''}</small><h2>Pode financiar até <span>${brl2(r.valor ? r.fin : r.finPriceRenda)}</span></h2>
-      <div class="sim-chips"><span>Faixa ${r.faixa}</span><span>Juros ${pctBR(r.taxa)} a.a.${r.cotista && r.faixa <= cfg.cotistaAteFaixa ? ' (cotista FGTS)' : ''}</span><span>${r.prazo} meses</span><span>Renda ${brl2(r.renda)}</span></div></div>
+    <div class="sim-topo"><div><small>${esc(nomeBonito(e.nome))}${e.cpf ? ' · CPF ' + esc(fmtCpf(e.cpf)) : ''}</small><h2>Resultado da simulação</h2></div>
       <div class="sim-nota" style="--c:${nota.cor}"><b>${nota.n}</b><small>Nota de perfil</small><span>${nota.rot}</span></div></div>
-    <div class="sim-grade">
-      <div class="sim-k"><small>Desconto do governo (subsídio)</small><b class="${r.subsidio ? 'pos' : ''}">${r.subsidio ? brl2(r.subsidio) : 'Sem desconto'}</b><span>${r.subsidio ? 'estimativa' : r.faixa > 2 ? 'só faixas 1 e 2' : 'renda acima do limite do desconto'}</span></div>
-      <div class="sim-k"><small>Parcela máxima (${cfg.comprometimento}% da renda)</small><b>${brl2(r.parcelaMax)}</b><span>por mês</span></div>
-      ${ent}
-      <div class="sim-k"><small>Primeira parcela</small><b>${brl2(r.parcPrice)}</b><span>Price · SAC começa em ${brl2(r.parcSac1)}</span></div>
-    </div>
+    <table class="sim-cx">${simLinhasCaixa(r).map(([a, b, c2, d]) => `<tr><td>${a}:</td><td>${b}</td><td>${c2}:</td><td class="${/amortiza/.test(c2) ? 'sim-or' : ''}">${d}</td></tr>`).join('')}</table>
+    <h3 class="sim-sub">Proponente(s)</h3>
+    <table class="sim-pr"><thead><tr><th>Data de nascimento</th><th>Renda individual</th><th>Participação</th></tr></thead><tbody>${simProponentes(e, r).map(p => `<tr><td>${p.nasc ? dataBR(p.nasc) : '—'}</td><td>${brl2(p.renda)}</td><td>${p.part.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 })}%</td></tr>`).join('')}</tbody></table>
     ${hist.length ? `<div class="sim-hist"><b>Histórico deste CPF</b>${hist.slice(0, 4).map(h => `<div class="g-${h.g}">${dataBR(h.data) || ''} · ${esc(h.txt)}</div>`).join('')}</div>` : ''}
     ${r.avisos.map(x => `<div class="sim-aviso">${esc(x)}</div>`).join('')}
     <div class="sim-acoes"><button class="btn btn-primary" onclick="salvarSim()" ${s.salvo ? 'disabled' : ''}>${s.salvo ? 'Simulação salva' : 'Salvar simulação'}</button><button class="btn btn-ghost" onclick="imprimirSim()">Imprimir</button><button class="btn btn-ghost" onclick="novaSim()">Nova simulação</button></div>
-    <p class="hint sim-obs">Estimativa feita pelas regras do Minha Casa Minha Vida (Nordeste), sem seguros e taxas. Os valores finais, principalmente o desconto do governo, são confirmados pela Caixa na análise de crédito.</p></div>`;
+    <p class="hint sim-obs">Estimativa pelas regras do Minha Casa Minha Vida (Nordeste), com seguros estimados. O valor do subsídio é estimado: o valor final é confirmado pela Caixa na análise de crédito.</p></div>`;
 }
-window.novaSim = () => { ['simNome','simCpf','simNasc','simRenda','simFgtsSaldo','simValor','simEntrada'].forEach(i => $(i).value = ''); ['simFgts','simDep','simImovel','simPcd'].forEach(i => $(i).checked = false); $('simTipo').value = 'formal'; simPart = []; $('simParts').innerHTML = ''; simFgtsVis(); $('simRes').innerHTML = ''; simUlt = null; $('simNome').focus(); };
+window.novaSim = () => { ['simNome','simCpf','simNasc','simRenda','simFgtsSaldo','simValor','simEntrada','simCondVal','simCondPrazo','simCondRenda'].forEach(i => $(i).value = ''); ['simFgts','simDep','simImovel','simPcd','simCond'].forEach(i => $(i).checked = false); $('simCondW').classList.add('hide'); $('simTipo').value = 'formal'; simPart = []; $('simParts').innerHTML = ''; simFgtsVis(); $('simRes').innerHTML = ''; simUlt = null; $('simNome').focus(); };
 window.salvarSim = async () => {
   if (!simUlt || simUlt.salvo) return; const { e, r, nota } = simUlt;
   const d = { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', cliente:e.nome.slice(0, 80), cpf:fmtCpf(e.cpf), cpfNorm:soDig(e.cpf), nasc:e.nasc, tipoRenda:e.tipoRenda, fgts:e.fgts, dependente:e.dependente,
-    participantes:r.partes, renda:r.renda, valor:r.valor, faixa:r.faixa, taxa:r.taxa, prazo:r.prazo, financiamento:Math.round(r.valor ? r.fin : r.finPriceRenda), subsidio:Math.round(r.subsidio), parcela:Math.round(r.parcPrice * 100) / 100,
+    participantes:r.partes, condicionada:!!r.cond, parcelaCond:r.cond ? r.condVal : null, renda:r.renda, valor:r.valor, faixa:r.faixa, taxa:r.taxa, prazo:r.prazo, financiamento:Math.round(r.valor ? r.fin : r.finPriceRenda), subsidio:Math.round(r.subsidio), parcela:Math.round(r.parcPrice * 100) / 100,
     entradaFalta:r.entradaFalta === null ? null : Math.round(r.entradaFalta), nota:nota.n, dia:hojeISO(), em:Date.now() };
   try { await gravar(setDoc(doc(collection(db,'simulacoes')), d)); simUlt.salvo = true; $('simRes').innerHTML = htmlSimResultado(simUlt); toast('Simulação salva'); }
   catch(err) { toast('Não foi possível salvar: ' + err.message + ' (publique as regras novas do Firebase)'); }
@@ -11792,12 +11851,14 @@ window.salvarSim = async () => {
 window.imprimirSim = () => {
   if (!simUlt) return; const { e, r, nota, hist } = simUlt, cfg = simCfg();
   const lin = (a, b) => `<tr><td>${a}</td><td><b>${b}</b></td></tr>`;
-  const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Simulação · ${esc(e.nome)}</title><style>body{font-family:Arial,Helvetica,sans-serif;color:#0f172a;margin:32px}h1{font-size:20px;margin:0}h2{font-size:15px;margin:22px 0 8px;color:#1C5F8E}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #f28c38;padding-bottom:12px}.top img{height:44px}table{width:100%;border-collapse:collapse}td{padding:7px 4px;border-bottom:1px solid #e5e7eb;font-size:13.5px}td:last-child{text-align:right}.big{font-size:26px;font-weight:800;color:#0f6b4a;margin:10px 0}.obs{font-size:11px;color:#64748b;margin-top:22px;line-height:1.5}.av{font-size:12.5px;background:#fff7ed;border:1px solid #fed7aa;padding:6px 8px;border-radius:6px;margin-top:6px}</style></head><body>
-    <div class="top"><div><h1>Simulação de financiamento</h1><div style="font-size:12px;color:#64748b">Minha Casa Minha Vida · ${new Date().toLocaleString('pt-BR')}</div></div><img src="${location.origin + location.pathname.replace(/[^/]*$/, '')}logo-frade.png" alt="Frade Imóveis"></div>
-    <h2>Cliente</h2><table>${lin('Nome', esc(nomeBonito(e.nome)))}${e.cpf ? lin('CPF', esc(fmtCpf(e.cpf))) : ''}${lin('Renda familiar', brl2(r.renda))}${lin('Tipo de renda', { formal:'Formal', mista:'Mista', informal:'Informal' }[e.tipoRenda])}${lin('Participantes', r.partes)}${lin('FGTS (3 anos ou mais)', r.cotista ? 'Sim' : 'Não')}${lin('Possui dependente', e.dependente ? 'Sim' : 'Não')}</table>
-    <h2>Resultado</h2><div class="big">Pode financiar até ${brl2(r.valor ? r.fin : r.finPriceRenda)}</div><table>${lin('Faixa do programa', 'Faixa ' + r.faixa)}${lin('Juros', pctBR(r.taxa) + ' ao ano')}${lin('Prazo', r.prazo + ' meses')}${lin('Desconto do governo (estimativa)', r.subsidio ? brl2(r.subsidio) : 'Sem desconto')}${lin('Parcela máxima (' + cfg.comprometimento + '% da renda)', brl2(r.parcelaMax))}${lin('Primeira parcela (Price)', brl2(r.parcPrice))}${lin('Primeira parcela (SAC)', brl2(r.parcSac1))}${r.valor ? lin('Valor do imóvel', brl2(r.valor)) + lin('Entrada que falta', brl2(r.entradaFalta || 0)) : lin('Imóvel que cabe', 'até ' + brl2(r.valorCabe))}${lin('Nota de perfil', nota.n + ' · ' + nota.rot)}</table>
+  const linhas = simLinhasCaixa(r).map(([a, b, c2, d]) => `<tr><td class="r">${a}:</td><td>${b}</td><td class="r">${c2}:</td><td class="${/amortiza/.test(c2) ? 'or' : ''}">${d}</td></tr>`).join('');
+  const props = simProponentes(e, r).map(p => `<tr><td>${p.nasc ? dataBR(p.nasc) : '—'}</td><td>${brl2(p.renda)}</td><td>${p.part.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 })}%</td></tr>`).join('');
+  const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Simulação · ${esc(e.nome)}</title><style>body{font-family:Arial,Helvetica,sans-serif;color:#1f2937;margin:28px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #f28c38;padding-bottom:10px;margin-bottom:14px}.top img{height:42px}h1{font-size:18px;margin:0}.sub{font-size:12px;color:#64748b}h2{font-size:13px;margin:18px 0 6px;color:#0f172a;text-transform:uppercase;letter-spacing:.02em}table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px 6px;border-bottom:1px dashed #cbd5e1}tr:nth-child(odd) td{background:#f1f5f9}td.r{text-align:right;color:#475569;width:22%}.or{color:#f28c38;font-weight:700}th{background:#e2e8f0;font-weight:600}.pr td,.pr th{text-align:center}.av{font-size:12px;background:#fff7ed;border:1px solid #fed7aa;padding:6px 8px;border-radius:6px;margin-top:6px}.obs{font-size:11px;color:#64748b;margin-top:18px;line-height:1.5}</style></head><body>
+    <div class="top"><div><h1>Simulação de financiamento · Minha Casa Minha Vida</h1><div class="sub">${esc(nomeBonito(e.nome))}${e.cpf ? ' · CPF ' + esc(fmtCpf(e.cpf)) : ''} · ${new Date().toLocaleString('pt-BR')}</div></div><img src="${location.origin + location.pathname.replace(/[^/]*$/, '')}logo-frade.png" alt="Frade Imóveis"></div>
+    <h2>Resultado da simulação</h2><table>${linhas}</table>
+    <h2>Proponente(s)</h2><table class="pr"><thead><tr><th>Data de nascimento</th><th>Renda individual</th><th>Participação</th></tr></thead><tbody>${props}</tbody></table>
     ${r.avisos.map(x => `<div class="av">${esc(x)}</div>`).join('')}
-    <div class="obs">Simulação feita por ${esc(perfil.nome)} · Frade Imóveis. Estimativa pelas regras do Minha Casa Minha Vida, sem seguros e taxas. Os valores finais, principalmente o desconto do governo, são confirmados pela Caixa na análise de crédito.</div></body></html>`;
+    <div class="obs">Simulação feita por ${esc(perfil.nome)} · Frade Imóveis · nota de perfil ${nota.n} (${nota.rot}). Estimativa pelas regras do Minha Casa Minha Vida, com seguros estimados. O valor do subsídio é estimado e o resultado final é confirmado pela Caixa na análise de crédito.</div></body></html>`;
   const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
   const d = f.contentWindow.document; d.open(); d.write(html); d.close();
   setTimeout(() => { try { f.contentWindow.focus(); f.contentWindow.print(); } catch(err) { toast('Não deu para imprimir neste aparelho'); } setTimeout(() => f.remove(), 60000); }, 400);
@@ -11874,8 +11935,10 @@ function lerFormResumo(){
   CAMPOS_RES.forEach(([s,c]) => ['lead','doc','cpf'].forEach(k => r[s][c][k] = n(`res_${s}_${c}_${k}`)));
   return r;
 }
+const docsDoResumo = r => ['novos','recuperados'].reduce((a, k) => a + ['crm','insta'].reduce((b, c) => b + (Number(r[k]?.[c]?.doc) || 0), 0), 0);
 async function gravarResumo(r, sdr){
   const id = `${r.dia}_${sdr.uid}`;
+  if (!ehWa(sdr.uid)) { const m = r.dia.slice(0, 7); try { await setDoc(doc(db,'ranking_ativ', m + '_' + sdr.uid), { mes:m, uid:sdr.uid, nome:sdr.nome || '', equipe:sdr.equipe || '', sdoc:{ [r.dia]:docsDoResumo(r) }, atualizadoEm:Date.now() }, { merge:true }); } catch(e) { console.warn('docs da SDR no ranking', e.message); } }
   await gravar(setDoc(doc(db,'sdr_resumos',id), { ...r, autor:r.autor || '', sdrUid:sdr.uid, sdrNome:sdr.nome, equipe:sdr.equipe || '', texto:textoResumo(r), por:perfil.nome, em:Date.now() }));
 }
 window.salvarResumoSdr = async (mandar) => {
