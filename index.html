@@ -627,7 +627,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 
 .cart-dois{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}.cart-dois b{display:block;font-size:clamp(19px,6vw,26px);letter-spacing:-.02em;white-space:nowrap}.cart-pend{padding:8px 10px;border-radius:12px;background:rgba(250,204,21,.18);box-shadow:inset 0 0 0 1px rgba(250,204,21,.45)}.cart-pend small{color:#fde68a}.cart-pend b{color:#fde047}.poup-pend{display:inline-block;font-style:normal;font-weight:800;font-size:13px;color:#3a2a00;background:#fde047;padding:3px 9px;border-radius:99px;margin:3px 0 2px}.poup-tx span{display:block}
 button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.poup-ver{margin-left:auto;font-style:normal;font-weight:700;font-size:13px;background:rgba(255,255,255,.18);padding:6px 12px;border-radius:99px;flex:none}.cart-topo{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff;margin-bottom:12px}.cart-topo small{opacity:.85}.cart-it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.cart-it small{display:block;color:var(--muted);font-size:12.5px}.cart-it span{color:#16a34a;font-weight:800;white-space:nowrap}
-.rk-toca{cursor:pointer}.vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
+.rk-toca{cursor:pointer}.bd-crm{margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}.bd-crm small{display:block;margin-top:4px;font-size:12px}.vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
 .tvr-bts{display:flex;gap:8px}html.modo-tvr .sidebar,html.modo-tvr .topbar,html.modo-tvr .mobilebar,html.modo-tvr #fab,html.modo-tvr .ia-bolha,html.modo-tvr #zapFab,html.modo-tvr #discFab{display:none!important}
 .tvr{display:none}html.modo-tvr .tvr{display:flex}html.modo-tvr body{overflow:hidden}
 .tvr{position:fixed;inset:0;z-index:60;background:radial-gradient(1200px 600px at 10% -10%,#16405f 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#3a1f12 0%,transparent 55%),#081826;color:#eef4f8;padding:1.6vw 1.8vw;flex-direction:column;gap:1.2vw;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
@@ -2695,6 +2695,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <div class="hint" style="margin-top:0">Cole uma ou várias mensagens do grupo, ou envie a <b>conversa exportada</b> do WhatsApp (⋮ → Mais → Exportar conversa → Sem mídia). Só as mensagens com "DATA REFERENTE" são lidas.</div>
       <div class="int-linha" style="margin:8px 0"><label style="font-size:13px">De <input type="date" id="resDe" style="width:auto" onchange="lerColado()"></label><label style="font-size:13px">até <input type="date" id="resAte" style="width:auto" onchange="lerColado()"></label>
         <button class="btn btn-ghost" onclick="document.getElementById('resArq').click()">Enviar conversa exportada</button><input type="file" id="resArq" class="hide" accept=".txt,.zip,text/plain" onchange="lerArquivoConversa(this)"></div>
+      <label class="fv-chk" style="margin:0 0 8px"><input type="checkbox" id="resPular" checked> Não mexer nos dias que a SDR já preencheu no app</label>
       <textarea id="resColar" placeholder="Cole aqui a mensagem do grupo…" style="min-height:120px" oninput="clearTimeout(window._rcT);window._rcT=setTimeout(lerColado,400)"></textarea>
       <div id="resPrevia" style="margin-top:10px"></div>
     </div>
@@ -2998,6 +2999,14 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-body"><div style="font-size:26px;font-weight:800;margin-bottom:10px" id="ptDetTot"></div><div class="tbl-wrap" id="ptDetLista"></div><p class="hint" id="ptDetObs" style="margin-top:10px"></p></div>
   </div>
 </div>
+<div class="modal" id="vincWaModal">
+  <div class="sheet" style="width:min(420px,100%)">
+    <div class="sheet-head"><h2>Vincular SDR</h2><button class="icon-btn" onclick="fechar('vincWaModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><p style="margin:0 0 10px">Os resumos que vieram do WhatsApp como <b id="vwNome"></b> vão somar em:</p><div class="fg"><select id="vwSel"></select></div>
+      <p class="hint">Se a SDR já tiver preenchido algum desses dias no app, vale o que ela preencheu (não soma duas vezes).</p></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('vincWaModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarVinculoWa()">Vincular</button></div>
+  </div>
+</div>
 <div class="modal" id="bzDispModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><h2>Disparo do bolsão</h2><button class="icon-btn" onclick="fechar('bzDispModal')" data-ic="x"></button></div>
@@ -3006,6 +3015,9 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <label class="fv-chk"><input type="checkbox" id="bdAtivo"> Disparo ligado</label>
       <div class="row2"><div class="fg"><label>Leads por vez</label><input type="number" id="bdQtd" min="1"></div><div class="fg"><label>A cada (minutos)</label><input type="number" id="bdInt" min="1"></div></div>
       <div class="fg"><label>Pausar quando houver quantos livres no bolsão</label><input type="number" id="bdMax" min="1"></div>
+      <div class="bd-crm"><label class="fv-chk"><input type="checkbox" id="bdCrmAtivo"> Leads do CRM direto para o bolsão</label>
+        <div class="fg"><label>Perfil do CRM cujos leads vão para o bolsão</label><input id="bdCrmNomes" maxlength="120" placeholder="Allan ADM"><small class="muted">Escreva igual ao nome do perfil no CRM. Mais de um: separe por vírgula.</small></div>
+        <div class="fg"><label>Quando o lead chegar</label><select id="bdCrmDest"><option value="livre">Fica disponível na hora</option><option value="fila">Entra na fila e sai pelo disparo</option></select></div></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" id="bdSoltar" onclick="soltarAgora()">Soltar agora</button><button class="btn btn-primary" onclick="salvarDisparo()">Salvar</button></div>
   </div>
@@ -5409,7 +5421,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 120;
+const APP_VERSAO = 123;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5737,6 +5749,7 @@ function assinarEtapa1(){
       mensagens: d.mensagens?.length ? (d.mensagens.some(m => m.id === 'pesquisa') || d.semPesquisa ? d.mensagens : [...d.mensagens, MSG_PESQUISA]) : MSG_PADRAO , checkin: d.checkin || null, analises: d.analises || null, bonusVisitas: d.bonusVisitas || null, abasOcultas: d.abasOcultas || ABAS_OCULTAS_PADRAO, abasLiberadas: d.abasLiberadas || {}, pontosNomes: d.pontosNomes || {}, bolsaoDisparo: d.bolsaoDisparo || null };
     aplicarAbasOcultas();
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
+    if (typeof montarResumosSdr === 'function') montarResumosSdr();
     carregado.cfg = true; render(); fecharMesesPendentes();
     // v120: pedido do Allan: cada 10 ligações valem 2 pontos (ajusta uma vez; depois ele muda em Pontuação quando quiser)
     if (souDono() && s.exists() && !d.migrLig120) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ligacao:2, ligBloco:10 }, migrLig120:true }, { merge:true }).catch(e => console.warn('pontos ligação', e.message));
@@ -7914,7 +7927,8 @@ window.exportarBolsao = () => {
   baixarCSV('bolsao', ['Nome','Telefone','Criativo','Tipo','Motivo','Empreendimento','Situação','Corretor','Resultado','Entrou em'],
     l.map(x => [x.nome || '', x.telefone || '', x.criativo || '', x.origem === 'perdido' ? 'Cliente perdido' : 'Lead', x.motivo || '', x.empreendimento || '', ST[x.status] || x.status || '', x.pegoNome || '', (BZ_RES.find(r => r[0] === x.resultado) || [, x.resultado || ''])[1].replace(/^[^\p{L}]+/u, ''), x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR') : '']));
 };
-window.abrirDisparo = () => { const c = bzDisp(); $('bdAtivo').checked = c.ativo !== false; $('bdQtd').value = c.qtd; $('bdInt').value = c.intervalo; $('bdMax').value = c.max; abrir('bzDispModal'); };
+window.abrirDisparo = () => { const c = bzDisp(), k = { ativo:true, nomes:['Allan ADM'], destino:'livre', ...(appCfg.bolsaoCrm || {}) }; $('bdAtivo').checked = c.ativo !== false; $('bdQtd').value = c.qtd; $('bdInt').value = c.intervalo; $('bdMax').value = c.max;
+  $('bdCrmAtivo').checked = k.ativo !== false; $('bdCrmNomes').value = (k.nomes || []).join(', '); $('bdCrmDest').value = k.destino === 'fila' ? 'fila' : 'livre'; abrir('bzDispModal'); };
 // v99: botão Disparar — solta a primeira leva na hora e segue soltando enquanto o app da gerência estiver aberto
 let _bzTimer = null, _bzProx = 0;
 async function bzSoltarUmaVez(){
@@ -7957,7 +7971,8 @@ window.soltarAgora = async () => {
 };
 window.salvarDisparo = async () => {
   const d = { ativo:$('bdAtivo').checked, qtd:Math.max(1, Math.round(Number($('bdQtd').value) || 3)), intervalo:Math.max(1, Math.round(Number($('bdInt').value) || 2)), max:Math.max(1, Math.round(Number($('bdMax').value) || 15)) };
-  try { await gravar(setDoc(doc(db,'config','app'), { bolsaoDisparo:d, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); fechar('bzDispModal'); toast('Disparo salvo'); } catch(e) { toast('Erro: ' + e.message); }
+  const crm = { ativo:$('bdCrmAtivo').checked, nomes:$('bdCrmNomes').value.split(',').map(x => x.trim()).filter(Boolean).slice(0, 5), destino:$('bdCrmDest').value }; // v121: leads do perfil do CRM (Allan ADM) vão para o bolsão
+  try { await gravar(setDoc(doc(db,'config','app'), { bolsaoDisparo:d, bolsaoCrm:crm, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); appCfg.bolsaoCrm = crm; fechar('bzDispModal'); toast('Disparo salvo'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.salvarBolsao = async () => {
   const crv = $('bzCriativo').value.trim();
@@ -11272,14 +11287,35 @@ function renderEtapa3(){
 // =====================================================================
 const souSdr = () => souAtivo() && perfil.papel === 'sdr';
 window.souSdr = souSdr;
-let sdrResumos = [];
+let sdrResumos = [], sdrResumosBrutos = [];
+// v123: resumo importado com nome do WhatsApp ("wa-...") é ligado à SDR certa do app; se a SDR já preencheu aquele dia no app, vale o do app
+// (uma base só: Relatórios, Ranking das SDRs e TV usam esta mesma lista)
+const ehWa = u => String(u || '').startsWith('wa-');
+function uidSdrDoResumo(x){
+  if (!ehWa(x.sdrUid)) return x.sdrUid;
+  const ap = appCfg.apelidosSdr || {}, m = ap[x.sdrNome] || ap[x.autor];
+  if (m) return m;
+  const p = sdrDoAutor(x.sdrNome || x.autor); return p ? p.uid : x.sdrUid;
+}
+function montarResumosSdr(){
+  const ja = new Set(sdrResumosBrutos.filter(x => !ehWa(x.sdrUid)).map(x => x.dia + '_' + x.sdrUid)), out = [];
+  sdrResumosBrutos.forEach(x => {
+    if (!ehWa(x.sdrUid)) { out.push(x); return; }
+    const uid = uidSdrDoResumo(x); if (uid === '__ignorar') return;
+    if (ehWa(uid)) { if (ja.has(x.dia + '_' + uid)) return; ja.add(x.dia + '_' + uid); out.push(x); return; }
+    if (ja.has(x.dia + '_' + uid)) return; ja.add(x.dia + '_' + uid);
+    const p = perfisLista.find(y => y.uid === uid) || {}; out.push({ ...x, sdrUid:uid, sdrNome:p.nome || x.sdrNome, equipe:p.equipe || x.equipe || '', doWhats:x.sdrNome });
+  });
+  sdrResumos = out;
+}
+window.montarResumosSdr = montarResumosSdr;
 function assinarSdr(){
   const silencio = e => console.warn('SDR:', e.code || e.message);
   let q = null;
   if (souGerente()) q = query(collection(db,'sdr_resumos'), where('dia','>=',inicioJanela()));
   else if (souCoord()) q = query(collection(db,'sdr_resumos'), where('equipe','==',perfil.equipe || '-'));
   else if (souSdr()) q = query(collection(db,'sdr_resumos'), where('sdrUid','==',uidAtual));
-  if (q) subsPapel.push(onSnapshot(q, s => { sdrResumos = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  if (q) subsPapel.push(onSnapshot(q, s => { sdrResumosBrutos = s.docs.map(d => ({ id:d.id, ...d.data() })); montarResumosSdr(); render(); }, silencio));
 }
 const coordDaEquipe = eq => perfisTodos.find(p => p.papel === 'coordenador' && p.equipe === eq && p.status === 'ativo');
 
@@ -11374,7 +11410,7 @@ function tabelaSdr(de, ate){
   if (!l.length) return '<div class="muted" style="font-size:13.5px">Nenhuma visita marcada por SDR e nenhum resumo do dia no período.</div>';
   const pos = posicoes(l);
   return `<div style="overflow-x:auto"><table class="rank"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th>Docs</th><th title="Dias com média de até 3 leads por doc">Dias na média</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
-    l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td>${x.docs}</td><td>${x.diasMedia || 0}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
+    l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span>${ehWa(x.uid) && souGerente() && !souCeo() ? `<button class="link" style="display:block;font-size:12px" onclick="vincularSdrWa('${esc(x.nome).replace(/'/g, '&#39;')}')">Vincular à SDR do app</button>` : ''}</td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td>${x.docs}</td><td>${x.diasMedia || 0}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
     <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam. Dias na média: dias com pelo menos ${SDR_MIN_LEADS} leads novos em que a média ficou em até ${SDR_MEDIA_PADRAO} (leads novos ÷ docs + CPFs do dia, novos e recuperados).</div></details>`;
 }
 
@@ -11425,9 +11461,20 @@ function sdrDoAutor(autor){
   if (!autor) return null;
   const mapa = appCfg.apelidosSdr || {};
   if (mapa[autor]) return sdrsAtivas().find(p => p.uid === mapa[autor]) || null;
-  const a = norm(autor).replace(/\bsdr\b/g, '').trim(), pr = a.split(' ')[0];
+  const a = norm(autor).replace(/^[^a-z]*[a-z]{1,3}\s*\|\s*/, '').replace(/\s+-\s+.*$/, '').replace(/\bsdr\b/g, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(), pr = a.split(' ')[0];
   return sdrsAtivas().find(p => norm(p.nome) === a) || (sdrsAtivas().filter(p => norm(p.nome).split(' ')[0] === pr).length === 1 ? sdrsAtivas().find(p => norm(p.nome).split(' ')[0] === pr) : null);
 }
+// v123: liga um nome do WhatsApp a uma SDR do app (ou tira da conta); vale para todos os resumos desse nome
+window.vincularSdrWa = nome => {
+  $('vwNome').textContent = nome; $('vwSel').innerHTML = `<option value="">— escolha a SDR —</option>${sdrsAtivas().map(p => `<option value="${p.uid}">${esc(p.nome)}</option>`).join('')}<option value="__ignorar">Não contar (ex.: quem já saiu)</option>`;
+  window._vwNome = nome; abrir('vincWaModal');
+};
+window.salvarVinculoWa = async () => {
+  const uid = $('vwSel').value, nome = window._vwNome; if (!uid) { toast('Escolha a SDR'); return; }
+  const ap = { ...(appCfg.apelidosSdr || {}), [nome]:uid };
+  try { await gravar(setDoc(doc(db,'config','app'), { apelidosSdr:ap }, { merge:true })); appCfg.apelidosSdr = ap; montarResumosSdr(); fechar('vincWaModal'); render(); toast(uid === '__ignorar' ? 'Esse nome não conta mais' : 'Vinculado: os resumos somam na SDR do app'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 window.abrirResumoSdr = () => { if (souSdr()) { setView('resumo'); return; } abrirColarSdr(); };
 function abrirFormResumo(){
   if (!souSdr()) return;
@@ -11510,12 +11557,12 @@ window.lerColado = () => {
     const nv = r.novos, rc = r.recuperados, v = x => x === '' || x === undefined ? '–' : x;
     return `<div class="msg-item"><b>📅 ${dataBR(r.dia)}${r.autor ? ` · de "${esc(r.autor)}"` : ''}</b>
       <div style="font-size:13px;color:var(--muted);margin:4px 0 8px">Novos CRM ${v(nv.crm.lead)} (doc ${v(nv.crm.doc)}, CPF ${v(nv.crm.cpf)}) · Novos Insta ${v(nv.insta.lead)} (doc ${v(nv.insta.doc)}, CPF ${v(nv.insta.cpf)}) · Recuperados CRM ${v(rc.crm.lead)} · Insta ${v(rc.insta.lead)} · Aprovações ${v(r.aprovDia)} · Outro CCA ${v(r.aprovOutroCca)}</div>
-      ${souSdr() ? '' : `<label style="font-size:13px">SDR: <select id="resSdr${i}" style="width:auto"><option value="">— escolha —</option>${r.autor ? `<option value="__autor">Usar o nome do WhatsApp: ${esc(r.autor)}</option>` : ''}${ops}</select></label>`}</div>`;
+      ${souSdr() ? '' : `<label style="font-size:13px">SDR: <select id="resSdr${i}" style="width:auto"><option value="">— escolha —</option><option value="__ignorar">Não importar</option>${r.autor ? `<option value="__autor">Usar o nome do WhatsApp: ${esc(r.autor)}</option>` : ''}${ops}</select></label>`}</div>`;
   }).join('') + `<button class="btn btn-primary btn-block" onclick="salvarColados()">Salvar ${lidos.length} resumo${lidos.length!==1?'s':''}</button>`;
-  if (!souSdr()) lidos.forEach((r, i) => { const s = sdrDoAutor(r.autor); if (s) $('resSdr' + i).value = s.uid; else if (r.autor) $('resSdr' + i).value = '__autor'; });
+  if (!souSdr()) lidos.forEach((r, i) => { const s = sdrDoAutor(r.autor); if (s) $('resSdr' + i).value = s.uid; else if (r.autor) $('resSdr' + i).value = '__ignorar'; }); // v122: quem não é SDR do app (ex.: quem já saiu) fica de fora, a menos que você escolha
 };
 window.salvarColados = async () => {
-  const lidos = window._resLidos || [], novosApelidos = {};
+  const lidos = window._resLidos || [], novosApelidos = {}; let salvos = 0, pulados = 0, ignorados = 0;
   try {
     for (let i = 0; i < lidos.length; i++) {
       const r = lidos[i];
@@ -11523,14 +11570,17 @@ window.salvarColados = async () => {
       if (souSdr()) s = { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe };
       else {
         const uid = $('resSdr' + i).value; if (!uid) { toast(`Escolha a SDR do resumo de ${dataBR(r.dia)}`); return; }
+        if (uid === '__ignorar') { ignorados++; continue; }
         // SDR ainda sem cadastro no app: guarda pelo nome do WhatsApp
         if (uid === '__autor') s = { uid:'wa-' + norm(r.autor).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), nome:r.autor, equipe:'' };
         else { s = sdrsAtivas().find(p => p.uid === uid); if (r.autor && !sdrDoAutor(r.autor)) novosApelidos[r.autor] = uid; }
       }
-      await gravarResumo(r, s);
+      // v122: dia que a SDR já preencheu no app fica como está (não repete nem troca)
+      if ($('resPular')?.checked && sdrResumos.some(x => x.dia === r.dia && x.sdrUid === s.uid)) { pulados++; continue; }
+      await gravarResumo(r, s); salvos++;
     }
     if (souDono() && Object.keys(novosApelidos).length) await gravar(setDoc(doc(db,'config','app'), { apelidosSdr:{ ...(appCfg.apelidosSdr || {}), ...novosApelidos } }, { merge:true }));
-    fechar('resModal'); toast(`${lidos.length} resumo${lidos.length!==1?'s':''} salvo${lidos.length!==1?'s':''} ✓`);
+    fechar('resModal'); toast(`${salvos} resumo${salvos!==1?'s':''} salvo${salvos!==1?'s':''}${pulados ? ` · ${pulados} já estava${pulados!==1?'m':''} no app e ficou como estava` : ''}${ignorados ? ` · ${ignorados} não importado${ignorados!==1?'s':''}` : ''}`);
   } catch(e) { toast('Erro: ' + e.message); }
 };
 
