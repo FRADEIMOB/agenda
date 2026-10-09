@@ -703,6 +703,12 @@ html.modo-tvr .tve.on{opacity:1;background:radial-gradient(circle at 50% 45%,col
 .tve-foto{position:relative;width:16vw;height:16vw;border-radius:50%;object-fit:cover;border:.6vw solid var(--c);box-shadow:0 0 0 1vw color-mix(in srgb,var(--c) 25%,transparent),0 2vw 5vw rgba(0,0,0,.5)}
 .tve-ini{display:grid;place-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));color:#0b1e2d;font:800 8vw/1 'Saira Condensed',sans-serif}
 .tve-rot{position:relative;margin-top:2vw;padding:.6vw 2vw;border-radius:99px;background:var(--c);color:#0b1e2d;font:800 2.6vw/1.1 'Saira Condensed',sans-serif;letter-spacing:.04em;text-transform:uppercase}.tve-rot span{opacity:.75}
+.manut-tela{position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#0b2a45,#123d61);display:flex;align-items:center;justify-content:center;padding:24px}
+.manut-box{max-width:420px;text-align:center;color:#fff}.manut-box h2{font-size:26px;margin:14px 0 8px}.manut-box p{color:#cfe0ec;font-size:16px;line-height:1.45;margin:0 0 6px}.manut-box small{display:block;color:#8fb0c8;margin-bottom:18px}
+.manut-ic{width:64px;height:64px;margin:0 auto;border-radius:50%;border:5px solid rgba(255,255,255,.18);border-top-color:#f28c38;animation:manutGira 1.4s linear infinite}@keyframes manutGira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.manut-ic{animation:none}}
+.manut-faixa{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:9999;background:#b45309;color:#fff;padding:9px 12px 9px 16px;border-radius:12px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;max-width:calc(100% - 32px)}
+.manut-faixa button{background:#fff;color:#b45309;border:0;border-radius:8px;padding:6px 10px;font-weight:700;white-space:nowrap}
 .tve-frd{position:relative;margin-top:1.4vw;font:700 2.6vw/1.1 'Saira Condensed',sans-serif;color:#fde68a}.tve-frd b{font-size:4.6vw;color:#f5c542;margin-left:.4vw;text-shadow:0 0 2vw rgba(245,197,66,.55)}.tve-frd.ganhou b{color:#4ade80;text-shadow:0 0 2vw rgba(74,222,128,.55)}.tve-frd small{display:block;font-size:1.5vw;color:#e8d9a6;margin-top:.3vw}
 .tve-nome{position:relative;margin-top:1.2vw;font:800 6vw/1 'Saira Condensed',sans-serif;color:#fff;text-shadow:0 .4vw 2vw rgba(0,0,0,.5)}.tve-eq{position:relative;margin-top:.6vw;font-size:1.6vw;color:#cfe0ec}
 .tve-conf{position:absolute;inset:-10vw -20vw;overflow:hidden;pointer-events:none}.tve-conf i{position:absolute;top:-2vw;left:var(--x);width:.8vw;height:1.4vw;background:var(--k);border-radius:.2vw;opacity:0;transform:rotate(var(--r))}
@@ -2465,6 +2471,10 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- CONFIGURAÇÕES -->
       <section class="view" id="v-config">
         <div class="page-head"><div><h1>Configurações</h1><div class="sub">Personalize a sua agenda. <span class="ver-app" id="verApp"></span></div></div></div>
+        <div class="card dono-only hide" id="cardManut" style="margin-bottom:20px"><div class="card-head"><h2>Manutenção</h2><span class="muted">Só o dono</span></div>
+          <div class="hint" style="margin:0 0 10px">Com a manutenção ligada, ninguém usa o app (aparece um aviso na tela de todos). Só você continua entrando para arrumar. Ao desligar, todos voltam na hora.</div>
+          <div class="fg"><label>Mensagem para a equipe</label><input id="manutMsg" maxlength="160" placeholder="Estamos ajustando o app. Volte em alguns minutos."></div>
+          <button class="btn btn-primary" id="manutBt" onclick="alternarManutencao()">Entrar em manutenção</button></div>
         <div class="card gerente-only hide" style="margin-bottom:20px"><div class="card-head"><h2>🏢 Presença no escritório</h2></div><div class="hint" style="margin:0 0 10px">O corretor marca a presença pelo botão <b>Cheguei no escritório</b> (o app confere se ele está perto do escritório), pelo código da tela da recepção ou como <b>atendimento externo</b>. Quem chegar depois do horário entra como atrasado, e quem ainda não marcou recebe um aviso 10 minutos depois.</div><div id="ciCfgBox"></div></div>
         <div class="card" id="cfgNotif" style="margin-bottom:20px"><div class="card-head"><h2>🔔 Quais avisos você quer receber</h2></div><div class="hint" style="margin:0 0 10px">Tudo aparece no sino 🔔 lá em cima. Os que estiverem ligados também chegam no celular, se as notificações estiverem ativadas no aparelho.</div><div id="prefNotif"></div></div>
         <div class="set-grid">
@@ -3076,6 +3086,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('pixModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarPix()">Salvar PIX</button></div>
   </div>
 </div>
+<div id="manutTela" class="manut-tela hide"><div class="manut-box"><div class="manut-ic"></div><h2>App em manutenção</h2><p id="manutTxt">Estamos ajustando o app. Volte em alguns minutos.</p><small id="manutDesde"></small><button class="btn btn-ghost" onclick="location.reload()">Tentar de novo</button></div></div>
+<div id="manutFaixa" class="manut-faixa hide">App em manutenção: só você está usando. <button onclick="alternarManutencao()">Sair da manutenção</button></div>
 <div class="modal" id="ptDetModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><h2 id="ptDetTit">Pontos</h2><button class="icon-btn" onclick="fechar('ptDetModal')" data-ic="x"></button></div>
@@ -4148,6 +4160,28 @@ const EMAIL_ANTIGO_TENDA = 'tropatenda@fradeimoveis.com';
 
 let uidAtual = '', perfil = null, perfilOk = false, instalacao = null, instOk = false;
 let perfisTodos = [];
+// v136: lista única de pessoas do ranking (nome, equipe, cargo, situação, data de entrada) — todos leem a mesma, assim todas as telas mostram os mesmos pontos
+let rkPessoas = [];
+const pessoasRk = () => rkPessoas.length ? rkPessoas : perfisTodos;
+window.pessoasRk = pessoasRk;
+// v136: modo manutenção (o dono liga em Configurações; os outros veem um aviso e não usam o app)
+function aplicarManutencao(){
+  const m = (typeof appCfg !== 'undefined' && appCfg.manutencao) || {}, on = !!m.ativo, dono = souDono();
+  const t = document.getElementById('manutTela'), f = document.getElementById('manutFaixa'); if (!t) return;
+  if (!on && t && !t.classList.contains('hide')) setTimeout(() => window._conferirVersao && window._conferirVersao(), 1500);
+  t.classList.toggle('hide', !on || dono); f.classList.toggle('hide', !on || !dono);
+  document.getElementById('manutTxt').textContent = m.msg || 'Estamos ajustando o app. Volte em alguns minutos.';
+  document.getElementById('manutDesde').textContent = on && m.em ? 'Desde ' + new Date(m.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : '';
+  const bt = document.getElementById('manutBt'); if (bt) { bt.textContent = on ? 'Sair da manutenção' : 'Entrar em manutenção'; bt.className = 'btn ' + (on ? 'btn-ghost' : 'btn-primary'); }
+  const inp = document.getElementById('manutMsg'); if (inp && document.activeElement !== inp) inp.value = m.msg || '';
+}
+window.alternarManutencao = async () => {
+  if (!souDono()) return; const on = !(appCfg.manutencao || {}).ativo;
+  if (on && !confirm('Colocar o app em manutenção? Ninguém além de você vai conseguir usar até você desligar.')) return;
+  const msg = (document.getElementById('manutMsg')?.value || '').trim().slice(0, 160);
+  try { await gravar(setDoc(doc(db,'config','app'), { manutencao:{ ativo:on, msg, em:Date.now(), por:perfil.nome || '' } }, { merge:true }));
+    toast(on ? 'App em manutenção. Só você está usando.' : 'Manutenção encerrada. Todos voltaram.'); } catch(e) { toast('Erro: ' + e.message); }
+};
 let equipes = {}, visitas = [], rankingDocs = [], perfisLista = [], visitasBrutas = [];
 window.visitaPorId = id => visitas.find(x => x.id === id);
 let subsBase = [], subsPapel = [], chaveSubs = '', cadDispensado = false;
@@ -4261,7 +4295,8 @@ function configurarAcesso(){
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador','sdr']));
   else if (perfil.papel === 'sdr') qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
-  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => ({ uid:d.id, ...d.data() })); perfisLista = perfisTodos.filter(p => p.papel !== 'correspondente'); render(); sincVendasRanking(); sincPresencaRanking(); }, erro));
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => ({ uid:d.id, ...d.data() })); perfisLista = perfisTodos.filter(p => p.papel !== 'correspondente'); render(); sincVendasRanking(); sincPresencaRanking(); sincPessoasRanking(); }, erro));
+  rkPessoas = []; subsPapel.push(onSnapshot(collection(db,'ranking_pessoas'), s => { rkPessoas = s.docs.map(d => ({ uid:d.id, ...d.data() })); window._rkpOk = true; render(); sincPessoasRanking(); }, e => console.warn('ranking_pessoas', e.code || e.message)));
 }
 
 // ---------- Cadastro / primeiro gerente ----------
@@ -5523,7 +5558,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 135;
+const APP_VERSAO = 136;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5532,8 +5567,12 @@ const APP_VERSAO = 135;
     try { const t = await (await fetch('sw.js?v=' + Date.now(), { cache:'no-store' })).text(); const m = t.match(/minha-agenda-v(\d+)/);
       if (m && Number(m[1]) > APP_VERSAO) { avisado = true; const b = document.createElement('button'); b.className = 'nova-versao'; b.innerHTML = '✨ Saiu uma versão nova do app · <b>Atualizar agora</b>';
         b.onclick = async () => { b.textContent = 'Atualizando…'; try { const r = await navigator.serviceWorker?.getRegistration(); await r?.update(); } catch(e) {} location.reload(); };
-        document.body.appendChild(b); } } catch(e) {}
+        document.body.appendChild(b);
+        // v136: atualiza sozinho (para todos ficarem na mesma versão e verem os mesmos números), se ninguém estiver digitando ou com janela aberta
+        const tenta = () => { const ocupado = document.querySelector('.modal.open') || ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName); if (ocupado) { setTimeout(tenta, 20000); return; } b.onclick(); };
+        setTimeout(tenta, 5000); } } catch(e) {}
   };
+  window._conferirVersao = () => { document.querySelectorAll('.nova-versao').forEach(x => x.remove()); avisado = false; conferir(); };
   setTimeout(conferir, 8000); setInterval(conferir, 10 * 60 * 1000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') conferir(); });
 })();
@@ -5556,9 +5595,9 @@ window.comemorar = comemorar;
 // v115: visita do Feirão Tenda realizada -> sobe a tela "+ R$ 50,00" na hora
 function checarCarteira(antes, depois){
   const c = bvCfg(); if (!c.ativo) return;
-  if (!visitaVale(depois, c) && visitaPendenteCart(depois, c) && !visitaPendenteCart(antes, c) && !visitaVale(antes, c)) { const v = valorVisitaCart(c); if (v && (depois.corretorUid === uidAtual || depois.sdrUid === uidAtual)) setTimeout(() => mostrarGanho(v, 'saldo pendente · vira disponível quando a visita for realizada'), 1400); return; }
+  if (!visitaVale(depois, c) && visitaPendenteCart(depois, c) && !visitaPendenteCart(antes, c) && !visitaVale(antes, c)) { const v = valorVisitaCart(c); if (v && donoCart(depois) === uidAtual) setTimeout(() => mostrarGanho(v, 'saldo pendente · vira disponível quando a visita for realizada'), 1400); return; }
   if (visitaVale(antes, c) || !visitaVale(depois, c)) return;
-  const valor = valorVisitaCart(c), meu = depois.corretorUid === uidAtual || depois.sdrUid === uidAtual;
+  const valor = valorVisitaCart(c), meu = donoCart(depois) === uidAtual;
   window._tgAte = Date.now() + 10000; // a tela grande já mostra o ganho; o aviso pequeno da carteira fica quieto
   setTimeout(() => telaGanho(valor, depois, meu), 1300);
 }
@@ -5854,7 +5893,7 @@ function assinarEtapa1(){
     aplicarAbasOcultas();
     if (typeof avaliacoesTodas !== 'undefined') filtrarAvaliacoes();
     if (typeof montarResumosSdr === 'function') montarResumosSdr();
-    carregado.cfg = true; render(); fecharMesesPendentes();
+    carregado.cfg = true; render(); fecharMesesPendentes(); aplicarManutencao();
     // v120: pedido do Allan: cada 10 ligações valem 2 pontos (ajusta uma vez; depois ele muda em Pontuação quando quiser)
     if (souDono() && s.exists() && d.migrLig120 && !d.migrAus132 && !Number((d.pontos || {}).ausencia)) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ausencia:-15 }, migrAus132:true }, { merge:true }).catch(e => console.warn('ausência', e.message));
     if (souDono() && s.exists() && !d.migrLig120) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ligacao:2, ligBloco:10 }, migrLig120:true }, { merge:true }).catch(e => console.warn('pontos ligação', e.message));
@@ -5870,7 +5909,7 @@ function assinarEtapa1(){
 
 // ---------- pontos ----------
 function pontosDoMes(m, val){
-  val = val || appCfg.pontos;
+  val = val || appCfg.pontos; const RK = pessoasRk;
   const n = k => Number(val[k]) || 0;
   const noMes = d => !!d && d.slice(0,7) === m;
   const g = new Map();
@@ -5881,7 +5920,7 @@ function pontosDoMes(m, val){
   };
   // v97: visitas que a SDR agendou pontuam para a SDR
   rankingDocs.filter(r => noMes(r.date) && !r.semPontos && r.sdrUid && visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
-    const ps = perfisTodos.find(p => p.uid === r.sdrUid) || {}, x = pega({ corretorUid:r.sdrUid, corretorNome:ps.nome || r.sdrNome || 'SDR', equipe:ps.equipe || r.sdrEquipe || '' });
+    const ps = RK().find(p => p.uid === r.sdrUid) || {}, x = pega({ corretorUid:r.sdrUid, corretorNome:ps.nome || r.sdrNome || 'SDR', equipe:ps.equipe || r.sdrEquipe || '' });
     x.agendSdr = (x.agendSdr || 0) + 1;
     // v131: se a pontuação própria da SDR não foi definida, a visita dela vale o mesmo que a do corretor
     if (n('agendSdr') || n('agendSdrReal')) x.pontos += n('agendSdr') + (r.status === 'Realizada' ? n('agendSdrReal') : 0);
@@ -5891,7 +5930,7 @@ function pontosDoMes(m, val){
   // v131: documentações do resumo do dia da SDR (ficam no resumo do ranking para todos verem o mesmo número)
   const docPts = val.docSdr !== undefined && val.docSdr !== '' ? n('docSdr') : n('docs');
   rankingAtiv.filter(r => r.mes === m && r.uid && r.sdoc).forEach(r => { const q = Object.values(r.sdoc).reduce((a, v) => a + (Number(v) || 0), 0); if (!q) return;
-    const ps = perfisTodos.find(p => p.uid === r.uid) || {}, x = pega({ corretorUid:r.uid, corretorNome:ps.nome || r.nome, equipe:ps.equipe || r.equipe || '' }); x.docsSdr = (x.docsSdr || 0) + q; x.docs += q; x.pontos += q * docPts; });
+    const ps = RK().find(p => p.uid === r.uid) || {}, x = pega({ corretorUid:r.uid, corretorNome:ps.nome || r.nome, equipe:ps.equipe || r.equipe || '' }); x.docsSdr = (x.docsSdr || 0) + q; x.docs += q; x.pontos += q * docPts; });
   rankingDocs.filter(r => noMes(r.date) && !r.semPontos && !visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
     const x = pega(r); x.visitas++;
     if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); }
@@ -5908,7 +5947,7 @@ function pontosDoMes(m, val){
   });
   // presença no plantão, ligações e recontatos (resumo por corretor e mês, sem dados de cliente)
   rankingAtiv.filter(r => r.mes === m && r.uid).forEach(r => {
-    const x = pega({ corretorUid:r.uid, corretorNome:(perfisTodos.find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
+    const x = pega({ corretorUid:r.uid, corretorNome:(RK().find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const diasPres = new Set([...Object.keys(r.pres || {}), ...Object.keys(r.chk || {})]);
     const pr = diasPres.size, l = somaCap(r.lig, val) + somaCap(r.rec, val), c = 0;
     x.presencas += pr; x.ligacoes += l; (x._pres ||= new Set()); diasPres.forEach(d => x._pres.add(d));
@@ -5926,7 +5965,7 @@ function pontosDoMes(m, val){
   if (n('ausencia')) {
     const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO();
     const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && k < hj && dias.includes(d.getDay())) uteis.push(k); }
-    const quem = perfisTodos.length ? perfisTodos.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
+    const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
       const ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
       const x = pega({ corretorUid:p.uid, corretorNome:p.nome, equipe:p.equipe });
@@ -5936,7 +5975,7 @@ function pontosDoMes(m, val){
     });
   }
   // v97: os pontos acompanham o corretor na equipe em que ele está agora
-  g.forEach(x => { if (!x.uid) return; const p = perfisTodos.find(y => y.uid === x.uid), ra = rankingAtiv.find(r => r.mes === m && r.uid === x.uid);
+  g.forEach(x => { if (!x.uid) return; const p = RK().find(y => y.uid === x.uid), ra = rankingAtiv.find(r => r.mes === m && r.uid === x.uid);
     const eq = p ? p.equipe : ra?.equipe; if (eq !== undefined && eq !== null) x.equipe = eq || ''; if (p?.nome) x.nome = p.nome; });
   return [...g.values()].sort((a,b) => b.pontos-a.pontos || b.vendas-a.vendas || b.cartas-a.cartas || a.nome.localeCompare(b.nome,'pt-BR'));
 }
@@ -5965,7 +6004,7 @@ window.verPontosDe = i => {
 // v135: a gerência ajusta presença / ausência de cada dia já passado (ex.: dias antes de começarem a marcar presença)
 function htmlDiasPres(x){
   const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = String(P.ausenciaDesde || '2026-10-07');
-  const p = perfisTodos.find(y => y.uid === x.uid) || {}, ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
+  const p = pessoasRk().find(y => y.uid === x.uid) || {}, ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
   const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && iso(d) >= ini) L.push(iso(d)); }
   if (!L.length) return '';
   const pv = Number(P.presenca) || 0, av = Number(P.ausencia) || 0, sn = v => (v > 0 ? '+' : '') + v;
@@ -5983,7 +6022,7 @@ window.ajustarDiaPres = async (uid, dia, st) => {
   const p = perfisTodos.find(y => y.uid === uid) || {};
   try { await gravar(setDoc(doc(db,'presenca',dia), { dia, marcados:{ [uid]:{ status:st, hora:'', por:perfil.nome, em:Date.now(), ajuste:true } }, atualizadoEm:Date.now() }, { merge:true }));
     await presencaNoRanking(uid, dia, st); toast(`${primeiro(p.nome || '')}: ${dia.slice(8)}/${dia.slice(5,7)} ${st === 'presente' ? 'presente' : st === 'folga' ? 'abonado' : 'ausente'}`);
-    setTimeout(() => { const i = (window._rkLista || []).findIndex(y => y.uid === uid); if (i >= 0 && $('ptDetModal').classList.contains('show')) verPontosDe(i); }, 600);
+    setTimeout(() => { const i = (window._rkLista || []).findIndex(y => y.uid === uid); if (i >= 0 && $('ptDetModal').classList.contains('open')) verPontosDe(i); }, 600);
   } catch(e) { toast('Erro: ' + e.message); }
 };
 // v135: abona de uma vez quem ficou sem marcar no dia escolhido (dias em que ainda não se marcava presença)
@@ -6775,8 +6814,8 @@ window.salvarEquipeAnjo = async () => {
 function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate(d.getDate() + (dow === 0 ? -1 : 6 - dow)); return iso(d); }
 function dadosTvRank(){
   const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate;
-  const nm = (uid, nome) => (perfisTodos.find(p => p.uid === uid) || {}).nome || nome || '';
-  const eqDe = (uid, eq) => { const p = perfisTodos.find(x => x.uid === uid); return p ? (p.equipe || '') : (eq || ''); };
+  const nm = (uid, nome) => (pessoasRk().find(p => p.uid === uid) || {}).nome || nome || '';
+  const eqDe = (uid, eq) => { const p = pessoasRk().find(x => x.uid === uid); return p ? (p.equipe || '') : (eq || ''); };
   const agrupa = (lista, chave, nome, eq, val = () => 1) => { const g = new Map(); lista.forEach(x => { const k = chave(x) || 'n:' + norm(nome(x)); if (!g.has(k)) g.set(k, { uid:chave(x), nome:nm(chave(x), nome(x)), equipe:eqDe(chave(x), eq(x)), v:0 }); g.get(k).v += val(x); }); return [...g.values()].filter(x => x.v > 0).sort((a, b) => b.v - a.v); };
   const pts = pontosDoMes(m).filter(x => x.pontos > 0).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:x.pontos }));
   const vis = agrupa(rankingDocs.filter(r => noM(r.date) && r.status === 'Realizada' && !visitaDeSdr(r)), r => r.corretorUid, r => r.corretorNome, r => r.equipe);
@@ -6790,8 +6829,8 @@ function dadosTvRank(){
   // v114: visitas do feirão contam o mês inteiro, inclusive as marcadas para dias que ainda vão chegar (ex.: o sábado do feirão)
   // v135: a visita do feirão conta para o corretor e também para a SDR que marcou
   const feiBase = fonteSab.filter(r => (r.date || '').slice(0, 7) === m && r.status !== 'Cancelada' && !r.arquivado && r.feirao);
-  const feiQuem = feiBase.flatMap(r => [...(r.corretorUid || r.corretorNome ? [{ uid:r.corretorUid, nome:r.corretorNome, equipe:r.equipe }] : []),
-    ...(r.sdrUid && visitaDeSdr(r) && r.sdrUid !== r.corretorUid ? [{ uid:r.sdrUid, nome:r.sdrNome, equipe:(perfisTodos.find(p => p.uid === r.sdrUid) || {}).equipe || '' }] : [])]);
+  // v136: visita marcada pela SDR conta só para a SDR (igual à carteira)
+  const feiQuem = feiBase.map(r => { const u = donoCart(r); return u && u !== r.corretorUid ? { uid:u, nome:r.sdrNome || '', equipe:(pessoasRk().find(p => p.uid === u) || {}).equipe || '' } : { uid:r.corretorUid, nome:r.corretorNome, equipe:r.equipe }; }).filter(x => x.uid || x.nome);
   const fei = agrupa(feiQuem, r => r.uid, r => r.nome, r => r.equipe);
   const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => (Number(r.lig?.[sab]) || 0) + (Number(r.rec?.[sab]) || 0));
   const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
@@ -6823,7 +6862,7 @@ function contadoresTv(){
   rankingDocs.filter(r => (r.date || '') >= m + '-01' && r.status !== 'Cancelada' && !visitaDeSdr(r) && !ehFei(r)).forEach(r => { soma('marcada', r.corretorUid); if (r.status === 'Realizada') soma('realizada', r.corretorUid); });
   if (cart) { const fonte = (souGerente() || souCoord()) && visitas.length ? visitas : rankingDocs;
     fonte.filter(r => (r.date || '').slice(0, 7) === m && ehFei(r) && !r.arquivado && r.status !== 'Cancelada' && !PERDA_V.includes(r.status)).forEach(r => {
-      const quem = [r.corretorUid, r.sdrUid && r.sdrUid !== r.corretorUid ? r.sdrUid : ''].filter(Boolean);
+      const quem = [donoCart(r)].filter(Boolean);
       quem.forEach(u => { soma('feiM', u); if (r.status === 'Confirmada') soma('feiC', u); if (visitaVale(r, bc)) soma('feiG', u); }); }); }
   rankingCartas.filter(x => noM(x.data) && !x.arquivado).forEach(x => soma('aprovacao', x.corretorUid));
   rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => (v.corretores || []).forEach(x => soma('venda', x.uid)));
@@ -6877,7 +6916,7 @@ window.Som = Som;
 let tvSom = (() => { try { return localStorage.getItem('tvSom') !== '0'; } catch(e) { return true; } })();
 window.tvTrocaSom = () => { tvSom = !tvSom || !Som.pronto(); try { localStorage.setItem('tvSom', tvSom ? '1' : '0'); } catch(e) {} if (tvSom) Som.festa(); renderTvRank(); };
 // v112: nome do anjo que acompanha a pessoa (o gestor escolhe a equipe do anjo)
-function anjoDe(uid){ if (!uid) return ''; const a = (perfisTodos || []).find(p => p.papel === 'anjo' && p.status === 'ativo' && (p.membros || []).includes(uid)); return a ? a.nome || '' : ''; }
+function anjoDe(uid){ if (!uid) return ''; const a = (pessoasRk() || []).find(p => p.papel === 'anjo' && p.status === 'ativo' && (p.membros || []).includes(uid)); return a ? a.nome || '' : ''; }
 function mostrarEventoTv(){
   const e = _tvFila.shift(), box = $('tvEvento'); if (!e || !box || view !== 'tvrank') { _tvMostrando = false; if (box) box.classList.remove('on'); return; }
   _tvMostrando = true;
@@ -7560,6 +7599,22 @@ function assinarEtapa4(){
   }
   assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); assinarSaques(); assinarSimulacoes(); conferirLinkCheckin();
 }
+// v136: a gerência mantém a lista pública do ranking igual aos perfis (só nome, equipe, cargo, situação, entrada e equipe do anjo)
+let _rkpT = 0;
+function sincPessoasRanking(){
+  if (!souGerente() || souCeo() || !perfisTodos.length || !window._rkpOk) return;
+  clearTimeout(_rkpT); _rkpT = setTimeout(async () => {
+    const ja = new Map(rkPessoas.map(x => [x.uid, x])), b = writeBatch(db); let n = 0;
+    const CARGOS = ['corretor','coordenador','sdr','anjo','gerente'];
+    perfisTodos.filter(p => CARGOS.includes(p.papel)).forEach(p => {
+      const d = { nome:p.nome || '', equipe:p.equipe || '', papel:p.papel || '', status:p.status || '', criadoEm:p.criadoEm || 0, membros:p.papel === 'anjo' ? (p.membros || []) : [] };
+      const v = ja.get(p.uid); ja.delete(p.uid);
+      if (v && ['nome','equipe','papel','status','criadoEm'].every(k => (v[k] ?? '') === d[k]) && JSON.stringify(v.membros || []) === JSON.stringify(d.membros)) return;
+      b.set(doc(db,'ranking_pessoas', p.uid), d); n++; });
+    ja.forEach((v, uid) => { b.delete(doc(db,'ranking_pessoas', uid)); n++; });
+    if (n) { try { await b.commit(); } catch(e) { console.warn('ranking_pessoas', e.message); } }
+  }, 1500);
+}
 // a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
 // v135: 'presente' soma presença; 'folga' abona o dia (não conta ausência) — fica no ranking para todos verem o mesmo número
 async function presencaNoRanking(uid, dia, st){
@@ -7575,7 +7630,7 @@ async function sincPresencaRanking(){
   try {
     const meses = [mesAtual(), mesAnterior(1)], quer = {}, querAbo = {};
     Object.entries(presencas).forEach(([dia, d]) => { if (!meses.includes(dia.slice(0,7))) return;
-      Object.entries(d.marcados || {}).forEach(([uid, x]) => { const k = dia.slice(0,7) + '_' + uid; if (x.status === 'presente') ((quer[k] = quer[k] || new Set())).add(dia); if (x.status === 'folga') ((querAbo[k] = querAbo[k] || new Set())).add(dia); }); });
+      Object.entries(d.marcados || {}).forEach(([uid, x]) => { const k = dia.slice(0,7) + '_' + uid; if (x.status === 'presente') ((quer[k] = quer[k] || new Set())).add(dia); if (['folga','ferias','atestado'].includes(x.status)) ((querAbo[k] = querAbo[k] || new Set())).add(dia); }); });
     const b = writeBatch(db); let n = 0;
     const ids = new Set([...Object.keys(quer), ...Object.keys(querAbo), ...rankingAtiv.filter(r => meses.includes(r.mes)).map(r => r.id)]);
     ids.forEach(id => {
@@ -8237,7 +8292,17 @@ function visitaDaConstrutora(v, cons){
   const e = empreendimentos.find(x => { const n = norm(x.nome || ''); return n && (n === ve || n.includes(ve) || ve.includes(n)); });
   return e ? norm(e.construtora || '').includes(k) : ve.includes(k);
 }
-const visitasQueValem = (uid, m, c = bvCfg()) => visitas.filter(v => (v.corretorUid === uid || v.sdrUid === uid) && (v.date || '').slice(0, 7) === m && visitaVale(v, c));
+// v136: os FRD 50 vão só para quem realmente marcou a visita (quem criou no app). Marcada pela SDR = da SDR, mesmo sendo para outro corretor.
+// Sem registro de quem criou (ou criada pela gerência/importada da conversa da SDR): vai para a SDR da visita, se houver; senão para o corretor.
+const donoCart = v => {
+  if (!v) return ''; const cp = v.criadoPor || '';
+  if (cp && v.sdrUid && cp === v.sdrUid) return v.sdrUid;
+  if (cp && cp === v.corretorUid) return v.corretorUid;
+  if (v.sdrUid && visitaDeSdr(v)) return v.sdrUid;
+  return v.corretorUid || '';
+};
+window.donoCart = donoCart;
+const visitasQueValem = (uid, m, c = bvCfg()) => visitas.filter(v => donoCart(v) === uid && (v.date || '').slice(0, 7) === m && visitaVale(v, c));
 const visitasRealizadas = (uid, m, c = bvCfg()) => visitasQueValem(uid, m, c).length;
 // poupança de visitas na tela inicial do corretor, com o "+ R$" subindo quando entra dinheiro
 // v117: Carteira Frade em FRD (1 FRD = R$ 1): visita do feirão marcada = saldo pendente; realizada = saldo disponível; saque pelo WhatsApp
@@ -8252,7 +8317,7 @@ const valorVisitaCart = (c = bvCfg()) => c.soFeirao ? ((c.modo === 'por_visita' 
 // pendente até 2 dias depois do sábado; se a visita não foi feita (faltou, cancelou ou passou do prazo) sai do pendente e não vale nada
 const visitaPendenteCart = (v, c = bvCfg()) => !!v && c.soFeirao && !!v.feirao && ehSabado(v.date) && !v.arquivado && v.status !== 'Realizada' && !PERDA_V.includes(v.status) && v.date >= somaDias(hojeISO(), -2);
 function saldoCarteira(uid, c = bvCfg()){
-  const meus = visitas.filter(v => v.corretorUid === uid || v.sdrUid === uid), vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
+  const meus = visitas.filter(v => donoCart(v) === uid), vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
   const porMes = {}; vale.forEach(v => { const m = (v.date || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
   // v119: no modo Feirão cada visita vale o valor fixo (padrão FRD 50), mesmo sem regra preenchida
   const cada = valorVisitaCart(c);
@@ -8363,6 +8428,11 @@ function desenharBonus(){
   $('bvTabela').innerHTML = `<div class="bv-cab"><b>${nomeMes(m)}</b><span>Total: <b>${brl2(tot)}</b></span></div><div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Visitas realizadas</th><th>Bônus</th><th></th></tr></thead><tbody>
     ${ps.map(x => `<tr><td><span class="nm">${esc(x.p.nome)}</span></td><td>${x.n}</td><td><b>${brl2(x.b)}</b></td><td>${!x.b ? '' : x.l ? (x.l.pago ? '<span class="fin-pos">✓ pago</span>' : '<span class="muted">lançado</span>') : (souGerente() && !souCeo() ? `<button class="link" onclick="lancarBonus('${x.p.uid}')">lançar pagamento</button>` : '')}</td></tr>`).join('')}</tbody></table></div>
     <p class="hint" style="margin-top:8px">Conta as visitas marcadas como <b>Realizada</b> no mês escolhido no Financeiro${c.soFeirao ? ', só as do <b>Feirão Tenda em sábado</b>' : ''}. “Lançar pagamento” cria a saída em “Entradas e saídas”.</p>`;
+  // v136: conferência das visitas do feirão — quem marcou e quem recebe os FRD
+  const nmP = u => (pessoasRk().find(p => p.uid === u) || perfisTodos.find(p => p.uid === u) || {}).nome || '';
+  const vf = visitas.filter(v => (v.date || '').slice(0, 7) === m && (c.soFeirao ? v.feirao : visitaVale(v, c)) && !v.arquivado && v.status !== 'Cancelada').sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+  if (vf.length) $('bvTabela').insertAdjacentHTML('beforeend', `<h3 style="margin:18px 0 6px;font-size:15px">Visitas do Feirão: quem marcou e quem recebe</h3><div class="tbl-wrap"><table class="rank"><thead><tr><th>Dia</th><th>Cliente</th><th>Marcou</th><th>Corretor</th><th>Recebe</th><th>Situação</th></tr></thead><tbody>${vf.map(v => { const dn = donoCart(v), vale = visitaVale(v, c), pend = visitaPendenteCart(v, c);
+    return `<tr><td>${esc((v.date || '').slice(8) + '/' + (v.date || '').slice(5, 7))}</td><td>${esc(v.cliente || '')}</td><td>${esc(primeiro(nmP(v.criadoPor) || v.sdrNome || '—'))}${v.criadoPor && v.criadoPor === v.sdrUid ? ' <small class="muted">SDR</small>' : v.fonte === 'whatsapp_sdr' ? ' <small class="muted">da conversa da SDR</small>' : ''}</td><td>${esc(primeiro(v.corretorNome || nmP(v.corretorUid) || '—'))}</td><td><b>${esc(primeiro(nmP(dn) || '—'))}</b></td><td>${vale ? `<span class="fin-pos">${frd(valorVisitaCart(c))}</span>` : pend ? `<span class="muted">${frd(valorVisitaCart(c))} pendente</span>` : '<span class="muted">não vale</span>'}</td></tr>`; }).join('')}</tbody></table></div><p class="hint" style="margin-top:6px">Os FRD vão para quem marcou a visita no app. Marcada pela SDR para outro corretor, o valor é da SDR.</p>`);
   const sq = saques.slice().sort((x, y) => (x.status === 'solicitado' ? 0 : 1) - (y.status === 'solicitado' ? 0 : 1) || (y.em || 0) - (x.em || 0)).slice(0, 40);
   $('bvTabela').insertAdjacentHTML('beforeend', `<h3 style="margin:18px 0 6px;font-size:15px">Pedidos de saque da Carteira Frade</h3>` + (sq.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Valor</th><th>PIX</th><th>Pedido</th><th></th></tr></thead><tbody>${sq.map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span></td><td><b>${frd(x.valor)}</b></td><td style="word-break:break-all">${esc((x.pix || {}).chave || '')}<br><small class="muted">${esc((x.pix || {}).titular || '')}</small></td><td>${new Date(x.em).toLocaleDateString('pt-BR')}<br><small class="muted">nº ${esc(x.cod || '')}</small></td><td>${x.status === 'solicitado' ? (souGerente() && !souCeo() ? `<button class="link" onclick="marcarSaque('${x.id}','pago')">marcar pago</button><br><button class="link" style="color:var(--danger)" onclick="marcarSaque('${x.id}','recusado')">recusar</button>` : 'solicitado') : x.status === 'pago' ? '<span class="fin-pos">pago</span>' : '<span class="muted">recusado</span>'}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted" style="font-size:13.5px">Nenhum pedido de saque ainda.</div>'));
 }
@@ -11596,7 +11666,7 @@ window.copiarSdrMsg = async () => { const t = $('sdrTxt').value; try { await nav
 // visita conta para a SDR só se quem marcou é SDR hoje (perfil trocado para corretor volta a contar como visita normal)
 function visitaDeSdr(r){
   if (!r.sdrUid) return false;
-  const p = perfisTodos.find(x => x.uid === r.sdrUid);
+  const p = pessoasRk().find(x => x.uid === r.sdrUid);
   return !p || p.papel === 'sdr';
 }
 window.visitaDeSdr = visitaDeSdr;
