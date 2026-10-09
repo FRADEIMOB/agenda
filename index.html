@@ -627,7 +627,27 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 
 .cart-dois{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}.cart-dois b{display:block;font-size:clamp(19px,6vw,26px);letter-spacing:-.02em;white-space:nowrap}.cart-pend{padding:8px 10px;border-radius:12px;background:rgba(250,204,21,.18);box-shadow:inset 0 0 0 1px rgba(250,204,21,.45)}.cart-pend small{color:#fde68a}.cart-pend b{color:#fde047}.poup-pend{display:inline-block;font-style:normal;font-weight:800;font-size:13px;color:#3a2a00;background:#fde047;padding:3px 9px;border-radius:99px;margin:3px 0 2px}.poup-tx span{display:block}
 button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.poup-ver{margin-left:auto;font-style:normal;font-weight:700;font-size:13px;background:rgba(255,255,255,.18);padding:6px 12px;border-radius:99px;flex:none}.cart-topo{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff;margin-bottom:12px}.cart-topo small{opacity:.85}.cart-it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.cart-it small{display:block;color:var(--muted);font-size:12.5px}.cart-it span{color:#16a34a;font-weight:800;white-space:nowrap}
-.rk-toca{cursor:pointer}.bd-crm{margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}.bd-crm small{display:block;margin-top:4px;font-size:12px}.vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
+@media (max-width:900px){
+  /* v128: (+) em grade de atalhos, numa folha só acima do botão */
+  html.fab-aberto #fabMenu.fab-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;left:16px;right:16px;bottom:calc(146px + env(safe-area-inset-bottom));padding:14px 10px;border-radius:22px;background:var(--card,#fff);box-shadow:0 18px 50px rgba(0,0,0,.28);border:1px solid var(--border)}
+  html.fab-aberto #fabMenu button{flex-direction:column-reverse;justify-content:flex-end;gap:7px;padding:8px 4px;border-radius:14px}
+  html.fab-aberto #fabMenu button:active{background:var(--card2)}
+  html.fab-aberto #fabMenu span{background:none;box-shadow:none;padding:0;font-size:12.5px;font-weight:700;text-align:center;line-height:1.2}
+  html.fab-aberto #fabMenu i{margin:0;width:50px;height:50px;box-shadow:0 6px 14px rgba(0,0,0,.18)}
+}
+.fab-menu .fm-ia i{background:#1C5F8E}
+/* v128: assistente sem a aba vertical: no celular fica no (+); no computador, botão redondo no canto */
+@media (max-width:900px){#iaBolha{display:none!important}}
+@media (min-width:901px){#iaBolha{right:24px;bottom:24px;width:54px;height:54px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);justify-content:center}#iaBolha .ia-btx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}#iaBolha:hover{padding:0;transform:translateY(-2px)}}
+.hoje-topo{display:grid;gap:12px;margin-bottom:14px}.hoje-topo:empty,.hoje-topo>div:empty{display:none}
+@media (min-width:901px){.hoje-topo{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:stretch}.hoje-topo .poup,.hoje-topo .ci-card{height:100%;margin:0}}
+.hoje-topo .poup{margin:0}.hoje-topo .ci-card{margin:0;padding:14px 16px}
+.hoje-avisos{display:grid;gap:8px;margin-bottom:16px}.hoje-avisos>div:empty{display:none}.hoje-avisos .banner,.hoje-avisos .card,.hoje-avisos>div>div{margin:0!important}
+.hoje-avisos .banner{padding:10px 14px;font-size:13.5px;border-radius:12px}
+.ci-card.feito .ci-bts,.ci-card.fora .ci-bts{gap:8px}.btn.btn-sm{padding:8px 12px;font-size:13px;min-height:0}
+.ml-bts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.ml-vazio{font-size:13.5px;margin-top:12px}
+.tar-extra{display:grid;gap:16px;margin-top:18px}@media (min-width:901px){.tar-extra{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.rk-toca{cursor:pointer}.bz-tent{margin:8px 0 2px;padding:8px 10px;border-radius:10px;font-size:13px;background:rgba(242,140,56,.1);border:1px solid rgba(242,140,56,.35)}.bz-tent.ok{background:rgba(22,163,74,.08);border-color:rgba(22,163,74,.35)}.bz-tent details{margin-top:4px}.bz-tent summary{cursor:pointer;color:var(--muted)}.bz-tent details div{color:var(--muted);font-size:12.5px;padding:2px 0}.bd-crm{margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}.bd-crm small{display:block;margin-top:4px;font-size:12px}.vm-feirao{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}.vm-feirao input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#f28c38}.vm-feirao span{display:flex;flex-direction:column;gap:2px}.vm-feirao small{color:var(--muted,#8a99a8);font-weight:500;font-size:12.5px}.vm-feirao:has(input:checked){border-color:#f28c38;background:rgba(242,140,56,.08)}.tag-feirao{color:#f28c38;font-weight:700}
 .tvr-bts{display:flex;gap:8px}html.modo-tvr .sidebar,html.modo-tvr .topbar,html.modo-tvr .mobilebar,html.modo-tvr #fab,html.modo-tvr .ia-bolha,html.modo-tvr #zapFab,html.modo-tvr #discFab{display:none!important}
 .tvr{display:none}html.modo-tvr .tvr{display:flex}html.modo-tvr body{overflow:hidden}
 .tvr{position:fixed;inset:0;z-index:60;background:radial-gradient(1200px 600px at 10% -10%,#16405f 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#3a1f12 0%,transparent 55%),#081826;color:#eef4f8;padding:1.6vw 1.8vw;flex-direction:column;gap:1.2vw;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
@@ -1906,14 +1926,18 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- HOJE -->
       <section class="view" id="v-hoje">
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">Publicar aviso</button></div>
-        <div id="bannerHoje"></div>
-        <div id="alertasHoje"></div>
-        <div id="conviteNotif"></div>
-        <div id="relDiaHoje"></div>
-        <div id="poupHoje"></div>
-        <div class="mural" id="mural"></div>
-        <div id="checkinHoje"></div>
-        <div id="aulasHoje"></div>
+        <div class="hoje-topo">
+          <div id="checkinHoje"></div>
+          <div id="poupHoje"></div>
+        </div>
+        <div class="hoje-avisos">
+          <div id="bannerHoje"></div>
+          <div id="alertasHoje"></div>
+          <div id="conviteNotif"></div>
+          <div id="relDiaHoje"></div>
+          <div class="mural" id="mural"></div>
+          <div id="aulasHoje"></div>
+        </div>
         <div id="metaHoje"></div>
         <div class="stats hide" id="statsPapel"></div>
         <div id="ligHoje"></div>
@@ -1938,34 +1962,17 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
             <div id="visHoje"></div>
             <div class="row2"><button class="btn btn-ghost" onclick="novaVisita()">+ Nova visita</button><button class="btn btn-ghost wa" onclick="abrirConfirmar()"><i data-ic="wa" style="width:17px;height:17px;display:grid"></i><span class="txtConfAm">Confirmar amanhã</span></button></div>
           </div>
-          <div class="card">
-            <div class="card-head"><h2>Agenda de hoje</h2><span class="muted" id="hojeResumo"></span></div>
-            <div id="alertaAtraso"></div>
-            <div class="quick"><input id="quick" placeholder='Ex.: "Visita cliente amanhã 14h"' onkeydown="if(event.key==='Enter')addRapida()"><button class="btn btn-primary" onclick="addRapida()">Adicionar</button></div>
-            <div class="hint">Dica: escreva "amanhã" e um horário (ex.: 9h, 14:30) que o app preenche sozinho.</div>
-            <div class="tlist" id="listaHoje"></div>
-          </div>
           </div>
           <div class="col">
             <div class="card hide" id="cardEquipe">
               <div class="card-head"><h2>Painel da equipe</h2><span class="muted">este mês</span></div>
               <div id="painelEquipe"></div>
             </div>
-            <div class="card">
-              <div class="card-head"><h2 id="tituloProgresso">Seu progresso</h2></div>
-              <div class="ring-wrap">
-                <div class="ring"><svg width="112" height="112"><circle cx="56" cy="56" r="48" fill="none" stroke="var(--card2)" stroke-width="11"/><circle id="ringArc" cx="56" cy="56" r="48" fill="none" stroke="var(--accent)" stroke-width="11" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6" style="transition:stroke-dashoffset .6s"/></svg><div class="lbl"><div><b id="ringPct">0%</b><span>do dia</span></div></div></div>
-                <div class="ring-info"><div><b id="rFeitas">0</b> concluídas</div><div><b id="rFaltam">0</b> faltando</div><div>Sequência: <b id="rStreak">0 dias</b></div></div>
-              </div>
-              <div class="quote" id="frase"></div>
-            </div>
-            <div class="card">
-              <div class="card-head"><h2>Esta semana</h2><button class="link" onclick="setView('calendario')">Ver mês</button></div>
-              <div class="week" id="semana"></div>
-            </div>
-            <div class="card">
-              <div class="card-head"><h2>Próximos compromissos</h2></div>
-              <div id="proximos"></div>
+          <div class="card">
+              <div class="card-head"><h2>Agenda de hoje</h2><span class="muted" id="hojeResumo"></span></div>
+              <div id="alertaAtraso"></div>
+              <div class="quick"><input id="quick" placeholder='Nova tarefa (ex.: "ligar cliente amanhã 14h")' onkeydown="if(event.key==='Enter')addRapida()"><button class="btn btn-primary" onclick="addRapida()">Adicionar</button></div>
+              <div class="tlist" id="listaHoje"></div>
             </div>
           </div>
         </div>
@@ -1984,6 +1991,25 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
           </div>
           <div class="chips" id="chipsCat" style="margin-bottom:10px"></div>
           <div class="tlist" id="listaTodas"></div>
+        </div>
+        <!-- v128: progresso, semana e próximos compromissos saíram da tela inicial e ficam aqui -->
+        <div class="tar-extra">
+            <div class="card">
+              <div class="card-head"><h2 id="tituloProgresso">Seu progresso</h2></div>
+              <div class="ring-wrap">
+                <div class="ring"><svg width="112" height="112"><circle cx="56" cy="56" r="48" fill="none" stroke="var(--card2)" stroke-width="11"/><circle id="ringArc" cx="56" cy="56" r="48" fill="none" stroke="var(--accent)" stroke-width="11" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6" style="transition:stroke-dashoffset .6s"/></svg><div class="lbl"><div><b id="ringPct">0%</b><span>do dia</span></div></div></div>
+                <div class="ring-info"><div><b id="rFeitas">0</b> concluídas</div><div><b id="rFaltam">0</b> faltando</div><div>Sequência: <b id="rStreak">0 dias</b></div></div>
+              </div>
+              <div class="quote" id="frase"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>Esta semana</h2><button class="link" onclick="setView('calendario')">Ver mês</button></div>
+              <div class="week" id="semana"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>Próximos compromissos</h2></div>
+              <div id="proximos"></div>
+            </div>
         </div>
       </section>
 
@@ -2502,7 +2528,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <div class="fab-fundo" onclick="fabFechar()"></div>
-<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-cart" id="fmCart" onclick="fabFechar();abrirCarteira()"><span>Carteira</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1.3" fill="currentColor"/></svg><b id="fmCartN"></b></i></button><button class="fm-bz" id="fmBz" onclick="fabFechar();setView('bolsao')"><span>Bolsão</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="fmBzN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
+<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-cart" id="fmCart" onclick="fabFechar();abrirCarteira()"><span>Carteira</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1.3" fill="currentColor"/></svg><b id="fmCartN"></b></i></button><button class="fm-bz" id="fmBz" onclick="fabFechar();setView('bolsao')"><span>Bolsão</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="fmBzN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-ia hide" id="fmIa" onclick="fabFechar();iaAlternar()"><span>Assistente</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
 <button class="fab hide" id="fab" onclick="fabClique()" title="Adicionar" data-ic="plus"></button>
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
@@ -2595,7 +2621,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div id="vmIndWrap" class="hide"><label>Indicado por</label><input id="vmIndicado" placeholder="Quem indicou?"></div>
         <div id="vmOutroWrap" class="hide"><label>Qual foi a origem?</label><input id="vmOrigemOutro" placeholder="Ex.: carro de som, placa na obra…"></div></div>
       <div class="fg"><label>Avaliação de crédito <span class="muted" style="font-weight:500">(opcional)</span></label><input id="vmAval" list="listaAval" placeholder="Ex.: aprovado outro cca"><datalist id="listaAval"></datalist></div>
-      <label class="fg vm-feirao"><input type="checkbox" id="vmFeirao"><span><b>Visita do Feirão Tenda</b><small>Marque se o cliente veio para o feirão. Conta no ranking do Feirão da TV.</small></span></label>
+      <label class="fg vm-feirao"><input type="checkbox" id="vmFeirao"><span><b>Visita do Feirão Tenda</b><small id="vmFeiraoVal">Marque se o cliente veio para o feirão. Conta no ranking do Feirão da TV.</small></span></label>
       <div class="fg hide" id="vmMotivoWrap"><label>Motivo da perda</label><select id="vmMotivo"></select></div>
       <div class="fg"><label>Observação</label><textarea id="vmObs" placeholder="Observação opcional" style="min-height:64px"></textarea></div>
       <div class="row2" id="vmExtras">
@@ -3015,6 +3041,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <label class="fv-chk"><input type="checkbox" id="bdAtivo"> Disparo ligado</label>
       <div class="row2"><div class="fg"><label>Leads por vez</label><input type="number" id="bdQtd" min="1"></div><div class="fg"><label>A cada (minutos)</label><input type="number" id="bdInt" min="1"></div></div>
       <div class="fg"><label>Pausar quando houver quantos livres no bolsão</label><input type="number" id="bdMax" min="1"></div>
+      <div class="fg"><label>Ligações mínimas antes de "Não atende", devolver ou pegar outro lead</label><input type="number" id="bdMinLig" min="0" max="10"></div>
       <div class="bd-crm"><label class="fv-chk"><input type="checkbox" id="bdCrmAtivo"> Leads do CRM direto para o bolsão</label>
         <div class="fg"><label>Perfil do CRM cujos leads vão para o bolsão</label><input id="bdCrmNomes" maxlength="120" placeholder="Allan ADM"><small class="muted">Escreva igual ao nome do perfil no CRM. Mais de um: separe por vírgula.</small></div>
         <div class="fg"><label>Quando o lead chegar</label><select id="bdCrmDest"><option value="livre">Fica disponível na hora</option><option value="fila">Entra na fila e sai pelo disparo</option></select></div></div>
@@ -3139,6 +3166,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-body">
       <input id="discFabNum" inputmode="tel" autocomplete="off" placeholder="Número com DDD" style="font-size:22px;text-align:center;letter-spacing:.5px" onkeydown="if(event.key==='Enter')ligarDoFab()">
       <button class="btn btn-block disc-ligar" style="margin-top:12px" onclick="ligarDoFab()">Ligar pelo WhatsApp</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="ligarDoFabTel()">Ligar pelo celular</button>
       <div class="hint" style="margin-top:12px" id="discRegra"></div>
     </div>
   </div>
@@ -4254,7 +4282,7 @@ function cardVisita(v, compacto){
   if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(v.corretorNome||'Sem corretor')}</span>`);
   if (v.sdrNome && !souSdr()) meta.push(`<span>📞 SDR ${esc(primeiro(v.sdrNome))}</span>`);
   if (v.avaliacao) meta.push(`<span>📋 ${esc(v.avaliacao)}</span>`);
-  if (v.feirao) meta.push(`<span class="tag-feirao">Feirão Tenda</span>`);
+  if (v.feirao) { const c = bvCfg(), val = c.ativo ? valorVisitaCart(c) : 0; meta.push(`<span class="tag-feirao">Feirão Tenda${val ? ' · ' + (v.status === 'Realizada' ? '' : 'vale ') + frd(val) : ''}</span>`); }
   if (souGerente() && !compacto) meta.push(`<span>${esc(eqNome(v.equipe))}</span>`);
   if (v.telefone) meta.push(`<span>📱 ${esc(v.telefone)}</span>`);
   const acoes = [];
@@ -4457,6 +4485,7 @@ function abrirFormVisita(v, dataPadrao){
   $('vmHora').value = v?.time || '09:00';
   $('vmCliente').value = v?.cliente || ''; $('vmFone').value = v?.telefone || '';
   $('vmImovel').value = v?.empreendimento || ''; $('vmObs').value = v?.obs || ''; $('vmFeirao').checked = !!v?.feirao;
+  { const c = bvCfg(), val = c.ativo ? valorVisitaCart(c) : 0; $('vmFeiraoVal').innerHTML = val ? `Vale <b>+ ${frd(val)}</b> na carteira do corretor quando a visita for realizada no sábado. Conta no ranking do Feirão da TV.` : 'Marque se o cliente veio para o feirão. Conta no ranking do Feirão da TV.'; }
   $('vmStatus').innerHTML = STATUS.map(s => `<option ${ (v?.status||'Pendente')===s?'selected':''}>${s}</option>`).join('');
   $('listaImoveis').innerHTML = [...new Set(visitas.map(x => x.empreendimento).filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
   $('vmCorWrap').classList.toggle('hide', !podeGerir() && !souSdr());
@@ -5383,10 +5412,11 @@ const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
   const lig = $('discFab') && !$('discFab').classList.contains('hide'), zap = $('zapFab') && !$('zapFab').classList.contains('hide');
-  const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu();
-  if (!lig && !zap && !ind && !bz && !cart || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
+  const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu(), ia = souGerente();
+  if (!lig && !zap && !ind && !bz && !cart && !ia || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
   $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !bz);
   $('fmCart').classList.toggle('hide', !cart);
+  $('fmIa').classList.toggle('hide', !ia);
   const nBz = bz && bzPresente() ? bzLivres().length : 0; $('fmBzN').textContent = nBz ? String(nBz) : '';
   $('fmZapN').textContent = $('zapFabN') && !$('zapFabN').classList.contains('hide') ? $('zapFabN').textContent : '';
   document.documentElement.classList.toggle('fab-aberto');
@@ -5421,7 +5451,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 123;
+const APP_VERSAO = 128;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7472,6 +7502,7 @@ function iniciarLigacao(tel, cliente, origem){
   if (!podeDiscador()) return;
   const pend = { tel:String(tel || ''), cliente:String(cliente || ''), origem:origem || '', ini:Date.now(), uid:uidAtual, saiu:false, id:'' };
   gravarLigPend(pend);
+  bzRegistrarLigacao(tel); // v125: conta a tentativa no lead do bolsão
   if (ligaPontua() || ligaSdr()) registrarLigacao(tel, cliente, origem).then(id => { const p = lerLigPend(); if (id && p && p.ini === pend.ini) gravarLigPend({ ...p, id }); }).catch(e => { console.warn('Ligação:', e.message); toast('A ligação não foi registrada: ' + (e.message || e)); }); // v114: avisa se a ligação não contou
   else toast('Teste do gestor: a ligação não é registrada.');
 }
@@ -7483,8 +7514,14 @@ function voltouDaLigacao(){
   const seg = Math.round((Date.now() - p.ini) / 1000);
   if (seg > 3 * 3600) return;
   _ligConf = { ...p, seg }; $('ligConfPro').checked = false; $('ligConfVis').checked = false; $('ligConfFei').checked = false; $('ligConfFeiRow').classList.add('hide'); $('ligConfProRow').classList.toggle('hide', !ligaPontua());
-  $('ligConfTxt').innerHTML = `Ligação para <b>${esc(p.cliente || p.tel)}</b> · ${fmtDurLig(seg)} fora do app.<br>O cliente atendeu?`;
+  $('ligConfTxt').innerHTML = `Ligação para <b>${esc(p.cliente || p.tel)}</b> · ${fmtDurLig(seg)} fora do app.<br><span id="ligConfHist" class="muted" style="font-size:13px"></span><br>O cliente atendeu?`;
   abrir('ligConfModal');
+  // v125: quantas vezes você já ligou para este número
+  const tn = chaveTel(p.tel); if (tn && uidAtual) getDocs(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('telNorm','==',tn))).then(r => {
+    const l = r.docs.map(d => d.data()).sort((a, b) => (b.em || 0) - (a.em || 0)), n = l.length; if (!$('ligConfHist') || !n) return;
+    const ant = l[1] ? new Date(l[1].em) : null;
+    $('ligConfHist').textContent = `${n}ª ligação sua para este número${ant ? ` · a anterior foi em ${ant.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })} às ${ant.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}` : ''}${n < BZ_MIN_LIG() ? ` · insista: o mínimo são ${BZ_MIN_LIG()} tentativas` : ''}`;
+  }).catch(() => {});
 }
 document.addEventListener('visibilitychange', voltouDaLigacao);
 window.ligConfResp = async sim => {
@@ -7547,6 +7584,7 @@ window.abrirDiscador = () => {
   $('discRegra').innerHTML = `Abre o seu WhatsApp na conversa do número: toque no ícone de telefone de lá para chamar. Toda ligação feita pelo app conta, mesmo para o mesmo número. Ao voltar, diga se o cliente atendeu.`;
   $('discFabNum').value = ''; abrir('discModal'); setTimeout(() => $('discFabNum').focus(), 80);
 };
+window.ligarDoFabTel = () => { const v = $('discFabNum').value; if (soDig(v).length < 8) { toast('Digite o número com DDD'); return; } fechar('discModal'); ligar(v, '', 'discador'); };
 window.ligarDoFab = () => { const v = $('discFabNum').value; if (soDig(v).length < 10) { toast('Digite o número com DDD'); return; } fechar('discModal'); ligarZap(v, '', 'discador'); };
 // lista para o gestor conferir e anular
 window.abrirLigLista = () => { $('ligListaDia').value = hojeISO(); abrir('ligListaModal'); carregarLigLista(); };
@@ -7602,11 +7640,10 @@ function htmlMeusLeads(){
     return `<div class="ml-row"><div class="ml-av">${esc((e.cliente || '?').trim()[0] || '?')}</div><div class="ml-txt"><b>${esc(e.cliente || 'Lead sem nome')}</b><small>${esc(tel || 'sem telefone no aviso do CRM')}${e.origem ? ' · ' + esc(e.origem) : ''} · ${new Date(e.em || 0).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</small></div>
       <div class="ml-acoes">${ok ? '<span class="pill-ok">✓ ligou</span>' : ''}${htmlLigar(tel, e.cliente, 'lead')}${tel ? `<button class="snooze wa" onclick="abrirWhats('${esc(soDig(tel))}')" title="WhatsApp">${IC.wa}WhatsApp</button>` : ''}</div></div>`;
   }).join('');
-  return `<div class="card ml-card"><div class="card-head"><h2>📞 Ligações de hoje</h2><span class="muted">${lig} ligaç${lig === 1 ? 'ão' : 'ões'} · ${rec} recontato${rec === 1 ? '' : 's'}</span></div>
-    <div class="ml-disc"><input id="discNum" inputmode="tel" placeholder="Ligar para um número (com DDD)" onkeydown="if(event.key==='Enter')ligarDiscador()"><button class="btn btn-primary" onclick="ligarDiscador()">📞 Ligar</button><button class="btn btn-ghost zap-bt" onclick="ligarDiscadorZap()" title="Ligar pelo WhatsApp">📲 Zap</button></div>
-    <div class="ml-extra"><button class="btn btn-ghost" onclick="abrirIndicacao()">+ Indicação recebida</button>${htmlFunilDia()}</div>
-    ${l.length ? `<div class="rep-sec" style="margin:14px 0 6px">Seus leads de hoje (${l.length})</div>${linhas}` : '<div class="muted" style="font-size:13.5px;margin-top:10px">Os leads que o CRM passar para você hoje aparecem aqui com o botão de ligar.</div>'}
-    <details class="info-tog" style="margin-top:8px"><summary>ⓘ Como conta</summary><div class="hint" style="margin-top:6px">Ligue sempre pelo app. Toda ligação conta, mesmo repetida para o mesmo número. Ao voltar, diga se o cliente atendeu e se tem perfil: isso monta o seu funil.</div></details></div>`;
+  // v128: cartão enxuto; o discador completo fica no (+) e no botão Ligar
+  return `<div class="card ml-card"><div class="card-head"><h2>Ligações de hoje</h2><span class="muted">${lig} ligaç${lig === 1 ? 'ão' : 'ões'} · ${rec} recontato${rec === 1 ? '' : 's'}</span></div>
+    <div class="ml-bts"><button class="btn btn-primary" onclick="abrirDiscador()">Ligar para um número</button><button class="btn btn-ghost" onclick="abrirIndicacao()">+ Indicação</button>${htmlFunilDia()}</div>
+    ${l.length ? `<div class="rep-sec" style="margin:14px 0 6px">Seus leads de hoje (${l.length})</div>${linhas}` : '<div class="muted ml-vazio">Os leads que o CRM passar para você hoje aparecem aqui, com o botão de ligar. Ligue sempre pelo app: toda ligação conta.</div>'}</div>`;
 }
 
 // =====================================================================
@@ -7851,6 +7888,7 @@ function renderBolsao(){
     $('bzLista').innerHTML = l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card meu"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead'}</span><small>peguei ${tempo(x.pegoEm)}</small></div>
       <b class="an-cli">${esc(x.nome || 'Cliente')}</b><div class="an-c2"><span>📱 ${esc(x.telefone || '')}</span>${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}</div>${x.obs ? `<div class="an-c3">${esc(x.obs)}</div>` : ''}
       <div class="bz-lig">${htmlLigar(x.telefone, x.nome, 'bolsão')}</div>
+      ${htmlBzLigs(x)}
       <div class="bz-res"><select id="bzRes_${x.id}"><option value="">Como foi?</option>${BZ_RES.map(([k, n]) => `<option value="${k}">${n}</option>`).join('')}</select><button class="btn btn-ghost" onclick="resultadoBolsao('${x.id}')">Salvar</button></div>
       <button class="link" onclick="devolverBolsao('${x.id}')">Devolver ao bolsão</button></div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Você não pegou nenhum cliente do bolsão</b><p>Vá em “Disponíveis” e toque em “Pegar este cliente”.</p></div>`;
   } else {
@@ -7860,11 +7898,28 @@ function renderBolsao(){
   }
 }
 window.bzVerAba = k => { bzAba = k; renderBolsao(); };
-const bzHist = (x, txt) => [...(x.historico || []).slice(-30), { em:Date.now(), por:perfil.nome, txt }];
+const bzHist = (x, txt) => [...(x.historico || []).slice(-40), { em:Date.now(), por:perfil.nome, uid:uidAtual, txt }];
+// v125: histórico de ligações por número no bolsão + mínimo de tentativas antes de passar para o próximo
+const BZ_MIN_LIG = () => { const v = Number(appCfg.bolsaoMinLig); return isFinite(v) && v >= 0 ? v : 3; };
+const bzLigs = x => (x.historico || []).filter(h => h.txt === 'ligou');
+const bzMinhasLigs = x => bzLigs(x).filter(h => h.uid === uidAtual && (h.em || 0) >= (x.pegoEm || 0)).length;
+const bzFaltaInsistir = x => x.status === 'pego' && x.pegoPor === uidAtual && !x.resultado && bzMinhasLigs(x) < BZ_MIN_LIG();
+async function bzRegistrarLigacao(tel){
+  const t = chaveTel(tel); if (!t) return;
+  const x = bolsao.find(b => b.status === 'pego' && b.pegoPor === uidAtual && chaveTel(b.telefone) === t); if (!x) return;
+  const ult = bzLigs(x).filter(h => h.uid === uidAtual).pop(); if (ult && Date.now() - ult.em < 20000) return; // toque repetido
+  try { await updateDoc(doc(db,'bolsao', x.id), { historico:bzHist(x, 'ligou') }); } catch(e) { console.warn('bolsão ligação', e.message); }
+}
+function htmlBzLigs(x){
+  const l = bzLigs(x), meus = bzMinhasLigs(x), min = BZ_MIN_LIG(), ok = meus >= min;
+  const fmt = ms => { const d = new Date(ms); return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' }) + ' ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }); };
+  return `<div class="bz-tent ${ok ? 'ok' : ''}"><span>${min ? `Suas ligações: <b>${meus} de ${min}</b>${ok ? '' : ` · faltam ${min - meus}`}` : `Suas ligações: <b>${meus}</b>`}</span>${l.length ? `<details><summary>${l.length} ligaç${l.length === 1 ? 'ão' : 'ões'} para este número</summary>${l.slice().reverse().map(h => `<div>${fmt(h.em)} · ${esc(primeiro(h.por || ''))}</div>`).join('')}</details>` : ''}</div>`;
+}
 window.pegarBolsao = async id => {
   const x = bolsao.find(b => b.id === id); if (!x) return;
   if (bzMeus().length >= BZ_LIMITE()) { toast(`Você já está com ${BZ_LIMITE()} clientes do bolsão. Dê o resultado de algum antes.`); return; }
   if (!bzPresente()) { toast('Marque presença no escritório para pegar leads do bolsão.'); return; }
+  { const f = bolsao.find(bzFaltaInsistir); if (f) { toast(`Antes de pegar outro, ligue pelo menos ${BZ_MIN_LIG()} vezes para ${nomeCurto(f.nome)} (feitas: ${bzMinhasLigs(f)}).`); bzAba = 'meus'; render(); return; } }
   const h = hojeISO(), mm = h.slice(0,7);
   try { const dados = { status:'pego', pegoPor:uidAtual, pegoNome:perfil.nome, pegoEm:Date.now(), pegoDia:h, equipe:perfil.equipe || '', historico:bzHist(x, 'pegou') };
     // se o Firebase ainda estiver com as regras antigas, tenta sem o campo novo
@@ -7879,6 +7934,7 @@ window.pegarBolsao = async id => {
 };
 window.resultadoBolsao = async id => {
   const x = bolsao.find(b => b.id === id), r = $('bzRes_' + id)?.value; if (!x || !r) { toast('Escolha como foi'); return; }
+  if (r === 'nao_atende' && bzMinhasLigs(x) < BZ_MIN_LIG()) { toast(`Insista mais: ligue pelo menos ${BZ_MIN_LIG()} vezes antes de marcar "Não atende" (feitas: ${bzMinhasLigs(x)}).`); return; }
   const fim = !['retornar'].includes(r);
   try { await updateDoc(doc(db,'bolsao', id), { status:fim ? 'encerrado' : 'pego', resultado:r, resultadoEm:Date.now(), historico:bzHist(x, (BZ_RES.find(b => b[0] === r) || [, r])[1]) });
     toast(r === 'agendou' ? '📅 Boa! Cadastre a visita.' : ['acompanhando','conversando'].includes(r) ? 'Salvo. O cliente segue com você e a vaga do bolsão foi liberada.' : 'Resultado salvo ✓');
@@ -7886,7 +7942,9 @@ window.resultadoBolsao = async id => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.devolverBolsao = async id => {
-  const x = bolsao.find(b => b.id === id); if (!x) return; const mot = prompt('Por que está devolvendo? (opcional)') ; if (mot === null) return;
+  const x = bolsao.find(b => b.id === id); if (!x) return;
+  if (!souGerente() && bzMinhasLigs(x) < BZ_MIN_LIG()) { toast(`Insista mais: ligue pelo menos ${BZ_MIN_LIG()} vezes antes de devolver (feitas: ${bzMinhasLigs(x)}).`); return; }
+  const mot = prompt('Por que está devolvendo? (opcional)') ; if (mot === null) return;
   try { await updateDoc(doc(db,'bolsao', id), { status:'livre', pegoPor:'', pegoNome:'', pegoEm:0, tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'devolveu' + (mot ? ': ' + mot : '')) }); toast('Devolvido ao bolsão'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.voltarBolsao = async id => { const x = bolsao.find(b => b.id === id); if (!x) return;
@@ -7928,7 +7986,7 @@ window.exportarBolsao = () => {
     l.map(x => [x.nome || '', x.telefone || '', x.criativo || '', x.origem === 'perdido' ? 'Cliente perdido' : 'Lead', x.motivo || '', x.empreendimento || '', ST[x.status] || x.status || '', x.pegoNome || '', (BZ_RES.find(r => r[0] === x.resultado) || [, x.resultado || ''])[1].replace(/^[^\p{L}]+/u, ''), x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR') : '']));
 };
 window.abrirDisparo = () => { const c = bzDisp(), k = { ativo:true, nomes:['Allan ADM'], destino:'livre', ...(appCfg.bolsaoCrm || {}) }; $('bdAtivo').checked = c.ativo !== false; $('bdQtd').value = c.qtd; $('bdInt').value = c.intervalo; $('bdMax').value = c.max;
-  $('bdCrmAtivo').checked = k.ativo !== false; $('bdCrmNomes').value = (k.nomes || []).join(', '); $('bdCrmDest').value = k.destino === 'fila' ? 'fila' : 'livre'; abrir('bzDispModal'); };
+  $('bdCrmAtivo').checked = k.ativo !== false; $('bdCrmNomes').value = (k.nomes || []).join(', '); $('bdCrmDest').value = k.destino === 'fila' ? 'fila' : 'livre'; $('bdMinLig').value = BZ_MIN_LIG(); abrir('bzDispModal'); };
 // v99: botão Disparar — solta a primeira leva na hora e segue soltando enquanto o app da gerência estiver aberto
 let _bzTimer = null, _bzProx = 0;
 async function bzSoltarUmaVez(){
@@ -7972,7 +8030,7 @@ window.soltarAgora = async () => {
 window.salvarDisparo = async () => {
   const d = { ativo:$('bdAtivo').checked, qtd:Math.max(1, Math.round(Number($('bdQtd').value) || 3)), intervalo:Math.max(1, Math.round(Number($('bdInt').value) || 2)), max:Math.max(1, Math.round(Number($('bdMax').value) || 15)) };
   const crm = { ativo:$('bdCrmAtivo').checked, nomes:$('bdCrmNomes').value.split(',').map(x => x.trim()).filter(Boolean).slice(0, 5), destino:$('bdCrmDest').value }; // v121: leads do perfil do CRM (Allan ADM) vão para o bolsão
-  try { await gravar(setDoc(doc(db,'config','app'), { bolsaoDisparo:d, bolsaoCrm:crm, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); appCfg.bolsaoCrm = crm; fechar('bzDispModal'); toast('Disparo salvo'); } catch(e) { toast('Erro: ' + e.message); }
+  try { await gravar(setDoc(doc(db,'config','app'), { bolsaoDisparo:d, bolsaoCrm:crm, bolsaoMinLig:Math.max(0, Math.min(10, Math.round(Number($('bdMinLig').value)))) || 0, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); appCfg.bolsaoCrm = crm; fechar('bzDispModal'); toast('Disparo salvo'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.salvarBolsao = async () => {
   const crv = $('bzCriativo').value.trim();
@@ -8088,7 +8146,7 @@ window.abrirCarteira = (soAtualiza) => {
   $('cartLista').innerHTML = (k.pendL.length ? `<h4 class="cart-h">Pendente</h4>` + k.pendL.sort((a, b) => (a.date || '').localeCompare(b.date || '')).map(v => item(v, 'pend')).join('') : '')
     + (k.vale.length ? `<h4 class="cart-h">Visitas realizadas</h4>` + k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(v => item(v, 'ok')).join('') : '')
     + (ult.length ? `<h4 class="cart-h">Saques</h4>` + ult.map(x => `<div class="cart-it"><div><b>${frd(x.valor)}</b><small>${new Date(x.em).toLocaleDateString('pt-BR')} · pedido nº ${esc(x.cod || '')}</small></div><span class="cart-st ${x.status}">${x.status === 'pago' ? 'Pago' : 'Solicitado'}</span></div>`).join('') : '')
-    || `<div class="muted" style="padding:14px 0">Ainda não tem saldo. ${c.soFeirao ? 'Marque a visita como <b>Visita do Feirão Tenda</b>: ela entra como pendente e vira saldo disponível quando for <b>realizada</b> no sábado.' : ''}</div>`;
+    || `<div class="muted" style="padding:14px 0">Ainda não tem saldo. ${c.soFeirao ? `Cada visita do <b>Feirão Tenda</b> realizada no sábado vale <b>${frd(valorVisitaCart(c))}</b>. Marcou a visita, o valor já aparece como pendente.` : ''}</div>`;
   $('cartRegra').innerHTML = c.soFeirao ? `Visita do Feirão Tenda marcada para sábado entra como <b>pendente</b>. Quando ela é marcada como <b>Realizada</b>, o valor vai na hora para o <b>saldo disponível</b> e já pode ser sacado. Se a visita não acontecer (não compareceu, cancelada ou sem atualização até 2 dias depois), ela sai do pendente e não vale nada. 1 FRD = R$ 1,00.` : '1 FRD = R$ 1,00.';
   if (!soAtualiza) abrir('carteiraModal');
 };
@@ -8752,15 +8810,15 @@ function htmlCheckinHoje(){
   const c = meuCheckin, cfg = ciCfg(), diaSem = new Date().getDay();
   if (!c) { if (!cfg.dias.includes(diaSem)) return '';
     const atras = hm(Date.now()) > cfg.hora;
-    return htmlCiResumoGestor() + `<div class="ci-card ${atras ? 'atras' : ''}"><div class="ci-txt"><b>${atras ? '⏰ Você ainda não marcou a presença' : '👋 Bom dia! Marque a sua presença'}</b><small>Entrada às ${cfg.hora}.</small></div>
-      <div class="ci-bts"><button class="btn btn-primary ci-bt" id="ciBtEsc" onclick="chegueiEscritorio()">🏢 Cheguei no escritório</button><button class="btn btn-ghost ci-bt" onclick="abrirExterno()">🚗 Estou em atendimento externo</button></div>
-      <button class="link ci-qr" onclick="abrirCamera()">📷 Ou leia o código da recepção</button></div>`; }
-  if (c.saida) return `<div class="ci-card feito"><div class="ci-txt"><b>👋 Até amanhã!</b><small>Chegou às ${hm(c.entrada)} e encerrou o dia às ${hm(c.saida)}.</small></div></div>`;
-  if (ciFora(c)) return htmlCiResumoGestor() + `<div class="ci-card fora"><div class="ci-txt"><b>🚗 Em atendimento externo desde ${hm(ciDesde(c))}</b><small>${esc(ciOnde(c))}</small></div>
-    <div class="ci-bts"><button class="btn btn-primary" id="ciBtEsc" onclick="chegueiEscritorio()">🏢 Cheguei no escritório</button><button class="btn btn-ghost" onclick="fazerCheckout()">Encerrar o dia 👋</button></div></div>`;
+    return htmlCiResumoGestor() + `<div class="ci-card ${atras ? 'atras' : ''}"><div class="ci-txt"><b>${atras ? 'Você ainda não marcou a presença' : 'Bom dia! Marque a sua presença'}</b><small>Entrada às ${cfg.hora}.</small></div>
+      <div class="ci-bts"><button class="btn btn-primary ci-bt" id="ciBtEsc" onclick="chegueiEscritorio()">Cheguei no escritório</button><button class="btn btn-ghost ci-bt" onclick="abrirExterno()">Estou em atendimento externo</button></div>
+      <button class="link ci-qr" onclick="abrirCamera()">Ou leia o código da recepção</button></div>`; }
+  if (c.saida) return `<div class="ci-card feito"><div class="ci-txt"><b>Dia encerrado. Até amanhã!</b><small>Chegou às ${hm(c.entrada)} e encerrou o dia às ${hm(c.saida)}.</small></div></div>`;
+  if (ciFora(c)) return htmlCiResumoGestor() + `<div class="ci-card fora"><div class="ci-txt"><b>Em atendimento externo desde ${hm(ciDesde(c))}</b><small>${esc(ciOnde(c))}</small></div>
+    <div class="ci-bts"><button class="btn btn-primary btn-sm" id="ciBtEsc" onclick="chegueiEscritorio()">Cheguei no escritório</button><button class="btn btn-ghost btn-sm" onclick="fazerCheckout()">Encerrar o dia</button></div></div>`;
   const pos = posicaoMinha();
-  return htmlCiResumoGestor() + `<div class="ci-card feito"><div class="ci-txt"><b>✅ No escritório desde ${hm(ciChegada(c))}${ciAtrasado(c) ? ' <em class="ci-atr">atrasado</em>' : ''}</b><small>${pos ? `Você foi o <b>${pos}º</b> a chegar hoje.` : 'Bom trabalho!'}</small></div>
-    <div class="ci-bts"><button class="btn btn-ghost" onclick="abrirExterno()">🚗 Sair para atendimento</button><button class="btn btn-ghost" onclick="fazerCheckout()">Encerrar o dia 👋</button></div></div>`;
+  return htmlCiResumoGestor() + `<div class="ci-card feito"><div class="ci-txt"><b>No escritório desde ${hm(ciChegada(c))}${ciAtrasado(c) ? ' <em class="ci-atr">atrasado</em>' : ''}</b><small>${pos ? `Você foi o <b>${pos}º</b> a chegar hoje.` : 'Bom trabalho!'}</small></div>
+    <div class="ci-bts"><button class="btn btn-ghost btn-sm" onclick="abrirExterno()">Sair para atendimento</button><button class="btn btn-ghost btn-sm" onclick="fazerCheckout()">Encerrar o dia</button></div></div>`;
 }
 function htmlCiGestao(){
   if (!podeGerir()) return '';
@@ -11424,7 +11482,7 @@ function textoResumo(r){
 // entende a mensagem do grupo (uma ou várias, com ou sem "[data] Nome:")
 function lerResumos(texto){
   const t = String(texto || '').replace(/\r/g, '');
-  const cab = /^\[?(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?,?\s+(\d{1,2}:\d{2})(?::\d{2})?\]?\s*(?:-\s*)?([^:\n]{1,60}):\s?/gm;
+  const cab = /^\[?(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?,?\s+(\d{1,2}:\d{2})(?::\d{2})?(?:\s*[AaPp]\.?\s?[Mm]\.?)?\]?\s*(?:-\s*)?([^:\n]{1,60}):\s?/gm; // v124: aceita hora com AM/PM (iPhone)
   const partes = []; let m, ult = null;
   while ((m = cab.exec(t))) { if (ult) ult.fim = m.index; ult = { ini:m.index + m[0].length, fim:t.length, autor:m[5].trim(), dd:m[1], mm:m[2], aa:m[3] }; partes.push(ult); }
   if (!partes.length) partes.push({ ini:0, fim:t.length, autor:'' });
@@ -11456,12 +11514,65 @@ function lerResumos(texto){
   return saida;
 }
 window.lerResumos = lerResumos;
+// v124: visitas que as SDRs mandaram no grupo ("Visita na imobiliária", "Visita na tenda"...)
+function lerVisitasConversa(texto){
+  const t = String(texto || '').replace(/\r/g, '').replace(/[‎ ]/g, ' ');
+  const cab = /^\[?(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?,?\s+(\d{1,2}):(\d{2})(?::\d{2})?(?:\s*([AaPp])\.?\s?[Mm]\.?)?\]?\s*(?:-\s*)?([^:\n]{1,60}):\s?/gm;
+  const ps = []; let m, ult = null;
+  while ((m = cab.exec(t))) { if (ult) ult.fim = m.index; ult = { ini:m.index + m[0].length, fim:t.length, a:+m[1], b:+m[2], aa:m[3] || '', autor:m[7].trim() }; ps.push(ult); }
+  // formato da data: americano (mês/dia, iPhone em inglês) ou brasileiro (dia/mês)
+  const us = ps.some(p => p.b > 12) && !ps.some(p => p.a > 12);
+  const out = new Map();
+  ps.forEach(p => {
+    const c = t.slice(p.ini, p.fim).trim(), l1 = norm(c.split('\n')[0]);
+    if (!/^visita/.test(l1) || /^visita(s)?\s*(realizada|feita)|^visitas\b/.test(l1)) return;
+    const dd = us ? p.b : p.a, mm = us ? p.a : p.b, ano = p.aa ? (p.aa.length === 2 ? '20' + p.aa : p.aa) : String(new Date().getFullYear());
+    const diaMsg = `${ano}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
+    const campo = rx => { const x = c.match(rx); return x ? x[1].trim() : ''; };
+    const nome = campo(/nome\s*:\s*(.+)/i).slice(0, 80); if (!nome) return;
+    const hor = campo(/hor[aá]rio\s*:\s*(.+)/i), dm = hor.match(/(\d{1,2})\s*\/\s*(\d{1,2})/), hm = hor.match(/(\d{1,2})\s*(?::|h)\s*(\d{2})?/i);
+    let dia = diaMsg;
+    if (dm) { let y = +ano; if (+dm[2] < mm - 6) y++; dia = `${y}-${dm[2].padStart(2,'0')}-${dm[1].padStart(2,'0')}`; }
+    else if (/amanh/i.test(hor)) dia = somaDias(diaMsg, 1);
+    const hora = hm && !(dm && hm.index === dm.index) ? `${hm[1].padStart(2,'0')}:${hm[2] || '00'}` : (hor.match(/às\s*(\d{1,2})(?::|h)?(\d{2})?/i) ? (() => { const z = hor.match(/às\s*(\d{1,2})(?::|h)?(\d{2})?/i); return z[1].padStart(2,'0') + ':' + (z[2] || '00'); })() : '');
+    const tel = (c.match(/(?:tel|fone|contato|whats)[^:\n]*:\s*([\d\s()+\-]{10,})/i) || [])[1] || '';
+    const obs = c.split('\n').slice(1).filter(x => x.trim() && !/^\s*(nome|cpf|avalia|hor[aá]rio|tel|fone|contato|whats)/i.test(x)).join('\n').trim().slice(0, 400);
+    const k = norm(p.autor) + '|' + norm(nome);
+    out.set(k, { autor:p.autor, nome, dia, hora, avaliacao:campo(/avalia[cç][aã]o\s*:\s*(.+)/i).slice(0, 120), telefone:tel.trim().slice(0, 25), obs, tipo:/tenda/.test(l1) ? 'tenda' : 'imobiliaria', diaMsg });
+  });
+  return [...out.values()];
+}
+window.lerVisitasConversa = lerVisitasConversa; window.sdrDoAutor = (...a) => sdrDoAutor(...a);
+// mesmo cliente: nome igual, ou um nome contém o outro (pelo menos 2 palavras)
+const mesmoCliente = (a, b) => { const x = norm(a).replace(/\s+/g, ' ').trim(), y = norm(b).replace(/\s+/g, ' ').trim(); if (!x || !y) return false; if (x === y) return true; const cx = x.split(' '), cy = y.split(' '); return Math.min(cx.length, cy.length) >= 2 && (x.includes(y) || y.includes(x) || (cx[0] === cy[0] && cx[cx.length - 1] === cy[cy.length - 1])); };
+async function importarVisitasSdr(lista){
+  const vs = lista.map(v => ({ ...v, sdr:sdrDoAutor(v.autor) })).filter(v => v.sdr);
+  if (!vs.length) return { novas:0, creditadas:0, ja:0, fora:lista.length };
+  const dmin = somaDias(vs.reduce((a, v) => v.dia < a ? v.dia : a, '9999'), -10), dmax = somaDias(vs.reduce((a, v) => v.dia > a ? v.dia : a, '0000'), 10);
+  const ex = (await getDocs(query(collection(db,'visitas'), where('date','>=',dmin), where('date','<=',dmax)))).docs.map(d => ({ id:d.id, ...d.data() }));
+  let novas = 0, creditadas = 0, ja = 0; const dif = (a, b) => Math.abs((parseISO(a) - parseISO(b)) / 864e5);
+  const ops = [];
+  for (const v of vs) {
+    const id = 'wa_' + (v.sdr.uid + '_' + norm(v.nome).replace(/[^a-z0-9]+/g, '-')).slice(0, 120);
+    const achou = ex.find(x => x.id === id) || ex.find(x => !x.arquivado && mesmoCliente(x.cliente, v.nome) && dif(x.date, v.dia) <= 10);
+    if (achou) {
+      if (achou.sdrUid) { ja++; continue; }
+      const d = { ...achou, sdrUid:v.sdr.uid, sdrNome:v.sdr.nome, atualizadoEm:Date.now() }; delete d.id;
+      ops.push(b => { b.set(doc(db,'visitas',achou.id), d); b.set(doc(db,'ranking',achou.id), rankingDe(d)); }); creditadas++; achou.sdrUid = v.sdr.uid; continue;
+    }
+    const d = { date:v.dia, time:v.hora || '', cliente:v.nome, telefone:v.telefone, telNorm:chaveTel(v.telefone), empreendimento:'', status:'Pendente', obs:v.obs, origem:'', avaliacao:v.avaliacao, motivoPerda:'',
+      corretorUid:'', corretorNome:'', equipe:v.sdr.equipe || '', sdrUid:v.sdr.uid, sdrNome:v.sdr.nome, criadoPor:uidAtual, criadoEm:Date.now(), atualizadoEm:Date.now(), semPontos:false, fonte:'whatsapp_sdr', local:v.tipo };
+    ops.push(b => { b.set(doc(db,'visitas',id), d); b.set(doc(db,'ranking',id), rankingDe(d)); }); novas++; ex.push({ id, ...d });
+  }
+  for (let i = 0; i < ops.length; i += 200) { const b = writeBatch(db); ops.slice(i, i + 200).forEach(f => f(b)); await gravar(b.commit()); }
+  return { novas, creditadas, ja, fora:lista.length - vs.length };
+}
 const sdrsAtivas = () => perfisLista.filter(p => p.papel === 'sdr' && p.status === 'ativo');
 function sdrDoAutor(autor){
   if (!autor) return null;
   const mapa = appCfg.apelidosSdr || {};
   if (mapa[autor]) return sdrsAtivas().find(p => p.uid === mapa[autor]) || null;
-  const a = norm(autor).replace(/^[^a-z]*[a-z]{1,3}\s*\|\s*/, '').replace(/\s+-\s+.*$/, '').replace(/\bsdr\b/g, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(), pr = a.split(' ')[0];
+  const a = norm(autor).replace(/^[^a-z]*(am|pm|[a-z]{1,3})\s*[|\]]\s*/, '').replace(/\s+-\s+.*$/, '').replace(/\bsdr\b/g, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(), pr = a.split(' ')[0];
   return sdrsAtivas().find(p => norm(p.nome) === a) || (sdrsAtivas().filter(p => norm(p.nome).split(' ')[0] === pr).length === 1 ? sdrsAtivas().find(p => norm(p.nome).split(' ')[0] === pr) : null);
 }
 // v123: liga um nome do WhatsApp a uma SDR do app (ou tira da conta); vale para todos os resumos desse nome
@@ -11545,11 +11656,19 @@ window.lerArquivoConversa = async input => {
   } catch(e) { $('resPrevia').innerHTML = `<div class="late" style="font-size:13px">Não consegui ler o arquivo: ${esc(e.message)}</div>`; }
   input.value = '';
 };
+function htmlVisitasPrevia(){
+  const l = window._visLidas || []; if (!l.length) return '';
+  const por = {}; let fora = 0; l.forEach(v => { const sd = sdrDoAutor(v.autor); if (!sd) { fora++; return; } por[sd.nome] = (por[sd.nome] || 0) + 1; });
+  return `<div class="msg-item vis-imp"><b>Visitas das SDRs nesta conversa</b><div style="font-size:13px;margin:6px 0">${Object.entries(por).map(([n, q]) => `${esc(n)}: <b>${q}</b>`).join(' · ') || 'Nenhuma de SDR do app.'}${fora ? ` · ${fora} de quem não é SDR do app (ficam de fora)` : ''}</div>
+    <label class="fv-chk" style="margin:0"><input type="checkbox" id="resVis" checked> Trazer as visitas também</label>
+    <small class="muted" style="display:block;margin-top:4px">Se a visita já está no app (mesmo cliente, data parecida), ela só recebe o nome da SDR. Se não está, entra como <b>Pendente</b> para alguém atualizar o status.</small></div>`;
+}
 window.lerColado = () => {
   const de = $('resDe').value || '0000', ate = $('resAte').value || '9999';
   const todos = lerResumos($('resColar').value);
   const lidos = todos.filter(r => r.dia >= de && r.dia <= ate);
   window._resLidos = lidos;
+  window._visLidas = souGerente() && !souCeo() ? lerVisitasConversa($('resColar').value).filter(v => v.dia >= de && v.dia <= ate) : [];
   if (!lidos.length) { $('resPrevia').innerHTML = `<div class="late" style="font-size:13px">${todos.length ? `Achei ${todos.length} resumo${todos.length!==1?'s':''}, mas nenhum no período escolhido.` : 'Não encontrei nenhum resumo. A mensagem precisa ter "DATA REFERENTE".'}</div>`; return; }
   const ops = sdrsAtivas().map(p => `<option value="${p.uid}">${esc(p.nome)}</option>`).join('');
   $('resPrevia').innerHTML = lidos.map((r, i) => {
@@ -11558,7 +11677,7 @@ window.lerColado = () => {
     return `<div class="msg-item"><b>📅 ${dataBR(r.dia)}${r.autor ? ` · de "${esc(r.autor)}"` : ''}</b>
       <div style="font-size:13px;color:var(--muted);margin:4px 0 8px">Novos CRM ${v(nv.crm.lead)} (doc ${v(nv.crm.doc)}, CPF ${v(nv.crm.cpf)}) · Novos Insta ${v(nv.insta.lead)} (doc ${v(nv.insta.doc)}, CPF ${v(nv.insta.cpf)}) · Recuperados CRM ${v(rc.crm.lead)} · Insta ${v(rc.insta.lead)} · Aprovações ${v(r.aprovDia)} · Outro CCA ${v(r.aprovOutroCca)}</div>
       ${souSdr() ? '' : `<label style="font-size:13px">SDR: <select id="resSdr${i}" style="width:auto"><option value="">— escolha —</option><option value="__ignorar">Não importar</option>${r.autor ? `<option value="__autor">Usar o nome do WhatsApp: ${esc(r.autor)}</option>` : ''}${ops}</select></label>`}</div>`;
-  }).join('') + `<button class="btn btn-primary btn-block" onclick="salvarColados()">Salvar ${lidos.length} resumo${lidos.length!==1?'s':''}</button>`;
+  }).join('') + htmlVisitasPrevia() + `<button class="btn btn-primary btn-block" onclick="salvarColados()">Salvar ${lidos.length} resumo${lidos.length!==1?'s':''}${(window._visLidas || []).length ? ' e as visitas' : ''}</button>`;
   if (!souSdr()) lidos.forEach((r, i) => { const s = sdrDoAutor(r.autor); if (s) $('resSdr' + i).value = s.uid; else if (r.autor) $('resSdr' + i).value = '__ignorar'; }); // v122: quem não é SDR do app (ex.: quem já saiu) fica de fora, a menos que você escolha
 };
 window.salvarColados = async () => {
@@ -11580,7 +11699,8 @@ window.salvarColados = async () => {
       await gravarResumo(r, s); salvos++;
     }
     if (souDono() && Object.keys(novosApelidos).length) await gravar(setDoc(doc(db,'config','app'), { apelidosSdr:{ ...(appCfg.apelidosSdr || {}), ...novosApelidos } }, { merge:true }));
-    fechar('resModal'); toast(`${salvos} resumo${salvos!==1?'s':''} salvo${salvos!==1?'s':''}${pulados ? ` · ${pulados} já estava${pulados!==1?'m':''} no app e ficou como estava` : ''}${ignorados ? ` · ${ignorados} não importado${ignorados!==1?'s':''}` : ''}`);
+    let rv = null; if ($('resVis')?.checked && (window._visLidas || []).length) rv = await importarVisitasSdr(window._visLidas);
+    fechar('resModal'); toast(`${salvos} resumo${salvos!==1?'s':''} salvo${salvos!==1?'s':''}${pulados ? ` · ${pulados} já estava${pulados!==1?'m':''} no app e ficou como estava` : ''}${ignorados ? ` · ${ignorados} não importado${ignorados!==1?'s':''}` : ''}${rv ? ` · visitas: ${rv.novas} nova${rv.novas!==1?'s':''}, ${rv.creditadas} já no app recebe${rv.creditadas!==1?'ram':'u'} a SDR${rv.ja ? `, ${rv.ja} já tinha${rv.ja!==1?'m':''} SDR` : ''}` : ''}`);
   } catch(e) { toast('Erro: ' + e.message); }
 };
 
