@@ -2408,11 +2408,15 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
           </div>
           <div class="sim-g3">
             <div class="fg hide" id="simFgtsSaldoW"><label>Saldo do FGTS <span class="muted">(se souber)</span></label><input id="simFgtsSaldo" inputmode="decimal" placeholder="R$"></div>
-            <div class="fg"><label>Entrada disponível <span class="muted">(opcional)</span></label><input id="simEntrada" inputmode="decimal" placeholder="R$"></div>
+            <div class="fg"><label>Quanto quer dar de entrada <span class="muted">(opcional)</span></label><input id="simEntrada" inputmode="decimal" placeholder="R$ (vazio = a menor possível)"></div>
+            <div class="fg"><label>Sistema</label><select id="simSist"><option value="price">PRICE / TR - Tabela Price</option><option value="sac">SAC / TR - Amortização Constante</option></select></div>
+            <div class="fg"><label>Prazo <span class="muted">(meses, vazio = máximo)</span></label><input id="simPrazo" inputmode="numeric" placeholder="420"></div>
+            <div class="fg"><label>Valor máximo da parcela <span class="muted">(opcional)</span></label><input id="simParcMax" inputmode="decimal" placeholder="R$"></div>
           </div>
           <div id="simParts"></div>
           <details class="sim-mais"><summary>Mais informações</summary>
             <label class="sim-chk"><input type="checkbox" id="simImovel"> Já possui imóvel residencial na cidade</label>
+            <label class="sim-chk"><input type="checkbox" id="simSubJa"> Já recebeu subsídio do governo (FGTS/União) desde maio de 2005</label>
             <label class="sim-chk"><input type="checkbox" id="simPcd"> PNE/PCD na família</label>
           </details>
           <div class="sim-bts"><button class="btn btn-ghost" onclick="simAddPart()">+ Participante</button><button class="btn btn-primary" onclick="simular()">Simular</button></div>
@@ -5558,7 +5562,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 136;
+const APP_VERSAO = 137;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11830,12 +11834,20 @@ const SIM_PADRAO = {
   faixas:[{ n:1, ate:3200 }, { n:2, ate:5000 }, { n:3, ate:9600 }, { n:4, ate:13000 }],
   // taxa nominal ao ano para NÃO cotista no Nordeste (cotista FGTS: menos "redCotista")
   taxas:[{ ate:2000, taxa:4.50 }, { ate:3200, taxa:4.75 }, { ate:4000, taxa:5.25 }, { ate:4500, taxa:6.00 }, { ate:5000, taxa:6.75 }, { ate:9600, taxa:8.16 }, { ate:13000, taxa:10.00 }],
-  redCotista:0.5, cotistaAteFaixa:3, comprometimento:30, reservaParcela:30, dfi:0.0064, mip:[{ ate:30, p:0.0098 }, { ate:35, p:0.0120 }, { ate:40, p:0.0153 }, { ate:45, p:0.0200 }, { ate:50, p:0.0280 }, { ate:55, p:0.0420 }, { ate:60, p:0.0600 }, { ate:65, p:0.0900 }, { ate:200, p:0.1300 }], prazoMax:420, idadeMax:80.5, cota:80,
+  // v137: calibrado com 2 simulações reais do site da Caixa (João Pessoa, PRICE, 420 meses): financiamento, parcela e subsídio batem
+  ver:2, redCotista:0.5, cotistaAteFaixa:3, comprometimento:30, reservaParcela:0, dfi:0.0064,
+  // MIP da parcela mostrada (seguradora Caixa Residencial)
+  mip:[{ ate:25, p:0.00909 }, { ate:30, p:0.0098 }, { ate:35, p:0.0120 }, { ate:40, p:0.01533 }, { ate:45, p:0.0200 }, { ate:50, p:0.0280 }, { ate:55, p:0.0420 }, { ate:60, p:0.0600 }, { ate:65, p:0.0900 }, { ate:200, p:0.1300 }],
+  // MIP que a Caixa usa para calcular quanto a renda aguenta (mais alto que o da parcela)
+  mipCap:[{ ate:25, p:0.0172538 }, { ate:30, p:0.0205 }, { ate:35, p:0.0270 }, { ate:40, p:0.0352248 }, { ate:45, p:0.0460 }, { ate:50, p:0.0644 }, { ate:55, p:0.0966 }, { ate:60, p:0.1380 }, { ate:65, p:0.2070 }, { ate:200, p:0.2990 }],
+  prazoMax:420, idadeMax:80.5, cota:80,
   tetos:{ 1:275000, 2:275000, 3:400000, 4:600000 },
-  subsidioAte:4000, subsidioMin:1500, redUnipessoal:70,
-  curva:[{ renda:1750, valor:55000 }, { renda:2200, valor:45000 }, { renda:2600, valor:32000 }, { renda:3000, valor:18000 }, { renda:3500, valor:6000 }, { renda:4000, valor:1500 }]
+  subsidioAte:3080, subsidioMin:1500, redUnipessoal:70,
+  // subsídio (com dependente) — passa exatamente pelos pontos reais: renda 2.521 → 19.684 e renda 2.550 → 18.747
+  curva:[{ renda:1428, valor:55000 }, { renda:2521, valor:19684 }, { renda:2550, valor:18747 }, { renda:3000, valor:4207 }, { renda:3080, valor:1622 }]
 };
-const simCfg = () => { const c = appCfg.simulador || {}; return { ...SIM_PADRAO, ...c, tetos:{ ...SIM_PADRAO.tetos, ...(c.tetos || {}) }, mip:c.mip || SIM_PADRAO.mip, reservaParcela:c.reservaParcela ?? SIM_PADRAO.reservaParcela, dfi:c.dfi ?? SIM_PADRAO.dfi }; };
+// v137: tabela salva antes da calibração é ignorada (senão os números antigos continuariam valendo)
+const simCfg = () => { const c0 = appCfg.simulador || {}, c = c0.ver === SIM_PADRAO.ver ? c0 : {}; return { ...SIM_PADRAO, ...c, tetos:{ ...SIM_PADRAO.tetos, ...(c.tetos || {}) }, mip:c.mip || SIM_PADRAO.mip, mipCap:c.mipCap || SIM_PADRAO.mipCap, reservaParcela:c.reservaParcela ?? SIM_PADRAO.reservaParcela, dfi:c.dfi ?? SIM_PADRAO.dfi }; };
 let simulacoes = [], simUlt = null, simPart = [];
 function assinarSimulacoes(){
   simulacoes = []; if (!souAtivo() || souCorresp()) return;
@@ -11864,6 +11876,7 @@ function simCalcular(e){
   let prazo = Math.max(0, Math.min(c.prazoMax, Math.floor(c.idadeMax * 12 - maisVelho)));
   const cond = e.cond && e.condVal > 0; // carta condicionada: vale a parcela (e o prazo) que a Caixa aprovou
   if (cond && e.condPrazo) prazo = Math.min(prazo || e.condPrazo, e.condPrazo);
+  if (e.prazoQuer > 0) prazo = Math.min(prazo, Math.round(e.prazoQuer));
   if (e.cond && !e.condVal) avisos.push('Carta condicionada marcada sem o valor da parcela: usei os 30% da renda.');
   if (idades.length && prazo < 60) bloqueios.push('Pela idade do participante mais velho, o prazo fica curto demais para financiar.');
   else if (idades.length && prazo < c.prazoMax) avisos.push(`Prazo reduzido para ${prazo} meses por causa da idade (o financiamento termina até ${String(c.idadeMax).replace('.5', ' anos e 6 meses').replace(/^(\d+)$/, '$1 anos')}).`);
@@ -11871,23 +11884,27 @@ function simCalcular(e){
   const tx = (c.taxas.find(t => renda <= t.ate) || c.taxas[c.taxas.length - 1] || { taxa:10 }).taxa;
   const taxa = Math.max(0, tx - (cotista && faixa && faixa <= c.cotistaAteFaixa ? c.redCotista : 0));
   const i = taxa / 100 / 12, n = prazo;
-  const parcelaMax = cond ? e.condVal : (e.cond && e.condRenda ? e.condRenda : renda) * c.comprometimento / 100;
+  let parcelaMax = cond ? e.condVal : (e.cond && e.condRenda ? e.condRenda : renda) * c.comprometimento / 100;
+  if (e.parcQuer > 0 && e.parcQuer < parcelaMax) parcelaMax = e.parcQuer; // "Valor máximo da parcela" (igual ao site da Caixa)
+  const sac = e.sistema === 'sac';
   const fator = n ? (i ? (1 - Math.pow(1 + i, -n)) / i : n) : 0;
   // seguros da Caixa dentro da prestação: MIP (morte e invalidez, pela idade do mais velho, sobre o financiamento) e DFI (danos ao imóvel, sobre o valor)
   const idadeAnos = Math.floor(maisVelho / 12), mip = ((c.mip.find(m => idadeAnos <= m.ate) || c.mip[c.mip.length - 1]).p || 0) / 100, dfi = (Number(c.dfi) || 0) / 100;
+  const mc = c.mipCap || c.mip, mipCap = ((mc.find(m => idadeAnos <= m.ate) || mc[mc.length - 1]).p || 0) / 100;
   const valorRef = Number(e.valor) || 0, capPrest = Math.max(0, parcelaMax - (cond ? 0 : Number(c.reservaParcela) || 0));
-  const finCap = (vRef, sac) => { if (!n) return 0; const d = vRef * dfi; return Math.max(0, (capPrest - d) / ((sac ? 1 / n + i : 1 / fator) + mip)); };
-  let finPriceRenda = finCap(valorRef), finSacRenda = finCap(valorRef, true);
-  if (!valorRef) { for (let k = 0; k < 3; k++) { finPriceRenda = finCap(finPriceRenda / (c.cota / 100)); } finSacRenda = finCap(finPriceRenda / (c.cota / 100), true); }
+  const finCap = (vRef, sac) => { if (!n) return 0; const d = vRef * dfi; return Math.max(0, (capPrest - d) / ((sac ? 1 / n + i : 1 / fator) + mipCap)); };
+  let finPriceRenda = finCap(valorRef, sac), finSacRenda = finCap(valorRef, true);
+  if (!valorRef) { for (let k = 0; k < 3; k++) { finPriceRenda = finCap(finPriceRenda / (c.cota / 100), sac); } finSacRenda = finCap(finPriceRenda / (c.cota / 100), true); }
   const teto = faixa ? Number(c.tetos[faixa]) || 0 : 0;
   // subsídio estimado (faixas 1 e 2, renda até o limite, imóvel dentro do teto)
   let subsidio = 0;
-  if (faixa && faixa <= 2 && renda <= c.subsidioAte) {
+  if (e.subJa) avisos.push('Já recebeu subsídio do governo (FGTS/União) desde 2005: não tem desconto de novo.');
+  if (faixa && faixa <= 2 && renda <= c.subsidioAte && !e.subJa) {
     const cv = c.curva.slice().sort((a, b) => a.renda - b.renda);
     if (renda <= cv[0].renda) subsidio = cv[0].valor;
     else { for (let k = 1; k < cv.length; k++) if (renda <= cv[k].renda) { const a = cv[k - 1], b = cv[k]; subsidio = a.valor + (b.valor - a.valor) * (renda - a.renda) / (b.renda - a.renda); break; } }
     if (parts.length === 1 && !e.dependente) { subsidio *= (100 - c.redUnipessoal) / 100; avisos.push(`Sem dependente e sem outro participante, o desconto cai ${c.redUnipessoal}% (família de uma pessoa). Com dependente, marque "Possui dependente".`); }
-    subsidio = subsidio >= c.subsidioMin ? Math.round(subsidio / 10) * 10 : 0;
+    subsidio = subsidio >= c.subsidioMin ? Math.round(subsidio) : 0;
   }
   const valor = Number(e.valor) || 0, entradaTem = Number(e.entrada) || 0, fgtsSaldo = Number(e.fgtsSaldo) || 0;
   let fin = finPriceRenda, entradaFalta = null, valorCabe;
@@ -11897,16 +11914,19 @@ function simCalcular(e){
     if (faixa === 4 && valor > c.tetos[4]) bloqueios.push(`Imóvel acima de ${brl2(c.tetos[4])}, teto da faixa 4.`);
     subsidio = Math.min(subsidio, Math.max(0, valor - Math.min(finPriceRenda, valor * c.cota / 100)));
     fin = Math.min(finPriceRenda, valor * c.cota / 100, Math.max(0, valor - subsidio));
-    entradaFalta = Math.max(0, valor - fin - subsidio - fgtsSaldo - entradaTem);
+    if (entradaTem > 0) fin = Math.min(fin, Math.max(0, valor - subsidio - entradaTem)); // "Quanto quer dar de entrada" (como no site da Caixa)
+    entradaFalta = Math.max(0, valor - fin - subsidio - fgtsSaldo - Math.max(entradaTem, 0));
   }
   valorCabe = Math.min(teto || Infinity, (finPriceRenda / (c.cota / 100)), finPriceRenda + subsidio + fgtsSaldo + entradaTem);
   const seg = fin * mip + (valor || fin / (c.cota / 100)) * dfi;
-  const parcPrice = n ? fin / fator + seg : 0, parcSac1 = n ? fin / n + fin * i + seg : 0;
+  const parcSac1 = n ? fin / n + fin * i + seg : 0, parcPrice = n ? (sac ? parcSac1 : fin / fator + seg) : 0;
+  // última parcela: no fim o saldo é quase zero, então quase só sobra amortização + juros
+  const parcUlt = n ? (sac ? fin / n * (1 + i) : fin / fator) : 0;
   const efetiva = (Math.pow(1 + i, 12) - 1) * 100, comprom = renda ? parcPrice / renda * 100 : 0, cotaUsada = valor ? fin / valor * 100 : null;
   if (e.tipoRenda === 'informal') avisos.push('Renda informal: a Caixa pede comprovação (extratos) e pode considerar um valor menor.');
   if (e.pcd) avisos.push('PNE/PCD tem prioridade nos empreendimentos do programa.');
   if (cond) avisos.push(`Carta condicionada: parcela de ${brl2(e.condVal)}${e.condPrazo ? ' em ' + e.condPrazo + ' meses' : ''}. O financiamento foi calculado em cima dela.`);
-  return { cond, condVal:e.condVal, renda, faixa, taxa, cotista, prazo, parcelaMax, finPriceRenda, finSacRenda, fin, subsidio, teto, valor, entradaFalta, valorCabe, parcPrice, parcSac1, efetiva, comprom, cotaUsada, seg, descTaxa:cotista && faixa && faixa <= c.cotistaAteFaixa ? c.redCotista : 0, avisos, bloqueios, partes:parts.length };
+  return { sac, parcUlt, cond, condVal:e.condVal, renda, faixa, taxa, cotista, prazo, parcelaMax, finPriceRenda, finSacRenda, fin, subsidio, teto, valor, entradaFalta, valorCabe, parcPrice, parcSac1, efetiva, comprom, cotaUsada, seg, descTaxa:cotista && faixa && faixa <= c.cotistaAteFaixa ? c.redCotista : 0, avisos, bloqueios, partes:parts.length };
 }
 // histórico do CPF na Prime e nas cartas do app
 function simHistCpf(cpf){
@@ -11932,7 +11952,7 @@ function simNota(e, r, hist){
 function simLer(){
   const v = id => ($(id)?.value || '').trim();
   return { nome:v('simNome'), cpf:v('simCpf'), nasc:v('simNasc'), renda:lerReais(v('simRenda')) || 0, tipoRenda:v('simTipo') || 'formal', fgts:$('simFgts').checked, fgtsSaldo:lerReais(v('simFgtsSaldo')) || 0,
-    dependente:$('simDep').checked, cond:$('simCond').checked, condVal:lerReais(v('simCondVal')) || 0, condPrazo:Math.round(Number(soDig(v('simCondPrazo')))) || 0, condRenda:lerReais(v('simCondRenda')) || 0, valor:lerReais(v('simValor')) || 0, entrada:lerReais(v('simEntrada')) || 0, possuiImovel:$('simImovel').checked, pcd:$('simPcd').checked,
+    dependente:$('simDep').checked, cond:$('simCond').checked, condVal:lerReais(v('simCondVal')) || 0, condPrazo:Math.round(Number(soDig(v('simCondPrazo')))) || 0, condRenda:lerReais(v('simCondRenda')) || 0, valor:lerReais(v('simValor')) || 0, entrada:lerReais(v('simEntrada')) || 0, sistema:v('simSist') || 'price', prazoQuer:Math.round(Number(soDig(v('simPrazo')))) || 0, parcQuer:lerReais(v('simParcMax')) || 0, subJa:!!$('simSubJa')?.checked, possuiImovel:$('simImovel').checked, pcd:$('simPcd').checked,
     parts:simPart.map((p, k) => ({ nasc:v('simPN' + k), renda:lerReais(v('simPR' + k)) || 0, fgts:$('simPF' + k)?.checked || false })).filter(p => p.nasc || p.renda) };
 }
 function htmlSimPart(){
@@ -11954,10 +11974,11 @@ function simLinhasCaixa(r){
   const ent = r.valor ? Math.max(0, r.valor - r.fin - r.subsidio) : null;
   return [
     ['Valor de avaliação', r.valor ? brl2(r.valor) : 'não informado', 'Valor da entrada', ent !== null ? brl2(ent) : '—'],
-    ['Valor do financiamento', brl2(r.valor ? r.fin : r.finPriceRenda), 'Cota máxima de financiamento', r.cotaUsada !== null ? pctBR(r.cotaUsada) : pctBR(simCfg().cota)],
+    ['Valor do financiamento', brl2(r.valor ? r.fin : r.finPriceRenda), 'Cota máxima do financiamento', pctBR(simCfg().cota) + (r.cotaUsada !== null && Math.abs(r.cotaUsada - simCfg().cota) > 0.01 ? ' (usada ' + pctBR(r.cotaUsada) + ')' : '')],
     ['Valor do subsídio (complemento)', r.subsidio ? brl2(r.subsidio) : 'R$ 0,00', 'Prazo máximo', simCfg().prazoMax + ' meses'],
     ['Comprometimento da renda', pctBR(r.comprom), 'Prazo', r.prazo + ' meses'],
-    ['1ª prestação', brl2(r.parcPrice), 'Sistema de amortização', 'PRICE / TR - Tabela Price'],
+    ['1ª prestação', brl2(r.parcPrice), 'Sistema de amortização', r.sac ? 'SAC / TR - Sistema de Amortização Constante' : 'PRICE / TR - Tabela Price'],
+    ['Última prestação', brl2(r.parcUlt || 0), 'Seguros na 1ª prestação', brl2(r.seg || 0)],
     ['Juros nominais', 'TR + ' + r.taxa.toLocaleString('pt-BR', { minimumFractionDigits:4 }) + '% a.a.', 'Juros efetivos', 'TR + ' + r.efetiva.toLocaleString('pt-BR', { minimumFractionDigits:4, maximumFractionDigits:4 }) + '% a.a.'],
     ['% desconto taxa de juros', r.descTaxa ? r.descTaxa.toLocaleString('pt-BR') + '%' : '0%', 'Faixa do programa', 'Faixa ' + r.faixa],
     ['Carta', r.cond ? 'Condicionada' : 'Não condicionada', r.cond ? 'Parcela condicionada' : 'Parcela máxima (30%)', brl2(r.parcelaMax)]
@@ -11981,7 +12002,7 @@ function htmlSimResultado(s){
     <div class="sim-acoes"><button class="btn btn-primary" onclick="salvarSim()" ${s.salvo ? 'disabled' : ''}>${s.salvo ? 'Simulação salva' : 'Salvar simulação'}</button><button class="btn btn-ghost" onclick="imprimirSim()">Imprimir</button><button class="btn btn-ghost" onclick="novaSim()">Nova simulação</button></div>
     <p class="hint sim-obs">Estimativa pelas regras do Minha Casa Minha Vida (Nordeste), com seguros estimados. O valor do subsídio é estimado: o valor final é confirmado pela Caixa na análise de crédito.</p></div>`;
 }
-window.novaSim = () => { ['simNome','simCpf','simNasc','simRenda','simFgtsSaldo','simValor','simEntrada','simCondVal','simCondPrazo','simCondRenda'].forEach(i => $(i).value = ''); ['simFgts','simDep','simImovel','simPcd','simCond'].forEach(i => $(i).checked = false); $('simCondW').classList.add('hide'); $('simTipo').value = 'formal'; simPart = []; $('simParts').innerHTML = ''; simFgtsVis(); $('simRes').innerHTML = ''; simUlt = null; $('simNome').focus(); };
+window.novaSim = () => { ['simNome','simCpf','simNasc','simRenda','simFgtsSaldo','simValor','simEntrada','simCondVal','simCondPrazo','simCondRenda','simPrazo','simParcMax'].forEach(i => $(i).value = ''); $('simSist').value = 'price'; ['simFgts','simDep','simImovel','simPcd','simCond','simSubJa'].forEach(i => $(i).checked = false); $('simCondW').classList.add('hide'); $('simTipo').value = 'formal'; simPart = []; $('simParts').innerHTML = ''; simFgtsVis(); $('simRes').innerHTML = ''; simUlt = null; $('simNome').focus(); };
 window.salvarSim = async () => {
   if (!simUlt || simUlt.salvo) return; const { e, r, nota } = simUlt;
   const d = { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', cliente:e.nome.slice(0, 80), cpf:fmtCpf(e.cpf), cpfNorm:soDig(e.cpf), nasc:e.nasc, tipoRenda:e.tipoRenda, fgts:e.fgts, dependente:e.dependente,
@@ -12031,7 +12052,7 @@ window.salvarSimCfg = async () => {
   const c = simCfg(), n = id => lerDec($(id).value) || 0;
   const d = { comprometimento:n('scComp'), prazoMax:n('scPrazo'), cota:n('scCota'), idadeMax:n('scIdade'), redCotista:n('scCot'), redUnipessoal:n('scUni'),
     faixas:c.faixas.map((f, k) => ({ n:f.n, ate:n('scF' + k) })), tetos:Object.fromEntries([1,2,3,4].map(k => [k, n('scT' + k)])),
-    taxas:c.taxas.map((t, k) => ({ ate:n('scTxA' + k), taxa:n('scTxV' + k) })), curva:c.curva.map((t, k) => ({ renda:n('scCvA' + k), valor:n('scCvV' + k) })), subsidioAte:n('scCvA' + (c.curva.length - 1)), subsidioMin:c.subsidioMin, cotistaAteFaixa:c.cotistaAteFaixa };
+    taxas:c.taxas.map((t, k) => ({ ate:n('scTxA' + k), taxa:n('scTxV' + k) })), curva:c.curva.map((t, k) => ({ renda:n('scCvA' + k), valor:n('scCvV' + k) })), subsidioAte:n('scCvA' + (c.curva.length - 1)), subsidioMin:c.subsidioMin, cotistaAteFaixa:c.cotistaAteFaixa, ver:SIM_PADRAO.ver };
   try { await gravar(setDoc(doc(db,'config','app'), { simulador:d }, { merge:true })); appCfg.simulador = d; fechar('simCfgModal'); toast('Tabela do simulador salva'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.simCalcular = simCalcular;
