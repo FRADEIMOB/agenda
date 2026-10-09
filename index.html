@@ -639,6 +639,24 @@ button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.pou
 /* v128: assistente sem a aba vertical: no celular fica no (+); no computador, botão redondo no canto */
 @media (max-width:900px){#iaBolha{display:none!important}}
 @media (min-width:901px){#iaBolha{right:24px;bottom:24px;width:54px;height:54px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);justify-content:center}#iaBolha .ia-btx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}#iaBolha:hover{padding:0;transform:translateY(-2px)}}
+.fab-menu .fm-sim i{background:#0891b2}
+.sim-form{display:grid;gap:4px}.sim-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 14px}.sim-g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
+@media (max-width:760px){.sim-g3{grid-template-columns:1fr}.sim-g4{grid-template-columns:1fr 1fr}}
+.sim-sw{display:flex;flex-wrap:wrap;gap:10px 24px;margin:4px 0 10px}.sim-chk{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;cursor:pointer}.sim-chk input{width:20px;height:20px;flex:none;accent-color:var(--accent)}.sim-chk small{color:var(--muted);font-weight:500}
+.sim-part{border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:6px 0}.sim-part b{font-size:13px}.sim-part .sim-chk{margin-top:22px}
+.sim-mais{margin:6px 0}.sim-mais summary{cursor:pointer;color:var(--muted);font-size:13.5px;font-weight:600}.sim-mais .sim-chk{margin-top:8px}
+.sim-bts{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.sim-bts .btn-primary{min-width:160px}
+.sim-res{border:1px solid color-mix(in srgb,var(--accent) 25%,var(--border))}.sim-topo{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.sim-topo small{color:var(--muted)}
+.sim-topo h2{font-size:clamp(20px,4.6vw,28px);margin:4px 0 8px;letter-spacing:-.02em}.sim-topo h2 span{color:#0f6b4a}
+.sim-chips{display:flex;flex-wrap:wrap;gap:6px}.sim-chips span{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--card2);border:1px solid var(--border)}
+.sim-nota{flex:none;width:104px;text-align:center;padding:10px 6px;border-radius:16px;border:2px solid var(--c);color:var(--c)}.sim-nota b{display:block;font-size:30px;line-height:1}.sim-nota small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.sim-nota span{font-weight:800;font-size:13px}
+.sim-grade{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0 8px}@media (max-width:900px){.sim-grade{grid-template-columns:1fr 1fr}}
+.sim-k{padding:12px;border-radius:12px;background:var(--card2);border:1px solid var(--border)}.sim-k small{display:block;color:var(--muted);font-size:12px}.sim-k b{display:block;font-size:19px;margin:3px 0 1px;letter-spacing:-.01em}.sim-k b.pos{color:#16a34a}.sim-k b.neg{color:#dc2626}.sim-k span{font-size:12px;color:var(--muted)}
+.sim-hist{margin:8px 0;padding:10px 12px;border-radius:12px;border:1px dashed var(--border);font-size:13px}.sim-hist b{display:block;margin-bottom:4px}.sim-hist .g-reprovado{color:#dc2626}.sim-hist .g-aprovado{color:#16a34a}
+.sim-aviso{margin-top:6px;padding:8px 12px;border-radius:10px;font-size:13px;background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
+.sim-bloq{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--danger) 10%,transparent);border:1px solid color-mix(in srgb,var(--danger) 30%,transparent);font-size:14px;display:grid;gap:4px}
+.sim-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.sim-obs{margin-top:10px}.sim-h{margin:14px 0 4px;font-size:13px;color:var(--muted)}.sim-par{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media (max-width:760px){.sim-topo{flex-direction:column}.sim-nota{width:auto;display:flex;align-items:center;gap:10px;justify-content:center}.sim-nota b{font-size:24px}}
 .hoje-topo{display:grid;gap:12px;margin-bottom:14px}.hoje-topo:empty,.hoje-topo>div:empty{display:none}
 @media (min-width:901px){.hoje-topo{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:stretch}.hoje-topo .poup,.hoje-topo .ci-card{height:100%;margin:0}}
 .hoje-topo .poup{margin:0}.hoje-topo .ci-card{margin:0;padding:14px 16px}
@@ -1890,6 +1908,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button data-view="avaliacoes" class="nao-sdr" onclick="setView('avaliacoes')"><i data-ic="doc"></i>Avaliações<span class="count" id="cAval"></span></button>
       <button data-view="analises" class="an-nav hide" onclick="setView('analises')"><i data-ic="pasta"></i>Correspondente <small class="zap-teste">teste</small><span class="count red hide" id="cAnalises">0</span></button>
       <div class="nav-title" style="margin-top:14px">Ferramentas</div>
+      <button data-view="simulador" onclick="setView('simulador')"><i data-ic="calc"></i>Simulador Caixa</button>
       <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button data-view="tvrank" class="gest hide" onclick="setView('tvrank')"><i data-ic="tela"></i>Rankings na TV</button>
@@ -2357,6 +2376,35 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
         <div class="page-head"><div><h1>Funil de ligações</h1><div class="sub" id="flSub">Da ligação ao fechamento.</div></div><div class="ph-acoes" id="flFiltros"></div></div>
         <div id="flCorpo"></div>
       </section>
+      <section class="view" id="v-simulador">
+        <div class="page-head"><div><h1>Simulador Caixa</h1><div class="sub">Minha Casa Minha Vida em poucos campos: quanto o cliente financia, o desconto e a parcela.</div></div><div class="ph-acoes"><button class="btn btn-ghost hide" id="simCfgBox" onclick="abrirSimCfg()">Tabela do simulador</button></div></div>
+        <div class="card sim-form">
+          <div class="sim-g3">
+            <div class="fg"><label>Nome do cliente</label><input id="simNome" autocomplete="off" placeholder="Nome completo"></div>
+            <div class="fg"><label>CPF</label><input id="simCpf" inputmode="numeric" autocomplete="off" placeholder="Só números" oninput="this.value=fmtCpf(this.value)"></div>
+            <div class="fg"><label>Data de nascimento</label><input type="date" id="simNasc"></div>
+            <div class="fg"><label>Renda mensal</label><input id="simRenda" inputmode="decimal" placeholder="R$"></div>
+            <div class="fg"><label>Tipo de renda</label><select id="simTipo"><option value="formal">Formal (carteira assinada)</option><option value="mista">Mista</option><option value="informal">Informal</option></select></div>
+            <div class="fg"><label>Valor do imóvel <span class="muted">(opcional)</span></label><input id="simValor" inputmode="decimal" placeholder="R$"></div>
+          </div>
+          <div class="sim-sw">
+            <label class="sim-chk"><input type="checkbox" id="simFgts" onchange="simFgtsVis()"> 3 anos ou mais de FGTS <small>(carteira assinada ou contribuição)</small></label>
+            <label class="sim-chk"><input type="checkbox" id="simDep"> Possui dependente <small>(fator social)</small></label>
+          </div>
+          <div class="sim-g3">
+            <div class="fg hide" id="simFgtsSaldoW"><label>Saldo do FGTS <span class="muted">(se souber)</span></label><input id="simFgtsSaldo" inputmode="decimal" placeholder="R$"></div>
+            <div class="fg"><label>Entrada disponível <span class="muted">(opcional)</span></label><input id="simEntrada" inputmode="decimal" placeholder="R$"></div>
+          </div>
+          <div id="simParts"></div>
+          <details class="sim-mais"><summary>Mais informações</summary>
+            <label class="sim-chk"><input type="checkbox" id="simImovel"> Já possui imóvel residencial na cidade</label>
+            <label class="sim-chk"><input type="checkbox" id="simPcd"> PNE/PCD na família</label>
+          </details>
+          <div class="sim-bts"><button class="btn btn-ghost" onclick="simAddPart()">+ Participante</button><button class="btn btn-primary" onclick="simular()">Simular</button></div>
+        </div>
+        <div id="simRes"></div>
+        <div class="card"><div class="card-head"><h2>Simulações salvas</h2><span class="muted"></span></div><div id="simHist"></div></div>
+      </section>
       <section class="view" id="v-relatorios">
         <div class="page-head"><div><h1>Relatórios</h1><div class="sub" id="relSub">Como anda a sua produtividade.</div></div></div>
         <div id="relGestao" class="gest hide">
@@ -2528,7 +2576,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <div class="fab-fundo" onclick="fabFechar()"></div>
-<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-cart" id="fmCart" onclick="fabFechar();abrirCarteira()"><span>Carteira</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1.3" fill="currentColor"/></svg><b id="fmCartN"></b></i></button><button class="fm-bz" id="fmBz" onclick="fabFechar();setView('bolsao')"><span>Bolsão</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="fmBzN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-ia hide" id="fmIa" onclick="fabFechar();iaAlternar()"><span>Assistente</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
+<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-cart" id="fmCart" onclick="fabFechar();abrirCarteira()"><span>Carteira</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1.3" fill="currentColor"/></svg><b id="fmCartN"></b></i></button><button class="fm-bz" id="fmBz" onclick="fabFechar();setView('bolsao')"><span>Bolsão</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="fmBzN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-sim" id="fmSim" onclick="fabFechar();setView('simulador')"><span>Simular</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h8"/></svg></i></button><button class="fm-ia hide" id="fmIa" onclick="fabFechar();iaAlternar()"><span>Assistente</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
 <button class="fab hide" id="fab" onclick="fabClique()" title="Adicionar" data-ic="plus"></button>
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
@@ -3033,6 +3081,13 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('vincWaModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarVinculoWa()">Vincular</button></div>
   </div>
 </div>
+<div class="modal" id="simCfgModal">
+  <div class="sheet" style="width:min(680px,100%)">
+    <div class="sheet-head"><h2>Tabela do simulador</h2><button class="icon-btn" onclick="fechar('simCfgModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><p class="hint" style="margin-top:0">Valores do Minha Casa Minha Vida usados nas contas (Nordeste). Quando a Caixa mudar alguma regra, ajuste aqui: vale na hora para todos.</p><div id="simCfgCorpo"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('simCfgModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarSimCfg()">Salvar tabela</button></div>
+  </div>
+</div>
 <div class="modal" id="bzDispModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><h2>Disparo do bolsão</h2><button class="icon-btn" onclick="fechar('bzDispModal')" data-ic="x"></button></div>
@@ -3248,6 +3303,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
       <button class="an-nav hide" onclick="fechar('menuModal');setView('analises')"><i data-ic="pasta"></i>Correspondente (teste)</button>
       <button class="funil-nav hide" onclick="fechar('menuModal');setView('funil')"><i data-ic="trend"></i>Funil de ligações</button>
+      <button onclick="fechar('menuModal');setView('simulador')"><i data-ic="calc"></i>Simulador Caixa</button>
       <button onclick="fechar('menuModal');setView('relatorios')"><i data-ic="chart"></i>Relatórios</button>
       <button class="direcao-only hide" onclick="fechar('menuModal');setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
       <button class="zap-nav hide" onclick="fechar('menuModal');setView('whatsapp')"><i data-ic="zap"></i>WhatsApp (teste)</button>
@@ -3292,6 +3348,7 @@ catch(e) { db = getFirestore(fb); }
 
 // ================= Ícones =================
 const IC = {
+  calc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h8"/></svg>',
   dinheiro:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/></svg>',
   zap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>',
   predio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10"/><path d="M3 21h18"/><path d="M8 7h2M8 11h2M8 15h2M12 7h0M12 11h0M12 15h0"/></svg>',
@@ -3595,7 +3652,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -3797,6 +3854,7 @@ function render(){
   // ----- RELATÓRIOS -----
   if (view === 'relatorios') { renderRelatorios(stk); renderRelGestao(); }
   if (view === 'funil') renderFunilLig();
+  if (view === 'simulador') renderSimulador();
   if (view === 'tvrank') renderTvRank();
   if (view === 'config') renderAdm();
   renderEtapa2(); renderEtapa3(); renderSdrHoje(); renderResumoView();
@@ -5412,11 +5470,11 @@ const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
   const lig = $('discFab') && !$('discFab').classList.contains('hide'), zap = $('zapFab') && !$('zapFab').classList.contains('hide');
-  const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu(), ia = souGerente();
-  if (!lig && !zap && !ind && !bz && !cart && !ia || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
+  const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu(), ia = souGerente(), sim = souAtivo() && !souCorresp() && !abaOculta('simulador');
+  if (!lig && !zap && !ind && !bz && !cart && !ia && !sim || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
   $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !bz);
   $('fmCart').classList.toggle('hide', !cart);
-  $('fmIa').classList.toggle('hide', !ia);
+  $('fmIa').classList.toggle('hide', !ia); $('fmSim').classList.toggle('hide', !sim);
   const nBz = bz && bzPresente() ? bzLivres().length : 0; $('fmBzN').textContent = nBz ? String(nBz) : '';
   $('fmZapN').textContent = $('zapFabN') && !$('zapFabN').classList.contains('hide') ? $('zapFabN').textContent : '';
   document.documentElement.classList.toggle('fab-aberto');
@@ -5451,7 +5509,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 128;
+const APP_VERSAO = 129;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5733,11 +5791,11 @@ function filtrarAvaliacoes(){
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
 const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], anjo:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
-const ABAS_CARGO = [['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
-const ABAS_DO_CARGO = { corretor:['whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
-  coordenador:['tvrank','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
-  sdr:['discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'],
-  anjo:['funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'] }; // v113: anjo tem tudo do corretor + funil da equipe dele
+const ABAS_CARGO = [['simulador','Simulador Caixa'],['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_DO_CARGO = { corretor:['simulador','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
+  coordenador:['simulador','tvrank','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
+  sdr:['simulador','discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'],
+  anjo:['simulador','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'] }; // v113: anjo tem tudo do corretor + funil da equipe dele
 const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador','anjo'].includes(perfil?.papel));
 window.podeZap = podeZap;
 const cfgCargo = (m, pap) => m ? (m[pap] !== undefined ? m[pap] : (pap === 'anjo' ? m.corretor : undefined)) : undefined; // v113: anjo sem config própria segue o corretor
@@ -7425,7 +7483,7 @@ function assinarEtapa4(){
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
-  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); assinarSaques(); conferirLinkCheckin();
+  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); assinarSaques(); assinarSimulacoes(); conferirLinkCheckin();
 }
 // a presença marcada pela gerência vira um resumo que todos podem ver no ranking (sem os detalhes do plantão)
 async function presencaNoRanking(uid, dia, presente){
@@ -11586,6 +11644,195 @@ window.salvarVinculoWa = async () => {
   try { await gravar(setDoc(doc(db,'config','app'), { apelidosSdr:ap }, { merge:true })); appCfg.apelidosSdr = ap; montarResumosSdr(); fechar('vincWaModal'); render(); toast(uid === '__ignorar' ? 'Esse nome não conta mais' : 'Vinculado: os resumos somam na SDR do app'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
+// =====================================================================
+// ============ SIMULADOR CAIXA (MCMV) · v129 ============
+// Estimativa pelas regras do Minha Casa Minha Vida. Tudo editável pelo gestor (config/app.simulador).
+// =====================================================================
+const SIM_PADRAO = {
+  faixas:[{ n:1, ate:3200 }, { n:2, ate:5000 }, { n:3, ate:9600 }, { n:4, ate:13000 }],
+  // taxa nominal ao ano para NÃO cotista no Nordeste (cotista FGTS: menos "redCotista")
+  taxas:[{ ate:2000, taxa:4.50 }, { ate:3200, taxa:5.00 }, { ate:4000, taxa:5.25 }, { ate:4500, taxa:6.00 }, { ate:5000, taxa:6.75 }, { ate:9600, taxa:8.16 }, { ate:13000, taxa:10.00 }],
+  redCotista:0.5, cotistaAteFaixa:3, comprometimento:30, prazoMax:420, idadeMax:80.5, cota:80,
+  tetos:{ 1:275000, 2:275000, 3:400000, 4:600000 },
+  subsidioAte:4000, subsidioMin:1500, redUnipessoal:70,
+  curva:[{ renda:1750, valor:55000 }, { renda:2200, valor:45000 }, { renda:2600, valor:32000 }, { renda:3000, valor:18000 }, { renda:3500, valor:6000 }, { renda:4000, valor:1500 }]
+};
+const simCfg = () => { const c = appCfg.simulador || {}; return { ...SIM_PADRAO, ...c, tetos:{ ...SIM_PADRAO.tetos, ...(c.tetos || {}) } }; };
+let simulacoes = [], simUlt = null, simPart = [];
+function assinarSimulacoes(){
+  simulacoes = []; if (!souAtivo() || souCorresp()) return;
+  const q = souGerente() ? query(collection(db,'simulacoes'), where('dia','>=', inicioJanela())) : souCoord() ? query(collection(db,'simulacoes'), where('equipe','==', perfil.equipe || '-'))
+    : souAnjo() ? null : query(collection(db,'simulacoes'), where('uid','==', uidAtual));
+  const ouvir = qq => subsPapel.push(onSnapshot(qq, s => { const m = new Map(simulacoes.map(x => [x.id, x])); s.docs.forEach(d => m.set(d.id, { id:d.id, ...d.data() })); simulacoes = [...m.values()]; if (view === 'simulador') renderSimHist(); }, e => console.warn('simulações', e.code || e.message)));
+  if (q) ouvir(q); else [uidAtual, ...membrosAnjo()].slice(0, 30).forEach(u => ouvir(query(collection(db,'simulacoes'), where('uid','==', u))));
+}
+const idadeMeses = nasc => { if (!nasc) return null; const n = parseISO(nasc), h = new Date(); let m = (h.getFullYear() - n.getFullYear()) * 12 + (h.getMonth() - n.getMonth()); if (h.getDate() < n.getDate()) m--; return m; };
+// valor em reais digitado de qualquer jeito: 2.500 / 2500 / 2.500,50 / 200.000
+const lerReais = x => { let t = String(x || '').replace(/[^\d,.]/g, ''); if (!t) return 0; if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.'); else if ((t.match(/\./g) || []).length > 1 || /\.\d{3}$/.test(t)) t = t.replace(/\./g, ''); return Number(t) || 0; };
+window.fmtCpf = fmtCpf;
+const pctBR = v => (Number(v) || 0).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }) + '%';
+function simCalcular(e){
+  const c = simCfg(), avisos = [], bloqueios = [];
+  const parts = [{ nasc:e.nasc, renda:e.renda, fgts:e.fgts }, ...e.parts].filter(p => p.nasc || p.renda);
+  const renda = parts.reduce((a, p) => a + (Number(p.renda) || 0), 0);
+  const faixaObj = c.faixas.find(f => renda <= f.ate), faixa = faixaObj ? faixaObj.n : 0;
+  if (!renda) bloqueios.push('Informe a renda mensal.');
+  if (renda && !faixa) bloqueios.push(`Renda familiar de ${brl2(renda)} acima do limite do programa (${brl2(c.faixas[c.faixas.length - 1].ate)}). Vai pelo SBPE, fora do Minha Casa Minha Vida.`);
+  if (e.possuiImovel) bloqueios.push('Quem já tem imóvel residencial na cidade não entra no Minha Casa Minha Vida.');
+  const idades = parts.map(p => idadeMeses(p.nasc)).filter(x => x !== null);
+  if (!idades.length) bloqueios.push('Informe a data de nascimento.');
+  const maisVelho = idades.length ? Math.max(...idades) : 0;
+  if (idades.some(x => x < 216)) bloqueios.push('Todo participante precisa ter 18 anos ou mais.');
+  const prazo = Math.max(0, Math.min(c.prazoMax, Math.floor(c.idadeMax * 12 - maisVelho)));
+  if (idades.length && prazo < 60) bloqueios.push('Pela idade do participante mais velho, o prazo fica curto demais para financiar.');
+  else if (idades.length && prazo < c.prazoMax) avisos.push(`Prazo reduzido para ${prazo} meses por causa da idade (o financiamento termina até ${String(c.idadeMax).replace('.5', ' anos e 6 meses').replace(/^(\d+)$/, '$1 anos')}).`);
+  const cotista = parts.some(p => p.fgts);
+  const tx = (c.taxas.find(t => renda <= t.ate) || c.taxas[c.taxas.length - 1] || { taxa:10 }).taxa;
+  const taxa = Math.max(0, tx - (cotista && faixa && faixa <= c.cotistaAteFaixa ? c.redCotista : 0));
+  const i = taxa / 100 / 12, n = prazo;
+  const parcelaMax = renda * c.comprometimento / 100;
+  const pvPrice = p => i ? p * (1 - Math.pow(1 + i, -n)) / i : p * n;
+  const finPriceRenda = n ? pvPrice(parcelaMax) : 0, finSacRenda = n ? parcelaMax / (1 / n + i) : 0;
+  const teto = faixa ? Number(c.tetos[faixa]) || 0 : 0;
+  // subsídio estimado (faixas 1 e 2, renda até o limite, imóvel dentro do teto)
+  let subsidio = 0;
+  if (faixa && faixa <= 2 && renda <= c.subsidioAte) {
+    const cv = c.curva.slice().sort((a, b) => a.renda - b.renda);
+    if (renda <= cv[0].renda) subsidio = cv[0].valor;
+    else { for (let k = 1; k < cv.length; k++) if (renda <= cv[k].renda) { const a = cv[k - 1], b = cv[k]; subsidio = a.valor + (b.valor - a.valor) * (renda - a.renda) / (b.renda - a.renda); break; } }
+    if (parts.length === 1 && !e.dependente) { subsidio *= (100 - c.redUnipessoal) / 100; avisos.push(`Sem dependente e sem outro participante, o desconto cai ${c.redUnipessoal}% (família de uma pessoa). Com dependente, marque "Possui dependente".`); }
+    subsidio = subsidio >= c.subsidioMin ? Math.round(subsidio / 10) * 10 : 0;
+  }
+  const valor = Number(e.valor) || 0, entradaTem = Number(e.entrada) || 0, fgtsSaldo = Number(e.fgtsSaldo) || 0;
+  let fin = finPriceRenda, entradaFalta = null, valorCabe;
+  if (valor) {
+    if (teto && valor > teto && faixa <= 2) { avisos.push(`O imóvel passa do teto da faixa ${faixa} (${brl2(teto)}): sem desconto do governo e pode ir para a faixa 3.`); subsidio = 0; }
+    if (faixa === 3 && valor > c.tetos[3]) bloqueios.push(`Imóvel acima de ${brl2(c.tetos[3])}, teto da faixa 3.`);
+    if (faixa === 4 && valor > c.tetos[4]) bloqueios.push(`Imóvel acima de ${brl2(c.tetos[4])}, teto da faixa 4.`);
+    subsidio = Math.min(subsidio, Math.max(0, valor - Math.min(finPriceRenda, valor * c.cota / 100)));
+    fin = Math.min(finPriceRenda, valor * c.cota / 100, Math.max(0, valor - subsidio));
+    entradaFalta = Math.max(0, valor - fin - subsidio - fgtsSaldo - entradaTem);
+  }
+  valorCabe = Math.min(teto || Infinity, (finPriceRenda / (c.cota / 100)), finPriceRenda + subsidio + fgtsSaldo + entradaTem);
+  const parcPrice = n ? (i ? fin * i / (1 - Math.pow(1 + i, -n)) : fin / n) : 0, parcSac1 = n ? fin / n + fin * i : 0;
+  if (e.tipoRenda === 'informal') avisos.push('Renda informal: a Caixa pede comprovação (extratos) e pode considerar um valor menor.');
+  if (e.pcd) avisos.push('PNE/PCD tem prioridade nos empreendimentos do programa.');
+  return { renda, faixa, taxa, cotista, prazo, parcelaMax, finPriceRenda, finSacRenda, fin, subsidio, teto, valor, entradaFalta, valorCabe, parcPrice, parcSac1, avisos, bloqueios, partes:parts.length };
+}
+// histórico do CPF na Prime e nas cartas do app
+function simHistCpf(cpf){
+  const d = soDig(cpf); if (d.length !== 11) return [];
+  const l = [];
+  (typeof avaliacoesTodas !== 'undefined' ? avaliacoesTodas : []).filter(a => a.cpfNorm === d || soDig(a.cpf) === d).forEach(a => l.push({ data:a.data || '', txt:'Prime: ' + (a.status || 'em análise'), g:infoStatus(a.status).g }));
+  (typeof cartas !== 'undefined' ? cartas : []).filter(c => c.cpfNorm === d || soDig(c.cpf) === d).forEach(c => l.push({ data:c.data || '', txt:'Carta: ' + (c.status || 'aprovada'), g:'aprovado' }));
+  return l.sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+}
+function simNota(e, r, hist){
+  let n = 560;
+  n += e.tipoRenda === 'formal' ? 120 : e.tipoRenda === 'mista' ? 60 : 0;
+  if (r.cotista) n += 90; if (e.dependente || r.partes > 1) n += 40;
+  const id = idadeMeses(e.nasc); if (id !== null) n += id <= 45 * 12 ? 50 : id >= 60 * 12 ? -60 : 0;
+  if (r.prazo && r.prazo < 240) n -= 80;
+  if (r.valor) { const prec = r.valor - r.subsidio; n += prec <= r.finPriceRenda / (simCfg().cota / 100) ? 80 : -120; if (r.entradaFalta > 0) n -= Math.min(150, Math.round(r.entradaFalta / 1000) * 5); }
+  const g = hist[0]?.g; if (g === 'reprovado') n -= 380; else if (g === 'aprovado') n += 150; else if (g === 'condicionado') n -= 40; else if (g === 'outro') n += 60;
+  if (r.bloqueios.length) n = Math.min(n, 200);
+  n = Math.max(0, Math.min(1000, Math.round(n)));
+  const rot = n >= 800 ? ['Excelente', '#16a34a'] : n >= 650 ? ['Bom', '#22c55e'] : n >= 450 ? ['Regular', '#f59e0b'] : ['Baixo', '#dc2626'];
+  return { n, rot:rot[0], cor:rot[1] };
+}
+function simLer(){
+  const v = id => ($(id)?.value || '').trim();
+  return { nome:v('simNome'), cpf:v('simCpf'), nasc:v('simNasc'), renda:lerReais(v('simRenda')) || 0, tipoRenda:v('simTipo') || 'formal', fgts:$('simFgts').checked, fgtsSaldo:lerReais(v('simFgtsSaldo')) || 0,
+    dependente:$('simDep').checked, valor:lerReais(v('simValor')) || 0, entrada:lerReais(v('simEntrada')) || 0, possuiImovel:$('simImovel').checked, pcd:$('simPcd').checked,
+    parts:simPart.map((p, k) => ({ nasc:v('simPN' + k), renda:lerReais(v('simPR' + k)) || 0, fgts:$('simPF' + k)?.checked || false })).filter(p => p.nasc || p.renda) };
+}
+function htmlSimPart(){
+  return simPart.map((p, k) => `<div class="sim-part"><b>${k + 2}º participante</b><div class="sim-g3"><div class="fg"><label>Data de nascimento</label><input type="date" id="simPN${k}" value="${esc(p.nasc || '')}"></div>
+    <div class="fg"><label>Renda mensal</label><input id="simPR${k}" inputmode="decimal" placeholder="R$" value="${p.renda ? String(p.renda).replace('.', ',') : ''}"></div>
+    <label class="sim-chk"><input type="checkbox" id="simPF${k}" ${p.fgts ? 'checked' : ''}> 3 anos de FGTS</label></div><button class="link" onclick="simTirarPart(${k})">Tirar</button></div>`).join('');
+}
+window.simAddPart = () => { const e = simLer(); simPart = [...e.parts, {}]; if (simPart.length > 3) { simPart.length = 3; toast('Até 4 participantes'); } $('simParts').innerHTML = htmlSimPart(); };
+window.simTirarPart = k => { const e = simLer(); simPart = e.parts.filter((_, j) => j !== k); $('simParts').innerHTML = htmlSimPart(); };
+window.simFgtsVis = () => $('simFgtsSaldoW').classList.toggle('hide', !$('simFgts').checked);
+window.simular = () => {
+  const e = simLer(), r = simCalcular(e), hist = simHistCpf(e.cpf), nota = simNota(e, r, hist);
+  if (!e.nome) { toast('Digite o nome do cliente'); $('simNome').focus(); return; }
+  if (e.cpf && soDig(e.cpf).length !== 11) { toast('CPF incompleto'); $('simCpf').focus(); return; }
+  simUlt = { e, r, hist, nota, em:Date.now(), salvo:false };
+  $('simRes').innerHTML = htmlSimResultado(simUlt); $('simRes').scrollIntoView({ behavior:'smooth', block:'start' });
+};
+function htmlSimResultado(s){
+  const { e, r, hist, nota } = s, cfg = simCfg();
+  if (r.bloqueios.length) return `<div class="card sim-res"><div class="sim-bloq"><b>Não dá para seguir pelo Minha Casa Minha Vida</b>${r.bloqueios.map(x => `<div>${esc(x)}</div>`).join('')}</div>${r.avisos.map(x => `<div class="sim-aviso">${esc(x)}</div>`).join('')}</div>`;
+  const ent = r.valor ? (r.entradaFalta > 0 ? `<div class="sim-k"><small>Entrada que falta</small><b class="neg">${brl2(r.entradaFalta)}</b><span>imóvel de ${brl2(r.valor)}</span></div>` : `<div class="sim-k"><small>Entrada que falta</small><b class="pos">Nada</b><span>imóvel de ${brl2(r.valor)} cabe</span></div>`) : `<div class="sim-k"><small>Imóvel que cabe</small><b>até ${brl2(r.valorCabe)}</b><span>financiamento + desconto${e.entrada || e.fgtsSaldo ? ' + entrada' : ''}</span></div>`;
+  return `<div class="card sim-res">
+    <div class="sim-topo"><div><small>${esc(nomeBonito(e.nome))}${e.cpf ? ' · CPF ' + esc(fmtCpf(e.cpf)) : ''}</small><h2>Pode financiar até <span>${brl2(r.valor ? r.fin : r.finPriceRenda)}</span></h2>
+      <div class="sim-chips"><span>Faixa ${r.faixa}</span><span>Juros ${pctBR(r.taxa)} a.a.${r.cotista && r.faixa <= cfg.cotistaAteFaixa ? ' (cotista FGTS)' : ''}</span><span>${r.prazo} meses</span><span>Renda ${brl2(r.renda)}</span></div></div>
+      <div class="sim-nota" style="--c:${nota.cor}"><b>${nota.n}</b><small>Nota de perfil</small><span>${nota.rot}</span></div></div>
+    <div class="sim-grade">
+      <div class="sim-k"><small>Desconto do governo (subsídio)</small><b class="${r.subsidio ? 'pos' : ''}">${r.subsidio ? brl2(r.subsidio) : 'Sem desconto'}</b><span>${r.subsidio ? 'estimativa' : r.faixa > 2 ? 'só faixas 1 e 2' : 'renda acima do limite do desconto'}</span></div>
+      <div class="sim-k"><small>Parcela máxima (${cfg.comprometimento}% da renda)</small><b>${brl2(r.parcelaMax)}</b><span>por mês</span></div>
+      ${ent}
+      <div class="sim-k"><small>Primeira parcela</small><b>${brl2(r.parcPrice)}</b><span>Price · SAC começa em ${brl2(r.parcSac1)}</span></div>
+    </div>
+    ${hist.length ? `<div class="sim-hist"><b>Histórico deste CPF</b>${hist.slice(0, 4).map(h => `<div class="g-${h.g}">${dataBR(h.data) || ''} · ${esc(h.txt)}</div>`).join('')}</div>` : ''}
+    ${r.avisos.map(x => `<div class="sim-aviso">${esc(x)}</div>`).join('')}
+    <div class="sim-acoes"><button class="btn btn-primary" onclick="salvarSim()" ${s.salvo ? 'disabled' : ''}>${s.salvo ? 'Simulação salva' : 'Salvar simulação'}</button><button class="btn btn-ghost" onclick="imprimirSim()">Imprimir</button><button class="btn btn-ghost" onclick="novaSim()">Nova simulação</button></div>
+    <p class="hint sim-obs">Estimativa feita pelas regras do Minha Casa Minha Vida (Nordeste), sem seguros e taxas. Os valores finais, principalmente o desconto do governo, são confirmados pela Caixa na análise de crédito.</p></div>`;
+}
+window.novaSim = () => { ['simNome','simCpf','simNasc','simRenda','simFgtsSaldo','simValor','simEntrada'].forEach(i => $(i).value = ''); ['simFgts','simDep','simImovel','simPcd'].forEach(i => $(i).checked = false); $('simTipo').value = 'formal'; simPart = []; $('simParts').innerHTML = ''; simFgtsVis(); $('simRes').innerHTML = ''; simUlt = null; $('simNome').focus(); };
+window.salvarSim = async () => {
+  if (!simUlt || simUlt.salvo) return; const { e, r, nota } = simUlt;
+  const d = { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', cliente:e.nome.slice(0, 80), cpf:fmtCpf(e.cpf), cpfNorm:soDig(e.cpf), nasc:e.nasc, tipoRenda:e.tipoRenda, fgts:e.fgts, dependente:e.dependente,
+    participantes:r.partes, renda:r.renda, valor:r.valor, faixa:r.faixa, taxa:r.taxa, prazo:r.prazo, financiamento:Math.round(r.valor ? r.fin : r.finPriceRenda), subsidio:Math.round(r.subsidio), parcela:Math.round(r.parcPrice * 100) / 100,
+    entradaFalta:r.entradaFalta === null ? null : Math.round(r.entradaFalta), nota:nota.n, dia:hojeISO(), em:Date.now() };
+  try { await gravar(setDoc(doc(collection(db,'simulacoes')), d)); simUlt.salvo = true; $('simRes').innerHTML = htmlSimResultado(simUlt); toast('Simulação salva'); }
+  catch(err) { toast('Não foi possível salvar: ' + err.message + ' (publique as regras novas do Firebase)'); }
+};
+window.imprimirSim = () => {
+  if (!simUlt) return; const { e, r, nota, hist } = simUlt, cfg = simCfg();
+  const lin = (a, b) => `<tr><td>${a}</td><td><b>${b}</b></td></tr>`;
+  const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Simulação · ${esc(e.nome)}</title><style>body{font-family:Arial,Helvetica,sans-serif;color:#0f172a;margin:32px}h1{font-size:20px;margin:0}h2{font-size:15px;margin:22px 0 8px;color:#1C5F8E}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #f28c38;padding-bottom:12px}.top img{height:44px}table{width:100%;border-collapse:collapse}td{padding:7px 4px;border-bottom:1px solid #e5e7eb;font-size:13.5px}td:last-child{text-align:right}.big{font-size:26px;font-weight:800;color:#0f6b4a;margin:10px 0}.obs{font-size:11px;color:#64748b;margin-top:22px;line-height:1.5}.av{font-size:12.5px;background:#fff7ed;border:1px solid #fed7aa;padding:6px 8px;border-radius:6px;margin-top:6px}</style></head><body>
+    <div class="top"><div><h1>Simulação de financiamento</h1><div style="font-size:12px;color:#64748b">Minha Casa Minha Vida · ${new Date().toLocaleString('pt-BR')}</div></div><img src="${location.origin + location.pathname.replace(/[^/]*$/, '')}logo-frade.png" alt="Frade Imóveis"></div>
+    <h2>Cliente</h2><table>${lin('Nome', esc(nomeBonito(e.nome)))}${e.cpf ? lin('CPF', esc(fmtCpf(e.cpf))) : ''}${lin('Renda familiar', brl2(r.renda))}${lin('Tipo de renda', { formal:'Formal', mista:'Mista', informal:'Informal' }[e.tipoRenda])}${lin('Participantes', r.partes)}${lin('FGTS (3 anos ou mais)', r.cotista ? 'Sim' : 'Não')}${lin('Possui dependente', e.dependente ? 'Sim' : 'Não')}</table>
+    <h2>Resultado</h2><div class="big">Pode financiar até ${brl2(r.valor ? r.fin : r.finPriceRenda)}</div><table>${lin('Faixa do programa', 'Faixa ' + r.faixa)}${lin('Juros', pctBR(r.taxa) + ' ao ano')}${lin('Prazo', r.prazo + ' meses')}${lin('Desconto do governo (estimativa)', r.subsidio ? brl2(r.subsidio) : 'Sem desconto')}${lin('Parcela máxima (' + cfg.comprometimento + '% da renda)', brl2(r.parcelaMax))}${lin('Primeira parcela (Price)', brl2(r.parcPrice))}${lin('Primeira parcela (SAC)', brl2(r.parcSac1))}${r.valor ? lin('Valor do imóvel', brl2(r.valor)) + lin('Entrada que falta', brl2(r.entradaFalta || 0)) : lin('Imóvel que cabe', 'até ' + brl2(r.valorCabe))}${lin('Nota de perfil', nota.n + ' · ' + nota.rot)}</table>
+    ${r.avisos.map(x => `<div class="av">${esc(x)}</div>`).join('')}
+    <div class="obs">Simulação feita por ${esc(perfil.nome)} · Frade Imóveis. Estimativa pelas regras do Minha Casa Minha Vida, sem seguros e taxas. Os valores finais, principalmente o desconto do governo, são confirmados pela Caixa na análise de crédito.</div></body></html>`;
+  const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
+  const d = f.contentWindow.document; d.open(); d.write(html); d.close();
+  setTimeout(() => { try { f.contentWindow.focus(); f.contentWindow.print(); } catch(err) { toast('Não deu para imprimir neste aparelho'); } setTimeout(() => f.remove(), 60000); }, 400);
+};
+function renderSimHist(){
+  const el = $('simHist'); if (!el) return;
+  const l = simulacoes.slice().sort((a, b) => (b.em || 0) - (a.em || 0)).slice(0, 60), lider = souGerente() || souCoord() || souAnjo();
+  el.innerHTML = l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Data</th><th>Cliente</th>${lider ? '<th>Corretor</th>' : ''}<th>Renda</th><th>Faixa</th><th>Financia</th><th>Desconto</th><th>Nota</th></tr></thead><tbody>${l.map(x => `<tr><td>${dataBR(x.dia)}</td><td><span class="nm">${esc(nomeBonito(x.cliente || ''))}</span></td>${lider ? `<td>${esc(primeiro(x.nome || ''))}</td>` : ''}<td>${brl2(x.renda)}</td><td>${x.faixa || '—'}</td><td>${brl2(x.financiamento)}</td><td>${x.subsidio ? brl2(x.subsidio) : '—'}</td><td>${x.nota ?? '—'}</td></tr>`).join('')}</tbody></table></div>`
+    : '<div class="muted" style="font-size:13.5px">Nenhuma simulação salva ainda.</div>';
+}
+function renderSimulador(){
+  renderSimHist();
+  if ($('simCfgBox')) $('simCfgBox').classList.toggle('hide', !souDono());
+}
+window.renderSimulador = renderSimulador;
+// tabela do simulador (só o gestor muda)
+window.abrirSimCfg = () => {
+  const c = simCfg(), inp = (id, v) => `<input id="${id}" inputmode="decimal" value="${String(v).replace('.', ',')}">`;
+  $('simCfgCorpo').innerHTML = `<div class="sim-g3"><div class="fg"><label>Comprometimento (% da renda)</label>${inp('scComp', c.comprometimento)}</div><div class="fg"><label>Prazo máximo (meses)</label>${inp('scPrazo', c.prazoMax)}</div><div class="fg"><label>Cota de financiamento (%)</label>${inp('scCota', c.cota)}</div>
+    <div class="fg"><label>Idade máxima no fim (anos)</label>${inp('scIdade', c.idadeMax)}</div><div class="fg"><label>Redução cotista FGTS (p.p.)</label>${inp('scCot', c.redCotista)}</div><div class="fg"><label>Redução família de 1 pessoa (%)</label>${inp('scUni', c.redUnipessoal)}</div></div>
+    <h4 class="sim-h">Faixas (renda até)</h4><div class="sim-g4">${c.faixas.map((f, k) => `<div class="fg"><label>Faixa ${f.n}</label>${inp('scF' + k, f.ate)}</div>`).join('')}</div>
+    <h4 class="sim-h">Teto do imóvel por faixa</h4><div class="sim-g4">${[1,2,3,4].map(k => `<div class="fg"><label>Faixa ${k}</label>${inp('scT' + k, c.tetos[k])}</div>`).join('')}</div>
+    <h4 class="sim-h">Juros ao ano, não cotista (renda até → taxa)</h4><div class="sim-g4">${c.taxas.map((t, k) => `<div class="fg sim-par">${inp('scTxA' + k, t.ate)}${inp('scTxV' + k, t.taxa)}</div>`).join('')}</div>
+    <h4 class="sim-h">Desconto do governo (renda até → valor)</h4><div class="sim-g4">${c.curva.map((t, k) => `<div class="fg sim-par">${inp('scCvA' + k, t.renda)}${inp('scCvV' + k, t.valor)}</div>`).join('')}</div>`;
+  abrir('simCfgModal');
+};
+window.salvarSimCfg = async () => {
+  const c = simCfg(), n = id => lerDec($(id).value) || 0;
+  const d = { comprometimento:n('scComp'), prazoMax:n('scPrazo'), cota:n('scCota'), idadeMax:n('scIdade'), redCotista:n('scCot'), redUnipessoal:n('scUni'),
+    faixas:c.faixas.map((f, k) => ({ n:f.n, ate:n('scF' + k) })), tetos:Object.fromEntries([1,2,3,4].map(k => [k, n('scT' + k)])),
+    taxas:c.taxas.map((t, k) => ({ ate:n('scTxA' + k), taxa:n('scTxV' + k) })), curva:c.curva.map((t, k) => ({ renda:n('scCvA' + k), valor:n('scCvV' + k) })), subsidioAte:n('scCvA' + (c.curva.length - 1)), subsidioMin:c.subsidioMin, cotistaAteFaixa:c.cotistaAteFaixa };
+  try { await gravar(setDoc(doc(db,'config','app'), { simulador:d }, { merge:true })); appCfg.simulador = d; fechar('simCfgModal'); toast('Tabela do simulador salva'); } catch(e) { toast('Erro: ' + e.message); }
+};
+window.simCalcular = simCalcular;
+
 window.abrirResumoSdr = () => { if (souSdr()) { setView('resumo'); return; } abrirColarSdr(); };
 function abrirFormResumo(){
   if (!souSdr()) return;
