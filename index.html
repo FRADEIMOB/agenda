@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="Frade Imóveis">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Saira+Condensed:wght@700;800&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Saira+Condensed:wght@700;800&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --accent:#E65100;--marinho:#022C45;--accent-soft:color-mix(in srgb,var(--accent) 12%,transparent);
@@ -703,6 +703,18 @@ html.modo-tvr .tve.on{opacity:1;background:radial-gradient(circle at 50% 45%,col
 .tve-foto{position:relative;width:16vw;height:16vw;border-radius:50%;object-fit:cover;border:.6vw solid var(--c);box-shadow:0 0 0 1vw color-mix(in srgb,var(--c) 25%,transparent),0 2vw 5vw rgba(0,0,0,.5)}
 .tve-ini{display:grid;place-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));color:#0b1e2d;font:800 8vw/1 'Saira Condensed',sans-serif}
 .tve-rot{position:relative;margin-top:2vw;padding:.6vw 2vw;border-radius:99px;background:var(--c);color:#0b1e2d;font:800 2.6vw/1.1 'Saira Condensed',sans-serif;letter-spacing:.04em;text-transform:uppercase}.tve-rot span{opacity:.75}
+.ip-it{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--border)}.card-head+.ip-it{border-top:0}
+.ip-it>div:first-child{display:flex;flex-direction:column}.ip-it span{font-size:12.5px;color:var(--muted)}.ip-bts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ip-bts .btn{padding:8px 12px;font-size:13px}
+.rep-tipos{display:flex;gap:8px;flex-wrap:wrap}.rep-tipos label{flex:1;min-width:120px}.rep-tipos input{position:absolute;opacity:0;pointer-events:none}
+.rep-tipos span{display:block;text-align:center;padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;font-weight:600;font-size:13.5px;cursor:pointer}
+.rep-tipos input:checked+span{border-color:var(--primary,#1e5a8a);background:color-mix(in srgb,var(--primary,#1e5a8a) 10%,transparent);color:var(--primary,#1e5a8a)}
+.rep-tipos input:focus-visible+span{outline:2px solid var(--primary,#1e5a8a);outline-offset:2px}
+.rep-ok{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:18px 0}.rep-ok b{font-size:19px}.rep-ok span{color:var(--muted)}
+.rep-it{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}.rep-it.feito{opacity:.62}
+.rep-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}.rep-top b{color:var(--text);font-size:14px}
+.rep-chip{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;background:#fee2e2;color:#b91c1c}.rep-chip.melhoria{background:#dcfce7;color:#15803d}.rep-chip.duvida{background:#e0f2fe;color:#0369a1}
+.rep-it p{margin:8px 0;white-space:pre-wrap;font-size:14px;line-height:1.45}.rep-it img{max-width:160px;max-height:160px;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;display:block;margin:6px 0}
+.rep-acoes{display:flex;gap:8px;flex-wrap:wrap}
 .manut-tela{position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#0b2a45,#123d61);display:flex;align-items:center;justify-content:center;padding:24px}
 .manut-box{max-width:420px;text-align:center;color:#fff}.manut-box h2{font-size:26px;margin:14px 0 8px}.manut-box p{color:#cfe0ec;font-size:16px;line-height:1.45;margin:0 0 6px}.manut-box small{display:block;color:#8fb0c8;margin-bottom:18px}
 .manut-ic{width:64px;height:64px;margin:0 auto;border-radius:50%;border:5px solid rgba(255,255,255,.18);border-top-color:#f28c38;animation:manutGira 1.4s linear infinite}@keyframes manutGira{to{transform:rotate(360deg)}}
@@ -954,6 +966,15 @@ html[data-theme="dark"] .topbar{background:rgba(13,24,35,.6);border-bottom-color
 .sidebar{background:linear-gradient(180deg,#14466F 0%,#123F63 45%,#0F3655 100%)}
 html[data-theme="dark"] .sidebar{background:linear-gradient(180deg,#0C1B29,#0A1621)}
 .mobilebar{-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
+/* v140: barra de baixo estilo app — ícones fortes, aba aberta cheia e laranja */
+@media (max-width:760px){
+  .mobilebar{background:var(--card)!important;-webkit-backdrop-filter:none;backdrop-filter:none;padding:8px 2px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -1px 0 var(--border)}
+  .mobilebar button{flex:1;min-width:0;font-size:11px;font-weight:700;gap:4px;padding:4px 2px;color:var(--muted)}
+  .mobilebar button svg{width:25px;height:25px}
+  .mobilebar button svg.tb .f{display:none}
+  .mobilebar button.active svg.tb .o{display:none}.mobilebar button.active svg.tb .f{display:inline}
+  .mobilebar button.active{color:var(--accent)}
+}
 .modal{background:rgba(10,30,48,.38);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .sheet{background:var(--vidro-forte);-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);border-color:var(--vidro-borda);border-radius:18px}
 .toast{background:rgba(18,63,99,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
@@ -1849,6 +1870,193 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 #resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
+<style id="vn140">
+/* =====================================================================
+   v140 · VISUAL NOVO (estilo app, leve e rápido no toque)
+   Vale para o app aberto; a tela de login continua exatamente como era.
+   ===================================================================== */
+body:has(#app:not(.hide)){--accent:#C94A00;--accent-soft:color-mix(in srgb,#C94A00 11%,transparent);--marinho:#022C45;--destaque:#E65100;--vn-bg:#F1F2F4;--vn-ln:#E4E7EB}
+html[data-theme="dark"] body:has(#app:not(.hide)){--accent:#F08A4B;--accent-soft:color-mix(in srgb,#F08A4B 14%,transparent);--vn-bg:var(--bg);--vn-ln:var(--border)}
+body:has(#app:not(.hide)){background:var(--vn-bg)!important;font-family:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;font-variant-numeric:tabular-nums}
+body:has(#app:not(.hide)) :is(h1,h2,h3,.stat b,.pd-kpi b,.lh-top b,.p-stats b,.card-head h2,.page-head h1){font-family:inherit}
+body:has(#app:not(.hide)) .page-head h1{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+body:has(#app:not(.hide)) .card-head h2,body:has(#app:not(.hide)) .card h2{font-size:17px;font-weight:800;letter-spacing:0}
+body:has(#app:not(.hide)) .stat b,body:has(#app:not(.hide)) .pd-kpi b{font-weight:800;letter-spacing:-.01em}
+
+/* leve: sem vidro, sem manchas no fundo, sem sombras pesadas (rola e toca mais rápido no celular) */
+body:has(#app:not(.hide)) *,body:has(#app:not(.hide)) .modal{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+body:has(#app:not(.hide)) :is(.card,.stat,.pd-kpi,.ap-op){background:var(--card)!important;border:0!important;border-radius:16px!important;box-shadow:none!important}
+body:has(#app:not(.hide)) .vcard{background:var(--card)!important;border:0!important;border-radius:14px!important;box-shadow:none!important}
+body:has(#app:not(.hide)) .topbar{background:var(--vn-bg)!important;border-bottom:1px solid var(--vn-ln)!important}
+body:has(#app:not(.hide)) .sidebar{background:#022C45!important}
+html[data-theme="dark"] body:has(#app:not(.hide)) .sidebar{background:#0A1621!important}
+body:has(#app:not(.hide)) .modal{background:rgba(8,18,26,.46)!important}
+body:has(#app:not(.hide)) .modal .sheet{background:var(--card)!important;border:0!important;border-radius:20px!important;box-shadow:0 18px 50px rgba(8,18,26,.22)!important}
+body:has(#app:not(.hide)) .toast{background:#0E1B26!important;border-radius:12px!important}
+body:has(#app:not(.hide)) input,body:has(#app:not(.hide)) select,body:has(#app:not(.hide)) textarea{border-radius:12px;font-family:inherit}
+
+/* botões: cantos de app, peso firme, laranja só na ação principal */
+body:has(#app:not(.hide)) .btn{border-radius:12px;font-weight:700;font-family:inherit}
+body:has(#app:not(.hide)) .btn-primary{background:var(--accent)!important;color:#fff!important;border:0}
+body:has(#app:not(.hide)) .btn-ghost{background:var(--card);border:1.5px solid var(--vn-ln)}
+body:has(#app:not(.hide)) .snooze{border-radius:20px;font-weight:700}
+
+/* (+) flutuante */
+body:has(#app:not(.hide)) .fab{background:#E65100!important;border-radius:18px!important;box-shadow:0 6px 16px rgba(230,81,0,.36)!important}
+
+/* cartões soltos ficam lisos: carteira, relatório do dia, avisos */
+body:has(#app:not(.hide)) .poup{background:var(--card)!important;color:var(--text)!important;border-radius:16px}
+body:has(#app:not(.hide)) .poup .poup-ic{background:#022C45!important;color:#fff}
+body:has(#app:not(.hide)) .poup .poup-tx b{color:#022C45}
+html[data-theme="dark"] body:has(#app:not(.hide)) .poup .poup-tx b{color:var(--text)}
+body:has(#app:not(.hide)) .poup .poup-tx small,body:has(#app:not(.hide)) .poup .poup-tx span{color:var(--muted);opacity:1}
+body:has(#app:not(.hide)) .poup .poup-pend{background:#FFF1D6!important;color:#8A4E00!important}
+body:has(#app:not(.hide)) .poup .poup-ver{background:var(--accent-soft)!important;color:var(--accent)!important}
+body:has(#app:not(.hide)) .rel-dia{box-shadow:none!important;border-radius:16px}
+body:has(#app:not(.hide)) .banner{border-radius:14px}
+
+/* presença em faixa fina depois de marcar */
+.ci-fino{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:#E2F3EA;color:#11703F;font-weight:700;font-size:14.5px}
+.ci-fino>i{width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
+.ci-fino>span{flex:1;min-width:0}
+.ci-fino>button{border:0;background:none;color:inherit;font-weight:800;font-size:13.5px;font-family:inherit;padding:8px 6px;border-radius:8px;min-height:36px}
+.ci-fino>button:active{background:rgba(0,0,0,.06)}
+.ci-fino.fora{background:#E3EEFA;color:#0A549E}
+.ci-fino.fim{background:var(--card);color:var(--muted)}
+html[data-theme="dark"] .ci-fino{background:#10291D;color:#7FD4A6}
+html[data-theme="dark"] .ci-fino.fora{background:#11243A;color:#8DBDF0}
+
+/* toque leve e com resposta na hora */
+body:has(#app:not(.hide)) :is(button,.btn,.stat[onclick],.snooze,.chip,a,.vcard .v-body,[onclick]){touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+body:has(#app:not(.hide)) :is(.btn,.snooze,.icon-btn,.mobilebar button,.menu-list button,.fab,.stat[onclick],.ci-fino>button,.chip,.poup){transition:transform .08s ease,background-color .12s ease,filter .12s ease}
+body:has(#app:not(.hide)) :is(.btn,.snooze,.icon-btn,.menu-list button,.stat[onclick],.chip,.poup):active{transform:scale(.97)}
+body:has(#app:not(.hide)) .mobilebar button:active{transform:scale(.9)}
+body:has(#app:not(.hide)) .fab:active{transform:scale(.92)}
+body:has(#app:not(.hide)) .btn-primary:active{filter:brightness(.92)}
+/* movimento curto: troca de tela rápida, sem cascata de cartões */
+body:has(#app:not(.hide)) .view.on{animation:fr-entra .16s ease-out both}
+body:has(#app:not(.hide)) .view.on :is(.stats>*,.pd-kpis>*,.grid>*>.card,.col>.card,.set-grid>.card,.ap-escolha>*),body:has(#app:not(.hide)) .view.on>.card{animation:none!important}
+body:has(#app:not(.hide)) .modal.open{animation:fr-fundo .14s ease both}
+body:has(#app:not(.hide)) .modal.open .sheet{animation:fr-zoom .18s ease-out both}
+body:has(#app:not(.hide)) :is(.stat[onclick],.ap-op,.vcard):hover{transform:none!important}
+
+body:has(#app:not(.hide)) .au-hoje .au-ic{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}body:has(#app:not(.hide)) .au-hoje .au-ic svg{width:22px;height:22px}
+body:has(#app:not(.hide)) .aviso-card .ai{color:var(--accent)}
+.med{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;font:800 13px Figtree,sans-serif;color:#fff;font-style:normal;line-height:1}.med1{background:#C99A1E}.med2{background:#8A97A3}.med3{background:#B06A3B}
+.pd-col .med{width:34px;height:34px;font-size:16px}
+/* menu "Você" em lista de app */
+body:has(#app:not(.hide)) #menuModal .menu-list button{border-radius:12px;font-weight:600}
+
+/* arrastar a visita: direita confirma no WhatsApp, esquerda liga */
+.vcard[data-vid]{touch-action:pan-y}
+body:has(#app:not(.hide)) .vcard.swp{overflow:visible!important;transition:none!important;z-index:3;transform:translateX(var(--sx,0px))}
+body:has(#app:not(.hide)) .vcard.swp.d{box-shadow:calc(var(--sx,0px) * -1) 0 0 0 #11703F!important}
+body:has(#app:not(.hide)) .vcard.swp.e{box-shadow:calc(var(--sx,0px) * -1) 0 0 0 #022C45!important}
+.vcard.swp::after{content:attr(data-acao);position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-weight:800;font-size:14.5px;white-space:nowrap;opacity:.75}
+.vcard.swp.pronto::after{opacity:1}
+.vcard.swp.d::after{right:calc(100% + 16px)}
+.vcard.swp.e::after{left:calc(100% + 16px)}
+body:has(#app:not(.hide)) .vcard.solta{transition:transform .2s ease,box-shadow .2s ease!important;overflow:visible!important}
+@media (prefers-reduced-motion:reduce){
+  body:has(#app:not(.hide)) .view.on,body:has(#app:not(.hide)) .modal.open,body:has(#app:not(.hide)) .modal.open .sheet{animation:none!important}
+  .vcard.solta{transition:none!important}
+}
+</style>
+<style id="vn141">
+/* v141: visual mais suave — cores mais leves, letra menos pesada, cantos maiores, sombra sutil e movimento macio */
+body:has(#app:not(.hide)){--vn-bg:#F6F7F9;--vn-ln:#ECEEF1;--text:#1F2D3A;--text2:#3D4B57;--muted:#6B7783;--vn-sombra:0 1px 2px rgba(31,45,58,.04),0 4px 14px rgba(31,45,58,.045);--vn-or:#E8743B;--vn-or-b:#C25526;--vn-or-s:#FDEFE6;--accent:#C25526}
+html[data-theme="dark"] body:has(#app:not(.hide)){--vn-sombra:none;--vn-or:#F08A4B;--vn-or-b:#F08A4B;--vn-or-s:rgba(240,138,75,.14)}
+body:has(#app:not(.hide)) .page-head h1{font-weight:700;letter-spacing:-.015em}
+body:has(#app:not(.hide)) .card-head h2,body:has(#app:not(.hide)) .card h2{font-weight:700}
+body:has(#app:not(.hide)) .stat b,body:has(#app:not(.hide)) .pd-kpi b{font-weight:700}
+body:has(#app:not(.hide)) :is(.card,.stat,.pd-kpi,.ap-op){border-radius:20px!important;box-shadow:var(--vn-sombra)!important}
+body:has(#app:not(.hide)) .vcard{border-radius:18px!important;box-shadow:var(--vn-sombra)!important}
+body:has(#app:not(.hide)) .vcard:before{width:3px;border-radius:0 3px 3px 0;opacity:.7}
+body:has(#app:not(.hide)) .stat-ic{border-radius:14px!important;background:var(--vn-or-s)!important;color:var(--vn-or-b)!important}
+body:has(#app:not(.hide)) .btn{border-radius:14px;font-weight:600}
+body:has(#app:not(.hide)) .btn-primary{background:var(--vn-or-b)!important;box-shadow:0 4px 12px rgba(194,85,38,.20)!important}
+body:has(#app:not(.hide)) .btn-ghost{border-color:var(--vn-ln);color:var(--text2)}
+body:has(#app:not(.hide)) .snooze{border-radius:22px;font-weight:600;border-color:var(--vn-ln)}
+body:has(#app:not(.hide)) .vst{border-radius:22px;font-weight:600}
+body:has(#app:not(.hide)) input,body:has(#app:not(.hide)) select,body:has(#app:not(.hide)) textarea{border-radius:14px;border-color:var(--vn-ln)}
+body:has(#app:not(.hide)) .fab{background:var(--vn-or)!important;border-radius:20px!important;box-shadow:0 8px 20px rgba(232,116,59,.30)!important}
+body:has(#app:not(.hide)) .modal{background:rgba(20,32,44,.32)!important}
+body:has(#app:not(.hide)) .modal .sheet{border-radius:24px!important;box-shadow:0 20px 60px rgba(20,32,44,.16)!important}
+body:has(#app:not(.hide)) .banner{border-radius:18px;border-width:0}
+body:has(#app:not(.hide)) .poup{border-radius:20px;box-shadow:var(--vn-sombra)!important}
+body:has(#app:not(.hide)) .ci-fino{border-radius:18px;font-weight:600}
+/* barra de baixo suave: aba aberta com um fundo claro atrás do ícone */
+@media (max-width:760px){
+  body:has(#app:not(.hide)) .mobilebar{box-shadow:0 -1px 0 var(--vn-ln),0 -6px 18px rgba(31,45,58,.04)}
+  body:has(#app:not(.hide)) .mobilebar button{font-weight:600}
+  body:has(#app:not(.hide)) .mobilebar button i{display:grid;place-items:center;width:56px;height:30px;border-radius:16px;transition:background-color .2s ease}
+  body:has(#app:not(.hide)) .mobilebar button.active{color:var(--vn-or-b)}
+  body:has(#app:not(.hide)) .mobilebar button.active i{background:var(--vn-or-s)}
+}
+/* movimento macio */
+@keyframes vn-suave{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes vn-sobe{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+body:has(#app:not(.hide)) .view.on{animation:vn-suave .26s cubic-bezier(.2,.8,.2,1) both}
+body:has(#app:not(.hide)) .modal.open{animation:fr-fundo .22s ease both}
+body:has(#app:not(.hide)) .modal.open .sheet{animation:vn-sobe .3s cubic-bezier(.2,.8,.2,1) both}
+body:has(#app:not(.hide)) :is(.btn,.snooze,.icon-btn,.mobilebar button,.menu-list button,.fab,.stat[onclick],.chip,.poup){transition:transform .14s cubic-bezier(.2,.8,.2,1),background-color .2s ease,box-shadow .2s ease,filter .2s ease}
+body:has(#app:not(.hide)) :is(.btn,.snooze,.icon-btn,.menu-list button,.stat[onclick],.chip,.poup):active{transform:scale(.98)}
+@media (prefers-reduced-motion:reduce){body:has(#app:not(.hide)) .view.on,body:has(#app:not(.hide)) .modal.open .sheet{animation:none!important}}
+/* v141: acabamento premium — tudo em blocos claros com sombra sutil, sem fundos coloridos berrantes */
+body:has(#app:not(.hide)) :is(.banner,.aviso-card,.au-hoje,.team-card){background:var(--card)!important;border:0!important;border-radius:20px!important;box-shadow:var(--vn-sombra)!important;color:var(--text)!important}
+body:has(#app:not(.hide)) .team-card.lead{box-shadow:inset 0 0 0 2px var(--vn-or),var(--vn-sombra)!important}
+body:has(#app:not(.hide)) .aviso-card .ai,body:has(#app:not(.hide)) .banner>svg{width:38px;height:38px;border-radius:12px;background:var(--vn-or-s);color:var(--vn-or-b)!important;display:grid;place-items:center;flex:none;padding:9px;box-sizing:border-box}
+body:has(#app:not(.hide)) .pd-col{background:#F1F3F5!important;border:0!important;border-radius:16px 16px 6px 6px!important}
+body:has(#app:not(.hide)) .p1 .pd-col{background:var(--vn-or-s)!important}
+html[data-theme="dark"] body:has(#app:not(.hide)) .pd-col{background:rgba(255,255,255,.05)!important}
+/* filtros e buscas das telas em pílula clara (os formulários das janelas continuam como estão) */
+body:has(#app:not(.hide)) .view select{-webkit-appearance:none;appearance:none;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7783' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center/14px;border:0!important;border-radius:22px!important;padding:10px 34px 10px 15px!important;font-weight:600;box-shadow:var(--vn-sombra)}
+body:has(#app:not(.hide)) .view input[type="search"],body:has(#app:not(.hide)) .view .busca input,body:has(#app:not(.hide)) .view input[placeholder^="Buscar"]{background:#ECEEF1!important;border:0!important;border-radius:14px!important}
+html[data-theme="dark"] body:has(#app:not(.hide)) .view input[placeholder^="Buscar"]{background:rgba(255,255,255,.06)!important}
+body:has(#app:not(.hide)) .snooze{display:inline-flex;align-items:center;gap:5px}body:has(#app:not(.hide)) .snooze svg{width:14px;height:14px;flex:none}
+/* carteira em verde clarinho (no Hoje e na janela da carteira) */
+body:has(#app:not(.hide)) .poup{background:#E9F7EF!important;color:#174D33!important;box-shadow:none!important}
+body:has(#app:not(.hide)) .poup .poup-ic{background:#1E8E5A!important;color:#fff!important}
+body:has(#app:not(.hide)) .poup .poup-tx b{color:#0F5E3A!important}
+body:has(#app:not(.hide)) .poup .poup-tx small,body:has(#app:not(.hide)) .poup .poup-tx span{color:#3F6E56!important}
+body:has(#app:not(.hide)) .poup .poup-ver{background:#fff!important;color:#11703F!important}
+body:has(#app:not(.hide)) .cart-topo{background:#E9F7EF!important;color:#174D33!important}
+body:has(#app:not(.hide)) .cart-topo b{color:#0F5E3A}
+body:has(#app:not(.hide)) .cart-topo small{color:#3F6E56;opacity:1}
+body:has(#app:not(.hide)) .cart-pend{background:#FFF1D6!important;box-shadow:none!important}body:has(#app:not(.hide)) .cart-pend small{color:#8A4E00!important}body:has(#app:not(.hide)) .cart-pend b{color:#7A4400!important}
+html[data-theme="dark"] body:has(#app:not(.hide)) :is(.poup,.cart-topo){background:#12291E!important;color:#CFEBDB!important}
+html[data-theme="dark"] body:has(#app:not(.hide)) :is(.poup .poup-tx b,.cart-topo b){color:#9BE0B9!important}
+html[data-theme="dark"] body:has(#app:not(.hide)) :is(.poup .poup-tx small,.poup .poup-tx span,.cart-topo small){color:#8FBBA3!important}
+body:has(#app:not(.hide)) .btn-primary:disabled{background:#E4E7EB!important;color:#6B7680!important;box-shadow:none!important;cursor:default}
+/* v141: jeito de aplicativo no celular */
+@media (max-width:760px){
+  /* topo enxuto: só a marca pequena e os ícones (o título grande fica na tela) */
+  body:has(#app:not(.hide)) .topbar{border-bottom:0!important;padding-top:6px;padding-bottom:6px}
+  body:has(#app:not(.hide)) #btnTema{display:none}
+  body:has(#app:not(.hide)) .topbar.rolou{border-bottom:1px solid var(--vn-ln)!important;box-shadow:0 4px 14px rgba(31,45,58,.05)}
+  /* números do dia em carrossel deslizante */
+  body:has(#app:not(.hide)) .stats{display:flex!important;overflow-x:auto;gap:10px;scroll-snap-type:x mandatory;scroll-padding:0 16px;padding:2px 16px 6px;margin-left:-16px;margin-right:-16px;scrollbar-width:none}
+  body:has(#app:not(.hide)) .stats::-webkit-scrollbar{display:none}
+  body:has(#app:not(.hide)) .stats>.stat{flex:0 0 auto;min-width:148px;scroll-snap-align:start;padding:14px}
+  body:has(#app:not(.hide)) .stats>.stat.hide{display:none}
+  /* visita: ações secundárias no "⋯" */
+  body:has(#app:not(.hide)) .vcard:not(.aberto) .v-actions :is(.icon-btn:not(.v-mais),.lig-zap){display:none!important}
+  body:has(#app:not(.hide)) .vcard.aberto .v-mais{color:var(--vn-or-b)}
+}
+.v-mais{display:none}
+@media (max-width:760px){body:has(#app:not(.hide)) .v-mais{display:inline-grid;place-items:center;margin-left:auto}}
+/* puxar para atualizar */
+.ptr{position:fixed;left:50%;top:64px;z-index:40;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:var(--card);box-shadow:0 4px 14px rgba(31,45,58,.16);display:grid;place-items:center;color:var(--vn-or-b,#C25526);transform:translateY(-80px);opacity:0;pointer-events:none}
+.ptr svg{width:22px;height:22px}
+.ptr.gira svg{animation:ptrGira .7s linear infinite}@keyframes ptrGira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.ptr.gira svg{animation:none}}
+/* títulos de app no celular: grandes, sem subtítulo repetindo o óbvio */
+@media (max-width:760px){
+  body:has(#app:not(.hide)) .page-head h1{font-size:31px}
+  body:has(#app:not(.hide)) .view:not(#v-hoje) .page-head .sub{display:none}
+  body:has(#app:not(.hide)) .page-head{margin-bottom:16px}
+}
+</style>
 </head>
 <body>
 
@@ -1965,6 +2173,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
           <div id="relDiaHoje"></div>
           <div class="mural" id="mural"></div>
           <div id="aulasHoje"></div>
+          <div id="indPedHoje"></div>
         </div>
         <div id="metaHoje"></div>
         <div class="stats hide" id="statsPapel"></div>
@@ -2475,6 +2684,10 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <!-- CONFIGURAÇÕES -->
       <section class="view" id="v-config">
         <div class="page-head"><div><h1>Configurações</h1><div class="sub">Personalize a sua agenda. <span class="ver-app" id="verApp"></span></div></div></div>
+        <div class="card rep-card" style="margin-bottom:20px"><div class="card-head"><h2>Achou um erro ou tem uma ideia?</h2></div><div class="hint" style="margin:0 0 10px">Conte o que aconteceu ou o que poderia melhorar no app. Vai direto para o Allan.</div><button class="btn btn-primary" onclick="abrirReporte()">Reportar erro ou sugestão</button></div>
+        <div class="card dono-only hide" id="cardRep" style="margin-bottom:20px"><div class="card-head"><h2>Erros e sugestões da equipe</h2><span class="muted" id="fbNovos"></span></div>
+          <div class="fg"><label>Seu WhatsApp para receber os reportes</label><input id="fbFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999" onchange="salvarRepFone()"></div>
+          <button class="btn btn-primary" onclick="abrirRepLista()">Ver erros e sugestões</button></div>
         <div class="card dono-only hide" id="cardManut" style="margin-bottom:20px"><div class="card-head"><h2>Manutenção</h2><span class="muted">Só o dono</span></div>
           <div class="hint" style="margin:0 0 10px">Com a manutenção ligada, ninguém usa o app (aparece um aviso na tela de todos). Só você continua entrando para arrumar. Ao desligar, todos voltam na hora.</div>
           <div class="fg"><label>Mensagem para a equipe</label><input id="manutMsg" maxlength="160" placeholder="Estamos ajustando o app. Volte em alguns minutos."></div>
@@ -2522,6 +2735,14 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
             <div class="hint" style="margin:0 0 10px">Marcado = a aba aparece para aquele cargo. Desmarque para esconder. Uma aba liberada para um cargo novo mostra só o que esse cargo tem permissão de ver. Gerentes e CEO não mudam.</div>
             <div id="admAbas"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarAbas()">Salvar abas</button>
+          </div>
+          <div class="card dono-only hide" id="cardIndPed">
+            <div class="card-head"><h2>Pedido de indicação depois da venda</h2><span class="muted">Só o dono</span></div>
+            <div class="hint" style="margin:0 0 10px">Depois da venda, o app lembra o corretor de pedir uma indicação ao cliente, com a mensagem pronta no WhatsApp. Quem traz a indicação ganha os pontos de indicação.</div>
+            <label class="fv-chk"><input type="checkbox" id="ipAtivo"> Lembrete ligado</label>
+            <div class="fg"><label>Depois de quantos dias da venda <span class="muted">(separe por vírgula)</span></label><input id="ipDias" placeholder="30, 90"></div>
+            <div class="fg"><label>Mensagem <span class="muted">({cliente} e {corretor} viram os nomes)</span></label><textarea id="ipMsg" rows="4" maxlength="600"></textarea></div>
+            <button class="btn btn-primary" onclick="salvarIndPedCfg()">Salvar</button>
           </div>
           <div class="card dono-only hide" id="cardAdmListas">
             <div class="card-head"><h2>Listas do app</h2><span class="muted">Só o gestor</span></div>
@@ -2604,16 +2825,16 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
 <nav class="mobilebar hide" id="mobilebar">
-  <button data-view="hoje" class="nao-ceo" onclick="setView('hoje')"><i data-ic="home"></i>Hoje</button>
-  <button data-view="visitas" class="nao-ceo" onclick="setView('visitas')"><i data-ic="house"></i>Visitas</button>
+  <button data-view="hoje" class="nao-ceo" onclick="setView('hoje')"><i data-ic="tbHoje"></i>Hoje</button>
+  <button data-view="visitas" class="nao-ceo" onclick="setView('visitas')"><i data-ic="tbVis"></i>Visitas</button>
   <button data-view="painel" class="so-ceo" onclick="setView('painel')"><i data-ic="painel"></i>Painel</button>
   <button data-view="desempenho" class="so-ceo" onclick="setView('desempenho')"><i data-ic="trend"></i>Equipe</button>
   <button data-view="vendas" class="so-ceo" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas</button>
-  <button data-view="calendario" onclick="setView('calendario')"><i data-ic="cal"></i>Agenda</button>
-  <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas</button>
+  <button data-view="calendario" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
+  <button data-view="ranking" class="nao-sdr" onclick="setView('ranking')"><i data-ic="tbRank"></i>Ranking</button>
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button data-view="analises" class="so-corresp" onclick="setView('analises')"><i data-ic="pasta"></i>Pastas</button>
-  <button onclick="abrir('menuModal')"><i data-ic="menu"></i>Menu</button>
+  <button id="mbVoce" onclick="abrir('menuModal')"><i data-ic="tbVoce"></i>Você</button>
 </nav>
 
 <!-- ================= MODAL DE TAREFA ================= -->
@@ -3092,6 +3313,29 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </div>
 <div id="manutTela" class="manut-tela hide"><div class="manut-box"><div class="manut-ic"></div><h2>App em manutenção</h2><p id="manutTxt">Estamos ajustando o app. Volte em alguns minutos.</p><small id="manutDesde"></small><button class="btn btn-ghost" onclick="location.reload()">Tentar de novo</button></div></div>
 <div id="manutFaixa" class="manut-faixa hide">App em manutenção: só você está usando. <button onclick="alternarManutencao()">Sair da manutenção</button></div>
+<div class="modal" id="fbModal">
+  <div class="sheet" style="width:min(480px,100%)">
+    <div class="sheet-head"><h2>Reportar erro ou sugestão</h2><button class="icon-btn" onclick="fechar('fbModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="fbForm">
+      <p class="hint" style="margin-top:0">Achou algo errado ou tem uma ideia para o app? Conte aqui. Vai direto para o Allan.</p>
+      <div class="fg"><label>O que é</label><div class="rep-tipos" id="fbTipos">
+        <label><input type="radio" name="repTipo" value="erro" checked><span>Erro no app</span></label>
+        <label><input type="radio" name="repTipo" value="melhoria"><span>Ideia ou melhoria</span></label>
+        <label><input type="radio" name="repTipo" value="duvida"><span>Dúvida</span></label></div></div>
+      <div class="fg"><label>Em qual parte do app</label><select id="fbTela"></select></div>
+      <div class="fg"><label id="fbTxtLb">O que aconteceu</label><textarea id="fbTxt" rows="5" maxlength="2000" placeholder="Ex.: toquei em Salvar visita e apareceu erro. Ou: seria bom ter..."></textarea></div>
+      <div class="fg"><label>Print da tela <span class="muted">(opcional)</span></label><input type="file" id="fbFoto" accept="image/*"><small class="muted" id="fbFotoInfo"></small></div>
+    </div>
+    <div class="sheet-body hide" id="fbOk"><div class="rep-ok"><b>Recebido, obrigado!</b><span id="fbOkTxt">O Allan já foi avisado.</span><button class="btn btn-ghost hide" id="fbZapBt">Mandar também pelo WhatsApp</button></div></div>
+    <div class="sheet-foot" id="fbFoot"><button class="btn btn-ghost" onclick="fechar('fbModal')">Cancelar</button><button class="btn btn-primary" id="fbEnviarBt" onclick="enviarReporte()">Enviar</button></div>
+  </div>
+</div>
+<div class="modal" id="fbListaModal">
+  <div class="sheet" style="width:min(640px,100%)">
+    <div class="sheet-head"><h2>Erros e sugestões</h2><button class="icon-btn" onclick="fechar('fbListaModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="seg" id="fbFiltro" style="margin-bottom:12px"></div><div id="fbLista"></div></div>
+  </div>
+</div>
 <div class="modal" id="ptDetModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><h2 id="ptDetTit">Pontos</h2><button class="icon-btn" onclick="fechar('ptDetModal')" data-ic="x"></button></div>
@@ -3319,6 +3563,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
     <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
     <div class="sheet-body menu-list">
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
+      <button class="nao-sdr" onclick="fechar('menuModal');setView('cartas')"><i data-ic="card"></i>Cartas aprovadas</button>
       <button class="so-ceo" onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
       <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
       <button onclick="fechar('menuModal');setView('bolsao')"><i data-ic="users"></i>Bolsão de clientes</button>
@@ -3340,6 +3585,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
       <button class="gest hide" onclick="fechar('menuModal');setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('recepcao')"><i data-ic="tela"></i>Tela da recepção (check-in)</button>
       <button class="instalar hide" onclick="fechar('menuModal');instalarApp()"><i data-ic="phone"></i>Instalar aplicativo</button>
+      <button onclick="fechar('menuModal');abrirReporte()"><i data-ic="doc"></i>Reportar erro ou sugestão</button>
       <button onclick="fechar('menuModal');setView('config')"><i data-ic="gear"></i>Configurações</button>
       <button onclick="fechar('menuModal');sair()"><i data-ic="logout"></i>Sair</button>
     </div>
@@ -3374,6 +3620,15 @@ catch(e) { db = getFirestore(fb); }
 
 // ================= Ícones =================
 const IC = {
+  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5 5.3 16A8 8 0 1 1 8 18.7z"/></svg>',
+  arquivo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg>',
+  avisar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>',
+  // v140: ícones da barra de baixo (contorno; cheio quando a aba está aberta)
+  tbHoje:'<svg class="tb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="o"><path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1h-4.5v-6h-6v6H4.5a1 1 0 0 1-1-1z"/></g><g class="f" fill="currentColor" stroke="none"><path d="M11.4 2.6a1 1 0 0 1 1.2 0l8.6 7.1a1 1 0 0 1 .3.8V20a1.5 1.5 0 0 1-1.5 1.5H15v-6.5H9v6.5H4.5A1.5 1.5 0 0 1 3 20v-9.5a1 1 0 0 1 .3-.8z"/></g></svg>',
+  tbVis:'<svg class="tb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="o"><path d="M4 20V9.5l8-5.5 8 5.5V20"/><path d="M9 14l2 2 4-4"/></g><g class="f" fill="currentColor" stroke="none"><path d="M11.4 3.2a1 1 0 0 1 1.2 0l8 5.6a1 1 0 0 1 .4.8V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.6a1 1 0 0 1 .4-.8zm4.3 8.1a1 1 0 0 0-1.4 0L11 14.6l-1.3-1.3a1 1 0 1 0-1.4 1.4l2 2a1 1 0 0 0 1.4 0l4-4a1 1 0 0 0 0-1.4z"/></g></svg>',
+  tbAg:'<svg class="tb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="o"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></g><g class="f" fill="currentColor" stroke="none"><path d="M8 2.2a1 1 0 0 1 1 1V4h6v-.8a1 1 0 1 1 2 0V4h1a3 3 0 0 1 3 3v2H3V7a3 3 0 0 1 3-3h1v-.8a1 1 0 0 1 1-1zM3 10.5h18V18a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z"/></g></svg>',
+  tbRank:'<svg class="tb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="o"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/></g><g class="f" fill="currentColor" stroke="none"><path d="M7 3h10a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1 4.5 4.5 0 0 1-4 4.5 6 6 0 0 1-4 3.4V16h2a1 1 0 0 1 1 1v2h1a1 1 0 1 1 0 2H7a1 1 0 1 1 0-2h1v-2a1 1 0 0 1 1-1h2v-3.1a6 6 0 0 1-4-3.4A4.5 4.5 0 0 1 3 6a1 1 0 0 1 1-1h2V4a1 1 0 0 1 1-1zm-1 4H5.1A2.5 2.5 0 0 0 6.3 8.6 6 6 0 0 1 6 7zm12 0a6 6 0 0 1-.3 1.6A2.5 2.5 0 0 0 18.9 7z"/></g></svg>',
+  tbVoce:'<svg class="tb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="o"><circle cx="12" cy="8" r="4"/><path d="M4 20.5a8 8 0 0 1 16 0"/></g><g class="f" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4.5"/><path d="M3.5 20.3a8.5 8.5 0 0 1 17 0 .7.7 0 0 1-.7.7H4.2a.7.7 0 0 1-.7-.7z"/></g></svg>',
   calc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h8"/></svg>',
   dinheiro:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v4M18 10v4"/></svg>',
   zap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>',
@@ -3544,7 +3799,7 @@ onAuthStateChanged(auth, user => {
       state = estadoInicial(user); salvar(); pedirCadastro(); return;
     }
     const d = snap.data();
-    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {} };
+    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {} };
     render();
     pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
@@ -3897,6 +4152,7 @@ function render(){
   if ($('relDiaHoje')) { const hr = htmlRelDia(); if ($('relDiaHoje')._h !== hr) { $('relDiaHoje').innerHTML = hr; $('relDiaHoje')._h = hr; } }
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
   if (!window._hashZap && podeZap() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
+  if (!window._hashRep && perfil && souAtivo() && location.hash === '#reportar') { window._hashRep = true; window._hashGen = true; history.replaceState(null, '', location.pathname); setTimeout(() => abrirReporte(), 300); }
   if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
@@ -4168,6 +4424,132 @@ let perfisTodos = [];
 let rkPessoas = [];
 const pessoasRk = () => rkPessoas.length ? rkPessoas : perfisTodos;
 window.pessoasRk = pessoasRk;
+// v138: erros e sugestões da equipe (formulário dentro do app; link direto: /#reportar)
+let reportes = [], fbFiltroSel = 'novo', _fbFoto = '';
+const REP_TIPOS = { erro:'Erro no app', melhoria:'Ideia ou melhoria', duvida:'Dúvida' };
+function assinarReportes(){
+  reportes = []; if (!souAtivo()) return;
+  const q = souDono() ? query(collection(db,'reportes'), where('em','>=', Date.now() - 180 * 864e5)) : query(collection(db,'reportes'), where('uid','==', uidAtual));
+  subsPapel.push(onSnapshot(q, s => { reportes = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a, b) => (b.em || 0) - (a.em || 0)); pintarRepNovos(); if ($('fbListaModal')?.classList.contains('open')) desenharRepLista(); }, e => console.warn('reportes', e.code || e.message)));
+}
+function pintarRepNovos(){ const n = reportes.filter(r => r.status === 'novo').length, el = $('fbNovos'); if (el) el.textContent = n ? n + (n === 1 ? ' novo' : ' novos') : ''; }
+window.abrirReporte = () => {
+  const telas = Object.entries(TITULOS).filter(([k]) => !['tvrank','recepcao','apresentacao'].includes(k)).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR'));
+  $('fbTela').innerHTML = `<option value="geral">No app em geral</option>` + telas.map(([k, t]) => `<option value="${k}" ${k === view ? 'selected' : ''}>${esc(t)}</option>`).join('');
+  $('fbTxt').value = ''; $('fbFoto').value = ''; $('fbFotoInfo').textContent = ''; _fbFoto = '';
+  document.querySelector('input[name="repTipo"][value="erro"]').checked = true; repTipoMuda();
+  $('fbForm').classList.remove('hide'); $('fbOk').classList.add('hide'); $('fbFoot').classList.remove('hide'); $('fbEnviarBt').disabled = false;
+  abrir('fbModal'); setTimeout(() => $('fbTxt').focus(), 80);
+};
+function repTipoMuda(){ const t = document.querySelector('input[name="repTipo"]:checked')?.value || 'erro';
+  $('fbTxtLb').textContent = t === 'erro' ? 'O que aconteceu' : t === 'melhoria' ? 'Sua ideia' : 'Sua dúvida';
+  $('fbTxt').placeholder = t === 'erro' ? 'Ex.: toquei em Salvar visita e apareceu uma mensagem de erro.' : t === 'melhoria' ? 'Ex.: seria bom ter um aviso quando...' : 'Ex.: como faço para...'; }
+document.addEventListener('change', ev => { if (ev.target?.name === 'repTipo') repTipoMuda();
+  if (ev.target?.id === 'fbFoto') { const f = ev.target.files?.[0]; _fbFoto = ''; $('fbFotoInfo').textContent = f ? 'Preparando a foto...' : '';
+    if (f) comprimirFoto(f, 1100, 0.6).then(d => { _fbFoto = d.length < 850000 ? d : ''; $('fbFotoInfo').textContent = _fbFoto ? 'Print anexado.' : 'Foto grande demais; envie sem ela.'; }).catch(() => { $('fbFotoInfo').textContent = 'Não consegui ler essa imagem.'; }); } });
+const repTexto = r => `*${REP_TIPOS[r.tipo] || 'Reporte'}* no app Frade\n${r.nome}${r.papel ? ' (' + (PAPEIS[r.papel] || r.papel) + (r.equipe ? ' · ' + eqNome(r.equipe).replace(/^[^\p{L}]+/u, '') : '') + ')' : ''}\nOnde: ${r.telaNome}\n\n${r.texto}\n\nVersão v${r.versao}${r.foto ? ' · tem print no app' : ''}`;
+window.enviarReporte = async () => {
+  const texto = $('fbTxt').value.trim(); if (texto.length < 5) { toast('Escreva o que aconteceu'); $('fbTxt').focus(); return; }
+  const tipo = document.querySelector('input[name="repTipo"]:checked')?.value || 'erro', tela = $('fbTela').value || 'geral';
+  const d = { uid:uidAtual, nome:perfil.nome || '', papel:perfil.papel || '', equipe:perfil.equipe || '', tipo, tela, telaNome:tela === 'geral' ? 'No app em geral' : (TITULOS[tela] || tela), texto:texto.slice(0, 2000),
+    versao:APP_VERSAO, aparelho:String(navigator.userAgent || '').replace(/\s*\(KHTML.*$/, '').slice(0, 160), tela_w:innerWidth, em:Date.now(), dia:hojeISO(), status:'novo', ...(_fbFoto ? { foto:_fbFoto } : {}) };
+  $('fbEnviarBt').disabled = true;
+  try { const ref = doc(collection(db,'reportes')); await gravar(setDoc(ref, d));
+    avisarCarteiro('reporte', ref.id);
+    $('fbForm').classList.add('hide'); $('fbFoot').classList.add('hide'); $('fbOk').classList.remove('hide');
+    // o robô do WhatsApp manda sozinho quando está ligado; senão, a própria pessoa manda pelo WhatsApp dela
+    const fone = soDig(appCfg.reporteFone || ''), robo = await getDoc(doc(db,'zap_status','robo')).then(x => x.exists() ? x.data() : null).catch(() => null);
+    const roboOn = robo && robo.estado === 'conectado' && Date.now() - (Number(robo.vivoEm) || 0) < 180000;
+    $('fbOkTxt').textContent = roboOn ? 'O Allan já recebeu no WhatsApp e no app.' : 'O Allan já foi avisado no app.';
+    const bt = $('fbZapBt'); bt.classList.toggle('hide', !fone || roboOn);
+    bt.onclick = () => { let n = fone; if (n.length <= 11) n = '55' + n; window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(repTexto(d)), '_blank'); fechar('fbModal'); };
+  } catch(e) { $('fbEnviarBt').disabled = false; toast('Erro: ' + e.message); }
+};
+window.salvarRepFone = async () => { if (!souDono()) return; const v = $('fbFone').value.trim();
+  try { await gravar(setDoc(doc(db,'config','app'), { reporteFone:v }, { merge:true })); appCfg.reporteFone = v; toast('WhatsApp salvo'); } catch(e) { toast('Erro: ' + e.message); } };
+window._fbF = k => { fbFiltroSel = k; desenharRepLista(); };
+window.abrirRepLista = () => { desenharRepLista(); abrir('fbListaModal'); };
+function desenharRepLista(){
+  const F = [['novo','Novos'], ['feito','Resolvidos'], ['todos','Todos']], cont = k => k === 'todos' ? reportes.length : reportes.filter(r => r.status === k).length;
+  $('fbFiltro').innerHTML = F.map(([k, t]) => `<button class="${fbFiltroSel === k ? 'on' : ''}" onclick="window._fbF('${k}')">${t} (${cont(k)})</button>`).join('');
+  const l = reportes.filter(r => fbFiltroSel === 'todos' || r.status === fbFiltroSel);
+  const quando = ms => { const d = new Date(ms); return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' }) + ' ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }); };
+  $('fbLista').innerHTML = l.length ? l.map(r => { const tel = soDig((perfisTodos.find(p => p.uid === r.uid) || {}).telefone || '');
+    return `<div class="rep-it ${r.status === 'feito' ? 'feito' : ''}"><div class="rep-top"><span class="rep-chip ${esc(r.tipo)}">${esc(REP_TIPOS[r.tipo] || r.tipo)}</span><b>${esc(r.nome || '')}</b><span>${esc(PAPEIS[r.papel] || r.papel || '')}${r.equipe ? ' · ' + esc(eqNome(r.equipe).replace(/^[^\p{L}]+/u, '')) : ''}</span><span>${quando(r.em)}</span></div>
+      <div class="rep-top" style="margin-top:4px"><span>Onde: ${esc(r.telaNome || r.tela || '')}</span><span>v${esc(String(r.versao || ''))}</span></div><p>${esc(r.texto || '')}</p>${r.foto ? `<img src="${r.foto}" alt="Print enviado" onclick="window.open().document.write('<img src=&quot;'+this.src+'&quot; style=&quot;max-width:100%&quot;>')">` : ''}
+      <div class="rep-acoes">${r.status === 'feito' ? `<button class="btn btn-ghost" onclick="marcarRep('${r.id}','novo')">Reabrir</button>` : `<button class="btn btn-primary" onclick="marcarRep('${r.id}','feito')">Marcar como resolvido</button>`}${tel ? `<button class="btn btn-ghost" onclick="window.open('https://wa.me/${tel.length <= 11 ? '55' + tel : tel}?text='+encodeURIComponent('Oi, ${esc(primeiro(r.nome || ''))}! Sobre o que você reportou no app: '),'_blank')">Responder no WhatsApp</button>` : ''}</div></div>`; }).join('')
+    : `<div class="muted" style="font-size:13.5px">${fbFiltroSel === 'novo' ? 'Nenhum reporte novo.' : 'Nada por aqui.'}</div>`;
+}
+window.marcarRep = async (id, st) => { try { await gravar(updateDoc(doc(db,'reportes', id), { status:st, feitoEm:st === 'feito' ? Date.now() : 0, feitoPor:perfil.nome || '' })); } catch(e) { toast('Erro: ' + e.message); } };
+// v140: arrastar a visita (direita confirma no WhatsApp, esquerda liga) e vibração curta ao tocar
+(() => {
+  const vib = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch(e) {} };
+  document.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse') return;
+    if (e.target.closest('.mobilebar button, .fab, .btn-primary, .ci-fino>button')) vib(6);
+  }, { passive:true });
+  let st = null;
+  const LIM = 90;
+  const limpa = c => { c.classList.remove('swp', 'd', 'e', 'pronto'); c.style.removeProperty('--sx'); };
+  document.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' || st) return;
+    const c = e.target.closest('.vcard[data-vid]');
+    if (!c || e.target.closest('button, a, input, select, textarea')) return;
+    st = { c, x:e.clientX, y:e.clientY, dx:0, h:null, id:e.pointerId, ok:false };
+  }, { passive:true });
+  document.addEventListener('pointermove', e => {
+    if (!st || e.pointerId !== st.id) return;
+    const mx = e.clientX - st.x, my = e.clientY - st.y;
+    if (st.h === null && (Math.abs(mx) > 10 || Math.abs(my) > 10)) {
+      st.h = Math.abs(mx) > Math.abs(my) * 1.3;
+      if (!st.h) { st = null; return; }
+      st.wa = st.c.querySelector('.snooze.wa'); st.lig = st.c.querySelector('.snooze.lig:not(.lig-zap)') || st.c.querySelector('.snooze.lig');
+      st.c.classList.remove('solta'); st.c.classList.add('swp');
+    }
+    if (!st.h) return;
+    const dx = Math.max(-150, Math.min(150, mx)); st.dx = dx;
+    st.c.style.setProperty('--sx', dx + 'px');
+    st.c.classList.toggle('d', dx > 0); st.c.classList.toggle('e', dx < 0);
+    st.c.dataset.acao = dx > 0 ? (st.wa ? 'Confirmar no WhatsApp' : 'Sem WhatsApp') : (st.lig ? 'Ligar' : 'Sem telefone');
+    const ok = Math.abs(dx) > LIM; if (ok && !st.ok) vib(12); st.ok = ok; st.c.classList.toggle('pronto', ok);
+  }, { passive:true });
+  const fim = e => {
+    if (!st || (e && e.pointerId !== st.id)) return;
+    const { c, dx, h, wa, lig } = st; st = null;
+    if (!h) return;
+    c.classList.add('solta'); c.style.setProperty('--sx', '0px');
+    setTimeout(() => { limpa(c); c.classList.remove('solta'); }, 220);
+    if (dx > LIM) { if (wa) wa.click(); else toast('Essa visita não tem telefone para confirmar pelo WhatsApp.'); }
+    else if (dx < -LIM) { if (lig) lig.click(); else toast('Essa visita não tem telefone.'); }
+  };
+  document.addEventListener('pointerup', fim, { passive:true });
+  document.addEventListener('pointercancel', e => { if (st && st.c) { limpa(st.c); } st = null; }, { passive:true });
+  // dica uma vez só, na primeira vez que abre as visitas pelo celular
+  window._dicaArrasto = () => {
+    let ja = false; try { ja = localStorage.getItem('dicaArrasto') === '1'; } catch(e) { ja = true; }
+    if (ja || innerWidth > 760 || !document.querySelector('#v-visitas .vcard[data-vid]')) return;
+    try { localStorage.setItem('dicaArrasto', '1'); } catch(e) {}
+    setTimeout(() => toast('Dica: arraste a visita para a direita para confirmar e para a esquerda para ligar.'), 600);
+  };
+})();
+// v141: puxar a tela para baixo para atualizar + topo com sombra ao rolar (jeito de aplicativo)
+(() => {
+  const el = document.createElement('div'); el.className = 'ptr'; el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg>';
+  document.body.appendChild(el);
+  let y0 = null, d = 0, ativo = false;
+  const podePuxar = () => innerWidth <= 760 && !document.getElementById('app')?.classList.contains('hide') && !document.querySelector('.modal.open') && (scrollY || document.documentElement.scrollTop) <= 0;
+  addEventListener('touchstart', e => { if (!podePuxar() || e.touches.length !== 1) { y0 = null; return; } y0 = e.touches[0].clientY; d = 0; ativo = false; }, { passive:true });
+  addEventListener('touchmove', e => { if (y0 === null) return; d = e.touches[0].clientY - y0; if (d <= 0) { el.style.opacity = 0; return; }
+    ativo = true; const p = Math.min(d, 120); el.style.transition = 'none'; el.style.opacity = Math.min(1, p / 70); el.style.transform = `translateY(${p - 60}px) rotate(${p * 3}deg)`; }, { passive:true });
+  addEventListener('touchend', () => { if (y0 === null || !ativo) { y0 = null; return; } y0 = null;
+    el.style.transition = 'transform .2s ease, opacity .2s ease';
+    if (d > 80) { el.classList.add('gira'); el.style.transform = 'translateY(20px)'; try { navigator.vibrate && navigator.vibrate(10); } catch(e) {}
+      setTimeout(() => { try { render(); } catch(e) {} el.classList.remove('gira'); el.style.opacity = 0; el.style.transform = 'translateY(-80px)'; toast('Atualizado'); }, 650); }
+    else { el.style.opacity = 0; el.style.transform = 'translateY(-80px)'; } }, { passive:true });
+  const tb = () => document.querySelector('.topbar');
+  addEventListener('scroll', () => { const t = tb(); if (t) t.classList.toggle('rolou', (scrollY || 0) > 8); }, { passive:true });
+})();
 // v136: modo manutenção (o dono liga em Configurações; os outros veem um aviso e não usam o app)
 function aplicarManutencao(){
   const m = (typeof appCfg !== 'undefined' && appCfg.manutencao) || {}, on = !!m.ativo, dono = souDono();
@@ -4178,6 +4560,7 @@ function aplicarManutencao(){
   document.getElementById('manutDesde').textContent = on && m.em ? 'Desde ' + new Date(m.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : '';
   const bt = document.getElementById('manutBt'); if (bt) { bt.textContent = on ? 'Sair da manutenção' : 'Entrar em manutenção'; bt.className = 'btn ' + (on ? 'btn-ghost' : 'btn-primary'); }
   const inp = document.getElementById('manutMsg'); if (inp && document.activeElement !== inp) inp.value = m.msg || '';
+  const rf = document.getElementById('fbFone'); if (rf && document.activeElement !== rf) rf.value = appCfg.reporteFone || '';
 }
 window.alternarManutencao = async () => {
   if (!souDono()) return; const on = !(appCfg.manutencao || {}).ativo;
@@ -4389,13 +4772,13 @@ function quandoTxt(date){
 // ---------- Cartão de visita ----------
 function cardVisita(v, compacto){
   const cor = ST_COR[v.status] || '#64748b';
-  const meta = v.empreendimento ? [`<span>🏠 ${esc(v.empreendimento)}</span>`] : [];
-  if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(v.corretorNome||'Sem corretor')}</span>`);
-  if (v.sdrNome && !souSdr()) meta.push(`<span>📞 SDR ${esc(primeiro(v.sdrNome))}</span>`);
-  if (v.avaliacao) meta.push(`<span>📋 ${esc(v.avaliacao)}</span>`);
+  const meta = v.empreendimento ? [`<span>${esc(v.empreendimento)}</span>`] : [];
+  if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>${esc(v.corretorNome||'Sem corretor')}</span>`);
+  if (v.sdrNome && !souSdr()) meta.push(`<span>SDR ${esc(primeiro(v.sdrNome))}</span>`);
+  if (v.avaliacao) meta.push(`<span>${esc(v.avaliacao)}</span>`);
   if (v.feirao) { const c = bvCfg(), val = c.ativo ? valorVisitaCart(c) : 0; meta.push(`<span class="tag-feirao">Feirão Tenda${val ? ' · ' + (v.status === 'Realizada' ? '' : 'vale ') + frd(val) : ''}</span>`); }
   if (souGerente() && !compacto) meta.push(`<span>${esc(eqNome(v.equipe))}</span>`);
-  if (v.telefone) meta.push(`<span>📱 ${esc(v.telefone)}</span>`);
+  if (v.telefone) meta.push(`<span>${esc(v.telefone)}</span>`);
   const acoes = [];
   if (v.telefone && v.status !== 'Cancelada') acoes.push(htmlLigar(v.telefone, v.cliente, 'visita'));
   if (v.telefone && AGUARDA_CONF.concat('Confirmada').includes(v.status)) acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
@@ -4405,17 +4788,18 @@ function cardVisita(v, compacto){
   if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">Não veio</button>`);
   if (!compacto) {
     acoes.push(`<button class="icon-btn" onclick="addGoogle(visitaComoTarefa(visitaPorId('${v.id}')))" title="Adicionar ao Google Agenda">${IC.calplus}</button>`);
-    if (souSdr()) acoes.push(`<button class="icon-btn" onclick="avisarPeloWhats(visitaPorId('${v.id}'))" title="Avisar o corretor pelo WhatsApp">📲</button>`);
-    if (v.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('v','${v.id}')" title="Mensagens prontas">💬</button>`);
-    acoes.push(`<button class="icon-btn del" onclick="excluirVisita('${v.id}')" title="Arquivar">🗄️</button>`);
+    if (souSdr()) acoes.push(`<button class="icon-btn" onclick="avisarPeloWhats(visitaPorId('${v.id}'))" title="Avisar o corretor pelo WhatsApp" aria-label="Avisar o corretor pelo WhatsApp">${IC.avisar}</button>`);
+    if (v.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('v','${v.id}')" title="Mensagens prontas" aria-label="Mensagens prontas">${IC.chat}</button>`);
+    acoes.push(`<button class="icon-btn del" onclick="excluirVisita('${v.id}')" title="Arquivar" aria-label="Arquivar">${IC.arquivo}</button>`);
+    acoes.push(`<button class="icon-btn v-mais" onclick="this.closest('.vcard').classList.toggle('aberto')" title="Mais ações" aria-label="Mais ações"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/></svg></button>`);
   }
-  return `<div class="vcard" style="--vc:${cor}">
+  return `<div class="vcard" style="--vc:${cor}" data-vid="${v.id}">
     <div class="v-time"><b>${esc(v.time||'--:--')}</b></div>
     <div class="v-body" onclick="editarVisita('${v.id}')">
       <div class="v-top"><b>${esc(v.cliente)}${seloRepetido('visita', v.id)}</b><span class="vst ${stCls(v.status)}">${esc(v.status)}</span></div>
       <div class="v-meta">${meta.join('')}</div>
-      ${v.motivoPerda && !compacto ? `<div class="v-obs">❌ ${esc(v.motivoPerda)}</div>` : ''}
-      ${v.obs && !compacto ? `<div class="v-obs">📝 ${esc(v.obs)}</div>` : ''}
+      ${v.motivoPerda && !compacto ? `<div class="v-obs">Motivo: ${esc(v.motivoPerda)}</div>` : ''}
+      ${v.obs && !compacto ? `<div class="v-obs">${esc(v.obs)}</div>` : ''}
     </div>
     <div class="v-actions">${acoes.join('')}</div>
   </div>`;
@@ -4428,9 +4812,9 @@ function renderPapel(){
   if (!perfil) { el.classList.add('hide'); }
   else {
     el.classList.remove('hide');
-    if (perfil.status === 'pendente') el.textContent = '⏳ Aguardando aprovação';
-    else if (perfil.status === 'bloqueado') el.textContent = '🔒 Acesso bloqueado';
-    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? '👑 Gestor' : perfil.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente') : (perfil.papel === 'coordenador' ? '🧭 Coordenador' : perfil.papel === 'anjo' ? 'Anjo' : perfil.papel === 'sdr' ? '📞 SDR' : perfil.papel === 'correspondente' ? '🏦 Correspondente' : '🏠 Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
+    if (perfil.status === 'pendente') el.textContent = 'Aguardando aprovação';
+    else if (perfil.status === 'bloqueado') el.textContent = 'Acesso bloqueado';
+    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? 'Gestor' : perfil.cargo === 'dono' ? 'CEO' : 'Gerente') : (perfil.papel === 'coordenador' ? 'Coordenador' : perfil.papel === 'anjo' ? 'Anjo' : perfil.papel === 'sdr' ? 'SDR' : perfil.papel === 'correspondente' ? 'Correspondente' : 'Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir() && !(e.dataset.view && abaLiberada(e.dataset.view)) && !abaLiberada(((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1])));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
@@ -4492,7 +4876,7 @@ function renderVisitasTudo(){
   else {
     $('visSub').textContent = souGerente() ? 'Todas as equipes e corretores.' : souCoord() ? 'Visitas da ' + eqNome(perfil.equipe) + '.' : 'As suas visitas.';
     $('paneLista').classList.toggle('hide', visAba !== 'lista');
-    if (view === 'visitas') renderListaVisitas();
+    if (view === 'visitas') { renderListaVisitas(); window._dicaArrasto && window._dicaArrasto(); }
     // o ranking mora na aba própria
     const host = $('rankHost'), pr = $('paneRanking');
     if (host && pr && pr.parentElement !== host) host.appendChild(pr);
@@ -4571,7 +4955,7 @@ function renderRanking(){
   // disputa entre equipes
   const eqs = listaEquipes().map(e => ({ e, n: base.filter(r => r.equipe === e.id).length, real: base.filter(r => r.equipe === e.id && r.status === 'Realizada').length }));
   const max = Math.max(0, ...eqs.map(x => x.n));
-  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>visitas · ${x.real} realizada${x.real!==1?'s':''}${x.n && x.n===max?' · 🏆 liderando':''}</span></div>`).join('');
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>visitas · ${x.real} realizada${x.real!==1?'s':''}${x.n && x.n===max?' · liderando':''}</span></div>`).join('');
   const lista = agrupaRanking(base.filter(r => !rankEquipe || r.equipe === rankEquipe));
   $('rankTit').textContent = 'Ranking de corretores ' + rotRank(rankPeriodo);
   if (!lista.length) { $('rankLista').innerHTML = vazio('Sem visitas no período', 'Assim que as visitas forem marcadas, o ranking aparece aqui.'); return; }
@@ -5047,8 +5431,8 @@ function cardCarta(c){
   const acoes = [];
   if (c.telefone) acoes.push(htmlLigar(c.telefone, c.cliente, 'carta'), `<button class="snooze wa" onclick="abrirWhats('${esc(c.telefone)}')" title="Abrir conversa">${IC.wa}WhatsApp</button>`);
   if (c.status === 'Aprovada' || c.status === 'Em negociação') acoes.push(`<button class="snooze" onclick="mudarStatusCarta('${c.id}','Venda fechada')">Venda fechada</button>`);
-  if (c.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('c','${c.id}')" title="Mensagens prontas">💬</button>`);
-  acoes.push(`<button class="icon-btn del" onclick="excluirCarta('${c.id}')" title="Arquivar">🗄️</button>`);
+  if (c.telefone) acoes.push(`<button class="icon-btn" onclick="abrirMensagens('c','${c.id}')" title="Mensagens prontas" aria-label="Mensagens prontas">${IC.chat}</button>`);
+  acoes.push(`<button class="icon-btn del" onclick="excluirCarta('${c.id}')" title="Arquivar" aria-label="Arquivar">${IC.arquivo}</button>`);
   return `<div class="vcard" style="--vc:${cor}">
     <div class="v-time"><b style="font-size:15px">${parseISO(c.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</b><span>aprovada</span></div>
     <div class="v-body" onclick="editarCarta('${c.id}')">
@@ -5240,7 +5624,7 @@ function renderRankingVgv(){
   const todos = rankingVgv(de, ate, '');
   const eqs = listaEquipes().map(e => { const l = todos.filter(x => x.equipe === e.id); return { e, v:l.reduce((a,x) => a + x.vgv, 0), n:l.reduce((a,x) => a + x.vendas, 0) }; });
   const max = Math.max(0, ...eqs.map(x => x.v));
-  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.v && x.v===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b style="font-size:22px">${brl(x.v)}</b><span>${fmtVendas(x.n)} venda${x.n!==1?'s':''}${x.v && x.v===max?' · 🏆 liderando':''}</span></div>`).join('');
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.v && x.v===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b style="font-size:22px">${brl(x.v)}</b><span>${fmtVendas(x.n)} venda${x.n!==1?'s':''}${x.v && x.v===max?' · liderando':''}</span></div>`).join('');
   const lista = rankEquipe ? todos.filter(x => x.equipe === rankEquipe) : todos;
   const total = lista.reduce((a,x) => a + x.vgv, 0);
   $('rankTit').textContent = 'Ranking de VGV ' + (rotRank(rankPeriodo) || '') + (total ? ' · total ' + brl(total) : '');
@@ -5255,7 +5639,7 @@ function renderRankingCartas(){
   const base = rankingCartas.filter(r => r.data && r.data >= de && r.data <= ate);
   const eqs = listaEquipes().map(e => ({ e, n: base.filter(r => r.equipe === e.id).length, v: base.filter(r => r.equipe === e.id && r.status === 'Venda fechada').length }));
   const max = Math.max(0, ...eqs.map(x => x.n));
-  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>cartas · ${x.v} venda${x.v!==1?'s':''}${x.n && x.n===max?' · 🏆 liderando':''}</span></div>`).join('');
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>cartas · ${x.v} venda${x.v!==1?'s':''}${x.n && x.n===max?' · liderando':''}</span></div>`).join('');
   const g = new Map();
   base.filter(r => !rankEquipe || r.equipe === rankEquipe).forEach(r => {
     const k = r.corretorUid || 'n:' + norm(r.corretorNome);
@@ -5322,7 +5706,7 @@ const avisosAtivos = () => avisos.filter(a => (a.expiraEm || 0) > Date.now()).so
 function podeApagarAviso(a){ return souGerente() || a.autorUid === uidAtual; }
 function renderMural(){
   const lista = souAtivo() ? avisosAtivos().filter(a => !dispensados.has(a.id)) : [];
-  $('mural').innerHTML = lista.map(a => `<div class="aviso-card"><div class="ai">📣</div><div class="at"><p>${esc(a.texto)}</p>
+  $('mural').innerHTML = lista.map(a => `<div class="aviso-card"><div class="ai"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14"/></svg></div><div class="at"><p>${esc(a.texto)}</p>
       <span>${esc(a.autorNome)} · ${a.equipe ? 'para ' + esc(eqNome(a.equipe)) : 'para todos'} · ${new Date(a.criadoEm).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span></div>
       ${podeApagarAviso(a) ? `<button class="icon-btn del" onclick="excluirAviso('${a.id}')" title="Apagar para todos">${IC.trash}</button>` : ''}
       <button class="icon-btn" onclick="dispensarAviso('${a.id}')" title="Ocultar para mim">${IC.x}</button></div>`).join('');
@@ -5408,7 +5792,8 @@ window.exportarCartas = () => {
 // =====================================================================
 // ================= LAYOUT POR PERFIL, BUSCA E MENU + =================
 // =====================================================================
-const MEDALHA = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
+// v140: posição em disco (ouro, prata, bronze) no lugar das medalhas em emoji
+const MEDALHA = i => i <= 2 ? `<span class="med med${i + 1}">${i + 1}</span>` : (i + 1) + 'º';
 function rankingMes(filtroEquipe){
   const [de, ate] = faixa('mes');
   return agrupaRanking(rankingDocs.filter(r => r.date && r.date >= de && r.date <= ate && r.status !== 'Cancelada' && (!filtroEquipe || r.equipe === filtroEquipe)));
@@ -5440,12 +5825,12 @@ function renderPainelPapel(){
   const caixa = itens => `<div class="p-stats">${itens.map(([v,r]) => `<div><b>${v}</b><span>${r}</span></div>`).join('')}</div>`;
   $('pFootRank').innerHTML = souGerente()
     ? caixa([[totMes,'visitas'],[aprovMes.length,'aprovações'],[vendasMes,'vendas']])
-    : caixa([[pPos >= 0 ? (pPos > 2 ? (pPos+1) + 'º' : MEDALHA(pPos) + ' ' + (pPos+1) + 'º') : '–','ranking'],[pEu ? pEu.pontos : 0,'pontos'],[minhasCartas,'cartas']]);
+    : caixa([[pPos >= 0 ? (pPos+1) + 'º' : '–','ranking'],[pEu ? pEu.pontos : 0,'pontos'],[minhasCartas,'cartas']]);
 
   if (souSdr()) {
     const rs = rankingSdr(mi, mf), sp = rs.findIndex(x => x.uid === uidAtual), eu2 = rs[sp] || { visitas:0, realizadas:0, pontos:0 };
     const marcHoje = visitas.filter(v => (v.criadoEm && iso(new Date(v.criadoEm)) === h)).length;
-    $('pFootRank').innerHTML = caixa([[sp >= 0 ? (sp > 2 ? (sp+1) + 'º' : MEDALHA(sp) + ' ' + (sp+1) + 'º') : '–','ranking'],[eu2.pontos,'pontos'],[eu2.visitas,'visitas']]);
+    $('pFootRank').innerHTML = caixa([[sp >= 0 ? (sp+1) + 'º' : '–','ranking'],[eu2.pontos,'pontos'],[eu2.visitas,'visitas']]);
     $('statsPapel').innerHTML =
       statCard('house','var(--accent)','var(--accent-soft)', marcHoje, 'Marcadas hoje', '', "novaVisita()") +
       statCard('check','var(--ok)','var(--ok-soft)', eu2.visitas, 'Visitas no mês', '', "setView('visitas')") +
@@ -5562,7 +5947,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 137;
+const APP_VERSAO = 142;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -5697,7 +6082,7 @@ function estadoNotif(){
 function renderNotif(){
   const st = estadoNotif();
   const txt = { 'nao-configurado':'Ainda não configurado pelo gerente.', 'ios-instalar':'No iPhone, instale o app na Tela de Início para receber notificações.',
-    'sem-suporte':'Este navegador não recebe notificações. Use o Chrome (Android/computador) ou o app instalado no iPhone.',
+    'sem-suporte':'Para receber avisos no celular, abra pelo Chrome ou instale o app na tela inicial.',
     'bloqueado': ehIOS ? 'Notificações bloqueadas. No iPhone: Ajustes → Notificações → Frade (ou Minha Agenda) → Permitir.' : 'Notificações bloqueadas. No Chrome: toque no cadeado ao lado do endereço → Permissões → Notificações → Permitir. Depois toque em Ativar de novo.',
     'nav-interno':'Você abriu o app por dentro do WhatsApp ou do Instagram. Abra o link no Chrome (Android) ou no Safari (iPhone) para ativar as notificações.',
     'ios-antigo':'Este iPhone precisa do iOS 16.4 ou mais novo para receber notificações. Atualize em Ajustes → Geral → Atualização de Software.', 'ativo':'Ativas neste aparelho ✓', 'desligado':'Receba avisos, visitas e lembretes mesmo com o app fechado' }[st];
@@ -5709,7 +6094,7 @@ function renderNotif(){
   let dispensado = false; try { dispensado = localStorage.getItem('conviteNotif') === '1'; } catch(e){}
   const mostrar = souAtivo() && !dispensado && ['desligado','ios-instalar','bloqueado','nav-interno','ios-antigo','sem-suporte'].includes(st);
   const txtConv = { 'ios-instalar':'Instale o app na Tela de Início (Compartilhar → Adicionar à Tela de Início) e abra por lá para receber os avisos.', 'desligado':'Ative as notificações para receber avisos, visitas marcadas e lembretes na hora, mesmo com o app fechado.' }[st] || txt;
-  $('conviteNotif').innerHTML = mostrar ? `<div class="banner" style="background:var(--accent-soft);color:var(--text);border-color:color-mix(in srgb,var(--accent) 30%,transparent)"><span style="font-size:20px">🔔</span><span style="flex:1">${esc(txtConv)}</span>${st === 'desligado' || st === 'bloqueado' ? '<button class="btn btn-primary" onclick="ativarNotificacoes()">Ativar</button>' : ''}<button class="icon-btn" onclick="dispensarConvite()" title="Agora não">${IC.x}</button></div>` : '';
+  $('conviteNotif').innerHTML = mostrar ? `<div class="banner" style="background:var(--accent-soft);color:var(--text);border-color:color-mix(in srgb,var(--accent) 30%,transparent)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;color:var(--accent)"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span style="flex:1">${esc(txtConv)}</span>${st === 'desligado' || st === 'bloqueado' ? '<button class="btn btn-primary" onclick="ativarNotificacoes()">Ativar</button>' : ''}<button class="icon-btn" onclick="dispensarConvite()" title="Agora não">${IC.x}</button></div>` : '';
 }
 window.dispensarConvite = () => { try { localStorage.setItem('conviteNotif','1'); } catch(e){} renderNotif(); };
 window.ativarNotificacoes = async () => {
@@ -6078,7 +6463,7 @@ function renderRankingPontos(){
   const m = mesAtual(), todos = pontosDoMes(m);
   const eqs = listaEquipes().map(e => ({ e, n: todos.filter(x => x.equipe === e.id).reduce((a,x) => a + x.pontos, 0) }));
   const max = Math.max(0, ...eqs.map(x => x.n));
-  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n===max?' · 🏆 liderando':''}</span></div>`).join('');
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n===max?' · liderando':''}</span></div>`).join('');
   const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
   $('rankTit').textContent = 'Ranking de pontos · ' + nomeMes(m);
   if (!lista.length) { $('rankLista').innerHTML = vazio('Ninguém pontuou ainda neste mês', 'Visitas, cartas e vendas geram pontos. O ranking aparece aqui.'); return; }
@@ -7601,7 +7986,7 @@ function assinarEtapa4(){
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
-  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); assinarSaques(); assinarSimulacoes(); conferirLinkCheckin();
+  assinarFinanceiro(); assinarFin2(); assinarZap(); assinarNotifs(); assinarExtrato(); ligarLogFin(); assinarMetas(); assinarSorteios(); assinarCheckins(); assinarAulas(); assinarAnalises(); assinarBolsao(); assinarSaques(); assinarSimulacoes(); assinarReportes(); conferirLinkCheckin();
 }
 // v136: a gerência mantém a lista pública do ranking igual aos perfis (só nome, equipe, cargo, situação, entrada e equipe do anjo)
 let _rkpT = 0;
@@ -7651,7 +8036,7 @@ async function sincPresencaRanking(){
 // ---------- ligar pelo app: abre o discador e registra sozinho ----------
 function htmlLigar(tel, cliente, origem){
   if (!soDig(tel)) return '';
-  return `<span class="lig-par"><button class="snooze lig" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarBtn(this)" title="Ligar pelo telefone (conta pontos)">📞 Ligar</button><button class="snooze lig lig-zap" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarZapBtn(this)" title="Ligar pelo WhatsApp (conta pontos)">📲 Zap</button></span>`;
+  return `<span class="lig-par"><button class="snooze lig" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarBtn(this)" title="Ligar pelo telefone (conta pontos)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>Ligar</button><button class="snooze lig lig-zap" data-tel="${esc(tel)}" data-cli="${esc(cliente || '')}" data-or="${esc(origem || '')}" onclick="ligarZapBtn(this)" title="Ligar pelo WhatsApp (conta pontos)">${IC.wa}Zap</button></span>`;
 }
 // ligação pelo WhatsApp: abre a conversa (é só tocar no telefone dela para chamar) e conta como ligação
 const telZap = tel => { let n = soDig(tel); if (n.startsWith('55') && n.length >= 12) n = n.slice(2); n = n.replace(/^0+/, ''); return n.length >= 10 ? '55' + n : ''; };
@@ -7731,6 +8116,40 @@ window.ligConfResp = async sim => {
   if (ligaPontua()) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [sim ? 'at' : 'na']:{ [dia]: increment(1) }, ...(pro ? { pro:{ [dia]: increment(1) } } : {}), atualizadoEm:Date.now() }, { merge:true });
   try { await gravar(b.commit()); toast(sim ? (pro ? 'Atendeu · cliente com perfil' : 'Atendeu') : 'Não atendeu'); } catch(e) { toast('Erro ao registrar: ' + e.message); }
   abreVisita();
+};
+// v139: depois da venda, o app lembra o corretor de pedir uma indicação ao cliente (padrão: 30 e 90 dias)
+const IP_MSG = 'Oi, {cliente}! Aqui é {corretor}, da Frade Imóveis. Passando para saber como você está com a casa nova. Se você conhece alguém que também quer sair do aluguel, me passa o contato? Vou cuidar com o mesmo carinho que cuidei de você.';
+const ipCfg = () => ({ ativo:true, dias:[30, 90], janela:20, msg:IP_MSG, ...(appCfg.indPedido || {}) });
+function pedidosIndicacao(){
+  const c = ipCfg(); if (!c.ativo || !state || typeof reservasTodas === 'undefined') return [];
+  const hj = hojeISO(), feitos = state.indPed || {}, dias = (c.dias || []).map(Number).filter(n => n > 0).sort((a, b) => b - a), out = [];
+  reservasTodas.filter(r => !r.caiu && !r.arquivado && r.dia && (r.corretorUids || []).includes(uidAtual)).forEach(r => {
+    const D = dias.find(d => hj >= somaDias(r.dia, d)); if (!D) return;
+    const vence = somaDias(r.dia, D); if (hj > somaDias(vence, Number(c.janela) || 20) || feitos[r.id + '_' + D]) return;
+    out.push({ r, D, chave:r.id + '_' + D });
+  });
+  return out.sort((a, b) => (a.r.dia || '').localeCompare(b.r.dia || ''));
+}
+function htmlIndPedHoje(){
+  const l = pedidosIndicacao(); if (!l.length) return '';
+  return `<div class="card ip-card"><div class="card-head"><h2>Peça uma indicação</h2><span class="muted">${l.length} cliente${l.length > 1 ? 's' : ''}</span></div>
+    ${l.slice(0, 3).map(x => `<div class="ip-it"><div><b>${esc(nomeBonito(x.r.cliente || 'Cliente'))}</b><span>comprou há ${x.D} dias${x.r.empreendimento ? ' · ' + esc(x.r.empreendimento) : ''}</span></div>
+      <div class="ip-bts">${soDig(x.r.telefone || '').length >= 10 ? `<button class="btn btn-primary" onclick="pedirIndicacao('${x.chave}')">Pedir no WhatsApp</button>` : '<small class="muted">sem telefone</small>'}<button class="btn btn-ghost" onclick="recebiIndicacao('${x.chave}')">Recebi uma indicação</button><button class="link" onclick="marcarIndPed('${x.chave}','pulou')">Agora não</button></div></div>`).join('')}
+    <p class="hint" style="margin:6px 0 0">Indicação de cliente que já comprou fecha mais fácil. Cadastrou a indicação, ganhou os pontos.</p></div>`;
+}
+window.marcarIndPed = (k, st) => { if (!state) return; state.indPed = { ...(state.indPed || {}), [k]:{ st, em:Date.now() } }; salvar(); };
+window.pedirIndicacao = k => {
+  const x = pedidosIndicacao().find(y => y.chave === k); if (!x) return;
+  const txt = String(ipCfg().msg || IP_MSG).replace(/\{cliente\}/g, primeiro(nomeBonito(x.r.cliente || ''))).replace(/\{corretor\}/g, primeiro(perfil?.nome || ''));
+  let n = soDig(x.r.telefone); if (n.length <= 11) n = '55' + n;
+  window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(txt), '_blank'); marcarIndPed(k, 'pedido'); toast('Pedido enviado. Quando o cliente indicar alguém, toque em "Indicação" no (+).');
+};
+window.recebiIndicacao = k => { const x = pedidosIndicacao().find(y => y.chave === k); marcarIndPed(k, 'recebeu'); abrirIndicacao(); if (x) setTimeout(() => { $('indPor').value = nomeBonito(x.r.cliente || ''); }, 30); };
+function pintarIndPedCfg(){ const c = ipCfg(); $('ipAtivo').checked = c.ativo !== false; $('ipDias').value = (c.dias || []).join(', '); $('ipMsg').value = c.msg || IP_MSG; }
+window.salvarIndPedCfg = async () => {
+  if (!souDono()) return; const dias = $('ipDias').value.split(/[,;\s]+/).map(Number).filter(n => n > 0 && n < 1000).slice(0, 5);
+  const d = { ativo:$('ipAtivo').checked, dias:dias.length ? dias : [30, 90], janela:20, msg:$('ipMsg').value.trim().slice(0, 600) || IP_MSG };
+  try { await gravar(setDoc(doc(db,'config','app'), { indPedido:d }, { merge:true })); appCfg.indPedido = d; toast('Pedido de indicação salvo'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.abrirIndicacao = () => { ['indNome','indTel','indPor'].forEach(i => $(i).value = ''); abrir('indModal'); setTimeout(() => $('indNome').focus(), 80); };
 window.salvarIndicacao = async () => {
@@ -8845,7 +9264,7 @@ window.auFiltro = k => { auTema = k; renderAulas(); };
 function htmlAulasHoje(){
   const p = auPendentes(); if (!p.length) return '';
   const a = p[0];
-  return `<div class="au-hoje" onclick="abrirAula('${a.id}')"><span>🎓</span><div><b>${p.length > 1 ? `Você tem ${p.length} aulas para assistir` : 'Aula para você assistir'}</b><small>${esc(a.titulo)} · com ${esc(a.professor || '')}</small></div><button class="btn btn-primary">Assistir</button></div>`;
+  return `<div class="au-hoje" onclick="abrirAula('${a.id}')"><span class="au-ic">${IC.play}</span><div><b>${p.length > 1 ? `Você tem ${p.length} aulas para assistir` : 'Aula para você assistir'}</b><small>${esc(a.titulo)} · com ${esc(a.professor || '')}</small></div><button class="btn btn-primary">Assistir</button></div>`;
 }
 window.abrirAula = async id => {
   const a = aulas.find(x => x.id === id); if (!a) return;
@@ -9041,12 +9460,11 @@ function htmlCheckinHoje(){
     return htmlCiResumoGestor() + `<div class="ci-card ${atras ? 'atras' : ''}"><div class="ci-txt"><b>${atras ? 'Você ainda não marcou a presença' : 'Bom dia! Marque a sua presença'}</b><small>Entrada às ${cfg.hora}.</small></div>
       <div class="ci-bts"><button class="btn btn-primary ci-bt" id="ciBtEsc" onclick="chegueiEscritorio()">Cheguei no escritório</button><button class="btn btn-ghost ci-bt" onclick="abrirExterno()">Estou em atendimento externo</button></div>
       <button class="link ci-qr" onclick="abrirCamera()">Ou leia o código da recepção</button></div>`; }
-  if (c.saida) return `<div class="ci-card feito"><div class="ci-txt"><b>Dia encerrado. Até amanhã!</b><small>Chegou às ${hm(c.entrada)} e encerrou o dia às ${hm(c.saida)}.</small></div></div>`;
-  if (ciFora(c)) return htmlCiResumoGestor() + `<div class="ci-card fora"><div class="ci-txt"><b>Em atendimento externo desde ${hm(ciDesde(c))}</b><small>${esc(ciOnde(c))}</small></div>
-    <div class="ci-bts"><button class="btn btn-primary btn-sm" id="ciBtEsc" onclick="chegueiEscritorio()">Cheguei no escritório</button><button class="btn btn-ghost btn-sm" onclick="fazerCheckout()">Encerrar o dia</button></div></div>`;
+  // v140: depois de marcar, a presença vira uma faixa fina (o cartão grande só aparece enquanto falta marcar)
+  if (c.saida) return `<div class="ci-fino fim"><i></i><span>Dia encerrado · chegou ${hm(c.entrada)}, saiu ${hm(c.saida)}</span></div>`;
+  if (ciFora(c)) return htmlCiResumoGestor() + `<div class="ci-fino fora"><i></i><span>Em atendimento externo${ciOnde(c) ? ' · ' + esc(ciOnde(c)) : ''}</span><button id="ciBtEsc" onclick="chegueiEscritorio()">Voltei</button><button onclick="fazerCheckout()">Encerrar</button></div>`;
   const pos = posicaoMinha();
-  return htmlCiResumoGestor() + `<div class="ci-card feito"><div class="ci-txt"><b>No escritório desde ${hm(ciChegada(c))}${ciAtrasado(c) ? ' <em class="ci-atr">atrasado</em>' : ''}</b><small>${pos ? `Você foi o <b>${pos}º</b> a chegar hoje.` : 'Bom trabalho!'}</small></div>
-    <div class="ci-bts"><button class="btn btn-ghost btn-sm" onclick="abrirExterno()">Sair para atendimento</button><button class="btn btn-ghost btn-sm" onclick="fazerCheckout()">Encerrar o dia</button></div></div>`;
+  return htmlCiResumoGestor() + `<div class="ci-fino"><i></i><span>No escritório desde ${hm(ciChegada(c))}${pos ? ` · ${pos}º a chegar` : ''}</span><button onclick="abrirExterno()">Externo</button><button onclick="fazerCheckout()">Encerrar</button></div>`;
 }
 function htmlCiGestao(){
   if (!podeGerir()) return '';
@@ -9461,6 +9879,8 @@ function renderExtrato(){ renderPrefNotif();
   renderAnalises(); renderBolsao();
   if ($('sorteiosRank')) { const h = view === 'ranking' ? htmlSorteiosPub() : ''; if ($('sorteiosRank')._h !== h) { $('sorteiosRank').innerHTML = h; $('sorteiosRank')._h = h; } }
   renderAulas(); if (auAberta && $('auVerModal').classList.contains('open')) pintarInfoAula();
+  if ($('indPedHoje')) { const h = view === 'hoje' ? htmlIndPedHoje() : ''; if ($('indPedHoje')._h !== h) { $('indPedHoje').innerHTML = h; $('indPedHoje')._h = h; } }
+  if ($('ipAtivo') && view === 'config' && !$('cardIndPed').contains(document.activeElement)) pintarIndPedCfg();
   if ($('aulasHoje')) { const h = view === 'hoje' ? htmlAulasHoje() : ''; if ($('aulasHoje')._h !== h) { $('aulasHoje').innerHTML = h; $('aulasHoje')._h = h; } }
   if ($('cAulas')) { const n = auPendentes().length; $('cAulas').textContent = n; $('cAulas').classList.toggle('hide', !n); }
   if (view === 'sorteio' && $('sxPalco') && !sxGirando && !$('sxPalco').contains(document.activeElement) && !document.querySelector('.sx-cfg')?.contains(document.activeElement)) { sxPinta(); sxPintaHist(); }
