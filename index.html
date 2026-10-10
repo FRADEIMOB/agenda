@@ -1870,6 +1870,29 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 #resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
+<style id="bz144">
+.bzf-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;color:var(--muted);font-size:13.5px}
+.bzf{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 14px;align-items:flex-start;overscroll-behavior-x:contain}
+.bzf-col{flex:0 0 min(300px,84vw);scroll-snap-align:start;background:color-mix(in srgb,var(--muted) 9%,transparent);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:10px;max-height:72vh}
+.bzf-h{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 0}
+.bzf-h b{font-size:14.5px;font-weight:800}
+.bzf-h i{font-style:normal;font-weight:800;font-size:12.5px;min-width:24px;height:22px;padding:0 7px;border-radius:11px;background:var(--card);display:inline-flex;align-items:center;justify-content:center;color:var(--muted)}
+.bzf-lista{display:flex;flex-direction:column;gap:9px;overflow-y:auto}
+.bzf-card{background:var(--card);border-radius:14px;padding:12px 13px;display:grid;gap:7px;border:1px solid var(--border)}
+.bzf-card.novo{border-left:4px solid var(--accent)}
+.bzf-card.fora{opacity:.75}
+.bzf-l1{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.bzf-l1 b{font-size:15px}.bzf-l1 small{color:var(--muted);font-size:12px;white-space:nowrap}
+.bzf-l2{display:flex;flex-wrap:wrap;gap:4px 10px;color:var(--muted);font-size:13px}
+.bzf-mov select{width:100%;min-height:40px}
+.bzf-vz{color:var(--muted);font-size:13px;text-align:center;padding:14px 0}
+.bzet{border:1px solid var(--border);border-radius:14px;padding:10px;margin-bottom:8px;display:grid;gap:8px}
+.bzet-l1{display:flex;gap:6px;align-items:center}.bzet-l1 input{flex:1;min-width:0}
+.bzet-l2{display:flex;flex-direction:column;gap:6px;padding:0 2px}
+.bzet .bzet-l2 label{display:flex!important;align-items:center;gap:9px;margin:0!important;padding:0!important;width:auto!important;font-size:13.5px;font-weight:600;color:var(--text2);text-transform:none;letter-spacing:0}
+.bzet .bzet-l2 input[type=checkbox]{width:18px!important;height:18px!important;min-height:0!important;margin:0!important;padding:0!important;flex:none;accent-color:var(--accent)}
+.bzf-mov select{font-size:14px!important;font-weight:600}
+</style>
 <style id="vn140">
 /* =====================================================================
    v140 · VISUAL NOVO (estilo app, leve e rápido no toque)
@@ -1965,7 +1988,7 @@ body:has(#app:not(.hide)) .vcard.solta{transition:transform .2s ease,box-shadow 
 <style id="vn141">
 /* v141: visual mais suave — cores mais leves, letra menos pesada, cantos maiores, sombra sutil e movimento macio */
 body:has(#app:not(.hide)){--vn-bg:#F6F7F9;--vn-ln:#ECEEF1;--text:#1F2D3A;--text2:#3D4B57;--muted:#6B7783;--vn-sombra:0 1px 2px rgba(31,45,58,.04),0 4px 14px rgba(31,45,58,.045);--vn-or:#E8743B;--vn-or-b:#C25526;--vn-or-s:#FDEFE6;--accent:#C25526}
-html[data-theme="dark"] body:has(#app:not(.hide)){--vn-sombra:none;--vn-or:#F08A4B;--vn-or-b:#F08A4B;--vn-or-s:rgba(240,138,75,.14)}
+html[data-theme="dark"] body:has(#app:not(.hide)){--vn-bg:#0D1823;--vn-ln:#22364A;--text:#E6EEF5;--text2:#C3D1DD;--muted:#8899A8;--accent:#F08A4B;--vn-sombra:none;--vn-or:#F08A4B;--vn-or-b:#F08A4B;--vn-or-s:rgba(240,138,75,.14)}
 body:has(#app:not(.hide)) .page-head h1{font-weight:700;letter-spacing:-.015em}
 body:has(#app:not(.hide)) .card-head h2,body:has(#app:not(.hide)) .card h2{font-weight:700}
 body:has(#app:not(.hide)) .stat b,body:has(#app:not(.hide)) .pd-kpi b{font-weight:700}
@@ -3357,6 +3380,17 @@ body:has(#app:not(.hide)) .btn-primary:disabled{background:#E4E7EB!important;col
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('simCfgModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarSimCfg()">Salvar tabela</button></div>
   </div>
 </div>
+<div class="modal" id="bzEtModal">
+  <div class="sheet" style="width:min(520px,100%)">
+    <div class="sheet-head"><h2>Etapas do bolsão</h2><button class="icon-btn" onclick="fechar('bzEtModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="hint" style="margin:0 0 12px">Cada etapa vira uma coluna em "Os que eu peguei". A ordem aqui é a ordem das colunas.</div>
+      <div id="bzEtLista"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" onclick="bzEtNova()">Nova etapa</button><button class="link" onclick="bzEtPadrao()">Voltar às etapas padrão</button></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('bzEtModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarBzEtapas()">Salvar etapas</button></div>
+  </div>
+</div>
 <div class="modal" id="bzDispModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><h2>Disparo do bolsão</h2><button class="icon-btn" onclick="fechar('bzDispModal')" data-ic="x"></button></div>
@@ -3799,7 +3833,7 @@ onAuthStateChanged(auth, user => {
       state = estadoInicial(user); salvar(); pedirCadastro(); return;
     }
     const d = snap.data();
-    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {} };
+    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {}, bzPeguei:d.bzPeguei || {} };
     render();
     pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
@@ -5947,7 +5981,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 142;
+const APP_VERSAO = 144;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8450,8 +8484,12 @@ window.histBuscar = v => { _histFiltro = v; pintarHistorico(true); };
 // ============ BOLSÃO DE LEADS E CLIENTES PERDIDOS · v84 ============
 // =====================================================================
 let bolsao = [], bzAba = 'livres';
-const BZ_LIMITE = () => Number(appCfg.bolsaoLimite) || 5;
-const BZ_RES = [['agendou','📅 Agendou visita'], ['acompanhando','👀 Acompanhando'], ['conversando','💬 Conversando'], ['retornar','🔁 Retornar depois'], ['sem_interesse','🙅 Sem interesse'], ['nao_atende','📵 Não atende'], ['numero_errado','❌ Número errado'], ['comprou','🏠 Já comprou']];
+const BZ_LIMITE = () => Infinity; // v144: sem limite de clientes por corretor (pedido do gestor)
+// v144: etapas do funil do bolsão, editáveis pela gerência (config/app.bzEtapas). fim = libera a vaga do corretor; volta = depois das horas configuradas o cliente volta para a fila
+const BZ_ET_PADRAO = [{ k:'agendou', n:'Agendou visita', fim:true, visita:true }, { k:'acompanhando', n:'Acompanhando', fim:true }, { k:'conversando', n:'Conversando', fim:true }, { k:'retornar', n:'Retornar depois', fim:false, volta:true }, { k:'sem_interesse', n:'Sem interesse', fim:true }, { k:'nao_atende', n:'Não atende', fim:true, volta:true, insistir:true }, { k:'numero_errado', n:'Número errado', fim:true }, { k:'comprou', n:'Já comprou', fim:true }];
+const bzEtapas = () => (Array.isArray(appCfg.bzEtapas) && appCfg.bzEtapas.length ? appCfg.bzEtapas : BZ_ET_PADRAO).filter(e => e && e.k && e.n);
+const bzRes = () => bzEtapas().map(e => [e.k, e.n]);
+const bzEtapa = k => bzEtapas().find(e => e.k === k);
 function assinarBolsao(){
   bolsao = []; if (!souAtivo() || souCorresp()) return;
   let vistos = null;
@@ -8480,7 +8518,7 @@ function renderBolsao(){
   const gere = (souGerente() && !souCeo()) || souCoord();
   $('bzNovoBt').classList.toggle('hide', !gere); $('bzPerdBt').classList.toggle('hide', !gere); $('bzExpBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDispBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').textContent = _bzTimer ? 'Parar disparo' : 'Disparar'; $('bzDisparaBt').classList.toggle('btn-primary', !_bzTimer); $('bzDisparaBt').classList.toggle('btn-ghost', !!_bzTimer);
   const fila = bolsao.filter(x => x.status === 'fila').length;
-  const abas = [['livres', 'Disponíveis', bzLivres().length], ['meus', 'Os que eu peguei', bzMeus().length], ['ranking', 'Ranking', 0], ...(podeGerir() ? [['todos', 'Acompanhar', bolsao.filter(x => x.status !== 'livre' && x.status !== 'fila').length]] : []), ...(souGerente() && !souCeo() ? [['fila', 'Na fila', fila]] : [])];
+  const abas = [['livres', 'Disponíveis', bzLivres().length], ['meus', 'Os que eu peguei', bzTodosMeus().length], ['ranking', 'Ranking', 0], ...(podeGerir() ? [['todos', 'Acompanhar', bolsao.filter(x => x.status !== 'livre' && x.status !== 'fila').length]] : []), ...(souGerente() && !souCeo() ? [['fila', 'Na fila', fila]] : [])];
   $('bzTabs').innerHTML = abas.map(([k, r, q]) => `<button class="${bzAba === k ? 'on' : ''}" onclick="bzVerAba('${k}')">${r}${q ? ` <i>${q}</i>` : ''}</button>`).join('');
   const tempo = ms => anTempo(ms);
   if (bzAba === 'livres' && !bzPresente()) {
@@ -8493,32 +8531,90 @@ function renderBolsao(){
     $('bzLista').innerHTML = `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th></tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
     const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
-    $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar ? `<div class="bz-lim">Você está com <b>${meus}</b> de ${BZ_LIMITE()} clientes do bolsão. ${meus >= BZ_LIMITE() ? 'Dê o resultado de algum para pegar outro.' : ''}</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
+    $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span><small>${tempo(x.criadoEm)}</small></div>
       <b class="an-cli">${esc(nomeCurto(x.nome))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.tentativas ? `<span>${x.tentativas}ª tentativa</span>` : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>Pegar e ligar</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
   } else if (bzAba === 'meus') {
-    const l = bzMeus();
-    $('bzLista').innerHTML = l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card meu"><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead'}</span><small>peguei ${tempo(x.pegoEm)}</small></div>
-      <b class="an-cli">${esc(x.nome || 'Cliente')}</b><div class="an-c2"><span>📱 ${esc(x.telefone || '')}</span>${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}</div>${x.obs ? `<div class="an-c3">${esc(x.obs)}</div>` : ''}
-      <div class="bz-lig">${htmlLigar(x.telefone, x.nome, 'bolsão')}</div>
-      ${htmlBzLigs(x)}
-      <div class="bz-res"><select id="bzRes_${x.id}"><option value="">Como foi?</option>${BZ_RES.map(([k, n]) => `<option value="${k}">${n}</option>`).join('')}</select><button class="btn btn-ghost" onclick="resultadoBolsao('${x.id}')">Salvar</button></div>
-      <button class="link" onclick="devolverBolsao('${x.id}')">Devolver ao bolsão</button></div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Você não pegou nenhum cliente do bolsão</b><p>Vá em “Disponíveis” e toque em “Pegar este cliente”.</p></div>`;
+    $('bzLista').innerHTML = htmlBzFunil();
   } else {
     const l = bolsao.filter(x => x.status !== 'livre').sort((a, b) => (b.resultadoEm || b.pegoEm || 0) - (a.resultadoEm || a.pegoEm || 0));
     const res = {}; l.filter(x => x.resultado).forEach(x => res[x.resultado] = (res[x.resultado] || 0) + 1);
-    $('bzLista').innerHTML = `<div class="bz-kpis">${BZ_RES.map(([k, n]) => `<div><b>${res[k] || 0}</b><span>${n}</span></div>`).join('')}</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Cliente</th><th>Corretor</th><th>Situação</th><th></th></tr></thead><tbody>${l.slice(0, 200).map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span><small class="muted"> ${esc(x.telefone || '')}</small></td><td>${esc(primeiro(x.pegoNome || ''))}</td><td>${x.status === 'pego' ? `em atendimento · ${tempo(x.pegoEm)}` : esc((BZ_RES.find(r => r[0] === x.resultado) || [, 'encerrado'])[1])}</td><td>${souGerente() && !souCeo() ? `<button class="link" onclick="voltarBolsao('${x.id}')">voltar ao bolsão</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Ninguém pegou cliente do bolsão ainda.</div>');
+    $('bzLista').innerHTML = `<div class="bz-kpis">${bzRes().map(([k, n]) => `<div><b>${res[k] || 0}</b><span>${n}</span></div>`).join('')}</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Cliente</th><th>Corretor</th><th>Situação</th><th></th></tr></thead><tbody>${l.slice(0, 200).map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span><small class="muted"> ${esc(x.telefone || '')}</small></td><td>${esc(primeiro(x.pegoNome || ''))}</td><td>${x.status === 'pego' ? `em atendimento · ${tempo(x.pegoEm)}` : esc((bzRes().find(r => r[0] === x.resultado) || [, 'encerrado'])[1])}</td><td>${souGerente() && !souCeo() ? `<button class="link" onclick="voltarBolsao('${x.id}')">voltar ao bolsão</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Ninguém pegou cliente do bolsão ainda.</div>');
   }
 }
 window.bzVerAba = k => { bzAba = k; renderBolsao(); };
+// v144: "Os que eu peguei" em colunas por etapa, com todos os clientes que a pessoa pegou (os encerrados também)
+const bzTodosMeus = () => bolsao.filter(x => x.pegoPor === uidAtual && (x.status === 'pego' || x.status === 'encerrado'));
+function bzCardFunil(x, et){
+  const tempo = ms => anTempo(ms), aberto = x.status === 'pego';
+  const opts = bzEtapas().filter(e => e.k !== (x.resultado || '')).map(e => `<option value="${e.k}">${esc(e.n)}</option>`).join('');
+  return `<div class="bzf-card${aberto && !x.resultado ? ' novo' : ''}">
+    <div class="bzf-l1"><b>${esc(x.nome || 'Cliente')}</b><small>${tempo(x.resultadoEm || x.pegoEm)}</small></div>
+    <div class="bzf-l2">${x.telefone ? `<span>${esc(x.telefone)}</span>` : ''}${x.origem === 'perdido' ? '<span>cliente perdido</span>' : ''}${x.empreendimento ? `<span>${esc(x.empreendimento)}</span>` : ''}</div>
+    ${x.obs ? `<div class="an-c3">${esc(x.obs)}</div>` : ''}
+    <div class="bz-lig">${htmlLigar(x.telefone, x.nome, 'bolsão')}</div>
+    ${aberto ? htmlBzLigs(x) : ''}
+    <div class="bzf-mov"><select onchange="if(this.value)resultadoBolsao('${x.id}',this.value)" aria-label="Mover para outra etapa"><option value="">${x.resultado ? 'Mover para outra etapa' : 'Como foi? Mover para…'}</option>${opts}</select></div>
+    ${aberto ? `<button class="link" onclick="devolverBolsao('${x.id}')">Devolver ao bolsão</button>` : ''}</div>`;
+}
+function htmlBzFunil(){
+  const l = bzTodosMeus().sort((a, b) => (b.resultadoEm || b.pegoEm || 0) - (a.resultadoEm || a.pegoEm || 0));
+  const ets = bzEtapas(), conhecidas = new Set(ets.map(e => e.k));
+  const cols = [{ k:'', n:'Novos', l:l.filter(x => !x.resultado || !conhecidas.has(x.resultado)) }, ...ets.map(e => ({ ...e, l:l.filter(x => x.resultado === e.k) }))];
+  // os que já voltaram para o bolsão (o app guarda na conta da pessoa quais ela pegou)
+  const tem = new Set(l.map(x => x.id)), vm = new Map();
+  bzCarregarHist();
+  [...bolsao, ...(_bzHistTodos || [])].forEach(x => { if (tem.has(x.id) || vm.has(x.id)) return; const h = (x.historico || []).filter(e => e.uid === uidAtual && e.txt === 'pegou').pop(); if (h) vm.set(x.id, { n:x.nome, t:x.telefone, em:h.em, agora:x.pegoPor ? primeiro(x.pegoNome || '') : '' }); });
+  Object.entries(state?.bzPeguei || {}).forEach(([id, v]) => { if (!tem.has(id) && !vm.has(id)) vm.set(id, v); });
+  const voltou = [...vm.entries()].sort((a, b) => (b[1].em || 0) - (a[1].em || 0));
+  const edit = souGerente() && !souCeo();
+  const topo = `<div class="bzf-topo"><span>${l.filter(x => x.status === 'pego').length} em atendimento · ${l.length} cliente${l.length === 1 ? '' : 's'} pego${l.length === 1 ? '' : 's'}${voltou.length ? ` · ${voltou.length} que já pegou antes` : ''}</span>${edit ? `<button class="btn btn-ghost" onclick="abrirBzEtapas()">Editar etapas</button>` : ''}</div>`;
+  if (!l.length && !voltou.length) return topo + `<div class="an-vazio"><b>Você ainda não pegou nenhum cliente do bolsão</b><p>Vá em “Disponíveis” e toque em “Pegar e ligar”.</p></div>`;
+  const col = c => `<div class="bzf-col"><div class="bzf-h"><b>${esc(c.n)}</b><i>${c.l.length}</i></div><div class="bzf-lista">${c.l.length ? c.l.map(x => bzCardFunil(x, c)).join('') : '<div class="bzf-vz">Nenhum</div>'}</div></div>`;
+  const colV = voltou.length ? `<div class="bzf-col"><div class="bzf-h"><b>Já pegou antes</b><i>${voltou.length}</i></div><div class="bzf-lista">${voltou.map(([id, v]) => `<div class="bzf-card fora"><div class="bzf-l1"><b>${esc(v.n || 'Cliente')}</b><small>peguei ${anTempo(v.em)}</small></div><div class="bzf-l2">${v.t ? `<span>${esc(v.t)}</span>` : ''}<span>${v.agora ? 'agora com ' + esc(v.agora) : 'voltou ao bolsão'}</span></div></div>`).join('')}</div></div>` : '';
+  return topo + `<div class="bzf">${cols.map(col).join('')}${colV}</div>`;
+}
+// v144: busca no histórico do bolsão todos os clientes que a pessoa já pegou (uma vez por sessão; a gerência já tem tudo)
+let _bzHistTodos = null, _bzHistIndo = false;
+function bzCarregarHist(){
+  if (_bzHistTodos || _bzHistIndo || souGerente() || !uidAtual) return; _bzHistIndo = true;
+  getDocs(collection(db,'bolsao')).then(sn => { _bzHistTodos = sn.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => (x.historico || []).some(e => e.uid === uidAtual && e.txt === 'pegou')); if (view === 'bolsao') renderBolsao(); })
+    .catch(e => { console.warn('bolsão histórico', e.code || e.message); _bzHistTodos = []; }).finally(() => { _bzHistIndo = false; });
+}
+// editor de etapas (gerência)
+let _bzEt = [];
+window.abrirBzEtapas = () => { _bzEt = bzEtapas().map(e => ({ ...e })); pintarBzEtapas(); abrir('bzEtModal'); };
+function pintarBzEtapas(){
+  $('bzEtLista').innerHTML = _bzEt.map((e, i) => `<div class="bzet">
+    <div class="bzet-l1"><input value="${esc(e.n)}" maxlength="40" oninput="bzEtMuda(${i},'n',this.value)" aria-label="Nome da etapa">
+      <button class="icon-btn" onclick="bzEtMover(${i},-1)" ${i ? '' : 'disabled'} aria-label="Subir" title="Subir">${IC.up || '↑'}</button>
+      <button class="icon-btn" onclick="bzEtMover(${i},1)" ${i < _bzEt.length - 1 ? '' : 'disabled'} aria-label="Descer" title="Descer">${IC.down || '↓'}</button>
+      <button class="icon-btn" onclick="bzEtApagar(${i})" aria-label="Apagar" title="Apagar">${IC.trash || '×'}</button></div>
+    <div class="bzet-l2"><label><input type="checkbox" ${e.fim !== false ? 'checked' : ''} onchange="bzEtMuda(${i},'fim',this.checked)"> encerra o atendimento (sai de "em atendimento")</label>
+      <label><input type="checkbox" ${e.volta ? 'checked' : ''} onchange="bzEtMuda(${i},'volta',this.checked)"> volta para a fila depois de ${BZ_VOLTA_H()}h</label>
+      <label><input type="checkbox" ${e.visita ? 'checked' : ''} onchange="bzEtMuda(${i},'visita',this.checked)"> abre o cadastro de visita</label></div></div>`).join('');
+}
+window.bzEtMuda = (i, c, v) => { _bzEt[i][c] = v; };
+window.bzEtMover = (i, d) => { const j = i + d; if (j < 0 || j >= _bzEt.length) return; [_bzEt[i], _bzEt[j]] = [_bzEt[j], _bzEt[i]]; pintarBzEtapas(); };
+window.bzEtApagar = i => { const e = _bzEt[i], n = bolsao.filter(x => x.resultado === e.k && x.status !== 'livre').length;
+  if (n && !confirm(`${n} cliente${n > 1 ? 's estão' : ' está'} em "${e.n}". Eles vão para a coluna "Novos" de quem pegou. Apagar a etapa?`)) return; _bzEt.splice(i, 1); pintarBzEtapas(); };
+window.bzEtNova = () => { _bzEt.push({ k:'e' + Date.now().toString(36), n:'', fim:true }); pintarBzEtapas(); const l = $('bzEtLista').querySelectorAll('.bzet-l1 input'); l[l.length - 1]?.focus(); };
+window.bzEtPadrao = () => { _bzEt = BZ_ET_PADRAO.map(e => ({ ...e })); pintarBzEtapas(); };
+window.salvarBzEtapas = async () => {
+  const l = _bzEt.map(e => ({ k:e.k, n:String(e.n || '').trim().slice(0, 40), fim:e.fim !== false, ...(e.volta ? { volta:true } : {}), ...(e.visita ? { visita:true } : {}), ...(e.insistir ? { insistir:true } : {}) })).filter(e => e.n);
+  if (!l.length) { toast('Deixe pelo menos uma etapa'); return; }
+  try { await gravar(setDoc(doc(db,'config','app'), { bzEtapas:l, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); appCfg.bzEtapas = l; fechar('bzEtModal'); toast('Etapas salvas'); render(); } catch(e) { toast('Erro: ' + e.message); }
+};
+
 const bzHist = (x, txt) => [...(x.historico || []).slice(-40), { em:Date.now(), por:perfil.nome, uid:uidAtual, txt }];
 // v125: histórico de ligações por número no bolsão + mínimo de tentativas antes de passar para o próximo
 // v135: cliente que não deu sequência volta para a fila do bolsão (padrão: 2 horas) — o Carteiro faz isso sozinho; o app do dono ajuda enquanto estiver aberto
 const BZ_VOLTA_H = () => { const v = Number(appCfg.bolsaoVoltaHoras); return isFinite(v) && v >= 0 && appCfg.bolsaoVoltaHoras !== undefined && appCfg.bolsaoVoltaHoras !== '' ? v : 2; };
-const BZ_SEM_SEQ = ['', 'retornar', 'nao_atende'], BZ_VOLTA_MAX = 5; // depois de 5 voltas o cliente sai do giro
+const bzSemSeq = () => ['', ...bzEtapas().filter(e => e.volta).map(e => e.k)], BZ_VOLTA_MAX = 5; // depois de 5 voltas o cliente sai do giro
 function bzParaVoltar(agora = Date.now()){
   const h = BZ_VOLTA_H(); if (!h) return [];
-  return bolsao.filter(x => (x.status === 'pego' || (x.status === 'encerrado' && x.resultado === 'nao_atende')) && BZ_SEM_SEQ.includes(x.resultado || '')
+  const sem = bzSemSeq();
+  return bolsao.filter(x => (x.status === 'pego' || (x.status === 'encerrado' && x.resultado)) && sem.includes(x.resultado || '')
     && agora - Math.max(Number(x.pegoEm) || 0, Number(x.resultadoEm) || 0) >= h * 3600000 && (Number(x.pegoEm) || Number(x.resultadoEm)) && (Number(x.voltas) || 0) < BZ_VOLTA_MAX);
 }
 let _bzVoltaT = 0;
@@ -8555,6 +8651,7 @@ window.pegarBolsao = async id => {
     // se o Firebase ainda estiver com as regras antigas, tenta sem o campo novo
     try { await updateDoc(doc(db,'bolsao', id), dados); } catch(e1) { if (e1.code !== 'permission-denied') throw e1; const { pegoDia, ...velho } = dados; await updateDoc(doc(db,'bolsao', id), velho); }
     if (ligaPontua()) setDoc(doc(db,'ranking_ativ', mm + '_' + uidAtual), { mes:mm, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', bz:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('bz ranking', e.message));
+    if (state) { const pg = state.bzPeguei || {}, lim = Date.now() - 30 * 864e5; Object.keys(pg).forEach(k => { if ((pg[k].em || 0) < lim) delete pg[k]; }); pg[id] = { n:String(x.nome || '').slice(0, 60), t:String(x.telefone || '').slice(0, 25), em:Date.now() }; state.bzPeguei = pg; salvar(); }
     bzAba = 'meus'; vibrar(15); render();
     // v100: já abre a ligação pelo WhatsApp do corretor (e conta como ligação)
     const n = telZap(x.telefone || '');
@@ -8562,13 +8659,15 @@ window.pegarBolsao = async id => {
     else toast('Cliente é seu, mas o telefone está incompleto. Veja em "Os que eu peguei".'); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Alguém pegou esse cliente antes de você.' : 'Erro: ' + e.message); }
 };
-window.resultadoBolsao = async id => {
-  const x = bolsao.find(b => b.id === id), r = $('bzRes_' + id)?.value; if (!x || !r) { toast('Escolha como foi'); return; }
-  if (r === 'nao_atende' && bzMinhasLigs(x) < BZ_MIN_LIG()) { toast(`Insista mais: ligue pelo menos ${BZ_MIN_LIG()} vezes antes de marcar "Não atende" (feitas: ${bzMinhasLigs(x)}).`); return; }
-  const fim = !['retornar'].includes(r);
-  try { await updateDoc(doc(db,'bolsao', id), { status:fim ? 'encerrado' : 'pego', resultado:r, resultadoEm:Date.now(), historico:bzHist(x, (BZ_RES.find(b => b[0] === r) || [, r])[1]) });
-    toast(r === 'agendou' ? '📅 Boa! Cadastre a visita.' : ['acompanhando','conversando'].includes(r) ? 'Salvo. O cliente segue com você e a vaga do bolsão foi liberada.' : 'Resultado salvo ✓');
-    if (r === 'agendou') { novaVisita(); setTimeout(() => { $('vmCliente').value = x.nome || ''; $('vmFone').value = x.telefone || ''; if (x.empreendimento) $('vmImovel').value = x.empreendimento; }, 60); } }
+window.resultadoBolsao = async (id, rr) => {
+  const x = bolsao.find(b => b.id === id), r = rr || $('bzRes_' + id)?.value; if (!x || !r) { toast('Escolha como foi'); return; }
+  const et = bzEtapa(r) || { k:r, n:r, fim:true };
+  if ((et.insistir || r === 'nao_atende') && x.status === 'pego' && bzMinhasLigs(x) < BZ_MIN_LIG()) { toast(`Insista mais: ligue pelo menos ${BZ_MIN_LIG()} vezes antes de marcar "${et.n}" (feitas: ${bzMinhasLigs(x)}).`); render(); return; }
+  const fim = et.fim !== false;
+  if (!fim && x.status !== 'pego' && bzMeus().length >= BZ_LIMITE()) { toast(`"${et.n}" ocupa uma vaga e você já está com ${BZ_LIMITE()}. Mova outro cliente antes.`); render(); return; }
+  try { await updateDoc(doc(db,'bolsao', id), { status:fim ? 'encerrado' : 'pego', resultado:r, resultadoEm:Date.now(), historico:bzHist(x, et.n) });
+    vibrar(10); toast(et.visita ? 'Boa! Cadastre a visita.' : `Movido para "${et.n}"`);
+    if (et.visita) { novaVisita(); setTimeout(() => { $('vmCliente').value = x.nome || ''; $('vmFone').value = x.telefone || ''; if (x.empreendimento) $('vmImovel').value = x.empreendimento; }, 60); } }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.devolverBolsao = async id => {
@@ -8613,7 +8712,7 @@ window.exportarBolsao = () => {
   const ST = { fila:'Na fila', livre:'Disponível', pego:'Com corretor', encerrado:'Encerrado' };
   const l = bolsao.slice().sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0));
   baixarCSV('bolsao', ['Nome','Telefone','Criativo','Tipo','Motivo','Empreendimento','Situação','Corretor','Resultado','Entrou em'],
-    l.map(x => [x.nome || '', x.telefone || '', x.criativo || '', x.origem === 'perdido' ? 'Cliente perdido' : 'Lead', x.motivo || '', x.empreendimento || '', ST[x.status] || x.status || '', x.pegoNome || '', (BZ_RES.find(r => r[0] === x.resultado) || [, x.resultado || ''])[1].replace(/^[^\p{L}]+/u, ''), x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR') : '']));
+    l.map(x => [x.nome || '', x.telefone || '', x.criativo || '', x.origem === 'perdido' ? 'Cliente perdido' : 'Lead', x.motivo || '', x.empreendimento || '', ST[x.status] || x.status || '', x.pegoNome || '', (bzRes().find(r => r[0] === x.resultado) || [, x.resultado || ''])[1].replace(/^[^\p{L}]+/u, ''), x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR') : '']));
 };
 window.abrirDisparo = () => { const c = bzDisp(), k = { ativo:true, nomes:['Allan ADM'], destino:'livre', ...(appCfg.bolsaoCrm || {}) }; $('bdAtivo').checked = c.ativo !== false; $('bdQtd').value = c.qtd; $('bdInt').value = c.intervalo; $('bdMax').value = c.max;
   $('bdCrmAtivo').checked = k.ativo !== false; $('bdCrmNomes').value = (k.nomes || []).join(', '); $('bdCrmDest').value = k.destino === 'fila' ? 'fila' : 'livre'; $('bdMinLig').value = BZ_MIN_LIG(); $('bdVoltaH').value = BZ_VOLTA_H(); abrir('bzDispModal'); };
