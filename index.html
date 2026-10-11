@@ -2083,58 +2083,96 @@ body:has(#app:not(.hide)) .btn-primary:disabled{background:#E4E7EB!important;col
 </style>
 </head>
 <body>
-<!-- v146: abertura ao iniciar o app (logo da Frade em 3D, em vetor: nítida em qualquer tela) -->
+<!-- v148: abertura ao iniciar o app — as peças da logo da Frade chegam e se encaixam (em vetor, nítida em qualquer tela);
+     no celular o painel azul desce e vira o topo do login (a tela de login do celular tem o mesmo painel por baixo) -->
 <div id="frAbre" aria-hidden="true">
-  <div class="fa-cena">
-    <div class="fa-logo">
-      <svg class="fa-cam fa-c0" viewBox="0 0 512 512"><defs><linearGradient id="faFundo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1A4C75"/><stop offset="1" stop-color="#0F3557"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#faFundo)"/></svg>
-      <svg class="fa-cam fa-c1" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M130 168h65v260h-65zM195 184h185v16H195zM195 252h185v60H195z"/></svg>
-      <svg class="fa-cam fa-c2" viewBox="0 0 512 512"><path fill="#EE5A0A" d="M223 211h153v29H223zM223 338h153v90H223z"/></svg>
-      <svg class="fa-cam fa-c3" viewBox="0 0 512 512"><defs><linearGradient id="faTelha" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF8A1A"/><stop offset=".5" stop-color="#FF7400"/><stop offset=".5" stop-color="#E65A06"/><stop offset="1" stop-color="#D04600"/></linearGradient></defs><path fill="url(#faTelha)" d="M95 155 258 82 415 155v60L258 145 95 215z"/></svg>
-      <i class="fa-brilho"></i>
-    </div>
-    <div class="fa-chao"></div>
-    <div class="fa-nome"><b>FRADE</b> <span>IMÓVEIS</span></div>
-    <div class="fa-traco"></div>
+  <div class="fa-pn"><div class="fa-pn-tx"><b>FRADE <span>IMÓVEIS</span></b></div></div>
+  <div class="fa-logo">
+    <i class="fa-po fa-po1"></i><i class="fa-po fa-po2"></i>
+    <svg class="fa-p fa-p0" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#133F63"/></svg>
+    <svg class="fa-p fa-p1" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M132 201.5 256 146l94 42H196v70h176v56H196v114h-64z"/></svg>
+    <svg class="fa-p fa-p2" viewBox="0 0 512 512"><path fill="#E8510C" d="M224 212h152v30H224z"/></svg>
+    <svg class="fa-p fa-p3" viewBox="0 0 512 512"><path fill="#E8510C" d="M224 340h152v88H224z"/></svg>
+    <svg class="fa-p fa-p4" viewBox="0 0 512 512"><defs><linearGradient id="faTelha" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF8A1A"/><stop offset=".5" stop-color="#FF7400"/><stop offset=".5" stop-color="#E65A06"/><stop offset="1" stop-color="#D04600"/></linearGradient></defs><path fill="url(#faTelha)" d="M258 84 416 156v60h-8L256 148 104 216h-8v-60z"/></svg>
+    <i class="fa-brilho"></i>
   </div>
+  <div class="fa-nome"><b>FRADE <span>IMÓVEIS</span></b><small>Equipe Frade</small></div>
 </div>
 <style>
-#frAbre{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:radial-gradient(120% 75% at 50% 40%,#0B4669 0%,#022C45 55%,#011A2A 100%);transition:opacity .35s ease,visibility .35s;cursor:pointer}
+#frAbre{position:fixed;inset:0;z-index:2147483000;overflow:hidden;background:var(--bg,#F4F6F8);cursor:pointer;transition:opacity .35s ease,visibility .35s;--T:3.8s}
 #frAbre.sai{opacity:0;visibility:hidden}
-#frAbre .fa-cena{display:flex;flex-direction:column;align-items:center;perspective:900px}
-#frAbre .fa-logo{position:relative;width:min(40vw,168px);aspect-ratio:1;transform-style:preserve-3d;animation:faGira 1.25s cubic-bezier(.18,.85,.25,1) both}
-#frAbre .fa-cam{position:absolute;inset:0;width:100%;height:100%;overflow:visible;backface-visibility:hidden}
-#frAbre .fa-c0{filter:drop-shadow(0 22px 34px rgba(0,0,0,.5));animation:faC0 1.25s cubic-bezier(.18,.85,.25,1) both}
-#frAbre .fa-c1{animation:faC1 1.25s cubic-bezier(.18,.85,.25,1) both}
-#frAbre .fa-c2{animation:faC2 1.25s cubic-bezier(.18,.85,.25,1) both}
-#frAbre .fa-c3{filter:drop-shadow(0 6px 6px rgba(0,0,0,.25));animation:faC3 1.25s cubic-bezier(.18,.85,.25,1) both}
-#frAbre .fa-brilho{position:absolute;inset:0;border-radius:22%;overflow:hidden;pointer-events:none;-webkit-mask-image:linear-gradient(#000,#000)}
-#frAbre .fa-brilho::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:40%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.5),rgba(255,255,255,0));transform:translateX(-160%) skewX(-18deg);animation:faBrilho .8s .95s ease-out both}
-#frAbre .fa-chao{width:min(30vw,130px);height:16px;margin-top:22px;border-radius:50%;background:rgba(0,0,0,.55);filter:blur(9px);animation:faChao 1.25s ease-out both}
-#frAbre .fa-nome{margin-top:20px;font:800 clamp(26px,8vw,34px)/1 'Saira','Figtree',system-ui,sans-serif;letter-spacing:.04em;color:#fff;animation:faSobe .5s 1s ease-out both}
-#frAbre .fa-nome span{color:#FF7A1A}
-#frAbre .fa-traco{width:56px;height:3px;border-radius:2px;background:#FF7A1A;margin-top:14px;transform-origin:center;animation:faTraco .5s 1.2s ease-out both}
-@keyframes faGira{0%{transform:rotateY(-75deg) rotateX(22deg) scale(.55)}55%{transform:rotateY(16deg) rotateX(-6deg) scale(1.06)}80%{transform:rotateY(-5deg) rotateX(2deg) scale(.99)}100%{transform:none}}
-@keyframes faC0{0%{transform:translateZ(-120px);opacity:0}40%{opacity:1}100%{transform:none}}
-@keyframes faC1{0%{transform:translateZ(150px);opacity:0}35%{opacity:1}60%{transform:translateZ(26px)}100%{transform:none}}
-@keyframes faC2{0%{transform:translateZ(220px);opacity:0}40%{opacity:1}62%{transform:translateZ(40px)}100%{transform:none}}
-@keyframes faC3{0%{transform:translateZ(300px) translateY(-60px);opacity:0}45%{opacity:1}64%{transform:translateZ(58px)}100%{transform:none}}
-@keyframes faBrilho{to{transform:translateX(330%) skewX(-18deg)}}
-@keyframes faChao{0%{opacity:0;transform:scaleX(.3)}60%{opacity:.6;transform:scaleX(1.15)}100%{opacity:.45;transform:none}}
-@keyframes faSobe{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
-@keyframes faTraco{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+#frAbre .fa-pn{position:absolute;left:0;right:0;top:0;height:44%;background:linear-gradient(160deg,#0B4669 0%,#022C45 60%,#01223A 100%);border-radius:0 0 44px 44px;transform:translateY(-102%);animation:faPn var(--T) cubic-bezier(.3,.9,.3,1) both}
+#frAbre .fa-pn-tx,.login-pn .lp-tx{position:absolute;left:0;right:0;text-align:center;top:calc(env(safe-area-inset-top,0px) + 222px);color:#fff}
+#frAbre .fa-pn-tx{animation:faPnTx var(--T) ease-out both}
+#frAbre .fa-pn-tx b,.login-pn .lp-tx b{display:block;font:800 26px/1 'Saira','Figtree',system-ui,sans-serif;letter-spacing:.02em;color:#fff}
+#frAbre .fa-pn-tx b span,#frAbre .fa-nome b span,.login-pn .lp-tx b span{color:#FF7A1A}
+#frAbre .fa-pn-tx small,.login-pn .lp-tx small{display:block;margin-top:8px;font:500 14px/1.3 'Figtree',system-ui,sans-serif;color:#B9CAD6}
+#frAbre .fa-logo{position:absolute;left:50%;top:38%;width:160px;height:160px;margin-left:-80px;animation:faMove var(--T) cubic-bezier(.5,0,.25,1) both;transform-origin:50% 50%}
+#frAbre .fa-p{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform-origin:50% 84%}
+#frAbre .fa-p0{transform-origin:50% 50%;filter:drop-shadow(0 14px 22px rgba(2,44,69,.28));animation:faP0 var(--T) both}
+#frAbre .fa-p1{animation:faP1 var(--T) both}
+#frAbre .fa-p2{animation:faP2 var(--T) both}
+#frAbre .fa-p3{animation:faP3 var(--T) both}
+#frAbre .fa-p4{transform-origin:50% 40%;animation:faP4 var(--T) both}
+#frAbre .fa-po{position:absolute;top:30%;width:18px;height:18px;border-radius:50%;background:#C9D3DC;opacity:0;animation:faPo var(--T) ease-out both}
+#frAbre .fa-po1{left:-8px}#frAbre .fa-po2{right:-8px;animation-name:faPo2}
+#frAbre .fa-brilho{position:absolute;inset:0;border-radius:22%;overflow:hidden;pointer-events:none}
+#frAbre .fa-brilho::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:40%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0));transform:translateX(-170%) skewX(-18deg);animation:faBrilho var(--T) ease-out both}
+#frAbre .fa-nome{position:absolute;left:0;right:0;top:calc(38% + 186px);text-align:center;animation:faNome var(--T) ease-out both}
+#frAbre .fa-nome b{font:800 32px/1 'Saira','Figtree',system-ui,sans-serif;letter-spacing:.02em;color:var(--marinho,#022C45)}
+html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
+#frAbre .fa-nome small{display:block;margin-top:8px;font:500 14px 'Figtree',system-ui,sans-serif;color:var(--muted,#5E6B77)}
+/* no computador não tem o painel: a logo se monta, mostra o nome e some */
+#frAbre.curto .fa-pn{display:none}
+#frAbre.curto .fa-logo{animation:faMoveC var(--T) cubic-bezier(.5,0,.25,1) both}
+#frAbre.curto .fa-nome{animation:faNomeC var(--T) ease-out both}
+@keyframes faP0{0%{transform:scale(0);opacity:0}7%{transform:scale(1.12);opacity:1}10%{transform:scale(.96)}12%,100%{transform:none}}
+@keyframes faP1{0%,9%{transform:translateY(300px);opacity:0}10%{opacity:1}17%{transform:translateY(-16px) scaleY(1.06)}20%{transform:scale(1.06,.9)}23%,100%{transform:none}}
+@keyframes faP2{0%,17%{transform:translateX(320px);opacity:0}18%{opacity:1}24%{transform:translateX(-12px)}27%,100%{transform:none}}
+@keyframes faP3{0%,21%{transform:translateY(-380px);opacity:0}22%{opacity:1}28%{transform:translateY(0) scale(1.08,.84)}31%{transform:translateY(-6px)}33%,100%{transform:none}}
+@keyframes faP4{0%,29%{transform:translateY(-460px) rotate(-10deg);opacity:0}30%{opacity:1}37%{transform:translateY(0) rotate(0) scale(1.08,.82)}40%{transform:translateY(-14px) scaleY(1.04)}43%,100%{transform:none}}
+@keyframes faPo{0%,36%{opacity:0;transform:scale(.3)}39%{opacity:.9;transform:scale(1) translateX(-6px)}46%,100%{opacity:0;transform:scale(1.7) translateX(-22px)}}
+@keyframes faPo2{0%,36%{opacity:0;transform:scale(.3)}39%{opacity:.9;transform:scale(1) translateX(6px)}46%,100%{opacity:0;transform:scale(1.7) translateX(22px)}}
+@keyframes faBrilho{0%,45%{transform:translateX(-170%) skewX(-18deg)}56%,100%{transform:translateX(340%) skewX(-18deg)}}
+@keyframes faNome{0%,44%{opacity:0;transform:translateY(14px)}52%,62%{opacity:1;transform:none}68%,100%{opacity:0;transform:translateY(-10px)}}
+@keyframes faNomeC{0%,44%{opacity:0;transform:translateY(14px)}52%,100%{opacity:1;transform:none}}
+@keyframes faPn{0%,62%{transform:translateY(-102%)}73%{transform:translateY(2%)}77%,100%{transform:none}}
+@keyframes faMove{0%,37%{top:38%;transform:none}39%{transform:rotate(-3deg)}41%{transform:rotate(2deg)}43%{transform:none}64%{top:38%;transform:none}78%,100%{top:calc(env(safe-area-inset-top,0px) + 56px);transform:scale(.7)}}
+@keyframes faMoveC{0%,37%{transform:none}39%{transform:rotate(-3deg)}41%{transform:rotate(2deg)}43%,100%{transform:none}}
+@keyframes faPnTx{0%,76%{opacity:0;transform:translateY(10px)}84%,100%{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#frAbre *,#frAbre *::after{animation-duration:.01s!important;animation-delay:0s!important}}
+/* login no celular: mesmo painel azul da abertura no topo (as funções e os campos do login não mudam) */
+.login-pn{display:none}
+@media(max-width:900px){
+  .login-pn{display:block;position:relative;height:44vh;height:44dvh;background:linear-gradient(160deg,#0B4669 0%,#022C45 60%,#01223A 100%);border-radius:0 0 44px 44px}
+  .login-pn .lp-logo{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 80px);width:112px;height:112px;margin-left:-56px}
+  .login-pn .lp-logo svg{position:absolute;inset:0;width:100%;height:100%}
+  .login{min-height:100vh;min-height:100dvh;display:block}
+  .login .auth{align-items:flex-start;padding:28px 24px 28px}
+  .auth-box .brand{display:none!important}
+  .login.entra .auth-box>*{animation:lpSobe .55s cubic-bezier(.2,.8,.2,1) both}
+  .login.entra .auth-box>*:nth-child(3){animation-delay:.05s}.login.entra .auth-box>*:nth-child(n+4){animation-delay:.1s}.login.entra .auth-box>*:nth-child(n+8){animation-delay:.16s}.login.entra .auth-box>*:nth-child(n+10){animation-delay:.22s}
+}
+@keyframes lpSobe{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.login.entra .auth-box>*{animation:none}}
 </style>
 <script>
 (function(){
   var el = document.getElementById('frAbre'); if (!el) return;
   var ja = false; try { ja = sessionStorage.getItem('frAbriu') === '1'; sessionStorage.setItem('frAbriu', '1'); } catch(e) {}
-  // só na primeira abertura (não repete quando o app se atualiza sozinho ou recarrega)
+  // só na primeira abertura (não repete quando o app se atualiza sozinho ou recarrega) e nunca na TV
   if (ja || /[?&]tv=|#tv/.test(location.href)) { el.remove(); return; }
   var mot = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fim = function(){ if (!el) return; el.classList.add('sai'); var e = el; el = null; setTimeout(function(){ e.remove(); }, 400); };
+  var cel = innerWidth <= 900; if (!cel) el.classList.add('curto');
+  var fim = function(){
+    if (!el) return; var e = el; el = null;
+    var lg = document.getElementById('login');
+    // no celular, se a tela de login está aberta, o painel dela está no mesmo lugar: tira a abertura na hora e os campos sobem
+    if (cel && lg && !lg.classList.contains('hide') && !mot) { lg.classList.add('entra'); e.remove(); setTimeout(function(){ lg.classList.remove('entra'); }, 900); return; }
+    e.classList.add('sai'); setTimeout(function(){ e.remove(); }, 400);
+  };
   el.addEventListener('click', fim);
-  setTimeout(fim, mot ? 500 : 1900);
+  setTimeout(fim, mot ? 500 : (cel ? 3250 : 2300));
 })();
 </script>
 
@@ -2153,6 +2191,10 @@ body:has(#app:not(.hide)) .btn-primary:disabled{background:#E4E7EB!important;col
     </div>
     <div class="hero-foot">© <span id="ano"></span> Frade Imóveis · Seus dados protegidos na nuvem</div>
     <div class="hero-deco"></div>
+  </div>
+  <div class="login-pn" aria-hidden="true">
+    <div class="lp-logo"><svg viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#133F63"/><path fill="#FFFFFF" d="M132 201.5 256 146l94 42H196v70h176v56H196v114h-64z"/><path fill="#E8510C" d="M224 212h152v30H224zM224 340h152v88H224z"/><defs><linearGradient id="lpTelha" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF8A1A"/><stop offset=".5" stop-color="#FF7400"/><stop offset=".5" stop-color="#E65A06"/><stop offset="1" stop-color="#D04600"/></linearGradient></defs><path fill="url(#lpTelha)" d="M258 84 416 156v60h-8L256 148 104 216h-8v-60z"/></svg></div>
+    <div class="lp-tx"><b>FRADE <span>IMÓVEIS</span></b></div>
   </div>
   <div class="auth">
     <div class="auth-box">
@@ -4655,6 +4697,32 @@ window.marcarRep = async (id, st) => { try { await gravar(updateDoc(doc(db,'repo
   const tb = () => document.querySelector('.topbar');
   addEventListener('scroll', () => { const t = tb(); if (t) t.classList.toggle('rolou', (scrollY || 0) > 8); }, { passive:true });
 })();
+// v148: letras uniformes — em cada linha, o pedaço depois de um separador (· – — -) começa com maiúscula
+// ("Visitas de hoje · Todas as equipes"), e textos curtos que começam minúsculos ganham a inicial maiúscula.
+// Não mexe no login, na abertura, em campos de digitação nem em mensagens prontas.
+(() => {
+  const SEP = /(\s[·•–—\-|]\s+)([a-zà-öø-ÿ])/g;
+  const PULA = 'input, textarea, select, script, style, code, pre, [contenteditable], #login, #frAbre, .sem-cap, .wa-prev, .msg-prev, .msg-txt, .zap-b, .zap-con, .v-obs, .an-c3, .ia-painel, #v-whatsapp, .ia-bolha, .ia-btx, svg';
+  const ajusta = n => {
+    const t = n.nodeValue; if (!t || t.length < 3) return;
+    const pai = n.parentElement; if (!pai || pai.closest(PULA)) return;
+    let v = t.replace(SEP, (m, a, b) => a + b.toUpperCase());
+    // começo do texto em minúscula (ex.: "visitas do Feirão Tenda"), só quando tem pelo menos duas palavras e é o início do elemento
+    if (/^[a-zà-öø-ÿ]/.test(v) && /\s\S/.test(v.trim()) && !n.previousSibling && !/@|https?:|www\./.test(v)) v = v[0].toUpperCase() + v.slice(1);
+    if (v !== t) n.nodeValue = v;
+  };
+  const varre = raiz => {
+    if (!raiz) return;
+    if (raiz.nodeType === 3) { ajusta(raiz); return; }
+    if (raiz.nodeType !== 1 || raiz.closest?.(PULA)) return;
+    const w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) ajusta(n);
+  };
+  let fila = new Set(), agendado = false;
+  const roda = () => { agendado = false; const l = [...fila]; fila = new Set(); l.forEach(varre); };
+  const obs = new MutationObserver(ms => { ms.forEach(m => { if (m.type === 'characterData') fila.add(m.target); else m.addedNodes.forEach(x => fila.add(x)); }); if (!agendado) { agendado = true; requestAnimationFrame(roda); } });
+  const liga = () => { varre(document.body); obs.observe(document.body, { childList:true, subtree:true, characterData:true }); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', liga); else liga();
+})();
 // v136: modo manutenção (o dono liga em Configurações; os outros veem um aviso e não usam o app)
 function aplicarManutencao(){
   const m = (typeof appCfg !== 'undefined' && appCfg.manutencao) || {}, on = !!m.ativo, dono = souDono();
@@ -6052,7 +6120,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 147;
+const APP_VERSAO = 148;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
