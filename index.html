@@ -1980,6 +1980,7 @@ body:has(#app:not(.hide)) .vcard.swp.e{box-shadow:calc(var(--sx,0px) * -1) 0 0 0
 .vcard.swp.d::after{right:calc(100% + 16px)}
 .vcard.swp.e::after{left:calc(100% + 16px)}
 body:has(#app:not(.hide)) .vcard.solta{transition:transform .2s ease,box-shadow .2s ease!important;overflow:visible!important}
+body:has(.vcard.swp),body:has(.vcard.solta){overflow-x:clip}
 @media (prefers-reduced-motion:reduce){
   body:has(#app:not(.hide)) .view.on,body:has(#app:not(.hide)) .modal.open,body:has(#app:not(.hide)) .modal.open .sheet{animation:none!important}
   .vcard.solta{transition:none!important}
@@ -2082,6 +2083,60 @@ body:has(#app:not(.hide)) .btn-primary:disabled{background:#E4E7EB!important;col
 </style>
 </head>
 <body>
+<!-- v146: abertura ao iniciar o app (logo da Frade em 3D, em vetor: nítida em qualquer tela) -->
+<div id="frAbre" aria-hidden="true">
+  <div class="fa-cena">
+    <div class="fa-logo">
+      <svg class="fa-cam fa-c0" viewBox="0 0 512 512"><defs><linearGradient id="faFundo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1A4C75"/><stop offset="1" stop-color="#0F3557"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#faFundo)"/></svg>
+      <svg class="fa-cam fa-c1" viewBox="0 0 512 512"><path fill="#FFFFFF" d="M130 168h65v260h-65zM195 184h185v16H195zM195 252h185v60H195z"/></svg>
+      <svg class="fa-cam fa-c2" viewBox="0 0 512 512"><path fill="#EE5A0A" d="M223 211h153v29H223zM223 338h153v90H223z"/></svg>
+      <svg class="fa-cam fa-c3" viewBox="0 0 512 512"><defs><linearGradient id="faTelha" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF8A1A"/><stop offset=".5" stop-color="#FF7400"/><stop offset=".5" stop-color="#E65A06"/><stop offset="1" stop-color="#D04600"/></linearGradient></defs><path fill="url(#faTelha)" d="M95 155 258 82 415 155v60L258 145 95 215z"/></svg>
+      <i class="fa-brilho"></i>
+    </div>
+    <div class="fa-chao"></div>
+    <div class="fa-nome"><b>FRADE</b> <span>IMÓVEIS</span></div>
+    <div class="fa-traco"></div>
+  </div>
+</div>
+<style>
+#frAbre{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:radial-gradient(120% 75% at 50% 40%,#0B4669 0%,#022C45 55%,#011A2A 100%);transition:opacity .35s ease,visibility .35s;cursor:pointer}
+#frAbre.sai{opacity:0;visibility:hidden}
+#frAbre .fa-cena{display:flex;flex-direction:column;align-items:center;perspective:900px}
+#frAbre .fa-logo{position:relative;width:min(40vw,168px);aspect-ratio:1;transform-style:preserve-3d;animation:faGira 1.25s cubic-bezier(.18,.85,.25,1) both}
+#frAbre .fa-cam{position:absolute;inset:0;width:100%;height:100%;overflow:visible;backface-visibility:hidden}
+#frAbre .fa-c0{filter:drop-shadow(0 22px 34px rgba(0,0,0,.5));animation:faC0 1.25s cubic-bezier(.18,.85,.25,1) both}
+#frAbre .fa-c1{animation:faC1 1.25s cubic-bezier(.18,.85,.25,1) both}
+#frAbre .fa-c2{animation:faC2 1.25s cubic-bezier(.18,.85,.25,1) both}
+#frAbre .fa-c3{filter:drop-shadow(0 6px 6px rgba(0,0,0,.25));animation:faC3 1.25s cubic-bezier(.18,.85,.25,1) both}
+#frAbre .fa-brilho{position:absolute;inset:0;border-radius:22%;overflow:hidden;pointer-events:none;-webkit-mask-image:linear-gradient(#000,#000)}
+#frAbre .fa-brilho::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:40%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.5),rgba(255,255,255,0));transform:translateX(-160%) skewX(-18deg);animation:faBrilho .8s .95s ease-out both}
+#frAbre .fa-chao{width:min(30vw,130px);height:16px;margin-top:22px;border-radius:50%;background:rgba(0,0,0,.55);filter:blur(9px);animation:faChao 1.25s ease-out both}
+#frAbre .fa-nome{margin-top:20px;font:800 clamp(26px,8vw,34px)/1 'Saira','Figtree',system-ui,sans-serif;letter-spacing:.04em;color:#fff;animation:faSobe .5s 1s ease-out both}
+#frAbre .fa-nome span{color:#FF7A1A}
+#frAbre .fa-traco{width:56px;height:3px;border-radius:2px;background:#FF7A1A;margin-top:14px;transform-origin:center;animation:faTraco .5s 1.2s ease-out both}
+@keyframes faGira{0%{transform:rotateY(-75deg) rotateX(22deg) scale(.55)}55%{transform:rotateY(16deg) rotateX(-6deg) scale(1.06)}80%{transform:rotateY(-5deg) rotateX(2deg) scale(.99)}100%{transform:none}}
+@keyframes faC0{0%{transform:translateZ(-120px);opacity:0}40%{opacity:1}100%{transform:none}}
+@keyframes faC1{0%{transform:translateZ(150px);opacity:0}35%{opacity:1}60%{transform:translateZ(26px)}100%{transform:none}}
+@keyframes faC2{0%{transform:translateZ(220px);opacity:0}40%{opacity:1}62%{transform:translateZ(40px)}100%{transform:none}}
+@keyframes faC3{0%{transform:translateZ(300px) translateY(-60px);opacity:0}45%{opacity:1}64%{transform:translateZ(58px)}100%{transform:none}}
+@keyframes faBrilho{to{transform:translateX(330%) skewX(-18deg)}}
+@keyframes faChao{0%{opacity:0;transform:scaleX(.3)}60%{opacity:.6;transform:scaleX(1.15)}100%{opacity:.45;transform:none}}
+@keyframes faSobe{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
+@keyframes faTraco{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){#frAbre *,#frAbre *::after{animation-duration:.01s!important;animation-delay:0s!important}}
+</style>
+<script>
+(function(){
+  var el = document.getElementById('frAbre'); if (!el) return;
+  var ja = false; try { ja = sessionStorage.getItem('frAbriu') === '1'; sessionStorage.setItem('frAbriu', '1'); } catch(e) {}
+  // só na primeira abertura (não repete quando o app se atualiza sozinho ou recarrega)
+  if (ja || /[?&]tv=|#tv/.test(location.href)) { el.remove(); return; }
+  var mot = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fim = function(){ if (!el) return; el.classList.add('sai'); var e = el; el = null; setTimeout(function(){ e.remove(); }, 400); };
+  el.addEventListener('click', fim);
+  setTimeout(fim, mot ? 500 : 1900);
+})();
+</script>
 
 <div class="loading" id="loading"><div class="spinner"></div></div>
 
@@ -4522,42 +4577,58 @@ window.marcarRep = async (id, st) => { try { await gravar(updateDoc(doc(db,'repo
     if (e.pointerType === 'mouse') return;
     if (e.target.closest('.mobilebar button, .fab, .btn-primary, .ci-fino>button')) vib(6);
   }, { passive:true });
-  let st = null;
-  const LIM = 90;
+  // v147: arrastar refeito com toque (touch): começa em qualquer parte do cartão (até em cima dos botões),
+  // trava a rolagem enquanto arrasta para o lado e não deixa o toque abrir a visita nem apertar botão depois do arraste
+  let st = null, bloqueiaAte = 0, cardBloq = null;
+  const limDe = c => Math.max(90, c.offsetWidth * 0.32); // passou de 1/3 do cartão, vale
   const limpa = c => { c.classList.remove('swp', 'd', 'e', 'pronto'); c.style.removeProperty('--sx'); };
-  document.addEventListener('pointerdown', e => {
-    if (e.pointerType === 'mouse' || st) return;
-    const c = e.target.closest('.vcard[data-vid]');
-    if (!c || e.target.closest('button, a, input, select, textarea')) return;
-    st = { c, x:e.clientX, y:e.clientY, dx:0, h:null, id:e.pointerId, ok:false };
+  document.addEventListener('touchstart', e => {
+    if (st || e.touches.length !== 1) { st = null; return; }
+    const c = e.target.closest && e.target.closest('.vcard[data-vid]');
+    if (!c || e.target.closest('input, select, textarea, .v-mais') || document.querySelector('.modal.open')) return;
+    const t = e.touches[0]; st = { c, x:t.clientX, y:t.clientY, dx:0, h:null, ok:false, lim:limDe(c), larg:c.offsetWidth };
   }, { passive:true });
-  document.addEventListener('pointermove', e => {
-    if (!st || e.pointerId !== st.id) return;
-    const mx = e.clientX - st.x, my = e.clientY - st.y;
-    if (st.h === null && (Math.abs(mx) > 10 || Math.abs(my) > 10)) {
-      st.h = Math.abs(mx) > Math.abs(my) * 1.3;
+  document.addEventListener('touchmove', e => {
+    if (!st) return;
+    const t = e.touches[0], mx = t.clientX - st.x, my = t.clientY - st.y;
+    if (st.h === null) {
+      if (Math.abs(mx) < 8 && Math.abs(my) < 8) return;
+      st.h = Math.abs(mx) > Math.abs(my) * 1.2;
       if (!st.h) { st = null; return; }
+      window._swpAtivo = true;
       st.wa = st.c.querySelector('.snooze.wa'); st.lig = st.c.querySelector('.snooze.lig:not(.lig-zap)') || st.c.querySelector('.snooze.lig');
-      st.c.classList.remove('solta'); st.c.classList.add('swp');
+      st.c.classList.remove('solta'); st.c.classList.add('swp'); st.x = t.clientX - Math.sign(mx) * 8;
     }
-    if (!st.h) return;
-    const dx = Math.max(-150, Math.min(150, mx)); st.dx = dx;
+    if (e.cancelable) e.preventDefault(); // não rola a tela nem puxa para atualizar enquanto arrasta para o lado
+    const dx = Math.max(-st.larg, Math.min(st.larg, t.clientX - st.x)); st.dx = dx; // acompanha o dedo até a borda
     st.c.style.setProperty('--sx', dx + 'px');
     st.c.classList.toggle('d', dx > 0); st.c.classList.toggle('e', dx < 0);
     st.c.dataset.acao = dx > 0 ? (st.wa ? 'Confirmar no WhatsApp' : 'Sem WhatsApp') : (st.lig ? 'Ligar' : 'Sem telefone');
-    const ok = Math.abs(dx) > LIM; if (ok && !st.ok) vib(12); st.ok = ok; st.c.classList.toggle('pronto', ok);
-  }, { passive:true });
-  const fim = e => {
-    if (!st || (e && e.pointerId !== st.id)) return;
-    const { c, dx, h, wa, lig } = st; st = null;
+    const ok = Math.abs(dx) >= st.lim; if (ok && !st.ok) vib(12); st.ok = ok; st.c.classList.toggle('pronto', ok);
+  }, { passive:false });
+  const fim = () => {
+    if (!st) return;
+    const { c, dx, h, ok, wa, lig, larg } = st; st = null;
     if (!h) return;
-    c.classList.add('solta'); c.style.setProperty('--sx', '0px');
-    setTimeout(() => { limpa(c); c.classList.remove('solta'); }, 220);
-    if (dx > LIM) { if (wa) wa.click(); else toast('Essa visita não tem telefone para confirmar pelo WhatsApp.'); }
-    else if (dx < -LIM) { if (lig) lig.click(); else toast('Essa visita não tem telefone.'); }
+    // o toque que termina o arraste não pode virar clique (abrir a visita ou apertar Realizada/Não veio)
+    bloqueiaAte = Date.now() + 450; cardBloq = c;
+    setTimeout(() => { window._swpAtivo = false; }, 60);
+    c.classList.add('solta');
+    const volta = () => { c.style.setProperty('--sx', '0px'); setTimeout(() => { limpa(c); c.classList.remove('solta'); }, 230); };
+    if (!ok) { volta(); return; }
+    // passou do ponto: o cartão sai inteiro para o lado, faz a ação e volta para o lugar
+    c.style.setProperty('--sx', (dx > 0 ? larg : -larg) + 'px'); vib(18);
+    setTimeout(() => {
+      if (dx > 0) { if (wa) wa.click(); else toast('Essa visita não tem telefone para confirmar pelo WhatsApp.'); }
+      else { if (lig) lig.click(); else toast('Essa visita não tem telefone.'); }
+      volta();
+    }, 200);
   };
-  document.addEventListener('pointerup', fim, { passive:true });
-  document.addEventListener('pointercancel', e => { if (st && st.c) { limpa(st.c); } st = null; }, { passive:true });
+  document.addEventListener('touchend', fim, { passive:true });
+  document.addEventListener('touchcancel', () => { if (st && st.c) limpa(st.c); st = null; window._swpAtivo = false; }, { passive:true });
+  document.addEventListener('click', e => {
+    if (Date.now() < bloqueiaAte && cardBloq && e.isTrusted && cardBloq.contains(e.target)) { e.stopPropagation(); e.preventDefault(); bloqueiaAte = 0; }
+  }, true);
   // dica uma vez só, na primeira vez que abre as visitas pelo celular
   window._dicaArrasto = () => {
     let ja = false; try { ja = localStorage.getItem('dicaArrasto') === '1'; } catch(e) { ja = true; }
@@ -4574,7 +4645,7 @@ window.marcarRep = async (id, st) => { try { await gravar(updateDoc(doc(db,'repo
   let y0 = null, d = 0, ativo = false;
   const podePuxar = () => innerWidth <= 760 && !document.getElementById('app')?.classList.contains('hide') && !document.querySelector('.modal.open') && (scrollY || document.documentElement.scrollTop) <= 0;
   addEventListener('touchstart', e => { if (!podePuxar() || e.touches.length !== 1) { y0 = null; return; } y0 = e.touches[0].clientY; d = 0; ativo = false; }, { passive:true });
-  addEventListener('touchmove', e => { if (y0 === null) return; d = e.touches[0].clientY - y0; if (d <= 0) { el.style.opacity = 0; return; }
+  addEventListener('touchmove', e => { if (y0 === null) return; if (window._swpAtivo) { y0 = null; el.style.opacity = 0; return; } d = e.touches[0].clientY - y0; if (d <= 0) { el.style.opacity = 0; return; }
     ativo = true; const p = Math.min(d, 120); el.style.transition = 'none'; el.style.opacity = Math.min(1, p / 70); el.style.transform = `translateY(${p - 60}px) rotate(${p * 3}deg)`; }, { passive:true });
   addEventListener('touchend', () => { if (y0 === null || !ativo) { y0 = null; return; } y0 = null;
     el.style.transition = 'transform .2s ease, opacity .2s ease';
@@ -5981,7 +6052,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 144;
+const APP_VERSAO = 147;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9744,7 +9815,7 @@ document.addEventListener('pointerdown', e => { const b = e.target.closest && e.
   let y0 = null, puxou = 0, el = null;
   const noTopo = () => (window.lenis ? window.lenis.scroll : window.scrollY) <= 2;
   document.addEventListener('touchstart', e => { if (e.touches.length !== 1 || !noTopo() || document.querySelector('.modal.open') || e.target.closest('.fv-funil, .zap, .sino-painel, input, textarea, select')) { y0 = null; return; } y0 = e.touches[0].clientY; puxou = 0; }, { passive:true });
-  document.addEventListener('touchmove', e => { if (y0 === null) return; const d = e.touches[0].clientY - y0; if (d <= 0) { if (el) el.style.opacity = 0; return; }
+  document.addEventListener('touchmove', e => { if (y0 === null) return; if (window._swpAtivo) { y0 = null; if (el) { el.remove(); el = null; } return; } const d = e.touches[0].clientY - y0; if (d <= 0) { if (el) el.style.opacity = 0; return; }
     puxou = Math.min(110, d * .5); if (!el) { el = document.createElement('div'); el.className = 'ptr'; el.innerHTML = '<i>↻</i>'; document.body.appendChild(el); }
     el.style.opacity = Math.min(1, puxou / 60); el.style.transform = `translate(-50%, ${puxou}px) rotate(${puxou * 3}deg)`; el.classList.toggle('pronto', puxou >= 70); }, { passive:true });
   document.addEventListener('touchend', () => { if (y0 === null || !el) { y0 = null; return; } if (puxou >= 70) { el.classList.add('girando'); vibrar(15); setTimeout(() => location.reload(), 350); } else { el.remove(); el = null; } y0 = null; });
