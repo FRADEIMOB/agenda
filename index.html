@@ -1870,6 +1870,18 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 #resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
+<style id="vr150">
+.vr-ops{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.vr-op{border:1.5px solid var(--border);background:var(--card);border-radius:14px;padding:14px 12px;text-align:left;cursor:pointer;font-family:inherit;color:var(--text);display:grid;gap:3px}
+.vr-op b{font-size:15.5px}.vr-op span{font-size:12.5px;color:var(--muted)}
+.vr-op.on{border-color:var(--accent);background:var(--accent-soft)}
+.vr-op[data-r="fechou"].on{border-color:#11703F;background:color-mix(in srgb,#11703F 10%,transparent)}
+.vr-tag{display:inline-flex;align-items:center;font-size:12.5px;font-weight:700;padding:5px 10px;border-radius:999px;border:0;font-family:inherit}
+.vr-tag.ok{background:color-mix(in srgb,#11703F 14%,transparent);color:#11703F}
+.vr-tag.nao{background:color-mix(in srgb,#B42318 10%,transparent);color:#B42318;cursor:pointer}
+.snooze.vr-venda{color:#11703F;font-weight:700}
+.snooze.vr-atraso{border-color:#B42318!important;color:#B42318!important}
+</style>
 <style id="bz144">
 .bzf-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;color:var(--muted);font-size:13.5px}
 .bzf{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 14px;align-items:flex-start;overscroll-behavior-x:contain}
@@ -3151,6 +3163,19 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
   <div class="ap-nav"><button onclick="apIr(-1)" aria-label="Anterior">‹</button><button onclick="apIr(1)" aria-label="Próximo">›</button></div>
 </div>
 
+<div class="modal" id="vrModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-head"><div><h2>Como foi a visita?</h2><div class="muted" style="font-size:13px;margin-top:3px" id="vrCli"></div></div><button class="icon-btn" onclick="fechar('vrModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="vr-ops"><button class="vr-op" data-r="fechou" onclick="vrEscolher('fechou')"><b>Fechou reserva</b><span>Abre a reserva já preenchida</span></button><button class="vr-op" data-r="nao_fechou" onclick="vrEscolher('nao_fechou')"><b>Não fechou</b><span>Conte o motivo</span></button></div>
+      <div id="vrNao" class="hide" style="margin-top:14px">
+        <div class="fg"><label for="vrMotivo">Motivo</label><select id="vrMotivo"></select></div>
+        <div class="fg"><label for="vrObs">Como foi a visita</label><textarea id="vrObs" maxlength="600" placeholder="Ex.: gostou do imóvel, vai trazer a esposa no sábado." style="min-height:90px"></textarea></div>
+      </div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('vrModal')">Cancelar</button><button class="btn btn-primary" id="vrSalvar" onclick="salvarComoFoi()">Salvar registro</button></div>
+  </div>
+</div>
 <div class="modal" id="resvModal">
   <div class="sheet" style="width:min(620px,100%)">
     <div class="sheet-head"><h2 id="rvTitulo">Reserva</h2><button class="icon-btn" onclick="fechar('resvModal')" data-ic="x"></button></div>
@@ -4957,6 +4982,12 @@ function cardVisita(v, compacto){
   if (v.telefone && AGUARDA_CONF.concat('Confirmada').includes(v.status)) acoes.push(`<button class="snooze wa" onclick="whatsConfirmar('${v.id}')" title="Mandar mensagem de confirmação">${IC.wa}Confirmar</button>`);
   if (v.status === 'Pendente' || v.status === 'Reagendada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Confirmada')">Confirmada</button>`);
   if (v.status === 'Confirmada') acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Realizada')">Realizada</button>`);
+  // v150: depois de realizada, registrar como foi a visita e gerar a venda direto
+  if (v.status === 'Realizada') {
+    if (v.resultado === 'fechou') acoes.push(`<span class="vr-tag ok">Venda gerada</span>`);
+    else if (v.resultado === 'nao_fechou') acoes.push(`<button class="vr-tag nao" onclick="abrirComoFoi('${v.id}')" title="Ver ou mudar o registro">Não fechou${v.resultadoMotivo ? ' · ' + esc(v.resultadoMotivo) : ''}</button>`);
+    if (v.resultado !== 'fechou' && podeRegistrarVisita(v)) acoes.push(`<button class="snooze${vrPendente(v) ? ' vr-atraso' : ''}" onclick="abrirComoFoi('${v.id}')">${v.resultado ? 'Editar registro' : 'Como foi?'}</button>`, `<button class="snooze vr-venda" onclick="gerarVendaDaVisita('${v.id}')">Gerar venda</button>`);
+  }
   if (v.status === 'Realizada' && !cartas.some(c => c.visitaId === v.id)) acoes.push(`<button class="snooze" onclick="cartaDaVisita('${v.id}')">+ Carta aprovada</button>`);
   if (v.status === 'Confirmada' && v.date <= hojeISO()) acoes.push(`<button class="snooze" onclick="mudarStatus('${v.id}','Não compareceu')">Não veio</button>`);
   if (!compacto) {
@@ -5911,6 +5942,68 @@ window.excluirAviso = async id => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 
+
+// =====================================================================
+// v150: pós-visita — registro de como foi + gerar venda (vira reserva) + cobrança depois de 24h sem registro
+// =====================================================================
+const VR_DESDE = '2026-10-12'; // só cobra visitas a partir daqui (as antigas não viram pendência)
+const VR_MOTIVOS = ['Vai pensar / retornar', 'Sem renda ou crédito', 'Documentação pendente', 'Não gostou do imóvel', 'Preferiu outro lugar', 'Outro motivo'];
+const podeRegistrarVisita = v => !!v && !souSdr() && (v.corretorUid === uidAtual || podeGerir());
+const vrQuando = v => { const t = Date.parse((v.date || '') + 'T' + (/^\d\d:\d\d$/.test(v.time || '') ? v.time : '12:00') + ':00'); return isFinite(t) ? t : 0; };
+const vrPendente = v => !!v && v.status === 'Realizada' && !v.resultado && (v.date || '') >= VR_DESDE && Date.now() - vrQuando(v) > 24 * 3600000;
+let _vrId = null, _vrRes = '';
+window.abrirComoFoi = id => {
+  const v = visitas.find(x => x.id === id); if (!v || !podeRegistrarVisita(v)) return;
+  _vrId = id; _vrRes = v.resultado || '';
+  $('vrCli').textContent = v.cliente + (v.empreendimento ? ' · ' + v.empreendimento : '');
+  $('vrMotivo').innerHTML = '<option value="">Escolha o motivo</option>' + VR_MOTIVOS.map(m => `<option ${v.resultadoMotivo === m ? 'selected' : ''}>${esc(m)}</option>`).join('');
+  $('vrObs').value = v.resultadoObs || '';
+  vrPintar(); abrir('vrModal');
+};
+function vrPintar(){
+  document.querySelectorAll('#vrModal .vr-op').forEach(b => b.classList.toggle('on', b.dataset.r === _vrRes));
+  $('vrNao').classList.toggle('hide', _vrRes !== 'nao_fechou');
+  $('vrSalvar').textContent = _vrRes === 'fechou' ? 'Gerar venda' : 'Salvar registro';
+}
+window.vrEscolher = r => { _vrRes = r; vrPintar(); };
+window.salvarComoFoi = async () => {
+  const v = visitas.find(x => x.id === _vrId); if (!v) return;
+  if (!_vrRes) { toast('Escolha se fechou ou não'); return; }
+  if (_vrRes === 'fechou') { fechar('vrModal'); gerarVendaDaVisita(v.id); return; }
+  const mot = $('vrMotivo').value, obs = $('vrObs').value.trim();
+  if (!mot) { toast('Escolha o motivo'); return; }
+  try { await gravar(updateDoc(doc(db,'visitas', v.id), { resultado:'nao_fechou', resultadoMotivo:mot, resultadoObs:obs.slice(0, 600), resultadoEm:Date.now(), resultadoPor:perfil.nome }));
+    fechar('vrModal'); toast('Registro salvo'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// gerar venda: abre a reserva já preenchida com os dados da visita; ao salvar, a visita fica como "Venda gerada"
+window.gerarVendaDaVisita = id => {
+  const v = visitas.find(x => x.id === id); if (!v || !podeRegistrarVisita(v)) return;
+  if (!souGerente() && !['corretor','coordenador','anjo'].includes(perfil?.papel)) { toast('Só corretor ou gerência cadastra venda.'); return; }
+  editarReserva();
+  window._vendaDaVisita = v.id;
+  const pr = (k, x) => { if (x && $(k)) $(k).value = x; };
+  pr('rvCli', v.cliente); pr('rvTel', v.telefone); pr('rvEmp', v.empreendimento); pr('rvOrig', v.origem || (v.feirao ? 'Feirão Tenda' : ''));
+  if (souGerente()) pr('rvCor', v.corretorNome);
+  toast('Confira os dados e salve a reserva');
+};
+async function vincularVendaVisita(reservaId){
+  const vid = window._vendaDaVisita; window._vendaDaVisita = null; if (!vid) return;
+  try { await updateDoc(doc(db,'visitas', vid), { resultado:'fechou', resultadoMotivo:'', resultadoEm:Date.now(), resultadoPor:perfil.nome, reservaId:reservaId || '' }); } catch(e) { console.warn('visita venda', e.message); }
+}
+// itens de cobrança para "Precisa da sua atenção"
+function itensPosVisita(){
+  const out = [], minhas = visitas.filter(v => v.corretorUid === uidAtual && vrPendente(v));
+  minhas.forEach(v => out.push({ ord:-1, html:`<div class="at-row"><div class="ati" style="background:var(--danger-soft)">📝</div><div class="att"><b>Registre como foi a visita de ${esc(v.cliente)}</b><span>Realizada em ${(v.date || '').split('-').reverse().slice(0, 2).join('/')} · faltando o registro há mais de 24h</span></div>
+    <div class="ata"><button class="snooze" onclick="abrirComoFoi('${v.id}')">Como foi?</button><button class="snooze vr-venda" onclick="gerarVendaDaVisita('${v.id}')">Gerar venda</button></div></div>` }));
+  if (podeGerir()) {
+    const eq = visitas.filter(v => v.corretorUid !== uidAtual && vrPendente(v)), por = {};
+    eq.forEach(v => { const k = v.corretorNome || 'Sem corretor'; (por[k] = por[k] || []).push(v); });
+    const nomes = Object.keys(por).sort((a, b) => por[b].length - por[a].length);
+    if (nomes.length) out.push({ ord:-0.5, html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,var(--warn) 16%,transparent)">📝</div><div class="att"><b>${eq.length} visita${eq.length > 1 ? 's' : ''} da equipe sem registro há mais de 24h</b><span>${nomes.slice(0, 6).map(n => esc(primeiro(n)) + ' (' + por[n].length + ')').join(' · ')}</span></div>
+      <div class="ata"><button class="snooze" onclick="setView('visitas')">Ver visitas</button></div></div>` });
+  }
+  return out;
+}
 // ---------- Precisa da sua atenção ----------
 function renderAtencao(){
   if (!souAtivo()) { $('cardAtencao').classList.add('hide'); return; }
@@ -5931,6 +6024,7 @@ function renderAtencao(){
     itens.push({ ord:2, html:`<div class="at-row"><div class="ati" style="background:color-mix(in srgb,var(--warn) 16%,transparent)">📄</div><div class="att"><b>Faltam ${falta} documento${falta!==1?'s':''} de ${esc(c.cliente)}</b><span>${DOCS.filter(([k]) => !c.docs?.[k]).map(([,n]) => n).slice(0,3).join(', ')}${falta>3?'…':''}</span></div>
       <div class="ata"><button class="snooze" onclick="editarCarta('${c.id}')">Atualizar</button></div></div>` });
   });
+  itensPosVisita().forEach(i => itens.push(i));
   itensEtapa2().forEach(i => itens.push({ ...i, ord:i.ord + 0.5 }));
   itensPesquisa().forEach(i => itens.push(i));
   itens.sort((a,b) => a.ord - b.ord);
@@ -6120,7 +6214,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 149;
+const APP_VERSAO = 150;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11531,6 +11625,7 @@ window.rvAbrirDoc = async did => {
   } catch(e) { $('axCorpo').innerHTML = `<div class="ax-load">Não deu para abrir: ${esc(e.message)}</div>`; }
 };
 window.editarReserva = id => {
+  window._vendaDaVisita = null;
   const rr = id ? reservasTodas.find(x => x.id === id) : null;
   const minha = !!rr && (rr.corretorUids || []).includes(uidAtual);
   if (!souGerente() && (id ? !minha : !['corretor','coordenador','anjo'].includes(perfil?.papel))) return;
@@ -11578,7 +11673,7 @@ window.salvarReserva = async () => {
     try { await gravar(setDoc(doc(db,'reservas',idc), { ...d, corretorUids:uids, criadoPor:uidAtual, fonte:'corretor', criadoEm:Date.now(), caiu:false }));
       let feitos = 0;
       if (rvNovos.length) { try { const { docs } = await rvGravarDocs(idc, uids); await gravar(updateDoc(doc(db,'reservas',idc), { docs, docsEm:Date.now() })); feitos = new Set(docs.map(x => x.tipo)).size; pontuarDocsReserva(idc, docs, uids, false); } catch(e) { toast('A reserva foi salva, mas os documentos não subiram: ' + e.message); } }
-      fechar('resvModal'); avisarCarteiro('reserva', idc, false, { feitos, total:DOCS_RES.length }); copiarTextoReserva(d, true); setTimeout(() => festejar(), 300); }
+      fechar('resvModal'); vincularVendaVisita(idc); avisarCarteiro('reserva', idc, false, { feitos, total:DOCS_RES.length }); copiarTextoReserva(d, true); setTimeout(() => festejar(), 300); }
     catch(e) { toast(e.code === 'permission-denied' ? 'Esse cliente já tem reserva cadastrada. Fale com a gerência.' : 'Erro: ' + e.message); }
     return;
   }
@@ -11586,7 +11681,7 @@ window.salvarReserva = async () => {
   if (!rvId && reservasTodas.some(x => x.id === id)) { if (!confirm('Já existe uma reserva desse cliente. Atualizar a que existe?')) return; }
   const rAntes = rvId ? reservasTodas.find(x => x.id === rvId) : null;
   if (rvNovos.length || rvTirar.length) { try { const { docs } = await rvGravarDocs(id, rAntes?.corretorUids || corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean)); d.docs = docs; d.docsEm = Date.now(); } catch(e) { toast('Erro nos documentos: ' + e.message); return; } }
-  try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓');
+  try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓'); vincularVendaVisita(id);
     if (d.docs) pontuarDocsReserva(id, d.docs, rAntes?.corretorUids || corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean), rAntes?.docsPontos);
     if (rAntes) logEdicao('reservas', id, d.cliente, rAntes, d, ROT_R);
     const rx = reservasTodas.find(x => x.id === id); if (rvId && rx && rx.fonte === 'corretor' && !rx.avisadoOk) avisarCarteiro('reserva_ok', id); }
