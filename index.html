@@ -1872,6 +1872,12 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </style>
 <style id="cp158">
 /* v158: quem responde pela Prime e prints colados */
+.cp-lista{flex-direction:column;flex-wrap:nowrap}.cp-pes{display:grid;grid-template-columns:minmax(0,1fr) auto auto 24px;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--card2)}
+.cp-pes b{font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cp-pes small{font-size:12px;color:var(--ok);font-weight:700}.cp-pes.off b{color:var(--muted);text-decoration:line-through}.cp-pes.off small{color:var(--muted)}
+.cp-x{all:unset;cursor:pointer;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;color:var(--muted)}.cp-x:hover{background:var(--border);color:var(--text)}
+.cp-eq{display:flex;flex-direction:column;gap:4px}.cp-eq-l{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(6,minmax(0,1fr));gap:8px;align-items:center;padding:9px 10px;border-radius:10px;background:var(--card2);font-variant-numeric:tabular-nums;text-align:center}
+.cp-eq-l>span:first-child{text-align:left;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cp-eq-cab{background:none;font-size:11.5px;font-weight:700;color:var(--muted);padding-top:0;padding-bottom:0}
+@media(max-width:640px){.cp-eq-cab{display:none}.cp-eq-l{grid-template-columns:repeat(3,minmax(0,1fr));text-align:left}.cp-eq-l>span:first-child{grid-column:1/-1}.cp-eq-l>span[data-r]:before{content:attr(data-r);display:block;font-size:11px;color:var(--muted)}}
 .cp-quem{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;margin-bottom:12px;border-radius:12px;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border))}
 .cp-quem label{font-size:13px;font-weight:700}.cp-quem select{flex:1;min-width:160px;height:38px}.cp-quem select.cp-falta{outline:2px solid var(--danger);outline-offset:2px}
 .cp-lista{display:flex;flex-wrap:wrap;gap:6px}.cp-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 11px;border-radius:99px;background:var(--card2);font-size:13.5px;font-weight:600}
@@ -2816,7 +2822,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 
       <section class="view" id="v-analises">
         <div class="an-topo"><div><h1 id="anTit">Correspondente</h1><p class="an-sub" id="anSub"></p></div>
-          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="anTestBt" onclick="abrirTestadores()">Quem participa do teste</button><button class="btn btn-ghost hide" id="cpPesBt" onclick="abrirCpPessoas()">Quem usa este acesso</button><button class="btn btn-primary hide" id="anNovaBt" onclick="novaPasta()">+ Nova pasta</button></div></div>
+          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="anTestBt" onclick="abrirTestadores()">Quem participa do teste</button><button class="btn btn-ghost hide" id="cpEqBt" onclick="abrirCpEquipe()">Equipe da Prime</button><button class="btn btn-ghost hide" id="cpPesBt" onclick="abrirCpPessoas()">Quem usa este acesso</button><button class="btn btn-primary hide" id="anNovaBt" onclick="novaPasta()">+ Nova pasta</button></div></div>
         <div class="an-kpis" id="anKpis"></div>
         <div class="an-filtros"><div class="an-tabs" id="anTabs"></div><input id="anBusca" placeholder="Buscar cliente, CPF ou corretor" oninput="anBuscar(this.value)"></div>
         <div id="anLista"></div>
@@ -3761,9 +3767,15 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 </div>
 <div class="modal" id="cpModal">
   <div class="sheet" style="width:min(440px,100%)">
-    <div class="sheet-head"><div><h2>Quem usa este acesso</h2><div class="muted" style="font-size:13px;margin-top:3px">Na hora de responder, cada um escolhe o próprio nome.</div></div><button class="icon-btn" onclick="fechar('cpModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><div><h2>Quem usa este acesso</h2><div class="muted" style="font-size:13px;margin-top:3px">Todos entram com o mesmo e-mail e senha. Na hora de responder, cada um escolhe o próprio nome. Quem for desativado some da lista.</div></div><button class="icon-btn" onclick="fechar('cpModal')" data-ic="x"></button></div>
     <div class="sheet-body"><div class="cp-lista" id="cpLista"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="cpNovo" maxlength="40" placeholder="Nome da pessoa" onkeydown="if(event.key==='Enter'){event.preventDefault();cpAdd()}" style="flex:1"><button class="btn btn-ghost" onclick="cpAdd()">Adicionar</button></div></div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('cpModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarCpPessoas()">Salvar</button></div>
+  </div>
+</div>
+<div class="modal" id="cpEqModal">
+  <div class="sheet" style="width:min(820px,100%)">
+    <div class="sheet-head"><div><h2>Equipe da Prime</h2><div class="muted" style="font-size:13px;margin-top:3px">O que cada correspondente respondeu no mês.</div></div><button class="icon-btn" onclick="fechar('cpEqModal')" data-ic="x"></button></div>
+    <div class="sheet-body" data-lenis-prevent><select id="cpEqMes" aria-label="Mês" onchange="_cpEqMes=this.value;pintarCpEquipe()" style="margin-bottom:12px"></select><div id="cpEqCorpo"></div></div>
   </div>
 </div>
 <div class="modal" id="anRespModal">
@@ -4952,10 +4964,13 @@ let historicoCompleto = false, enviadosConf = new Set();
 const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR', anjo:'Anjo', correspondente:'Correspondente', adm:'ADM / Correspondente', marketing:'Marketing' };
 // lista de perfis na ordem da empresa: CEO, Gerente, Coordenador, Corretor, SDR (CEO = gerente com cargo de direção)
 function opcoesPapel(p, comGerencia){
-  const atual = p.papel === 'gerente' && p.cargo === 'dono' ? 'ceo' : p.papel;
-  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR'], ['anjo','Anjo'], ['adm','ADM / Correspondente'], ['marketing','Marketing'], ['correspondente','Correspondente (Prime)']];
+  const atual = p.papel === 'gerente' && p.cargo === 'dono' ? 'ceo' : p.papel === 'correspondente' && p.liderCorresp ? 'corresp_lider' : p.papel;
+  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR'], ['anjo','Anjo'], ['adm','ADM / Correspondente'], ['marketing','Marketing'], ['correspondente','Correspondente (Prime)'], ['corresp_lider','Líder dos correspondentes']];
   return ops.map(([k,n]) => `<option value="${k}" ${atual===k?'selected':''}>${n}</option>`).join('');
 }
+// v159: o líder dos correspondentes é um correspondente com liderCorresp; nenhum correspondente tem equipe
+const SEM_EQUIPE = ['gerente', 'anjo', 'correspondente'];
+const papelDaEscolha = e => e === 'ceo' ? { papel:'gerente', extra:{ cargo:'dono' } } : e === 'corresp_lider' ? { papel:'correspondente', extra:{ liderCorresp:true, equipe:'' } } : e === 'correspondente' ? { papel:'correspondente', extra:{ liderCorresp:false, equipe:'' } } : { papel:e, extra:{} };
 const EQUIPES_PADRAO = { raio:{ nome:'Tropa do Raio', icone:'⚡', ordem:1 }, tenda:{ nome:'Tropa Tenda', icone:'🏕️', ordem:2 } };
 // Sistema antigo (Central de Visitas) — usado só para importar
 const FIREBASE_ANTIGO = {
@@ -5420,7 +5435,7 @@ function renderPapel(){
     el.classList.remove('hide');
     if (perfil.status === 'pendente') el.textContent = 'Aguardando aprovação';
     else if (perfil.status === 'bloqueado') el.textContent = 'Acesso bloqueado';
-    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? 'Gestor' : perfil.cargo === 'dono' ? 'CEO' : 'Gerente') : (perfil.papel === 'coordenador' ? 'Coordenador' : perfil.papel === 'anjo' ? 'Anjo' : perfil.papel === 'sdr' ? 'SDR' : perfil.papel === 'correspondente' ? 'Correspondente' : perfil.papel === 'adm' ? 'ADM / Correspondente' : perfil.papel === 'marketing' ? 'Marketing' : 'Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
+    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? 'Gestor' : perfil.cargo === 'dono' ? 'CEO' : 'Gerente') : (perfil.papel === 'coordenador' ? 'Coordenador' : perfil.papel === 'anjo' ? 'Anjo' : perfil.papel === 'sdr' ? 'SDR' : perfil.papel === 'correspondente' ? (perfil.liderCorresp ? 'Líder dos correspondentes' : 'Correspondente') : perfil.papel === 'adm' ? 'ADM / Correspondente' : perfil.papel === 'marketing' ? 'Marketing' : 'Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir() && !(e.dataset.view && abaLiberada(e.dataset.view)) && !abaLiberada(((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1])));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
@@ -5797,11 +5812,13 @@ window.mudarPermissao = async (uid, campo, valor, el) => {
     return;
   }
   const dados = { [campo]: valor };
+  if (campo === 'papel' && (valor === 'correspondente' || valor === 'corresp_lider')) { const pe = papelDaEscolha(valor); dados.papel = pe.papel; Object.assign(dados, pe.extra); valor = pe.papel; }
+  else if (campo === 'papel' && p.liderCorresp) dados.liderCorresp = false;
   if (campo === 'papel' && valor === 'gerente') dados.cargo = '';
   if (campo === 'papel' && valor === 'gerente') {
     if (!confirm(`Tornar ${p.nome} GERENTE? Essa pessoa vai ver e editar tudo (menos os outros gerentes, que só o gestor altera).`)) { el.value = p.papel; return; }
   }
-  if (campo === 'papel' && valor !== 'gerente' && valor !== 'anjo' && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
+  if (campo === 'papel' && !SEM_EQUIPE.includes(valor) && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
   if (campo === 'papel' && valor === 'anjo') setTimeout(() => toast('Agora toque em "Equipe do anjo" para escolher quem ele acompanha.'), 1500);
   if (uid === uidAtual) { try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Equipe atualizada'); } catch(e) { toast('Erro: ' + e.message); } return; }
   if (campo === 'status' && valor === 'bloqueado' && !confirm(`Bloquear o acesso de ${p.nome} às visitas?`)) { el.value = p.status; return; }
@@ -5819,10 +5836,10 @@ window.setCorEq = k => { corEquipeFiltro = k; render(); };
 
 window.aprovar = async uid => {
   const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
-  const escolha = $('pp_' + uid).value, papel = escolha === 'ceo' ? 'gerente' : escolha, equipe = $('pe_' + uid).value;
-  if (papel !== 'gerente' && papel !== 'anjo' && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
+  const escolha = $('pp_' + uid).value, papel = escolha === 'ceo' ? 'gerente' : papelDaEscolha(escolha).papel, equipe = papel === 'correspondente' ? '' : $('pe_' + uid).value;
+  if (!SEM_EQUIPE.includes(papel) && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
   try {
-    await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now(), ...(papel === 'gerente' ? { cargo: escolha === 'ceo' ? 'dono' : '' } : {}) }, { merge:true });
+    await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now(), ...(papel === 'gerente' ? { cargo: escolha === 'ceo' ? 'dono' : '' } : {}), ...(papel === 'correspondente' ? { liderCorresp:escolha === 'corresp_lider' } : {}) }, { merge:true });
     // vincula visitas antigas que estão só com o nome desta pessoa
     const soltas = visitas.filter(v => !v.corretorUid && norm(v.corretorNome) === norm(p.nome));
     for (let i = 0; i < soltas.length; i += 200) {
@@ -5901,12 +5918,13 @@ window.excluirCadastro = async (uid) => {
 };
 window.salvarGestao = async uid => {
   const esc0 = $('gmPapel').value, equipe = $('gmEquipe').value, status = $('gmStatus').value;
-  const papel = esc0 === 'ceo' ? 'gerente' : esc0, p0 = perfisTodos.find(x => x.uid === uid) || {};
-  if (papel !== 'gerente' && !equipe) { toast('Escolha a equipe'); return; }
+  const papel = esc0 === 'ceo' ? 'gerente' : papelDaEscolha(esc0).papel, p0 = perfisTodos.find(x => x.uid === uid) || {};
+  if (!SEM_EQUIPE.includes(papel) && !equipe) { toast('Escolha a equipe'); return; }
   if (papel === 'gerente' && !souDono()) { toast('Só o gestor coloca alguém como CEO ou gerente'); return; }
   if (papel === 'gerente' && p0.papel !== 'gerente' && !confirm(`Tornar ${p0.nome || 'essa pessoa'} ${esc0 === 'ceo' ? 'CEO' : 'GERENTE'}? Ela vai ver e editar tudo.`)) return;
-  const dados = { papel, equipe, status };
+  const dados = { papel, equipe:papel === 'correspondente' ? '' : equipe, status };
   if (papel === 'gerente' || p0.cargo) dados.cargo = esc0 === 'ceo' ? 'dono' : '';
+  if (papel === 'correspondente' || p0.liderCorresp) dados.liderCorresp = esc0 === 'corresp_lider';
   try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Alterações salvas'); fechar('relModal'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
@@ -6622,7 +6640,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 158;
+const APP_VERSAO = 159;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9676,6 +9694,7 @@ function assinarAnalises(){
     : souCoord() ? query(collection(db,'analises'), where('equipe','==', perfil.equipe || '-'))
     : query(collection(db,'analises'), where('corretorUid','==', uidAtual));
   subsPapel.push(onSnapshot(q, s => { analises = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); if (anAberta && $('anVerModal').classList.contains('open')) pintarPasta(); }, e => console.warn('analises', e.code || e.message)));
+  assinarCpLista();
 }
 const anNaoVista = a => { const v = (a.vistoPor || {})[uidAtual] || 0; return a.ultimo && a.ultimo.uid !== uidAtual && (a.ultimo.em || 0) > v; };
 function anContador(){
@@ -9688,7 +9707,7 @@ const anDur = ms => { const h = ms / 3600e3; return h < 1 ? Math.max(1, Math.rou
 function renderAnalises(){
   const n = anContador(); if ($('cAnalises')) { $('cAnalises').textContent = n; $('cAnalises').classList.toggle('hide', !n); }
   if (view !== 'analises' || !$('anLista')) return;
-  $('anTit').textContent = souCorresp() ? 'Pastas de crédito' : 'Correspondente · Prime'; $('cpPesBt')?.classList.toggle('hide', !souCorresp());
+  $('anTit').textContent = souCorresp() ? 'Pastas de crédito' : 'Correspondente · Prime'; $('cpPesBt')?.classList.toggle('hide', !cpPodeEditar()); $('cpEqBt')?.classList.toggle('hide', !cpPodeVerEquipe());
   $('anSub').textContent = souCorresp() ? `Olá, ${primeiro(perfil.nome)}! Aqui chegam as pastas dos corretores da Frade.` : 'Mande a pasta do cliente com os documentos e acompanhe a análise da Prime por aqui. Fase de teste.';
   $('anNovaBt').classList.toggle('hide', !anPodeCriar()); $('anTestBt').classList.toggle('hide', !souDono());
   const mes = mesAtual(), lista = analises.filter(a => souCorresp() ? a.enviada : true);
@@ -9773,24 +9792,58 @@ function pintarPasta(){
 // =====================================================================
 // v158: acesso da Prime usado por várias pessoas (quem responde é obrigatório) e prints colados com Ctrl+V
 // =====================================================================
-const cpPessoas = () => (state && Array.isArray(state.correspPessoas) ? state.correspPessoas : []).filter(Boolean);
-const cpQuem = () => { let q = ''; try { q = sessionStorage.getItem('cpQuem') || ''; } catch(e) {} return cpPessoas().includes(q) ? q : ''; };
-const cpExige = () => souCorresp();
+// v159: a lista fica num documento só (corresp_pessoas/lista); quem cadastra e desativa é o líder dos correspondentes (ou a gerência)
+let cpLista = null; // [{ n, ativo }]
+const cpTodos = () => (Array.isArray(cpLista) ? cpLista : (state && Array.isArray(state.correspPessoas) ? state.correspPessoas.map(n => ({ n, ativo:true })) : [])).filter(x => x && x.n);
+const cpPessoas = () => cpTodos().filter(x => x.ativo !== false).map(x => x.n);
+const souLiderCp = () => souCorresp() && perfil.liderCorresp === true;
+const cpPodeEditar = () => souLiderCp() || (opTudo() && !souCeo());
+const cpPodeVerEquipe = () => souLiderCp() || opTudo();
+const cpExige = () => souCorresp() && !souLiderCp();
+// nome de quem está respondendo: no login compartilhado, o escolhido; o líder responde com o próprio nome
+const cpQuem = () => { if (souLiderCp()) return perfil.nome || ''; if (!cpExige()) return ''; let q = ''; try { q = sessionStorage.getItem('cpQuem') || ''; } catch(e) {} return cpPessoas().includes(q) ? q : ''; };
+function assinarCpLista(){
+  if (!(souCorresp() || opTudo())) return;
+  subsPapel.push(onSnapshot(doc(db,'corresp_pessoas','lista'), s => { cpLista = s.exists() && Array.isArray(s.data().pessoas) ? s.data().pessoas : null; if (anAberta && $('anVerModal')?.classList.contains('open')) pintarPasta(); else if (view === 'analises') render(); }, e => console.warn('corresp_pessoas', e.code || e.message)));
+}
 function cpNomeResp(){ const q = cpQuem(); return q ? q + ' · Prime' : perfil.nome; }
 // devolve o nome de quem está respondendo; se ainda não escolheu, pede e para a ação
 function cpGarante(){
   if (!cpExige()) return true;
-  if (!cpPessoas().length) { toast('Cadastre primeiro quem usa este acesso (botão Quem usa este acesso).'); abrirCpPessoas(); return false; }
+  if (!cpPessoas().length) { toast('Nenhum nome cadastrado neste acesso. Peça ao líder dos correspondentes para cadastrar o seu.'); return false; }
   if (!cpQuem()) { toast('Escolha quem está respondendo.'); const s = document.getElementById('cpQuemSel'); if (s) { s.focus(); s.classList.add('cp-falta'); setTimeout(() => s.classList.remove('cp-falta'), 1600); } return false; }
   return true;
 }
 window.cpEscolher = v => { try { sessionStorage.setItem('cpQuem', v || ''); } catch(e) {} document.querySelectorAll('.cp-quem-sel').forEach(s => s.value = v || ''); };
-const htmlCpQuem = () => !cpExige() ? '' : `<div class="cp-quem"><label for="cpQuemSel">Quem está respondendo</label><select id="cpQuemSel" class="cp-quem-sel" onchange="cpEscolher(this.value)"><option value="">Escolha seu nome</option>${cpPessoas().map(n => `<option ${cpQuem() === n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select><button class="link" onclick="abrirCpPessoas()">Quem usa este acesso</button></div>`;
-window.abrirCpPessoas = () => { window._cpEd = cpPessoas().slice(); pintarCpPessoas(); abrir('cpModal'); };
-function pintarCpPessoas(){ $('cpLista').innerHTML = (_cpEd.length ? _cpEd.map((n, i) => `<span class="cp-chip">${esc(n)}<button onclick="_cpEd.splice(${i},1);pintarCpPessoas()" aria-label="Tirar ${esc(n)}">✕</button></span>`).join('') : '<span class="muted" style="font-size:13px">Ninguém cadastrado ainda.</span>'); }
+const htmlCpQuem = () => !cpExige() ? '' : `<div class="cp-quem"><label for="cpQuemSel">Quem está respondendo</label><select id="cpQuemSel" class="cp-quem-sel" onchange="cpEscolher(this.value)"><option value="">Escolha seu nome</option>${cpPessoas().map(n => `<option ${cpQuem() === n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>${cpPodeEditar() ? '<button class="link" onclick="abrirCpPessoas()">Quem usa este acesso</button>' : ''}</div>`;
+window.abrirCpPessoas = () => { if (!cpPodeEditar()) { toast('Só o líder dos correspondentes cadastra os nomes.'); return; } window._cpEd = cpTodos().map(x => ({ n:x.n, ativo:x.ativo !== false })); pintarCpPessoas(); abrir('cpModal'); };
+function pintarCpPessoas(){ $('cpLista').innerHTML = _cpEd.length ? _cpEd.map((x, i) => `<div class="cp-pes ${x.ativo ? '' : 'off'}"><b>${esc(x.n)}</b><small>${x.ativo ? 'Ativo' : 'Desativado'}</small><button class="link" onclick="_cpEd[${i}].ativo=!_cpEd[${i}].ativo;pintarCpPessoas()">${x.ativo ? 'Desativar' : 'Reativar'}</button><button class="cp-x" onclick="_cpEd.splice(${i},1);pintarCpPessoas()" aria-label="Tirar ${esc(x.n)}">✕</button></div>`).join('') : '<span class="muted" style="font-size:13px">Ninguém cadastrado ainda.</span>'; }
 window.pintarCpPessoas = pintarCpPessoas;
-window.cpAdd = () => { const i = $('cpNovo'), n = i.value.trim().replace(/\s+/g, ' ').slice(0, 40); if (!n) return; if (_cpEd.some(x => norm(x) === norm(n))) { toast('Esse nome já está na lista'); return; } if (_cpEd.length >= 15) { toast('No máximo 15 pessoas'); return; } _cpEd.push(n); i.value = ''; i.focus(); pintarCpPessoas(); };
-window.salvarCpPessoas = () => { if (!state) return; state.correspPessoas = _cpEd.slice(); if (!state.correspPessoas.includes(cpQuem())) cpEscolher(''); salvar(); fechar('cpModal'); toast('Lista salva'); if (anAberta) abrirPasta(anAberta); else render(); };
+window.cpAdd = () => { const i = $('cpNovo'), n = i.value.trim().replace(/\s+/g, ' ').slice(0, 40); if (!n) return; if (_cpEd.some(x => norm(x.n) === norm(n))) { toast('Esse nome já está na lista'); return; } if (_cpEd.length >= 20) { toast('No máximo 20 pessoas'); return; } _cpEd.push({ n, ativo:true }); i.value = ''; i.focus(); pintarCpPessoas(); };
+window.salvarCpPessoas = async () => { if (!cpPodeEditar()) return; const pessoas = _cpEd.map(x => ({ n:x.n, ativo:!!x.ativo }));
+  try { await setDoc(doc(db,'corresp_pessoas','lista'), { pessoas, atualizadoEm:Date.now(), por:perfil.nome || '' }); cpLista = pessoas; fechar('cpModal'); toast('Lista salva'); if (anAberta && $('anVerModal').classList.contains('open')) pintarPasta(); else render(); }
+  catch(e) { toast('Erro: ' + e.message); } };
+// ---------- resumo da equipe da Prime (líder e gerência) ----------
+const cpMesDe = t => { const d = new Date(t); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+const cpNomeDe = t => String(t || '').replace(/\s*·\s*Prime$/, '').trim();
+window.abrirCpEquipe = () => { if (!cpPodeVerEquipe()) return; if (!window._cpEqMes) window._cpEqMes = mesAtual(); pintarCpEquipe(); abrir('cpEqModal'); };
+window.pintarCpEquipe = () => {
+  const m = window._cpEqMes || mesAtual(), noMes = t => t && cpMesDe(t) === m, P = {};
+  const pes = nome => { const k = nome || 'Sem nome'; return P[k] || (P[k] = { n:k, resp:0, aprov:0, verif:0, pend:0, msgs:0, tempos:[] }); };
+  for (const a of analises) {
+    const r = a.resultado || {};
+    if (r.respondidoPor && noMes(a.respondidaEm || r.em)) { const x = pes(r.respondidoPor); x.resp++; if (a.status === 'aprovada') x.aprov++; const ini = a.reenviadaEm && a.reenviadaEm < (a.respondidaEm || r.em) ? a.reenviadaEm : a.enviadaEm; if (ini && (a.respondidaEm || r.em) > ini) x.tempos.push((a.respondidaEm || r.em) - ini); }
+    const v = a.verificacao || {}; if (v.por && /·\s*Prime$/.test(v.por) && noMes(v.em || a.respondidaEm)) pes(cpNomeDe(v.por)).verif++;
+    for (const msg of a.msgs || []) { if (msg.papel !== 'correspondente' || !msg.quem || !noMes(msg.em)) continue; if (msg.sistema && /Pendência/.test(msg.texto || '')) pes(msg.quem).pend++; else if (!msg.sistema) pes(msg.quem).msgs++; }
+  }
+  cpPessoas().forEach(n => pes(n));
+  const lista = Object.values(P).sort((a, b) => b.resp - a.resp || b.verif - a.verif || a.n.localeCompare(b.n, 'pt-BR'));
+  const fmtT = ms => { if (!ms) return '—'; const min = Math.round(ms / 60000); return min < 60 ? min + ' min' : min < 1440 ? (Math.round(min / 6) / 10).toString().replace('.', ',') + ' h' : (Math.round(min / 144) / 10).toString().replace('.', ',') + ' dias'; };
+  const media = t => t.length ? t.reduce((s, x) => s + x, 0) / t.length : 0;
+  const meses = [...new Set([mesAtual(), ...analises.map(a => a.respondidaEm && cpMesDe(a.respondidaEm)).filter(Boolean)])].sort().reverse().slice(0, 6);
+  $('cpEqMes').innerHTML = meses.map(k => `<option value="${k}" ${k === m ? 'selected' : ''}>${new Date(k + '-15').toLocaleDateString('pt-BR', { month:'long', year:'numeric' })}</option>`).join('');
+  $('cpEqCorpo').innerHTML = lista.length ? `<div class="cp-eq"><div class="cp-eq-l cp-eq-cab"><span>Nome</span><span>Respondidas</span><span>Aprovadas</span><span>Verificações</span><span>Pendências</span><span>Mensagens</span><span>Tempo médio</span></div>${lista.map(x => `<div class="cp-eq-l"><span><b>${esc(x.n)}</b></span><span data-r="Respondidas">${x.resp}</span><span data-r="Aprovadas">${x.aprov}</span><span data-r="Verificações">${x.verif}</span><span data-r="Pendências">${x.pend}</span><span data-r="Mensagens">${x.msgs}</span><span data-r="Tempo médio">${fmtT(media(x.tempos))}</span></div>`).join('')}</div><div class="muted" style="font-size:12px;margin-top:10px">Tempo médio: do envio da pasta até o resultado. Conta a partir da versão 158, quando cada resposta passou a levar o nome de quem respondeu.</div>` : '<div class="muted">Nenhuma resposta neste mês ainda.</div>';
+};
 // ---------- prints colados (Ctrl+V) ----------
 let _cpCola = [];
 function cpPintaCola(){ const el = document.getElementById('anRCola'); if (!el) return; el.innerHTML = _cpCola.map((f, i) => `<span class="cp-mini"><img src="${f.url}" alt="Print ${i + 1}"><button onclick="cpTiraCola(${i})" aria-label="Tirar print">✕</button></span>`).join(''); }
