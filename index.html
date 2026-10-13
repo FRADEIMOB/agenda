@@ -1872,12 +1872,18 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 </style>
 <style id="zap152">
 /* v152: WhatsApp do CRM */
-.zap-lh{flex-wrap:wrap;gap:6px}.zap-lh-bts{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.zap-lh{flex-wrap:nowrap;gap:8px;align-items:flex-start;padding:14px 14px 8px}.zap-lh-bts{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.zap-tit{min-width:0;padding-top:4px}.zap-tit h2{line-height:1.2}
+.zap-lista-col>.zap-st{padding:0 14px 8px;gap:10px}.zap-lista-col>.zap-st .zap-chip{background:none!important;padding:0;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.zap-abas button{padding:9px 6px}
+.zap-mais-bt{width:30px;padding:0;font-size:17px;line-height:1}.zap-lh .fin-menu{min-width:210px}
+.zf-sep{flex:0 0 1px;align-self:stretch;background:var(--border);margin:2px 2px}
+.zap-tagsf{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent);padding-right:24px}
 .zap-mini{height:30px;padding:0 10px;font-size:12.5px;border-radius:9px}
 .zap-abas{overflow-x:auto;scrollbar-width:none}.zap-abas::-webkit-scrollbar{display:none}.zap-abas button{white-space:nowrap}
 .zap-tagsf{display:flex;gap:6px;padding:8px 12px 0;overflow-x:auto;scrollbar-width:none}.zap-tagsf:empty{display:none}
 .zap-tagsf button{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:99px;padding:3px 10px;cursor:pointer}
-.zap-tagsf button i{width:8px;height:8px;border-radius:50%;background:var(--tc,var(--muted))}.zap-tagsf button:first-child i{display:none}
+.zap-tagsf button i{width:8px;height:8px;border-radius:50%;background:var(--tc,var(--muted))}
 .zap-tagsf button.on{border-color:var(--text);background:var(--card2)}
 .zap-it-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px;align-items:center}.zap-it-tags:empty{display:none}
 .zt-tipo,.zt-et,.zt-tag,.zt-ag{font-size:10.5px;font-weight:700;line-height:1;padding:3px 6px;border-radius:6px;white-space:nowrap}
@@ -1886,6 +1892,8 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 .zt-tag{background:color-mix(in srgb,var(--tc) 16%,transparent);color:var(--tc)}
 .zt-ag{background:#E8510C;color:#fff}
 .zap-item.ag{border-color:#E8510C;background:color-mix(in srgb,#E8510C 7%,transparent)}
+.zap-det-volta{all:unset;cursor:pointer;font-weight:700;font-size:14px;color:var(--accent);padding:4px 0 12px;display:none}
+@media(max-width:760px){.zap-det-volta{display:block}}
 #zapCab .zap-ch-acoes .lig-par .snooze.lig-zap{display:none}
 .zap-cam{display:inline-flex;align-items:center;justify-content:center;color:var(--muted)}
 @media (max-width:760px){.zap-input{gap:4px;padding:8px}.zap-input .icon-btn{width:34px;min-width:34px}}
@@ -2618,9 +2626,11 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <section class="view" id="v-whatsapp">
         <div class="zap">
           <div class="zap-col zap-lista-col">
-            <div class="zap-lh"><h2>Conversas</h2><div class="zap-lh-bts"><button class="btn btn-ghost zap-mini" onclick="abrirFunilZap()">Oportunidades</button><button class="btn btn-ghost zap-mini zap-so-ger" onclick="abrirFilaCrm()">Fila e plantão</button><button class="btn btn-ghost zap-mini zap-so-ger" onclick="abrirAnaliseZap()">Análise</button><button class="icon-btn zap-so-ger" title="Mensagem automática" onclick="zapConfig()">⚙️</button><button class="icon-btn zap-so-ger" title="Nova conversa" onclick="zapNova()">✎</button></div></div>
-            <div class="zap-st"><span id="zapChip" class="zap-chip">●</span><button class="link hide" id="zapSair" onclick="zapDesconectar()">Desconectar</button></div>
-            <div class="zap-abas" id="zapAbas"><button data-a="naoLidas" onclick="zapAba='naoLidas';render()">Não lidas <span class="zap-nl hide" id="zapNl">0</span></button><button data-a="todas" onclick="zapAba='todas';render()">Todas</button><button data-a="novos" onclick="zapAba='novos';render()">Novos</button><button data-a="antigos" onclick="zapAba='antigos';render()">Antigos</button><button data-a="esperando" class="zap-so-ger" onclick="zapAba='esperando';render()">Esperando</button><button data-a="semDono" class="zap-so-ger" onclick="zapAba='semDono';render()">Sem corretor</button></div>
+            <div class="zap-lh"><div class="zap-tit"><h2>Conversas</h2></div>
+              <div class="zap-lh-bts"><button class="btn btn-ghost zap-mini" onclick="abrirFunilZap()">Oportunidades</button>
+                <div class="fin-mais zap-so-ger"><button class="btn btn-ghost zap-mini zap-mais-bt" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="zapNova()">Nova conversa</button><button onclick="abrirFilaCrm()">Fila e plantão</button><button onclick="abrirAnaliseZap()">Análise das conversas</button><button onclick="zapConfig()">Mensagem automática</button></div></div></div></div>
+            <div class="zap-st zap-so-ger"><span id="zapChip" class="zap-chip">●</span><button class="link hide" id="zapSair" onclick="zapDesconectar()">Desconectar</button></div>
+            <div class="zap-abas" id="zapAbas"><button data-a="todas" onclick="zapAba='todas';render()">Todas</button><button data-a="naoLidas" onclick="zapAba='naoLidas';render()">Não lidas <span class="zap-nl hide" id="zapNl">0</span></button><button data-a="novos" onclick="zapAba='novos';render()">Novos</button><button data-a="antigos" onclick="zapAba='antigos';render()">Antigos</button></div>
             <div class="zap-tagsf" id="zapTagsF"></div>
             <input class="zap-busca" placeholder="Buscar nome, número ou mensagem" oninput="zapBusca=this.value;renderZap()">
             <div class="zap-lista" id="zapLista" data-lenis-prevent></div>
@@ -11337,7 +11347,8 @@ function zapNoApp(c){
 }
 function abrirConversa(id){
   if (zapSel === id && zapSubMsgs) { document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto'); return; }
-  document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto');
+  document.getElementById('v-whatsapp')?.classList.add('zap-chat-aberto'); document.getElementById('v-whatsapp')?.classList.remove('zap-det-on');
+  if (zapCel() && !(history.state && history.state.zap)) history.pushState({ zap:'chat' }, '');
   zapSel = id; zapMsgs = []; if (zapSubMsgs) zapSubMsgs();
   zapSubMsgs = onSnapshot(query(collection(db,'zap_conversas',id,'msgs'), orderBy('em','desc'), limit(200)), s => { zapMsgs = s.docs.map(d => ({ id:d.id, ...d.data() })).reverse(); renderZap();
     const cc = zapConvs.find(x => x.id === zapSel); if (cc?.naoLidas && view === 'whatsapp' && !document.hidden) setDoc(doc(db,'zap_conversas',zapSel), { naoLidas:0 }, { merge:true }).catch(() => {}); }, e => console.warn('msgs:', e.message));
@@ -11347,7 +11358,14 @@ function abrirConversa(id){
   render(); setTimeout(() => { try { zapPulso(); } catch(e) {} }, 50);
 }
 window.abrirConversa = abrirConversa;
-window.zapVoltar = () => { document.getElementById('v-whatsapp')?.classList.remove('zap-chat-aberto'); };
+// v152: no celular, o botão voltar (da tela e do aparelho) volta um passo: detalhes → conversa → lista
+const zapCel = () => innerWidth <= 760;
+window.zapVoltar = () => { if (history.state && history.state.zap) { history.back(); return; } const v = document.getElementById('v-whatsapp'); v?.classList.remove('zap-det-on'); v?.classList.remove('zap-chat-aberto'); };
+window.zapDetalhes = () => { const v = document.getElementById('v-whatsapp'); if (!v) return;
+  if (v.classList.contains('zap-det-on')) { if (zapCel() && history.state && history.state.zap === 'det') history.back(); else v.classList.remove('zap-det-on'); return; }
+  v.classList.add('zap-det-on'); if (zapCel()) history.pushState({ zap:'det' }, ''); };
+addEventListener('popstate', () => { const v = document.getElementById('v-whatsapp'); if (!v) return;
+  if (v.classList.contains('zap-det-on')) v.classList.remove('zap-det-on'); else if (v.classList.contains('zap-chat-aberto')) v.classList.remove('zap-chat-aberto'); });
 const _zapCache = {};
 function zapPor(el, html){ const e = $(el); if (!e) return false; if (_zapCache[el] === html) return false; _zapCache[el] = html; e.innerHTML = html; return true; }
 window.renderZap = () => renderZap();
@@ -11374,7 +11392,9 @@ function renderZap(){
   if (zapAba === 'novos') l = l.filter(c => c.tipoLead !== 'antigo'); if (zapAba === 'antigos') l = l.filter(c => c.tipoLead === 'antigo');
   if (zapAba === 'esperando') l = l.filter(c => c.dist === 'aguardando');
   if (window.zapTagF) l = l.filter(c => (c.etiquetas || []).includes(zapTagF));
-  { const tg = crmEtiquetas(), h = tg.length ? `<button class="${!window.zapTagF ? 'on' : ''}" onclick="zapTagF='';renderZap()">Todas</button>` + tg.map(e => `<button class="${window.zapTagF === e.k ? 'on' : ''}" style="--tc:${esc(e.c || '#64748b')}" onclick="zapTagF='${e.k}';renderZap()"><i></i>${esc(e.n)}</button>`).join('') : ''; zapPor('zapTagsF', h); }
+  { const tg = crmEtiquetas(), st = ger ? [['esperando','Esperando resposta'],['semDono','Sem corretor']] : [];
+    const h = st.map(([k, n]) => `<button class="zf-st ${zapAba === k ? 'on' : ''}" onclick="zapAba=zapAba==='${k}'?'todas':'${k}';render()">${n}</button>`).join('') + (st.length && tg.length ? '<span class="zf-sep"></span>' : '')
+      + tg.map(e => `<button class="${window.zapTagF === e.k ? 'on' : ''}" style="--tc:${esc(e.c || '#64748b')}" onclick="zapTagF=zapTagF==='${e.k}'?'':'${e.k}';renderZap()"><i></i>${esc(e.n)}</button>`).join(''); zapPor('zapTagsF', h); }
   document.querySelectorAll('#zapAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === zapAba));
   zapPor('zapLista', l.length ? l.map(c => `<button class="zap-item ${zapSel === c.id ? 'sel' : ''}${zapMeuAguardando(c) ? ' ag' : ''}" data-id="${esc(c.id)}">
       <span class="zap-av">${esc(iniciais(zapNome(c)))}</span>
@@ -11397,7 +11417,7 @@ function renderZap(){
     setTimeout(() => $('zapTxt')?.focus(), 30);
   }
   zapPor('zapCab', `<button class="icon-btn so-cel" onclick="zapVoltar()" title="Voltar">←</button><span class="zap-av">${esc(iniciais(zapNome(c)))}</span><div class="zap-ch-nome"><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
-    <div class="zap-ch-acoes">${c.numero ? htmlLigar(c.numero, zapNome(c), 'whatsapp') : ''}<button class="icon-btn" title="Detalhes do contato" onclick="document.getElementById('v-whatsapp').classList.toggle('zap-det-on')">ⓘ</button></div>`);
+    <div class="zap-ch-acoes">${c.numero ? htmlLigar(c.numero, zapNome(c), 'whatsapp') : ''}<button class="icon-btn" title="Detalhes do contato" onclick="zapDetalhes()">ⓘ</button></div>`);
   { const fora = ofi && !zapJanela(c), ag = zapMeuAguardando(c), falta = ag ? Math.max(0, Math.ceil(((c.atribuidoEm || Date.now()) + crmCfg().repasseMin * 60e3 - Date.now()) / 60e3)) : 0;
     $('zapChat').classList.toggle('zap-fora', fora);
     zapPor('zapAviso', !ofi && st !== 'conectado' ? '<div class="zap-ro">⚠️ O WhatsApp do robô não está conectado. As mensagens ficam guardadas e saem quando ele voltar.</div>'
@@ -11417,7 +11437,7 @@ function renderZap(){
   } else if (!box.dataset.rolou && box.clientHeight && zapMsgs.length) { box.scrollTop = box.scrollHeight; box.dataset.rolou = '1'; }
   // detalhes do contato
   const noApp = zapNoApp(c);
-  if (!['zapCorSel','zapEtSel'].includes(document.activeElement?.id)) zapPor('zapDet', `<div class="zap-det-card"><span class="zap-av g">${esc(iniciais(zapNome(c)))}</span><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
+  if (!['zapCorSel','zapEtSel'].includes(document.activeElement?.id)) zapPor('zapDet', `<button class="zap-det-volta" onclick="zapVoltar()">← Voltar para a conversa</button><div class="zap-det-card"><span class="zap-av g">${esc(iniciais(zapNome(c)))}</span><b>${esc(zapNome(c))}</b><small>${esc(fmtFone(c.numero || ''))}</small></div>
     <label>Corretor responsável</label>
     ${ger ? `<select id="zapCorSel" onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>${c.atribuidoPor === 'rodízio' ? '<div class="muted" style="font-size:12px;margin-top:4px">Passado pelo rodízio automático</div>' : ''}` : `<div style="font-size:14px;font-weight:600">${esc(c.corretorNome || '—')}</div>`}
     ${(() => { const pode = zapPodeEditar(c), ets = crmEtapas();
