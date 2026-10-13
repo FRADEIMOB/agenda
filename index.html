@@ -6600,7 +6600,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 156;
+const APP_VERSAO = 157;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13183,7 +13183,7 @@ function htmlTvMetas(){
 }
 
 // ---------- música na TV (Spotify Premium): a TV vira um aparelho "Frade TV" e a música é trocada pelo celular ----------
-const SP = { cliente:() => (appCfg.spotify || {}).clientId || '', redir:() => location.origin + location.pathname.replace(/index\.html$/, ''), // sempre .../agenda/ (o mesmo cadastrado no Spotify) escopo:'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state' };
+const SP = { cliente:() => (appCfg.spotify || {}).clientId || '', redir:() => location.origin + location.pathname.replace(/index\.html$/, ''), /* sempre .../agenda/, o mesmo cadastrado no Spotify */ escopo:'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state' };
 const spGet = k => { try { return localStorage.getItem('sp_' + k); } catch(e) { return null; } };
 const spSet = (k, v) => { try { v == null ? localStorage.removeItem('sp_' + k) : localStorage.setItem('sp_' + k, v); } catch(e) {} };
 const b64url = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
