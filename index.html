@@ -1870,6 +1870,17 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 #resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
+<style id="cp158">
+/* v158: quem responde pela Prime e prints colados */
+.cp-quem{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;margin-bottom:12px;border-radius:12px;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border))}
+.cp-quem label{font-size:13px;font-weight:700}.cp-quem select{flex:1;min-width:160px;height:38px}.cp-quem select.cp-falta{outline:2px solid var(--danger);outline-offset:2px}
+.cp-lista{display:flex;flex-wrap:wrap;gap:6px}.cp-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 11px;border-radius:99px;background:var(--card2);font-size:13.5px;font-weight:600}
+.cp-chip button{all:unset;cursor:pointer;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;color:var(--muted)}.cp-chip button:hover{background:var(--border);color:var(--text)}
+.cp-cola{display:flex;flex-direction:column;gap:6px;padding:12px;border:1.5px dashed var(--border);border-radius:12px;margin:4px 0 12px}.cp-cola>span{font-size:13px;color:var(--muted)}.cp-cola>b{font-size:13.5px}
+.cp-minis{display:flex;flex-wrap:wrap;gap:8px}.cp-minis:empty{display:none}.cp-mini{position:relative}.cp-mini img{width:84px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border)}
+.cp-mini button{all:unset;cursor:pointer;position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--danger);color:#fff;font-size:11px;display:grid;place-items:center}
+.cp-dica{font-size:12.5px;color:var(--muted);margin-top:8px}
+</style>
 <style id="md155">
 /* v155: metas do dia */
 .md-card{margin-bottom:14px}.md-card.bateu{border-color:color-mix(in srgb,var(--ok) 45%,var(--border));background:color-mix(in srgb,var(--ok) 6%,var(--card))}
@@ -2805,7 +2816,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 
       <section class="view" id="v-analises">
         <div class="an-topo"><div><h1 id="anTit">Correspondente</h1><p class="an-sub" id="anSub"></p></div>
-          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="anTestBt" onclick="abrirTestadores()">Quem participa do teste</button><button class="btn btn-primary hide" id="anNovaBt" onclick="novaPasta()">+ Nova pasta</button></div></div>
+          <div class="an-topo-bts"><button class="btn btn-ghost hide" id="anTestBt" onclick="abrirTestadores()">Quem participa do teste</button><button class="btn btn-ghost hide" id="cpPesBt" onclick="abrirCpPessoas()">Quem usa este acesso</button><button class="btn btn-primary hide" id="anNovaBt" onclick="novaPasta()">+ Nova pasta</button></div></div>
         <div class="an-kpis" id="anKpis"></div>
         <div class="an-filtros"><div class="an-tabs" id="anTabs"></div><input id="anBusca" placeholder="Buscar cliente, CPF ou corretor" oninput="anBuscar(this.value)"></div>
         <div id="anLista"></div>
@@ -3748,6 +3759,13 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-body" id="anVCorpo"></div>
   </div>
 </div>
+<div class="modal" id="cpModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><div><h2>Quem usa este acesso</h2><div class="muted" style="font-size:13px;margin-top:3px">Na hora de responder, cada um escolhe o próprio nome.</div></div><button class="icon-btn" onclick="fechar('cpModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="cp-lista" id="cpLista"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="cpNovo" maxlength="40" placeholder="Nome da pessoa" onkeydown="if(event.key==='Enter'){event.preventDefault();cpAdd()}" style="flex:1"><button class="btn btn-ghost" onclick="cpAdd()">Adicionar</button></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('cpModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarCpPessoas()">Salvar</button></div>
+  </div>
+</div>
 <div class="modal" id="anRespModal">
   <div class="sheet" style="width:min(560px,100%)">
     <div class="sheet-head"><h2>Resultado da análise</h2><button class="icon-btn" onclick="fechar('anRespModal')" data-ic="x"></button></div>
@@ -3759,7 +3777,9 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <label class="fv-chk"><input type="checkbox" id="anRRest"> Cliente tem restrição no CPF</label>
       <div class="fg" id="anRCondBox"><label id="anRCondL">Condição</label><textarea id="anRCond" rows="2" maxlength="600" placeholder="Ex.: precisa de entrada de R$ 8.000 / usar o FGTS / regularizar CPF"></textarea></div>
       <div class="fg"><label>Observação (opcional)</label><textarea id="anRObs" rows="2" maxlength="1000"></textarea></div>
-      <div class="fg"><label>Anexar a carta ou simulação (opcional)</label><input type="file" id="anRArq" accept="image/*,application/pdf"></div>
+      <div class="cp-cola"><b>Prints</b><span>Tirou print da tela? Aperte <b>Ctrl+V</b> aqui e ele vai junto com o resultado.</span><div class="cp-minis" id="anRCola"></div></div>
+      <div class="fg"><label>Ou anexe um arquivo (opcional)</label><input type="file" id="anRArq" accept="image/*,application/pdf"></div>
+      <div id="anRQuem"></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anRespModal')">Cancelar</button><button class="btn btn-primary" id="anRBt" onclick="enviarResultado()">Enviar resultado</button></div>
   </div>
@@ -3773,6 +3793,8 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <div class="row2"><div class="fg"><label>Parcela (se tiver análise válida)</label><input id="anVParc" inputmode="decimal" placeholder="R$ 0,00"></div><div class="fg"><label>Prazo (meses)</label><input id="anVPrazo" type="number" min="1" max="420"></div></div>
       <div class="fg"><label>Renda cadastrada</label><input id="anVRenda" inputmode="decimal" placeholder="R$ 0,00"></div>
       <div class="fg"><label>Observação (opcional)</label><textarea id="anVObs" rows="2" maxlength="800"></textarea></div>
+      <div class="cp-dica">Print da tela: aperte <b>Ctrl+V</b> e ele entra direto na pasta.</div>
+      <div id="anVQuem"></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('anVerifModal')">Cancelar</button><button class="btn btn-primary" id="anVBt" onclick="enviarVerificacao()">Enviar resposta</button></div>
   </div>
@@ -4315,7 +4337,7 @@ onAuthStateChanged(auth, user => {
       state = estadoInicial(user); salvar(); pedirCadastro(); return;
     }
     const d = snap.data();
-    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {}, bzPeguei:d.bzPeguei || {}, ...(Array.isArray(d.zapTags) ? { zapTags:d.zapTags } : {}) };
+    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {}, bzPeguei:d.bzPeguei || {}, ...(Array.isArray(d.zapTags) ? { zapTags:d.zapTags } : {}), ...(Array.isArray(d.correspPessoas) ? { correspPessoas:d.correspPessoas } : {}) };
     render();
     pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
@@ -6600,7 +6622,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 157;
+const APP_VERSAO = 158;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9666,7 +9688,7 @@ const anDur = ms => { const h = ms / 3600e3; return h < 1 ? Math.max(1, Math.rou
 function renderAnalises(){
   const n = anContador(); if ($('cAnalises')) { $('cAnalises').textContent = n; $('cAnalises').classList.toggle('hide', !n); }
   if (view !== 'analises' || !$('anLista')) return;
-  $('anTit').textContent = souCorresp() ? 'Pastas de crédito' : 'Correspondente · Prime';
+  $('anTit').textContent = souCorresp() ? 'Pastas de crédito' : 'Correspondente · Prime'; $('cpPesBt')?.classList.toggle('hide', !souCorresp());
   $('anSub').textContent = souCorresp() ? `Olá, ${primeiro(perfil.nome)}! Aqui chegam as pastas dos corretores da Frade.` : 'Mande a pasta do cliente com os documentos e acompanhe a análise da Prime por aqui. Fase de teste.';
   $('anNovaBt').classList.toggle('hide', !anPodeCriar()); $('anTestBt').classList.toggle('hide', !souDono());
   const mes = mesAtual(), lista = analises.filter(a => souCorresp() ? a.enviada : true);
@@ -9726,6 +9748,7 @@ function pintarPasta(){
   acoes.push(`<button class="btn btn-ghost" onclick="anCopiarGrupo()">📋 Copiar no formato do grupo</button>`);
   if (souGerente() && !souCeo()) acoes.push(`<button class="link" style="color:var(--danger)" onclick="anExcluir()">Excluir</button>`);
   $('anVCorpo').innerHTML = `
+    ${htmlCpQuem()}
     <div class="an-v-topo" style="--c:${st.cor}"><span class="an-st grande">${st.ic} ${st.nome}</span><span class="muted">${esc(a.corretorNome || '')}${a.equipe ? ' · ' + esc(eqNome(a.equipe)) : ''}</span></div>
     ${a.status !== 'rascunho' && a.status !== 'cancelada' ? `<div class="an-passos" style="grid-template-columns:repeat(${passos.length},1fr)">${passos.map(([n, t], i) => `<div class="${t ? 'ok' : ''}"><i>${t ? '✓' : i + 1}</i><b>${n}</b><small>${t ? new Date(t).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</small></div>`).join('')}</div>` : ''}
     ${a.status === 'pendencia' && a.pendencia ? `<div class="an-alerta">⚠️ <b>Pendência:</b> ${esc(a.pendencia)}</div>` : ''}
@@ -9740,26 +9763,70 @@ function pintarPasta(){
         ${a.imovel?.empreendimento || a.imovel?.valor ? `<h3 style="margin-top:12px">Imóvel</h3><div class="an-dados">${linha('Empreendimento', esc(a.imovel.empreendimento || ''))}${linha('Valor', a.imovel.valor ? brl(a.imovel.valor) : '')}</div>` : ''}
         ${a.obs ? `<div class="an-obs">💬 ${esc(a.obs)}</div>` : ''}</div>
       <div class="an-box ${ehV && !docs.length ? 'hide' : ''}"><h3>Documentos (${docs.length})</h3>${docs.length ? `<div class="an-docs">${docs.map((d, i) => `<button class="an-doc" onclick="anAbrirDoc(${i})"><i>${(d.mime || '').startsWith('image/') ? '🖼️' : '📄'}</i><span><b>${esc(anDocTit(d))}</b><small>${d.tipo === 'documento' ? '' : esc(d.nome || '') + ' · '}${Math.max(1, Math.round((d.tamanho || 0) / 1024))} KB${d.porPapel === 'correspondente' ? ' · enviado pela Prime' : ''}</small></span></button>`).join('')}</div>` : '<div class="muted" style="font-size:13px">Nenhum documento anexado.</div>'}
-        ${souCorresp() && a.status !== 'cancelada' ? `<button class="btn btn-ghost" style="margin-top:8px" onclick="document.getElementById('anArqPrime').click()">📎 Anexar arquivo para o corretor</button><input type="file" id="anArqPrime" class="hide" accept="image/*,application/pdf" onchange="anPrimeAnexa(this)">` : ''}</div>
+        ${souCorresp() && a.status !== 'cancelada' ? `<div class="cp-dica">Tirou print? É só apertar <b>Ctrl+V</b> com a pasta aberta que ele entra aqui.</div><button class="btn btn-ghost" style="margin-top:8px" onclick="document.getElementById('anArqPrime').click()">📎 Anexar arquivo para o corretor</button><input type="file" id="anArqPrime" class="hide" accept="image/*,application/pdf" onchange="anPrimeAnexa(this)">` : ''}</div>
     </div>
     <div class="an-box an-chat"><h3>Conversa</h3><div class="an-msgs">${(a.msgs || []).length ? a.msgs.map(m => `<div class="an-msg ${m.uid === uidAtual ? 'eu' : ''} ${m.sistema ? 'sis' : ''}"><small>${esc(m.sistema ? '' : primeiro(m.nome || '') + (m.papel === 'correspondente' ? ' · Prime' : ''))} ${new Date(m.em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}</small><p>${esc(m.texto)}</p></div>`).join('') : '<div class="muted" style="font-size:13px">Nenhuma mensagem ainda.</div>'}</div>
       ${a.status !== 'rascunho' && a.status !== 'cancelada' && !souCeo() ? `<div class="an-escreve"><textarea id="anMsg" rows="1" maxlength="1000" placeholder="Escreva uma mensagem…"></textarea><button class="btn btn-primary" onclick="anMandarMsg()">Enviar</button></div>` : ''}</div>`;
   const box = document.querySelector('.an-msgs'); if (box) box.scrollTop = box.scrollHeight;
 }
+
+// =====================================================================
+// v158: acesso da Prime usado por várias pessoas (quem responde é obrigatório) e prints colados com Ctrl+V
+// =====================================================================
+const cpPessoas = () => (state && Array.isArray(state.correspPessoas) ? state.correspPessoas : []).filter(Boolean);
+const cpQuem = () => { let q = ''; try { q = sessionStorage.getItem('cpQuem') || ''; } catch(e) {} return cpPessoas().includes(q) ? q : ''; };
+const cpExige = () => souCorresp();
+function cpNomeResp(){ const q = cpQuem(); return q ? q + ' · Prime' : perfil.nome; }
+// devolve o nome de quem está respondendo; se ainda não escolheu, pede e para a ação
+function cpGarante(){
+  if (!cpExige()) return true;
+  if (!cpPessoas().length) { toast('Cadastre primeiro quem usa este acesso (botão Quem usa este acesso).'); abrirCpPessoas(); return false; }
+  if (!cpQuem()) { toast('Escolha quem está respondendo.'); const s = document.getElementById('cpQuemSel'); if (s) { s.focus(); s.classList.add('cp-falta'); setTimeout(() => s.classList.remove('cp-falta'), 1600); } return false; }
+  return true;
+}
+window.cpEscolher = v => { try { sessionStorage.setItem('cpQuem', v || ''); } catch(e) {} document.querySelectorAll('.cp-quem-sel').forEach(s => s.value = v || ''); };
+const htmlCpQuem = () => !cpExige() ? '' : `<div class="cp-quem"><label for="cpQuemSel">Quem está respondendo</label><select id="cpQuemSel" class="cp-quem-sel" onchange="cpEscolher(this.value)"><option value="">Escolha seu nome</option>${cpPessoas().map(n => `<option ${cpQuem() === n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select><button class="link" onclick="abrirCpPessoas()">Quem usa este acesso</button></div>`;
+window.abrirCpPessoas = () => { window._cpEd = cpPessoas().slice(); pintarCpPessoas(); abrir('cpModal'); };
+function pintarCpPessoas(){ $('cpLista').innerHTML = (_cpEd.length ? _cpEd.map((n, i) => `<span class="cp-chip">${esc(n)}<button onclick="_cpEd.splice(${i},1);pintarCpPessoas()" aria-label="Tirar ${esc(n)}">✕</button></span>`).join('') : '<span class="muted" style="font-size:13px">Ninguém cadastrado ainda.</span>'); }
+window.pintarCpPessoas = pintarCpPessoas;
+window.cpAdd = () => { const i = $('cpNovo'), n = i.value.trim().replace(/\s+/g, ' ').slice(0, 40); if (!n) return; if (_cpEd.some(x => norm(x) === norm(n))) { toast('Esse nome já está na lista'); return; } if (_cpEd.length >= 15) { toast('No máximo 15 pessoas'); return; } _cpEd.push(n); i.value = ''; i.focus(); pintarCpPessoas(); };
+window.salvarCpPessoas = () => { if (!state) return; state.correspPessoas = _cpEd.slice(); if (!state.correspPessoas.includes(cpQuem())) cpEscolher(''); salvar(); fechar('cpModal'); toast('Lista salva'); if (anAberta) abrirPasta(anAberta); else render(); };
+// ---------- prints colados (Ctrl+V) ----------
+let _cpCola = [];
+function cpPintaCola(){ const el = document.getElementById('anRCola'); if (!el) return; el.innerHTML = _cpCola.map((f, i) => `<span class="cp-mini"><img src="${f.url}" alt="Print ${i + 1}"><button onclick="cpTiraCola(${i})" aria-label="Tirar print">✕</button></span>`).join(''); }
+window.cpTiraCola = i => { const f = _cpCola[i]; if (f) URL.revokeObjectURL(f.url); _cpCola.splice(i, 1); cpPintaCola(); };
+const cpImagensDoEvento = ev => [...(ev.clipboardData?.items || [])].filter(it => it.kind === 'file' && it.type.startsWith('image/')).map(it => it.getAsFile()).filter(Boolean)
+  .map((f, i) => new File([f], `print-${new Date().toLocaleTimeString('pt-BR').replace(/:/g, '')}-${i + 1}.png`, { type:f.type || 'image/png' }));
+document.addEventListener('paste', async ev => {
+  const imgs = cpImagensDoEvento(ev); if (!imgs.length) return;
+  const resp = document.getElementById('anRespModal')?.classList.contains('open'), verif = document.getElementById('anVerifModal')?.classList.contains('open'), pasta = document.getElementById('anVerModal')?.classList.contains('open');
+  if (!resp && !verif && !pasta) return;
+  ev.preventDefault();
+  if (resp) { imgs.forEach(f => _cpCola.push({ f, url:URL.createObjectURL(f) })); cpPintaCola(); toast(imgs.length === 1 ? 'Print colado. Ele vai junto com o resultado.' : imgs.length + ' prints colados.'); return; }
+  // com a pasta aberta (ou na verificação): o print vai direto para a pasta
+  const a = anAtual(); if (!a) return;
+  if (!souCorresp() && !(opTudo() && !souCeo()) && a.corretorUid !== uidAtual) return;
+  if (!cpGarante()) return;
+  toast('Enviando o print…');
+  try { const novos = []; for (const f of imgs) novos.push(await anSubirArq(f, 'resposta', a));
+    await anGravar({ docs:[...(a.docs || []), ...novos] }, 'msg', `📎 ${cpNomeResp()} colou ${novos.length === 1 ? 'um print' : novos.length + ' prints'}.`); toast(novos.length === 1 ? 'Print anexado ✓' : 'Prints anexados ✓'); }
+  catch(e) { toast('Erro: ' + e.message); }
+});
 // ---- ações ----
 const anAtual = () => analises.find(x => x.id === anAberta);
-const anMsgSis = texto => ({ em:Date.now(), uid:uidAtual, nome:perfil.nome, papel:perfil.papel, texto, sistema:true });
+const anMsgSis = texto => ({ em:Date.now(), uid:uidAtual, nome:cpExige() ? cpNomeResp() : perfil.nome, papel:perfil.papel, texto, sistema:true, ...(cpQuem() ? { quem:cpQuem() } : {}) });
 async function anGravar(upd, evento, texto){
   const a = anAtual(); if (!a) return false;
   const agora = Date.now(), m = texto ? [...(a.msgs || []), anMsgSis(texto)] : null;
-  try { await updateDoc(doc(db,'analises', a.id), { ...upd, ...(m ? { msgs:m } : {}), atualizadoEm:agora, ultimo:{ em:agora, uid:uidAtual, texto:texto || upd.status || '' }, ['vistoPor.' + uidAtual]:agora });
+  try { await updateDoc(doc(db,'analises', a.id), { ...upd, ...(m ? { msgs:m } : {}), atualizadoEm:agora, ultimo:{ em:agora, uid:uidAtual, texto:texto || upd.status || '', ...(cpQuem() ? { quem:cpQuem() } : {}) }, ['vistoPor.' + uidAtual]:agora });
     if (evento) avisarCarteiro('analise', a.id, false, { evento }); return true; }
   catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'sem permissão (confira as regras novas do Firebase)' : e.message)); return false; }
 }
-window.anMudar = async st => { if (await anGravar({ status:st, ...(st === 'em_analise' ? { emAnaliseEm:Date.now() } : {}) }, st, st === 'em_analise' ? '🔎 A Prime começou a análise.' : '')) toast('Status atualizado ✓'); };
+window.anMudar = async st => { if (!cpGarante()) return; if (await anGravar({ status:st, ...(st === 'em_analise' ? { emAnaliseEm:Date.now() } : {}) }, st, st === 'em_analise' ? '🔎 A Prime começou a análise.' : '')) toast('Status atualizado ✓'); };
 window.anPedirPendencia = async () => {
+  if (!cpGarante()) return;
   const t = prompt('O que falta ou precisa ser corrigido? O corretor recebe um aviso.'); if (!t || !t.trim()) return;
-  if (await anGravar({ status:'pendencia', pendencia:t.trim() }, 'pendencia', '⚠️ Pendência: ' + t.trim())) toast('Pendência enviada ao corretor');
+  if (await anGravar({ status:'pendencia', pendencia:t.trim() }, 'pendencia', '⚠️ Pendência' + (cpQuem() ? ' (' + cpQuem() + ')' : '') + ': ' + t.trim())) toast('Pendência enviada ao corretor');
 };
 window.anReenviar = async () => { if (await anGravar({ status:'enviada', reenviadaEm:Date.now() }, 'reenviada', '📨 Pendência resolvida. Pasta reenviada.')) toast('📨 Pasta reenviada para a Prime'); };
 window.anEnviarJa = async () => {
@@ -9774,7 +9841,8 @@ window.anExcluir = async () => {
 };
 window.anMandarMsg = async () => {
   const a = anAtual(), t = $('anMsg').value.trim(); if (!a || !t) return;
-  const agora = Date.now(), m = { em:agora, uid:uidAtual, nome:perfil.nome, papel:perfil.papel, texto:t };
+  if (!cpGarante()) return;
+  const agora = Date.now(), m = { em:agora, uid:uidAtual, nome:cpExige() ? cpNomeResp() : perfil.nome, papel:perfil.papel, texto:t, ...(cpQuem() ? { quem:cpQuem() } : {}) };
   try { await updateDoc(doc(db,'analises', a.id), { msgs:[...(a.msgs || []), m], atualizadoEm:agora, ultimo:{ em:agora, uid:uidAtual, texto:t }, ['vistoPor.' + uidAtual]:agora });
     $('anMsg').value = ''; avisarCarteiro('analise', a.id, false, { evento:'msg' }); } catch(e) { toast('Erro: ' + e.message); }
 };
@@ -9789,6 +9857,8 @@ window.anLancarCarta = () => {
 window.anResVis = () => { const v = document.querySelector('input[name=anRes]:checked').value; $('anResNum').classList.toggle('hide', v === 'reprovada'); $('anRCondL').textContent = v === 'reprovada' ? 'Motivo da reprovação' : v === 'condicionada' ? 'Condição' : 'Condição (se tiver)'; };
 window.abrirResultado = () => {
   const a = anAtual(); if (!a) return; const r = a.resultado || {};
+  if (!cpGarante()) return;
+  _cpCola.forEach(f => URL.revokeObjectURL(f.url)); _cpCola = []; setTimeout(() => { cpPintaCola(); const q = document.getElementById('anRQuem'); if (q) q.innerHTML = htmlCpQuem().replace('id="cpQuemSel"', 'id="cpQuemSelR"'); }, 0);
   const v = AN_RESP.includes(a.status) ? a.status : 'aprovada'; document.querySelectorAll('input[name=anRes]').forEach(i => i.checked = i.value === v);
   $('anRFin').value = r.financiado ? fmtValorInput(r.financiado) : ''; $('anRSub').value = r.subsidio ? fmtValorInput(r.subsidio) : ''; $('anRParc').value = r.parcela ? String(r.parcela).replace('.', ',') : '';
   $('anRPrazo').value = r.prazo || ''; $('anRTaxa').value = r.taxa ? String(r.taxa).replace('.', ',') : ''; $('anRVal').value = r.validade || ''; $('anRCond').value = r.condicao || ''; $('anRObs').value = r.obs || ''; $('anRArq').value = ''; $('anRRest').checked = !!r.restricao;
@@ -9799,26 +9869,33 @@ window.enviarResultado = async () => {
   const r = { financiado:lerValor($('anRFin').value), subsidio:lerValor($('anRSub').value), parcela:Math.round(lerDec($('anRParc').value) * 100) / 100, prazo:Number($('anRPrazo').value) || 0, taxa:lerDec($('anRTaxa').value) || 0, validade:$('anRVal').value, condicao:$('anRCond').value.trim(), obs:$('anRObs').value.trim(), restricao:$('anRRest').checked, por:perfil.nome, em:Date.now() };
   if (st !== 'reprovada' && !r.financiado) { toast('Informe o valor financiado'); return; }
   if (st !== 'aprovada' && !r.condicao) { toast(st === 'reprovada' ? 'Informe o motivo' : 'Informe a condição'); return; }
+  if (!cpGarante()) return;
+  if (cpQuem()) { r.respondidoPor = cpQuem(); r.por = cpQuem() + ' · Prime'; }
   $('anRBt').disabled = true;
   try {
     let docs = a.docs || []; const f = $('anRArq').files[0];
     if (f) { if (f.size > 10 * 1048576) throw new Error('arquivo grande demais (máximo 10 MB)'); docs = [...docs, await anSubirArq(f, 'resposta', a)]; }
+    for (const c of _cpCola) docs = [...docs, await anSubirArq(c.f, 'resposta', a)]; // prints colados com Ctrl+V
     const txt = st === 'reprovada' ? `❌ Reprovada: ${r.condicao}` : `${AN_ST[st].ic} ${AN_ST[st].nome}: financiamento de ${brl(r.financiado)}${r.subsidio ? `, subsídio de ${brl(r.subsidio)}` : ''}${r.parcela ? `, parcela de ${brl2(r.parcela)}` : ''}.${r.condicao && st !== 'reprovada' ? ' Condição: ' + r.condicao : ''}`;
-    if (await anGravar({ status:st, resultado:r, docs, respondidaEm:a.respondidaEm || Date.now(), pendencia:'' }, 'resultado', txt)) { fechar('anRespModal'); toast('Resultado enviado ao corretor ✓'); }
+    if (await anGravar({ status:st, resultado:r, docs, respondidaEm:a.respondidaEm || Date.now(), pendencia:'' }, 'resultado', txt)) { fechar('anRespModal'); _cpCola.forEach(c => URL.revokeObjectURL(c.url)); _cpCola = []; toast('Resultado enviado ao corretor ✓'); }
   } catch(e) { toast('Erro: ' + e.message); }
   $('anRBt').disabled = false;
 };
 window.abrirVerificacao = () => {
   const a = anAtual(); if (!a) return; const v = a.verificacao || {};
+  if (!cpGarante()) return;
+  setTimeout(() => { const q = document.getElementById('anVQuem'); if (q) q.innerHTML = htmlCpQuem().replace('id="cpQuemSel"', 'id="cpQuemSelV"'); }, 0);
   $('anVCca').value = v.cca || 'nao'; $('anVCcaQ').value = v.ccaQual || ''; $('anVRest').value = v.restricao || 'nao'; $('anVRestQ').value = v.restricaoQual || '';
   $('anVParc').value = v.parcela ? String(v.parcela).replace('.', ',') : ''; $('anVPrazo').value = v.prazo || ''; $('anVRenda').value = v.renda ? fmtValorInput(v.renda) : ''; $('anVObs').value = v.obs || '';
   abrir('anVerifModal');
 };
 window.enviarVerificacao = async () => {
   const a = anAtual(); if (!a) return;
+  if (!cpGarante()) return;
   const v = { cca:$('anVCca').value, ccaQual:$('anVCcaQ').value.trim(), restricao:$('anVRest').value, restricaoQual:$('anVRestQ').value.trim(), parcela:Math.round(lerDec($('anVParc').value) * 100) / 100, prazo:Number($('anVPrazo').value) || 0, renda:lerValor($('anVRenda').value), obs:$('anVObs').value.trim(), por:perfil.nome, em:Date.now() };
   const txt = `🔍 Outro CCA: ${simNao(v.cca)}${v.ccaQual ? ' (' + v.ccaQual + ')' : ''} · Restrição: ${simNao(v.restricao)}${v.restricaoQual ? ' (' + v.restricaoQual + ')' : ''}${v.parcela ? ` · análise válida: ${brl2(v.parcela)}${v.prazo ? ' em ' + v.prazo + ' meses' : ''}` : ''}${v.renda ? ' · renda cadastrada ' + brl(v.renda) : ''}`;
   $('anVBt').disabled = true;
+  if (cpQuem()) v.por = cpQuem() + ' · Prime';
   if (await anGravar({ status:'verificada', verificacao:v, respondidaEm:a.respondidaEm || Date.now(), pendencia:'' }, 'resultado', txt)) { fechar('anVerifModal'); toast('Resposta enviada ao corretor ✓'); }
   $('anVBt').disabled = false;
 };
@@ -9826,9 +9903,10 @@ window.enviarVerificacao = async () => {
 window.anVirarAnalise = () => { const a = anAtual(); if (!a) return; fecharPasta(); anEdit = a.id; anVirando = true; $('anFTit').textContent = 'Análise de crédito · ' + (a.cliente?.nome || ''); anPreencher(a); document.querySelector('input[name=anTipo][value=analise]').checked = true; anTipoVis(); $('anTipoBox').classList.add('hide'); $('anEnviarBt').textContent = 'Enviar para análise'; abrir('anModal'); };
 window.anPrimeAnexa = async inp => {
   const a = anAtual(), f = inp.files && inp.files[0]; inp.value = ''; if (!a || !f) return;
+  if (!cpGarante()) return;
   if (f.size > 10 * 1048576) { toast('Arquivo grande demais (máximo 10 MB)'); return; }
   toast('Enviando o arquivo…');
-  try { const d = await anSubirArq(f, 'resposta', a); await anGravar({ docs:[...(a.docs || []), d] }, 'msg', '📎 A Prime anexou um arquivo: ' + (f.name || 'arquivo')); toast('Arquivo anexado ✓'); } catch(e) { toast('Erro: ' + e.message); }
+  try { const d = await anSubirArq(f, 'resposta', a); await anGravar({ docs:[...(a.docs || []), d] }, 'msg', '📎 ' + (cpQuem() ? cpQuem() + ' (Prime)' : 'A Prime') + ' anexou um arquivo: ' + (f.name || 'arquivo')); toast('Arquivo anexado ✓'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // ---- arquivos (em pedaços no Firestore, como as notas fiscais) ----
 async function anSubirArq(f, tipo, a){
