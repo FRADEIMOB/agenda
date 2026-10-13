@@ -1870,6 +1870,97 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 #resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
+<style id="md155">
+/* v155: metas do dia */
+.md-card{margin-bottom:14px}.md-card.bateu{border-color:color-mix(in srgb,var(--ok) 45%,var(--border));background:color-mix(in srgb,var(--ok) 6%,var(--card))}
+.md-ts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:4px}
+@media(max-width:600px){.md-ts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.md-t{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:10px 6px;border-radius:14px;background:var(--card2)}
+.md-anel{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p) * 1%),color-mix(in srgb,var(--c) 14%,transparent) 0);transition:background .4s}
+.md-anel b{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:var(--card);font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.md-t.ok .md-anel b{color:var(--ok)}.md-t span{font-size:13px;font-weight:700}.md-t small{font-size:11.5px;color:var(--muted)}
+.md-rank{display:flex;flex-direction:column;gap:6px}
+.md-rl{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;border-radius:12px;background:var(--card2)}
+.md-rl.me{outline:2px solid color-mix(in srgb,var(--accent) 45%,transparent)}.md-rl.bateu{background:color-mix(in srgb,var(--ok) 10%,var(--card2))}
+.md-pos{font-weight:800;color:var(--muted);text-align:center}.md-nome{min-width:0}.md-nome b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.md-nome small{font-size:11.5px;color:var(--muted)}
+.md-chips{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.md-chip{display:flex;flex-direction:column;align-items:center;min-width:46px;padding:4px 6px;border-radius:9px;background:color-mix(in srgb,var(--c) 12%,var(--card));border:1px solid color-mix(in srgb,var(--c) 35%,transparent)}
+.md-chip i{font-style:normal;font-size:10px;font-weight:700;color:var(--muted)}.md-chip b{font-size:15px;font-variant-numeric:tabular-nums}.md-chip.ok b{color:var(--ok)}
+@media(max-width:600px){.md-rl{grid-template-columns:24px minmax(0,1fr)}.md-chips{grid-column:1/-1;justify-content:flex-start}}
+.md-ed{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(52px,1fr));gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.md-ed span{font-size:13.5px;min-width:0}.md-ed span small{display:block;font-size:11.5px;color:var(--muted)}.md-ed input{height:36px;text-align:center;padding:0 4px}
+.md-cab{border:0;padding-bottom:0}.md-cab small{font-size:11px;font-weight:700;color:var(--muted);text-align:center;line-height:1.2}
+/* letreiro: passa a cada 5 minutos */
+.md-let{position:fixed;left:0;right:0;bottom:calc(var(--mbH,0px) + 10px);z-index:65;display:flex;justify-content:center;pointer-events:none;opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s}
+.md-let.on{opacity:1;transform:none}
+.md-let-in{display:flex;align-items:center;gap:12px;width:min(920px,calc(100% - 24px));padding:9px 14px;border-radius:14px;background:#0b2236;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.3);overflow:hidden}
+.md-let-tit{flex-shrink:0;font-size:12px;font-weight:800;color:#f5c542}
+.md-let-trilho{flex:1;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.md-let-txt{display:inline-block;white-space:nowrap;font-size:14px;animation:mdLet 28s linear infinite}.md-let-txt b{color:#fff}.md-let-txt i{font-style:normal;color:#f28c38;margin:0 14px}
+@keyframes mdLet{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.md-let-txt{animation:none;white-space:normal}}
+@media(max-width:900px){.md-let{--mbH:72px}}
+html.modo-tvr .md-let{bottom:1.2vw}html.modo-tvr .md-let-in{width:70vw;padding:.8vw 1.2vw;border-radius:1vw;background:rgba(11,34,54,.95);border:1px solid rgba(245,197,66,.35)}
+html.modo-tvr .md-let-tit{font-size:1vw}html.modo-tvr .md-let-txt{font-size:1.25vw}
+/* TV: dia e semana lado a lado */
+.tvr-seg{display:inline-flex;gap:2px;padding:2px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.tvr-bts .tvr-seg button.tvr-modo{width:auto;height:auto;min-height:0;border:0;border-radius:99px;padding:.35vw .8vw;font-size:.8vw;font-weight:700;background:none;opacity:.6}
+.tvr-bts .tvr-seg button.tvr-modo.on{background:#f28c38;color:#081826;opacity:1}
+.tvm{flex:1;min-height:0;display:grid;grid-template-columns:1.15fr 1fr;gap:1.4vw}
+.tvm-col{min-height:0;display:flex;flex-direction:column;gap:.9vw;border-radius:1.2vw;padding:1.2vw 1.3vw;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.tvm-col:before{content:'';position:absolute;left:0;right:0;top:0;height:.32vw;background:linear-gradient(90deg,#facc15,#2dd4bf,#38bdf8,#22c55e)}
+.tvm-col.sem:before{background:linear-gradient(90deg,#f28c38,#f5c542)}
+.tvm-col header{display:flex;align-items:baseline;gap:1vw}.tvm-col header h2{font:800 2.6vw/1 'Saira Condensed',sans-serif;letter-spacing:.02em;color:#fff;margin:0}.tvm-col header span{font-size:.95vw;color:#8fb0c6}
+.tvm-res{display:grid;grid-template-columns:repeat(4,1fr);gap:.6vw}
+.tvm-res div{padding:.6vw .8vw;border-radius:.8vw;background:rgba(5,15,25,.45);border-left:.25vw solid var(--c)}
+.tvm-res b{display:block;font:800 1.9vw/1 'Saira Condensed',sans-serif;color:#fff;font-variant-numeric:tabular-nums}.tvm-res b small{font-size:1vw;color:#87a6bb;margin-left:.15vw}.tvm-res span{font-size:.75vw;color:#9fbad0}
+.tvm-lista{flex:1;min-height:0;display:flex;flex-direction:column;gap:.45vw;overflow:hidden}
+.tvm-l{display:grid;grid-template-columns:1.8vw 9vw minmax(0,1fr);gap:.8vw;align-items:center;padding:.55vw .8vw;border-radius:.8vw;background:rgba(5,15,25,.45)}
+.tvm-l.bateu{background:linear-gradient(90deg,rgba(34,197,94,.22),rgba(5,15,25,.45));box-shadow:inset 0 0 0 1px rgba(34,197,94,.35)}
+.tvm-pos{font:800 1.1vw 'Saira Condensed',sans-serif;color:#7f9cb2;text-align:center}.tvm-l.bateu .tvm-pos{color:#f5c542;font-size:1.3vw}
+.tvm-nome{min-width:0}.tvm-nome b{display:block;font-size:1vw;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tvm-nome small{font-size:.7vw;color:#87a6bb}
+.tvm-bs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6vw}
+.tvm-b{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:.15vw .4vw;align-items:center}
+.tvm-b span{font-size:.62vw;color:#9fbad0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tvm-b b{font:800 .85vw 'Saira Condensed',sans-serif;color:#fff;grid-row:1;grid-column:2}
+.tvm-trilho{grid-column:1/-1;height:.45vw;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}.tvm-trilho i{display:block;height:100%;border-radius:99px;background:var(--c);transition:width .8s}
+.tvm-b.ok b{color:#6ee7a8}
+/* TV: música */
+.tvr-rod{display:flex;justify-content:flex-start;min-height:0}.tvr-rod:empty{display:none}
+.tvsp{display:flex;align-items:center;gap:.8vw;padding:.45vw .7vw;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);max-width:34vw}
+.tvsp img,.tvsp-ic{width:2.4vw;height:2.4vw;border-radius:.5vw;object-fit:cover;flex-shrink:0;display:grid;place-items:center;background:#1db954;color:#081826;font-weight:800}
+.tvsp-t{min-width:0;flex:1}.tvsp-t b{display:block;font-size:.85vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tvsp-t small{display:block;font-size:.7vw;color:#8fb0c6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tvsp button{border:0;background:none;color:#cfe0ec;font-size:.9vw;cursor:pointer;padding:.2vw .35vw}.tvsp button:hover{color:#fff}
+.tvsp .tvsp-bt{background:#1db954;color:#081826;font-weight:800;border-radius:99px;padding:.4vw 1vw;font-size:.85vw}
+@media (max-width:1100px){.tvm{grid-template-columns:1fr;overflow:auto}.tvm-l{grid-template-columns:28px 110px minmax(0,1fr)}}
+
+/* v155b: TV dia e semana no estilo pódio + equipes + tabela */
+.tvp-pod{display:flex;justify-content:center;align-items:flex-end;gap:1vw;padding-top:.4vw}
+.tvp-p{display:flex;flex-direction:column;align-items:center;gap:.15vw;width:9.5vw}
+.tvp-av{width:3.2vw;height:3.2vw;border-radius:50%;display:grid;place-items:center;font:800 1.4vw 'Saira Condensed',sans-serif;color:#fff;background:linear-gradient(135deg,#6b3a2a,#1d2a3a);box-shadow:0 .4vw 1vw rgba(0,0,0,.35);margin-bottom:.2vw}
+.tvp-p.p1 .tvp-av{width:4.2vw;height:4.2vw;font-size:1.9vw;background:linear-gradient(135deg,#f5a04d,#e8741d)}
+.tvp-p b{font-size:1vw;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.tvp-p.p1 b{font-size:1.2vw}
+.tvp-p small{font-size:.72vw;color:#8fb0c6;white-space:nowrap}
+.tvp-deg{width:100%;margin-top:.4vw;border-radius:.8vw .8vw 0 0;display:grid;place-items:center;background:rgba(255,255,255,.06)}
+.tvp-p.p1 .tvp-deg{height:5.2vw;background:linear-gradient(180deg,rgba(242,140,56,.28),rgba(242,140,56,.08))}.tvp-p.p2 .tvp-deg{height:3.6vw}.tvp-p.p3 .tvp-deg{height:2.6vw}
+.tvp-deg span{width:1.8vw;height:1.8vw;border-radius:50%;display:grid;place-items:center;font:800 .9vw 'Saira Condensed',sans-serif;color:#fff;background:#8a96a3}
+.tvp-p.p1 .tvp-deg span{background:#d4a017}.tvp-p.p3 .tvp-deg span{background:#b5683a}
+.tvp-eqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:.7vw}
+.tvp-eq{padding:.6vw .9vw;border-radius:.9vw;background:rgba(5,15,25,.45);border:1px solid rgba(255,255,255,.08)}
+.tvp-eq.lider{border-color:#f28c38;box-shadow:inset 0 0 0 1px rgba(242,140,56,.35)}
+.tvp-eq span{display:block;font-size:.75vw;color:#9fbad0}.tvp-eq b{display:block;font:800 1.7vw/1.05 'Saira Condensed',sans-serif;color:#fff}.tvp-eq small{font-size:.68vw;color:#87a6bb}
+.tvp-tab{width:100%;border-collapse:separate;border-spacing:0 .35vw;font-variant-numeric:tabular-nums}
+.tvp-tab th{font-size:.66vw;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7f9cb2;text-align:right;padding:0 .6vw .1vw}.tvp-tab th:nth-child(-n+2){text-align:left}
+.tvp-tab th:nth-child(n+3){border-bottom:.15vw solid var(--c)}
+.tvp-tab td{background:rgba(5,15,25,.45);padding:.45vw .6vw;text-align:right;vertical-align:middle}
+.tvp-tab td:first-child{border-radius:.7vw 0 0 .7vw;width:2.4vw;text-align:center}.tvp-tab td:last-child{border-radius:0 .7vw .7vw 0}
+.tvp-tab tr.bateu td{background:rgba(34,197,94,.16)}
+.tvp-pos{display:inline-grid;place-items:center;width:1.6vw;height:1.6vw;border-radius:50%;font:800 .85vw 'Saira Condensed',sans-serif;color:#cfe0ec}
+.tvp-pos.p1{background:#d4a017;color:#fff}.tvp-pos.p2{background:#8a96a3;color:#fff}.tvp-pos.p3{background:#b5683a;color:#fff}
+.tvp-nm{text-align:left!important}.tvp-nm b{display:block;font-size:.95vw;font-weight:800;white-space:nowrap}.tvp-nm small{font-size:.66vw;color:#87a6bb}
+.tvp-tab td b{display:block;font:800 1.15vw/1 'Saira Condensed',sans-serif;color:#fff}.tvp-tab td b small{font-size:.75vw;color:#87a6bb;margin-left:.1vw}
+.tvp-tab td i{font-style:normal;font-size:.66vw;color:var(--c)}.tvp-tab td.ok i{color:#6ee7a8;font-weight:700}.tvp-nd{color:#5d7486}
+.tvm-col{gap:.8vw}
+</style>
 <style id="mkt154">
 /* v154: perfis ADM / Correspondente e Marketing */
 .so-adm,.so-mkt{display:none!important}html.modo-adm .so-adm,html.modo-mkt .so-mkt{display:flex!important}
@@ -2459,6 +2550,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div class="hoje-avisos">
           <div id="bannerHoje"></div>
           <div id="alertasHoje"></div>
+          <div id="mdHoje"></div>
           <div id="mkHoje"></div>
           <div id="conviteNotif"></div>
           <div id="relDiaHoje"></div>
@@ -3403,6 +3495,15 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-head"><div><h2>Análise das conversas</h2><div class="muted" style="font-size:13px;margin-top:3px">O que faz o cliente responder e o que leva até a documentação.</div></div><button class="icon-btn" onclick="fechar('zapAnModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="zaCorpo" data-lenis-prevent></div>
     <div class="sheet-foot"><select id="zaDias" aria-label="Período"><option value="7">Últimos 7 dias</option><option value="15">Últimos 15 dias</option><option value="30">Últimos 30 dias</option></select><button class="btn btn-primary" id="zaBt" onclick="analisarZapAgora()">Analisar agora</button></div>
+  </div>
+</div>
+<!-- v155: metas do dia -->
+<div class="md-let" id="mdLetreiro" aria-live="polite"></div>
+<div class="modal" id="mdModal">
+  <div class="sheet" style="width:min(640px,100%)">
+    <div class="sheet-head"><div><h2>Metas do dia</h2><div class="muted" style="font-size:13px;margin-top:3px">Aparecem na tela de cada um, no ranking e na TV.</div></div><button class="icon-btn" onclick="fechar('mdModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="mdCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('mdModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarMetasDia()">Salvar metas</button></div>
   </div>
 </div>
 <!-- v154: tarefa do marketing -->
@@ -5430,9 +5531,11 @@ function agrupaRanking(rows){
 function renderRanking(){
   preencherSel('rPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option>', rankPeriodo);
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  $('segRank').innerHTML = [['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
   $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos'); if ($('podio')) $('podio').innerHTML = '';
+  document.getElementById('paneRanking')?.classList.toggle('rk-hoje', rankTipo === 'hoje');
+  if (rankTipo === 'hoje') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirMetasDia()">Metas do dia</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Metas de hoje'; $('rankNota').textContent = 'Cada número mostra quanto falta para bater a meta de hoje.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankHoje(); return; }
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
   if (rankTipo === 'vgv') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'VGV = soma do valor das vendas (reservas) pela data da reserva. Venda em parceria divide o valor entre os corretores. Vendas que caíram não entram.'; renderRankingVgv(); return; }
@@ -6497,7 +6600,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 154;
+const APP_VERSAO = 155;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7874,7 +7977,7 @@ function renderTvRank(){
   const el = $('tvRank'); if (!el) return;
   const d = dadosTvRank(), agora = new Date();
   if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'mes';
-  const fe = window.tvModo === 'feirao', cols = fe ? d.feirao : d.cols;
+  const fe = window.tvModo === 'feirao', mt = window.tvModo === 'metas', cols = fe ? d.feirao : d.cols;
   const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
   const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : ''; // v109: nome da equipe completo, como está cadastrado
   const anj = uid => { const a = anjoDe(uid); return a ? 'Anjo ' + curto(a) : ''; }; // v112: anjo responsável abaixo da equipe
@@ -7890,8 +7993,10 @@ function renderTvRank(){
   el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo">F</span><div><b>Frade <i>Imóveis</i></b><small>${fe ? 'Feirão Tenda · ' + nomeMes(d.m).split(' de ')[0].toLowerCase() : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
     <div class="tvr-eqs">${d.eqs.map((x, i) => `<div class="tvr-eq ${i === 0 && x.n ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><i style="width:${Math.round(x.n / maxEq * 100)}%"></i></div>`).join('')}</div>
     <div class="tvr-hora"><span class="tvr-vivo">ao vivo</span><b>${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</b><small>${dataLonga(hojeISO())}</small></div>
-    <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><button class="tvr-modo" onclick="tvModo=tvModo==='feirao'?'mes':'feirao';renderTvRank()" title="Trocar entre o mês e o feirão">${fe ? 'Mês' : 'Feirão'}</button><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
-    <div class="tvr-grade ${fe ? 'tvr-3' : ''}" style="--n:${cols.length}">${cols.map(col).join('')}</div>`;
+    <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><span class="tvr-seg">${[['mes','Mês'],['metas','Dia e semana'],['feirao','Feirão']].map(([k, n]) => `<button class="tvr-modo ${(window.tvModo || 'mes') === k ? 'on' : ''}" onclick="tvModo='${k}';renderTvRank()">${n}</button>`).join('')}</span><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
+    ${mt ? htmlTvMetas() : `<div class="tvr-grade ${fe ? 'tvr-3' : ''}" style="--n:${cols.length}">${cols.map(col).join('')}</div>`}
+    <div class="tvr-rod"><div id="tvSp"></div></div>`;
+  const sp = document.getElementById('tvSp'); if (sp) { sp._h = ''; spPintar(); }
   conferirEventosTv();
   if (!_tvRelogio) _tvRelogio = setInterval(() => { if (view === 'tvrank') renderTvRank(); else { clearInterval(_tvRelogio); _tvRelogio = null; } }, 30000);
 }
@@ -8614,7 +8719,8 @@ async function registrarLigacao(tel, cliente, origem){
   const t = chaveTel(tel); if (!t) return '';
   const h = hojeISO(), m = h.slice(0,7), rec = minhasLigHoje.some(x => x.telNorm === t), b = writeBatch(db), ref = doc(collection(db,'ligacoes'));
   b.set(ref, { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec, v:97, ...(sdr ? { sdr:true } : {}) });
-  if (!sdr) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', lig:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true });
+  if (!sdr) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', lig:{ [h]: increment(1) }, ...(rec ? {} : { ligu:{ [h]: increment(1) } }), atualizadoEm:Date.now() }, { merge:true });
+  else if (!rec) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', ligu:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true }); // v155: meta de ligações da SDR
   await gravar(b.commit());
   toast('Ligação registrada. Ao voltar, diga se o cliente atendeu.');
   return ref.id;
@@ -12915,6 +13021,228 @@ window.desSet = (k, v) => {
 };
 
 // =====================================================================
+// v155: metas do dia (ligações, docs, visitas marcadas e realizadas), ranking do dia e da semana, letreiro e música na TV
+// =====================================================================
+const MD_ITENS = [['lig','Ligações','números diferentes'],['docs','Docs','documentações'],['vm','Visitas marcadas','marcadas no dia'],['vr','Visitas realizadas','feitas no dia']];
+const MD_PAPEIS = ['corretor','coordenador','anjo','sdr'];
+const MD_COR = { lig:'#facc15', docs:'#2dd4bf', vm:'#38bdf8', vr:'#22c55e' };
+const mdCfg = () => appCfg.metasDia || {};
+const mdPessoa = uid => pessoasRk().find(x => x.uid === uid) || (uid === uidAtual ? { ...perfil, uid:uidAtual } : null);
+function metaDiaDe(uid){
+  const c = mdCfg(), p = mdPessoa(uid) || {}, base = p.papel === 'sdr' ? (c.sdr || {}) : (c.padrao || {}), o = (c.pessoas || {})[uid] || {}, r = {};
+  MD_ITENS.forEach(([k]) => { const v = o[k] !== undefined && o[k] !== '' && o[k] !== null ? o[k] : base[k]; r[k] = Math.max(0, Number(v) || 0); });
+  return r;
+}
+const mdTem = m => MD_ITENS.some(([k]) => m[k] > 0);
+const mdPessoas = () => pessoasRk().filter(p => p.status !== 'inativo' && p.status !== 'bloqueado' && MD_PAPEIS.includes(p.papel) && mdTem(metaDiaDe(p.uid)));
+const mdVazio = () => ({ lig:0, docs:0, vm:0, vr:0 });
+// dias de trabalho da semana até hoje (segunda a sábado)
+function mdDiasSemana(ate){ const h = ate || hojeISO(), d = parseISO(h), w = (d.getDay() + 6) % 7, seg = somaDias(h, -w), l = []; for (let i = 0; i <= w; i++) { const x = somaDias(seg, i); if (parseISO(x).getDay() !== 0) l.push(x); } return l; }
+// soma os números de cada pessoa nos dias pedidos
+function mdValores(dias){
+  const ds = new Set(dias), out = new Map(), add = (u, k, n = 1) => { if (!u || !n) return; const o = out.get(u) || mdVazio(); o[k] += n; out.set(u, o); };
+  // ligações: cada número diferente no dia conta 1 (o app soma na hora da ligação)
+  rankingAtiv.forEach(r => Object.entries(r.ligu || {}).forEach(([d, n]) => { if (ds.has(d)) add(r.uid, 'lig', Number(n) || 0); }));
+  const vivo = souGerente();
+  if (!vivo) rankingAtiv.forEach(r => [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => Object.entries(r[c] || {}).forEach(([d, n]) => { if (ds.has(d)) add(r.uid, k, Number(n) || 0); })));
+  // ao vivo: a gerência vê tudo; os outros recalculam os próprios números (o resto vem do que a gerência sincroniza)
+  const so = vivo ? null : uidAtual;
+  if (!vivo && so) { const o = out.get(so); if (o) { o.vm = 0; o.vr = 0; o.docs = 0; } }
+  const ok = u => vivo || u === so;
+  visitasBrutas.filter(v => !v.arquivado).forEach(v => {
+    if (v.criadoEm && v.status !== 'Cancelada') { const d = iso(new Date(v.criadoEm)), u = donoCart(v) || v.corretorUid; if (ds.has(d) && ok(u)) add(u, 'vm'); }
+    if (v.status === 'Realizada' && ds.has(v.date) && ok(v.corretorUid)) add(v.corretorUid, 'vr');
+  });
+  // docs: tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada), sem contar o mesmo cliente duas vezes no dia
+  const vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); add(u, 'docs'); };
+  try { avaliacoesUnificadas().forEach(a => doc(a.corretorUid, a.data || '', a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id)); } catch(e) {}
+  (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
+  // SDR: documentações do resumo do dia
+  try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) add(x.uid, 'docs', Number(x.docs) || 0); })); } catch(e) {}
+  return out;
+}
+const mdFalta = (meta, v) => { const r = {}; MD_ITENS.forEach(([k]) => r[k] = Math.max(0, (meta[k] || 0) - (v[k] || 0))); return r; };
+const mdBateu = (meta, v) => mdTem(meta) && MD_ITENS.every(([k]) => !meta[k] || (v[k] || 0) >= meta[k]);
+const mdPct = (meta, v) => { const ks = MD_ITENS.map(([k]) => k).filter(k => meta[k]); return ks.length ? ks.reduce((s, k) => s + Math.min(1, (v[k] || 0) / meta[k]), 0) / ks.length : 0; };
+function mdLista(dias, multi = 1){
+  const vals = mdValores(dias);
+  return mdPessoas().map(p => { const m0 = metaDiaDe(p.uid), meta = {}; MD_ITENS.forEach(([k]) => meta[k] = m0[k] * multi); const v = vals.get(p.uid) || mdVazio();
+    return { p, meta, v, falta:mdFalta(meta, v), bateu:mdBateu(meta, v), pct:mdPct(meta, v), itens:MD_ITENS.filter(([k]) => meta[k] && (v[k] || 0) >= meta[k]).length }; })
+    .sort((a, b) => b.itens - a.itens || b.pct - a.pct || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
+}
+// quem bateu as metas no último dia de trabalho
+function mdOntem(){ let d = somaDias(hojeISO(), -1); if (parseISO(d).getDay() === 0) d = somaDias(d, -1); return d; }
+function mdBateramOntem(){
+  const d = mdOntem(), l = mdLista([d]);
+  return { dia:d, todos:l.filter(x => x.bateu), parcial:l.filter(x => !x.bateu && x.itens > 0).map(x => ({ ...x, quais:MD_ITENS.filter(([k]) => x.meta[k] && x.v[k] >= x.meta[k]).map(([, n]) => n) })) };
+}
+
+// ---------- tela Hoje: a meta vai diminuindo conforme a pessoa faz ----------
+function htmlMetasDiaHoje(){
+  if (!perfil || !MD_PAPEIS.includes(perfil.papel) || view !== 'hoje') return '';
+  const meta = metaDiaDe(uidAtual); if (!mdTem(meta)) return '';
+  const v = mdValores([hojeISO()]).get(uidAtual) || mdVazio(), bateu = mdBateu(meta, v);
+  const tiles = MD_ITENS.filter(([k]) => meta[k]).map(([k, n]) => { const f = Math.max(0, meta[k] - (v[k] || 0)), pct = Math.min(100, Math.round((v[k] || 0) / meta[k] * 100));
+    return `<div class="md-t ${f ? '' : 'ok'}" style="--c:${MD_COR[k]};--p:${pct}"><div class="md-anel"><b>${f ? f : '✓'}</b></div><span>${n}</span><small>${f ? (f === 1 ? 'falta 1' : 'faltam ' + f) + ' de ' + meta[k] : 'meta batida'}</small></div>`; }).join('');
+  return `<div class="card md-card ${bateu ? 'bateu' : ''}"><div class="card-head"><h3>${bateu ? 'Metas de hoje batidas' : 'Suas metas de hoje'}</h3><span class="muted" style="font-size:12.5px">${bateu ? 'Você aparece no letreiro amanhã' : 'O número cai a cada uma que você faz'}</span></div><div class="md-ts">${tiles}</div></div>`;
+}
+function renderMetasDiaHoje(){ const el = $('mdHoje'); if (!el) return; const h = htmlMetasDiaHoje(); if (el._h !== h) { el.innerHTML = h; el._h = h; } }
+
+// ---------- letreiro: a cada 5 minutos passa quem bateu as metas de ontem ----------
+let _mdLetUlt = 0;
+function htmlLetreiro(){
+  const r = mdBateramOntem(); if (!r.todos.length && !r.parcial.length) return '';
+  const dd = parseISO(r.dia).toLocaleDateString('pt-BR', { weekday:'long' });
+  const partes = [...r.todos.map(x => `<b>${esc(nomeCurto(x.p.nome))}</b> bateu todas as metas`), ...r.parcial.slice(0, 12).map(x => `<b>${esc(nomeCurto(x.p.nome))}</b> bateu ${esc(x.quais.join(', ').toLowerCase())}`)];
+  return `<div class="md-let-in"><span class="md-let-tit">Metas de ${esc(dd)}</span><div class="md-let-trilho"><div class="md-let-txt">${partes.join('<i>·</i>')}<i>·</i>${partes.join('<i>·</i>')}</div></div></div>`;
+}
+function mdLetreiroPulso(){
+  const el = $('mdLetreiro'); if (!el || !perfil || !souAtivo()) return;
+  const agora = Date.now(), mostrar = view === 'hoje' || view === 'tvrank';
+  if (!mostrar) { el.classList.remove('on'); return; }
+  if (agora - _mdLetUlt >= 5 * 60e3) { const h = htmlLetreiro(); if (h) { el.innerHTML = h; el.classList.add('on'); _mdLetUlt = agora; setTimeout(() => el.classList.remove('on'), 30000); } else _mdLetUlt = agora; }
+}
+setInterval(mdLetreiroPulso, 15000);
+window.verLetreiro = () => { _mdLetUlt = 0; mdLetreiroPulso(); };
+
+// ---------- gerência: guarda os números de cada um para o ranking de todos (corretor não lê os dados dos outros) ----------
+let _mdSinc = 0;
+async function sincMetasDia(){
+  if (!souGerente() || souCeo() || Date.now() - _mdSinc < 3 * 60e3 || !carregado.visitas) return;
+  _mdSinc = Date.now();
+  try {
+    const dias = [...new Set([mdOntem(), ...mdDiasSemana()])], b = writeBatch(db); let n = 0;
+    const porUid = new Map();
+    dias.forEach(d => mdValores([d]).forEach((v, u) => { const o = porUid.get(u) || {}; o[d] = v; porUid.set(u, o); }));
+    pessoasRk().filter(p => MD_PAPEIS.includes(p.papel)).forEach(p => {
+      const meses = {}; dias.forEach(d => { (meses[d.slice(0, 7)] = meses[d.slice(0, 7)] || []).push(d); });
+      Object.entries(meses).forEach(([m, ds]) => {
+        const id = m + '_' + p.uid, ra = rankingAtiv.find(r => r.id === id) || {}, up = {};
+        [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => ds.forEach(d => { const val = ((porUid.get(p.uid) || {})[d] || {})[k] || 0, ant = (ra[c] || {})[d] || 0; if (val !== ant) { up[c] = up[c] || {}; up[c][d] = val; } }));
+        if (Object.keys(up).length && n < 400) { b.set(doc(db,'ranking_ativ', id), { mes:m, uid:p.uid, nome:p.nome || '', equipe:p.equipe || '', ...up, atualizadoEm:Date.now() }, { merge:true }); n++; }
+      });
+    });
+    if (n) await b.commit();
+  } catch(e) { console.warn('metas do dia', e.message); }
+}
+
+// ---------- ranking: aba Hoje ----------
+function htmlRankHoje(){
+  const l = mdLista([hojeISO()]);
+  if (!l.length) return `<div class="an-vazio"><b>Nenhuma meta do dia definida</b><p>${souGerente() ? 'Defina as metas em Ranking > Metas do dia.' : 'A gerência ainda não definiu as metas do dia.'}</p></div>`;
+  return `<div class="md-rank">${l.map((x, i) => `<div class="md-rl ${x.bateu ? 'bateu' : ''} ${x.p.uid === uidAtual ? 'me' : ''}"><span class="md-pos">${i + 1}</span><span class="md-nome"><b>${esc(x.p.nome)}</b><small>${esc(PAPEIS[x.p.papel] || '')}${x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe).replace(/^[^\p{L}]+/u, '')) : ''}</small></span>
+    <span class="md-chips">${MD_ITENS.filter(([k]) => x.meta[k]).map(([k, n]) => `<span class="md-chip ${x.falta[k] ? '' : 'ok'}" style="--c:${MD_COR[k]}" title="${n}: ${x.v[k]} de ${x.meta[k]}"><i>${n.split(' ')[0] === 'Visitas' ? (k === 'vm' ? 'Marc.' : 'Real.') : n}</i><b>${x.falta[k] ? x.falta[k] : '✓'}</b></span>`).join('')}</span></div>`).join('')}</div>
+    <div class="hint" style="margin-top:10px">O número é quanto falta para bater a meta de hoje. Ligações contam números diferentes; ligar de novo para o mesmo cliente no dia não soma.</div>`;
+}
+
+// ---------- gerência: definir as metas ----------
+window.abrirMetasDia = () => {
+  if (!souGerente() || souCeo()) return;
+  const c = mdCfg(), pad = c.padrao || {}, sdr = c.sdr || {}, por = c.pessoas || {};
+  const linha = (id, o, ph) => MD_ITENS.map(([k, n]) => `<input type="number" min="0" step="1" inputmode="numeric" data-g="${id}" data-k="${k}" value="${o[k] ?? ''}" placeholder="${ph ? (ph[k] ?? 0) : 0}" aria-label="${n}">`).join('');
+  const gente = pessoasRk().filter(p => MD_PAPEIS.includes(p.papel) && p.status !== 'inativo').sort((a, b) => (a.papel === 'sdr') - (b.papel === 'sdr') || a.nome.localeCompare(b.nome, 'pt-BR'));
+  $('mdCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">A meta é por dia. Ligações contam números diferentes ligados no dia. Docs contam tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada; para a SDR, o resumo do dia).</div>
+    <div class="md-ed md-cab"><span></span>${MD_ITENS.map(([, n]) => `<small>${n}</small>`).join('')}</div>
+    <div class="md-ed"><span><b>Corretores e coordenadores</b><small>meta de todos</small></span>${linha('padrao', pad)}</div>
+    <div class="md-ed"><span><b>SDRs</b><small>meta de todas</small></span>${linha('sdr', sdr)}</div>
+    <div class="rep-sec" style="margin:16px 0 6px">Mudar para alguém (vazio usa a meta de todos; 0 tira a meta)</div>
+    ${gente.map(p => `<div class="md-ed"><span>${esc(p.nome)}<small>${esc(PAPEIS[p.papel] || '')}</small></span>${linha('p:' + p.uid, por[p.uid] || {}, p.papel === 'sdr' ? sdr : pad)}</div>`).join('')}
+    <div class="rep-sec" style="margin:18px 0 6px">Música na TV (Spotify Premium)</div>
+    <div class="hint" style="margin:0 0 8px">Cole o código do app (Client ID) criado em developer.spotify.com. Na TV, toque em Conectar Spotify uma vez; depois é só escolher as músicas pelo Spotify do celular, no aparelho "Frade TV".</div>
+    <div style="display:flex;gap:8px"><input id="mdSpId" value="${esc((appCfg.spotify || {}).clientId || '')}" placeholder="Client ID do Spotify" maxlength="32" style="flex:1"><button class="btn btn-ghost" onclick="salvarSpotify()">Salvar</button></div>`;
+  abrir('mdModal');
+};
+window.salvarMetasDia = async () => {
+  const ler = id => { const o = {}; document.querySelectorAll(`#mdCorpo input[data-g="${id}"]`).forEach(i => { if (i.value !== '') o[i.dataset.k] = Math.max(0, Math.min(999, Math.round(Number(i.value) || 0))); }); return o; };
+  const pessoas = {}; document.querySelectorAll('#mdCorpo input[data-g^="p:"]').forEach(i => { const u = i.dataset.g.slice(2); if (!pessoas[u]) { const o = ler('p:' + u); if (Object.keys(o).length) pessoas[u] = o; } });
+  const metasDia = { padrao:ler('padrao'), sdr:ler('sdr'), pessoas, atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
+  // updateDoc troca o campo inteiro (assim quem voltou para a meta de todos perde a meta antiga)
+  try { await gravar(updateDoc(doc(db,'config','app'), { metasDia })); }
+  catch(e) { try { await gravar(setDoc(doc(db,'config','app'), { metasDia }, { merge:true })); } catch(e2) { toast('Erro: ' + (e2.message || e.message)); return; } }
+  fechar('mdModal'); toast('Metas do dia salvas'); render();
+};
+
+// ---------- TV: dia e semana lado a lado ----------
+function htmlTvMetas(){
+  const h = hojeISO(), dias = mdDiasSemana(), hoje = mdLista([h]), sem = mdLista(dias, dias.length);
+  const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
+  const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : '';
+  const nMetas = x => MD_ITENS.filter(([k]) => x.meta[k]).length;
+  const podio = l => { const t = l.slice(0, 3); if (!t.length) return '';
+    const ordem = [t[1], t[0], t[2]].map((x, i) => x ? { x, pos:[2, 1, 3][i] } : null).filter(Boolean);
+    return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}"><span class="tvp-av">${esc((x.p.nome || '?').trim()[0] || '?')}</span><b>${esc(curto(x.p.nome))}</b><small>${x.itens} de ${nMetas(x)} metas${x.bateu ? ' · bateu' : ''}</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
+  const equipes = l => { const es = listaEquipes().map(e => { const m = l.filter(x => x.p.equipe === e.id); return { e, it:m.reduce((s, x) => s + x.itens, 0), tot:m.reduce((s, x) => s + nMetas(x), 0), bat:m.filter(x => x.bateu).length }; }).filter(x => x.tot);
+    const max = Math.max(0, ...es.map(x => x.it / x.tot));
+    return es.length ? `<div class="tvp-eqs">${es.map(x => `<div class="tvp-eq ${x.it && x.it / x.tot === max ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${Math.round(x.it / x.tot * 100)}%</b><small>das metas batidas${x.bat ? ' · ' + x.bat + (x.bat === 1 ? ' pessoa completa' : ' pessoas completas') : ''}</small></div>`).join('')}</div>` : ''; };
+  const cel = (x, k) => { if (!x.meta[k]) return '<td class="tvp-nd">—</td>'; const f = x.falta[k];
+    return `<td class="${f ? '' : 'ok'}" style="--c:${MD_COR[k]}"><b>${x.v[k] || 0}<small>/${x.meta[k]}</small></b><i>${f ? 'falta ' + f : '✓ bateu'}</i></td>`; };
+  const tabela = (l, max) => l.length ? `<table class="tvp-tab"><thead><tr><th>#</th><th>Nome</th>${MD_ITENS.map(([k, n]) => `<th style="--c:${MD_COR[k]}">${({ vm:'Marcadas', vr:'Realizadas' })[k] || n}</th>`).join('')}</tr></thead><tbody>${l.slice(0, max).map((x, i) => `<tr class="${x.bateu ? 'bateu' : ''}"><td><span class="tvp-pos p${i + 1}">${i + 1}</span></td><td class="tvp-nm"><b>${esc(curto(x.p.nome))}</b><small>${esc(eqN(x.p.equipe) || PAPEIS[x.p.papel] || '')}</small></td>${MD_ITENS.map(([k]) => cel(x, k)).join('')}</tr>`).join('')}</tbody></table>` : '<div class="tvr-vazio">Defina as metas do dia<br>no app (Ranking)</div>';
+  const bateramH = hoje.filter(x => x.bateu).length;
+  const coluna = (cls, tit, sub, l) => `<section class="tvm-col ${cls}"><header><h2>${tit}</h2><span>${sub}</span></header>${podio(l)}${equipes(l)}${tabela(l, 7)}</section>`;
+  return `<div class="tvm">${coluna('', 'Hoje', bateramH ? bateramH + (bateramH === 1 ? ' pessoa bateu' : ' pessoas bateram') + ' todas as metas' : 'A meta cai a cada ligação, doc e visita', hoje)}${coluna('sem', 'Semana', dias.length + (dias.length === 1 ? ' dia' : ' dias') + ' de trabalho · meta do dia × ' + dias.length, sem)}</div>`;
+}
+
+// ---------- música na TV (Spotify Premium): a TV vira um aparelho "Frade TV" e a música é trocada pelo celular ----------
+const SP = { cliente:() => (appCfg.spotify || {}).clientId || '', redir:() => location.origin + location.pathname, escopo:'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state' };
+const spGet = k => { try { return localStorage.getItem('sp_' + k); } catch(e) { return null; } };
+const spSet = (k, v) => { try { v == null ? localStorage.removeItem('sp_' + k) : localStorage.setItem('sp_' + k, v); } catch(e) {} };
+const b64url = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+window.spConectar = async () => {
+  const id = SP.cliente(); if (!id) { toast('Falta o código do app do Spotify (Ranking > Metas do dia > Música).'); return; }
+  const ver = b64url(crypto.getRandomValues(new Uint8Array(48))), desafio = b64url(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ver))), st = b64url(crypto.getRandomValues(new Uint8Array(12)));
+  spSet('ver', ver); spSet('st', st);
+  location.href = 'https://accounts.spotify.com/authorize?' + new URLSearchParams({ client_id:id, response_type:'code', redirect_uri:SP.redir(), code_challenge_method:'S256', code_challenge:desafio, scope:SP.escopo, state:st });
+};
+async function spToken(form){
+  const r = await fetch('https://accounts.spotify.com/api/token', { method:'POST', headers:{ 'Content-Type':'application/x-www-form-urlencoded' }, body:new URLSearchParams(form) });
+  const j = await r.json(); if (!r.ok) throw new Error(j.error_description || j.error || 'Spotify ' + r.status);
+  spSet('tk', j.access_token); spSet('exp', String(Date.now() + (j.expires_in - 60) * 1000)); if (j.refresh_token) spSet('rf', j.refresh_token); return j.access_token;
+}
+async function spAcesso(){
+  const tk = spGet('tk'), exp = Number(spGet('exp') || 0); if (tk && Date.now() < exp) return tk;
+  const rf = spGet('rf'); if (!rf || !SP.cliente()) return null;
+  try { return await spToken({ grant_type:'refresh_token', refresh_token:rf, client_id:SP.cliente() }); } catch(e) { spSet('rf', null); return null; }
+}
+// volta do login do Spotify (?code=...)
+(async () => { const q = new URLSearchParams(location.search); if (!q.get('code') || !q.get('state') || q.get('state') !== spGet('st')) return;
+  const code = q.get('code'); history.replaceState(null, '', location.pathname + '#tvrank');
+  const esperaCfg = async () => { for (let i = 0; i < 40 && !SP.cliente(); i++) await new Promise(r => setTimeout(r, 500)); };
+  await esperaCfg();
+  try { await spToken({ grant_type:'authorization_code', code, redirect_uri:SP.redir(), client_id:SP.cliente(), code_verifier:spGet('ver') || '' }); spSet('ver', null); toast('Spotify conectado. Toque em Ligar música na TV.'); window.tvModo = 'metas'; }
+  catch(e) { toast('Não conectou o Spotify: ' + e.message); } })();
+let spPlayer = null, spEstado = null, spDev = '';
+function spCarregarSdk(){ return new Promise(ok => { if (window.Spotify) return ok(); window.onSpotifyWebPlaybackSDKReady = ok; const s = document.createElement('script'); s.src = 'https://sdk.scdn.co/spotify-player.js'; document.head.appendChild(s); }); }
+window.spLigar = async () => {
+  const tk = await spAcesso(); if (!tk) { spConectar(); return; }
+  await spCarregarSdk();
+  if (!spPlayer) {
+    spPlayer = new Spotify.Player({ name:'Frade TV', volume:0.6, getOAuthToken:async cb => cb(await spAcesso()) });
+    spPlayer.addListener('ready', async ({ device_id }) => { spDev = device_id;
+      try { await fetch('https://api.spotify.com/v1/me/player', { method:'PUT', headers:{ Authorization:'Bearer ' + await spAcesso(), 'Content-Type':'application/json' }, body:JSON.stringify({ device_ids:[device_id], play:true }) }); } catch(e) {}
+      toast('Frade TV pronta. No celular, abra o Spotify e escolha o aparelho "Frade TV".'); spPintar(); });
+    spPlayer.addListener('player_state_changed', s => { spEstado = s; spPintar(); });
+    ['initialization_error','authentication_error','account_error'].forEach(ev => spPlayer.addListener(ev, ({ message }) => toast('Spotify: ' + (ev === 'account_error' ? 'precisa de conta Premium' : message))));
+    await spPlayer.connect();
+  }
+  try { await spPlayer.activateElement(); } catch(e) {}
+  spPintar();
+};
+window.spAcao = a => { if (!spPlayer) return; ({ tocar:() => spPlayer.togglePlay(), prox:() => spPlayer.nextTrack(), ant:() => spPlayer.previousTrack() })[a]?.(); };
+function htmlSpotify(){
+  if (!SP.cliente()) return '';
+  if (!spPlayer) return `<div class="tvsp"><button class="tvsp-bt" onclick="spLigar()">${spGet('rf') ? 'Ligar música' : 'Conectar Spotify'}</button></div>`;
+  const t = spEstado?.track_window?.current_track, img = t?.album?.images?.[0]?.url || '';
+  return `<div class="tvsp">${img ? `<img src="${esc(img)}" alt="">` : '<span class="tvsp-ic">♪</span>'}<div class="tvsp-t"><b>${esc(t?.name || 'Frade TV pronta')}</b><small>${esc(t ? (t.artists || []).map(a => a.name).join(', ') : 'Escolha a música pelo Spotify do celular')}</small></div>
+    <button onclick="spAcao('ant')" aria-label="Anterior">‹‹</button><button onclick="spAcao('tocar')" aria-label="Tocar ou pausar">${spEstado && !spEstado.paused ? '❚❚' : '▶'}</button><button onclick="spAcao('prox')" aria-label="Próxima">››</button></div>`;
+}
+function spPintar(){ const el = document.getElementById('tvSp'); if (el) { const h = htmlSpotify(); if (el._h !== h) { el.innerHTML = h; el._h = h; } } }
+setInterval(() => { try { sincMetasDia(); } catch(e) {} }, 60e3);
+window.salvarSpotify = async () => {
+  const v = ($('mdSpId')?.value || '').trim(); if (v && !/^[0-9a-f]{32}$/i.test(v)) { toast('O código do app do Spotify tem 32 letras e números'); return; }
+  try { await gravar(setDoc(doc(db,'config','app'), { spotify:{ clientId:v } }, { merge:true })); toast(v ? 'Spotify ligado. Na TV, toque em Conectar Spotify.' : 'Spotify desligado'); } catch(e) { toast('Erro: ' + e.message); }
+};
+
+// =====================================================================
 // v154: Marketing (agenda de ações + tarefas para os corretores) e perfil ADM / Correspondente
 // =====================================================================
 let mkTarefas = [], _mkSub = null;
@@ -13019,6 +13347,7 @@ window.mkFeito = async id => {
 function renderMkHoje(){ const el = $('mkHoje'); if (!el) return; const h = view === 'hoje' ? htmlMkHoje() : ''; if (el._h !== h) { el.innerHTML = h; el._h = h; } }
 
 function renderEtapa3(){
+  try { renderMetasDiaHoje(); } catch(e) { console.warn('metas do dia', e.message); }
   try { renderMarketing(); renderMkHoje(); } catch(e) { console.warn('mkt render', e.message); }
   if (view === 'desempenho') renderDesempenho();
   renderVendas(); renderApEscolha(); renderAssistente();
