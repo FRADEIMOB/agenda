@@ -1877,6 +1877,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 .zap-lista-col>.zap-st{padding:0 14px 8px;gap:10px}.zap-lista-col>.zap-st .zap-chip{background:none!important;padding:0;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .zap-abas button{padding:9px 6px}
 .zap-mais-bt{width:30px;padding:0;font-size:17px;line-height:1}.zap-lh .fin-menu{min-width:210px}
+.zap-tagsf .zf-edit{color:var(--accent);border-style:dashed}.zt-novo{border-style:dashed;color:var(--accent)}
 .zf-sep{flex:0 0 1px;align-self:stretch;background:var(--border);margin:2px 2px}
 .zap-tagsf{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent);padding-right:24px}
 .zap-mini{height:30px;padding:0 10px;font-size:12.5px;border-radius:9px}
@@ -1892,6 +1893,9 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 .zt-tag{background:color-mix(in srgb,var(--tc) 16%,transparent);color:var(--tc)}
 .zt-ag{background:#E8510C;color:#fff}
 .zap-item.ag{border-color:#E8510C;background:color-mix(in srgb,#E8510C 7%,transparent)}
+.zap-b .zap-bt{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;color:var(--text)}
+#zapMsgs{overflow-x:hidden}.zap-b{min-width:0}.zap-b .zap-bt{min-width:0;max-width:100%}.zap-b .zap-bt a{word-break:break-all}
+.zap-enc{all:unset;cursor:pointer;font-size:12px;font-weight:700;color:var(--accent);padding:4px 2px 0;display:inline-flex;align-items:center;gap:4px}.zap-enc::before{content:'↪'}
 .zap-det-volta{all:unset;cursor:pointer;font-weight:700;font-size:14px;color:var(--accent);padding:4px 0 12px;display:none}
 @media(max-width:760px){.zap-det-volta{display:block}}
 #zapCab .zap-ch-acoes .lig-par .snooze.lig-zap{display:none}
@@ -3292,6 +3296,13 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="responderPlantao(false)">Não, vou encerrar</button><button class="btn btn-primary" onclick="responderPlantao(true)">Sim, vou ficar</button></div>
   </div>
 </div>
+<div class="modal" id="zapTagModal">
+  <div class="sheet" style="width:min(420px,100%)">
+    <div class="sheet-head"><div><h2>Minhas etiquetas</h2><div class="muted" style="font-size:13px;margin-top:3px">São só suas. Use para organizar os seus clientes.</div></div><button class="icon-btn" onclick="fechar('zapTagModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div id="mtLista"></div><button class="link" onclick="_mtNova()">+ Nova etiqueta</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('zapTagModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarMinhasTags()">Salvar etiquetas</button></div>
+  </div>
+</div>
 <div class="modal" id="zapFunilModal">
   <div class="sheet" style="width:min(1180px,100%)">
     <div class="sheet-head"><div><h2>Oportunidades do WhatsApp</h2><div class="muted" style="font-size:13px;margin-top:3px">Clientes que chegaram pelo número da Frade. O bolsão tem as etapas dele, separadas.</div></div><button class="icon-btn" onclick="fechar('zapFunilModal')" data-ic="x"></button></div>
@@ -3322,8 +3333,6 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <div class="cf-gente" id="cfGente"></div>
       <h3>Etapas das oportunidades</h3>
       <div id="cfEtapas"></div><button class="link" onclick="_cfEtNova()">+ Adicionar etapa</button>
-      <h3>Etiquetas</h3>
-      <div id="cfTags"></div><button class="link" onclick="_cfTagNova()">+ Adicionar etiqueta</button>
       <h3>Modelo para retomar conversa</h3>
       <div class="muted" style="font-size:12.5px;margin-bottom:8px">Depois de 24 horas sem o cliente falar, o WhatsApp só aceita um modelo aprovado pela Meta. Escreva o nome exato do modelo cadastrado no Gerenciador do WhatsApp.</div>
       <div class="cf-grade"><div class="fg"><label for="cfModelo">Nome do modelo</label><input id="cfModelo" placeholder="retomar_contato" maxlength="60"></div><div class="fg"><label for="cfIdioma">Idioma</label><input id="cfIdioma" placeholder="pt_BR" maxlength="10"></div></div>
@@ -4136,7 +4145,7 @@ onAuthStateChanged(auth, user => {
       state = estadoInicial(user); salvar(); pedirCadastro(); return;
     }
     const d = snap.data();
-    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {}, bzPeguei:d.bzPeguei || {} };
+    state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {}, bzPeguei:d.bzPeguei || {}, ...(Array.isArray(d.zapTags) ? { zapTags:d.zapTags } : {}) };
     render();
     pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
@@ -6404,7 +6413,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 152;
+const APP_VERSAO = 153;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11391,10 +11400,11 @@ function renderZap(){
   if (zapAba === 'semDono') l = l.filter(c => !c.corretorUid);
   if (zapAba === 'novos') l = l.filter(c => c.tipoLead !== 'antigo'); if (zapAba === 'antigos') l = l.filter(c => c.tipoLead === 'antigo');
   if (zapAba === 'esperando') l = l.filter(c => c.dist === 'aguardando');
-  if (window.zapTagF) l = l.filter(c => (c.etiquetas || []).includes(zapTagF));
-  { const tg = crmEtiquetas(), st = ger ? [['esperando','Esperando resposta'],['semDono','Sem corretor']] : [];
+  if (window.zapTagF) l = l.filter(c => tagsConv(c).some(e => norm(e.n) === norm(zapTagF)));
+  { const tg = minhasTags(), st = ger ? [['esperando','Esperando resposta'],['semDono','Sem corretor']] : [];
     const h = st.map(([k, n]) => `<button class="zf-st ${zapAba === k ? 'on' : ''}" onclick="zapAba=zapAba==='${k}'?'todas':'${k}';render()">${n}</button>`).join('') + (st.length && tg.length ? '<span class="zf-sep"></span>' : '')
-      + tg.map(e => `<button class="${window.zapTagF === e.k ? 'on' : ''}" style="--tc:${esc(e.c || '#64748b')}" onclick="zapTagF=zapTagF==='${e.k}'?'':'${e.k}';renderZap()"><i></i>${esc(e.n)}</button>`).join(''); zapPor('zapTagsF', h); }
+      + tg.map((e, i) => `<button class="${window.zapTagF && norm(zapTagF) === norm(e.n) ? 'on' : ''}" style="--tc:${esc(e.c || '#64748b')}" onclick="zapFiltroTag(${i})"><i></i>${esc(e.n)}</button>`).join('')
+      + '<button class="zf-edit" onclick="abrirMinhasTags()">Editar etiquetas</button>'; zapPor('zapTagsF', h); }
   document.querySelectorAll('#zapAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === zapAba));
   zapPor('zapLista', l.length ? l.map(c => `<button class="zap-item ${zapSel === c.id ? 'sel' : ''}${zapMeuAguardando(c) ? ' ag' : ''}" data-id="${esc(c.id)}">
       <span class="zap-av">${esc(iniciais(zapNome(c)))}</span>
@@ -11442,7 +11452,7 @@ function renderZap(){
     ${ger ? `<select id="zapCorSel" onchange="zapAssumir('${c.id}', this.value)"><option value="">Ninguém</option>${perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'sdr').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${c.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select>${c.atribuidoPor === 'rodízio' ? '<div class="muted" style="font-size:12px;margin-top:4px">Passado pelo rodízio automático</div>' : ''}` : `<div style="font-size:14px;font-weight:600">${esc(c.corretorNome || '—')}</div>`}
     ${(() => { const pode = zapPodeEditar(c), ets = crmEtapas();
       return `<label>Etapa</label>${pode ? `<select id="zapEtSel" onchange="zapSetEtapa('${c.id}', this.value)"><option value="">Sem etapa</option>${ets.map(e => `<option value="${e.k}" ${c.etapa === e.k ? 'selected' : ''}>${esc(e.n)}</option>`).join('')}</select>` : `<div style="font-size:14px">${esc((ets.find(e => e.k === c.etapa) || {}).n || 'Sem etapa')}</div>`}
-      <label>Etiquetas</label><div class="zap-tags">${crmEtiquetas().map(e => `<button class="zt-tg ${(c.etiquetas || []).includes(e.k) ? 'on' : ''}" style="--tc:${esc(e.c || '#64748b')}" ${pode ? `onclick="zapTag('${c.id}','${e.k}')"` : 'disabled'}><i></i>${esc(e.n)}</button>`).join('')}</div>
+      <label>Etiquetas</label><div class="zap-tags">${zapTagsDe(c).map((e, i) => `<button class="zt-tg ${e.on ? 'on' : ''}" style="--tc:${esc(e.c || '#64748b')}" ${pode ? `onclick="zapTag('${c.id}',${i})"` : 'disabled'}><i></i>${esc(e.n)}</button>`).join('')}${pode ? '<button class="zt-tg zt-novo" onclick="abrirMinhasTags()">+ Criar ou editar</button>' : ''}</div>
       <label>Lead</label><div style="font-size:13px">${c.tipoLead === 'antigo' ? 'Antigo (já falou com a Frade antes)' : 'Novo'}${c.origem === 'bolsão' || c.atribuidoPor === 'bolsão' ? ' · veio do bolsão' : ''}${c.travado ? ' · atendimento travado no corretor' : c.dist === 'aguardando' ? ' · esperando a 1ª resposta' : ''}</div>
       ${souGerente() && c.analise ? `<div class="zap-an">${c.analise.doc ? '<span class="ok">Trouxe documentação</span>' : c.analise.interagiu ? '<span>Cliente interagiu</span>' : '<span class="bad">Sem interação</span>'}</div>` : ''}`; })()}
     <label>No app</label>${noApp.length ? noApp.map(x => `<div class="zap-tag">${x}</div>`).join('') : '<div class="muted" style="font-size:13px">Esse número ainda não está em visitas, cartas ou na planilha.</div>'}
@@ -11480,6 +11490,8 @@ function carregarMidias(){
     el.dataset.ok = '1'; if (el.dataset.quer) el.innerHTML = '<span class="zap-mid-info">⏳ Carregando…</span>';
     try {
       const u = await urlMidia(mid, Number(n) || 1, mime);
+      // v152: encaminhar direto (abre a lista do celular: WhatsApp, e-mail...) sem precisar baixar
+      setTimeout(() => { if (!el.nextElementSibling?.classList.contains('zap-enc')) el.insertAdjacentHTML('afterend', `<button class="zap-enc" onclick="zapEncaminhar('${esc(mid)}',${Number(n) || 1},'${esc(mime)}','${esc(nome || '').replace(/'/g, '')}')">Encaminhar</button>`); }, 0);
       if (mime.startsWith('image/')) el.innerHTML = `<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="Foto" onload="const b=document.getElementById('zapMsgs');if(b&&b.scrollHeight-b.scrollTop-b.clientHeight<400)b.scrollTop=b.scrollHeight"></a>`;
       else if (mime.startsWith('audio/')) el.innerHTML = `<audio controls preload="metadata" src="${u}"></audio>`;
       else if (mime.startsWith('video/')) el.innerHTML = `<video controls playsinline preload="metadata" src="${u}"></video>`;
@@ -11488,6 +11500,19 @@ function carregarMidias(){
   });
 }
 window.carregarMidias = carregarMidias;
+window.zapEncaminhar = async (mid, n, mime, nome) => {
+  try {
+    const u = await urlMidia(mid, n, mime), blob = await (await fetch(u)).blob();
+    const ext = (mime.split('/')[1] || 'bin').split(';')[0].replace('jpeg', 'jpg').replace('quicktime', 'mov');
+    const arq = new File([blob], nome || ((mime.startsWith('image/') ? 'foto' : mime.startsWith('video/') ? 'video' : mime.startsWith('audio/') ? 'audio' : 'arquivo') + '.' + ext), { type:mime || blob.type });
+    if (navigator.canShare && navigator.canShare({ files:[arq] })) { await navigator.share({ files:[arq] }); return; }
+    // computador: foto vai para a área de transferência (é só colar no WhatsApp com Ctrl+V)
+    if (mime.startsWith('image/') && navigator.clipboard && window.ClipboardItem) {
+      const png = mime === 'image/png' ? blob : await new Promise(ok => { const im = new Image(); im.onload = () => { const cv = document.createElement('canvas'); cv.width = im.naturalWidth; cv.height = im.naturalHeight; cv.getContext('2d').drawImage(im, 0, 0); cv.toBlob(ok, 'image/png'); }; im.src = u; });
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png':png })]); toast('Foto copiada. Abra o outro WhatsApp e cole com Ctrl+V.'); return; }
+    const a = document.createElement('a'); a.href = u; a.download = arq.name; document.body.appendChild(a); a.click(); a.remove(); toast('Neste aparelho não dá para encaminhar direto. O arquivo foi salvo para você mandar.');
+  } catch(e) { if (e && e.name === 'AbortError') return; toast('Não deu para encaminhar: ' + (e.message || e)); }
+};
 window.zapAnexar = async inp => {
   const f = inp.files?.[0]; inp.value = ''; if (!f) return;
   const c = zapConvs.find(x => x.id === zapSel); if (!c) return;
@@ -11589,18 +11614,36 @@ function abrirZapCid(cid){
 window.abrirZapCid = abrirZapCid;
 
 // ---------- etapa e etiquetas da conversa ----------
+window.zapFiltroTag = i => { const e = minhasTags()[i]; if (!e) return; window.zapTagF = window.zapTagF && norm(zapTagF) === norm(e.n) ? '' : e.n; renderZap(); };
 window.zapSetEtapa = async (id, k) => {
   const c = zapConvs.find(x => x.id === id); if (!zapPodeEditar(c)) return;
   try { await gravar(setDoc(doc(db,'zap_conversas',id), { etapa:k || '', etapaEm:Date.now(), etapaPor:perfil.nome }, { merge:true })); vibrar(10); toast(k ? 'Movido para "' + ((crmEtapas().find(e => e.k === k) || {}).n || k) + '"' : 'Etapa removida'); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Falta publicar as regras novas do Firebase (v152).' : 'Erro: ' + e.message); }
 };
-window.zapTag = async (id, k) => {
+// v152: cada corretor tem as etiquetas dele (guardadas na conta da pessoa); na conversa fica o nome e a cor
+const minhasTags = () => (state && Array.isArray(state.zapTags) ? state.zapTags : CRM_TAG_PADRAO.map(({ n, c }) => ({ n, c }))).filter(e => e && e.n);
+const tagsConv = c => (c.etiquetas || []).map(x => typeof x === 'string' ? (CRM_TAG_PADRAO.find(e => e.k === x) || { n:x, c:'#64748b' }) : x).filter(e => e && e.n).map(e => ({ n:e.n, c:e.c || '#64748b' }));
+const zapTagsDe = c => { const tem = tagsConv(c), nomes = new Set(tem.map(e => norm(e.n)));
+  return [...minhasTags().map(e => ({ ...e, on:nomes.has(norm(e.n)) })), ...tem.filter(e => !minhasTags().some(m => norm(m.n) === norm(e.n))).map(e => ({ ...e, on:true }))]; };
+window.zapTag = async (id, i) => {
   const c = zapConvs.find(x => x.id === id); if (!zapPodeEditar(c)) return;
-  const l = new Set(c.etiquetas || []); l.has(k) ? l.delete(k) : l.add(k);
-  try { await gravar(setDoc(doc(db,'zap_conversas',id), { etiquetas:[...l] }, { merge:true })); }
+  const e = zapTagsDe(c)[i]; if (!e) return;
+  let l = tagsConv(c); l = e.on ? l.filter(x => norm(x.n) !== norm(e.n)) : [...l, { n:e.n, c:e.c }];
+  try { await gravar(setDoc(doc(db,'zap_conversas',id), { etiquetas:l.slice(0, 20) }, { merge:true })); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Falta publicar as regras novas do Firebase (v152).' : 'Erro: ' + e.message); }
 };
-const htmlTags = c => (c.etiquetas || []).map(k => crmEtiquetas().find(e => e.k === k)).filter(Boolean).map(e => `<span class="zt-tag" style="--tc:${esc(e.c || '#64748b')}">${esc(e.n)}</span>`).join('');
+window.abrirMinhasTags = () => { _mtEd = minhasTags().map(e => ({ ...e })); pintarMinhasTags(); abrir('zapTagModal'); };
+window._mtEd = []; // global: os campos editam direto
+function pintarMinhasTags(){
+  $('mtLista').innerHTML = _mtEd.length ? _mtEd.map((e, i) => `<div class="cf-item"><input type="color" value="${esc(e.c || '#64748b')}" oninput="_mtEd[${i}].c=this.value" aria-label="Cor"><input value="${esc(e.n)}" maxlength="24" oninput="_mtEd[${i}].n=this.value" aria-label="Nome da etiqueta"><button class="icon-btn" onclick="_mtEd.splice(${i},1);pintarMinhasTags()" title="Tirar">✕</button></div>`).join('') : '<div class="muted" style="font-size:13px">Nenhuma etiqueta. Crie a primeira abaixo.</div>';
+}
+window.pintarMinhasTags = pintarMinhasTags;
+window._mtNova = () => { if (_mtEd.length >= 20) { toast('No máximo 20 etiquetas'); return; } _mtEd.push({ n:'', c:['#E8510C','#2B6CB0','#2F855A','#B7791F','#6B46C1','#C53030'][_mtEd.length % 6] }); pintarMinhasTags(); setTimeout(() => [...document.querySelectorAll('#mtLista input[maxlength]')].pop()?.focus(), 30); };
+window.salvarMinhasTags = () => {
+  const vistos = new Set(), l = _mtEd.map(e => ({ n:String(e.n || '').trim().slice(0, 24), c:/^#[0-9a-f]{6}$/i.test(e.c || '') ? e.c : '#64748b' })).filter(e => e.n && !vistos.has(norm(e.n)) && vistos.add(norm(e.n)));
+  if (!state) return; state.zapTags = l; if (window.zapTagF && !l.some(e => norm(e.n) === norm(zapTagF))) window.zapTagF = ''; salvar(); fechar('zapTagModal'); Object.keys(_zapCache).forEach(k => delete _zapCache[k]); renderZap(); toast('Etiquetas salvas');
+};
+const htmlTags = c => tagsConv(c).map(e => `<span class="zt-tag" style="--tc:${esc(e.c || '#64748b')}">${esc(e.n)}</span>`).join('');
 const htmlTipoLead = c => c.tipoLead === 'antigo' ? '<span class="zt-tipo ant">Antigo</span>' : c.tipoLead === 'novo' ? '<span class="zt-tipo nov">Novo</span>' : '';
 
 // ---------- alerta com som enquanto o lead espera resposta ----------
@@ -11732,7 +11775,7 @@ function crmPintarRegras(){
 }
 function crmPintarListas(){
   $('cfEtapas').innerHTML = _cfEt.map((e, i) => `<div class="cf-item"><input value="${esc(e.n)}" maxlength="30" oninput="_cfEtSet(${i},'n',this.value)" aria-label="Nome da etapa"><label class="cf-chk" title="Quando a conversa chega nesta etapa, conta como documentação na análise"><input type="checkbox" ${e.doc ? 'checked' : ''} onchange="_cfEtSet(${i},'doc',this.checked)"> documentação</label><button class="icon-btn" onclick="_cfEtMover(${i},-1)" title="Subir">↑</button><button class="icon-btn" onclick="_cfEtTirar(${i})" title="Tirar">✕</button></div>`).join('');
-  $('cfTags').innerHTML = _cfTag.map((e, i) => `<div class="cf-item"><input type="color" value="${esc(e.c || '#64748b')}" oninput="_cfTagSet(${i},'c',this.value)" aria-label="Cor"><input value="${esc(e.n)}" maxlength="24" oninput="_cfTagSet(${i},'n',this.value)" aria-label="Nome da etiqueta"><button class="icon-btn" onclick="_cfTagTirar(${i})" title="Tirar">✕</button></div>`).join('');
+  if ($('cfTags')) $('cfTags').innerHTML = _cfTag.map((e, i) => `<div class="cf-item"><input type="color" value="${esc(e.c || '#64748b')}" oninput="_cfTagSet(${i},'c',this.value)" aria-label="Cor"><input value="${esc(e.n)}" maxlength="24" oninput="_cfTagSet(${i},'n',this.value)" aria-label="Nome da etiqueta"><button class="icon-btn" onclick="_cfTagTirar(${i})" title="Tirar">✕</button></div>`).join('');
 }
 window._cfEtSet = (i, k, v) => { _cfEt[i][k] = v; };
 window._cfEtTirar = i => { _cfEt.splice(i, 1); crmPintarListas(); };
@@ -11756,7 +11799,7 @@ window.salvarFilaCrm = async () => {
   if (!et.length) { toast('Deixe pelo menos uma etapa'); return; }
   const crmFila = { ativo:$('cfAtivo').checked, horaFim:fim, horaPergunta:perg, plantaoAte:ate, repasseMin:rep, minPresencas:mn, regraDesde:$('cfDesde').value || '', papeis, fora,
     modeloReabrir:$('cfModelo').value.trim().replace(/[^a-z0-9_]/gi, '').toLowerCase().slice(0, 60), idiomaModelo:($('cfIdioma').value.trim() || 'pt_BR').slice(0, 10), modeloComNome:$('cfModNome').checked, atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
-  try { await gravar(setDoc(doc(db,'config','app'), { crmFila, crmEtapas:et, crmEtiquetas:tg }, { merge:true })); toast('Regras do WhatsApp salvas'); fechar('crmFilaModal'); }
+  try { await gravar(setDoc(doc(db,'config','app'), { crmFila, crmEtapas:et }, { merge:true })); toast('Regras do WhatsApp salvas'); fechar('crmFilaModal'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.simularLeadCrm = async () => {
