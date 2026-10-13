@@ -1870,6 +1870,42 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 #resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
+<style id="mkt154">
+/* v154: perfis ADM / Correspondente e Marketing */
+.so-adm,.so-mkt{display:none!important}html.modo-adm .so-adm,html.modo-mkt .so-mkt{display:flex!important}
+html.modo-adm .nav>button[data-view]:not([data-view="analises"]):not([data-view="vendas"]):not([data-view="cartas"]):not([data-view="avaliacoes"]):not([data-view="empreendimentos"]):not([data-view="config"]),
+html.modo-adm .mobilebar>button[data-view]:not(.so-adm),
+html.modo-adm #menuModal .menu-list>button:not([onclick*="'analises'"]):not([onclick*="'vendas'"]):not([onclick*="'cartas'"]):not([onclick*="'avaliacoes'"]):not([onclick*="'empreendimentos'"]):not([onclick*="'config'"]):not([onclick*="sair"]),
+html.modo-mkt .nav>button[data-view]:not([data-view="marketing"]):not([data-view="ranking"]):not([data-view="empreendimentos"]):not([data-view="config"]),
+html.modo-mkt .mobilebar>button[data-view]:not(.so-mkt):not([data-view="ranking"]),
+html.modo-mkt #menuModal .menu-list>button:not([onclick*="'marketing'"]):not([onclick*="'ranking'"]):not([onclick*="'empreendimentos'"]):not([onclick*="'config'"]):not([onclick*="sair"]),
+html.modo-adm #btnTopo,html.modo-adm #fab,html.modo-adm .profile .p-stats,html.modo-adm .zap-fab,html.modo-adm .disc-fab,
+html.modo-mkt #btnTopo,html.modo-mkt #fab,html.modo-mkt .profile .p-stats,html.modo-mkt .zap-fab,html.modo-mkt .disc-fab{display:none!important}
+html.modo-adm .nav .mk-nav{display:none!important}
+.mk-grade{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media(max-width:900px){.mk-grade{grid-template-columns:1fr}}
+.mk-calcard{padding:14px}.mk-mes{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.mk-mes b{font-size:16px;text-transform:capitalize}
+.mk-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mk-sem{font-size:11px;font-weight:700;color:var(--muted);text-align:center;padding:2px 0 4px}
+.mk-d{all:unset;box-sizing:border-box;cursor:pointer;min-height:54px;border-radius:10px;padding:5px 6px;display:flex;flex-direction:column;gap:3px;background:var(--card2);position:relative}
+.mk-d b{font-size:13px}.mk-d.hoje b{color:var(--accent)}.mk-d.sel{outline:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--card))}
+.mk-d small{font-size:10.5px;color:var(--muted)}
+.mk-d:focus-visible{outline:2px solid var(--accent)}
+.mk-p{display:block;height:5px;border-radius:3px;background:var(--accent)}.mk-p.gravacao{background:#6B46C1}.mk-p.post{background:#2B6CB0}.mk-p.evento{background:#2F855A}.mk-p.treinamento{background:#B7791F}
+.mk-dia h2{font-size:17px;margin:2px 0 10px;text-transform:capitalize}.mk-h3{font-size:14px;margin:18px 0 8px;color:var(--muted)}
+.mk-nada{font-size:14px;color:var(--muted);padding:14px;background:var(--card2);border-radius:12px}
+.mk-card{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:12px;padding:11px 13px;margin-bottom:9px;display:flex;flex-direction:column;gap:5px}
+.mk-card.gravacao{border-left-color:#6B46C1}.mk-card.post{border-left-color:#2B6CB0}.mk-card.evento{border-left-color:#2F855A}.mk-card.treinamento{border-left-color:#B7791F}
+.mk-card b{font-size:15px}.mk-card p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.45}
+.mk-l1,.mk-l3{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.mk-tag{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--card2);color:var(--text)}
+.mk-prog{flex:0 0 70px;height:6px;border-radius:3px;background:var(--card2);overflow:hidden}.mk-prog i{display:block;height:100%;background:var(--ok)}
+.mk-falta{font-size:12.5px;color:var(--muted)}.mk-acoes{display:flex;gap:14px}.mk-link{font-size:13px;font-weight:700;color:var(--accent)}
+.mk-pessoas{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:2px 10px;max-height:220px;overflow:auto;padding:4px 2px}
+.mk-hoje{margin-bottom:12px}.mk-hi{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border)}
+.mk-hi-t{display:flex;flex-direction:column;gap:3px;min-width:0}.mk-hi-t b{font-size:14.5px}.mk-hi-t small{font-size:12px;color:var(--muted)}.mk-hi-t small.late{color:var(--danger)}.mk-hi-t p{margin:0;font-size:13px;color:var(--muted)}
+.mk-feito{flex-shrink:0;height:34px;font-size:13px}
+</style>
 <style id="zap152">
 /* v152: WhatsApp do CRM */
 .zap-lh{flex-wrap:nowrap;gap:8px;align-items:flex-start;padding:14px 14px 8px}.zap-lh-bts{display:flex;gap:6px;align-items:center;flex-shrink:0}
@@ -2369,6 +2405,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <div class="nav-title" style="margin-top:14px">Resultados</div>
       <button data-view="painel" class="direcao-only hide" onclick="setView('painel')"><i data-ic="painel"></i>Painel executivo</button>
+      <button data-view="marketing" class="mk-nav hide" onclick="setView('marketing')"><i data-ic="cal"></i>Marketing</button>
       <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button data-view="vendas" class="nao-sdr" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
@@ -2422,6 +2459,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div class="hoje-avisos">
           <div id="bannerHoje"></div>
           <div id="alertasHoje"></div>
+          <div id="mkHoje"></div>
           <div id="conviteNotif"></div>
           <div id="relDiaHoje"></div>
           <div class="mural" id="mural"></div>
@@ -2641,6 +2679,16 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
           </div>
           <div class="zap-col zap-chat" id="zapChat"></div>
           <div class="zap-col zap-det" id="zapDet" data-lenis-prevent></div>
+        </div>
+      </section>
+
+      <!-- MARKETING (v154) -->
+      <section class="view" id="v-marketing">
+        <div class="page-head"><div><h1>Marketing</h1><div class="sub">Agenda de ações e tarefas para os corretores.</div></div>
+          <div class="ph-acoes"><button class="btn btn-ghost" onclick="novoAviso()">Publicar aviso</button><button class="btn btn-primary" onclick="mkNova()">+ Nova tarefa</button></div></div>
+        <div class="mk-grade">
+          <div class="card mk-calcard"><div class="mk-mes"><button class="icon-btn" onclick="mkMes(-1)" aria-label="Mês anterior">‹</button><b id="mkMesNome"></b><button class="icon-btn" onclick="mkMes(1)" aria-label="Próximo mês">›</button></div><div class="mk-cal" id="mkCal"></div></div>
+          <div class="mk-dia"><h2 id="mkDiaTit"></h2><div id="mkLista"></div></div>
         </div>
       </section>
 
@@ -3090,6 +3138,10 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
   <button data-view="ranking" class="nao-sdr" onclick="setView('ranking')"><i data-ic="tbRank"></i>Ranking</button>
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button data-view="analises" class="so-corresp" onclick="setView('analises')"><i data-ic="pasta"></i>Pastas</button>
+  <button data-view="analises" class="so-adm" onclick="setView('analises')"><i data-ic="pasta"></i>Pastas</button>
+  <button data-view="vendas" class="so-adm" onclick="setView('vendas')"><i data-ic="chave"></i>Reservas</button>
+  <button data-view="cartas" class="so-adm" onclick="setView('cartas')"><i data-ic="doc"></i>Cartas</button>
+  <button data-view="marketing" class="so-mkt" onclick="setView('marketing')"><i data-ic="cal"></i>Agenda</button>
   <button id="mbVoce" onclick="abrir('menuModal')"><i data-ic="tbVoce"></i>Você</button>
 </nav>
 
@@ -3351,6 +3403,23 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-head"><div><h2>Análise das conversas</h2><div class="muted" style="font-size:13px;margin-top:3px">O que faz o cliente responder e o que leva até a documentação.</div></div><button class="icon-btn" onclick="fechar('zapAnModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="zaCorpo" data-lenis-prevent></div>
     <div class="sheet-foot"><select id="zaDias" aria-label="Período"><option value="7">Últimos 7 dias</option><option value="15">Últimos 15 dias</option><option value="30">Últimos 30 dias</option></select><button class="btn btn-primary" id="zaBt" onclick="analisarZapAgora()">Analisar agora</button></div>
+  </div>
+</div>
+<!-- v154: tarefa do marketing -->
+<div class="modal" id="mkModal">
+  <div class="sheet" style="width:min(520px,100%)">
+    <div class="sheet-head"><h2 id="mkTitM">Nova tarefa</h2><button class="icon-btn" onclick="fechar('mkModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label for="mkTitulo">O que precisa ser feito</label><input id="mkTitulo" maxlength="120" placeholder="Ex.: Gravar vídeo no decorado do Colibris"></div>
+      <div class="cf-grade"><div class="fg"><label for="mkTipo">Tipo</label><select id="mkTipo"></select></div><div class="fg"><label for="mkData">Dia</label><input type="date" id="mkData"></div><div class="fg"><label for="mkHora">Horário (opcional)</label><input type="time" id="mkHora"></div></div>
+      <div class="fg"><label for="mkDesc">Detalhes</label><textarea id="mkDesc" maxlength="1500" placeholder="Roteiro, local, o que levar, texto do post…" style="min-height:90px"></textarea></div>
+      <div class="fg"><label for="mkLinkIn">Link do material (opcional)</label><input id="mkLinkIn" inputmode="url" placeholder="https://"></div>
+      <div class="fg"><label for="mkPara">Para quem</label><select id="mkPara" onchange="mkParaVis()"><option value="todos">Todos os corretores</option><option value="equipe">Uma equipe</option><option value="pessoas">Escolher pessoas</option></select></div>
+      <div class="fg hide" id="mkEqWrap"><label for="mkEquipe">Equipe</label><select id="mkEquipe"></select></div>
+      <div class="fg hide" id="mkPesWrap"><label>Pessoas</label><div class="mk-pessoas" id="mkPessoas"></div></div>
+      <div class="muted" style="font-size:12.5px">Quem receber vê a tarefa na tela Hoje e ganha um aviso no celular.</div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost hide" id="mkExcluirBt" style="color:var(--danger);margin-right:auto" onclick="mkExcluir()">Excluir</button><button class="btn btn-ghost" onclick="fechar('mkModal')">Cancelar</button><button class="btn btn-primary" onclick="mkSalvar()">Salvar e enviar</button></div>
   </div>
 </div>
 <div class="modal" id="vrModal">
@@ -4279,7 +4348,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
-const TITULOS = {simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -4300,6 +4369,9 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
   if (souCeo() && !VIEWS_CEO.includes(v)) v = 'painel';
   if (souCorresp() && !['analises','config'].includes(v)) v = 'analises';
+  if (souAdm() && !VIEWS_ADM.includes(v)) v = 'analises';
+  if (souMkt() && !VIEWS_MKT.includes(v)) v = 'marketing';
+  if (v === 'marketing' && !souMkt() && !souGerente()) v = 'hoje';
   if (v === 'analises' && !anVisivel() && !abaLiberada('analises')) v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr' && !abaLiberada(v)) v = 'hoje';
@@ -4754,11 +4826,11 @@ const ST_COR = { Pendente:'#f59e0b', Confirmada:'#10b981', Reagendada:'#3b82f6',
 const stCls = st => 'st-' + norm(st).replace(/[^a-z0-9]+/g,'-');
 const MESES_JANELA = 2; // carrega o mês atual e os 2 anteriores + visitas futuras (economiza o limite gratuito); meses mais antigos vêm pelo seletor
 let historicoCompleto = false, enviadosConf = new Set();
-const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR', anjo:'Anjo', correspondente:'Correspondente' };
+const PAPEIS = { gerente:'Gerente', coordenador:'Coordenador', corretor:'Corretor', sdr:'SDR', anjo:'Anjo', correspondente:'Correspondente', adm:'ADM / Correspondente', marketing:'Marketing' };
 // lista de perfis na ordem da empresa: CEO, Gerente, Coordenador, Corretor, SDR (CEO = gerente com cargo de direção)
 function opcoesPapel(p, comGerencia){
   const atual = p.papel === 'gerente' && p.cargo === 'dono' ? 'ceo' : p.papel;
-  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR'], ['anjo','Anjo'], ['correspondente','Correspondente (Prime)']];
+  const ops = [...(comGerencia ? [['ceo','CEO'], ['gerente','Gerente']] : []), ['coordenador','Coordenador'], ['corretor','Corretor'], ['sdr','SDR'], ['anjo','Anjo'], ['adm','ADM / Correspondente'], ['marketing','Marketing'], ['correspondente','Correspondente (Prime)']];
   return ops.map(([k,n]) => `<option value="${k}" ${atual===k?'selected':''}>${n}</option>`).join('');
 }
 const EQUIPES_PADRAO = { raio:{ nome:'Tropa do Raio', icone:'⚡', ordem:1 }, tenda:{ nome:'Tropa Tenda', icone:'🏕️', ordem:2 } };
@@ -4991,6 +5063,13 @@ const souAnjo = () => souAtivo() && perfil.papel === 'anjo';
 const membrosAnjo = () => Array.isArray(perfil?.membros) ? perfil.membros : [];
 const podeGerir = () => souGerente() || souCoord();
 const souCorresp = () => souAtivo() && perfil.papel === 'correspondente';
+// v154: perfis novos. ADM / Correspondente (pessoa interna): pastas de crédito, reservas, cartas e avaliações. Marketing: avisos, ranking, agenda e tarefas para os corretores
+const souAdm = () => souAtivo() && perfil.papel === 'adm';
+const souMkt = () => souAtivo() && perfil.papel === 'marketing';
+const opTudo = () => souGerente() || souAdm();      // vê e cuida da operação de todas as equipes
+const opGerir = () => podeGerir() || souAdm();
+const VIEWS_ADM = ['analises','vendas','cartas','avaliacoes','empreendimentos','config'];
+const VIEWS_MKT = ['marketing','ranking','empreendimentos','config'];
 window.podeGerir = podeGerir;
 const eqNome = id => equipes[id] ? `${equipes[id].icone||''} ${equipes[id].nome}`.trim() : (id ? id : 'Sem equipe');
 const listaEquipes = () => Object.values(equipes).sort((a,b) => (a.ordem||99)-(b.ordem||99) || a.nome.localeCompare(b.nome,'pt-BR'));
@@ -5079,8 +5158,9 @@ function configurarAcesso(){
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador','sdr']));
   else if (perfil.papel === 'sdr') qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
-  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => ({ uid:d.id, ...d.data() })); perfisLista = perfisTodos.filter(p => p.papel !== 'correspondente'); render(); sincVendasRanking(); sincPresencaRanking(); sincPessoasRanking(); }, erro));
-  rkPessoas = []; subsPapel.push(onSnapshot(collection(db,'ranking_pessoas'), s => { rkPessoas = s.docs.map(d => ({ uid:d.id, ...d.data() })); window._rkpOk = true; render(); sincPessoasRanking(); }, e => console.warn('ranking_pessoas', e.code || e.message)));
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => ({ uid:d.id, ...d.data() })); perfisLista = perfisTodos.filter(p => !['correspondente','adm','marketing'].includes(p.papel)); render(); sincVendasRanking(); sincPresencaRanking(); sincPessoasRanking(); }, erro));
+  rkPessoas = []; subsPapel.push(onSnapshot(collection(db,'ranking_pessoas'), s => { rkPessoas = s.docs.map(d => ({ uid:d.id, ...d.data() })); window._rkpOk = true;
+    if (souAdm() || souMkt()) { perfisTodos = rkPessoas.map(x => ({ ...x })); perfisLista = perfisTodos.filter(p => ['corretor','coordenador','sdr','anjo','gerente'].includes(p.papel)); } render(); sincPessoasRanking(); }, e => console.warn('ranking_pessoas', e.code || e.message)));
 }
 
 // ---------- Cadastro / primeiro gerente ----------
@@ -5217,7 +5297,7 @@ function renderPapel(){
     el.classList.remove('hide');
     if (perfil.status === 'pendente') el.textContent = 'Aguardando aprovação';
     else if (perfil.status === 'bloqueado') el.textContent = 'Acesso bloqueado';
-    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? 'Gestor' : perfil.cargo === 'dono' ? 'CEO' : 'Gerente') : (perfil.papel === 'coordenador' ? 'Coordenador' : perfil.papel === 'anjo' ? 'Anjo' : perfil.papel === 'sdr' ? 'SDR' : perfil.papel === 'correspondente' ? 'Correspondente' : 'Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
+    else { el.textContent = perfil.papel === 'gerente' ? (souDono() ? 'Gestor' : perfil.cargo === 'dono' ? 'CEO' : 'Gerente') : (perfil.papel === 'coordenador' ? 'Coordenador' : perfil.papel === 'anjo' ? 'Anjo' : perfil.papel === 'sdr' ? 'SDR' : perfil.papel === 'correspondente' ? 'Correspondente' : perfil.papel === 'adm' ? 'ADM / Correspondente' : perfil.papel === 'marketing' ? 'Marketing' : 'Corretor') + (perfil.equipe && equipes[perfil.equipe] ? ' · ' + equipes[perfil.equipe].nome : ''); el.title = el.textContent; }
   }
   document.querySelectorAll('.gest').forEach(e => e.classList.toggle('hide', !podeGerir() && !(e.dataset.view && abaLiberada(e.dataset.view)) && !abaLiberada(((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1])));
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
@@ -5226,6 +5306,10 @@ function renderPapel(){
   if (souCeo() && !VIEWS_CEO.includes(view)) setTimeout(() => setView('painel'), 0);
   document.documentElement.classList.toggle('modo-corresp', souCorresp());
   if (souCorresp() && !['analises','config'].includes(view)) setTimeout(() => setView('analises'), 0);
+  document.documentElement.classList.toggle('modo-adm', souAdm()); document.documentElement.classList.toggle('modo-mkt', souMkt());
+  if (souAdm() && !VIEWS_ADM.includes(view)) setTimeout(() => setView('analises'), 0);
+  if (souMkt() && !VIEWS_MKT.includes(view)) setTimeout(() => setView('marketing'), 0);
+  document.querySelectorAll('.mk-nav').forEach(e => e.classList.toggle('hide', !(souMkt() || souGerente())));
   document.querySelectorAll('.an-nav').forEach(e => e.classList.toggle('hide', !anVisivel() && !abaLiberada('analises')));
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => { const v = e.dataset.view || ((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1]; e.classList.toggle('hide', perfil?.papel === 'sdr' && !abaLiberada(v)); });
@@ -5373,7 +5457,7 @@ function renderRanking(){
 // ---------- Formulário de visita ----------
 function membrosSelecionaveis(){
   const m = perfisLista.filter(p => p.status === 'ativo');
-  if (perfil && perfil.papel !== 'sdr' && !m.some(p => p.uid === uidAtual)) m.push({ ...perfil, uid:uidAtual });
+  if (perfil && perfil.papel !== 'sdr' && !souAdm() && !souMkt() && !m.some(p => p.uid === uidAtual)) m.push({ ...perfil, uid:uidAtual });
   return m.sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
 }
 function abrirFormVisita(v, dataPadrao){
@@ -5537,7 +5621,7 @@ function renderCorretores(){
       <button class="btn btn-danger" onclick="recusar('${p.uid}')">Recusar</button>
     </div>`).join('');
 
-  let membros = perfisLista.filter(p => p.status !== 'pendente');
+  let membros = (souGerente() ? perfisTodos.filter(p => p.papel !== 'correspondente') : perfisLista).filter(p => p.status !== 'pendente');
   if (souGerente() && perfil && !membros.some(p => p.uid === uidAtual)) membros.push({ ...perfil, uid:uidAtual });
   if (souGerente()) {
     const eqs = [['','Todos'], ...listaEquipes().map(e => [e.id, eqNome(e.id)]), ['_ger','⭐ Gerentes']];
@@ -5545,7 +5629,7 @@ function renderCorretores(){
     if (corEquipeFiltro === '_ger') membros = membros.filter(p => p.papel === 'gerente');
     else if (corEquipeFiltro) membros = membros.filter(p => p.equipe === corEquipeFiltro);
   } else $('corEquipes').innerHTML = '';
-  const ordemPapel = { gerente:0, coordenador:1, anjo:2, corretor:3, sdr:4, correspondente:5 };
+  const ordemPapel = { gerente:0, coordenador:1, anjo:2, corretor:3, sdr:4, adm:5, marketing:6, correspondente:7 };
   membros.sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
   const totalPer = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada').length;
   $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
@@ -5799,18 +5883,18 @@ function diasParaVencer(c){ const v = validadeDe(c); return v ? diffDias(v) : nu
 function cartasDoPerfil(p, de, ate){ return cartas.filter(c => c.corretorUid === p.uid && c.data >= de && c.data <= ate); }
 
 function assinarCartas(erro){
-  const qa = souGerente() ? collection(db,'avisos') : query(collection(db,'avisos'), where('equipe','in',['', perfil.equipe || '-']));
+  const qa = souGerente() || souMkt() ? collection(db,'avisos') : query(collection(db,'avisos'), where('equipe','in',['', perfil.equipe || '-']));
   subsPapel.push(onSnapshot(qa, s => { avisos = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, erro));
   let qc;
   if (perfil.papel === 'sdr') qc = null;
-  else if (souGerente()) qc = collection(db,'cartas');
+  else if (opTudo()) qc = collection(db,'cartas');
   else if (souCoord()) qc = query(collection(db,'cartas'), where('equipe','==',perfil.equipe||'-'));
   else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
   if (qc) subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
   // resumo das vendas para o ranking de VGV de todos (sem dados do cliente); a gestão mantém ele em dia
   subsPapel.push(onSnapshot(collection(db,'ranking_vendas'), s => { rankingVendas = s.docs.map(d => ({ id:d.id, ...d.data() })); window._rvOk = true; render(); sincVendasRanking(); sincExtrato(); conferirMetasBatidas(); }, e => console.warn('ranking_vendas:', e.code || e.message)));
-  if (!souGerente() && ['corretor','coordenador','anjo'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'reservas'), where('corretorUids','array-contains',uidAtual)), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('minhas reservas:', e.code || e.message)));
-  if (souGerente()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); sincVendasRanking(); sincExtrato(); }, e => console.warn('reservas:', e.code || e.message)));
+  if (!opTudo() && ['corretor','coordenador','anjo'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'reservas'), where('corretorUids','array-contains',uidAtual)), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('minhas reservas:', e.code || e.message)));
+  if (opTudo()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); sincVendasRanking(); sincExtrato(); }, e => console.warn('reservas:', e.code || e.message)));
   subsPapel.push(onSnapshot(souGerente() || historicoCompleto ? collection(db,'ranking_cartas') : query(collection(db,'ranking_cartas'), where('data','>=', somaMeses(mesAtual() + '-01', -6))), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
 }
 
@@ -5819,8 +5903,8 @@ function cardCarta(c){
   const meta = [];
   if (c.empreendimento) meta.push(`<span>🏠 ${esc(c.empreendimento)}</span>`);
   meta.push(`<span>🏦 ${esc(c.banco||'Caixa')}</span>`);
-  if (podeGerir() || c.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(c.corretorNome||'')}</span>`);
-  if (souGerente()) meta.push(`<span>${esc(eqNome(c.equipe))}</span>`);
+  if (opGerir() || c.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(c.corretorNome||'')}</span>`);
+  if (opTudo()) meta.push(`<span>${esc(eqNome(c.equipe))}</span>`);
   if (c.telefone) meta.push(`<span>📱 ${esc(c.telefone)}</span>`);
   if (c.cpf) meta.push(`<span title="Abra a carta para ver o CPF completo">🪪 ${cpfOculto(c.cpf)}</span>`);
   const nd = docsOk(c);
@@ -5851,14 +5935,14 @@ function cardCarta(c){
 // aprovado na planilha da administração, ainda sem carta cadastrada no app
 function cardAprovPlanilha(a){
   const meta = [];
-  if (podeGerir() || a.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(a.corretorNome || a.aba || '')}</span>`);
-  if (souGerente() && a.equipe) meta.push(`<span>${esc(eqNome(a.equipe))}</span>`);
+  if (opGerir() || a.corretorUid !== uidAtual) meta.push(`<span>👤 ${esc(a.corretorNome || a.aba || '')}</span>`);
+  if (opTudo() && a.equipe) meta.push(`<span>${esc(eqNome(a.equipe))}</span>`);
   if (a.telefone) meta.push(`<span>📱 ${esc(a.telefone)}</span>`);
   if (a.cpf) meta.push(`<span>🪪 ${cpfOculto(a.cpf)}</span>`);
   if (a.renda) meta.push(`<span>renda ${esc(a.renda)}</span>`);
   const acoes = [];
   if (a.telefone) acoes.push(htmlLigar(a.telefone, a.nome, 'avaliacao'), `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
-  if (a.corretorUid === uidAtual || podeGerir()) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
+  if (a.corretorUid === uidAtual || opGerir()) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
   return `<div class="vcard" style="--vc:#10b981">
     <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>aprovada</span></div>
     <div class="v-body" style="cursor:default">
@@ -5875,11 +5959,11 @@ function renderCartas(){
   $('cartasConteudo').classList.toggle('hide', !ativo);
   $('btnNovaCartaPag').classList.toggle('hide', !ativo);
   if (!ativo) return;
-  $('cartasSub').textContent = souGerente() ? 'Aprovações de todas as equipes: cartas do app + planilha, sem repetir cliente.' : souCoord() ? 'Cartas da ' + eqNome(perfil.equipe) + '.' : 'As suas cartas de crédito aprovadas.';
+  $('cartasSub').textContent = opTudo() ? 'Aprovações de todas as equipes: cartas do app + planilha, sem repetir cliente.' : souCoord() ? 'Cartas da ' + eqNome(perfil.equipe) + '.' : 'As suas cartas de crédito aprovadas.';
   $('cStatus').innerHTML = '<option value="">Todos os status</option>' + C_STATUS.map(s => `<option ${cFil.status===s?'selected':''}>${s}</option>`).join('');
-  $('cEquipe').classList.toggle('hide', !souGerente());
+  $('cEquipe').classList.toggle('hide', !opTudo());
   $('cEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${cFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  $('cCorretor').classList.toggle('hide', !podeGerir());
+  $('cCorretor').classList.toggle('hide', !opGerir());
   // aprovações da planilha que ainda não têm carta no app (mesmo cliente por CPF ou telefone não repete)
   const planAprov = souSdr() ? [] : avaliacoesUnificadas().filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a));
   const nomes = new Map(); cartas.forEach(c => { if (!nomes.has(c.corretorUid)) nomes.set(c.corretorUid, c.corretorNome || 'Sem nome'); });
@@ -5912,8 +5996,8 @@ function renderCartas(){
   $('csValor').textContent = lista.filter(c => docsOk(c) === DOCS.length).length;
   $('csVendas').textContent = lista.filter(c => c.status === 'Venda fechada').length;
   $('csVence').textContent = vencendo;
-  $('csSdrBox').classList.toggle('hide', !podeGerir());
-  if (podeGerir()) { const [sd, sa] = cFil.periodo === 'todas' ? ['0000','9999'] : cFil.periodo.startsWith('m:') ? faixaDoMes(cFil.periodo) : faixa(cFil.periodo), q = aprovSdr(sd, sa);
+  $('csSdrBox').classList.toggle('hide', !opGerir());
+  if (opGerir()) { const [sd, sa] = cFil.periodo === 'todas' ? ['0000','9999'] : cFil.periodo.startsWith('m:') ? faixaDoMes(cFil.periodo) : faixa(cFil.periodo), q = aprovSdr(sd, sa);
     $('csSdr').textContent = q.dia; $('csSdrSub').textContent = 'Aprovações das SDRs (WhatsApp)' + (q.outro ? ` · ${q.outro} em outro CCA` : ''); }
   $('cartasLista').innerHTML = juntos.length ? juntos.map(x => x.h).join('') : vazio('Nenhuma aprovação nesse filtro', 'Cadastre uma carta aprovada pelo botão "Nova carta".');
 }
@@ -5922,7 +6006,7 @@ window.filtrarVencendo = () => { cFil.periodo = 'todas'; cFil.status = ''; rende
 
 let cPre = null, cDocs = {};
 function abrirFormCarta(c, pre){
-  cEditId = c?.id || null; cOrig = c || null; cPre = pre || null; window._histRef = cEditId; $('cmHist')?.classList.toggle('hide', !(souGerente() && c));
+  cEditId = c?.id || null; cOrig = c || null; cPre = pre || null; window._histRef = cEditId; $('cmHist')?.classList.toggle('hide', !(opTudo() && c));
   cDocs = { ...(c?.docs || {}) }; desenharDocs();
   $('cmTitulo').textContent = c ? 'Editar carta' : 'Nova carta aprovada';
   $('cmCliente').value = c?.cliente || pre?.cliente || ''; $('cmFone').value = c?.telefone || pre?.telefone || '';
@@ -5934,9 +6018,9 @@ function abrirFormCarta(c, pre){
   $('cmImovel').value = c?.empreendimento || pre?.empreendimento || ''; $('cmObs').value = c?.obs || ''; $('cmInd').checked = !!(c ? c.indicacao : (pre?.visitaId && (visitas.find(v => v.id === pre.visitaId) || {}).origem === 'Indicação'));
   $('cmStatus').innerHTML = C_STATUS.map(s => `<option ${ (c?.status||'Aprovada')===s?'selected':''}>${s}</option>`).join('');
   $('listaImoveis2').innerHTML = [...new Set([...visitas.map(x => x.empreendimento), ...cartas.map(x => x.empreendimento)].filter(Boolean))].map(x => `<option value="${esc(x)}">`).join('');
-  $('cmCorWrap').classList.toggle('hide', !podeGerir());
-  if (podeGerir()) {
-    $('cmCorretor').innerHTML = membrosSelecionaveis().map(p => `<option value="${p.uid}">${esc(p.nome)}${souGerente() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`).join('');
+  $('cmCorWrap').classList.toggle('hide', !opGerir());
+  if (opGerir()) {
+    $('cmCorretor').innerHTML = membrosSelecionaveis().map(p => `<option value="${p.uid}">${esc(p.nome)}${opTudo() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`).join('');
     $('cmCorretor').value = c ? c.corretorUid : (pre?.corretorUid || uidAtual);
   }
   $('cmExcluir').classList.toggle('hide', !c);
@@ -5962,7 +6046,7 @@ window.salvarCarta = async () => {
   if (!d.data) { toast('Informe a data da aprovação'); return; }
   d.validade = somaMeses(d.data, 6);
   if (d.cpf && !cpfValido(d.cpf) && !confirm('O CPF parece inválido. Salvar mesmo assim?')) return;
-  if (!podeGerir()) { d.corretorUid = uidAtual; d.corretorNome = perfil.nome; d.equipe = perfil.equipe || ''; }
+  if (!opGerir()) { d.corretorUid = uidAtual; d.corretorNome = perfil.nome; d.equipe = perfil.equipe || ''; }
   else {
     const p = membrosSelecionaveis().find(x => x.uid === $('cmCorretor').value) || { ...perfil, uid:uidAtual };
     d.corretorUid = p.uid; d.corretorNome = p.nome; d.equipe = p.papel === 'gerente' ? '' : (p.equipe || '');
@@ -6011,7 +6095,7 @@ window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.to
 // ---------- ranking de VGV (valor geral de vendas) ----------
 function rankingVgv(de, ate, eqF){
   const g = new Map();
-  const fonte = souGerente() ? vendasUnificadas(de, ate) : rankingVendas.filter(x => !x.caiu && x.dia >= de && x.dia <= ate).map(x => ({ valor:x.valor || 0, corretores:x.corretores || [], equipe:(x.corretores || [])[0]?.equipe || '' }));
+  const fonte = opTudo() ? vendasUnificadas(de, ate) : rankingVendas.filter(x => !x.caiu && x.dia >= de && x.dia <= ate).map(x => ({ valor:x.valor || 0, corretores:x.corretores || [], equipe:(x.corretores || [])[0]?.equipe || '' }));
   fonte.forEach(v => {
     const cs = v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:v.equipe }];
     cs.forEach(c => { if (eqF && c.equipe !== eqF) return;
@@ -6116,9 +6200,9 @@ function renderMural(){
 }
 window.dispensarAviso = id => { dispensados.add(id); try { localStorage.setItem('avisosLidos', JSON.stringify([...dispensados])); } catch(e){} render(); };
 window.novoAviso = () => {
-  if (!podeGerir()) return;
+  if (!podeGerir() && !souMkt()) return;
   $('avTexto').value = '';
-  $('avDestino').innerHTML = souGerente()
+  $('avDestino').innerHTML = souGerente() || souMkt()
     ? '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('')
     : `<option value="${perfil.equipe}">${esc(eqNome(perfil.equipe))}</option>`;
   const meus = avisosAtivos().filter(podeApagarAviso);
@@ -6413,7 +6497,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 153;
+const APP_VERSAO = 154;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7311,7 +7395,7 @@ window.aFil = { busca:'', periodo:'mes', grupo:'', corretor:'' };
 function assinarEtapa2(){
   const silencio = e => console.warn('Etapa 2:', e.code || e.message);
   let qa;
-  if (souGerente()) qa = null; // gerência: leitura econômica logo abaixo
+  if (opTudo()) qa = null; // gerência: leitura econômica logo abaixo
   else if (souCoord()) qa = query(collection(db,'avaliacoes'), where('equipe','==',perfil.equipe || '-'));
   else if (perfil.papel !== 'sdr') qa = query(collection(db,'avaliacoes'), where('corretorUid','==',uidAtual));
   const limpa = x => { if (typeof x.aba === 'string') x.aba = x.aba.trim(); if (typeof x.corretorNome === 'string') x.corretorNome = x.corretorNome.trim(); return x; };
@@ -7319,7 +7403,7 @@ function assinarEtapa2(){
   if (qa) subsPapel.push(onSnapshot(qa, s => { avaliacoesTodas = s.docs.map(d => limpa({ id:d.id, ...d.data() })); filtrarAvaliacoes(); render(); }, silencio));
   // ECONOMIA (plano grátis do Firebase: 50 mil leituras por dia): a gerência tem milhares de avaliações.
   // O app usa o que já está guardado no aparelho e só busca na nuvem o que mudou desde a última vez.
-  if (souGerente()) {
+  if (opTudo()) {
     const janela = inicioJanela(), chaveFull = 'avalFull:' + uidAtual + ':' + janela, mapa = new Map();
     let vivo = true, max = 0;
     subsPapel.push(() => { vivo = false; });
@@ -7367,7 +7451,7 @@ function faixaAval(p){
 function cartaDoCliente(a){ return cartas.find(c => (a.cpfNorm && c.cpfNorm === a.cpfNorm) || (a.cpfNorm && soDig(c.cpf) === a.cpfNorm) || (a.telNorm && c.telNorm === a.telNorm)); }
 function cardAvaliacao(a){
   const inf = infoStatus(a.status), meta = [];
-  if (podeGerir()) meta.push(`<span>👤 ${esc(a.corretorNome || a.aba || '')}${!a.corretorUid ? ' <span class="late">(aba sem ligação)</span>' : ''}</span>`);
+  if (opGerir()) meta.push(`<span>👤 ${esc(a.corretorNome || a.aba || '')}${!a.corretorUid ? ' <span class="late">(aba sem ligação)</span>' : ''}</span>`);
   if (a.cpf) meta.push(`<span title="${esc(a.cpf)}">🪪 ${esc(a.cpf)}</span>`);
   if (a.telefone) meta.push(`<span>📱 ${esc(a.telefone)}</span>`);
   if (a.renda) meta.push(`<span>💰 renda ${esc(a.renda)}</span>`);
@@ -7375,7 +7459,7 @@ function cardAvaliacao(a){
   const hist = (a.historico || []).slice(-4).map(x => `${esc(x.status)} <span class="muted">${new Date(x.em).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</span>`).join(' → ');
   const acoes = [];
   if (a.telefone) acoes.push(htmlLigar(a.telefone, a.nome, 'avaliacao'), `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>`);
-  if (inf.g === 'aprovado' && !cartaDoCliente(a) && (a.corretorUid === uidAtual || podeGerir())) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
+  if (inf.g === 'aprovado' && !cartaDoCliente(a) && (a.corretorUid === uidAtual || opGerir())) acoes.push(`<button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Cadastrar carta</button>`);
   return `<div class="vcard" style="--vc:${inf.cor}">
     <div class="v-time"><b style="font-size:15px">${a.data ? a.data.slice(8,10) + '/' + a.data.slice(5,7) : '--'}</b><span>${a.dataEstimada ? 'sem data' : 'doc'}</span></div>
     <div class="v-body" style="cursor:default">
@@ -7413,10 +7497,10 @@ function renderAvaliacoes(){
   $('bannerAval').innerHTML = bannerAcesso();
   $('avalConteudo').classList.toggle('hide', !ativo);
   if (!ativo) return;
-  $('avalSub').textContent = souGerente() ? 'Avaliações de crédito de todas as equipes, vindas da planilha da administração.' : souCoord() ? 'Avaliações da ' + eqNome(perfil.equipe) + '.' : 'As avaliações de crédito dos seus clientes. Atualiza sozinho a cada 15 minutos.';
-  $('btnAvalSync').classList.toggle('hide', !souGerente());
+  $('avalSub').textContent = opTudo() ? 'Avaliações de crédito de todas as equipes, vindas da planilha da administração.' : souCoord() ? 'Avaliações da ' + eqNome(perfil.equipe) + '.' : 'As avaliações de crédito dos seus clientes. Atualiza sozinho a cada 15 minutos.';
+  $('btnAvalSync').classList.toggle('hide', !opTudo());
   $('aGrupo').innerHTML = '<option value="">Todos os grupos</option>' + Object.entries(GRUPOS_V).filter(([k]) => k).map(([k,g]) => `<option value="${k}" ${aFil.grupo===k?'selected':''}>${g.n}</option>`).join('');
-  $('aCorretor').classList.toggle('hide', !podeGerir());
+  $('aCorretor').classList.toggle('hide', !opGerir());
   const nomes = [...new Set(avaliacoes.map(a => a.corretorNome || a.aba).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
   $('aCorretor').innerHTML = '<option value="">Todos os corretores</option>' + nomes.map(n => `<option value="${esc(n)}" ${aFil.corretor===n?'selected':''}>${esc(n)}</option>`).join('');
   $('aPeriodo').value = aFil.periodo;
@@ -7429,7 +7513,7 @@ function renderAvaliacoes(){
   const l = noPer.filter(a => (!aFil.grupo || infoStatus(a.status).g === aFil.grupo) && (!aFil.corretor || (a.corretorNome || a.aba) === aFil.corretor)
     && (!t || norm([a.nome, a.status, a.corretorNome, a.aba].join(' ')).includes(t) || (dig.length >= 3 && (soDig(a.cpf).includes(dig) || soDig(a.telefone).includes(dig)))))
     .sort((a,b) => (b.statusEm || 0) - (a.statusEm || 0) || (b.data || '').localeCompare(a.data || ''));
-  $('janelaAval').innerHTML = souGerente() ? avisoJanela(aFil.periodo === 'todas') : '';
+  $('janelaAval').innerHTML = opTudo() ? avisoJanela(aFil.periodo === 'todas') : '';
   $('avalLista').innerHTML = l.length ? l.slice(0, 300).map(cardAvaliacao).join('') + (l.length > 300 ? `<div class="muted" style="padding:8px">Mostrando 300 de ${l.length}. Use a busca ou os filtros.</div>` : '')
     + (ocultos ? `<div class="muted" style="font-size:12.5px;padding:8px 2px">🔁 ${ocultos} registro${ocultos!==1?'s':''} repetido${ocultos!==1?'s':''} do mesmo cliente escondido${ocultos!==1?'s':''}: aparece só a última alteração. Nada foi apagado.</div>` : '')
     : vazio(avaliacoes.length ? 'Nenhuma avaliação com esses filtros' : 'Nenhuma avaliação ainda', avaliacoes.length ? 'Mude o período ou o grupo.' : 'Assim que a planilha da administração for ligada ao app, as avaliações aparecem aqui.');
@@ -7454,7 +7538,7 @@ function itensEtapa2(){
       <div class="ata">${a.telefone ? htmlLigar(a.telefone, a.nome, 'repescagem') + `<button class="snooze wa" onclick="abrirWhats('${esc(a.telefone)}')">${IC.wa}WhatsApp</button>` : ''}<button class="snooze" onclick="repescado('${a.id}')">Falei</button></div></div>` });
   });
   const limite = agora - 45 * 864e5;
-  avaliacoes.filter(a => infoStatus(a.status).g === 'aprovado' && (a.statusEm || 0) >= limite && (a.corretorUid === uidAtual || souGerente()) && !cartaDoCliente(a)).forEach(a => {
+  avaliacoes.filter(a => infoStatus(a.status).g === 'aprovado' && (a.statusEm || 0) >= limite && (a.corretorUid === uidAtual || opTudo()) && !cartaDoCliente(a)).forEach(a => {
     itens.push({ ord:1, html:`<div class="at-row"><div class="ati" style="background:var(--ok-soft)">✅</div><div class="att"><b>${esc(nomeBonito(a.nome))} foi aprovado na planilha</b><span>${a.corretorUid === uidAtual ? 'Cadastre a carta aprovada para ganhar os pontos' : 'Carta ainda não cadastrada por ' + esc(primeiro(a.corretorNome || a.aba))}</span></div>
       <div class="ata"><button class="snooze" onclick="cartaDaAvaliacao('${a.id}')">+ Carta</button></div></div>` });
   });
@@ -8445,6 +8529,7 @@ function somaCap(mapa, val){
 }
 const ligaPontua = () => souAtivo() && !souCeo() && ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
 function assinarEtapa4(){
+  try { assinarMkt(); } catch(e) { console.warn('mkt', e.message); }
   rankingAtiv = []; meusLeadsHoje = []; minhasLigHoje = []; _presSinc = false;
   const silencio = e => console.warn('Etapa 4:', e.code || e.message);
   subsPapel.push(onSnapshot(query(collection(db,'ranking_ativ'), where('mes','>=', mesAnterior(1))), s => { rankingAtiv = s.docs.map(d => ({ id:d.id, ...d.data() })); sincPresencaRanking(); render(); }, silencio));
@@ -9453,13 +9538,13 @@ const AN_DOCS = [['identidade','RG e CPF, ou CNH', false], ['residencia','Compro
 const anDocNome = t => (AN_DOCS.find(d => d[0] === t) || [, t === 'resposta' ? 'Carta / simulação da Prime' : 'Documento'])[1];
 const anDocTit = d => d.tipo === 'documento' ? (d.nome || 'Documento') : anDocNome(d.tipo);
 const anCfg = () => appCfg.analises || { todos:false, testadores:[] };
-function anVisivel(){ if (!souAtivo()) return false; if (souCorresp() || souGerente() || souCoord()) return true; const c = anCfg(); return (!!c.todos && ['corretor','coordenador','anjo'].includes(perfil.papel)) || (c.testadores || []).includes(uidAtual); }
+function anVisivel(){ if (!souAtivo()) return false; if (souCorresp() || opTudo() || souCoord()) return true; const c = anCfg(); return (!!c.todos && ['corretor','coordenador','anjo'].includes(perfil.papel)) || (c.testadores || []).includes(uidAtual); }
 window.anVisivel = anVisivel;
 const anPodeCriar = () => anVisivel() && !souCorresp() && !souCeo() && perfil.papel !== 'sdr';
 function assinarAnalises(){
   analises = []; if (!souAtivo()) return;
   const q = souCorresp() ? query(collection(db,'analises'), where('enviada','==',true))
-    : souGerente() ? collection(db,'analises')
+    : opTudo() ? collection(db,'analises')
     : souCoord() ? query(collection(db,'analises'), where('equipe','==', perfil.equipe || '-'))
     : query(collection(db,'analises'), where('corretorUid','==', uidAtual));
   subsPapel.push(onSnapshot(q, s => { analises = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); if (anAberta && $('anVerModal').classList.contains('open')) pintarPasta(); }, e => console.warn('analises', e.code || e.message)));
@@ -9468,7 +9553,7 @@ const anNaoVista = a => { const v = (a.vistoPor || {})[uidAtual] || 0; return a.
 function anContador(){
   if (!anVisivel()) return 0;
   if (souCorresp()) return analises.filter(a => a.status === 'enviada' || (AN_ABERTAS.includes(a.status) && anNaoVista(a))).length;
-  return analises.filter(a => anNaoVista(a) && (a.corretorUid === uidAtual || souGerente())).length;
+  return analises.filter(a => anNaoVista(a) && (a.corretorUid === uidAtual || opTudo())).length;
 }
 const anTempo = ms => { if (!ms) return ''; const m = Math.round((Date.now() - ms) / 60000); return m < 1 ? 'agora' : m < 60 ? `há ${m} min` : m < 1440 ? `há ${Math.round(m / 60)} h` : `há ${Math.round(m / 1440)} dia${Math.round(m / 1440) > 1 ? 's' : ''}`; };
 const anDur = ms => { const h = ms / 3600e3; return h < 1 ? Math.max(1, Math.round(ms / 60000)) + ' min' : h < 48 ? Math.round(h) + ' h' : Math.round(h / 24) + ' dias'; };
@@ -9502,7 +9587,7 @@ function htmlPastaCard(a){
   return `<button class="an-card ${anNaoVista(a) ? 'nova' : ''}" style="--c:${st.cor}" onclick="abrirPasta('${a.id}')">
     <div class="an-c1"><span class="an-st">${st.ic} ${st.nome}</span>${anNaoVista(a) ? '<em class="an-dot">novidade</em>' : ''}<small>${anTempo(a.ultimo?.em || a.atualizadoEm)}</small></div>
     <b class="an-cli">${esc(c.nome || 'Cliente sem nome')}</b><span class="an-tipo-tag">${anVerif(a) ? '🔍 Verificar CPF' : '📋 Análise de crédito'}</span>
-    <div class="an-c2">${souCorresp() || podeGerir() ? `<span>👤 ${esc(primeiro(a.corretorNome || ''))}</span>` : ''}${renda ? `<span>💰 ${brl(renda)}</span>` : ''}${a.imovel?.empreendimento ? `<span>🏠 ${esc(a.imovel.empreendimento)}</span>` : ''}${anVerif(a) ? '' : `<span>📎 ${nd}</span>`}</div>
+    <div class="an-c2">${souCorresp() || opGerir() ? `<span>👤 ${esc(primeiro(a.corretorNome || ''))}</span>` : ''}${renda ? `<span>💰 ${brl(renda)}</span>` : ''}${a.imovel?.empreendimento ? `<span>🏠 ${esc(a.imovel.empreendimento)}</span>` : ''}${anVerif(a) ? '' : `<span>📎 ${nd}</span>`}</div>
     ${a.status === 'verificada' ? `<div class="an-c3">Outro CCA: ${simNao(v.cca)} · Restrição: ${simNao(v.restricao)}${v.parcela ? ' · parcela ' + brl2(v.parcela) : ''}</div>` : a.status === 'aprovada' || a.status === 'condicionada' ? `<div class="an-c3">Financiamento ${brl(a.resultado?.financiado)}${a.resultado?.subsidio ? ` · subsídio ${brl(a.resultado.subsidio)}` : ''}</div>` : a.status === 'pendencia' && a.pendencia ? `<div class="an-c3">${esc(a.pendencia).slice(0, 110)}</div>` : a.ultimo?.texto ? `<div class="an-c3 muted">${esc(a.ultimo.texto).slice(0, 110)}</div>` : ''}
   </button>`;
 }
@@ -9513,18 +9598,18 @@ async function marcarVista(id){ const a = analises.find(x => x.id === id); if (!
 function pintarPasta(){
   const a = analises.find(x => x.id === anAberta); if (!a || !$('anVCorpo')) return;
   const st = AN_ST[a.status] || AN_ST.enviada, c = a.cliente || {}, cj = a.conjuge, r = a.resultado || {}, vf = a.verificacao || {}, ehV = anVerif(a);
-  const dono = a.corretorUid === uidAtual, editavel = (dono || souGerente() && !souCeo()) && ['rascunho','pendencia'].includes(a.status);
+  const dono = a.corretorUid === uidAtual, editavel = (dono || opTudo() && !souCeo()) && ['rascunho','pendencia'].includes(a.status);
   $('anVTit').textContent = c.nome || 'Pasta';
   const passos = anVerif(a) ? [['Enviada', a.enviadaEm], ['Resposta', a.respondidaEm]] : [['Enviada', a.enviadaEm], ['Em análise', a.emAnaliseEm], ['Resposta', a.respondidaEm]];
   const linha = (k, v) => v ? `<div><span>${k}</span><b>${v}</b></div>` : '';
   const docs = a.docs || [];
   const acoes = [];
-  if (souCorresp() || (souGerente() && !souCeo())) {
+  if (souCorresp() || (opTudo() && !souCeo())) {
     if (a.status === 'enviada') acoes.push(`<button class="btn btn-primary" onclick="anMudar('em_analise')">🔎 Começar a análise</button>`);
     if (['enviada','em_analise','pendencia'].includes(a.status)) acoes.push(`<button class="btn btn-ghost" onclick="anPedirPendencia()">⚠️ ${ehV ? 'Pedir informação' : 'Pedir documento / pendência'}</button>`, `<button class="btn btn-primary" onclick="${ehV ? 'abrirVerificacao()' : 'abrirResultado()'}">${ehV ? 'Responder a verificação' : 'Responder resultado'}</button>`);
     if (AN_RESP.includes(a.status)) acoes.push(`<button class="btn btn-ghost" onclick="${ehV ? 'abrirVerificacao()' : 'abrirResultado()'}">Corrigir a resposta</button>`);
   }
-  if (dono || (souGerente() && !souCeo())) {
+  if (dono || (opTudo() && !souCeo())) {
     if (editavel) acoes.push(`<button class="btn btn-ghost" onclick="editarPasta('${a.id}')">✏️ Editar dados e documentos</button>`);
     if (a.status === 'rascunho') acoes.push(`<button class="btn btn-primary" onclick="anEnviarJa()">📨 Enviar para a Prime</button>`);
     if (a.status === 'pendencia') acoes.push(`<button class="btn btn-primary" onclick="anReenviar()">📨 Pendência resolvida · reenviar</button>`);
@@ -12043,11 +12128,11 @@ window.vSet = (k, v) => { vFil[k] = v; if (k === 'busca') { clearTimeout(window.
 function faixaVend(p){ if (p && p.startsWith('m:')) return faixaDoMes(p); return p === 'todas' ? ['0000-01-01','9999-12-31'] : p === 'passado' ? faixaMesRel(1) : faixa(p === 'semana' ? 'semana' : 'mes'); }
 function renderVendas(){
   if (view !== 'vendas') return;
-  $('vendSub').textContent = souGerente() ? 'Reservas feitas. Cada reserva conta como venda.' : 'As suas reservas. Cadastre aqui e mande o texto pronto no grupo de reservas.';
+  $('vendSub').textContent = opTudo() ? 'Reservas feitas. Cada reserva conta como venda.' : 'As suas reservas. Cadastre aqui e mande o texto pronto no grupo de reservas.';
   const [de, ate] = faixaVend(vFil.periodo), t = norm(vFil.busca), dig = soDig(vFil.busca);
   const eqF = vFil.equipe;
   preencherSel('vendPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option>', vFil.periodo);
-  $('vEquipe').classList.toggle('hide', !souGerente());
+  $('vEquipe').classList.toggle('hide', !opTudo());
   $('vEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${vFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   const comCor = reservasTodas.map(r => ({ ...r, cor:corretoresDaReserva(r.corretorTexto) }));
   const noP = comCor.filter(r => r.dia >= de && r.dia <= ate && (!eqF || r.cor.some(c => c.equipe === eqF)));
@@ -12055,7 +12140,7 @@ function renderVendas(){
   $('vsQtd').textContent = ativas.length; $('vsValor').textContent = brl(ativas.reduce((a,r) => a + (Number(r.valor) || 0), 0)); $('vsCaiu').textContent = caidas.length;
   const l = (vFil.caidas ? caidas : ativas).filter(r => !t || norm([r.cliente, r.corretorTexto, r.empreendimento, r.construtora, r.cor.map(c => c.nome).join(' ')].join(' ')).includes(t) || (dig.length >= 3 && (soDig(r.cpf).includes(dig) || soDig(r.telefone).includes(dig))))
     .sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
-  const g = souGerente();
+  const g = opTudo();
   $('vendLista').innerHTML = (vFil.caidas ? `<div class="hint" style="margin:0 0 10px">Mostrando as vendas que caíram. <button class="link" onclick="vSet('caidas',false)">Voltar para as vendas</button></div>` : '')
     + (l.length ? l.map(r => `<div class="vcard" style="--vc:${r.caiu ? 'var(--danger)' : 'var(--ok)'}">
       <div class="v-time"><b style="font-size:15px">${r.dia ? r.dia.slice(8,10) + '/' + r.dia.slice(5,7) : '--'}</b><span>${r.caiu ? 'caiu' : 'reserva'}</span></div>
@@ -12089,7 +12174,7 @@ window.lerTextoReserva = () => {
     const l = linhas.find(x => tira(x).replace(/^[^A-Z]*/, '').startsWith(chave)); if (!l) return;
     let v = l.slice(l.indexOf(':') + 1).trim(); if (!v || l.indexOf(':') < 0) return;
     if (id === 'rvDia') { const m = v.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/); if (!m) return; v = `${m[3].length === 2 ? '20' + m[3] : m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`; }
-    if (id === 'rvCor' && !souGerente()) return; // o corretor é quem está cadastrando
+    if (id === 'rvCor' && !opTudo()) return; // o corretor é quem está cadastrando
     $(id).value = v; n++;
   });
   toast(n ? `${n} campos preenchidos. Confira e salve.` : 'Não reconheci o texto. Ele precisa ter "CLIENTE:", "CPF:" etc.');
@@ -12144,25 +12229,25 @@ window.editarReserva = id => {
   window._vendaDaVisita = null;
   const rr = id ? reservasTodas.find(x => x.id === id) : null;
   const minha = !!rr && (rr.corretorUids || []).includes(uidAtual);
-  if (!souGerente() && (id ? !minha : !['corretor','coordenador','anjo'].includes(perfil?.papel))) return;
+  if (!opTudo() && (id ? !minha : !['corretor','coordenador','anjo'].includes(perfil?.papel))) return;
   const r = rr; rvId = r ? r.id : null;
   rvDocsAtuais = [...(r?.docs || [])]; rvNovos = []; rvTirar = [];
-  const so = !souGerente() && !!r; // corretor abrindo a própria reserva: só mexe na documentação
+  const so = !opTudo() && !!r; // corretor abrindo a própria reserva: só mexe na documentação
   $('resvModal').classList.toggle('rv-ro', so); $('rvSalvarBtn').textContent = so ? 'Salvar documentos' : 'Salvar reserva';
-  setTimeout(rvDocsVis, 0); window._histRef = rvId; $('rvHist')?.classList.toggle('hide', !(souGerente() && r));
-  $('rvTitulo').textContent = r ? (souGerente() ? 'Editar reserva' : 'Sua reserva') : 'Nova reserva';
+  setTimeout(rvDocsVis, 0); window._histRef = rvId; $('rvHist')?.classList.toggle('hide', !(opTudo() && r));
+  $('rvTitulo').textContent = r ? (opTudo() ? 'Editar reserva' : 'Sua reserva') : 'Nova reserva';
   const v = (k, x) => { $(k).value = x ?? ''; };
   v('rvDia', r?.dia || hojeISO()); v('rvCor', r?.corretorTexto); v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
   v('rvEmp', r?.empreendimento); v('rvConst', r?.construtora); v('rvValor', r?.valor ? fmtValorInput(r.valor) : ''); v('rvEntrada', r?.entrada); v('rvCom', r?.comissao); v('rvPerc', r?.percentual);
   v('rvOrig', r?.origem); v('rvPrev', r?.previsao); v('rvStImo', r?.statusImovel); v('rvObs', r?.obs);
   v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', r?.notaCnpj); v('rvColar', '');
-  if (!r && !souGerente()) v('rvCor', perfil.nome);
+  if (!r && !opTudo()) v('rvCor', perfil.nome);
   $('rvCorLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)).map(p => `<option value="${esc(p.nome)}">`).join('');
   $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu);
   abrir('resvModal');
 };
 window.salvarReserva = async () => {
-  if (!souGerente() && rvId) {
+  if (!opTudo() && rvId) {
     const r = reservasTodas.find(x => x.id === rvId); if (!r) return;
     if (!rvNovos.length && !rvTirar.length) { fechar('resvModal'); return; }
     const btn = $('rvSalvarBtn'); btn.disabled = true;
@@ -12181,7 +12266,7 @@ window.salvarReserva = async () => {
     empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), comissao:$('rvCom').value.trim(),
     percentual:$('rvPerc').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(), statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(),
     criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
-  if (!souGerente()) {
+  if (!opTudo()) {
     // corretor cadastra a própria reserva; a gerência confere e edita depois
     if (!norm(d.corretorTexto).includes(norm(perfil.nome)) && !corretoresDaReserva(d.corretorTexto).some(c => c.uid === uidAtual)) d.corretorTexto = perfil.nome + (d.corretorTexto ? ' / ' + d.corretorTexto : '');
     const uids = [...new Set([uidAtual, ...corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean)])];
@@ -12829,7 +12914,112 @@ window.desSet = (k, v) => {
   render();
 };
 
+// =====================================================================
+// v154: Marketing (agenda de ações + tarefas para os corretores) e perfil ADM / Correspondente
+// =====================================================================
+let mkTarefas = [], _mkSub = null;
+window.mkMesAtual = mesAtual(); window.mkDia = hojeISO();
+const MK_TIPOS = [['tarefa','Tarefa'],['gravacao','Gravação de vídeo'],['post','Post / story'],['evento','Evento / ação'],['treinamento','Treinamento']];
+const mkTipoNome = k => (MK_TIPOS.find(t => t[0] === k) || MK_TIPOS[0])[1];
+const mkPublico = () => (rkPessoas.length ? rkPessoas : perfisTodos).filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','sdr'].includes(p.papel));
+const mkPodeEditar = () => souMkt() || (souGerente() && !souCeo());
+function assinarMkt(){
+  mkTarefas = []; if (_mkSub) { _mkSub(); _mkSub = null; }
+  if (!souAtivo() || souCorresp()) return;
+  const silencio = e => console.warn('marketing', e.code || e.message);
+  const q = (souMkt() || souGerente()) ? query(collection(db,'mkt_tarefas'), where('data','>=', somaMeses(mesAtual() + '-01', -2)))
+    : query(collection(db,'mkt_tarefas'), where('alvo','array-contains', uidAtual));
+  _mkSub = onSnapshot(q, s => { mkTarefas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio);
+  subsPapel.push(() => { if (_mkSub) { _mkSub(); _mkSub = null; } });
+}
+// ---------- tela Marketing: calendário do mês + lista do dia ----------
+function renderMarketing(){
+  if (view !== 'marketing' || !$('mkCal')) return;
+  const m = mkMesAtual, ini = parseISO(m + '-01'), dias = new Date(ini.getFullYear(), ini.getMonth() + 1, 0).getDate(), pul = (ini.getDay() + 6) % 7, h = hojeISO();
+  $('mkMesNome').textContent = nomeMes(m);
+  const porDia = {}; mkTarefas.filter(t => (t.data || '').startsWith(m)).forEach(t => (porDia[t.data] = porDia[t.data] || []).push(t));
+  let cel = ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].map(d => `<div class="mk-sem">${d}</div>`).join('') + '<div class="mk-vazio"></div>'.repeat(pul);
+  for (let d = 1; d <= dias; d++) { const dia = m + '-' + String(d).padStart(2, '0'), l = porDia[dia] || [];
+    cel += `<button class="mk-d ${dia === mkDia ? 'sel' : ''} ${dia === h ? 'hoje' : ''} ${l.length ? 'tem' : ''}" onclick="mkDia='${dia}';renderMarketing()"><b>${d}</b>${l.slice(0, 3).map(t => `<i class="mk-p ${t.tipo || 'tarefa'}"></i>`).join('')}${l.length > 3 ? `<small>+${l.length - 3}</small>` : ''}</button>`; }
+  $('mkCal').innerHTML = cel;
+  const dl = (porDia[mkDia] || []).slice().sort((a, b) => (a.hora || '99').localeCompare(b.hora || '99'));
+  $('mkDiaTit').textContent = mkDia === h ? 'Hoje' : parseISO(mkDia).toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' });
+  const prox = mkTarefas.filter(t => t.data > mkDia && t.data <= somaDias(h, 14)).sort((a, b) => (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')));
+  $('mkLista').innerHTML = (dl.length ? dl.map(mkCard).join('') : `<div class="mk-nada">Nada marcado neste dia.${mkPodeEditar() ? ' <button class="link" onclick="mkNova()">Marcar uma tarefa</button>' : ''}</div>`)
+    + (prox.length ? `<h3 class="mk-h3">Próximos dias</h3>` + prox.slice(0, 20).map(mkCard).join('') : '');
+}
+window.renderMarketing = renderMarketing;
+function mkNomes(uids){ const ps = mkPublico(); return uids.map(u => (ps.find(p => p.uid === u) || {}).nome || '').filter(Boolean); }
+function mkCard(t){
+  const alvo = t.alvo || [], feitos = t.feitos || {}, ok = alvo.filter(u => feitos[u]).length, falta = alvo.filter(u => !feitos[u]);
+  const para = t.para === 'todos' ? 'Todos os corretores' : t.para === 'equipe' ? eqNome(t.equipe) : mkNomes(alvo).map(primeiro).join(', ');
+  return `<div class="mk-card ${t.tipo || 'tarefa'}"><div class="mk-l1"><span class="mk-tag">${esc(mkTipoNome(t.tipo))}</span><span class="mk-qd">${t.data !== mkDia ? esc(dataBR(t.data)) + ' · ' : ''}${esc(t.hora || 'Dia todo')}</span></div>
+    <b>${esc(t.titulo || '')}</b>${t.descricao ? `<p>${esc(t.descricao).replace(/\n/g, '<br>')}</p>` : ''}${t.link ? `<a class="mk-link" href="${esc(t.link)}" target="_blank" rel="noopener">Abrir material</a>` : ''}
+    <div class="mk-l3"><span>Para: ${esc(para || '—')}</span>${alvo.length ? `<span class="mk-prog"><i style="width:${Math.round(ok / alvo.length * 100)}%"></i></span><span>${ok} de ${alvo.length} fizeram</span>` : ''}</div>
+    ${falta.length && falta.length <= 12 ? `<div class="mk-falta">Faltam: ${esc(mkNomes(falta).map(primeiro).join(', '))}</div>` : ''}
+    ${mkPodeEditar() ? `<div class="mk-acoes"><button class="link" onclick="mkNova('${t.id}')">Editar</button><button class="link" style="color:var(--danger)" onclick="mkExcluir('${t.id}')">Excluir</button></div>` : ''}</div>`;
+}
+window.mkMes = d => { mkMesAtual = somaMeses(mkMesAtual + '-01', d).slice(0, 7); mkDia = mkMesAtual === mesAtual() ? hojeISO() : mkMesAtual + '-01'; renderMarketing(); };
+// ---------- criar / editar ----------
+let mkEdit = null;
+window.mkNova = id => {
+  if (!mkPodeEditar()) return;
+  const t = id ? mkTarefas.find(x => x.id === id) : null; mkEdit = t ? t.id : null;
+  $('mkTitM').textContent = t ? 'Editar tarefa' : 'Nova tarefa para os corretores';
+  $('mkTipo').innerHTML = MK_TIPOS.map(([k, n]) => `<option value="${k}" ${(t?.tipo || 'tarefa') === k ? 'selected' : ''}>${n}</option>`).join('');
+  $('mkTitulo').value = t?.titulo || ''; $('mkDesc').value = t?.descricao || ''; $('mkData').value = t?.data || mkDia || hojeISO(); $('mkHora').value = t?.hora || ''; $('mkLinkIn').value = t?.link || '';
+  $('mkPara').value = t?.para || 'todos';
+  $('mkEquipe').innerHTML = listaEquipes().map(e => `<option value="${e.id}" ${t?.equipe === e.id ? 'selected' : ''}>${esc(eqNome(e.id))}</option>`).join('');
+  const sel = new Set(t?.para === 'pessoas' ? (t.alvo || []) : []);
+  $('mkPessoas').innerHTML = mkPublico().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')).map(p => `<label class="cf-chk"><input type="checkbox" value="${p.uid}" ${sel.has(p.uid) ? 'checked' : ''}> ${esc(p.nome)}</label>`).join('') || '<div class="muted">Nenhum corretor ativo.</div>';
+  mkParaVis(); $('mkExcluirBt').classList.toggle('hide', !t); abrir('mkModal'); setTimeout(() => $('mkTitulo').focus(), 60);
+};
+window.mkParaVis = () => { const v = $('mkPara').value; $('mkEqWrap').classList.toggle('hide', v !== 'equipe'); $('mkPesWrap').classList.toggle('hide', v !== 'pessoas'); };
+window.mkSalvar = async () => {
+  const titulo = $('mkTitulo').value.trim(), data = $('mkData').value, para = $('mkPara').value;
+  if (!titulo) { toast('Escreva o que precisa ser feito'); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) { toast('Escolha o dia'); return; }
+  let alvo = [], equipe = '';
+  if (para === 'todos') alvo = mkPublico().map(p => p.uid);
+  else if (para === 'equipe') { equipe = $('mkEquipe').value; alvo = mkPublico().filter(p => p.equipe === equipe).map(p => p.uid); }
+  else alvo = [...document.querySelectorAll('#mkPessoas input:checked')].map(i => i.value);
+  if (!alvo.length) { toast(para === 'pessoas' ? 'Escolha pelo menos uma pessoa' : 'Ninguém ativo nesse grupo'); return; }
+  const link = $('mkLinkIn').value.trim();
+  if (link && !/^https?:\/\//i.test(link)) { toast('O link precisa começar com https://'); return; }
+  const antes = mkEdit ? mkTarefas.find(x => x.id === mkEdit) : null, feitos = {};
+  if (antes) Object.entries(antes.feitos || {}).forEach(([u, v]) => { if (alvo.includes(u)) feitos[u] = v; });
+  const d = { titulo:titulo.slice(0, 120), descricao:$('mkDesc').value.trim().slice(0, 1500), tipo:$('mkTipo').value, data, hora:$('mkHora').value || '', para, equipe, alvo:alvo.slice(0, 200), feitos, link:link.slice(0, 500), atualizadoEm:Date.now() };
+  try {
+    const ref = mkEdit ? doc(db,'mkt_tarefas', mkEdit) : doc(collection(db,'mkt_tarefas'));
+    if (!mkEdit) Object.assign(d, { criadoPor:uidAtual, criadoNome:perfil.nome, criadoEm:Date.now() });
+    await gravar(setDoc(ref, d, { merge:true }));
+    if (!mkEdit) avisarCarteiro('mkt_tarefa', ref.id);
+    fechar('mkModal'); mkDia = data; mkMesAtual = data.slice(0, 7); toast(mkEdit ? 'Tarefa atualizada' : 'Tarefa enviada para ' + alvo.length + (alvo.length === 1 ? ' pessoa' : ' pessoas'));
+  } catch(e) { toast(e.code === 'permission-denied' ? 'Falta publicar as regras novas do Firebase (v154).' : 'Erro: ' + e.message); }
+};
+window.mkExcluir = async id => {
+  const t = mkTarefas.find(x => x.id === (id || mkEdit)); if (!t || !confirm(`Excluir "${t.titulo}"? Some também da tela dos corretores.`)) return;
+  try { await deleteDoc(doc(db,'mkt_tarefas', t.id)); fechar('mkModal'); toast('Tarefa excluída'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// ---------- tela Hoje do corretor: o que o marketing pediu ----------
+function htmlMkHoje(){
+  if (!souAtivo() || souMkt() || souAdm() || souCorresp()) return '';
+  const h = hojeISO(), l = mkTarefas.filter(t => (t.alvo || []).includes(uidAtual) && !(t.feitos || {})[uidAtual] && t.data <= somaDias(h, 3) && t.data >= somaDias(h, -7))
+    .sort((a, b) => (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')));
+  if (!l.length) return '';
+  return `<div class="card mk-hoje"><div class="card-head"><h3>Pedidos do marketing</h3><span class="muted" style="font-size:12.5px">${l.length}</span></div>${l.map(t => `<div class="mk-hi">
+    <div class="mk-hi-t"><span class="mk-tag">${esc(mkTipoNome(t.tipo))}</span><b>${esc(t.titulo || '')}</b><small class="${t.data < h ? 'late' : ''}">${t.data === h ? 'Hoje' : t.data < h ? 'Atrasada · ' + esc(dataBR(t.data)) : esc(dataBR(t.data))}${t.hora ? ' · ' + esc(t.hora) : ''}</small>
+    ${t.descricao ? `<p>${esc(t.descricao).replace(/\n/g, '<br>')}</p>` : ''}${t.link ? `<a class="mk-link" href="${esc(t.link)}" target="_blank" rel="noopener">Abrir material</a>` : ''}</div>
+    <button class="btn btn-primary mk-feito" onclick="mkFeito('${t.id}')">Feito</button></div>`).join('')}</div>`;
+}
+window.mkFeito = async id => {
+  try { await gravar(updateDoc(doc(db,'mkt_tarefas', id), { ['feitos.' + uidAtual]:Date.now() })); vibrar(15); toast('Marcado como feito'); }
+  catch(e) { toast(e.code === 'permission-denied' ? 'Falta publicar as regras novas do Firebase (v154).' : 'Erro: ' + e.message); }
+};
+function renderMkHoje(){ const el = $('mkHoje'); if (!el) return; const h = view === 'hoje' ? htmlMkHoje() : ''; if (el._h !== h) { el.innerHTML = h; el._h = h; } }
+
 function renderEtapa3(){
+  try { renderMarketing(); renderMkHoje(); } catch(e) { console.warn('mkt render', e.message); }
   if (view === 'desempenho') renderDesempenho();
   renderVendas(); renderApEscolha(); renderAssistente();
   if ($('cVendas')) { const [mi, mf] = faixa('mes'); const n = reservas.filter(r => r.dia >= mi && r.dia <= mf).length; $('cVendas').textContent = n || ''; }
