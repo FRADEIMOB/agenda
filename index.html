@@ -1871,6 +1871,28 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
 <style id="cp158">
+/* v166: Meus corretores, lista e cartões */
+.ac-barra{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}.ac-res{margin-bottom:0}.ac-res button{all:unset;cursor:pointer;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--border);text-align:center;transition:border-color .2s,box-shadow .2s}
+.ac-res button:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}.ac-res button.on{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 25%,transparent)}.ac-res button:focus-visible{outline:2px solid var(--accent)}
+.ac-res button b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.ac-res button b small{font-size:14px;color:var(--muted)}.ac-res button span{font-size:12px;color:var(--muted)}.ac-res button.tem b{color:var(--danger)}
+.ac-ctl{display:flex;justify-content:flex-end;gap:8px;align-items:center;flex-wrap:wrap}.ac-chip{all:unset;cursor:pointer;padding:7px 14px;border-radius:99px;background:var(--card);border:1px solid var(--border);font-size:13px;font-weight:700}.ac-chip.on{background:color-mix(in srgb,var(--danger) 12%,var(--card));border-color:color-mix(in srgb,var(--danger) 40%,var(--border));color:var(--danger)}
+
+.ac-eq{display:flex;align-items:center;gap:12px;margin:18px 0 8px}.ac-eq h2{font-size:16px;margin:0;white-space:nowrap}.ac-eq span{font-size:12.5px;color:var(--muted);white-space:nowrap}.ac-eq hr{flex:1;border:0;border-top:1px solid var(--border)}
+.ac-tab-w{overflow-x:auto}.ac-tab{table-layout:fixed}.ac-tab td.ac-als,.ac-tab td.ac-prox,.ac-lnk2{text-align:left}
+.ac-tab th:nth-child(1){width:18%}.ac-tab th:nth-child(2),.ac-tab th:nth-child(3),.ac-tab th:nth-child(4),.ac-tab th:nth-child(5),.ac-tab th:nth-child(6){width:5.4%}.ac-tab th:nth-child(7){width:12%}.ac-tab th:nth-child(8){width:9%}.ac-tab th:nth-child(9){width:21%}.ac-tab th:nth-child(10){width:8%}.ac-tab th:nth-child(11){width:7%}
+.ac-tab td:first-child b{overflow:hidden;text-overflow:ellipsis;display:block}.ac-tab td.ac-als{white-space:normal}.ac-tab{width:100%;border-collapse:separate;border-spacing:0 6px;min-width:900px}.ac-tab th{font-size:11.5px;color:var(--muted);font-weight:700;padding:0 6px;text-align:center}.ac-tab th:first-child,.ac-tab th:nth-child(7),.ac-tab th:nth-child(9){text-align:left}
+.ac-tab td{background:var(--card);padding:9px 6px;text-align:center;font-size:14px;font-variant-numeric:tabular-nums;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.ac-tab td:first-child{text-align:left;border-left:1px solid var(--border);border-radius:12px 0 0 12px;padding-left:14px}.ac-tab td:last-child{border-right:1px solid var(--border);border-radius:0 12px 12px 0}
+.ac-tab tr.alerta td:first-child{box-shadow:inset 3px 0 0 var(--danger)}.ac-tab td small{display:block;font-size:11.5px}.ac-tab td:first-child b{white-space:nowrap}.ac-al1{max-width:100%}.ac-tab td small i{font-style:normal;font-weight:700}
+.ac-z{font-style:normal;color:color-mix(in srgb,var(--muted) 55%,transparent)}.ac-lnk{all:unset;cursor:pointer;font-weight:800;color:var(--accent)}.ac-lnk:hover{text-decoration:underline}
+.ac-mt{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;align-items:center}.ac-card .ac-mt{align-items:stretch}.ac-mt i{display:block;width:100%;max-width:120px;height:6px;border-radius:9px;background:var(--card2);overflow:hidden}.ac-card .ac-mt i{max-width:none}.ac-mt u{display:block;height:100%;background:var(--accent);text-decoration:none}.ac-mt.ok{color:var(--ok)}.ac-mt.ok u{background:var(--ok)}
+.ac-als{text-align:left}.ac-al1{display:inline-block;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:99px;margin:2px 3px 2px 0;background:color-mix(in srgb,var(--warn) 16%,var(--card));color:color-mix(in srgb,var(--warn) 70%,var(--text))}.ac-al1.alto{background:color-mix(in srgb,var(--danger) 12%,var(--card));color:var(--danger)}
+.ac-mes{font-size:13px;white-space:nowrap}.ac-prox{text-align:left}.ac-lnk2{all:unset;cursor:pointer;display:block;max-width:170px}.ac-lnk2 b{font-size:12.5px}.ac-lnk2 small{display:block;font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ac-lnk2:hover b{color:var(--accent)}.ac-mais{font-size:11px;color:var(--muted)}.ac-ics{white-space:nowrap}.ac-ic{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--card2);margin-left:4px;text-decoration:none;font-size:14px}.ac-ic:hover{background:var(--border)}
+.ac-nums .zz b{color:color-mix(in srgb,var(--muted) 50%,transparent)}.ac-nums div[role=button]{cursor:pointer;outline:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+.ac-pe{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:12.5px;color:var(--muted);border-top:1px solid var(--border);padding-top:9px}
+.ac-ld{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}.ac-ld small{display:block;font-size:12px;color:var(--muted)}
+@media(max-width:700px){.ac-ctl{justify-content:flex-start}.ac-eq span{display:none}}
+
 /* v165: Meus corretores */
 .ac-res{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:16px}.ac-res div{padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--border);text-align:center}
 .ac-res b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.ac-res b small{font-size:14px;color:var(--muted)}.ac-res span{font-size:12px;color:var(--muted)}.ac-res .tem b{color:var(--danger)}
@@ -3816,6 +3838,12 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-head"><div><h2>Relatório dos corretores</h2><div class="muted" style="font-size:13px;margin-top:3px">O dia de cada corretor: leads, ligações, docs e visitas.</div></div><button class="icon-btn" onclick="fechar('relCorModal')" data-ic="x"></button></div>
     <div class="sheet-body" data-lenis-prevent><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap"><label for="rcDia" style="font-size:13px;font-weight:700">Dia</label><input type="date" id="rcDia" onchange="pintarRelCor()" style="width:auto"></div><div id="rcCorpo"></div></div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="abrirRelDia()" id="rcPlan">Relatório da planilha</button><button class="btn btn-primary" onclick="copiarRelCor()">Copiar para o WhatsApp</button></div>
+  </div>
+</div>
+<div class="modal" id="acLdModal">
+  <div class="sheet" style="width:min(520px,100%)">
+    <div class="sheet-head"><h2 id="acLdTit">Leads de hoje</h2><button class="icon-btn" onclick="fechar('acLdModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="acLdCorpo" data-lenis-prevent></div>
   </div>
 </div>
 <div class="modal" id="cpModal">
@@ -6731,7 +6759,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 165;
+const APP_VERSAO = 166;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7935,7 +7963,10 @@ const podeAcomp = () => souAtivo() && (souAnjo() || souCoord() || souGerente());
 window.acEq = 'todas';
 let _acSubs = [], _acChave = '', _acLeads = [], _acVis = [], _acPastas = [], _acChk = [], _acTick = null;
 function acParar(){ _acSubs.forEach(u => { try { u(); } catch(e) {} }); _acSubs = []; _acChave = ''; clearInterval(_acTick); _acTick = null; }
-function acPessoas(){
+const acNome = n => { const w = String(n || '').trim().toLowerCase().split(/\s+/).filter(Boolean); const ok = w.length > 1 ? [w[0], w[w.length - 1]] : w; return ok.map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(' ') || 'Corretor'; };
+const acTeste = p => /\bteste?\b/i.test(p.nome || '');
+function acPessoas(){ return acPessoas0().filter(p => !acTeste(p)); }
+function acPessoas0(){
   const base = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel));
   if (souAnjo()) return membrosAnjo().map(u => { const p = base.find(x => x.uid === u) || rkPessoas.find(x => x.uid === u) || {}; return { uid:u, nome:p.nome || (perfil.membrosNomes || [])[membrosAnjo().indexOf(u)] || 'Corretor', equipe:p.equipe || '', papel:p.papel || 'corretor' }; });
   if (souCoord()) return base.filter(p => p.equipe === perfil.equipe);
@@ -7973,36 +8004,61 @@ function acDados(p){
   const v = { lig:n('ligu'), docs:docsHoje, vm:marcHoje.length, vr:visHoje.filter(x => x.status === 'Realizada').length }, meta = metaDiaDe(p.uid);
   const al = [];
   const diaUtil = agora.getDay() !== 0;
-  if (diaUtil && !pres && !folga && agora.getHours() >= 9) al.push(['Sem check-in hoje', 'alto']);
-  if (lds.length && !(n('lig') + n('rec'))) al.push([`${lds.length} lead${lds.length > 1 ? 's' : ''} hoje e nenhuma ligação`, 'alto']);
+  if (diaUtil && !pres && !folga && agora.getHours() >= 9) al.push(['Sem check-in', 'alto']);
+  const velhos = lds.filter(e => Date.now() - (e.em || 0) > 30 * 60e3);
+  if (velhos.length && !(n('lig') + n('rec'))) al.push([`${velhos.length} lead${velhos.length > 1 ? 's' : ''} sem ligação há 30 min`, 'alto']);
   const semConf = vis.filter(x => (x.date === h || x.date === am) && AC_PEND.includes(x.status));
   if (semConf.length) al.push([`${semConf.length} visita${semConf.length > 1 ? 's' : ''} sem confirmar (${semConf.some(x => x.date === h) ? 'hoje' : 'amanhã'})`, 'medio']);
   const parada = pend.filter(a => Date.now() - ((a.ultimo || {}).em || a.atualizadoEm || 0) > 24 * 3600e3);
-  if (parada.length) al.push([`${parada.length} pendência${parada.length > 1 ? 's' : ''} da Prime parada${parada.length > 1 ? 's' : ''} há mais de 24 h`, 'medio']);
-  return { p, pres, folga, leads:lds.length, lig:n('lig') + n('rec'), num:n('ligu'), at:n('at'), docs:docsHoje, vm:marcHoje.length, vr:v.vr, visHoje:visHoje.length, meta, v, bateu:mdBateu(meta, v), temMeta:mdTem(meta), agenda, pend, anal, aprovMes, vendasMes, al };
+  if (parada.length) al.push([`${parada.length > 1 ? parada.length + ' pendências' : 'Pendência'} da Prime parada há 24 h`, 'medio']);
+  const tel = (perfisTodos.find(x => x.uid === p.uid) || {}).telefone || p.telefone || '';
+  return { p, nome:acNome(p.nome), tel, ldsL:lds, pres, folga, leads:lds.length, lig:n('lig') + n('rec'), num:n('ligu'), at:n('at'), docs:docsHoje, vm:marcHoje.length, vr:v.vr, visHoje:visHoje.length, meta, v, bateu:mdBateu(meta, v), temMeta:mdTem(meta), agenda, pend, anal, aprovMes, vendasMes, al };
 }
+window.acModo = (() => { try { return localStorage.getItem('acModo') || (innerWidth < 760 ? 'cartoes' : 'lista'); } catch(e) { return 'lista'; } })();
+window.acFoco = ''; window.acSoAlerta = false;
+window.acSetModo = m => { acModo = m; try { localStorage.setItem('acModo', m); } catch(e) {} renderAcomp(true); };
+window.acSetFoco = f => { if (f === 'al') { acSoAlerta = !acSoAlerta; acFoco = ''; } else acFoco = acFoco === f ? '' : f; renderAcomp(true); };
+window.acVerLeads = uid => { const x = (window._acLinhas || []).find(y => y.p.uid === uid); if (!x) return;
+  $('acLdTit').textContent = 'Leads de hoje · ' + x.nome;
+  $('acLdCorpo').innerHTML = x.ldsL.length ? x.ldsL.sort((a, b) => (b.em || 0) - (a.em || 0)).map(e => `<div class="ac-ld"><div><b>${esc(e.cliente || 'Contato sem nome')}</b><small>${e.em ? new Date(e.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : ''}${e.origem ? ' · ' + esc(e.origem) : ''}</small></div>${e.telefone ? `<a class="btn btn-ghost" href="https://wa.me/${soDig(e.telefone).replace(/^(?!55)/, '55')}" target="_blank" rel="noopener">WhatsApp</a>` : ''}</div>`).join('') : '<div class="muted">Nenhum lead hoje.</div>';
+  abrir('acLdModal'); };
 function renderAcomp(soDados){
   if (!$('acCorpo')) return;
   if (!soDados) acAssinar();
-  // filtro da gerência: equipe ou anjo
   if (souGerente() && $('acFiltros') && document.activeElement?.id !== 'acSel') {
     const anjos = rkPessoas.filter(a => a.papel === 'anjo' && a.status === 'ativo');
     $('acFiltros').innerHTML = `<select id="acSel" onchange="acEq=this.value;renderAcomp()" aria-label="Quem mostrar"><option value="todas">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}" ${acEq === e.id ? 'selected' : ''}>${esc(eqNome(e.id))}</option>`).join('')}${anjos.length ? `<optgroup label="Anjos">${anjos.map(a => `<option value="anjo:${a.uid}" ${acEq === 'anjo:' + a.uid ? 'selected' : ''}>${esc(a.nome)}</option>`).join('')}</optgroup>` : ''}</select>`;
   } else if (!souGerente() && $('acFiltros')) $('acFiltros').innerHTML = '';
   $('acSub').textContent = souAnjo() ? 'Os corretores que você acompanha, ao vivo.' : souCoord() ? 'Sua equipe, ao vivo.' : 'Os corretores de cada equipe e de cada anjo, ao vivo.';
-  const ls = acPessoas().map(acDados).sort((a, b) => b.al.length - a.al.length || (b.pres - a.pres) || b.docs - a.docs || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
-  const t = k => ls.reduce((s, x) => s + (Number(x[k]) || 0), 0);
-  $('acResumo').innerHTML = ls.length ? `<div class="ac-res"><div><b>${ls.filter(x => x.pres).length}<small>/${ls.length}</small></b><span>no escritório</span></div><div><b>${t('leads')}</b><span>leads hoje</span></div><div><b>${t('lig')}</b><span>ligações</span></div><div><b>${t('docs')}</b><span>docs hoje</span></div><div><b>${t('visHoje')}</b><span>visitas hoje</span></div><div class="${ls.some(x => x.al.length) ? 'tem' : ''}"><b>${ls.reduce((s2, x) => s2 + x.al.length, 0)}</b><span>alertas</span></div></div>` : '';
+  let ls = acPessoas().map(acDados); window._acLinhas = ls;
+  const t = k => ls.reduce((s2, x) => s2 + (Number(x[k]) || 0), 0), nAl = ls.filter(x => x.al.length).length;
+  const tile = (f, val, rot, extra = '') => `<button type="button" class="${acFoco === f || (f === 'al' && acSoAlerta) ? 'on' : ''} ${extra}" onclick="acSetFoco('${f}')"><b>${val}</b><span>${rot}</span></button>`;
+  $('acResumo').innerHTML = ls.length ? `<div class="ac-barra"><div class="ac-res">${tile('pres', `${ls.filter(x => x.pres).length}<small>/${ls.length}</small>`, 'no escritório')}${tile('leads', t('leads'), 'leads hoje')}${tile('lig', t('lig'), 'ligações')}${tile('docs', t('docs'), 'docs hoje')}${tile('vis', t('visHoje'), 'visitas hoje')}${tile('al', ls.reduce((s2, x) => s2 + x.al.length, 0), 'alertas', nAl ? 'tem' : '')}</div>
+    <div class="ac-ctl"><button type="button" class="ac-chip ${acSoAlerta ? 'on' : ''}" onclick="acSetFoco('al')">Só com alerta (${nAl})</button><div class="seg ac-seg"><button class="${acModo === 'lista' ? 'on' : ''}" onclick="acSetModo('lista')">Lista</button><button class="${acModo === 'cartoes' ? 'on' : ''}" onclick="acSetModo('cartoes')">Cartões</button></div></div></div>` : '';
+  if (acSoAlerta) ls = ls.filter(x => x.al.length);
+  const ord = { pres:(a, b) => (a.pres - b.pres), leads:(a, b) => b.leads - a.leads, lig:(a, b) => b.lig - a.lig, docs:(a, b) => b.docs - a.docs, vis:(a, b) => b.visHoje - a.visHoje }[acFoco];
+  ls.sort((a, b) => (ord ? ord(a, b) : 0) || b.al.length - a.al.length || (b.pres - a.pres) || b.docs - a.docs || a.nome.localeCompare(b.nome, 'pt-BR'));
+  const z = v => v ? `<b>${v}</b>` : '<i class="ac-z">0</i>';
+  const metaPrin = x => { if (!x.temMeta) return ''; const k = MD_ITENS.find(([kk]) => x.meta[kk]); if (!k) return ''; const a = x.v[k[0]] || 0, m0 = x.meta[k[0]]; return `<div class="ac-mt ${x.bateu ? 'ok' : ''}"><span>${x.bateu ? 'Metas do dia batidas' : esc(k[1]) + ' ' + a + ' de ' + m0}</span><i><u style="width:${Math.min(100, Math.round(a / m0 * 100))}%"></u></i></div>`; };
+  const acoes = x => (x.tel ? `<a class="ac-ic" href="https://wa.me/${soDig(x.tel).replace(/^(?!55)/, '55')}" target="_blank" rel="noopener" title="WhatsApp de ${esc(x.nome)}" aria-label="WhatsApp">💬</a><a class="ac-ic" href="tel:${soDig(x.tel)}" title="Ligar para ${esc(x.nome)}" aria-label="Ligar">📞</a>` : '');
+  const sit = x => x.pres ? '<i class="ac-ok">No escritório</i>' : x.folga ? '<i>Folga / abonado</i>' : '<i class="ac-nao">Sem check-in</i>';
+  const alHtml = x => x.al.map(([t2, g]) => `<span class="ac-al1 ${g}">${esc(t2)}</span>`).join('');
   const dia = d => d === hojeISO() ? 'hoje' : d === somaDias(hojeISO(), 1) ? 'amanhã' : d.slice(8) + '/' + d.slice(5, 7);
-  const metaTxt = x => { if (!x.temMeta) return ''; const ks = MD_ITENS.filter(([k]) => x.meta[k]); const feitos = ks.filter(([k]) => (x.v[k] || 0) >= x.meta[k]).length; return `<span class="ac-meta ${x.bateu ? 'ok' : ''}">${x.bateu ? 'Metas do dia batidas' : `Metas: ${feitos} de ${ks.length}`}</span>`; };
-  $('acCorpo').innerHTML = !ls.length ? vazio(souAnjo() ? 'Nenhum corretor ligado a você ainda' : 'Nenhum corretor para mostrar', souAnjo() ? 'A gerência escolhe quem cada anjo acompanha.' : 'Mude o filtro acima.') : `<div class="ac-grade">${ls.map(x => `
-    <article class="card ac-card ${x.al.length ? 'alerta' : ''}">
-      <header class="ac-top"><div><b>${esc(x.p.nome)}</b><small>${x.pres ? '<i class="ac-ok">No escritório</i>' : x.folga ? '<i>Folga / abonado</i>' : '<i class="ac-nao">Sem check-in</i>'}${souGerente() && x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></div>${metaTxt(x)}</header>
-      <div class="ac-nums"><div><b>${x.leads}</b><span>leads</span></div><div><b>${x.lig}</b><span>ligações</span></div><div><b>${x.num}</b><span>números</span></div><div><b>${x.docs}</b><span>docs</span></div><div><b>${x.vm}</b><span>marcou</span></div><div><b>${x.vr}</b><span>visitou</span></div></div>
-      ${x.al.length ? `<ul class="ac-al">${x.al.map(([t2, g]) => `<li class="${g}">${esc(t2)}</li>`).join('')}</ul>` : ''}
-      <div class="ac-sec"><h4>Próximas visitas</h4>${x.agenda.length ? x.agenda.map(v => `<div class="ac-vis" role="button" tabindex="0" onclick="editarVisita('${v.id}')" title="Abrir a visita"><span class="ac-d">${dia(v.date)} ${esc(v.time || '')}</span><span class="ac-c">${esc(v.cliente || '')}</span><span class="ac-st st-${stCls(v.status)}">${esc(v.status)}</span></div>`).join('') : '<div class="muted ac-vazio">Nenhuma visita marcada.</div>'}</div>
-      <div class="ac-sec ac-lado"><div><h4>Na Prime</h4><span>${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''}</span></div><div><h4>No mês</h4><span>${x.aprovMes} aprovaç${x.aprovMes === 1 ? 'ão' : 'ões'} · ${fmtVendas(x.vendasMes)} venda${x.vendasMes === 1 ? '' : 's'}</span></div></div>
-    </article>`).join('')}</div>`;
+  const grupos = souGerente() && (!acEq || acEq === 'todas') ? listaEquipes().map(e => [e.id, ls.filter(x => x.p.equipe === e.id)]).concat([['', ls.filter(x => !listaEquipes().some(e => e.id === x.p.equipe))]]).filter(([, l]) => l.length) : [[null, ls]];
+  const cabGrupo = (eq, l) => eq === null ? '' : `<div class="ac-eq"><h2>${esc(eq ? eqNome(eq) : 'Sem equipe')}</h2><span>${l.filter(x => x.pres).length} no escritório · ${l.reduce((s2, x) => s2 + x.leads, 0)} leads · ${l.reduce((s2, x) => s2 + x.lig, 0)} ligações · ${l.reduce((s2, x) => s2 + x.docs, 0)} docs</span><hr></div>`;
+  const linha = x => `<tr class="${x.al.length ? 'alerta' : ''}"><td><b>${esc(x.nome)}</b><small>${sit(x)}</small></td><td>${x.leads ? `<button class="ac-lnk" onclick="acVerLeads('${x.p.uid}')">${x.leads}</button>` : z(0)}</td><td>${z(x.lig)}</td><td>${z(x.docs)}</td><td>${z(x.vm)}</td><td>${z(x.vr)}</td><td class="ac-prox">${x.agenda[0] ? `<button class="ac-lnk2" onclick="editarVisita('${x.agenda[0].id}')" title="Abrir a visita"><b>${dia(x.agenda[0].date)} ${esc(x.agenda[0].time || '')}</b><small>${esc(x.agenda[0].cliente || '')} · ${esc(x.agenda[0].status)}</small></button>${x.agenda.length > 1 ? `<small class="ac-mais">+${x.agenda.length - 1}</small>` : ''}` : '<i class="ac-z">—</i>'}</td><td>${metaPrin(x)}</td><td class="ac-als">${alHtml(x) || '<i class="ac-z">—</i>'}</td><td class="ac-mes">${x.aprovMes ? x.aprovMes + ' aprov. · ' : ''}${fmtVendas(x.vendasMes)} venda${x.vendasMes === 1 ? '' : 's'}</td><td class="ac-ics">${acoes(x)}</td></tr>`;
+  const cartao = x => `<article class="card ac-card ${x.al.length ? 'alerta' : ''}">
+      <header class="ac-top"><div><b>${esc(x.nome)}</b><small>${sit(x)}${souGerente() && x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></div><div class="ac-ics">${acoes(x)}</div></header>
+      <div class="ac-nums">${[['leads', x.leads], ['ligações', x.lig], ['números', x.num], ['docs', x.docs], ['marcou', x.vm], ['visitou', x.vr]].map(([r, v], i) => `<div class="${v ? '' : 'zz'}" ${i === 0 && v ? `role="button" onclick="acVerLeads('${x.p.uid}')"` : ''}><b>${v}</b><span>${r}</span></div>`).join('')}</div>
+      ${metaPrin(x)}
+      ${x.al.length ? `<div class="ac-als">${alHtml(x)}</div>` : ''}
+      ${x.agenda.length ? `<div class="ac-sec"><h4>Próximas visitas</h4>${x.agenda.map(v => `<div class="ac-vis" role="button" tabindex="0" onclick="editarVisita('${v.id}')" title="Abrir a visita"><span class="ac-d">${dia(v.date)} ${esc(v.time || '')}</span><span class="ac-c">${esc(v.cliente || '')}</span><span class="ac-st st-${stCls(v.status)}">${esc(v.status)}</span></div>`).join('')}</div>` : ''}
+      <footer class="ac-pe"><span>${x.anal.length || x.pend.length ? `Prime: ${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''} · ` : ''}Mês: ${x.aprovMes} aprov. · ${fmtVendas(x.vendasMes)} venda${x.vendasMes === 1 ? '' : 's'}</span>${x.leads ? `<button class="ac-lnk" onclick="acVerLeads('${x.p.uid}')">Ver leads de hoje</button>` : ''}</footer>
+    </article>`;
+  $('acCorpo').innerHTML = !ls.length ? vazio(acSoAlerta ? 'Ninguém com alerta agora' : souAnjo() ? 'Nenhum corretor ligado a você ainda' : 'Nenhum corretor para mostrar', acSoAlerta ? 'Tudo em dia.' : souAnjo() ? 'A gerência escolhe quem cada anjo acompanha.' : 'Mude o filtro acima.')
+    : grupos.map(([eq, l]) => cabGrupo(eq, l) + (acModo === 'lista'
+      ? `<div class="ac-tab-w"><table class="ac-tab"><thead><tr><th>Corretor</th><th>Leads</th><th>Ligações</th><th>Docs</th><th>Marcou</th><th>Visitou</th><th>Próxima visita</th><th>Meta do dia</th><th>Alertas</th><th>Mês</th><th></th></tr></thead><tbody>${l.map(linha).join('')}</tbody></table></div>`
+      : `<div class="ac-grade">${l.map(cartao).join('')}</div>`)).join('');
 }
 // ---------- v103: funil de ligações (gerência, coordenador e anjo) ----------
 const podeFunil = () => souAtivo() && (souGerente() || souCoord() || souAnjo() || abaLiberada('funil'));
