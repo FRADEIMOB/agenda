@@ -5628,6 +5628,12 @@ function renderRanking(){
 // ---------- Formulário de visita ----------
 function membrosSelecionaveis(){
   const m = perfisLista.filter(p => p.status === 'ativo');
+  // v162: SDR e coordenador também mandam visita para os anjos da equipe (vêm da lista pública de pessoas)
+  if (perfil && (perfil.papel === 'sdr' || souCoord()) && perfil.equipe) {
+    const daEquipe = new Set(m.map(p => p.uid));
+    rkPessoas.filter(a => a.papel === 'anjo' && a.status === 'ativo' && !m.some(p => p.uid === a.uid) && (a.equipe === perfil.equipe || (a.membros || []).some(u => daEquipe.has(u))))
+      .forEach(a => m.push({ uid:a.uid, nome:a.nome, papel:'anjo', equipe:a.equipe || perfil.equipe, status:'ativo' }));
+  }
   if (perfil && perfil.papel !== 'sdr' && !souAdm() && !souMkt() && !m.some(p => p.uid === uidAtual)) m.push({ ...perfil, uid:uidAtual });
   return m.sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
 }
@@ -5645,7 +5651,7 @@ function abrirFormVisita(v, dataPadrao){
   $('vmAval').value = v?.avaliacao || '';
   if (podeGerir() || souSdr()) {
     const ms = membrosSelecionaveis();
-    let ops = ms.map(p => `<option value="${p.uid}">${esc(p.nome)}${p.papel === 'coordenador' ? ' (coordenador)' : ''}${souGerente() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`);
+    let ops = ms.map(p => `<option value="${p.uid}">${esc(p.nome)}${p.papel === 'coordenador' ? ' (coordenador)' : p.papel === 'anjo' ? ' (anjo)' : ''}${souGerente() && p.equipe ? ' · ' + esc(eqNome(p.equipe)) : ''}</option>`);
     if (souSdr()) { ops.unshift('<option value="">— sem corretor (o coordenador distribui) —</option>'); ops.push('<option value="__livre">✍️ Outra pessoa (digitar o nome)</option>'); }
     else if (v && !v.corretorUid) ops.unshift(`<option value="">${esc(v.corretorNome || 'Sem corretor')} (sem conta vinculada)</option>`);
     $('vmCorretor').innerHTML = ops.join('');
@@ -6671,7 +6677,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 162;
+const APP_VERSAO = 163;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7849,7 +7855,7 @@ function renderRelAuto(){
   const l = relatoriosLista || [];
   $('relAutoLista').innerHTML = l.length ? l.slice(0, 20).map(r => `<div class="arq-row"><div class="ai"><b>${r.tipo === 'mes' ? '📅' : '🗓️'} ${esc(r.titulo.replace('Desempenho individual · ', ''))}</b>
       <span class="muted" style="font-size:12.5px">Gerado em ${new Date(r.criadoEm).toLocaleString('pt-BR')}${r.enviado ? ' · enviado por e-mail' : ''}</span></div>
-      <button class="snooze" onclick="verRelatorio('${r.id}')">Ver</button>${r.tipo === 'mes' ? `<button class="snooze" onclick="planilhaMensal('${r.id}')" title="Planilha no modelo da gerência, com cores">📊 Planilha do mês</button>` : ''}<button class="snooze" onclick="excelRelatorio('${r.id}')">⬇ Excel</button></div>`).join('')
+      <button class="snooze" onclick="verRelatorio('${r.id}')">Ver</button>${r.tipo === 'mes' ? `<button class="snooze" onclick="planilhaMensal('${r.id}')" title="Planilha no modelo da gerência, com cores">📊 Planilha do mês</button><button class="snooze" onclick="pdfMensal('${r.id}')" title="A mesma planilha em PDF">PDF</button>` : ''}<button class="snooze" onclick="excelRelatorio('${r.id}')">⬇ Excel</button></div>`).join('')
     : '<div class="muted" style="font-size:13.5px">Nenhum relatório ainda. O semanal sai toda segunda às 8h e o mensal todo dia 1º às 8h. Você também pode gerar agora.</div>';
 }
 window.gerarRelatorioAgora = async (periodo) => {
@@ -8187,6 +8193,37 @@ function dadosPlanilhaMes(r){
 }
 // cores: verde = bom (até 5 leads por doc), amarelo = médio (até 10), roxo = acima de 10 ou lead sem nenhuma doc
 const corMed = (lead, doc) => !lead && !doc ? null : !doc ? 'FF9B30FF' : (lead / doc) <= 5 ? 'FF00FF00' : (lead / doc) <= 10 ? 'FFFFFF00' : 'FF9B30FF';
+// v162: a planilha do mês em PDF, com as mesmas colunas, cores e troféus
+window.pdfMensal = async id => {
+  const r = (relatoriosLista || []).find(x => x.id === id); if (!r || r.tipo !== 'mes') return;
+  toast('Montando o PDF…');
+  try {
+    const d = dadosPlanilhaMes(r), hex = a => '#' + a.slice(2);
+    const top = d.linhas.filter(l => l.total.doc > 0 && l.total.lead >= 5).sort((a, b) => a.total.lead / a.total.doc - b.total.lead / b.total.doc).slice(0, 3).map(l => l.nome);
+    const med = (l, dc) => !l && !dc ? '' : !dc ? 'SEM DOC' : (l / dc).toFixed(2).replace('.', ',');
+    const cel = (l, dc, forcar) => { const bg = forcar || corMed(l, dc); return `<td class="m" style="${bg ? `background:${hex(bg)};color:${bg === 'FF9B30FF' || bg === 'FF0B8A3E' ? '#fff' : '#000'};font-weight:700` : ''}">${med(l, dc)}</td>`; };
+    const n0 = v => v ? String(v).replace('.', ',') : '';
+    const tot = { c:0, r:0, s:d.semanas.map(() => ({ lead:0, doc:0 })), l:0, d:0 };
+    const linhas = d.linhas.map(l => { tot.c += l.contratos || 0; tot.r += l.reservas || 0; l.sem.forEach((x, i) => { tot.s[i].lead += x.lead; tot.s[i].doc += x.doc; }); tot.l += l.total.lead; tot.d += l.total.doc;
+      const t = top.includes(l.nome);
+      return `<tr><td class="nm">${t ? '🏆 ' : ''}${esc(l.nome)}</td><td>${n0(l.contratos)}</td><td>${n0(l.reservas)}</td><td></td>${l.sem.map(x => `<td>${x.lead || x.doc ? x.lead : ''}</td><td>${x.lead || x.doc ? x.doc : ''}</td>${cel(x.lead, x.doc)}`).join('')}<td class="sep"></td><td>${l.total.lead}</td><td>${l.total.doc}</td>${cel(l.total.lead, l.total.doc, t ? 'FF0B8A3E' : null)}</tr>`; }).join('');
+    const html = `<div id="pdfMes" style="font-family:Arial,sans-serif;color:#1e2a38;padding:10px;background:#fff">
+      <style>#pdfMes table{border-collapse:collapse;width:100%;font-size:9.5px}#pdfMes td,#pdfMes th{border:1px solid #9aa5b1;padding:3px 2px;text-align:center;white-space:nowrap}
+      #pdfMes .t1{background:#1e2a38;color:#fff;font-size:14px;font-weight:700;height:24px}#pdfMes .az{background:#0f4c81;color:#fff;font-weight:700}#pdfMes .cl{background:#dce9f5;color:#1e2a38;font-weight:700}
+      #pdfMes .nm{text-align:left;font-weight:700;padding-left:5px}#pdfMes .sep{border:0;width:6px;background:#fff}#pdfMes table.leg{width:auto;margin:8px auto 0}#pdfMes table.leg td{border:0;font-size:9px;font-weight:700;padding:0 9px}</style>
+      <table><tr><th class="t1" colspan="${4 + d.semanas.length * 3}">${esc(d.titulo)}</th><th class="sep"></th><th class="t1" colspan="3" rowspan="2">RESULTADO FINAL</th></tr>
+      <tr><th class="az" rowspan="2">CORRETOR</th><th class="az" rowspan="2">CONTRATOS</th><th class="az" rowspan="2">RESERVAS</th><th class="az" rowspan="2">INVEST.</th>${d.semanas.map(x => `<th class="az" colspan="3">${esc(x)}</th>`).join('')}<th class="sep"></th></tr>
+      <tr>${d.semanas.map(() => '<th class="cl">LEAD</th><th class="cl">DOC</th><th class="cl">MÉDIA</th>').join('')}<th class="sep"></th><th class="cl">TOTAL LEAD</th><th class="cl">TOTAL DOC</th><th class="cl">MÉDIA MENSAL</th></tr>
+      ${linhas}
+      <tr class="cl"><td class="cl">TOTAL</td><td class="cl">${n0(Math.round(tot.c * 10) / 10)}</td><td class="cl">${n0(Math.round(tot.r * 10) / 10)}</td><td class="cl"></td>${tot.s.map(x => `<td class="cl">${x.lead}</td><td class="cl">${x.doc}</td><td class="cl">${x.doc ? (x.lead / x.doc).toFixed(2).replace('.', ',') : ''}</td>`).join('')}<td class="sep"></td><td class="cl">${tot.l}</td><td class="cl">${tot.d}</td><td class="cl">${tot.d ? (tot.l / tot.d).toFixed(2).replace('.', ',') : ''}</td></tr></table>
+      <table class="leg"><tr><td>MÉDIA = LEADS ÷ DOCS (quanto menor, melhor)</td><td style="color:#0b8a3e">■ VERDE: até 5 (bom)</td><td style="color:#b59a00">■ AMARELO: de 5 a 10 (médio)</td><td style="color:#7a1fd6">■ ROXO: acima de 10 ou lead sem doc (ruim)</td><td>🏆 = 3 melhores médias do mês (mínimo de 5 leads)</td></tr></table></div>`;
+    if (!window.html2pdf) await new Promise((ok, erro) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'; sc.onload = ok; sc.onerror = () => erro(new Error('não carregou o gerador de PDF')); document.head.appendChild(sc); });
+    const box = document.createElement('div'); box.style.cssText = 'position:fixed;left:-10000px;top:0;width:1400px;background:#fff'; box.innerHTML = html; document.body.appendChild(box);
+    try { await html2pdf().set({ margin:6, filename:`Desempenho individual ${nomeMes(d.mes)}.pdf`, image:{ type:'jpeg', quality:0.96 }, html2canvas:{ scale:2, backgroundColor:'#ffffff' }, jsPDF:{ unit:'mm', format:'a4', orientation:'landscape' }, pagebreak:{ mode:['css','legacy'], avoid:'tr' } }).from(box.firstElementChild).save(); }
+    finally { box.remove(); }
+    toast('PDF pronto ✓');
+  } catch(e) { toast('Erro: ' + e.message); }
+};
 window.planilhaMensal = async id => {
   const r = (relatoriosLista || []).find(x => x.id === id); if (!r || r.tipo !== 'mes') return;
   toast('Montando a planilha…');
