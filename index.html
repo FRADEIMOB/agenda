@@ -158,7 +158,10 @@ label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin:0 0
 .stat:hover{transform:translateY(-2px)}
 .stat-ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none}
 .stat-ic svg{width:21px;height:21px}
-.stat b{font-size:24px;display:block;letter-spacing:-.02em;line-height:1.1}
+.stat b{font-size:24px;display:block;letter-spacing:-.02em;line-height:1.1;overflow-wrap:anywhere}
+.stat{min-width:0}.stat>div:last-child{min-width:0}
+/* v173: no celular o valor vendido ocupa a linha inteira para não sair da caixa */
+@media(max-width:700px){.stats{grid-auto-flow:dense}.stats .stat-largo{grid-column:1/-1}}
 .stat span{font-size:12.5px;color:var(--muted);font-weight:500}
 
 .grid-home{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
@@ -1043,6 +1046,12 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth iframe{pointer-events:none}
 .lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;transition-behavior:allow-discrete}
 
+/* v172: abas de equipe na tela de vendas */
+.vend-eq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.vend-eq button{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vend-eq button i{font-style:normal;font-weight:800;font-size:12px;background:var(--soft,#eef2f7);border-radius:999px;padding:1px 8px}
+.vend-eq button small{font-size:11.5px;opacity:.75;font-weight:600}
+@media (max-width:700px){.vend-eq{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.vend-eq button{flex:0 0 auto;flex-wrap:nowrap;white-space:nowrap}}
 /* assistente: abinha na borda direita que abre o chat */
 .ia-bolha{position:fixed;right:0;bottom:120px;z-index:27;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 9px 16px;border:1px solid rgba(255,255,255,.28);border-right:0;border-radius:14px 0 0 14px;cursor:pointer;color:#fff;
   background:linear-gradient(160deg,rgba(28,95,142,.92),rgba(18,63,99,.92));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:-6px 10px 26px rgba(18,63,99,.30);transition:transform .2s var(--ease,ease),padding .2s,right .26s var(--ease,ease)}
@@ -1869,6 +1878,31 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 #resvModal.rv-ro .sheet-body input:not([type=file]),#resvModal.rv-ro .sheet-body textarea,#resvModal.rv-ro .sheet-body select{pointer-events:none;background:var(--bg2,#f4f6f8);color:var(--text2)}
 #resvModal.rv-ro .rv-colar,#resvModal.rv-ro .rv-so-edita{display:none!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
+
+/* v173: nada sai da caixa (auditoria de todas as telas no celular e no computador) */
+.card-head>*{min-width:0}.card-head h2{overflow-wrap:anywhere}
+.stat span,.hx-lado span,.pd-kpi span{overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto}
+.row2>*,.row3>*{min-width:0}
+@media(max-width:700px){
+  .seg{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{flex:0 0 auto;white-space:nowrap}
+  .ph-acoes .seg{min-width:0;max-width:100%;overflow-x:auto}.ph-acoes .seg button{flex:1 0 auto}
+  .toolbar>*{max-width:100%;min-width:0}
+  .row2>.btn{white-space:normal;line-height:1.2;text-align:center;padding-left:10px;padding-right:10px}
+  .hx-lado span{font-size:11px}
+  .ci-bt{white-space:normal;flex:1 1 auto;text-align:center}
+  .ac-res button b small{display:block;font-size:12px}
+}
+.card-head h2{flex-wrap:wrap}
+.fn-resumo>div,.ac-nums>div{min-width:0}.fn-resumo span,.ac-nums span{overflow-wrap:anywhere}
+@media(max-width:420px){
+  .btn{white-space:normal;text-align:center}
+  .fn-resumo b{font-size:15px}
+  .ac-nums span{font-size:10px}
+  .hx-lado b{font-size:22px}.hx-lado>div{padding:8px}
+  #acResumo .ac-res button b small{display:block;font-size:11px}
+}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -2963,14 +2997,15 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
           <button class="btn btn-primary nao-sdr nao-ceo" onclick="editarReserva()">+ Nova reserva</button></div>
         <div class="stats">
           <div class="stat"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="star"></div><div><b id="vsQtd">0</b><span>Vendas no período</span></div></div>
-          <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="vsValor">R$ 0</b><span>Valor vendido</span></div></div>
+          <div class="stat stat-largo"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="chart"></div><div><b id="vsValor">R$ 0</b><span>Valor vendido</span></div></div>
           <div class="stat" onclick="vSet('caidas',!vFil.caidas)"><div class="stat-ic" style="background:var(--danger-soft);color:var(--danger)" data-ic="alert"></div><div><b id="vsCaiu">0</b><span>Caíram no período</span></div></div>
         </div>
+        <div class="seg vend-eq hide" id="vendEqAbas" role="tablist" aria-label="Filtrar por equipe"></div>
         <div class="card">
           <div class="tb-grid">
             <input id="vBusca" placeholder="Buscar cliente, CPF, corretor, empreendimento..." oninput="vSet('busca',this.value)">
             <select id="vendPeriodo" onchange="if(this.value.startsWith('m:'))garantirHistorico(this.value.slice(2));vSet('periodo',this.value)"><option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
-            <select id="vEquipe" onchange="vSet('equipe',this.value)"></select>
+            <select id="vendEquipe" class="hide" onchange="vSet('equipe',this.value)" aria-label="Equipe"></select>
           </div>
           <div id="vendLista"></div>
         </div>
@@ -6797,7 +6832,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 172;
+const APP_VERSAO = 173;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12879,24 +12914,32 @@ function aprovSdr(de, ate){
 // ---------- vendas = reservas do grupo + cartas marcadas "Venda fechada" (mesmo cliente não conta duas vezes) ----------
 let reservas = [], reservasTodas = [];
 window.vFil = { busca:'', periodo:'mes', equipe:'', caidas:false };
-window.vSet = (k, v) => { vFil[k] = v; if (k === 'busca') { clearTimeout(window._vT); window._vT = setTimeout(render, 250); } else render(); };
+// v173: a tela de Vendas tem os filtros dela (antes dividia com a de Visitas)
+const vendFil = window.vFil;
+window.vSet = (k, v) => { vendFil[k] = v; if (k === 'busca') { clearTimeout(window._vT); window._vT = setTimeout(render, 250); } else render(); };
 function faixaVend(p){ if (p && p.startsWith('m:')) return faixaDoMes(p); return p === 'todas' ? ['0000-01-01','9999-12-31'] : p === 'passado' ? faixaMesRel(1) : faixa(p === 'semana' ? 'semana' : 'mes'); }
 function renderVendas(){
   if (view !== 'vendas') return;
   $('vendSub').textContent = opTudo() ? 'Reservas feitas. Cada reserva conta como venda.' : 'As suas reservas. Cadastre aqui e mande o texto pronto no grupo de reservas.';
-  const [de, ate] = faixaVend(vFil.periodo), t = norm(vFil.busca), dig = soDig(vFil.busca);
-  const eqF = vFil.equipe;
-  preencherSel('vendPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option>', vFil.periodo);
-  $('vEquipe').classList.toggle('hide', !opTudo());
-  $('vEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${vFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  const [de, ate] = faixaVend(vendFil.periodo), t = norm(vendFil.busca), dig = soDig(vendFil.busca);
+  const eqF = vendFil.equipe;
+  preencherSel('vendPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option>', vendFil.periodo);
   const comCor = reservasTodas.map(r => ({ ...r, cor:corretoresDaReserva(r.corretorTexto) }));
-  const noP = comCor.filter(r => r.dia >= de && r.dia <= ate && (!eqF || r.cor.some(c => c.equipe === eqF)));
+  // v172: abas por equipe (com quantas vendas e o valor de cada uma no período)
+  const ehDaEq = (r, e) => e === '_sem' ? !r.cor.some(c => listaEquipes().some(x => x.id === c.equipe)) : r.cor.some(c => c.equipe === e);
+  const doP = comCor.filter(r => r.dia >= de && r.dia <= ate);
+  if (opTudo()) { const conta = e => doP.filter(r => !r.caiu && !r.arquivado && (!e || ehDaEq(r, e)));
+    const abas = [['', 'Todas'], ...listaEquipes().map(e => [e.id, eqNome(e.id)])]; if (conta('_sem').length) abas.push(['_sem', 'Sem equipe']);
+    $('vendEqAbas').innerHTML = abas.map(([k, n]) => { const l = conta(k), v = l.reduce((a, r) => a + (Number(r.valor) || 0), 0);
+      return `<button role="tab" aria-selected="${(eqF || '') === k}" class="${(eqF || '') === k ? 'on' : ''}" onclick="vSet('equipe','${k}')">${esc(n)}<i>${l.length}</i>${v ? `<small>${brl(v)}</small>` : ''}</button>`; }).join(''); }
+  $('vendEqAbas').classList.toggle('hide', !opTudo());
+  const noP = doP.filter(r => !eqF || ehDaEq(r, eqF));
   const ativas = noP.filter(r => !r.caiu && !r.arquivado), caidas = noP.filter(r => r.caiu);
   $('vsQtd').textContent = ativas.length; $('vsValor').textContent = brl(ativas.reduce((a,r) => a + (Number(r.valor) || 0), 0)); $('vsCaiu').textContent = caidas.length;
-  const l = (vFil.caidas ? caidas : ativas).filter(r => !t || norm([r.cliente, r.corretorTexto, r.empreendimento, r.construtora, r.cor.map(c => c.nome).join(' ')].join(' ')).includes(t) || (dig.length >= 3 && (soDig(r.cpf).includes(dig) || soDig(r.telefone).includes(dig))))
+  const l = (vendFil.caidas ? caidas : ativas).filter(r => !t || norm([r.cliente, r.corretorTexto, r.empreendimento, r.construtora, r.cor.map(c => c.nome).join(' ')].join(' ')).includes(t) || (dig.length >= 3 && (soDig(r.cpf).includes(dig) || soDig(r.telefone).includes(dig))))
     .sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
   const g = opTudo();
-  $('vendLista').innerHTML = (vFil.caidas ? `<div class="hint" style="margin:0 0 10px">Mostrando as vendas que caíram. <button class="link" onclick="vSet('caidas',false)">Voltar para as vendas</button></div>` : '')
+  $('vendLista').innerHTML = (vendFil.caidas ? `<div class="hint" style="margin:0 0 10px">Mostrando as vendas que caíram. <button class="link" onclick="vSet('caidas',false)">Voltar para as vendas</button></div>` : '')
     + (l.length ? l.map(r => `<div class="vcard" style="--vc:${r.caiu ? 'var(--danger)' : 'var(--ok)'}">
       <div class="v-time"><b style="font-size:15px">${r.dia ? r.dia.slice(8,10) + '/' + r.dia.slice(5,7) : '--'}</b><span>${r.caiu ? 'caiu' : 'reserva'}</span></div>
       <div class="v-body" ${g || (r.corretorUids || []).includes(uidAtual) ? `onclick="editarReserva('${r.id}')"` : 'style="cursor:default"'}>
@@ -12905,7 +12948,7 @@ function renderVendas(){
         ${r.caiu && r.motivoCaiu ? `<div class="v-obs">✖ ${esc(r.motivoCaiu)}</div>` : r.obs ? `<div class="v-obs">📝 ${esc(r.obs)}</div>` : ''}
       </div>
       <div class="v-actions">${r.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(r.telefone)}')">${IC.wa}WhatsApp</button>` : ''}${g ? (r.caiu ? `<button class="snooze" onclick="restaurarReserva('${r.id}')">↩ Voltar a contar</button>` : `<button class="snooze" onclick="editarReserva('${r.id}')">Editar</button>`) : ''}</div>
-    </div>`).join('') : vazio(vFil.caidas ? 'Nenhuma venda caiu nesse período' : 'Nenhuma venda nesse período', 'Mude o período ou cadastre pelo botão "Nova reserva".'));
+    </div>`).join('') : vazio(vendFil.caidas ? 'Nenhuma venda caiu nesse período' : 'Nenhuma venda nesse período', 'Mude o período ou cadastre pelo botão "Nova reserva".'));
 }
 let rvId = null;
 // o mesmo texto que os corretores mandam no grupo de reservas
@@ -14173,7 +14216,7 @@ function rankingSdr(de, ate){
   sdrResumos.filter(s => s.dia >= de && s.dia <= ate).forEach(s => {
     const x = pega(s.sdrUid, s.sdrNome), nv = s.novos || {}, rc = s.recuperados || {};
     const soma = (o, k) => (Number(o.crm?.[k]) || 0) + (Number(o.insta?.[k]) || 0);
-    x.leads += soma(nv, 'lead'); x.docs += soma(nv, 'doc') + soma(rc, 'doc'); x.cpfs += soma(nv, 'cpf') + soma(rc, 'cpf'); x.recup += soma(rc, 'lead');
+    x.leads += soma(nv, 'lead'); x.docs += soma(nv, 'doc') + soma(rc, 'doc') + soma(nv, 'cpf') + soma(rc, 'cpf'); x.cpfs += soma(nv, 'cpf') + soma(rc, 'cpf'); x.recup += soma(rc, 'lead');
     x.aprov += Number(s.aprovDia) || 0; x.outroCca += Number(s.aprovOutroCca) || 0;
     x.dias.push({ dia:s.dia, leads:soma(nv, 'lead'), docs:soma(nv, 'doc') + soma(rc, 'doc') + soma(nv, 'cpf') + soma(rc, 'cpf') });
   });
@@ -14186,7 +14229,7 @@ function tabelaSdr(de, ate){
   const pos = posicoes(l);
   return `<div style="overflow-x:auto"><table class="rank rk-sdr"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th>Docs</th><th title="Dias com média de até 3 leads por doc">Dias na média</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
     l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span>${ehWa(x.uid) && souGerente() && !souCeo() ? `<button class="link" style="display:block;font-size:12px" onclick="vincularSdrWa('${esc(x.nome).replace(/'/g, '&#39;')}')">Vincular à SDR do app</button>` : ''}</td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td>${x.docs}</td><td>${x.diasMedia || 0}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
-    <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam. Dias na média: dias com pelo menos ${SDR_MIN_LEADS} leads novos em que a média ficou em até ${SDR_MEDIA_PADRAO} (leads novos ÷ docs + CPFs do dia, novos e recuperados).</div></details>`;
+    <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam. CPF conta como documentação (a coluna CPFs mostra quantos dos docs foram de CPF). Dias na média: dias com pelo menos ${SDR_MIN_LEADS} leads novos em que a média ficou em até ${SDR_MEDIA_PADRAO} (leads novos ÷ docs + CPFs do dia, novos e recuperados).</div></details>`;
 }
 
 // ---------- resumo do dia das SDRs ----------
@@ -14553,7 +14596,7 @@ function renderResumoView(){
   { const m0 = mesAtual() + '-01', eu = rankingSdr(m0, fimDoMes(mesAtual())).find(x => x.uid === uidAtual);
     $('resAviso').innerHTML += `<div class="ci-resumo" style="margin:0 0 12px;font-size:14px">📊 <b>${nomeMes(mesAtual())}:</b> ${eu ? eu.docs : 0} docs · <b>${eu ? eu.diasMedia : 0} dia${(eu ? eu.diasMedia : 0) === 1 ? '' : 's'} na média</b> <span class="muted">(até ${SDR_MEDIA_PADRAO} leads novos por doc/CPF, nos dias com ${SDR_MIN_LEADS}+ leads)</span></div>`; }
   const naMedia = r => { const d = so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf'), l = so(r.novos,'lead'); return l >= SDR_MIN_LEADS && d > 0 && l / d <= SDR_MEDIA_PADRAO; };
-  $('resLista').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}${naMedia(r) ? ' <span style="color:var(--ok);font-weight:700">✓ na média</span>' : ''}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc')} docs · ${so(r.novos,'cpf') + so(r.recuperados,'cpf')} CPFs · ${v(r.aprovDia)} aprov.</b></div>`).join('')
+  $('resLista').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}${naMedia(r) ? ' <span style="color:var(--ok);font-weight:700">✓ na média</span>' : ''}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf')} docs (${so(r.novos,'cpf') + so(r.recuperados,'cpf')} de CPF) · ${v(r.aprovDia)} aprov.</b></div>`).join('')
     : '<div class="muted" style="font-size:13.5px">Nenhum resumo ainda.</div>';
 }
 window.abrirColarSdr = () => {
@@ -14576,7 +14619,8 @@ function lerFormResumo(){
   CAMPOS_RES.forEach(([s,c]) => ['lead','doc','cpf'].forEach(k => r[s][c][k] = n(`res_${s}_${c}_${k}`)));
   return r;
 }
-const docsDoResumo = r => ['novos','recuperados'].reduce((a, k) => a + ['crm','insta'].reduce((b, c) => b + (Number(r[k]?.[c]?.doc) || 0), 0), 0);
+// v173: CPF também conta como documentação
+const docsDoResumo = r => ['novos','recuperados'].reduce((a, k) => a + ['crm','insta'].reduce((b, c) => b + (Number(r[k]?.[c]?.doc) || 0) + (Number(r[k]?.[c]?.cpf) || 0), 0), 0);
 async function gravarResumo(r, sdr){
   const id = `${r.dia}_${sdr.uid}`;
   if (!ehWa(sdr.uid)) { const m = r.dia.slice(0, 7); try { await setDoc(doc(db,'ranking_ativ', m + '_' + sdr.uid), { mes:m, uid:sdr.uid, nome:sdr.nome || '', equipe:sdr.equipe || '', sdoc:{ [r.dia]:docsDoResumo(r) }, atualizadoEm:Date.now() }, { merge:true }); } catch(e) { console.warn('docs da SDR no ranking', e.message); } }
