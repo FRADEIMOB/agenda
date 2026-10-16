@@ -3304,8 +3304,8 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
             <div class="int-bloco"><b>5. Abas que o app não lê</b><span>Uma aba por linha, com o nome igual ao da planilha. As avaliações dessas abas somem do app, do painel e dos relatórios (a planilha não é alterada e nada é apagado).</span>
               <textarea id="intIgnoradas" style="min-height:120px;margin-top:8px"></textarea>
               <button class="btn btn-primary" style="margin-top:8px" onclick="salvarAbasIgnoradas()">Salvar abas</button></div>
-            <div class="int-bloco"><b>6. Docs do WhatsApp</b><span>Envie o arquivo <b>docs-whatsapp.json</b> (preparado a partir das conversas com o correspondente). Entram só os clientes que não estão na planilha; se a administração lançar o cliente depois, o do WhatsApp some sozinho para não contar duas vezes.</span>
-              <div class="int-linha"><button class="btn btn-ghost" onclick="document.getElementById('impWhatsArq').click()">Escolher arquivo</button><input type="file" id="impWhatsArq" class="hide" accept=".json,application/json" onchange="lerDocsWhats(this)"></div>
+            <div class="int-bloco"><b>6. Docs do WhatsApp</b><span>Escolha os <b>.zip das conversas</b> com o correspondente (exportadas do WhatsApp, pode escolher vários de uma vez) ou o arquivo <b>docs-whatsapp.json</b>. O app lê as conversas com as mesmas regras (prestação a partir de 28% da renda conta como aprovada). Entram só os clientes que não estão na planilha; se a administração lançar o cliente depois, o do WhatsApp some sozinho para não contar duas vezes.</span>
+              <div class="int-linha"><button class="btn btn-primary" onclick="document.getElementById('impZipArq').click()">Escolher .zip das conversas</button><input type="file" id="impZipArq" class="hide" multiple accept=".zip,.txt,application/zip,text/plain" onchange="lerZipsWhats(this)"><button class="btn btn-ghost" onclick="document.getElementById('impWhatsArq').click()">Arquivo .json</button><input type="file" id="impWhatsArq" class="hide" accept=".json,application/json" onchange="lerDocsWhats(this)"></div>
               <div id="impWhatsInfo" class="hint" style="margin:6px 0"></div>
               <button class="btn btn-primary hide" id="btnImpWhats" onclick="importarDocsWhats()">Importar</button></div>
             <div class="int-bloco"><b>9. Reservas (vendas) do WhatsApp</b><span>Envie o arquivo <b>reservas-whatsapp.json</b> (tirado do grupo de reservas). Cada reserva conta como venda, sem repetir cliente. Pode enviar de novo depois: as que já existem só são atualizadas.</span>
@@ -6836,7 +6836,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 176;
+const APP_VERSAO = 179;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7215,13 +7215,19 @@ function pontosDoMes(m, val){
     else if (r.status === 'Não compareceu') { x.faltas++; x.pontos += n('vFalta'); }
     else x.pontos += n('vPendente');
   });
+  const usaReservas = !!window._rvOk && rankingVendas.length > 0;
+  const ptVenda = ind => ind && n('vendaInd') ? n('vendaInd') : n('venda');
   rankingCartas.filter(r => !r.semPontos).forEach(r => {
     const aprov = noMes(r.data), venda = r.status === 'Venda fechada' && noMes(r.vendaEm || r.data);
     if (!aprov && !venda) return;
     const x = pega(r);
     if (aprov) { x.cartas++; x.pontos += n('carta'); if (r.docsCompletos) { x.docs++; x.pontos += n('docs'); } }
-    if (venda) { x.vendas++; x.pontos += n(r.indicacao ? 'vendaInd' : 'venda'); }
+    if (venda && !usaReservas) { x.vendas++; if (r.indicacao) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!r.indicacao); }
   });
+  // v179: vendas = reservas do mês (sem as que caíram). Em parceria, conta para cada corretor da reserva. Indicação vale os pontos de "Venda por indicação"
+  if (usaReservas) rankingVendas.filter(v => !v.caiu && noMes(v.dia)).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
+    const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
+    x.vendas++; if (v.ind) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!v.ind); }));
   // presença no plantão, ligações e recontatos (resumo por corretor e mês, sem dados de cliente)
   rankingAtiv.filter(r => r.mes === m && r.uid).forEach(r => {
     const x = pega({ corretorUid:r.uid, corretorNome:(RK().find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
@@ -7373,7 +7379,7 @@ function tabelaPontos(linhas){
   if (!linhas.length) return vazio('Sem pontos neste mês', 'Assim que houver visitas, cartas ou vendas, a tabela aparece aqui.');
   const pos = posicoes(linhas);
   return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th title="Dias no escritório">Presenças</th><th title="Ligações e recontatos registrados no app. Entre parênteses, os pontos que elas deram">Ligações</th><th class="hide-m" title="Dias de trabalho sem presença">Ausências</th><th>Pontos</th></tr></thead><tbody>${
-    linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}</td><td>${x.presencas ?? '–'}</td><td>${x.ligacoes === undefined ? '–' : `${x.ligacoes}${ptsLig(x.ligacoes) ? ` <small class="muted">(+${ptsLig(x.ligacoes)})</small>` : ''}`}</td><td class="hide-m">${x.ausencias ? `${x.ausencias} <small class="muted">(${x.ausencias * (Number(appCfg.pontos.ausencia) || 0)})</small>` : (x.ausencias === undefined ? '–' : 0)}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
+    linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}${x.vendasInd ? ` <small class="muted">(${x.vendasInd} ind.)</small>` : ''}</td><td>${x.presencas ?? '–'}</td><td>${x.ligacoes === undefined ? '–' : `${x.ligacoes}${ptsLig(x.ligacoes) ? ` <small class="muted">(+${ptsLig(x.ligacoes)})</small>` : ''}`}</td><td class="hide-m">${x.ausencias ? `${x.ausencias} <small class="muted">(${x.ausencias * (Number(appCfg.pontos.ausencia) || 0)})</small>` : (x.ausencias === undefined ? '–' : 0)}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
   }</tbody></table><div class="hint" style="margin-top:8px">Ligações: a cada ${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)} registradas no app, ${Number(appCfg.pontos.ligacao) || 0} ponto${Number(appCfg.pontos.ligacao) === 1 ? '' : 's'}. Os pontos de presença, ligações e ausências já estão somados no total.</div>`;
 }
 function faixaOrig(){ const [mi, mf] = faixa('mes'); return origPer === '3m' ? [somaDias(hojeISO(), -89), mf] : [mi, mf]; }
@@ -8752,11 +8758,162 @@ window.previaLeads = () => {
   $('impLeadsPrev').innerHTML = lista.slice(0, 40).map(([n, q]) => `<div class="pt-row"><span>👤 ${esc(n)}</span><b>${q}</b></div>`).join('');
   $('btnImpLeads').disabled = !unicos.length;
 };
+// v178: leitor das conversas do WhatsApp com o correspondente (a mesma regra do arquivo docs-whatsapp.json, agora dentro do app)
+const PC = (() => {
+  const norm = s => String(s || '').normalize('NFD').replace(/[^\x00-\x7f]/g, '').toLowerCase();
+  const dig = s => String(s || '').replace(/\D/g, '');
+  const ABA_ESP = { 'mateus silva':'MATEUS S.', 'guilherme m.':'GUILHERME M.', 'anna rafaella':'ANNA', 'ana flavia':'ANA FLAVIA', 'eustaquio':'EUSTAQUIO', 'robson barreto':'ROBSON', 'luis':'LUIS EDUARDO', 'ewerton':'EWERTON' };
+  function abaDoNome(arq){
+    let n = String(arq || '').replace(/\.(zip|txt)$/i, '').replace(/^[0-9a-f]{8}-/i, '').replace(/^(whatsapp chat( with| -)?|conversa do whatsapp com)\s*/i, '');
+    n = norm(n.replace(/_/g, ' ')).split(/\s+cr\s?e?dito\b/)[0].replace('fl via', 'flavia').replace('eust quio', 'eustaquio').replace(/\s+/g, ' ').trim();
+    return ABA_ESP[n] || (n.split(' ')[0] || 'WHATSAPP').toUpperCase();
+  }
+  function msgsDe(txt){
+    txt = String(txt || '').replace(/‎/g, '').replace(/ /g, ' ').replace(/‑/g, '-').replace(/\r/g, '');
+    const HDR = /^\[(\d{1,2})\/(\d{1,2})\/(\d{2,4}),\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*([AP]M)?\]\s*(?:-\s*)?([^:\n]{1,60}):\s?/gm;
+    const ms = [...txt.matchAll(HDR)];
+    const us = ms.some(m => +m[2] > 12) && !ms.some(m => +m[1] > 12);
+    return ms.map((m, i) => { const a = +m[1], b = +m[2], [mo, d] = us ? [a, b] : [b, a]; let y = +m[3]; if (y < 100) y += 2000;
+      return { dia:`${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`, autor:m[7].trim(), t:txt.slice(m.index + m[0].length, i + 1 < ms.length ? ms[i + 1].index : txt.length) }; });
+  }
+  const ehPrime = a => norm(a).includes('prime') || norm(a).startsWith('david soares');
+  function blocos(t){
+    const out = [];
+    for (const p of t.split(/(?=(?:an[aá]lise de cr[eé]dito|verificar cpf|consulta cpf)\s*[:/*]?)/i)) {
+      if (!/nome\s*:/i.test(p)) continue;
+      const tipo = /^\s*(verificar|consulta) cpf/i.test(p) ? 'verificar' : 'avaliacao';
+      const g = rx => { const m = p.match(rx); return m ? m[1].trim() : ''; };
+      const nome = g(/nome\s*:[ \t]*([^\n]*)/i), cpf = dig(g(/cpf\s*:[ \t]*([^\n]*)/i)).slice(0, 11);
+      const tel = g(/telefone\s*:[ \t]*([^\n]*)/i), renda = g(/renda total\s*:[ \t]*([^\n]*)/i) || g(/renda informal\s*:[ \t]*([^\n]*)/i) || g(/renda cadastrada\s*:[ \t]*([^\n]*)/i);
+      out.push({ tipo, nome:nome.slice(0, 80), cpf:cpf.length === 11 ? cpf : '', tel:tel.slice(0, 30), renda:renda.slice(0, 30),
+        restr:g(/ver se tem restri[cç][aã]o\s*:?[ \t]*([^\n]*)/i), parc:g(/parcela e prazo[^:\n]*:[ \t]*([^\n]*)/i), occa:g(/est[aá] em outro cca\??\s*:?[ \t]*([^\n]*)/i), corpo:norm(p) });
+    }
+    return out;
+  }
+  function veredito(txt){
+    let T = norm(txt);
+    T = T.replace(/ver se tem restri\w*\s*:?[^\n]*/g, '').replace(/parcela e prazo[^\n]*/g, '').replace(/est[a]? em outro cca\??[^\n]*/g, '').replace(/(sem|nao possui|nao tem|nao consta|nenhuma|livre de)\s+restri\w*/g, '');
+    const m = T.match(/retorno da an[a]?lise\s*\*?\s*:\s*([^\n]+)/), s = m ? m[1] : T;
+    if (s.includes('reprov') || /nao aprovad/.test(s)) return s.includes('bacen') ? 'REPROVADO/BACEN' : 'REPROVADO';
+    if (s.includes('condicion')) return 'CONDICIONADO';
+    if (s.includes('aprovad') && (m || !/carta aprovada|parcela aprovada|aprovada conosco|ja aprovad/.test(s))) return s.includes('bacen') ? 'APROVADO/BACEN' : (s.includes('outro') ? 'APROVADO/OUTRO CCA' : 'APROVADO');
+    if (/(consta|possui|tem|com)\s+restri|restri\w*\s*:\s*(sim|consta)/.test(s) || (s.includes('bloquead') && !s.includes('desbloq'))) return 'RESTRIÇÕES';
+    if (/outro cca|outro correspondente/.test(s)) return 'OUTRO CCA';
+    if (/(?<!nao )(consta|tem|possui) carta|possui cara|carta (valida|ativa)|analise valida/.test(s) && !/(nao|sem) (tem |possui )?carta/.test(s)) return 'CONSTA CARTA';
+    if (s.includes('possui imovel')) return 'POSSUI IMÓVEL';
+    return null;
+  }
+  const chave = b => b.cpf ? 'c' + b.cpf : (dig(b.tel).length >= 10 ? 't' + dig(b.tel).slice(-9) : null);
+  function valor(t, rx){
+    const mm = t.match(rx); if (!mm) return 0;
+    let x = mm[1].replace(/[^\d,.]/g, '').replace(/\.(?=\d*\.)/g, '');
+    if (x.includes(',')) x = x.replace(/\./g, '').replace(',', '.');
+    else if ((x.match(/\./g) || []).length === 1 && x.split('.')[1].length === 3) x = x.replace('.', '');
+    const n = parseFloat(x); return isNaN(n) ? 0 : n;
+  }
+  // grupos: [{ nome:'Laiane Crédito - FRADE PRIME.zip', texto:'...' }]
+  function converter(grupos, limite = 0.28){
+    const clientes = {};
+    for (const gr of grupos) {
+      const aba = abaDoNome(gr.nome), ms = msgsDe(gr.texto);
+      let ultimo = null, pend = [];
+      for (const m of ms) {
+        const prime = ehPrime(m.autor), bs = blocos(m.t);
+        if (!prime) {
+          for (const b of bs) {
+            const k = chave(b); if (!k) continue;
+            let c = clientes[k];
+            if (!c) c = clientes[k] = { k, aba, data:m.dia, nome:b.nome, cpf:b.cpf, telefone:b.tel, renda:b.renda, status:b.tipo === 'verificar' ? 'VERIFICAR CPF' : 'AVALIAÇÃO', aprovadoEm:'', ult:m.dia, final:false };
+            else {
+              c.ult = m.dia; c.aba = aba;
+              if (b.tipo === 'avaliacao') {
+                if (c.status === 'VERIFICAR CPF') c.status = 'AVALIAÇÃO';
+                if (!(c.status.startsWith('APROVADO') || ['CONDICIONADO','REPROVADO','REPROVADO/BACEN'].includes(c.status))) c.final = false;
+              }
+              for (const [f, v] of [['nome', b.nome], ['telefone', b.tel], ['renda', b.renda]]) if (v && !c[f]) c[f] = v;
+            }
+            ultimo = k;
+          }
+          continue;
+        }
+        // resposta da Prime
+        const cpfs = [...new Set((m.t.match(/\d{3}\.?\d{3}\.?\d{3}[-.]?\d{2}/g) || []).map(dig).filter(x => x.length === 11))];
+        let v = veredito(m.t);
+        // regra do gestor: prestação a partir de 28% da renda é aprovação; bem abaixo disso é condicionado
+        if (['APROVADO','APROVADO/BACEN','APROVADO/OUTRO CCA','CONDICIONADO'].includes(v)) {
+          const rd = valor(m.t, /renda[^:\n]*:[ \t]*([^\n]+)/i), pr = valor(m.t, /presta[cç][aã]o[^:\n]*:[ \t]*([^\n]+)/i);
+          if (rd > 500 && pr > 50 && pr < rd) v = (pr / rd >= limite ? 'APROVADO' + (norm(m.t).includes('bacen') ? '/BACEN' : '') : 'CONDICIONADO');
+        }
+        if (v && /retorno da an[a]?lise/.test(norm(m.t))) for (const c of cpfs) if (!clientes['c' + c]) {
+          const nm = ((m.t.match(/nome[^:\n]*:[ \t]*([^\n]+)/i) || [])[1] || '').trim(), rd = ((m.t.match(/renda\s*:[ \t]*([^\n]+)/i) || [])[1] || '').trim();
+          clientes['c' + c] = { k:'c' + c, aba, data:m.dia, nome:nm.slice(0, 80) || 'CLIENTE CPF ' + c.slice(0, 3) + '***', cpf:c, telefone:'', renda:rd.slice(0, 30), status:'AVALIAÇÃO', aprovadoEm:'', ult:m.dia, final:false };
+        }
+        let alvos = cpfs.map(c => 'c' + c).filter(k => clientes[k]);
+        if (!alvos.length && bs.length) for (const b of bs) { const k = chave(b); if (clientes[k]) alvos.push(k); }
+        if (!alvos.length && v && ultimo && !clientes[ultimo].final) alvos = [ultimo];
+        if (!alvos.length && v && !bs.length) { pend = pend.filter(x => !clientes[x].final); if (pend.length) alvos = [pend.pop()]; }
+        for (const b of bs) {
+          const k = chave(b); if (!clientes[k]) continue;
+          const lim = x => norm(x).replace(/^[\s?:*\-–]+/, '');
+          const R = lim(b.restr), P = lim(b.parc), O = lim(b.occa), C = b.corpo;
+          const negc = /(nao|sem)\s+(tem\s+|possui\s+)?carta|^nao\b/.test(P);
+          const carta = (!negc && (!!dig(P) || /^(sim|possui|tem|consta|valores)/.test(P))) || /(?<!nao )(tem|consta|possui) carta|carta (valida|ativa)/.test(C);
+          const restr = /^(sim|consta|serasa|spc|possui|tem|cadin|bacen|restri)/.test(R) && !/^(nada consta|nao|sem)/.test(R);
+          const occa = /^sim/.test(O);
+          if (/^solicitad/.test(P)) { Object.assign(clientes[k], { status:'AVALIAÇÃO', final:false, ult:m.dia }); ultimo = k; pend = pend.filter(x => x !== k).concat(k); continue; }
+          const st = /^reprov/.test(P) ? 'REPROVADO' : carta && occa ? 'CARTA EM OUTRO CCA' : carta ? 'CONSTA CARTA' : restr ? 'RESTRIÇÕES' : occa ? 'OUTRO CCA' : null;
+          if (st) Object.assign(clientes[k], { status:st, final:true, ult:m.dia });
+          else if (R || P || O) clientes[k].final = true;
+        }
+        if (bs.length) v = null;
+        if (v) for (const k of alvos) { const c = clientes[k]; c.status = v; c.final = true; c.ult = m.dia; if (v.startsWith('APROVADO') || v === 'CONDICIONADO') c.aprovadoEm = c.aprovadoEm || m.dia; }
+      }
+    }
+    return Object.values(clientes).map(c => {
+      const nome = c.nome || (c.cpf ? 'CLIENTE CPF ' + c.cpf.slice(0, 3) + '***' : 'CLIENTE TEL ' + dig(c.telefone).slice(-4));
+      return { id:c.cpf ? 'w' + c.cpf : 'wt' + dig(c.telefone).slice(-11), aba:c.aba, data:c.data, nome, cpf:c.cpf, telefone:c.telefone, renda:c.renda, status:c.status, aprovadoEm:c.aprovadoEm };
+    }).sort((a, b) => (a.data + a.aba).localeCompare(b.data + b.aba));
+  }
+  return { converter, abaDoNome };
+})();
+
+async function carregarJSZip(){
+  if (window.JSZip) return window.JSZip;
+  await new Promise((ok, erro) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'; s.onload = ok; s.onerror = erro; document.head.appendChild(s); });
+  return window.JSZip;
+}
+// v178: importar direto os .zip exportados do WhatsApp (sem precisar do arquivo pronto)
+window.lerZipsWhats = async input => {
+  const fs = [...(input.files || [])]; input.value = ''; if (!fs.length) return;
+  $('impWhatsInfo').textContent = `Lendo ${fs.length} arquivo${fs.length > 1 ? 's' : ''}…`; $('btnImpWhats').classList.add('hide');
+  try {
+    const grupos = [], ignorados = [], semTexto = [];
+    const nomeDoGrupo = (arq, txt) => { const m = [...String(txt).matchAll(/(?:mudou o nome do grupo para|mudou o nome de .{0,40}? para|criou o grupo|changed the group name to|created group)\s*[“"]([^”"\n]+)[”"]/gi)].pop(); return /cr.?dito|credito|sdr/i.test(PC.abaDoNome(arq) === 'WHATSAPP' ? '' : arq) ? arq : (m ? m[1] : arq); };
+    for (const f of fs) {
+      let txt = '';
+      if (/\.txt$/i.test(f.name)) txt = await f.text();
+      else { const Z = await carregarJSZip(), z = await Z.loadAsync(f), ts = Object.values(z.files).filter(x => !x.dir && /\.txt$/i.test(x.name) && !/__MACOSX/.test(x.name));
+        if (!ts.length) { semTexto.push(f.name); continue; }
+        const melhor = ts.sort((a, b) => (b._data?.uncompressedSize || 0) - (a._data?.uncompressedSize || 0))[0]; txt = await melhor.async('string'); }
+      const nome = nomeDoGrupo(f.name, txt), aba = PC.abaDoNome(nome);
+      // grupos que não são de crédito (resumo das SDRs, reservas, apresentação, análise da Tenda) ficam de fora
+      if (['SDR','RESERVAS','APRESENTACAO','FRADE','WHATSAPP'].includes(aba)) { ignorados.push(f.name); continue; }
+      grupos.push({ nome, texto:txt });
+    }
+    const lista = PC.converter(grupos);
+    const porAba = {}; lista.forEach(a => porAba[a.aba] = (porAba[a.aba] || 0) + 1);
+    prepararImpWhats(lista, `${grupos.length} conversa${grupos.length !== 1 ? 's' : ''} lida${grupos.length !== 1 ? 's' : ''} (${Object.entries(porAba).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}: ${n}`).join(' · ')})${ignorados.length ? ` · ${ignorados.length} sem ser de crédito ficaram de fora` : ''}${semTexto.length ? ` · ${semTexto.length} .zip sem a conversa dentro` : ''}. `);
+  } catch(e) { $('impWhatsInfo').textContent = 'Não consegui ler os arquivos: ' + e.message; }
+};
 let impWhats = [];
 window.lerDocsWhats = async input => {
   const f = input.files && input.files[0]; input.value = ''; if (!f) return;
-  try {
-    const j = JSON.parse(await f.text()); impWhats = (Array.isArray(j) ? j : j.avaliacoes || []).filter(a => a && a.id && a.aba);
+  try { const j = JSON.parse(await f.text()); prepararImpWhats((Array.isArray(j) ? j : j.avaliacoes || []), ''); }
+  catch(e) { $('impWhatsInfo').textContent = 'Não consegui ler o arquivo: ' + e.message; }
+};
+function prepararImpWhats(lista, antes){
+  {
+    impWhats = (lista || []).filter(a => a && a.id && a.aba);
     const jaTem = new Set(avaliacoesTodas.filter(a => a.origem !== 'whatsapp').flatMap(a => [a.cpfNorm && 'c' + a.cpfNorm, a.telNorm && 't' + a.telNorm]).filter(Boolean));
     const ck = a => { const c = soDig(a.cpf); return c.length === 11 ? 'c' + c : 't' + chaveTel(a.telefone); };
     const novos = impWhats.filter(a => !jaTem.has(ck(a)));
@@ -8765,8 +8922,9 @@ window.lerDocsWhats = async input => {
     $('impWhatsInfo').innerHTML = `${impWhats.length} clientes no arquivo · <b>${novos.length}</b> ainda não estão na planilha (${Object.entries(porMes).sort().map(([m,n]) => `${nomeMes(m)}: ${n}`).join(' · ')}) · <b>${ap}</b> aprovados.${impWhats.length > novos.length ? ` ${impWhats.length - novos.length} já foram lançados na planilha e ficam de fora.` : ''}`;
     impWhats = novos;
     $('btnImpWhats').classList.toggle('hide', !novos.length); $('btnImpWhats').textContent = `Importar ${novos.length} docs`;
-  } catch(e) { $('impWhatsInfo').textContent = 'Não consegui ler o arquivo: ' + e.message; }
-};
+    if (antes) $('impWhatsInfo').innerHTML = esc(antes) + $('impWhatsInfo').innerHTML;
+  }
+}
 let impRes = [];
 window.lerReservasArq = async input => {
   const f = input.files && input.files[0]; input.value = ''; if (!f) return;
@@ -13129,14 +13287,17 @@ let rankingVendas = [];
 Object.defineProperty(window, 'rankingVendas', { get: () => rankingVendas });
 let _sincT = null;
 window.sincVendasRanking = () => sincVendasRanking();
+// v179: venda de indicação x venda de lead (pela ORIGEM LEAD da reserva)
+const ehVendaIndicacao = r => /indica/.test(norm([r.origem, r.origemLead, r.criativo].filter(Boolean).join(' ')));
+window.ehVendaIndicacao = ehVendaIndicacao;
 function sincVendasRanking(){
   if (!souGerente() || souCeo() || !window._rvOk || !perfisLista.length) return;
   clearTimeout(_sincT); _sincT = setTimeout(async () => {
     const atual = new Map(rankingVendas.map(x => [x.id, x])), b = writeBatch(db); let n = 0;
     reservasTodas.forEach(r => {
-      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
+      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), ind:ehVendaIndicacao(r), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
       const a = atual.get(r.id);
-      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
+      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || !!a.ind !== d.ind || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
       // quem pode ver a reserva no app (o próprio corretor e o parceiro)
       const uids = d.corretores.map(c => c.uid).filter(Boolean); if (r.criadoPor && !uids.includes(r.criadoPor)) uids.push(r.criadoPor);
       if (JSON.stringify(r.corretorUids || []) !== JSON.stringify(uids) && n < 400) { b.set(doc(db,'reservas',r.id), { corretorUids:uids }, { merge:true }); n++; }
@@ -13470,7 +13631,19 @@ function contextoAssistente(){
         ...(perfil?.papel === 'sdr' ? { minhas_visitas_sdr:D.sdr.filter(x => x.uid === uidAtual).map(x => ({ visitas:x.visitas, realizadas:x.realizadas, leads:x.leads, docs:x.docs, aprovacoes:x.aprov })) } : {}) }; };
     const h = hojeISO(), proximas = visitas.filter(v => esc.has(v.corretorUid) && v.date >= h && v.date <= somaDias(h, 7) && v.status !== 'Cancelada' && !v.arquivado)
       .sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || ''))).slice(0, 40).map(v => ({ dia:v.date, hora:v.time || '', cliente:primeiro(nomeBonito(v.cliente || '')), corretor:primeiro(nomeDe(v.corretorUid)), status:v.status }));
+    // v177: o dia a dia da pessoa (ligações, meta do dia, pontos, pastas na Prime, avaliações do mês), para respostas certeiras
+    const m = mesAtual(), m0 = m + '-01', soma = (mp, f) => Object.entries(mp || {}).filter(([d]) => !f || f(d)).reduce((a, [, v]) => a + (Number(v) || 0), 0);
+    const raM = rankingAtiv.filter(r => r.mes === m && esc.has(r.uid));
+    const ligacoes = { hoje_tentativas:raM.reduce((a, r) => a + soma(r.lig, d => d === h) + soma(r.rec, d => d === h), 0), hoje_numeros_diferentes:raM.reduce((a, r) => a + soma(r.ligu, d => d === h), 0), hoje_atendidas:raM.reduce((a, r) => a + soma(r.at, d => d === h), 0),
+      mes_tentativas:raM.reduce((a, r) => a + soma(r.lig) + soma(r.rec), 0), mes_atendidas:raM.reduce((a, r) => a + soma(r.at), 0), dias_no_escritorio_no_mes:raM.reduce((a, r) => a + new Set([...Object.keys(r.pres || {}), ...Object.keys(r.chk || {})]).size, 0) };
+    let meta = null; try { const mt = metaDiaDe(uidAtual), v = mdValores([h]).get(uidAtual) || {}; meta = MD_ITENS.filter(([k]) => mt[k]).map(([k, nome]) => ({ item:nome, meta:mt[k], feito:Number(v[k]) || 0, falta:Math.max(0, mt[k] - (Number(v[k]) || 0)) })); } catch(e) {}
+    let pontos = null; try { const rk = pontosDoMes(m), i = rk.findIndex(x => x.uid === uidAtual); if (i >= 0) pontos = { pontos:rk[i].pontos, posicao_no_ranking:i + 1, de:rk.length, lider:rk[0] ? rk[0].pontos : null }; } catch(e) {}
+    const pastas = (analises || []).filter(a => esc.has(a.corretorUid) && ['enviada','em_analise','pendencia','rascunho'].includes(a.status)).slice(0, 30).map(a => ({ cliente:primeiro(nomeBonito(a.cliente?.nome || '')), corretor:primeiro(nomeDe(a.corretorUid)), situacao:(AN_ST[a.status] || {}).nome || a.status, desde:a.enviadaEm ? iso(new Date(a.enviadaEm)) : '' }));
+    const avs = (avaliacoes || []).filter(a => esc.has(a.corretorUid) && (a.data || '') >= m0).sort((a, b) => (b.data || '').localeCompare(a.data || '')).slice(0, 60).map(a => ({ cliente:primeiro(nomeBonito(a.nome || '')), corretor:primeiro(nomeDe(a.corretorUid)), data:a.data, situacao:a.status || 'sem retorno' }));
+    const cartasM = cartas.filter(c => esc.has(c.corretorUid) && (c.data || '') >= m0 && !c.arquivado).map(c => ({ cliente:primeiro(nomeBonito(c.cliente || '')), data:c.data, situacao:c.status || '' }));
     return { hoje:h, empresa:'Frade Imóveis (imobiliária de Minha Casa Minha Vida)', quem_pergunta:nomeBonito(perfil?.nome || ''), cargo:perfil?.papel || '',
+      ligacoes, meta_do_dia:meta, pontos, pastas_na_prime:pastas, avaliacoes_do_mes:avs, cartas_do_mes:cartasM,
+      observacao:'Os leads do CRM chegam em leads_do_crm (o servidor completa). Os totais de leads em este_mes podem vir zerados no app do corretor: use leads_do_crm.',
       acesso:perfil?.papel === 'coordenador' ? 'só a equipe dele' : perfil?.papel === 'anjo' ? 'ele e os corretores que acompanha' : 'só os números dele',
       regras:'LEAD = lead que ficou com o corretor no fim do dia. DOC = cada documentação (CPF também conta). Média = leads ÷ docs (até 5 é bom; quanto menor, melhor). Aprovações = planilha + cartas do app sem repetir cliente. Venda = reserva feita.',
       proximas_visitas:proximas, este_mes:blocoEu('mes_atual'), mes_passado:blocoEu('mes_passado'), esta_semana:blocoEu('sem_atual'), semana_passada:blocoEu('sem_passada') };
