@@ -589,7 +589,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .lh-parados{margin-top:10px;font-size:13px;background:color-mix(in srgb,#f59e0b 12%,transparent);border-radius:10px;padding:8px 10px}
 .nota-top{display:flex;gap:12px;align-items:center;margin-bottom:8px}.nota-top b{font-size:34px;color:var(--accent)}.nota-top span{font-size:12.5px;color:var(--muted);line-height:1.5}
 .pres-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.pres-row>b{font-size:14px}.pres-row small{font-size:12px}
+.pres-row>b{font-size:14px}.pres-row .av{display:grid;place-items:center;flex:none;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800}.pres-row small{font-size:12px}
 .pres-op{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
 .pres-op button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:6px 10px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
 .pres-op button.on{background:var(--pc);border-color:var(--pc);color:#fff}
@@ -1871,6 +1871,27 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 .v-docs{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff4e5;color:#9a5b00}.v-docs.ok{background:var(--ok-soft);color:var(--ok)}
 </style>
 <style id="cp158">
+/* v168: Meus corretores por período */
+.ac-pe3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-top:1px solid var(--border);padding-top:10px}
+.ac-pb{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;border-radius:10px;background:var(--card2);text-align:center;transition:background .15s}
+.ac-pb b{font-size:16px;font-variant-numeric:tabular-nums}.ac-pb span{font-size:11.5px;font-weight:700;color:var(--accent)}.ac-pb:hover:not([disabled]){background:color-mix(in srgb,var(--accent) 12%,var(--card2))}
+.ac-pb[disabled]{cursor:default;opacity:.55}.ac-pb[disabled] span{color:var(--muted)}.ac-pb:focus-visible{outline:2px solid var(--accent)}
+.ac-prime{font-size:12.5px;color:var(--muted)}
+
+/* v167: agenda de visitas em Meus corretores */
+.ag-card{margin-bottom:16px;padding:16px}.ag-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}.ag-top h2{margin:0;font-size:17px}.ag-top span{font-size:12.5px;color:var(--muted)}
+.ag-seg button i{font-style:normal;font-size:11px;font-weight:800;margin-left:6px;padding:1px 6px;border-radius:99px;background:var(--card2)}.ag-seg button.on i{background:color-mix(in srgb,var(--accent) 18%,var(--card));color:var(--accent)}
+.ag-lista{display:flex;flex-direction:column;gap:6px;max-height:430px;overflow:auto}
+.ag-dia{font-size:12px;font-weight:800;color:var(--muted);margin:8px 0 2px;text-transform:capitalize}
+.ag-l{display:grid;grid-template-columns:58px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:9px 12px;border-radius:12px;background:var(--card2);cursor:pointer;border:1px solid transparent;transition:border-color .15s}
+.ag-l:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--border))}.ag-l:focus-visible{outline:2px solid var(--accent)}
+.ag-l.pend{box-shadow:inset 3px 0 0 var(--warn)}.ag-l.atras{box-shadow:inset 3px 0 0 var(--danger)}
+.ag-h{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}.ag-cli{min-width:0}.ag-cli b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ag-cli small{display:block;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag-st{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:99px;background:var(--card);white-space:nowrap}
+.ag-ac{display:flex;gap:6px;align-items:center}.ag-b{all:unset;cursor:pointer;font-size:12px;font-weight:700;padding:6px 10px;border-radius:9px;background:var(--card);border:1px solid var(--border)}.ag-b:hover{border-color:var(--accent)}.ag-b.ok{background:color-mix(in srgb,var(--ok) 14%,var(--card));color:var(--ok);border-color:transparent}
+.ag-ic{all:unset;cursor:pointer;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--card)}.ag-vazio{font-size:13px;padding:6px 0}
+@media(max-width:700px){.ag-l{grid-template-columns:48px minmax(0,1fr);row-gap:6px}.ag-st{grid-column:2;justify-self:start}.ag-ac{grid-column:1/-1}}
+
 /* v166: Meus corretores, lista e cartões */
 .ac-barra{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}.ac-res{margin-bottom:0}.ac-res button{all:unset;cursor:pointer;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--border);text-align:center;transition:border-color .2s,box-shadow .2s}
 .ac-res button:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}.ac-res button.on{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 25%,transparent)}.ac-res button:focus-visible{outline:2px solid var(--accent)}
@@ -3068,7 +3089,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <section class="view" id="v-tvrank"></section>
       <section class="view" id="v-acomp">
         <div class="page-head"><div><h1>Meus corretores</h1><div class="sub" id="acSub">Tudo dos corretores que você acompanha, ao vivo.</div></div><div class="ph-acoes" id="acFiltros"></div></div>
-        <div id="acResumo"></div><div id="acCorpo"></div>
+        <div id="acResumo"></div><div id="acAgenda"></div><div id="acCorpo"></div>
       </section>
       <section class="view" id="v-funil">
         <div class="page-head"><div><h1>Funil de ligações</h1><div class="sub" id="flSub">Da ligação ao fechamento.</div></div><div class="ph-acoes" id="flFiltros"></div></div>
@@ -5068,6 +5089,18 @@ const FIREBASE_ANTIGO = {
 const EMAIL_ANTIGO_TENDA = 'tropatenda@fradeimoveis.com';
 
 let uidAtual = '', perfil = null, perfilOk = false, instalacao = null, instOk = false;
+// v169: nomes padronizados (sem caixa alta): "LUIS EDUARDO GOMES DO CARMO" vira "Luis Eduardo Gomes do Carmo"
+const PART_NOME = new Set(['de','da','do','das','dos','e','di','du']);
+function nomeBonito(n){ const t = String(n || '').replace(/\s+/g, ' ').trim(); if (!t) return t;
+  return t.toLocaleLowerCase('pt-BR').split(' ').map((w, i) => i > 0 && PART_NOME.has(w) ? w : w.split('-').map(x => x.charAt(0).toLocaleUpperCase('pt-BR') + x.slice(1)).join('-')).join(' '); }
+window.nomeBonito = nomeBonito;
+let _nomesCorrigidos = false;
+async function corrigirNomesNoBanco(){
+  // a gerência grava os nomes já padronizados no cadastro (uma vez por sessão); quem não pode, só vê padronizado
+  if (_nomesCorrigidos || !souGerente() || souCeo()) return; _nomesCorrigidos = true;
+  const l = perfisTodos.filter(p => p._nomeOrig && p._nomeOrig !== p.nome && (p.papel !== 'gerente' || souDono())).slice(0, 200);
+  for (let i = 0; i < l.length; i += 100) { const b = writeBatch(db); l.slice(i, i + 100).forEach(p => b.set(doc(db,'perfis',p.uid), { nome:p.nome }, { merge:true })); try { await b.commit(); } catch(e) { console.warn('nomes', e.code || e.message); } }
+}
 let perfisTodos = [];
 // v136: lista única de pessoas do ranking (nome, equipe, cargo, situação, data de entrada) — todos leem a mesma, assim todas as telas mostram os mesmos pontos
 let rkPessoas = [];
@@ -5311,7 +5344,7 @@ function iniciarVisitas(user){
   uidAtual = user.uid;
   subsBase.push(onSnapshot(doc(db,'perfis',user.uid), snap => {
     if (!snap.exists() && snap.metadata.fromCache) return; // espera a nuvem confirmar
-    perfil = snap.exists() ? { uid:user.uid, ...snap.data() } : null; perfilOk = true;
+    perfil = snap.exists() ? { uid:user.uid, ...snap.data() } : null; if (perfil) perfil.nome = nomeBonito(perfil.nome); perfilOk = true;
     if (perfil && user.email && perfil.email !== user.email) setDoc(doc(db,'perfis',user.uid), { email:user.email }, { merge:true }).catch(() => {});
     configurarAcesso(); render(); pedirCadastro();
   }, e => { perfilOk = true; console.error(e); }));
@@ -5383,8 +5416,8 @@ function configurarAcesso(){
   if (souGerente()) qp = collection(db,'perfis');
   else if (souCoord()) qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador','sdr']));
   else if (perfil.papel === 'sdr') qp = query(collection(db,'perfis'), where('equipe','==',perfil.equipe||'-'), where('papel','in',['corretor','coordenador']));
-  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => ({ uid:d.id, ...d.data() })); perfisLista = perfisTodos.filter(p => !['correspondente','adm','marketing'].includes(p.papel)); render(); sincVendasRanking(); sincPresencaRanking(); sincPessoasRanking(); }, erro));
-  rkPessoas = []; subsPapel.push(onSnapshot(collection(db,'ranking_pessoas'), s => { rkPessoas = s.docs.map(d => ({ uid:d.id, ...d.data() })); window._rkpOk = true;
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => { const x = d.data(); return { uid:d.id, ...x, nome:nomeBonito(x.nome), _nomeOrig:x.nome || '' }; }); setTimeout(corrigirNomesNoBanco, 3000); perfisLista = perfisTodos.filter(p => !['correspondente','adm','marketing'].includes(p.papel)); render(); sincVendasRanking(); sincPresencaRanking(); sincPessoasRanking(); }, erro));
+  rkPessoas = []; subsPapel.push(onSnapshot(collection(db,'ranking_pessoas'), s => { rkPessoas = s.docs.map(d => { const x = d.data(); return { uid:d.id, ...x, nome:nomeBonito(x.nome), _nomeRaw:x.nome || '' }; }); window._rkpOk = true;
     if (souAdm() || souMkt()) { perfisTodos = rkPessoas.map(x => ({ ...x })); perfisLista = perfisTodos.filter(p => ['corretor','coordenador','sdr','anjo','gerente'].includes(p.papel)); } render(); sincPessoasRanking(); }, e => console.warn('ranking_pessoas', e.code || e.message)));
 }
 
@@ -5475,7 +5508,7 @@ function quandoTxt(date){
 function cardVisita(v, compacto){
   const cor = ST_COR[v.status] || '#64748b';
   const meta = v.empreendimento ? [`<span>${esc(v.empreendimento)}</span>`] : [];
-  if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>${esc(v.corretorNome||'Sem corretor')}</span>`);
+  if (podeGerir() || v.corretorUid !== uidAtual) meta.push(`<span>${esc(nomeBonito(v.corretorNome)||'Sem corretor')}</span>`);
   if (v.sdrNome && !souSdr()) meta.push(`<span>SDR ${esc(primeiro(v.sdrNome))}</span>`);
   if (v.anjoNome && v.anjoUid !== uidAtual) meta.push(`<span>Anjo ${esc(primeiro(v.anjoNome))}</span>`); else if (v.anjoUid === uidAtual && v.corretorUid !== uidAtual) meta.push('<span>Você acompanha</span>');
   if (v.avaliacao) meta.push(`<span>${esc(v.avaliacao)}</span>`);
@@ -6759,7 +6792,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 166;
+const APP_VERSAO = 169;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7021,7 +7054,6 @@ const MSG_PADRAO = [
 ];
 const CAMPOS_MSG = [['{link_pesquisa}','link da pesquisa de atendimento'],['{cliente}','primeiro nome do cliente'],['{corretor}','seu primeiro nome'],['{dia}','dia da visita (hoje, amanhã…)'],['{hora}','horário da visita'],['{empreendimento}','imóvel ou empreendimento'],['{documentos}','lista de todos os documentos'],['{valor}','valor aprovado da carta'],['{faltam}','documentos que faltam na carta'],['{validade}','validade da carta']];
 // "PAULINHA" → "Paulinha" (nomes digitados em maiúsculas ficam bonitos na mensagem)
-const nomeBonito = n => String(n || '').trim().toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase());
 // preenche os campos do modelo; devolve '' quando o modelo precisa de uma informação que o cliente não tem
 function preencherModelo(texto, t, x){
   const faltam = t === 'c' ? DOCS.filter(([k]) => !x.docs?.[k]).map(([,n]) => '• ' + n) : [];
@@ -7961,7 +7993,7 @@ let relDia = null, _relDiaUnsub = null, _relDiaChave = '';
 // =====================================================================
 const podeAcomp = () => souAtivo() && (souAnjo() || souCoord() || souGerente());
 window.acEq = 'todas';
-let _acSubs = [], _acChave = '', _acLeads = [], _acVis = [], _acPastas = [], _acChk = [], _acTick = null;
+let _acSubs = [], _acChave = '', _acLeads = [], _acVis = [], _acPastas = [], _acChk = [], _acLD = [], _acTick = null;
 function acParar(){ _acSubs.forEach(u => { try { u(); } catch(e) {} }); _acSubs = []; _acChave = ''; clearInterval(_acTick); _acTick = null; }
 const acNome = n => { const w = String(n || '').trim().toLowerCase().split(/\s+/).filter(Boolean); const ok = w.length > 1 ? [w[0], w[w.length - 1]] : w; return ok.map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(' ') || 'Corretor'; };
 const acTeste = p => /\bteste?\b/i.test(p.nome || '');
@@ -7983,41 +8015,87 @@ function acAssinar(){
   else if (souCoord()) ouve(query(collection(db,'leads_ev'), where('dia','==',h), where('equipe','==',perfil.equipe || '-')), l => _acLeads = l);
   else if (uids.length) ouve(query(collection(db,'leads_ev'), where('dia','==',h), where('corretorUid','in',uids)), l => _acLeads = l);
   // visitas e pastas: o anjo busca as dos corretores dele (gerência e coordenação já têm)
-  if (souAnjo() && uids.length) { ouve(query(collection(db,'visitas'), where('corretorUid','in',uids)), l => _acVis = l.filter(v => !v.arquivado)); ouve(query(collection(db,'analises'), where('corretorUid','in',uids)), l => _acPastas = l); ouve(query(collection(db,'checkins'), where('dia','==',h), where('uid','in',uids)), l => _acChk = l); }
+  if (souAnjo() && uids.length) { ouve(query(collection(db,'visitas'), where('corretorUid','in',uids)), l => _acVis = l.filter(v => !v.arquivado)); ouve(query(collection(db,'analises'), where('corretorUid','in',uids)), l => _acPastas = l); ouve(query(collection(db,'checkins'), where('dia','==',h), where('uid','in',uids)), l => _acChk = l); ouve(query(collection(db,'leads_dia'), where('dia','>=', [mesAtual() + '-01', mdOntem()].sort()[0])), l => _acLD = l); }
   _acTick = setInterval(() => { if (view === 'acomp') renderAcomp(true); }, 60000); // alertas que dependem da hora
 }
 const AC_PEND = ['Pendente', 'Reagendada'];
+window.acPer = 'hoje';
+const acDias = per => { const h = hojeISO(); if (per === 'ontem') return [mdOntem()]; if (per === 'mes') { const out = []; for (let d = mesAtual() + '-01'; d <= h; d = somaDias(d, 1)) out.push(d); return out; } return [h]; };
 function acDados(p){
-  const h = hojeISO(), am = somaDias(h, 1), m = mesAtual(), agora = new Date();
-  const ra = rankingAtiv.filter(r => r.uid === p.uid), n = c => ra.reduce((a, r) => a + (Number((r[c] || {})[h]) || 0), 0);
-  const pres = ra.some(r => (r.pres || {})[h] || (r.chk || {})[h]) || ['presente','externo'].includes(presencas[h]?.marcados?.[p.uid]?.status || '') || _acChk.some(c => c.uid === p.uid && c.entrada) || (typeof checkinsHoje !== 'undefined' && (checkinsHoje || []).some?.(c => c.uid === p.uid));
+  const per = window.acPer, dias = acDias(per), ds = new Set(dias), h = hojeISO(), am = somaDias(h, 1), agora = new Date(), ehHoje = per === 'hoje';
+  const ra = rankingAtiv.filter(r => r.uid === p.uid), n = c => ra.reduce((a, r) => a + dias.reduce((b, d) => b + (Number((r[c] || {})[d]) || 0), 0), 0);
+  const presDia = d => ra.some(r => (r.pres || {})[d] || (r.chk || {})[d]) || ['presente','externo'].includes(presencas[d]?.marcados?.[p.uid]?.status || '') || (d === h && (_acChk.some(c => c.uid === p.uid && c.entrada) || checkinsHoje.some?.(c => c.uid === p.uid)));
+  const pres = presDia(dias[dias.length - 1]), diasPres = dias.filter(presDia).length;
   const folga = ['folga','ferias','atestado'].includes(presencas[h]?.marcados?.[p.uid]?.status || '');
-  const lds = (souGerente() ? leadsHoje.filter(e => e.dia === h) : (_acLeads || [])).filter(e => e.corretorUid === p.uid);
-  const vis = (souAnjo() ? _acVis : visitas).filter(v => v.corretorUid === p.uid && v.status !== 'Cancelada');
+  const ldsHoje = (souGerente() ? leadsHoje.filter(e => e.dia === h) : (_acLeads || [])).filter(e => e.corretorUid === p.uid);
+  // leads de outros dias: o dia fechado pelo carteiro (só o número de cada um)
+  const fontesLD = souAnjo() ? _acLD : leadsDias;
+  const ldDia = d => { if (d === h) return ldsHoje.length; const L = (fontesLD.find(x => x.dia === d) || {}).linhas || []; const x = L.find(l => l.uid === p.uid) || L.find(l => !l.uid && casaPerfilNome(l.nome, [{ uid:p.uid, nome:p.nome, status:'ativo' }])); return x ? Number(x.leads) || 0 : 0; };
+  const leadsPorDia = dias.map(d => [d, ldDia(d)]).filter(([, q]) => q), leads = leadsPorDia.reduce((a, [, q]) => a + q, 0);
+  const vis = (souAnjo() ? [...new Map([..._acVis, ...visitas].map(v => [v.id, v])).values()] : visitas).filter(v => v.corretorUid === p.uid && v.status !== 'Cancelada');
   const pastas = (souAnjo() ? _acPastas : analises).filter(a => a.corretorUid === p.uid);
-  const visHoje = vis.filter(v => v.date === h), marcHoje = vis.filter(v => v.criadoEm && iso(new Date(v.criadoEm)) === h);
-  const docsHoje = new Set([...avaliacoes.filter(a => a.corretorUid === p.uid && a.data === h).map(a => 'a' + (a.cpfNorm || a.id)), ...pastas.filter(a => a.enviadaEm && iso(new Date(a.enviadaEm)) === h).map(a => 'a' + (soDig(a.cliente?.cpf || '') || a.id))]).size;
+  const visPer = vis.filter(v => ds.has(v.date)), marc = vis.filter(v => v.criadoEm && ds.has(iso(new Date(v.criadoEm))));
+  const docs = new Set([...avaliacoes.filter(a => a.corretorUid === p.uid && ds.has(a.data)).map(a => 'a' + (a.cpfNorm || a.id)), ...pastas.filter(a => a.enviadaEm && ds.has(iso(new Date(a.enviadaEm)))).map(a => 'a' + (soDig(a.cliente?.cpf || '') || a.id))]).size;
+  // cartas aprovadas no período: as lançadas no app + as aprovações da planilha/WhatsApp (o mesmo cliente uma vez só)
+  const cl = rankingCartas.filter(c => c.corretorUid === p.uid && ds.has(c.data) && !c.arquivado).map(c => { const full = cartas.find(x => x.id === c.id) || {}; return { id:c.id, data:c.data, cliente:full.cliente || '', valor:c.valor || full.valor || 0, fonte:'carta', k:soDig(full.cpf || '') || 'c' + c.id }; });
+  const ks = new Set(cl.map(c => c.k));
+  avaliacoes.filter(a => a.corretorUid === p.uid && ds.has(a.aprovadoEm || a.data) && infoStatus(a.status).g === 'aprovado').forEach(a => { const k = a.cpfNorm || 'a' + a.id; if (!ks.has(k)) { ks.add(k); cl.push({ id:a.id, data:a.aprovadoEm || a.data, cliente:a.nome || '', valor:0, fonte:'planilha', k }); } });
   const agenda = vis.filter(v => v.date >= h && v.status !== 'Realizada' && !PERDA_V.includes(v.status)).sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || ''))).slice(0, 4);
   const pend = pastas.filter(a => a.status === 'pendencia'), anal = pastas.filter(a => ['enviada','em_analise'].includes(a.status));
-  const aprovMes = rankingCartas.filter(c => c.corretorUid === p.uid && (c.data || '').slice(0, 7) === m && !c.arquivado).length;
-  const vendasMes = vendasNoMes(p.uid);
-  const v = { lig:n('ligu'), docs:docsHoje, vm:marcHoje.length, vr:visHoje.filter(x => x.status === 'Realizada').length }, meta = metaDiaDe(p.uid);
+  const vendas = rankingVendas.filter(v => !v.caiu && ds.has(v.dia) && (v.corretores || []).some(c => c.uid === p.uid)).reduce((a, v) => a + 1 / Math.max(1, (v.corretores || []).length), 0);
+  const vr = visPer.filter(x => x.status === 'Realizada').length;
+  const v = { lig:n('ligu'), docs, vm:marc.length, vr }, meta0 = metaDiaDe(p.uid), meta = {}; MD_ITENS.forEach(([k]) => meta[k] = (meta0[k] || 0) * (per === 'mes' ? 0 : 1));
   const al = [];
-  const diaUtil = agora.getDay() !== 0;
-  if (diaUtil && !pres && !folga && agora.getHours() >= 9) al.push(['Sem check-in', 'alto']);
-  const velhos = lds.filter(e => Date.now() - (e.em || 0) > 30 * 60e3);
-  if (velhos.length && !(n('lig') + n('rec'))) al.push([`${velhos.length} lead${velhos.length > 1 ? 's' : ''} sem ligação há 30 min`, 'alto']);
-  const semConf = vis.filter(x => (x.date === h || x.date === am) && AC_PEND.includes(x.status));
-  if (semConf.length) al.push([`${semConf.length} visita${semConf.length > 1 ? 's' : ''} sem confirmar (${semConf.some(x => x.date === h) ? 'hoje' : 'amanhã'})`, 'medio']);
-  const parada = pend.filter(a => Date.now() - ((a.ultimo || {}).em || a.atualizadoEm || 0) > 24 * 3600e3);
-  if (parada.length) al.push([`${parada.length > 1 ? parada.length + ' pendências' : 'Pendência'} da Prime parada há 24 h`, 'medio']);
+  if (ehHoje) {
+    if (agora.getDay() !== 0 && !pres && !folga && agora.getHours() >= 9) al.push(['Sem check-in', 'alto']);
+    const velhos = ldsHoje.filter(e => Date.now() - (e.em || 0) > 30 * 60e3);
+    if (velhos.length && !(n('lig') + n('rec'))) al.push([`${velhos.length} lead${velhos.length > 1 ? 's' : ''} sem ligação há 30 min`, 'alto']);
+    const semConf = vis.filter(x => (x.date === h || x.date === am) && AC_PEND.includes(x.status));
+    if (semConf.length) al.push([`${semConf.length} visita${semConf.length > 1 ? 's' : ''} sem confirmar (${semConf.some(x => x.date === h) ? 'hoje' : 'amanhã'})`, 'medio']);
+    const parada = pend.filter(a => Date.now() - ((a.ultimo || {}).em || a.atualizadoEm || 0) > 24 * 3600e3);
+    if (parada.length) al.push([`${parada.length > 1 ? parada.length + ' pendências' : 'Pendência'} da Prime parada há 24 h`, 'medio']);
+  }
   const tel = (perfisTodos.find(x => x.uid === p.uid) || {}).telefone || p.telefone || '';
-  return { p, nome:acNome(p.nome), tel, ldsL:lds, pres, folga, leads:lds.length, lig:n('lig') + n('rec'), num:n('ligu'), at:n('at'), docs:docsHoje, vm:marcHoje.length, vr:v.vr, visHoje:visHoje.length, meta, v, bateu:mdBateu(meta, v), temMeta:mdTem(meta), agenda, pend, anal, aprovMes, vendasMes, al };
+  return { p, nome:acNome(p.nome), tel, ldsL:ldsHoje, leadsPorDia, visL:visPer, cartasL:cl, per, pres, diasPres, nDias:dias.length, folga, leads, lig:n('lig') + n('rec'), num:n('ligu'), at:n('at'), docs, vm:marc.length, vr, visHoje:visPer.length, meta, v, bateu:mdBateu(meta, v), temMeta:mdTem(meta), agenda, pend, anal, aprov:cl.length, vendas, al };
 }
-window.acModo = (() => { try { return localStorage.getItem('acModo') || (innerWidth < 760 ? 'cartoes' : 'lista'); } catch(e) { return 'lista'; } })();
-window.acFoco = ''; window.acSoAlerta = false;
+window.acModo = 'cartoes';
+window.acFoco = ''; window.acSoAlerta = false; window.acDia = 'hoje';
+window.acSetDia = d => { acDia = d; renderAcomp(true); };
+// v167: agenda de visitas da equipe, visível e clicável
+function htmlAcAgenda(pessoas){
+  const h = hojeISO(), am = somaDias(h, 1), fim = somaDias(h, 7), uids = new Set(pessoas.map(p => p.uid));
+  const nome = u => acNome((pessoas.find(p => p.uid === u) || {}).nome || '');
+  const todas = [...new Map([...(souAnjo() ? _acVis : []), ...visitas].map(v => [v.id, v])).values()].filter(v => uids.has(v.corretorUid) && !v.arquivado && v.status !== 'Cancelada');
+  const faixa = { hoje:[h, h], amanha:[am, am], semana:[h, fim] }[acDia] || [h, h];
+  const l = todas.filter(v => v.date >= faixa[0] && v.date <= faixa[1]).sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+  const conta = (a, b) => todas.filter(v => v.date >= a && v.date <= b).length;
+  const conf = l.filter(v => v.status === 'Confirmada').length, real = l.filter(v => v.status === 'Realizada').length, semConf = l.filter(v => AC_PEND.includes(v.status)).length;
+  const dl = d => d === h ? 'Hoje' : d === am ? 'Amanhã' : parseISO(d).toLocaleDateString('pt-BR', { weekday:'short', day:'2-digit', month:'2-digit' }).replace('.', '');
+  const acao = v => v.status === 'Pendente' || v.status === 'Reagendada' ? `<button class="ag-b" onclick="event.stopPropagation();mudarStatus('${v.id}','Confirmada')">Confirmar</button>`
+    : v.status === 'Confirmada' && v.date <= h ? `<button class="ag-b ok" onclick="event.stopPropagation();mudarStatus('${v.id}','Realizada')">Realizada</button><button class="ag-b" onclick="event.stopPropagation();mudarStatus('${v.id}','Não compareceu')">Não veio</button>` : '';
+  let ult = '';
+  const linhas = l.map(v => { const cab = acDia === 'semana' && v.date !== ult ? `<div class="ag-dia">${dl(v.date)}</div>` : ''; ult = v.date;
+    const atras = v.date === h && v.time && AC_PEND.includes(v.status) && v.time < new Date().toTimeString().slice(0, 5);
+    return cab + `<div class="ag-l ${AC_PEND.includes(v.status) ? 'pend' : ''} ${atras ? 'atras' : ''}" role="button" tabindex="0" onclick="editarVisita('${v.id}')" onkeydown="if(event.key==='Enter')editarVisita('${v.id}')" title="Abrir a visita">
+      <span class="ag-h">${esc(v.time || '--:--')}</span>
+      <span class="ag-cli"><b>${esc(v.cliente || 'Cliente')}</b><small>${esc(nome(v.corretorUid))}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}${v.origem ? ' · ' + esc(v.origem) : ''}</small></span>
+      <span class="ag-st st-${stCls(v.status)}">${esc(v.status)}</span>
+      <span class="ag-ac">${acao(v)}${v.telefone && v.status !== 'Realizada' ? `<button class="ag-ic" onclick="event.stopPropagation();whatsConfirmar('${v.id}')" title="Mandar confirmação pelo WhatsApp" aria-label="WhatsApp">💬</button>` : ''}</span></div>`; }).join('');
+  return `<section class="card ag-card"><header class="ag-top"><div><h2>Visitas marcadas</h2><span>${l.length ? `${l.length} visita${l.length > 1 ? 's' : ''} · ${conf} confirmada${conf === 1 ? '' : 's'} · ${real} realizada${real === 1 ? '' : 's'}${semConf ? ` · <b class="ac-nao">${semConf} sem confirmar</b>` : ''}` : 'Nenhuma visita nesse período'}</span></div>
+    <div class="seg ag-seg">${[['hoje', 'Hoje', conta(h, h)], ['amanha', 'Amanhã', conta(am, am)], ['semana', '7 dias', conta(h, fim)]].map(([k, r, n]) => `<button class="${acDia === k ? 'on' : ''}" onclick="acSetDia('${k}')">${r}<i>${n}</i></button>`).join('')}</div></header>
+    ${l.length ? `<div class="ag-lista">${linhas}</div>` : `<div class="muted ag-vazio">${acDia === 'hoje' ? 'Nenhuma visita marcada para hoje.' : acDia === 'amanha' ? 'Nenhuma visita marcada para amanhã.' : 'Nenhuma visita nos próximos 7 dias.'}</div>`}</section>`;
+}
+window.acSetPer = k => { acPer = k; acSoAlerta = k === 'hoje' && acSoAlerta; renderAcomp(true); };
 window.acSetModo = m => { acModo = m; try { localStorage.setItem('acModo', m); } catch(e) {} renderAcomp(true); };
 window.acSetFoco = f => { if (f === 'al') { acSoAlerta = !acSoAlerta; acFoco = ''; } else acFoco = acFoco === f ? '' : f; renderAcomp(true); };
+window.acVer = (tipo, uid) => { const x = (window._acLinhas || []).find(y => y.p.uid === uid); if (!x) return;
+  const pr = x.per === 'hoje' ? 'de hoje' : x.per === 'ontem' ? 'de ontem' : 'do mês';
+  if (tipo === 'leads' && x.per === 'hoje') return acVerLeads(uid);
+  const dd = d => d.slice(8) + '/' + d.slice(5, 7);
+  if (tipo === 'leads') { $('acLdTit').textContent = `Leads ${pr} · ${x.nome}`; $('acLdCorpo').innerHTML = x.leadsPorDia.length ? x.leadsPorDia.map(([d, q]) => `<div class="ac-ld"><div><b>${dd(d)}</b><small>${parseISO(d).toLocaleDateString('pt-BR', { weekday:'long' })}</small></div><b>${q} lead${q > 1 ? 's' : ''}</b></div>`).join('') + '<div class="muted" style="font-size:12px;margin-top:8px">Nos dias que já fecharam o app guarda só a quantidade de cada um.</div>' : '<div class="muted">Nenhum lead nesse período.</div>'; }
+  if (tipo === 'visitas') { $('acLdTit').textContent = `Visitas ${pr} · ${x.nome}`; $('acLdCorpo').innerHTML = x.visL.length ? x.visL.slice().sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || ''))).map(v => `<div class="ac-ld" role="button" tabindex="0" style="cursor:pointer" onclick="fechar('acLdModal');editarVisita('${v.id}')"><div><b>${esc(v.cliente || 'Cliente')}</b><small>${dd(v.date)} ${esc(v.time || '')}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}</small></div><span class="ag-st st-${stCls(v.status)}">${esc(v.status)}</span></div>`).join('') : '<div class="muted">Nenhuma visita nesse período.</div>'; }
+  if (tipo === 'cartas') { $('acLdTit').textContent = `Cartas aprovadas ${pr} · ${x.nome}`; $('acLdCorpo').innerHTML = x.cartasL.length ? x.cartasL.slice().sort((a, b) => (b.data || '').localeCompare(a.data || '')).map(c => `<div class="ac-ld"><div><b>${esc(c.cliente || 'Cliente')}</b><small>${dd(c.data || '')} · ${c.fonte === 'carta' ? 'lançada no app' : 'da planilha / WhatsApp'}</small></div>${c.valor ? `<b>${brl(c.valor)}</b>` : ''}</div>`).join('') : '<div class="muted">Nenhuma carta aprovada nesse período.</div>'; }
+  abrir('acLdModal'); };
 window.acVerLeads = uid => { const x = (window._acLinhas || []).find(y => y.p.uid === uid); if (!x) return;
   $('acLdTit').textContent = 'Leads de hoje · ' + x.nome;
   $('acLdCorpo').innerHTML = x.ldsL.length ? x.ldsL.sort((a, b) => (b.em || 0) - (a.em || 0)).map(e => `<div class="ac-ld"><div><b>${esc(e.cliente || 'Contato sem nome')}</b><small>${e.em ? new Date(e.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : ''}${e.origem ? ' · ' + esc(e.origem) : ''}</small></div>${e.telefone ? `<a class="btn btn-ghost" href="https://wa.me/${soDig(e.telefone).replace(/^(?!55)/, '55')}" target="_blank" rel="noopener">WhatsApp</a>` : ''}</div>`).join('') : '<div class="muted">Nenhum lead hoje.</div>';
@@ -8031,17 +8109,23 @@ function renderAcomp(soDados){
   } else if (!souGerente() && $('acFiltros')) $('acFiltros').innerHTML = '';
   $('acSub').textContent = souAnjo() ? 'Os corretores que você acompanha, ao vivo.' : souCoord() ? 'Sua equipe, ao vivo.' : 'Os corretores de cada equipe e de cada anjo, ao vivo.';
   let ls = acPessoas().map(acDados); window._acLinhas = ls;
+  if ($('acAgenda')) $('acAgenda').innerHTML = ls.length ? htmlAcAgenda(acPessoas()) : '';
   const t = k => ls.reduce((s2, x) => s2 + (Number(x[k]) || 0), 0), nAl = ls.filter(x => x.al.length).length;
   const tile = (f, val, rot, extra = '') => `<button type="button" class="${acFoco === f || (f === 'al' && acSoAlerta) ? 'on' : ''} ${extra}" onclick="acSetFoco('${f}')"><b>${val}</b><span>${rot}</span></button>`;
-  $('acResumo').innerHTML = ls.length ? `<div class="ac-barra"><div class="ac-res">${tile('pres', `${ls.filter(x => x.pres).length}<small>/${ls.length}</small>`, 'no escritório')}${tile('leads', t('leads'), 'leads hoje')}${tile('lig', t('lig'), 'ligações')}${tile('docs', t('docs'), 'docs hoje')}${tile('vis', t('visHoje'), 'visitas hoje')}${tile('al', ls.reduce((s2, x) => s2 + x.al.length, 0), 'alertas', nAl ? 'tem' : '')}</div>
-    <div class="ac-ctl"><button type="button" class="ac-chip ${acSoAlerta ? 'on' : ''}" onclick="acSetFoco('al')">Só com alerta (${nAl})</button><div class="seg ac-seg"><button class="${acModo === 'lista' ? 'on' : ''}" onclick="acSetModo('lista')">Lista</button><button class="${acModo === 'cartoes' ? 'on' : ''}" onclick="acSetModo('cartoes')">Cartões</button></div></div></div>` : '';
+  $('acResumo').innerHTML = ls.length ? `<div class="ac-barra"><div class="ac-res">${(() => { const pr = acPer === 'hoje' ? 'hoje' : acPer === 'ontem' ? 'ontem' : 'no mês'; return tile('pres', acPer === 'mes' ? t('diasPres') + '<small> dias</small>' : `${ls.filter(x => x.pres).length}<small>/${ls.length}</small>`, acPer === 'mes' ? 'de escritório (somados)' : 'no escritório') + tile('leads', t('leads'), 'leads ' + pr) + tile('lig', t('lig'), 'ligações') + tile('docs', t('docs'), 'docs ' + pr) + tile('vis', t('visHoje'), 'visitas ' + pr) + (acPer === 'hoje' ? tile('al', ls.reduce((s2, x) => s2 + x.al.length, 0), 'alertas', nAl ? 'tem' : '') : tile('aprov', t('aprov'), 'cartas aprovadas')); })()}</div>
+    <div class="ac-ctl">${acPer === 'hoje' ? `<button type="button" class="ac-chip ${acSoAlerta ? 'on' : ''}" onclick="acSetFoco('al')">Só com alerta (${nAl})</button>` : ''}<div class="seg ac-seg">${[['ontem', 'Ontem'], ['hoje', 'Hoje'], ['mes', 'Mês']].map(([k, r]) => `<button class="${acPer === k ? 'on' : ''}" onclick="acSetPer('${k}')">${r}</button>`).join('')}</div></div></div>` : '';
   if (acSoAlerta) ls = ls.filter(x => x.al.length);
-  const ord = { pres:(a, b) => (a.pres - b.pres), leads:(a, b) => b.leads - a.leads, lig:(a, b) => b.lig - a.lig, docs:(a, b) => b.docs - a.docs, vis:(a, b) => b.visHoje - a.visHoje }[acFoco];
+  const ord = { aprov:(a, b) => b.aprov - a.aprov, pres:(a, b) => acPer === 'mes' ? a.diasPres - b.diasPres : (a.pres - b.pres), leads:(a, b) => b.leads - a.leads, lig:(a, b) => b.lig - a.lig, docs:(a, b) => b.docs - a.docs, vis:(a, b) => b.visHoje - a.visHoje }[acFoco];
   ls.sort((a, b) => (ord ? ord(a, b) : 0) || b.al.length - a.al.length || (b.pres - a.pres) || b.docs - a.docs || a.nome.localeCompare(b.nome, 'pt-BR'));
   const z = v => v ? `<b>${v}</b>` : '<i class="ac-z">0</i>';
   const metaPrin = x => { if (!x.temMeta) return ''; const k = MD_ITENS.find(([kk]) => x.meta[kk]); if (!k) return ''; const a = x.v[k[0]] || 0, m0 = x.meta[k[0]]; return `<div class="ac-mt ${x.bateu ? 'ok' : ''}"><span>${x.bateu ? 'Metas do dia batidas' : esc(k[1]) + ' ' + a + ' de ' + m0}</span><i><u style="width:${Math.min(100, Math.round(a / m0 * 100))}%"></u></i></div>`; };
-  const acoes = x => (x.tel ? `<a class="ac-ic" href="https://wa.me/${soDig(x.tel).replace(/^(?!55)/, '55')}" target="_blank" rel="noopener" title="WhatsApp de ${esc(x.nome)}" aria-label="WhatsApp">💬</a><a class="ac-ic" href="tel:${soDig(x.tel)}" title="Ligar para ${esc(x.nome)}" aria-label="Ligar">📞</a>` : '');
-  const sit = x => x.pres ? '<i class="ac-ok">No escritório</i>' : x.folga ? '<i>Folga / abonado</i>' : '<i class="ac-nao">Sem check-in</i>';
+  // v167: só WhatsApp, já com a mensagem pronta (o que está pendente ou o resumo do dia)
+  const msgCor = x => { const p1 = x.nome.split(' ')[0], eu = primeiro(perfil?.nome || '');
+    const txt = x.al.length ? `Oi, ${p1}! Tudo bem? Aqui é ${eu}. Vi no app que tem coisa pendente aí:\n${x.al.map(([t2]) => '• ' + t2).join('\n')}\nConsegue resolver agora? Qualquer coisa me chama que eu te ajudo.`
+      : `Oi, ${p1}! Tudo bem? Aqui é ${eu}. Até agora hoje: ${x.leads} lead${x.leads === 1 ? '' : 's'}, ${x.lig} ligaç${x.lig === 1 ? 'ão' : 'ões'}, ${x.docs} doc${x.docs === 1 ? '' : 's'} e ${x.vm} visita${x.vm === 1 ? '' : 's'} marcada${x.vm === 1 ? '' : 's'}. Bora pra cima! Precisa de ajuda em algum cliente?`;
+    return encodeURIComponent(txt); };
+  const acoes = x => (x.tel ? `<a class="ac-ic" href="https://wa.me/${soDig(x.tel).replace(/^(?!55)/, '55')}?text=${msgCor(x)}" target="_blank" rel="noopener" title="Mandar mensagem pronta para ${esc(x.nome)} no WhatsApp" aria-label="WhatsApp">💬</a>` : '');
+  const sit = x => x.per === 'mes' ? `<i>${x.diasPres} de ${x.nDias} dias no escritório</i>` : x.per === 'ontem' ? (x.pres ? '<i class="ac-ok">Veio ontem</i>' : '<i class="ac-nao">Não veio ontem</i>') : x.pres ? '<i class="ac-ok">No escritório</i>' : x.folga ? '<i>Folga / abonado</i>' : '<i class="ac-nao">Sem check-in</i>';
   const alHtml = x => x.al.map(([t2, g]) => `<span class="ac-al1 ${g}">${esc(t2)}</span>`).join('');
   const dia = d => d === hojeISO() ? 'hoje' : d === somaDias(hojeISO(), 1) ? 'amanhã' : d.slice(8) + '/' + d.slice(5, 7);
   const grupos = souGerente() && (!acEq || acEq === 'todas') ? listaEquipes().map(e => [e.id, ls.filter(x => x.p.equipe === e.id)]).concat([['', ls.filter(x => !listaEquipes().some(e => e.id === x.p.equipe))]]).filter(([, l]) => l.length) : [[null, ls]];
@@ -8053,10 +8137,11 @@ function renderAcomp(soDados){
       ${metaPrin(x)}
       ${x.al.length ? `<div class="ac-als">${alHtml(x)}</div>` : ''}
       ${x.agenda.length ? `<div class="ac-sec"><h4>Próximas visitas</h4>${x.agenda.map(v => `<div class="ac-vis" role="button" tabindex="0" onclick="editarVisita('${v.id}')" title="Abrir a visita"><span class="ac-d">${dia(v.date)} ${esc(v.time || '')}</span><span class="ac-c">${esc(v.cliente || '')}</span><span class="ac-st st-${stCls(v.status)}">${esc(v.status)}</span></div>`).join('')}</div>` : ''}
-      <footer class="ac-pe"><span>${x.anal.length || x.pend.length ? `Prime: ${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''} · ` : ''}Mês: ${x.aprovMes} aprov. · ${fmtVendas(x.vendasMes)} venda${x.vendasMes === 1 ? '' : 's'}</span>${x.leads ? `<button class="ac-lnk" onclick="acVerLeads('${x.p.uid}')">Ver leads de hoje</button>` : ''}</footer>
+      ${x.anal.length || x.pend.length ? `<div class="ac-prime">Na Prime: ${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''}</div>` : ''}
+      <footer class="ac-pe3">${(() => { const pr = x.per === 'hoje' ? 'de hoje' : x.per === 'ontem' ? 'de ontem' : 'do mês'; return `<button class="ac-pb" ${x.leads ? '' : 'disabled'} onclick="acVer('leads','${x.p.uid}')"><b>${x.leads}</b><span>Ver leads ${pr}</span></button><button class="ac-pb" ${x.visL.length ? '' : 'disabled'} onclick="acVer('visitas','${x.p.uid}')"><b>${x.visL.length}</b><span>Ver visitas ${pr}</span></button><button class="ac-pb" ${x.aprov ? '' : 'disabled'} onclick="acVer('cartas','${x.p.uid}')"><b>${x.aprov}</b><span>Cartas aprovadas</span></button>`; })()}</footer>
     </article>`;
   $('acCorpo').innerHTML = !ls.length ? vazio(acSoAlerta ? 'Ninguém com alerta agora' : souAnjo() ? 'Nenhum corretor ligado a você ainda' : 'Nenhum corretor para mostrar', acSoAlerta ? 'Tudo em dia.' : souAnjo() ? 'A gerência escolhe quem cada anjo acompanha.' : 'Mude o filtro acima.')
-    : grupos.map(([eq, l]) => cabGrupo(eq, l) + (acModo === 'lista'
+    : grupos.map(([eq, l]) => cabGrupo(eq, l) + (false
       ? `<div class="ac-tab-w"><table class="ac-tab"><thead><tr><th>Corretor</th><th>Leads</th><th>Ligações</th><th>Docs</th><th>Marcou</th><th>Visitou</th><th>Próxima visita</th><th>Meta do dia</th><th>Alertas</th><th>Mês</th><th></th></tr></thead><tbody>${l.map(linha).join('')}</tbody></table></div>`
       : `<div class="ac-grade">${l.map(cartao).join('')}</div>`)).join('');
 }
@@ -9014,7 +9099,7 @@ function sincPessoasRanking(){
     perfisTodos.filter(p => CARGOS.includes(p.papel)).forEach(p => {
       const d = { nome:p.nome || '', equipe:p.equipe || '', papel:p.papel || '', status:p.status || '', criadoEm:p.criadoEm || 0, membros:p.papel === 'anjo' ? (p.membros || []) : [] };
       const v = ja.get(p.uid); ja.delete(p.uid);
-      if (v && ['nome','equipe','papel','status','criadoEm'].every(k => (v[k] ?? '') === d[k]) && JSON.stringify(v.membros || []) === JSON.stringify(d.membros)) return;
+      if (v && (v._nomeRaw ?? v.nome) === d.nome && ['equipe','papel','status','criadoEm'].every(k => (v[k] ?? '') === d[k]) && JSON.stringify(v.membros || []) === JSON.stringify(d.membros)) return;
       b.set(doc(db,'ranking_pessoas', p.uid), d); n++; });
     ja.forEach((v, uid) => { b.delete(doc(db,'ranking_pessoas', uid)); n++; });
     if (n) { try { await b.commit(); } catch(e) { console.warn('ranking_pessoas', e.message); } }
@@ -12571,7 +12656,7 @@ function renderPresenca(){
   let eqAnt = null;
   $('presLista').innerHTML = ps.length ? ps.map(p => {
     const x = m[p.uid] || {}, cab = p.equipe !== eqAnt ? `<div class="rep-sec" style="margin:12px 0 4px">${esc(eqNome(p.equipe))}</div>` : ''; eqAnt = p.equipe;
-    return cab + `<div class="pres-row"><span class="av" style="width:34px;height:34px;font-size:13px">${p.foto ? `<img src="${p.foto}" alt="">` : esc(p.nome[0] || '?')}</span><b>${esc(p.nome)}</b>${x.hora && x.status === 'presente' ? `<small class="muted">${esc(x.hora)}</small>` : ''}
+    return cab + `<div class="pres-row"><span class="av" style="width:34px;height:34px;font-size:13px">${p.foto ? `<img src="${p.foto}" alt="">` : esc(((p.nome || '?').trim()[0] || '?').toUpperCase())}</span><b>${esc(p.nome)}</b>${x.hora && x.status === 'presente' ? `<small class="muted">${esc(x.hora)}</small>` : ''}
       <div class="pres-op">${PRES_OP.map(([k,r,c]) => `<button class="${x.status===k?'on':''}" style="--pc:${c}" onclick="marcarPresenca('${p.uid}','${k}')">${r}</button>`).join('')}</div></div>`;
   }).join('') : '<div class="muted" style="font-size:13.5px">Os corretores aparecem aqui assim que tiverem conta aprovada no app.</div>';
   // resumo do mês
