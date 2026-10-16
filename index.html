@@ -2889,7 +2889,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <section class="view" id="v-financeiro">
         <div class="page-head"><div><h1>Financeiro</h1><div class="sub">Só a gerência e o CEO veem esta tela.</div></div>
           <div class="ph-acoes fin-acoes"><select id="finMesSel" onchange="finMes=this.value;render()"></select><button class="btn btn-primary" onclick="editarFin()">+ Lançamento</button>
-            <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas e parcelamentos</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="abrirBonus()">🎯 Bônus por visitas</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
+            <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas e parcelamentos</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="abrirBonus()">🎯 Bônus e Carteira Frade</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
         <div id="finKpis"></div>
         <div id="finAviso"></div>
         <div class="seg pn-abas" id="finAbas"><button data-a="geral" onclick="finAba='geral';render()">Visão geral</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões</button><button data-a="notas" onclick="finAba='notas';render()">Notas fiscais</button><button data-a="lanc" onclick="finAba='lanc';render()">Entradas e saídas</button><button data-a="salarios" onclick="finAba='salarios';render()">Salários</button></div>
@@ -3915,7 +3915,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 </div>
 <div class="modal" id="bonusModal">
   <div class="sheet" style="width:min(640px,100%)">
-    <div class="sheet-head"><h2>🎯 Bônus por visitas</h2><button class="icon-btn" onclick="fechar('bonusModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><h2>Bônus e Carteira Frade</h2><button class="icon-btn" onclick="fechar('bonusModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <details class="fx-nova" id="bvRegraBox"><summary>Regra do bônus</summary>
         <label class="fv-chk" style="margin-top:10px"><input type="checkbox" id="bvAtivo"> Bônus ligado</label>
@@ -3929,6 +3929,11 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div class="row2"><div class="fg" style="margin-top:8px"><label>Quem recebe os saques</label><input id="bvSaqNome" maxlength="40" placeholder="André"></div><div class="fg" style="margin-top:8px"><label>WhatsApp de quem recebe</label><input id="bvSaqFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
         <div class="fg hide" style="margin-top:8px"><label>Quem participa</label><select id="bvQuem"><option value="corretores">Corretores e coordenadores</option><option value="so_corretores">Só corretores</option></select></div>
         <button class="btn btn-primary btn-block" onclick="salvarBonus()">Salvar regra</button></details>
+      <details class="fx-nova" id="avBox"><summary>Carteira dos anjos: valor por venda</summary>
+        <label class="fv-chk" style="margin-top:10px"><input type="checkbox" id="avAtivo"> Ligado</label>
+        <div class="row2"><div class="fg"><label>Valor por venda (FRD = R$)</label><input id="avValor" inputmode="decimal" placeholder="Ex.: 100"></div><div class="fg"><label>Contar vendas a partir de</label><input id="avDesde" type="date"></div></div>
+        <p class="hint" style="margin:4px 0 10px">Cada venda feita por um corretor que o anjo acompanha entra na Carteira Frade do anjo com esse valor. Venda em parceria entre dois corretores do mesmo anjo conta uma vez. Se a venda cair, o valor sai do saldo. O anjo saca pelo mesmo botão de saque.</p>
+        <button class="btn btn-primary btn-block" onclick="salvarAnjoVenda()">Salvar</button></details>
       <div id="bvTabela"></div>
     </div>
   </div>
@@ -6663,7 +6668,7 @@ function renderPainelPapel(){
   const rkP = pontosDoMes(mesAtual()), pPos = rkP.findIndex(g => g.uid === uidAtual), pEu = rkP[pPos];
   // cartão do perfil
   // aprovações = planilha + cartas do app, sem repetir cliente; vendas = reservas + cartas vendidas
-  const aprovMes = aprovUnificadas(avaliacoesUnificadas().filter(a => a.data >= mi && a.data <= mf), cartas.filter(noMes));
+  const aprovMes = aprovUnificadas(avaliacoes.filter(a => a.data >= mi && a.data <= mf), cartas.filter(noMes));
   const minhasCartas = aprovMes.filter(x => x.uid === uidAtual).length;
   const totMes = rankingDocs.filter(r => r.date >= mi && r.date <= mf && r.status !== 'Cancelada').length, cartasMes = cartas.filter(noMes).length;
   const vendasMes = souGerente() ? vendasUnificadas(mi, mf).length : cartas.filter(vendaNoMes).length, minhasVendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
@@ -6792,7 +6797,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 171;
+const APP_VERSAO = 172;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7324,12 +7329,13 @@ function renderRankingPontos(){
 }
 
 // ---------- relatórios de gestão ----------
+const ptsLig = l => Math.floor((Number(l) || 0) / Math.max(1, Number(appCfg.pontos.ligBloco) || 1)) * (Number(appCfg.pontos.ligacao) || 0);
 function tabelaPontos(linhas){
   if (!linhas.length) return vazio('Sem pontos neste mês', 'Assim que houver visitas, cartas ou vendas, a tabela aparece aqui.');
   const pos = posicoes(linhas);
-  return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th>Pontos</th></tr></thead><tbody>${
-    linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
-  }</tbody></table>`;
+  return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th title="Dias no escritório">Presenças</th><th title="Ligações e recontatos registrados no app. Entre parênteses, os pontos que elas deram">Ligações</th><th class="hide-m" title="Dias de trabalho sem presença">Ausências</th><th>Pontos</th></tr></thead><tbody>${
+    linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}</td><td>${x.presencas ?? '–'}</td><td>${x.ligacoes === undefined ? '–' : `${x.ligacoes}${ptsLig(x.ligacoes) ? ` <small class="muted">(+${ptsLig(x.ligacoes)})</small>` : ''}`}</td><td class="hide-m">${x.ausencias ? `${x.ausencias} <small class="muted">(${x.ausencias * (Number(appCfg.pontos.ausencia) || 0)})</small>` : (x.ausencias === undefined ? '–' : 0)}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
+  }</tbody></table><div class="hint" style="margin-top:8px">Ligações: a cada ${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)} registradas no app, ${Number(appCfg.pontos.ligacao) || 0} ponto${Number(appCfg.pontos.ligacao) === 1 ? '' : 's'}. Os pontos de presença, ligações e ausências já estão somados no total.</div>`;
 }
 function faixaOrig(){ const [mi, mf] = faixa('mes'); return origPer === '3m' ? [somaDias(hojeISO(), -89), mf] : [mi, mf]; }
 function renderRelGestao(){
@@ -7339,7 +7345,7 @@ function renderRelGestao(){
   const meses = [...new Set([mesAtual(), ...Object.keys(pontosMeses)])].sort().reverse();
   if (!ptMesSel || !meses.includes(ptMesSel)) window.ptMesSel = mesAtual();
   $('ptMes').innerHTML = meses.map(m => `<option value="${m}" ${m===ptMesSel?'selected':''}>${nomeMes(m)}${m===mesAtual()?' · em andamento':''}</option>`).join('');
-  let linhas = linhasDoMes(ptMesSel);
+  let linhas = linhasDoMes(ptMesSel).filter(x => relSoCorretor(x.uid, x.nome));
   if (souCoord()) linhas = linhas.filter(x => x.equipe === perfil.equipe);
   const fech = pontosMeses[ptMesSel];
   $('ptInfo').innerHTML = ptMesSel === mesAtual() ? '⏳ Mês em andamento. Os pontos mudam a cada ação e o mês fecha sozinho no dia 1º.'
@@ -8034,7 +8040,7 @@ function acDados(p){
   const leadsPorDia = dias.map(d => [d, ldDia(d)]).filter(([, q]) => q), leads = leadsPorDia.reduce((a, [, q]) => a + q, 0);
   const vis = (souAnjo() ? [...new Map([..._acVis, ...visitas].map(v => [v.id, v])).values()] : visitas).filter(v => v.corretorUid === p.uid && v.status !== 'Cancelada');
   const pastas = (souAnjo() ? _acPastas : analises).filter(a => a.corretorUid === p.uid);
-  const visPer = vis.filter(v => ds.has(v.date)), marc = vis.filter(v => v.criadoEm && ds.has(iso(new Date(v.criadoEm))));
+  const [vde, vate] = per === 'mes' ? faixa('mes') : [dias[0], dias[dias.length - 1]], visPer = vis.filter(v => v.date >= vde && v.date <= vate), marc = vis.filter(v => v.criadoEm && ds.has(iso(new Date(v.criadoEm))));
   const docs = new Set([...avaliacoes.filter(a => a.corretorUid === p.uid && ds.has(a.data)).map(a => 'a' + (a.cpfNorm || a.id)), ...pastas.filter(a => a.enviadaEm && ds.has(iso(new Date(a.enviadaEm)))).map(a => 'a' + (soDig(a.cliente?.cpf || '') || a.id))]).size;
   // cartas aprovadas no período: as lançadas no app + as aprovações da planilha/WhatsApp (o mesmo cliente uma vez só)
   const cl = rankingCartas.filter(c => c.corretorUid === p.uid && ds.has(c.data) && !c.arquivado).map(c => { const full = cartas.find(x => x.id === c.id) || {}; return { id:c.id, data:c.data, cliente:full.cliente || '', valor:c.valor || full.valor || 0, fonte:'carta', k:soDig(full.cpf || '') || 'c' + c.id }; });
@@ -8124,19 +8130,22 @@ function acTotais(){
     return true; };
   const grupo = (l, f) => { const m = {}; l.forEach(x => { const [uid, nome] = f(x), p = quem(uid, nome), k = p ? p.uid : 'n:' + norm(nome || '');
     const tipo = !p ? 'Sem cadastro no app' : p.papel === 'sdr' ? 'SDR' : uids.has(p.uid) ? 'Corretor' : (PAPEIS[p.papel] || 'Outro');
-    (m[k] = m[k] || { nome:nomeBonito(p ? p.nome : nome || 'Sem nome'), tipo, n:0, r:0 }).n++; if (x.status === 'Realizada') m[k].r++; }); return Object.values(m).sort((a, b) => b.n - a.n); };
+    (m[k] = m[k] || { nome:nomeBonito(p ? p.nome : nome || 'Sem nome'), tipo, n:0, r:0, s:0 }).n++; if (x.status === 'Realizada') m[k].r++; if (x.date && visitaDeSdr(x)) m[k].s++; }); return Object.values(m).sort((a, b) => b.n - a.n); };
   const avs = N.avs.filter(a => ok(a.corretorUid, a.corretorNome || a.aba, a.equipe));
   const un = N.unif.filter(x => ok(x.uid, '', x.equipe));
-  const vs = N.vs.filter(r => ok(r.corretorUid, r.corretorNome, r.equipe));
+  // visitas no mês: o mês inteiro, inclusive as agendadas para os próximos dias (mesma conta do Ranking > Visitas > Este mês)
+  const [vde, vate] = acPer === 'mes' ? faixa('mes') : [dias[0], dias[dias.length - 1]];
+  const vs = rankingDocs.filter(r => r.date && r.date >= vde && r.date <= vate && r.status !== 'Cancelada' && !r.arquivado).filter(r => ok(r.corretorUid, r.corretorNome, r.equipe));
   return { docs:avs.length, docsL:grupo(avs, a => [a.corretorUid, a.corretorNome || a.aba]),
     aprov:un.length, aprovL:grupo(un, x => [x.uid, '']),
-    vis:vs.length, real:vs.filter(r => r.status === 'Realizada').length, visL:grupo(vs, r => [r.corretorUid, r.corretorNome]) };
+    vis:vs.length, real:vs.filter(r => r.status === 'Realizada').length, sdr:vs.filter(visitaDeSdr).length, sdrReal:vs.filter(r => visitaDeSdr(r) && r.status === 'Realizada').length, visL:grupo(vs, r => [r.corretorUid, r.corretorNome]) };
 }
 window.acVerTot = k => { const pr = acPer === 'hoje' ? 'de hoje' : acPer === 'ontem' ? 'de ontem' : 'do mês', T = acTotais();
-  const cfg = { docs:['Documentações', T.docsL, 'Mesma conta do Painel executivo: as documentações da planilha de avaliações.'], aprov:['Cartas aprovadas', T.aprovL, 'Mesma conta do Painel executivo: aprovações da planilha e cartas lançadas no app, sem repetir cliente.'], vis:['Visitas', T.visL, 'Todas as visitas com data no período (menos as canceladas). O segundo número é quantas foram realizadas.'] }[k];
+  const cfg = { docs:['Documentações', T.docsL, 'Mesma conta do Painel executivo: as documentações da planilha de avaliações.'], aprov:['Cartas aprovadas', T.aprovL, 'Mesma conta do Painel executivo: aprovações da planilha e cartas lançadas no app, sem repetir cliente.'], vis:['Visitas', T.visL, acPer === 'mes' ? 'Mesma conta do Ranking de visitas (Este mês): todas as visitas com data neste mês, inclusive as agendadas para os próximos dias. Canceladas não entram. Entre parênteses, quantas já foram realizadas.' : 'Todas as visitas com data no período (menos as canceladas). Entre parênteses, quantas foram realizadas.'] }[k];
   const tot = cfg[1].reduce((a, x) => a + x.n, 0), grupos = {}; cfg[1].forEach(x => (grupos[x.tipo] = grupos[x.tipo] || []).push(x));
   $('acLdTit').textContent = `${cfg[0]} ${pr} · ${tot}`;
-  $('acLdCorpo').innerHTML = tot ? Object.entries(grupos).map(([t2, l]) => `<div class="rep-sec" style="margin:10px 0 4px">${esc(t2)} · ${l.reduce((a, x) => a + x.n, 0)}</div>` + l.map(x => `<div class="ac-ld"><b>${esc(x.nome)}</b><b>${k === 'vis' ? `${x.n} <small class="muted">(${x.r} realizada${x.r === 1 ? '' : 's'})</small>` : x.n}</b></div>`).join('')).join('') + `<div class="muted" style="font-size:12px;margin-top:10px">${cfg[2]}</div>` : '<div class="muted">Nada nesse período.</div>';
+  const topo = k === 'vis' && tot ? `<div class="ac-ld" style="background:var(--soft,#f1f5f9);border-radius:10px;padding:8px 10px"><span>Marcadas pelas SDRs (já somadas no total, no nome do corretor que atende)</span><b>${T.sdr} <small class="muted">(${T.sdrReal} realizada${T.sdrReal === 1 ? '' : 's'})</small></b></div>` : '';
+  $('acLdCorpo').innerHTML = tot ? topo + Object.entries(grupos).map(([t2, l]) => `<div class="rep-sec" style="margin:10px 0 4px">${esc(t2)} · ${l.reduce((a, x) => a + x.n, 0)}</div>` + l.map(x => `<div class="ac-ld"><b>${esc(x.nome)}</b><b>${k === 'vis' ? `${x.n} <small class="muted">(${x.r} realizada${x.r === 1 ? '' : 's'}${x.s ? `, ${x.s} da SDR` : ''})</small>` : x.n}</b></div>`).join('')).join('') + `<div class="muted" style="font-size:12px;margin-top:10px">${cfg[2]}</div>` : '<div class="muted">Nada nesse período.</div>';
   abrir('acLdModal'); };
 window.acSetFoco = f => { if (f === 'leadsTot') { acVerLeadsTotal(); return; } if (f.endsWith('Tot')) { acVerTot(f.slice(0, -3)); return; } if (f === 'al') { acSoAlerta = !acSoAlerta; acFoco = ''; } else acFoco = acFoco === f ? '' : f; renderAcomp(true); };
 window.acVer = (tipo, uid) => { const x = (window._acLinhas || []).find(y => y.p.uid === uid); if (!x) return;
@@ -8444,7 +8453,7 @@ async function rcLeadsDoDia(d){
 }
 window.pintarRelCor = async () => {
   const d = $('rcDia').value || mdOntem(); window._rcDia = d;
-  const gente = pessoasFunil().filter(p => (p.uid !== uidAtual || !souAnjo()) && (p.papel || (perfisTodos.find(x => x.uid === p.uid) || {}).papel) !== 'sdr').map(p => ({ uid:p.uid, nome:String(p.nome || '').replace(/ \(você\)$/, '') }));
+  const gente = pessoasFunil().filter(p => (p.uid !== uidAtual || !souAnjo()) && relSoCorretor(p.uid, p.nome)).map(p => ({ uid:p.uid, nome:String(p.nome || '').replace(/ \(você\)$/, '') }));
   const leads = await rcLeadsDoDia(d), vals = mdValores([d]);
   const ra = uid => rankingAtiv.filter(r => r.uid === uid), n = (uid, c) => ra(uid).reduce((a, r) => a + (Number((r[c] || {})[d]) || 0), 0);
   const pres = uid => ra(uid).some(r => (r.pres || {})[d] || (r.chk || {})[d]) || ['presente','externo'].includes(presencas[d]?.marcados?.[uid]?.status || '');
@@ -8495,6 +8504,14 @@ function casaPerfilNome(nome, lista){
   if (tk.length > 1) { const c2 = c.filter(x => tok(x).includes(tk[tk.length - 1])); if (c2.length === 1) return c2[0]; }
   return null;
 }
+// v172: nos relatórios só entram corretores e coordenadores (sem gerência, CEO, ADM, marketing, correspondente, SDR, anjo nem conta de teste). Nome do CRM sem cadastro continua.
+function relSoCorretor(uid, nome){
+  if (/\bteste?\b/i.test(String(nome || ''))) return false;
+  const todos = [...perfisTodos, ...rkPessoas.filter(r => !perfisTodos.some(p => p.uid === r.uid))];
+  const p = (uid && todos.find(x => x.uid === uid)) || (!uid && nome ? casaPerfilNome(nome, todos) : null);
+  if (!p) return !uid;
+  return ['corretor','coordenador'].includes(p.papel) && !/\bteste?\b/i.test(String(p.nome || ''));
+}
 function dadosPlanilhaMes(r){
   const tab = JSON.parse(r.tabelaJson || '[]'), cab1 = tab[1] || [];
   const semanas = [];
@@ -8505,7 +8522,7 @@ function dadosPlanilhaMes(r){
   const res = {}, con = {};
   reservas.filter(x => x.dia >= de && x.dia <= ate).forEach(x => { const cs = corretoresDaReserva(x.corretorTexto); cs.forEach(c => { const k = c.uid || norm(c.nome); res[k] = (res[k] || 0) + 1 / Math.max(1, cs.length); }); });
   cartas.filter(c => c.status === 'Venda fechada' && (c.vendaEm || c.data) >= de && (c.vendaEm || c.data) <= ate).forEach(c => { const k = c.corretorUid || norm(c.corretorNome); con[k] = (con[k] || 0) + 1; });
-  const linhas = tab.slice(3).filter(l => l[0] && l[0] !== 'TOTAL').map(l => {
+  const linhas = tab.slice(3).filter(l => l[0] && l[0] !== 'TOTAL' && relSoCorretor('', l[0])).map(l => {
     const p = porNome(l[0]), k = p ? p.uid : norm(l[0]);
     const sem = semanas.map((_, i) => ({ lead:Number(l[1 + i * 5]) || 0, doc:Number(l[2 + i * 5]) || 0 }));
     const t = sem.reduce((a, s) => ({ lead:a.lead + s.lead, doc:a.doc + s.doc }), { lead:0, doc:0 });
@@ -8622,7 +8639,7 @@ window.planilhaMensal = async id => {
 
 window.excelRelatorio = async id => {
   const r = (relatoriosLista || []).find(x => x.id === id || x.id === window._repAtual); if (!r) return;
-  const tab = JSON.parse(r.tabelaJson || '[]');
+  const tab0 = JSON.parse(r.tabelaJson || '[]'), tab = tab0.filter((l, i) => i < 3 || !l[0] || l[0] === 'TOTAL' || relSoCorretor('', l[0]));
   try {
     const X = await carregarXLSX(), wb = X.utils.book_new(), ws = X.utils.aoa_to_sheet(tab);
     ws['!cols'] = [{ wch:24 }, ...Array(Math.max(0, (tab[1] || []).length - 1)).fill({ wch:8 })];
@@ -9962,22 +9979,34 @@ function assinarSaques(){
 const valorVisitaCart = (c = bvCfg()) => c.soFeirao ? ((c.modo === 'por_visita' && Number(c.valor)) || 50) : (c.modo === 'por_visita' ? Number(c.valor) || 0 : 0);
 // pendente até 2 dias depois do sábado; se a visita não foi feita (faltou, cancelou ou passou do prazo) sai do pendente e não vale nada
 const visitaPendenteCart = (v, c = bvCfg()) => !!v && c.soFeirao && !!v.feirao && ehSabado(v.date) && !v.arquivado && v.status !== 'Realizada' && !PERDA_V.includes(v.status) && v.date >= somaDias(hojeISO(), -2);
+// v172: carteira do anjo. Cada venda feita por um corretor que ele acompanha vale um valor fixo (a gerência define). Venda que caiu sai do saldo.
+const avCfg = () => ({ ativo:false, valor:0, desde:'', ...(appCfg.anjoVenda || {}) });
+const membrosDoAnjo = uid => { const p = uid === uidAtual ? perfil : (perfisTodos.find(x => x.uid === uid) || rkPessoas.find(x => x.uid === uid)); return Array.isArray(p?.membros) ? p.membros : []; };
+const ehAnjoUid = uid => uid === uidAtual ? perfil?.papel === 'anjo' : ((perfisTodos.find(x => x.uid === uid) || rkPessoas.find(x => x.uid === uid) || {}).papel === 'anjo');
+function vendasDoAnjo(uid, a = avCfg()){
+  if (!a.ativo || !(Number(a.valor) > 0) || !ehAnjoUid(uid)) return [];
+  const mb = new Set(membrosDoAnjo(uid)); if (!mb.size) return [];
+  return rankingVendas.filter(v => !v.caiu && v.dia && (!a.desde || v.dia >= a.desde) && (v.corretores || []).some(c => mb.has(c.uid)))
+    .map(v => ({ id:v.id, dia:v.dia, corretor:(v.corretores || []).filter(c => mb.has(c.uid)).map(c => primeiro(nomeBonito(c.nome || ''))).join(' e '), valor:Number(a.valor) || 0 }))
+    .sort((x, y) => y.dia.localeCompare(x.dia));
+}
 function saldoCarteira(uid, c = bvCfg()){
-  const meus = visitas.filter(v => donoCart(v) === uid), vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
+  const meus = c.ativo ? visitas.filter(v => donoCart(v) === uid) : [], vale = meus.filter(v => visitaVale(v, c)), pendL = meus.filter(v => visitaPendenteCart(v, c));
   const porMes = {}; vale.forEach(v => { const m = (v.date || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
   // v119: no modo Feirão cada visita vale o valor fixo (padrão FRD 50), mesmo sem regra preenchida
   const cada = valorVisitaCart(c);
-  const ganho = c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0);
+  const vendasA = vendasDoAnjo(uid), ganhoAnjo = vendasA.reduce((a, v) => a + v.valor, 0);
+  const ganho = (c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0)) + ganhoAnjo;
   const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0);
-  return { ganho, cada, vale, pendL, pend:pendL.length * cada, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
+  return { ganho, ganhoAnjo, vendasA, cada, vale, pendL, pend:pendL.length * cada, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
 }
 // v133: a carteira vale para todos os perfis (corretor, coordenador, SDR, anjo e gerência); só o correspondente fica de fora
-const participaCarteira = (c = bvCfg()) => c.ativo && souAtivo() && !souCorresp();
+const participaCarteira = (c = bvCfg()) => souAtivo() && !souCorresp() && (c.ativo || (perfil?.papel === 'anjo' && avCfg().ativo && Number(avCfg().valor) > 0));
 function htmlPoupanca(){
   const c = bvCfg(); if (view !== 'hoje' || !participaCarteira(c)) return '';
   const k = saldoCarteira(uidAtual, c);
   setTimeout(() => conferirPoupanca(mesAtual(), k.ganho), 0);
-  return `<button type="button" class="poup" onclick="abrirCarteira()"><div class="poup-ic">FRD</div><div class="poup-tx"><small>Carteira Frade · saldo disponível</small><b>${frd(k.disponivel)}</b>${k.pend ? `<em class="poup-pend">+ ${frd(k.pend)} pendente</em>` : ''}<span>${c.soFeirao ? 'visitas do Feirão Tenda' : 'visitas realizadas'}${k.cada ? ` · ${frd(k.cada)} cada` : ''}</span></div><i class="poup-ver">Abrir</i></button>`;
+  return `<button type="button" class="poup" onclick="abrirCarteira()"><div class="poup-ic">FRD</div><div class="poup-tx"><small>Carteira Frade · saldo disponível</small><b>${frd(k.disponivel)}</b>${k.pend ? `<em class="poup-pend">+ ${frd(k.pend)} pendente</em>` : ''}<span>${[c.ativo ? (c.soFeirao ? 'visitas do Feirão Tenda' : 'visitas realizadas') + (k.cada ? ` · ${frd(k.cada)} cada` : '') : '', perfil?.papel === 'anjo' && avCfg().ativo ? `vendas dos seus corretores · ${frd(avCfg().valor)} cada` : ''].filter(Boolean).join(' · ')}</span></div><i class="poup-ver">Abrir</i></button>`;
 }
 function conferirPoupanca(m, b){
   let antes = null; const k = 'poup_' + uidAtual + '_tot';
@@ -9992,7 +10021,7 @@ window.mostrarGanho = mostrarGanho;
 function htmlBonusMeu(){
   const c = bvCfg(); if (!participaCarteira(c)) return '';
   const k = saldoCarteira(uidAtual, c);
-  return `<div class="bv-meu"><span>FRD</span><div><b>Carteira Frade: ${frd(k.disponivel)} disponível</b><small>${k.pend ? 'Pendente: ' + frd(k.pend) + ' · ' : ''}${k.cada ? frd(k.cada) + ' por visita' : ''}</small></div></div>`;
+  return `<div class="bv-meu"><span>FRD</span><div><b>Carteira Frade: ${frd(k.disponivel)} disponível</b><small>${k.pend ? 'Pendente: ' + frd(k.pend) + ' · ' : ''}${c.ativo && k.cada ? frd(k.cada) + ' por visita' : ''}${perfil?.papel === 'anjo' && avCfg().ativo ? (c.ativo && k.cada ? ' · ' : '') + frd(avCfg().valor) + ' por venda dos seus corretores' : ''}</small></div></div>`;
 }
 const PIX_TIPOS = [['cpf','CPF'], ['telefone','Telefone'], ['email','E-mail'], ['aleatoria','Chave aleatória'], ['cnpj','CNPJ']];
 window.abrirCarteira = (soAtualiza) => {
@@ -10001,17 +10030,19 @@ window.abrirCarteira = (soAtualiza) => {
   $('cartTot').textContent = frd(k.disponivel);
   $('cartSub').textContent = 'Saldo disponível';
   $('cartPend').textContent = frd(k.pend);
-  $('cartResumo').innerHTML = `<div><small>Visitas pendentes</small><b>${k.pendL.length}</b></div><div><small>Já sacado</small><b>${frd(k.sacado)}</b></div><div><small>Total ganho</small><b>${frd(k.ganho)}</b></div>`;
+  $('cartResumo').innerHTML = (k.vendasA.length || (perfil?.papel === 'anjo' && avCfg().ativo) ? `<div><small>Vendas dos seus corretores</small><b>${k.vendasA.length}</b></div>` : '') + `<div><small>Visitas pendentes</small><b>${k.pendL.length}</b></div><div><small>Já sacado</small><b>${frd(k.sacado)}</b></div><div><small>Total ganho</small><b>${frd(k.ganho)}</b></div>`;
   $('cartPix').innerHTML = pix && pix.chave
     ? `<div class="cart-pix"><div><small>Seu PIX</small><b>${esc((PIX_TIPOS.find(t => t[0] === pix.tipo) || [, 'Chave'])[1])}: ${esc(pix.chave)}</b><small>Titular: ${esc(pix.titular || perfil.nome)}</small></div><button class="link" onclick="editarPix()">Trocar</button></div>`
     : `<div class="cart-pix falta"><b>Cadastre seu PIX para poder sacar</b><small>O pedido de saque já vai com a sua chave.</small><button class="btn btn-ghost" onclick="editarPix()">Cadastrar PIX</button></div>`;
   const pode = k.disponivel > 0;
   $('cartSaqueBt').disabled = !pode; $('cartSaqueBt').textContent = pode ? `Solicitar saque de ${frd(k.disponivel)}` : 'Sem saldo para sacar';
   $('cartLista').innerHTML = (k.pendL.length ? `<h4 class="cart-h">Pendente</h4>` + k.pendL.sort((a, b) => (a.date || '').localeCompare(b.date || '')).map(v => item(v, 'pend')).join('') : '')
+    + (k.vendasA.length ? `<h4 class="cart-h">Vendas dos seus corretores</h4>` + k.vendasA.map(v => `<div class="cart-it ok"><div><b>Venda de ${esc(v.corretor || 'corretor')}</b><small>${dataBR(v.dia)} · venda feita</small></div><span>+ ${frd(v.valor)}</span></div>`).join('') : '')
     + (k.vale.length ? `<h4 class="cart-h">Visitas realizadas</h4>` + k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(v => item(v, 'ok')).join('') : '')
     + (ult.length ? `<h4 class="cart-h">Saques</h4>` + ult.map(x => `<div class="cart-it"><div><b>${frd(x.valor)}</b><small>${new Date(x.em).toLocaleDateString('pt-BR')} · pedido nº ${esc(x.cod || '')}</small></div><span class="cart-st ${x.status}">${x.status === 'pago' ? 'Pago' : 'Solicitado'}</span></div>`).join('') : '')
-    || `<div class="muted" style="padding:14px 0">Ainda não tem saldo. ${c.soFeirao ? `Cada visita do <b>Feirão Tenda</b> realizada no sábado vale <b>${frd(valorVisitaCart(c))}</b>. Marcou a visita, o valor já aparece como pendente.` : ''}</div>`;
-  $('cartRegra').innerHTML = c.soFeirao ? `Visita do Feirão Tenda marcada para sábado entra como <b>pendente</b>. Quando ela é marcada como <b>Realizada</b>, o valor vai na hora para o <b>saldo disponível</b> e já pode ser sacado. Se a visita não acontecer (não compareceu, cancelada ou sem atualização até 2 dias depois), ela sai do pendente e não vale nada. 1 FRD = R$ 1,00.` : '1 FRD = R$ 1,00.';
+    || `<div class="muted" style="padding:14px 0">Ainda não tem saldo. ${perfil?.papel === 'anjo' && avCfg().ativo ? `Cada venda de um corretor que você acompanha vale <b>${frd(avCfg().valor)}</b>. ` : ''}${c.ativo && c.soFeirao ? `Cada visita do <b>Feirão Tenda</b> realizada no sábado vale <b>${frd(valorVisitaCart(c))}</b>. Marcou a visita, o valor já aparece como pendente.` : ''}</div>`;
+  const regraAnjo = perfil?.papel === 'anjo' && avCfg().ativo ? `Cada venda feita por um corretor que você acompanha vale <b>${frd(avCfg().valor)}</b> e entra direto no saldo disponível. Se a venda cair, o valor sai do saldo. ` : '';
+  $('cartRegra').innerHTML = regraAnjo + (!c.ativo ? '1 FRD = R$ 1,00.' : c.soFeirao ? `Visita do Feirão Tenda marcada para sábado entra como <b>pendente</b>. Quando ela é marcada como <b>Realizada</b>, o valor vai na hora para o <b>saldo disponível</b> e já pode ser sacado. Se a visita não acontecer (não compareceu, cancelada ou sem atualização até 2 dias depois), ela sai do pendente e não vale nada. 1 FRD = R$ 1,00.` : '1 FRD = R$ 1,00.');
   if (!soAtualiza) abrir('carteiraModal');
 };
 window.editarPix = () => {
@@ -10031,11 +10062,11 @@ window.solicitarSaque = () => {
   if (!pix || !pix.chave) { toast('Cadastre seu PIX antes de sacar'); editarPix(); return; }
   const fone = telZap(c.saqueFone || ''); if (!fone) { toast('A gerência ainda não cadastrou o WhatsApp que recebe os saques'); return; }
   const ref = doc(collection(db,'saques')), cod = ref.id.slice(0, 6).toUpperCase(), agora = new Date(), quem = c.saqueNome || 'André';
-  const nVis = k.cada ? Math.round(k.disponivel / k.cada) : k.vale.length, vis = k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, Math.max(0, nVis));
+  const nVis = !c.ativo ? 0 : k.cada ? Math.min(k.vale.length, Math.round(Math.max(0, k.disponivel - k.ganhoAnjo) / k.cada)) : k.vale.length, vis = k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, Math.max(0, nVis));
   const tipoPix = (PIX_TIPOS.find(t => t[0] === pix.tipo) || [, 'Chave'])[1], eq = eqNome(perfil.equipe || '').replace(/^[^\p{L}]+/u, '');
   const msg = `Olá, ${quem}! Tudo bem?\n\nAqui é *${nomeBonito(perfil.nome)}*${eq ? ' (' + eq + ')' : ''}. Pelo App Frade, estou fazendo uma *solicitação de saque* do meu saldo da Carteira Frade.\n\n`
     + `*Valor do saque:* ${frd(k.disponivel)} (R$ ${k.disponivel.toLocaleString('pt-BR', { minimumFractionDigits:2 })})\n`
-    + `*Origem:* ${nVis} visita${nVis === 1 ? '' : 's'} realizada${nVis === 1 ? '' : 's'} no Feirão Tenda\n`
+    + `*Origem:* ${[k.vendasA.length ? `${k.vendasA.length} venda${k.vendasA.length === 1 ? '' : 's'} dos corretores que acompanho (${frd(k.ganhoAnjo)})` : '', nVis ? `${nVis} visita${nVis === 1 ? '' : 's'} realizada${nVis === 1 ? '' : 's'} no Feirão Tenda` : ''].filter(Boolean).join(' e ')}\n`
     + vis.map(v => `• ${dataBR(v.date).slice(0, 5)} · ${nomeBonito(v.cliente || 'Cliente')}`).join('\n') + (vis.length ? '\n' : '')
     + `\n*Dados para o PIX*\nChave (${tipoPix}): ${pix.chave}\nTitular: ${pix.titular || perfil.nome}\n\n`
     + `Pedido nº ${cod} · ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}.\nQuando o PIX for feito, é só me avisar por aqui. Obrigado!`;
@@ -10057,6 +10088,7 @@ window.bvFaixaAdd = () => { (window._bvF ||= []).push({ min:0, valor:0 }); bvFai
 window.abrirBonus = () => {
   const c = bvCfg(); $('bvAtivo').checked = !!c.ativo; $('bvModo').value = c.modo; $('bvValor').value = c.valor ? String(c.valor).replace('.', ',') : ''; $('bvMetaN').value = c.meta || ''; $('bvPremio').value = c.premio ? String(c.premio).replace('.', ',') : ''; $('bvQuem').value = c.quem || 'corretores'; $('bvCarta').checked = c.exigeCarta !== false; $('bvCons').value = c.construtora || ''; $('bvFeirao').checked = c.soFeirao !== false; $('bvSaqNome').value = c.saqueNome || 'André'; $('bvSaqFone').value = c.saqueFone || ''; $('bvConsWrap').classList.toggle('hide', c.soFeirao !== false); $('bvCartaRow').classList.toggle('hide', c.soFeirao !== false);
   window._bvF = (c.faixas || []).map(x => ({ ...x })); if (!window._bvF.length) window._bvF = [{ min:10, valor:100 }, { min:20, valor:250 }, { min:30, valor:400 }];
+  const av = avCfg(); $('avAtivo').checked = !!av.ativo; $('avValor').value = av.valor ? String(av.valor).replace('.', ',') : ''; $('avDesde').value = av.desde || hojeISO(); $('avBox').classList.toggle('hide', !souDono()); $('avBox').open = !av.ativo;
   bvFaixasDesenha(); bvModoVis(); $('bvRegraBox').open = !c.ativo; $('bvRegraBox').classList.toggle('hide', !souDono()); desenharBonus(); abrir('bonusModal');
 };
 window.salvarBonus = async () => {
@@ -10064,9 +10096,23 @@ window.salvarBonus = async () => {
     faixas:(window._bvF || []).filter(f => f.min > 0 && f.valor > 0).sort((a, b) => a.min - b.min) };
   try { await gravar(setDoc(doc(db,'config','app'), { bonusVisitas:d }, { merge:true })); appCfg.bonusVisitas = d; toast('Regra do bônus salva ✓'); desenharBonus(); } catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'só o gestor muda a regra' : e.message)); }
 };
+window.salvarAnjoVenda = async () => {
+  const d = { ativo:$('avAtivo').checked, valor:lerDec($('avValor').value) || 0, desde:$('avDesde').value || hojeISO() };
+  if (d.ativo && !(d.valor > 0)) { toast('Coloque o valor por venda'); $('avValor').focus(); return; }
+  try { await gravar(setDoc(doc(db,'config','app'), { anjoVenda:d }, { merge:true })); appCfg.anjoVenda = d; toast('Carteira dos anjos salva'); desenharBonus(); } catch(e) { toast('Erro: ' + (e.code === 'permission-denied' ? 'só o gestor muda essa regra' : e.message)); }
+};
+// v172: quanto cada anjo tem a receber pelas vendas dos corretores dele
+function htmlAnjosVendas(){
+  const a = avCfg(); if (!a.ativo || !(Number(a.valor) > 0)) return '';
+  const m = finMes || mesAtual(), anjos = pessoasRk().filter(p => p.papel === 'anjo' && p.status === 'ativo');
+  if (!anjos.length) return '';
+  const l = anjos.map(p => { const v = vendasDoAnjo(p.uid, a), noMes = v.filter(x => x.dia.slice(0, 7) === m), sac = saques.filter(x => x.uid === p.uid && x.status !== 'recusado').reduce((s2, x) => s2 + (Number(x.valor) || 0), 0);
+    return { p, n:noMes.length, val:noMes.reduce((s2, x) => s2 + x.valor, 0), tot:v.reduce((s2, x) => s2 + x.valor, 0), sac }; }).sort((x, y) => y.val - x.val || x.p.nome.localeCompare(y.p.nome, 'pt-BR'));
+  return `<h3 style="margin:18px 0 6px;font-size:15px">Carteira dos anjos · ${frd(a.valor)} por venda</h3><div class="tbl-wrap"><table class="rank"><thead><tr><th>Anjo</th><th>Vendas em ${esc(nomeMes(m).split(' ')[0].toLowerCase())}</th><th>Valor no mês</th><th>Total ganho</th><th>Já sacado</th></tr></thead><tbody>${l.map(x => `<tr><td><span class="nm">${esc(nomeBonito(x.p.nome))}</span></td><td>${x.n}</td><td><b>${frd(x.val)}</b></td><td>${frd(x.tot)}</td><td>${frd(x.sac)}</td></tr>`).join('')}</tbody></table></div><p class="hint" style="margin-top:6px">Vendas a partir de ${dataBR(a.desde || hojeISO())}. Conta pelos corretores que cada anjo acompanha hoje (cadastro do anjo).</p>`;
+}
 function desenharBonus(){
   const c = bvCfg(), m = finMes || mesAtual();
-  if (!c.ativo) { $('bvTabela').innerHTML = '<div class="muted" style="font-size:13.5px;margin-top:10px">O bônus está desligado. Abra “Regra do bônus”, escolha como funciona e ligue.</div>'; return; }
+  if (!c.ativo) { $('bvTabela').innerHTML = '<div class="muted" style="font-size:13.5px;margin-top:10px">O bônus por visitas está desligado. Abra “Regra do bônus”, escolha como funciona e ligue.</div>' + htmlAnjosVendas(); desenharSaques(); return; }
   const ps = perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'correspondente')
     .map(p => { const n = visitasRealizadas(p.uid, m), b = bonusDe(n, c), l = finLanc.find(x => x.id === 'bv_' + m + '_' + p.uid); return { p, n, b, l }; })
     .sort((a, b) => b.n - a.n || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
@@ -10079,6 +10125,10 @@ function desenharBonus(){
   const vf = visitas.filter(v => (v.date || '').slice(0, 7) === m && (c.soFeirao ? v.feirao : visitaVale(v, c)) && !v.arquivado && v.status !== 'Cancelada').sort((a, b) => (a.date || '').localeCompare(b.date || ''));
   if (vf.length) $('bvTabela').insertAdjacentHTML('beforeend', `<h3 style="margin:18px 0 6px;font-size:15px">Visitas do Feirão: quem marcou e quem recebe</h3><div class="tbl-wrap"><table class="rank"><thead><tr><th>Dia</th><th>Cliente</th><th>Marcou</th><th>Corretor</th><th>Recebe</th><th>Situação</th></tr></thead><tbody>${vf.map(v => { const dn = donoCart(v), vale = visitaVale(v, c), pend = visitaPendenteCart(v, c);
     return `<tr><td>${esc((v.date || '').slice(8) + '/' + (v.date || '').slice(5, 7))}</td><td>${esc(v.cliente || '')}</td><td>${esc(primeiro(nmP(v.criadoPor) || v.sdrNome || '—'))}${v.criadoPor && v.criadoPor === v.sdrUid ? ' <small class="muted">SDR</small>' : v.fonte === 'whatsapp_sdr' ? ' <small class="muted">da conversa da SDR</small>' : ''}</td><td>${esc(primeiro(v.corretorNome || nmP(v.corretorUid) || '—'))}</td><td><b>${esc(primeiro(nmP(dn) || '—'))}</b></td><td>${vale ? `<span class="fin-pos">${frd(valorVisitaCart(c))}</span>` : pend ? `<span class="muted">${frd(valorVisitaCart(c))} pendente</span>` : '<span class="muted">não vale</span>'}</td></tr>`; }).join('')}</tbody></table></div><p class="hint" style="margin-top:6px">Os FRD vão para quem marcou a visita no app. Marcada pela SDR para outro corretor, o valor é da SDR.</p>`);
+  $('bvTabela').insertAdjacentHTML('beforeend', htmlAnjosVendas());
+  desenharSaques();
+}
+function desenharSaques(){
   const sq = saques.slice().sort((x, y) => (x.status === 'solicitado' ? 0 : 1) - (y.status === 'solicitado' ? 0 : 1) || (y.em || 0) - (x.em || 0)).slice(0, 40);
   $('bvTabela').insertAdjacentHTML('beforeend', `<h3 style="margin:18px 0 6px;font-size:15px">Pedidos de saque da Carteira Frade</h3>` + (sq.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Valor</th><th>PIX</th><th>Pedido</th><th></th></tr></thead><tbody>${sq.map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span></td><td><b>${frd(x.valor)}</b></td><td style="word-break:break-all">${esc((x.pix || {}).chave || '')}<br><small class="muted">${esc((x.pix || {}).titular || '')}</small></td><td>${new Date(x.em).toLocaleDateString('pt-BR')}<br><small class="muted">nº ${esc(x.cod || '')}</small></td><td>${x.status === 'solicitado' ? (souGerente() && !souCeo() ? `<button class="link" onclick="marcarSaque('${x.id}','pago')">marcar pago</button><br><button class="link" style="color:var(--danger)" onclick="marcarSaque('${x.id}','recusado')">recusar</button>` : 'solicitado') : x.status === 'pago' ? '<span class="fin-pos">pago</span>' : '<span class="muted">recusado</span>'}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted" style="font-size:13.5px">Nenhum pedido de saque ainda.</div>'));
 }
@@ -12812,6 +12862,7 @@ window.pedirNota = id => {
 // ---------- painel do dono ----------
 function faixaMesRel(n){ const d = new Date(); const a = new Date(d.getFullYear(), d.getMonth() - n, 1), b = new Date(d.getFullYear(), d.getMonth() - n + 1, 0); return [iso(a), iso(b)]; }
 // aprovações unificadas: planilha da administração + cartas do app, sem contar o mesmo cliente duas vezes
+// v172: recebe todas as linhas da planilha do período (não só a última de cada cliente), como o relatório do mês do carteiro
 function aprovUnificadas(avs, cs){
   const m = new Map();
   const chave = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
@@ -13058,7 +13109,7 @@ function numerosPeriodo(de, ate){
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
     semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
-    sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoesUnificadas().filter(a => noP(a.data)), cs), vendas:vendasUnificadas(de, ate).length, vendasL:vendasUnificadas(de, ate), valorVendido:vendasUnificadas(de, ate).reduce((a,v) => a + v.valor, 0), valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
+    sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoes.filter(a => noP(a.data)), cs), vendas:vendasUnificadas(de, ate).length, vendasL:vendasUnificadas(de, ate), valorVendido:vendasUnificadas(de, ate).reduce((a,v) => a + v.valor, 0), valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
 }
 function variacao(a, b){
@@ -13247,13 +13298,14 @@ function calcDesempenho(de, ate){
   avs.forEach(a => { const r = pega(a.corretorUid, a.corretorNome || a.aba, a.equipe); r.docs++; const g = infoStatus(a.status).g; if (g === 'condicionado') r.cond++; if (g === 'reprovado') r.reprov++; });
   // aprovações: planilha + cartas do app, sem repetir cliente
   const m = new Map(), chaveCli = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
-  avaliacoesUnificadas().filter(a => a.data >= de && a.data <= ate && infoStatus(a.status).g === 'aprovado').forEach(a => { const k = chaveCli(a.cpfNorm || a.cpf, a.telNorm, a.id); if (!m.has(k)) m.set(k, [a.corretorUid, a.corretorNome || a.aba, a.equipe]); });
+  // v172: igual ao relatório do mês: toda linha aprovada da planilha com data no período conta, o mesmo cliente uma vez só
+  avaliacoes.filter(a => a.data >= de && a.data <= ate && infoStatus(a.status).g === 'aprovado').forEach(a => { const k = chaveCli(a.cpfNorm || a.cpf, a.telNorm, a.id); if (!m.has(k)) m.set(k, [a.corretorUid, a.corretorNome || a.aba, a.equipe]); });
   cartas.filter(c => c.data >= de && c.data <= ate).forEach(c => { const k = chaveCli(c.cpfNorm || c.cpf, c.telNorm || chaveTel(c.telefone), c.id); m.set(k, [c.corretorUid, c.corretorNome, c.equipe]); });
   m.forEach(([uid, nome, eq]) => { pega(uid, nome, eq).aprov++; });
   // vendas (reservas): em parceria, conta para cada corretor da reserva; no total conta uma vez
   const vendasP = vendasUnificadas(de, ate);
   vendasP.forEach(v => (v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor' }]).forEach(c => { pega(c.uid, c.nome, c.equipe).vendas++; }));
-  return { linhas, vendasP };
+  return { linhas:new Map([...linhas].filter(([, r]) => relSoCorretor(r.uid, r.nome))), vendasP };
 }
 function renderDesempenho(){
   if (!podeGerir()) { $('desConteudo').innerHTML = ''; return; }
