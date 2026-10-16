@@ -1046,6 +1046,7 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth iframe{pointer-events:none}
 .lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;transition-behavior:allow-discrete}
 
+.ac-pap{font-size:10.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:1px 7px;vertical-align:middle;margin-left:4px}
 /* v172: abas de equipe na tela de vendas */
 .vend-eq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
 .vend-eq button{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -3077,7 +3078,9 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div class="card hide" id="cardPresenca" style="margin-bottom:20px">
           <div class="card-head pt-head"><h2>Presença no escritório</h2><input type="date" id="presData" onchange="mudarDiaPresenca(this.value)" style="width:auto"></div>
           <div class="hint" style="margin-top:0" id="presResumo"></div><button class="btn btn-ghost hide" id="presAbonar" style="margin:4px 0 8px" onclick="abonarDiaTodos()">Abonar quem está sem marcar neste dia</button>
+          <div class="seg vend-eq" id="presEqAbas" role="tablist" aria-label="Filtrar por equipe"></div>
           <div id="presLista"></div>
+          <div id="presSemConta"></div>
           <div class="rep-sec" style="margin:16px 0 8px">Resumo do mês</div>
           <div id="presMes"></div>
         </div>
@@ -3102,7 +3105,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
           <div class="chips" id="corEquipes" style="margin-bottom:10px"></div>
           <div class="people" id="corLista"></div>
         </div>
-        <div class="card gerente-only hide" style="margin-bottom:20px"><div class="set-row" style="border:0;padding:0"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Dá pra restaurar ou, só o gestor, excluir de vez.e dá para restaurar.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div></div>
+        <div class="card gerente-only hide" style="margin-bottom:20px"><div class="set-row" style="border:0;padding:0"><div><b>🗄️ Arquivados</b><span>Visitas e cartas tiradas da lista. Dá para restaurar ou, só o gestor, excluir de vez.</span></div><button class="btn btn-ghost" onclick="abrirArquivados()">Ver</button></div></div>
         <div class="set-grid gerente-only hide">
           <div class="card">
             <div class="card-head"><h2>Equipes</h2></div>
@@ -6833,7 +6836,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 175;
+const APP_VERSAO = 176;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8044,9 +8047,11 @@ function acPessoas0(){
   const base = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel));
   if (souAnjo()) return membrosAnjo().map(u => { const p = base.find(x => x.uid === u) || rkPessoas.find(x => x.uid === u) || {}; return { uid:u, nome:p.nome || (perfil.membrosNomes || [])[membrosAnjo().indexOf(u)] || 'Corretor', equipe:p.equipe || '', papel:p.papel || 'corretor' }; });
   if (souCoord()) return base.filter(p => p.equipe === perfil.equipe);
+  // v175: a gerência vê também os anjos (e os coordenadores) na lista e na presença
+  const comAnjos = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel));
   const f = window.acEq;
-  if (f && f.startsWith('anjo:')) { const a = rkPessoas.find(p => p.uid === f.slice(5)) || perfisTodos.find(p => p.uid === f.slice(5)); const m = new Set(a?.membros || []); return base.filter(p => m.has(p.uid)); }
-  return f && f !== 'todas' ? base.filter(p => p.equipe === f) : base;
+  if (f && f.startsWith('anjo:')) { const a = rkPessoas.find(p => p.uid === f.slice(5)) || perfisTodos.find(p => p.uid === f.slice(5)); const m = new Set([f.slice(5), ...(a?.membros || [])]); return comAnjos.filter(p => m.has(p.uid)); }
+  return f && f !== 'todas' ? comAnjos.filter(p => p.equipe === f) : comAnjos;
 }
 function acAssinar(){
   const h = hojeISO(), uids = acPessoas().map(p => p.uid).slice(0, 30), ch = h + '|' + (souGerente() ? 'g' : souCoord() ? 'c' + perfil.equipe : 'a' + uids.join(','));
@@ -8230,7 +8235,7 @@ function renderAcomp(soDados){
   const cabGrupo = (eq, l) => eq === null ? '' : `<div class="ac-eq"><h2>${esc(eq ? eqNome(eq) : 'Sem equipe')}</h2><span>${l.filter(x => x.pres).length} no escritório · ${l.reduce((s2, x) => s2 + x.leads, 0)} leads · ${l.reduce((s2, x) => s2 + x.lig, 0)} ligações · ${l.reduce((s2, x) => s2 + x.docs, 0)} docs</span><hr></div>`;
   const linha = x => `<tr class="${x.al.length ? 'alerta' : ''}"><td><b>${esc(x.nome)}</b><small>${sit(x)}</small></td><td>${x.leads ? `<button class="ac-lnk" onclick="acVerLeads('${x.p.uid}')">${x.leads}</button>` : z(0)}</td><td>${z(x.lig)}</td><td>${z(x.docs)}</td><td>${z(x.vm)}</td><td>${z(x.vr)}</td><td class="ac-prox">${x.agenda[0] ? `<button class="ac-lnk2" onclick="editarVisita('${x.agenda[0].id}')" title="Abrir a visita"><b>${dia(x.agenda[0].date)} ${esc(x.agenda[0].time || '')}</b><small>${esc(x.agenda[0].cliente || '')} · ${esc(x.agenda[0].status)}</small></button>${x.agenda.length > 1 ? `<small class="ac-mais">+${x.agenda.length - 1}</small>` : ''}` : '<i class="ac-z">—</i>'}</td><td>${metaPrin(x)}</td><td class="ac-als">${alHtml(x) || '<i class="ac-z">—</i>'}</td><td class="ac-mes">${x.aprovMes ? x.aprovMes + ' aprov. · ' : ''}${fmtVendas(x.vendasMes)} venda${x.vendasMes === 1 ? '' : 's'}</td><td class="ac-ics">${acoes(x)}</td></tr>`;
   const cartao = x => `<article class="card ac-card ${x.al.length ? 'alerta' : ''}">
-      <header class="ac-top"><div><b>${esc(x.nome)}</b><small>${sit(x)}${souGerente() && x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></div><div class="ac-ics">${acoes(x)}</div></header>
+      <header class="ac-top"><div><b>${esc(x.nome)}${x.p.papel === 'anjo' ? ' <span class="ac-pap">Anjo</span>' : x.p.papel === 'coordenador' ? ' <span class="ac-pap">Coordenador</span>' : ''}</b><small>${sit(x)}${souGerente() && x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></div><div class="ac-ics">${acoes(x)}</div></header>
       <div class="ac-nums">${[['leads', x.leads], ['ligações', x.lig], ['números', x.num], ['docs', x.docs], ['marcou', x.vm], ['visitou', x.vr]].map(([r, v], i) => `<div class="${v ? '' : 'zz'}" ${i === 0 && v ? `role="button" onclick="acVerLeads('${x.p.uid}')"` : ''}><b>${v}</b><span>${r}</span></div>`).join('')}</div>
       ${metaPrin(x)}
       ${x.al.length ? `<div class="ac-als">${alHtml(x)}</div>` : ''}
@@ -12782,14 +12787,36 @@ const PRES_OP = [['presente','Presente','var(--ok)'], ['falta','Faltou','var(--d
 function pessoasPresenca(){ return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)).sort((a,b) => (eqNome(a.equipe)).localeCompare(eqNome(b.equipe),'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR')); }
 const ciMinhaVisao = p => souGerente() || (['corretor','anjo'].includes(p.papel) && p.equipe === perfil.equipe);
 function pessoasPlantao(){ return perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'gerente' && p.papel !== 'sdr').sort((a,b) => (eqNome(a.equipe)).localeCompare(eqNome(b.equipe),'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR')); }
+window.presEq = '';
+// v176: nomes que aparecem no CRM (leads dos últimos 14 dias) ou na planilha de avaliações (este mês) e não têm conta no app
+function htmlSemConta(pe){
+  const todos = [...perfisTodos, ...rkPessoas.filter(r => !perfisTodos.some(p => p.uid === r.uid))], h = hojeISO(), de14 = somaDias(h, -14), m0 = mesAtual() + '-01';
+  const mapa = {}, add = (nome, eq, onde, q) => { nome = String(nome || '').trim(); if (!nome || /\bteste?\b/i.test(nome) || casaPerfilNome(nome, todos)) return;
+    const k = norm(nome).replace(/\s+/g, ' '); const x = mapa[k] = mapa[k] || { nome:nomeBonito(nome), eq:eq || '', leads:0, docs:0 }; x[onde] += q || 1; if (!x.eq && eq) x.eq = eq; };
+  leadsDias.filter(d => d.dia >= de14).forEach(d => (d.linhas || []).forEach(l => { if (!l.uid) add(l.nome, l.equipe, 'leads', Number(l.leads) || 0); }));
+  (leadsHoje || []).filter(e => !e.corretorUid).forEach(e => add(e.corretorNome || e.corretorCrm, e.equipe, 'leads', 1));
+  (avaliacoes || []).filter(a => !a.corretorUid && (a.data || '') >= m0).forEach(a => add(a.corretorNome || a.aba, a.equipe, 'docs', 1));
+  let l = Object.values(mapa).filter(x => x.leads || x.docs);
+  if (pe) l = l.filter(x => pe === '_sem' ? !x.eq || !listaEquipes().some(e => e.id === x.eq) : x.eq === pe);
+  if (!l.length) return '';
+  l.sort((a, b) => (b.leads + b.docs) - (a.leads + a.docs));
+  return `<details class="info-tog" style="margin-top:14px" open><summary><b>Faltam cadastrar no app (${l.length})</b></summary><div class="hint" style="margin:6px 0 8px">Nomes que recebem leads no CRM ou têm documentação na planilha, mas não têm conta no app. Peça para se cadastrarem, ou ligue o nome à pessoa certa em Integrações > Quem é quem.</div>${l.map(x => `<div class="pres-row"><span class="av" style="width:34px;height:34px;font-size:13px">${esc((x.nome[0] || '?').toUpperCase())}</span><b>${esc(x.nome)}</b><small class="muted">${[x.leads ? x.leads + ' lead' + (x.leads > 1 ? 's' : '') + ' (14 dias)' : '', x.docs ? x.docs + ' doc' + (x.docs > 1 ? 's' : '') + ' no mês' : '', x.eq ? eqNome(x.eq) : ''].filter(Boolean).join(' · ')}</small></div>`).join('')}</details>`;
+}
 function renderPresenca(){
   const card = $('cardPresenca'); if (!card) return;
   card.classList.toggle('hide', !souGerente());
   if (!souGerente()) return;
   if (!presDia) window.presDia = hojeISO();
   $('presData').value = presDia;
-  const m = presencas[presDia]?.marcados || {}, ps = pessoasPresenca();
+  const m = presencas[presDia]?.marcados || {}, todosP = pessoasPresenca();
+  // v176: abas por equipe (presentes / total de cada uma)
+  const eqIds = new Set(listaEquipes().map(e => e.id)), daEq = (p, e) => e === '_sem' ? !eqIds.has(p.equipe) : p.equipe === e;
+  const pe = window.presEq || '', ps = pe ? todosP.filter(p => daEq(p, pe)) : todosP;
+  const abas = [['', 'Todas'], ...listaEquipes().map(e => [e.id, eqNome(e.id)])]; if (todosP.some(p => !eqIds.has(p.equipe))) abas.push(['_sem', 'Sem equipe']);
+  $('presEqAbas').innerHTML = abas.map(([k, nm]) => { const l = k ? todosP.filter(p => daEq(p, k)) : todosP, pr = l.filter(p => m[p.uid]?.status === 'presente').length;
+    return `<button role="tab" aria-selected="${pe === k}" class="${pe === k ? 'on' : ''}" onclick="presEq='${k}';render()">${esc(nm)}<i>${pr}/${l.length}</i></button>`; }).join('');
   const n = st => ps.filter(p => m[p.uid]?.status === st).length;
+  $('presSemConta').innerHTML = htmlSemConta(pe);
   $('presAbonar').classList.toggle('hide', !(presDia < hojeISO()) || souCeo());
   $('presResumo').textContent = `${n('presente')} presente${n('presente')!==1?'s':''} · ${n('falta')} falta${n('falta')!==1?'s':''} · ${n('folga')} de folga · ${ps.length - n('presente') - n('falta') - n('folga')} sem marcar`;
   let eqAnt = null;
