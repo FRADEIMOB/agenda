@@ -4638,7 +4638,8 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'vendas' && !souGerente() && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('vendas')) v = 'hoje';
   if (v === 'financeiro' && !souGerente()) v = 'hoje';
   if (v === 'whatsapp' && !podeZap() && !abaLiberada('whatsapp')) v = 'hoje';
-  if ((v === 'apresentacao' || v === 'assistente') && !souGerente()) v = 'hoje';
+  if (v === 'apresentacao' && !souGerente()) v = 'hoje';
+  if (v === 'assistente' && !podeIA()) v = 'hoje';
   if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
   if (v === 'resumo' && perfil?.papel !== 'sdr' && !abaLiberada('resumo')) v = 'hoje';
   if (v === 'comissoes' && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('comissoes')) v = souGerente() ? 'financeiro' : 'hoje';
@@ -6793,7 +6794,7 @@ const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
   const lig = $('discFab') && !$('discFab').classList.contains('hide'), zap = $('zapFab') && !$('zapFab').classList.contains('hide');
-  const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu(), ia = souGerente(), sim = souAtivo() && !souCorresp() && !abaOculta('simulador');
+  const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu(), ia = podeIA(), sim = souAtivo() && !souCorresp() && !abaOculta('simulador');
   if (!lig && !zap && !ind && !bz && !cart && !ia && !sim || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
   $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !bz);
   $('fmCart').classList.toggle('hide', !cart);
@@ -6832,7 +6833,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 173;
+const APP_VERSAO = 175;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7118,7 +7119,7 @@ function filtrarAvaliacoes(){
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
 const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], anjo:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
-const ABAS_CARGO = [['simulador','Simulador Caixa'],['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_CARGO = [['assistente','Assistente (IA)'],['simulador','Simulador Caixa'],['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
 const ABAS_DO_CARGO = { corretor:['simulador','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
   coordenador:['simulador','tvrank','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
   sdr:['simulador','discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'],
@@ -13406,16 +13407,47 @@ function renderApEscolha(){
 
 // ---------- aba Assistente (Claude pelo carteiro) ----------
 let assHist = [], iaAberto = false;
+// v174: gerência sempre; os outros cargos quando o gestor libera em Abas por cargo (cada um só com os próprios números)
+const podeIA = () => souAtivo() && (souGerente() || (!souCorresp() && abaLiberada('assistente')));
+window.podeIA = podeIA;
 // o mesmo chat mora na aba Assistente e no balão do canto: a conversa é uma só
 function iaMover(paraPainel){ const card = document.querySelector('.ass-card'); if (!card) return; (paraPainel ? $('iaCorpo') : $('v-assistente')).appendChild(card); }
-window.iaAbrir = () => { if (!souGerente()) return;
+window.iaAbrir = () => { if (!podeIA()) return;
   iaAberto = true; iaMover(true); $('iaPainel').classList.add('open'); iaBolhaVis(); $('assMsgs').dataset.n = ''; renderAssistente(); setTimeout(() => $('assTxt').focus(), 250); };
 window.iaFechar = () => { iaAberto = false; $('iaPainel').classList.remove('open'); iaBolhaVis(); };
 window.iaAlternar = () => iaAberto ? iaFechar() : iaAbrir();
-function iaBolhaVis(){ const b = $('iaBolha'); if (!b) return; b.classList.toggle('hide', !souGerente() || $('apresent')?.classList.contains('open')); b.classList.toggle('on', iaAberto); }
+function iaBolhaVis(){ const b = $('iaBolha'); if (!b) return; b.classList.toggle('hide', !podeIA() || iaAberto || $('apresent')?.classList.contains('open')); b.classList.toggle('on', iaAberto); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && iaAberto) iaFechar(); });
+const ASS_SUG_EU = ['Como estou este mês comparado ao mês passado?', 'Minha média de leads por doc está boa?', 'Quais são minhas próximas visitas?', 'Escreva uma mensagem para confirmar a visita de amanhã', 'Escreva uma mensagem para pedir a documentação de um cliente'];
+const ASS_SUG_EQ = ['Quem precisa de atenção esta semana?', 'Compare este mês com o mês passado', 'Quem tem muitos leads e poucos docs?', 'Quais visitas estão marcadas para os próximos dias?', 'Escreva uma mensagem de cobrança do dia para o grupo'];
 const ASS_SUG = ['Analise o mês e me dê os pontos para a reunião', 'Quem precisa de atenção esta semana?', 'Compare este mês com o mês passado', 'Qual equipe está melhor e por quê?', 'Escreva uma mensagem para o grupo com os destaques da semana', 'Quais corretores têm muitos leads e poucos docs?'];
+// v174: quem a pessoa pode ver no assistente (null = tudo, só a gerência)
+function iaEscopo(){
+  if (souGerente()) return null;
+  const p = perfil?.papel;
+  if (p === 'coordenador') return new Set([uidAtual, ...perfisTodos.filter(x => x.equipe && x.equipe === perfil.equipe).map(x => x.uid)]);
+  if (p === 'anjo') return new Set([uidAtual, ...membrosAnjo()]);
+  return new Set([uidAtual]);
+}
 function contextoAssistente(){
+  const esc = iaEscopo();
+  if (esc) {
+    const nomeDe = u => nomeBonito((perfisTodos.find(x => x.uid === u) || rkPessoas.find(x => x.uid === u) || {}).nome || '');
+    const blocoEu = q => { const D = dadosReuniao(q), A = D.A, ps = D.pessoas.filter(r => r.uid && esc.has(r.uid));
+      const soma = k => ps.reduce((a, r) => a + (Number(r[k]) || 0), 0);
+      const vs = A.vs.filter(r => esc.has(r.corretorUid) || esc.has(r.sdrUid)), vd = A.vendasL.filter(v => (v.corretores || []).some(c => esc.has(c.uid)));
+      return { periodo:D.rotulo + (D.atual ? ' (parcial até hoje)' : ''), de:D.de, ate:D.ate,
+        totais:{ leads:soma('leads'), docs:soma('docs'), media_lead_doc:soma('docs') ? +(soma('leads') / soma('docs')).toFixed(2) : null, aprovacoes:soma('aprov'), condicionados:soma('cond'), reprovados:soma('reprov'), vendas:vd.length, valor_vendido:Math.round(vd.reduce((a, v) => a + (v.valor || 0), 0)), visitas_marcadas:vs.length, visitas_realizadas:vs.filter(r => r.status === 'Realizada').length },
+        pessoas:ps.map(r => ({ nome:r.nome, leads:r.leads, docs:r.docs, media:r.docs ? +(r.leads / r.docs).toFixed(2) : null, aprovacoes:r.aprov, condicionados:r.cond, reprovados:r.reprov, vendas:r.vendas })),
+        vendas:vd.map(v => ({ dia:v.dia, corretores:v.corretores.map(c => c.nome).join(' / '), valor:Math.round(v.valor) })),
+        ...(perfil?.papel === 'sdr' ? { minhas_visitas_sdr:D.sdr.filter(x => x.uid === uidAtual).map(x => ({ visitas:x.visitas, realizadas:x.realizadas, leads:x.leads, docs:x.docs, aprovacoes:x.aprov })) } : {}) }; };
+    const h = hojeISO(), proximas = visitas.filter(v => esc.has(v.corretorUid) && v.date >= h && v.date <= somaDias(h, 7) && v.status !== 'Cancelada' && !v.arquivado)
+      .sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || ''))).slice(0, 40).map(v => ({ dia:v.date, hora:v.time || '', cliente:primeiro(nomeBonito(v.cliente || '')), corretor:primeiro(nomeDe(v.corretorUid)), status:v.status }));
+    return { hoje:h, empresa:'Frade Imóveis (imobiliária de Minha Casa Minha Vida)', quem_pergunta:nomeBonito(perfil?.nome || ''), cargo:perfil?.papel || '',
+      acesso:perfil?.papel === 'coordenador' ? 'só a equipe dele' : perfil?.papel === 'anjo' ? 'ele e os corretores que acompanha' : 'só os números dele',
+      regras:'LEAD = lead que ficou com o corretor no fim do dia. DOC = cada documentação (CPF também conta). Média = leads ÷ docs (até 5 é bom; quanto menor, melhor). Aprovações = planilha + cartas do app sem repetir cliente. Venda = reserva feita.',
+      proximas_visitas:proximas, este_mes:blocoEu('mes_atual'), mes_passado:blocoEu('mes_passado'), esta_semana:blocoEu('sem_atual'), semana_passada:blocoEu('sem_passada') };
+  }
   const bloco = q => { const D = dadosReuniao(q), A = D.A;
     return { periodo:D.rotulo + (D.atual ? ' (parcial até hoje)' : ''), de:D.de, ate:D.ate,
       totais:{ leads:A.leads, docs:A.docs, media_lead_doc:A.docs ? +(A.leads / A.docs).toFixed(2) : null, aprovacoes:A.unif.length, condicionados:A.cond, reprovados:A.reprovPlan, vendas:A.vendas, valor_vendido:Math.round(A.valorVendido), visitas_marcadas:A.visitas, visitas_realizadas:A.realizadas },
@@ -13437,13 +13469,13 @@ function mdSimples(t){
   return out.join('');
 }
 function renderAssistente(){
-  if (!iaAberto || !souGerente()) return;
+  if (!iaAberto || !podeIA()) return;
   if ($('assMsgs').dataset.n === String(assHist.length) && $('assMsgs').dataset.p === String(!!window._assPensando)) return;
   $('assMsgs').dataset.n = assHist.length; $('assMsgs').dataset.p = !!window._assPensando;
-  $('assMsgs').innerHTML = (assHist.length ? '' : `<div class="ass-m ele"><p>Oi! Sou o assistente da Frade. Posso analisar os números do mês e da semana, comparar equipes e corretores, apontar quem precisa de atenção e escrever mensagens para a equipe. O que você quer saber?</p></div>`)
+  $('assMsgs').innerHTML = (assHist.length ? '' : `<div class="ass-m ele"><p>${souGerente() ? 'Oi! Sou o assistente da Frade. Posso analisar os números do mês e da semana, comparar equipes e corretores, apontar quem precisa de atenção e escrever mensagens para a equipe. O que você quer saber?' : perfil?.papel === 'coordenador' ? 'Oi! Sou o assistente da Frade. Vejo os números da sua equipe: leads, docs, aprovações, visitas e vendas. Posso apontar quem precisa de atenção e montar mensagens. O que você quer saber?' : perfil?.papel === 'anjo' ? 'Oi! Sou o assistente da Frade. Vejo os seus números e os dos corretores que você acompanha. Posso apontar quem precisa de ajuda e montar mensagens. O que você quer saber?' : 'Oi! Sou o assistente da Frade. Vejo só os seus números: leads, docs, aprovações, visitas e vendas. Posso te ajudar a planejar o dia e escrever mensagens para os clientes. O que você quer saber?'}</p></div>`)
     + assHist.map((m, i) => m.role === 'user' ? `<div class="ass-m eu">${esc(m.content)}</div>` : `<div class="ass-m ele">${mdSimples(m.content)}<button class="link copiar" onclick="assCopiar(${i})">Copiar</button></div>`).join('')
     + (window._assPensando ? '<div class="ass-m ele"><p class="muted">Pensando…</p></div>' : '');
-  $('assSug').innerHTML = assHist.length ? '' : ASS_SUG.map(t => `<button onclick="assEnviar(${JSON.stringify(t).replace(/"/g, '&quot;')})">${esc(t)}</button>`).join('');
+  $('assSug').innerHTML = assHist.length ? '' : (souGerente() ? ASS_SUG : ['coordenador','anjo'].includes(perfil?.papel) ? ASS_SUG_EQ : ASS_SUG_EU).map(t => `<button onclick="assEnviar(${JSON.stringify(t).replace(/"/g, '&quot;')})">${esc(t)}</button>`).join('');
   $('assMsgs').scrollTop = $('assMsgs').scrollHeight;
 }
 window.assCopiar = async i => { try { await navigator.clipboard.writeText(assHist[i].content); toast('Copiado ✓'); } catch(e) { toast('Não consegui copiar'); } };
