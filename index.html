@@ -1047,6 +1047,8 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;transition-behavior:allow-discrete}
 
 .ac-pap{font-size:10.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:1px 7px;vertical-align:middle;margin-left:4px}
+.bz-mv{display:flex;gap:4px;justify-content:flex-end}.bz-mv .icon-btn{width:32px;height:32px}
+.bz-seq{display:grid;gap:6px;margin:0 0 12px}.bz-seq small{color:var(--muted);font-size:12.5px}.bz-seq .seg{flex-wrap:wrap}
 /* v172: abas de equipe na tela de vendas */
 .vend-eq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
 .vend-eq button{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -6836,7 +6838,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 179;
+const APP_VERSAO = 181;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9865,12 +9867,13 @@ function renderBolsao(){
     const m = mesAtual(), lst = rankingAtiv.filter(r => r.mes === m && r.bz).map(r => ({ uid:r.uid, nome:(perfisTodos.find(p => p.uid === r.uid) || {}).nome || r.nome, n:Object.values(r.bz).reduce((a, v) => a + (Number(v) || 0), 0) })).filter(x => x.n > 0).sort((a, b) => b.n - a.n);
     $('bzLista').innerHTML = lst.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Leads pegos em ${nomeMes(m).split(' de ')[0].toLowerCase()}</th></tr></thead><tbody>${lst.map((x, i) => `<tr class="${x.uid === uidAtual ? 'me' : ''}"><td class="pos">${i + 1}º</td><td>${esc(x.nome || '')}</td><td class="tot">${x.n}</td></tr>`).join('')}</tbody></table></div>` : '<div class="an-vazio"><span>🏆</span><b>Ninguém pegou lead do bolsão este mês</b><p>Quem pegar mais aparece aqui.</p></div>';
   } else if (bzAba === 'fila') {
-    const c = bzDisp(), l = bolsao.filter(x => x.status === 'fila').sort((a, b) => (a.ordem || 0) - (b.ordem || 0) || (a.criadoEm || 0) - (b.criadoEm || 0));
-    $('bzLista').innerHTML = `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th></tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
+    const c = bzDisp(), l = bzOrdenar(bolsao.filter(x => x.status === 'fila')), md = bzOrdem(), dono = souGerente() && !souCeo();
+    const seq = `<div class="bz-seq"><b>Sequência da fila</b><div class="seg">${[['antigos','Mais antigos primeiro'],['novos','Mais novos primeiro'],['manual','Eu escolho']].map(([k, n]) => `<button class="${md === k ? 'on' : ''}" ${dono ? `onclick="bzSetOrdem('${k}')"` : 'disabled'}>${n}</button>`).join('')}</div><small>${md === 'novos' ? 'Os leads que chegaram por último saem primeiro.' : md === 'manual' ? 'Use as setas para mudar a posição. O 1º da lista é o próximo a sair.' : 'Os leads que estão há mais tempo na fila saem primeiro.'}</small></div>`;
+    $('bzLista').innerHTML = seq + `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th><th class="hide-m">Chegou</th>${md === 'manual' && dono ? '<th></th>' : ''}</tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td><td class="hide-m">${x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</td>${md === 'manual' && dono ? `<td><div class="bz-mv"><button class="icon-btn" title="Mandar para o começo" aria-label="Mandar para o começo" onclick="bzMover('${x.id}','topo')" ${i ? '' : 'disabled'}>⤒</button><button class="icon-btn" title="Subir" aria-label="Subir" onclick="bzMover('${x.id}',-1)" ${i ? '' : 'disabled'}>↑</button><button class="icon-btn" title="Descer" aria-label="Descer" onclick="bzMover('${x.id}',1)" ${i < l.length - 1 ? '' : 'disabled'}>↓</button></div></td>` : ''}</tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
     const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
     $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span></div>
-      <b class="an-cli">${esc(nomeCurto(x.nome))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.tentativas ? `<span>${x.tentativas}ª tentativa</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
+      <b class="an-cli">${esc(nomeCurto(String(x.nome || '').replace(/[\uFFFD\u200B-\u200F\u2060\uFE0F]/g, '').trim()))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>${x.zapConversaId ? 'Pegar e conversar' : 'Pegar e ligar'}</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
   } else if (bzAba === 'meus') {
     $('bzLista').innerHTML = htmlBzFunil();
@@ -10058,6 +10061,32 @@ window.abrirDisparo = () => { const c = bzDisp(), k = { ativo:true, nomes:['Alla
   $('bdCrmAtivo').checked = k.ativo !== false; $('bdCrmNomes').value = (k.nomes || []).join(', '); $('bdCrmDest').value = k.destino === 'fila' ? 'fila' : 'livre'; $('bdMinLig').value = BZ_MIN_LIG(); $('bdVoltaH').value = BZ_VOLTA_H(); abrir('bzDispModal'); };
 // v99: botão Disparar — solta a primeira leva na hora e segue soltando enquanto o app da gerência estiver aberto
 let _bzTimer = null, _bzProx = 0;
+// v181: a gerência escolhe a sequência em que a fila sai (mais antigos, mais novos ou manual). Os que a gerência devolveu para a fila saem antes.
+const bzOrdem = () => ['novos','manual'].includes(appCfg.bolsaoOrdem) ? appCfg.bolsaoOrdem : 'antigos';
+function bzOrdenar(l){
+  const md = bzOrdem(), pri = x => (Number(x.ordem) || 0) < 0 ? 0 : 1, ch = x => Number(x.voltouEm) || Number(x.criadoEm) || 0;
+  return l.slice().sort((a, b) => pri(a) - pri(b) || (pri(a) === 0 ? (a.ordem || 0) - (b.ordem || 0) : 0)
+    || (md === 'novos' ? ch(b) - ch(a) : md === 'manual' ? (Number(a.ordem) || 0) - (Number(b.ordem) || 0) || ch(a) - ch(b) : ch(a) - ch(b)));
+}
+window.bzSetOrdem = async k => {
+  if (!souDono()) { toast('Só o gestor muda a sequência'); return; }
+  try {
+    // ao passar para "Eu escolho", grava a posição atual para as setas partirem dela
+    if (k === 'manual' && bzOrdem() !== 'manual') { const l = bzOrdenar(bolsao.filter(x => x.status === 'fila')), base = Date.now();
+      for (let i = 0; i < l.length; i += 400) { const b = writeBatch(db); l.slice(i, i + 400).forEach((x, j) => b.update(doc(db,'bolsao', x.id), { ordem:base + (i + j) * 10 })); await gravar(b.commit()); } }
+    await gravar(setDoc(doc(db,'config','app'), { bolsaoOrdem:k }, { merge:true })); appCfg.bolsaoOrdem = k; render(); toast('Sequência da fila salva');
+  } catch(e) { toast('Erro: ' + e.message); }
+};
+window.bzMover = async (id, d) => {
+  const l = bzOrdenar(bolsao.filter(x => x.status === 'fila')), i = l.findIndex(x => x.id === id); if (i < 0) return;
+  try {
+    if (d === 'topo') { await gravar(updateDoc(doc(db,'bolsao', id), { ordem:(Number(l[0].ordem) || Date.now()) - 10 })); return; }
+    const j = i + d; if (j < 0 || j >= l.length) return;
+    const a = Number(l[i].ordem) || 0, b2 = Number(l[j].ordem) || 0, b = writeBatch(db);
+    b.update(doc(db,'bolsao', l[i].id), { ordem:a === b2 ? b2 + d : b2 }); b.update(doc(db,'bolsao', l[j].id), { ordem:a });
+    await gravar(b.commit());
+  } catch(e) { toast('Erro: ' + e.message); }
+};
 async function bzSoltarUmaVez(){
   try {
     const r = await chamarCarteiro({ tipo:'bolsao_soltar' });
