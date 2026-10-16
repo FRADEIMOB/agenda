@@ -3701,6 +3701,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div class="hint" style="margin:0 0 8px">Anexe o que já tiver. O resto você completa depois, abrindo a reserva em Vendas.</div>
         <div id="rvDocs"></div><input type="file" id="rvArq" class="hide" multiple accept="image/*,application/pdf" onchange="rvEscolheu(this)"></div>
       <div class="row2 rv-so-edita"><button class="btn btn-ghost" id="rvCaiuBtn" onclick="vendaCaiu()">Venda caiu</button><button class="btn btn-ghost" onclick="copiarTextoReserva()">📋 Copiar texto para o WhatsApp</button></div>
+      <button class="btn btn-ghost btn-block hide" id="rvExcluirBtn" style="margin-top:8px;color:var(--danger)" onclick="excluirReserva()">Excluir esta venda</button>
       <button class="btn btn-primary btn-block" id="rvSalvarBtn" style="margin-top:8px" onclick="salvarReserva()">Salvar reserva</button>
       <button class="link hide hist-l" id="rvHist" style="margin-top:8px" onclick="verHistorico('reservas', window._histRef)">🕘 Histórico de edições desta reserva</button>
     </div>
@@ -6838,7 +6839,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 181;
+const APP_VERSAO = 183;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9868,11 +9869,12 @@ function renderBolsao(){
     $('bzLista').innerHTML = lst.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Leads pegos em ${nomeMes(m).split(' de ')[0].toLowerCase()}</th></tr></thead><tbody>${lst.map((x, i) => `<tr class="${x.uid === uidAtual ? 'me' : ''}"><td class="pos">${i + 1}º</td><td>${esc(x.nome || '')}</td><td class="tot">${x.n}</td></tr>`).join('')}</tbody></table></div>` : '<div class="an-vazio"><span>🏆</span><b>Ninguém pegou lead do bolsão este mês</b><p>Quem pegar mais aparece aqui.</p></div>';
   } else if (bzAba === 'fila') {
     const c = bzDisp(), l = bzOrdenar(bolsao.filter(x => x.status === 'fila')), md = bzOrdem(), dono = souGerente() && !souCeo();
-    const seq = `<div class="bz-seq"><b>Sequência da fila</b><div class="seg">${[['antigos','Mais antigos primeiro'],['novos','Mais novos primeiro'],['manual','Eu escolho']].map(([k, n]) => `<button class="${md === k ? 'on' : ''}" ${dono ? `onclick="bzSetOrdem('${k}')"` : 'disabled'}>${n}</button>`).join('')}</div><small>${md === 'novos' ? 'Os leads que chegaram por último saem primeiro.' : md === 'manual' ? 'Use as setas para mudar a posição. O 1º da lista é o próximo a sair.' : 'Os leads que estão há mais tempo na fila saem primeiro.'}</small></div>`;
+    const seq = htmlBzSeq();
+    const _x = `<div class="bz-seq"><b>Sequência da fila</b><div class="seg">${[['antigos','Mais antigos primeiro'],['novos','Mais novos primeiro'],['manual','Eu escolho']].map(([k, n]) => `<button class="${md === k ? 'on' : ''}" ${dono ? `onclick="bzSetOrdem('${k}')"` : 'disabled'}>${n}</button>`).join('')}</div><small>${md === 'novos' ? 'Os leads que chegaram por último saem primeiro.' : md === 'manual' ? 'Use as setas para mudar a posição. O 1º da lista é o próximo a sair.' : 'Os leads que estão há mais tempo na fila saem primeiro.'}</small></div>`;
     $('bzLista').innerHTML = seq + `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th><th class="hide-m">Chegou</th>${md === 'manual' && dono ? '<th></th>' : ''}</tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td><td class="hide-m">${x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</td>${md === 'manual' && dono ? `<td><div class="bz-mv"><button class="icon-btn" title="Mandar para o começo" aria-label="Mandar para o começo" onclick="bzMover('${x.id}','topo')" ${i ? '' : 'disabled'}>⤒</button><button class="icon-btn" title="Subir" aria-label="Subir" onclick="bzMover('${x.id}',-1)" ${i ? '' : 'disabled'}>↑</button><button class="icon-btn" title="Descer" aria-label="Descer" onclick="bzMover('${x.id}',1)" ${i < l.length - 1 ? '' : 'disabled'}>↓</button></div></td>` : ''}</tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
-    const l = bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
-    $('bzLista').innerHTML = (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span></div>
+    const l = appCfg.bolsaoOrdem ? bzOrdenar(bzLivres()) : bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
+    $('bzLista').innerHTML = (souGerente() && !souCeo() ? htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span></div>
       <b class="an-cli">${esc(nomeCurto(String(x.nome || '').replace(/[\uFFFD\u200B-\u200F\u2060\uFE0F]/g, '').trim()))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>${x.zapConversaId ? 'Pegar e conversar' : 'Pegar e ligar'}</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
   } else if (bzAba === 'meus') {
@@ -10063,6 +10065,10 @@ window.abrirDisparo = () => { const c = bzDisp(), k = { ativo:true, nomes:['Alla
 let _bzTimer = null, _bzProx = 0;
 // v181: a gerência escolhe a sequência em que a fila sai (mais antigos, mais novos ou manual). Os que a gerência devolveu para a fila saem antes.
 const bzOrdem = () => ['novos','manual'].includes(appCfg.bolsaoOrdem) ? appCfg.bolsaoOrdem : 'antigos';
+function htmlBzSeq(){
+  const md = bzOrdem(), dono = souGerente() && !souCeo();
+  return `<div class="bz-seq"><b>Sequência do bolsão</b><div class="seg">${[['antigos','Mais antigos primeiro'],['novos','Mais novos primeiro'],['manual','Eu escolho']].map(([k, n]) => `<button class="${md === k ? 'on' : ''}" ${dono ? `onclick="bzSetOrdem('${k}')"` : 'disabled'}>${n}</button>`).join('')}</div><small>${md === 'novos' ? 'Os leads que chegaram por último aparecem e saem primeiro.' : md === 'manual' ? 'Na aba Na fila, use as setas para mudar a posição. O 1º é o próximo a sair.' : 'Os leads que estão há mais tempo aparecem e saem primeiro.'}</small></div>`;
+}
 function bzOrdenar(l){
   const md = bzOrdem(), pri = x => (Number(x.ordem) || 0) < 0 ? 0 : 1, ch = x => Number(x.voltouEm) || Number(x.criadoEm) || 0;
   return l.slice().sort((a, b) => pri(a) - pri(b) || (pri(a) === 0 ? (a.ordem || 0) - (b.ordem || 0) : 0)
@@ -10186,7 +10192,10 @@ function visitaDaConstrutora(v, cons){
 // v136: os FRD 50 vão só para quem realmente marcou a visita (quem criou no app). Marcada pela SDR = da SDR, mesmo sendo para outro corretor.
 // Sem registro de quem criou (ou criada pela gerência/importada da conversa da SDR): vai para a SDR da visita, se houver; senão para o corretor.
 const donoCart = v => {
-  if (!v) return ''; const cp = v.criadoPor || '';
+  if (!v) return '';
+  // v183: a visita vale para o corretor responsável pelo atendimento e fechamento, mesmo quando a SDR marcou
+  if (v.corretorUid) return v.corretorUid;
+  const cp = v.criadoPor || '';
   if (cp && v.sdrUid && cp === v.sdrUid) return v.sdrUid;
   if (cp && cp === v.corretorUid) return v.corretorUid;
   if (v.sdrUid && visitaDeSdr(v)) return v.sdrUid;
@@ -13245,8 +13254,11 @@ window.editarReserva = id => {
   if (!opTudo() && (id ? !minha : !['corretor','coordenador','anjo'].includes(perfil?.papel))) return;
   const r = rr; rvId = r ? r.id : null;
   rvDocsAtuais = [...(r?.docs || [])]; rvNovos = []; rvTirar = [];
-  const so = !opTudo() && !!r; // corretor abrindo a própria reserva: só mexe na documentação
-  $('resvModal').classList.toggle('rv-ro', so); $('rvSalvarBtn').textContent = so ? 'Salvar documentos' : 'Salvar reserva';
+  // v183: o corretor edita a própria reserva (a comissão e o percentual continuam só com a gerência); a gerência pode excluir
+  const so = false, meuEdit = !opTudo() && !!r;
+  $('resvModal').classList.toggle('rv-ro', so); $('rvSalvarBtn').textContent = 'Salvar reserva';
+  ['rvCom','rvPerc'].forEach(k => { if ($(k)) { $(k).disabled = meuEdit; $(k).title = meuEdit ? 'Só a gerência altera' : ''; } });
+  $('rvCaiuBtn')?.classList.toggle('hide', !opTudo()); $('rvExcluirBtn')?.classList.toggle('hide', !(r && souGerente() && !souCeo() || r && souAdm()));
   setTimeout(rvDocsVis, 0); window._histRef = rvId; $('rvHist')?.classList.toggle('hide', !(opTudo() && r));
   $('rvTitulo').textContent = r ? (opTudo() ? 'Editar reserva' : 'Sua reserva') : 'Nova reserva';
   const v = (k, x) => { $(k).value = x ?? ''; };
@@ -13256,15 +13268,26 @@ window.editarReserva = id => {
   v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', r?.notaCnpj); v('rvColar', '');
   if (!r && !opTudo()) v('rvCor', perfil.nome);
   $('rvCorLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)).map(p => `<option value="${esc(p.nome)}">`).join('');
-  $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu);
+  $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu || !opTudo());
   abrir('resvModal');
 };
 window.salvarReserva = async () => {
   if (!opTudo() && rvId) {
     const r = reservasTodas.find(x => x.id === rvId); if (!r) return;
-    if (!rvNovos.length && !rvTirar.length) { fechar('resvModal'); return; }
     const btn = $('rvSalvarBtn'); btn.disabled = true;
-    try { const { docs, tiposNovos } = await rvGravarDocs(rvId, r.corretorUids || [uidAtual]);
+    // v183: dados da reserva que o próprio corretor pode corrigir
+    const cpf2 = soDig($('rvCpf').value), tel2 = $('rvTel').value.trim(), dia2 = $('rvDia').value, cli2 = $('rvCli').value.trim();
+    if (!cli2 || !dia2) { toast('Preencha a data e o cliente'); btn.disabled = false; return; }
+    let ct = $('rvCor').value.trim(); if (!norm(ct).includes(norm(perfil.nome)) && !corretoresDaReserva(ct).some(c => c.uid === uidAtual)) ct = perfil.nome + (ct ? ' / ' + ct : '');
+    const dd = { dia:dia2, cliente:cli2, cpf:cpf2.length === 11 ? cpf2 : '', cpfNorm:cpf2.length === 11 ? cpf2 : '', telefone:tel2, telNorm:chaveTel(tel2), corretorTexto:ct,
+      empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(),
+      statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(), criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
+    const mudou = Object.keys(dd).filter(k => !['atualizadoEm','editadoPor'].includes(k)).some(k => String(dd[k] ?? '') !== String(r[k] ?? ''));
+    if (!rvNovos.length && !rvTirar.length && !mudou) { btn.disabled = false; fechar('resvModal'); return; }
+    try {
+      if (mudou) { await gravar(updateDoc(doc(db,'reservas',rvId), dd)); logEdicao('reservas', rvId, dd.cliente, r, dd, ROT_R); }
+      if (!rvNovos.length && !rvTirar.length) { fechar('resvModal'); toast('Reserva salva ✓'); btn.disabled = false; return; }
+      const { docs, tiposNovos } = await rvGravarDocs(rvId, r.corretorUids || [uidAtual]);
       await gravar(updateDoc(doc(db,'reservas',rvId), { docs, docsEm:Date.now() }));
       pontuarDocsReserva(rvId, docs, r.corretorUids, r.docsPontos);
       fechar('resvModal'); toast('Documentos salvos ✓');
@@ -13283,7 +13306,9 @@ window.salvarReserva = async () => {
     // corretor cadastra a própria reserva; a gerência confere e edita depois
     if (!norm(d.corretorTexto).includes(norm(perfil.nome)) && !corretoresDaReserva(d.corretorTexto).some(c => c.uid === uidAtual)) d.corretorTexto = perfil.nome + (d.corretorTexto ? ' / ' + d.corretorTexto : '');
     const uids = [...new Set([uidAtual, ...corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean)])];
-    const idc = 'r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36)));
+    let idc = 'r' + (d.cpf || (d.telNorm ? 't' + d.telNorm : 'm' + Date.now().toString(36)));
+    // v183: se a reserva desse cliente caiu, a nova venda entra como um registro novo
+    const ant = reservasTodas.find(x => x.id === idc); if (ant && (ant.caiu || ant.arquivado)) idc += '_' + Date.now().toString(36);
     try { await gravar(setDoc(doc(db,'reservas',idc), { ...d, corretorUids:uids, criadoPor:uidAtual, fonte:'corretor', criadoEm:Date.now(), caiu:false }));
       let feitos = 0;
       if (rvNovos.length) { try { const { docs } = await rvGravarDocs(idc, uids); await gravar(updateDoc(doc(db,'reservas',idc), { docs, docsEm:Date.now() })); feitos = new Set(docs.map(x => x.tipo)).size; pontuarDocsReserva(idc, docs, uids, false); } catch(e) { toast('A reserva foi salva, mas os documentos não subiram: ' + e.message); } }
@@ -13306,6 +13331,16 @@ window.vendaCaiu = async () => {
   const motivo = prompt('A venda caiu. Qual o motivo? (opcional)'); if (motivo === null) return;
   try { await gravar(setDoc(doc(db,'reservas',rvId), { caiu:true, motivoCaiu:motivo.trim(), caiuEm:Date.now(), caiuPor:perfil.nome }, { merge:true })); fechar('resvModal'); toast('Marcada como venda que caiu. Ela sai das contas; dá para voltar em "Caíram no período".'); }
   catch(e) { toast('Erro: ' + e.message); }
+};
+// v183: a gerência exclui de vez (para corrigir lançamento errado e o corretor poder lançar de novo)
+window.excluirReserva = async () => {
+  if (!rvId || !(souGerente() && !souCeo() || souAdm())) return;
+  const r = reservasTodas.find(x => x.id === rvId) || {};
+  if (!confirm(`Excluir de vez a venda de ${nomeBonito(r.cliente || 'cliente')}? Ela some das vendas, do ranking e dos pontos, e o corretor pode lançar de novo. Isso não tem volta.`)) return;
+  try { const b = writeBatch(db); b.delete(doc(db,'reservas',rvId)); b.delete(doc(db,'ranking_vendas',rvId)); await gravar(b.commit());
+    try { setDoc(doc(collection(db,'edicoes')), { col:'reservas', refId:rvId, titulo:String(r.cliente || '').slice(0, 80), campos:[{ campo:'Venda', de:'existia', para:'excluída' }], por:perfil.nome, porUid:uidAtual, papel:perfil.papel, equipe:perfil.equipe || '', em:Date.now() }); } catch(e) {}
+    fechar('resvModal'); toast('Venda excluída'); }
+  catch(e) { toast(e.code === 'permission-denied' ? 'Sem permissão para excluir: publique as regras novas do Firebase (v183).' : 'Erro: ' + e.message); }
 };
 window.restaurarReserva = async id => {
   try { await gravar(setDoc(doc(db,'reservas',id), { caiu:false, motivoCaiu:'', voltouEm:Date.now() }, { merge:true })); toast('A venda voltou a contar ✓'); }
