@@ -6792,7 +6792,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 169;
+const APP_VERSAO = 171;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8048,8 +8048,6 @@ function acDados(p){
   const al = [];
   if (ehHoje) {
     if (agora.getDay() !== 0 && !pres && !folga && agora.getHours() >= 9) al.push(['Sem check-in', 'alto']);
-    const velhos = ldsHoje.filter(e => Date.now() - (e.em || 0) > 30 * 60e3);
-    if (velhos.length && !(n('lig') + n('rec'))) al.push([`${velhos.length} lead${velhos.length > 1 ? 's' : ''} sem ligação há 30 min`, 'alto']);
     const semConf = vis.filter(x => (x.date === h || x.date === am) && AC_PEND.includes(x.status));
     if (semConf.length) al.push([`${semConf.length} visita${semConf.length > 1 ? 's' : ''} sem confirmar (${semConf.some(x => x.date === h) ? 'hoje' : 'amanhã'})`, 'medio']);
     const parada = pend.filter(a => Date.now() - ((a.ultimo || {}).em || a.atualizadoEm || 0) > 24 * 3600e3);
@@ -8087,7 +8085,60 @@ function htmlAcAgenda(pessoas){
 }
 window.acSetPer = k => { acPer = k; acSoAlerta = k === 'hoje' && acSoAlerta; renderAcomp(true); };
 window.acSetModo = m => { acModo = m; try { localStorage.setItem('acModo', m); } catch(e) {} renderAcomp(true); };
-window.acSetFoco = f => { if (f === 'al') { acSoAlerta = !acSoAlerta; acFoco = ''; } else acFoco = acFoco === f ? '' : f; renderAcomp(true); };
+// v171: total de leads do período igual ao do Painel (inclui SDRs e nomes ainda sem cadastro), com a divisão por pessoa
+function acLeadsTotal(){
+  const dias = acDias(acPer), h = hojeISO(), pessoas = acPessoas(), uids = new Set(pessoas.map(p => p.uid));
+  const todos = [...perfisTodos, ...rkPessoas.filter(r => !perfisTodos.some(p => p.uid === r.uid))];
+  const fonte = souAnjo() ? _acLD : leadsDias, linhas = [];
+  dias.forEach(d => {
+    if (!souAnjo()) { leadsDoDia(d).forEach(x => linhas.push({ uid:x.uid, nome:x.nome, equipe:x.equipe, leads:x.n })); return; }
+    if (d === h) { const ev = souGerente() ? leadsHoje.filter(e => e.dia === h) : (_acLeads || []); const g = {}; ev.forEach(e => { const k = e.corretorUid || 'n:' + norm(e.corretorCrm || e.corretorNome || ''); g[k] = g[k] || { uid:e.corretorUid || '', nome:e.corretorNome || e.corretorCrm || '', equipe:e.equipe || '', leads:0 }; g[k].leads++; }); linhas.push(...Object.values(g)); }
+    else linhas.push(...(((fonte.find(x => x.dia === d) || {}).linhas) || []).map(l => ({ ...l })));
+  });
+  const por = {};
+  linhas.forEach(l => { const p = (l.uid && todos.find(x => x.uid === l.uid)) || casaPerfilNome(l.nome, todos);
+    const eq = p ? (p.equipe || '') : (l.equipe || '');
+    if (souCoord() && eq !== perfil.equipe) return;
+    if (souAnjo() && !(p && uids.has(p.uid))) return;
+    if (souGerente() && acEq && acEq !== 'todas') { if (acEq.startsWith('anjo:')) { if (!(p && uids.has(p.uid))) return; } else if (eq !== acEq) return; }
+    const k = p ? p.uid : 'n:' + norm(l.nome || '');
+    const tipo = !p ? 'Sem cadastro no app' : p.papel === 'sdr' ? 'SDR' : uids.has(p.uid) ? 'Corretor' : (PAPEIS[p.papel] || 'Outro');
+    por[k] = por[k] || { nome:nomeBonito(p ? p.nome : l.nome || '?'), tipo, leads:0 }; por[k].leads += Number(l.leads) || 0; });
+  const l = Object.values(por).sort((a, b) => b.leads - a.leads);
+  return { total:l.reduce((a, x) => a + x.leads, 0), lista:l };
+}
+window.acVerLeadsTotal = () => { const r = acLeadsTotal(), pr = acPer === 'hoje' ? 'de hoje' : acPer === 'ontem' ? 'de ontem' : 'do mês';
+  const grupos = {}; r.lista.forEach(x => (grupos[x.tipo] = grupos[x.tipo] || []).push(x));
+  $('acLdTit').textContent = `Leads ${pr} · ${r.total}`;
+  $('acLdCorpo').innerHTML = r.lista.length ? Object.entries(grupos).map(([t2, l]) => `<div class="rep-sec" style="margin:10px 0 4px">${esc(t2)} · ${l.reduce((a, x) => a + x.leads, 0)}</div>` + l.map(x => `<div class="ac-ld"><b>${esc(x.nome)}</b><b>${x.leads}</b></div>`).join('')).join('') + '<div class="muted" style="font-size:12px;margin-top:10px">Mesmo total do Painel executivo. Quem aparece em "Sem cadastro no app" é nome do CRM que ainda não foi ligado a ninguém em Integrações > Quem é quem.</div>' : '<div class="muted">Nenhum lead nesse período.</div>';
+  abrir('acLdModal'); };
+// v171: docs, cartas e visitas do período com a mesma conta do Painel executivo, no escopo de quem está vendo
+function acTotais(){
+  const dias = acDias(acPer), N = numerosPeriodo(dias[0], dias[dias.length - 1]), pessoas = acPessoas(), uids = new Set(pessoas.map(p => p.uid));
+  const todos = [...perfisTodos, ...rkPessoas.filter(r => !perfisTodos.some(p => p.uid === r.uid))];
+  const quem = (uid, nome) => (uid && todos.find(x => x.uid === uid)) || (nome && casaPerfilNome(nome, todos)) || null;
+  const ok = (uid, nome, eq) => { const p = quem(uid, nome), e = p ? (p.equipe || '') : (eq || '');
+    if (souAnjo()) return !!(p && uids.has(p.uid));
+    if (souCoord()) return e === perfil.equipe;
+    if (souGerente() && acEq && acEq !== 'todas') return acEq.startsWith('anjo:') ? !!(p && uids.has(p.uid)) : e === acEq;
+    return true; };
+  const grupo = (l, f) => { const m = {}; l.forEach(x => { const [uid, nome] = f(x), p = quem(uid, nome), k = p ? p.uid : 'n:' + norm(nome || '');
+    const tipo = !p ? 'Sem cadastro no app' : p.papel === 'sdr' ? 'SDR' : uids.has(p.uid) ? 'Corretor' : (PAPEIS[p.papel] || 'Outro');
+    (m[k] = m[k] || { nome:nomeBonito(p ? p.nome : nome || 'Sem nome'), tipo, n:0, r:0 }).n++; if (x.status === 'Realizada') m[k].r++; }); return Object.values(m).sort((a, b) => b.n - a.n); };
+  const avs = N.avs.filter(a => ok(a.corretorUid, a.corretorNome || a.aba, a.equipe));
+  const un = N.unif.filter(x => ok(x.uid, '', x.equipe));
+  const vs = N.vs.filter(r => ok(r.corretorUid, r.corretorNome, r.equipe));
+  return { docs:avs.length, docsL:grupo(avs, a => [a.corretorUid, a.corretorNome || a.aba]),
+    aprov:un.length, aprovL:grupo(un, x => [x.uid, '']),
+    vis:vs.length, real:vs.filter(r => r.status === 'Realizada').length, visL:grupo(vs, r => [r.corretorUid, r.corretorNome]) };
+}
+window.acVerTot = k => { const pr = acPer === 'hoje' ? 'de hoje' : acPer === 'ontem' ? 'de ontem' : 'do mês', T = acTotais();
+  const cfg = { docs:['Documentações', T.docsL, 'Mesma conta do Painel executivo: as documentações da planilha de avaliações.'], aprov:['Cartas aprovadas', T.aprovL, 'Mesma conta do Painel executivo: aprovações da planilha e cartas lançadas no app, sem repetir cliente.'], vis:['Visitas', T.visL, 'Todas as visitas com data no período (menos as canceladas). O segundo número é quantas foram realizadas.'] }[k];
+  const tot = cfg[1].reduce((a, x) => a + x.n, 0), grupos = {}; cfg[1].forEach(x => (grupos[x.tipo] = grupos[x.tipo] || []).push(x));
+  $('acLdTit').textContent = `${cfg[0]} ${pr} · ${tot}`;
+  $('acLdCorpo').innerHTML = tot ? Object.entries(grupos).map(([t2, l]) => `<div class="rep-sec" style="margin:10px 0 4px">${esc(t2)} · ${l.reduce((a, x) => a + x.n, 0)}</div>` + l.map(x => `<div class="ac-ld"><b>${esc(x.nome)}</b><b>${k === 'vis' ? `${x.n} <small class="muted">(${x.r} realizada${x.r === 1 ? '' : 's'})</small>` : x.n}</b></div>`).join('')).join('') + `<div class="muted" style="font-size:12px;margin-top:10px">${cfg[2]}</div>` : '<div class="muted">Nada nesse período.</div>';
+  abrir('acLdModal'); };
+window.acSetFoco = f => { if (f === 'leadsTot') { acVerLeadsTotal(); return; } if (f.endsWith('Tot')) { acVerTot(f.slice(0, -3)); return; } if (f === 'al') { acSoAlerta = !acSoAlerta; acFoco = ''; } else acFoco = acFoco === f ? '' : f; renderAcomp(true); };
 window.acVer = (tipo, uid) => { const x = (window._acLinhas || []).find(y => y.p.uid === uid); if (!x) return;
   const pr = x.per === 'hoje' ? 'de hoje' : x.per === 'ontem' ? 'de ontem' : 'do mês';
   if (tipo === 'leads' && x.per === 'hoje') return acVerLeads(uid);
@@ -8112,7 +8163,7 @@ function renderAcomp(soDados){
   if ($('acAgenda')) $('acAgenda').innerHTML = ls.length ? htmlAcAgenda(acPessoas()) : '';
   const t = k => ls.reduce((s2, x) => s2 + (Number(x[k]) || 0), 0), nAl = ls.filter(x => x.al.length).length;
   const tile = (f, val, rot, extra = '') => `<button type="button" class="${acFoco === f || (f === 'al' && acSoAlerta) ? 'on' : ''} ${extra}" onclick="acSetFoco('${f}')"><b>${val}</b><span>${rot}</span></button>`;
-  $('acResumo').innerHTML = ls.length ? `<div class="ac-barra"><div class="ac-res">${(() => { const pr = acPer === 'hoje' ? 'hoje' : acPer === 'ontem' ? 'ontem' : 'no mês'; return tile('pres', acPer === 'mes' ? t('diasPres') + '<small> dias</small>' : `${ls.filter(x => x.pres).length}<small>/${ls.length}</small>`, acPer === 'mes' ? 'de escritório (somados)' : 'no escritório') + tile('leads', t('leads'), 'leads ' + pr) + tile('lig', t('lig'), 'ligações') + tile('docs', t('docs'), 'docs ' + pr) + tile('vis', t('visHoje'), 'visitas ' + pr) + (acPer === 'hoje' ? tile('al', ls.reduce((s2, x) => s2 + x.al.length, 0), 'alertas', nAl ? 'tem' : '') : tile('aprov', t('aprov'), 'cartas aprovadas')); })()}</div>
+  $('acResumo').innerHTML = ls.length ? `<div class="ac-barra"><div class="ac-res">${(() => { const pr = acPer === 'hoje' ? 'hoje' : acPer === 'ontem' ? 'ontem' : 'no mês'; return tile('pres', acPer === 'mes' ? t('diasPres') + '<small> dias</small>' : `${ls.filter(x => x.pres).length}<small>/${ls.length}</small>`, acPer === 'mes' ? 'de escritório (somados)' : 'no escritório') + tile('leadsTot', acLeadsTotal().total, 'leads ' + pr) + tile('lig', t('lig'), 'ligações') + (T0 => tile('docsTot', Math.max(T0.docs, souAnjo() ? t('docs') : 0), 'docs ' + pr) + tile('visTot', `${Math.max(T0.vis, souAnjo() ? t('visHoje') : 0)}<small> · ${T0.real} realizada${T0.real === 1 ? '' : 's'}</small>`, 'visitas ' + pr) + (acPer === 'hoje' ? '' : tile('aprovTot', Math.max(T0.aprov, souAnjo() ? t('aprov') : 0), 'cartas aprovadas')))(acTotais()) + (acPer === 'hoje' ? tile('al', ls.reduce((s2, x) => s2 + x.al.length, 0), 'alertas', nAl ? 'tem' : '') : ''); })()}</div>
     <div class="ac-ctl">${acPer === 'hoje' ? `<button type="button" class="ac-chip ${acSoAlerta ? 'on' : ''}" onclick="acSetFoco('al')">Só com alerta (${nAl})</button>` : ''}<div class="seg ac-seg">${[['ontem', 'Ontem'], ['hoje', 'Hoje'], ['mes', 'Mês']].map(([k, r]) => `<button class="${acPer === k ? 'on' : ''}" onclick="acSetPer('${k}')">${r}</button>`).join('')}</div></div></div>` : '';
   if (acSoAlerta) ls = ls.filter(x => x.al.length);
   const ord = { aprov:(a, b) => b.aprov - a.aprov, pres:(a, b) => acPer === 'mes' ? a.diasPres - b.diasPres : (a.pres - b.pres), leads:(a, b) => b.leads - a.leads, lig:(a, b) => b.lig - a.lig, docs:(a, b) => b.docs - a.docs, vis:(a, b) => b.visHoje - a.visHoje }[acFoco];
@@ -8120,9 +8171,11 @@ function renderAcomp(soDados){
   const z = v => v ? `<b>${v}</b>` : '<i class="ac-z">0</i>';
   const metaPrin = x => { if (!x.temMeta) return ''; const k = MD_ITENS.find(([kk]) => x.meta[kk]); if (!k) return ''; const a = x.v[k[0]] || 0, m0 = x.meta[k[0]]; return `<div class="ac-mt ${x.bateu ? 'ok' : ''}"><span>${x.bateu ? 'Metas do dia batidas' : esc(k[1]) + ' ' + a + ' de ' + m0}</span><i><u style="width:${Math.min(100, Math.round(a / m0 * 100))}%"></u></i></div>`; };
   // v167: só WhatsApp, já com a mensagem pronta (o que está pendente ou o resumo do dia)
-  const msgCor = x => { const p1 = x.nome.split(' ')[0], eu = primeiro(perfil?.nome || '');
-    const txt = x.al.length ? `Oi, ${p1}! Tudo bem? Aqui é ${eu}. Vi no app que tem coisa pendente aí:\n${x.al.map(([t2]) => '• ' + t2).join('\n')}\nConsegue resolver agora? Qualquer coisa me chama que eu te ajudo.`
-      : `Oi, ${p1}! Tudo bem? Aqui é ${eu}. Até agora hoje: ${x.leads} lead${x.leads === 1 ? '' : 's'}, ${x.lig} ligaç${x.lig === 1 ? 'ão' : 'ões'}, ${x.docs} doc${x.docs === 1 ? '' : 's'} e ${x.vm} visita${x.vm === 1 ? '' : 's'} marcada${x.vm === 1 ? '' : 's'}. Bora pra cima! Precisa de ajuda em algum cliente?`;
+  const msgCor = x => { const p1 = x.nome.split(' ')[0], eu = primeiro(perfil?.nome || ''), qd = x.per === 'ontem' ? 'ontem' : x.per === 'mes' ? 'este mês' : 'hoje';
+    // v170: cobrança do dia, pedindo o retorno do que aconteceu com os leads
+    const txt = x.leads
+      ? `Oi, ${p1}! Tudo bem? Aqui é ${eu}. ${qd === 'hoje' ? 'Hoje' : qd === 'ontem' ? 'Ontem' : 'Este mês'} você recebeu ${x.leads} lead${x.leads > 1 ? 's' : ''}. Me passa um retorno de como foi: conseguiu falar com eles? Qual foi o final de cada um? Gerou documentação, visita ou alguma oportunidade? Me manda um resumo por aqui.`
+      : `Oi, ${p1}! Tudo bem? Aqui é ${eu}. Me passa um retorno do seu dia ${qd === 'hoje' ? 'de hoje' : qd === 'ontem' ? 'de ontem' : 'neste mês'}: com quem você falou, o que gerou (documentação, visita, proposta) e o que ficou pendente. Me manda um resumo por aqui.`;
     return encodeURIComponent(txt); };
   const acoes = x => (x.tel ? `<a class="ac-ic" href="https://wa.me/${soDig(x.tel).replace(/^(?!55)/, '55')}?text=${msgCor(x)}" target="_blank" rel="noopener" title="Mandar mensagem pronta para ${esc(x.nome)} no WhatsApp" aria-label="WhatsApp">💬</a>` : '');
   const sit = x => x.per === 'mes' ? `<i>${x.diasPres} de ${x.nDias} dias no escritório</i>` : x.per === 'ontem' ? (x.pres ? '<i class="ac-ok">Veio ontem</i>' : '<i class="ac-nao">Não veio ontem</i>') : x.pres ? '<i class="ac-ok">No escritório</i>' : x.folga ? '<i>Folga / abonado</i>' : '<i class="ac-nao">Sem check-in</i>';
