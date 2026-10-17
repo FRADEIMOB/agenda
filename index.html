@@ -1049,6 +1049,15 @@ html.lenis,html.lenis body{height:auto}
 .ac-pap{font-size:10.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:1px 7px;vertical-align:middle;margin-left:4px}
 .bz-mv{display:flex;gap:4px;justify-content:flex-end}.bz-mv .icon-btn{width:32px;height:32px}
 .bz-seq{display:grid;gap:6px;margin:0 0 12px}.bz-seq small{color:var(--muted);font-size:12.5px}.bz-seq .seg{flex-wrap:wrap}
+/* v185: meu dia anterior */
+.md-card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--border)}
+.md-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.md-ic{font-size:20px}.md-tx{flex:1;display:grid;gap:2px;min-width:0}.md-tx small{color:var(--muted);font-size:12px}.md-tx b{font-size:14.5px}.md-ver{font-style:normal;font-weight:700;color:var(--accent);font-size:13px}
+.md-nav{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:10px}.md-nav input{max-width:180px}
+.md-titulo{font-weight:800;font-size:16px;margin:4px 0 10px}
+.md-b{border:1px solid var(--border);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--card)}
+.md-bh{display:flex;justify-content:space-between;gap:10px}.md-bh span{font-weight:700}
+.md-li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px dashed var(--border);font-size:13.5px}.md-li small{color:var(--muted);text-align:right}
 /* v172: abas de equipe na tela de vendas */
 .vend-eq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
 .vend-eq button{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -2684,6 +2693,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div class="hoje-topo">
           <div id="checkinHoje"></div>
           <div id="poupHoje"></div>
+          <div id="meuDiaHoje"></div>
         </div>
         <div class="hoje-avisos">
           <div id="bannerHoje"></div>
@@ -3908,6 +3918,15 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-body" id="acLdCorpo" data-lenis-prevent></div>
   </div>
 </div>
+<div class="modal" id="meuDiaModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><h2>Meu dia</h2><button class="icon-btn" onclick="fechar('meuDiaModal')" data-ic="x"></button></div>
+    <div class="sheet-body" data-lenis-prevent>
+      <div class="md-nav"><button class="icon-btn" onclick="mdNav(-1)" aria-label="Dia anterior" title="Dia anterior">‹</button><input type="date" id="mdDia" onchange="pintarMeuDia(this.value)"><button class="icon-btn" onclick="mdNav(1)" aria-label="Próximo dia" title="Próximo dia">›</button></div>
+      <div id="mdCorpo"></div>
+    </div>
+  </div>
+</div>
 <div class="modal" id="cpModal">
   <div class="sheet" style="width:min(440px,100%)">
     <div class="sheet-head"><div><h2>Quem usa este acesso</h2><div class="muted" style="font-size:13px;margin-top:3px">Todos entram com o mesmo e-mail e senha. Na hora de responder, cada um escolhe o próprio nome. Quem for desativado some da lista.</div></div><button class="icon-btn" onclick="fechar('cpModal')" data-ic="x"></button></div>
@@ -4860,6 +4879,7 @@ function render(){
     if ($('fab')) $('fab').classList.toggle('tem-novo', !!zv && $('zapFabN') && !$('zapFabN').classList.contains('hide')); }
   if ($('alertasHoje')) $('alertasHoje').innerHTML = view === 'hoje' ? htmlAlertasHoje() : '';
   try { assinarRelDia(); } catch(e) {}
+  if ($('meuDiaHoje')) { const hm = htmlMeuDiaCard(); if ($('meuDiaHoje')._h !== hm) { $('meuDiaHoje').innerHTML = hm; $('meuDiaHoje')._h = hm; } }
   if ($('poupHoje')) { const hp = htmlPoupanca(); if ($('poupHoje')._h !== hp) { $('poupHoje').innerHTML = hp; $('poupHoje')._h = hp; } }
   if ($('relDiaHoje')) { const hr = htmlRelDia(); if ($('relDiaHoje')._h !== hr) { $('relDiaHoje').innerHTML = hr; $('relDiaHoje')._h = hr; } }
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
@@ -6839,7 +6859,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 183;
+const APP_VERSAO = 186;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7276,7 +7296,7 @@ window.verPontosDe = i => {
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
-    ['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))], ['Vendas', x.vendas, null, null],
+    ['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))], ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ['Ausências', x.ausencias, n('ausencia'), (x.ausencias || 0) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
     ['Visitas agendadas (SDR)', x.agendSdr, n('agendSdr'), null]
@@ -8057,7 +8077,7 @@ function acPessoas0(){
   if (souAnjo()) return membrosAnjo().map(u => { const p = base.find(x => x.uid === u) || rkPessoas.find(x => x.uid === u) || {}; return { uid:u, nome:p.nome || (perfil.membrosNomes || [])[membrosAnjo().indexOf(u)] || 'Corretor', equipe:p.equipe || '', papel:p.papel || 'corretor' }; });
   if (souCoord()) return base.filter(p => p.equipe === perfil.equipe);
   // v175: a gerência vê também os anjos (e os coordenadores) na lista e na presença
-  const comAnjos = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel));
+  const comAnjos = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','sdr'].includes(p.papel)); // v185: SDRs também
   const f = window.acEq;
   if (f && f.startsWith('anjo:')) { const a = rkPessoas.find(p => p.uid === f.slice(5)) || perfisTodos.find(p => p.uid === f.slice(5)); const m = new Set([f.slice(5), ...(a?.membros || [])]); return comAnjos.filter(p => m.has(p.uid)); }
   return f && f !== 'todas' ? comAnjos.filter(p => p.equipe === f) : comAnjos;
@@ -8086,9 +8106,9 @@ function acDados(p){
   const ldsHoje = (souGerente() ? leadsHoje.filter(e => e.dia === h) : (_acLeads || [])).filter(e => e.corretorUid === p.uid);
   // leads de outros dias: o dia fechado pelo carteiro (só o número de cada um)
   const fontesLD = souAnjo() ? _acLD : leadsDias;
-  const ldDia = d => { if (d === h) return ldsHoje.length; const L = (fontesLD.find(x => x.dia === d) || {}).linhas || []; const x = L.find(l => l.uid === p.uid) || L.find(l => !l.uid && casaPerfilNome(l.nome, [{ uid:p.uid, nome:p.nome, status:'ativo' }])); return x ? Number(x.leads) || 0 : 0; };
+  const ldDia = d => { if (d === h) return ldsHoje.length; if (!fontesLD.some(x => x.dia === d)) return leadsEvDia(d).filter(e => e.corretorUid === p.uid).length; const L = (fontesLD.find(x => x.dia === d) || {}).linhas || []; const x = L.find(l => l.uid === p.uid) || L.find(l => !l.uid && casaPerfilNome(l.nome, [{ uid:p.uid, nome:p.nome, status:'ativo' }])); return x ? Number(x.leads) || 0 : 0; };
   const leadsPorDia = dias.map(d => [d, ldDia(d)]).filter(([, q]) => q), leads = leadsPorDia.reduce((a, [, q]) => a + q, 0);
-  const vis = (souAnjo() ? [...new Map([..._acVis, ...visitas].map(v => [v.id, v])).values()] : visitas).filter(v => v.corretorUid === p.uid && v.status !== 'Cancelada');
+  const vis = (souAnjo() ? [...new Map([..._acVis, ...visitas].map(v => [v.id, v])).values()] : visitas).filter(v => (v.corretorUid === p.uid || (p.papel === 'sdr' && v.sdrUid === p.uid)) && v.status !== 'Cancelada');
   const pastas = (souAnjo() ? _acPastas : analises).filter(a => a.corretorUid === p.uid);
   const [vde, vate] = per === 'mes' ? faixa('mes') : [dias[0], dias[dias.length - 1]], visPer = vis.filter(v => v.date >= vde && v.date <= vate), marc = vis.filter(v => v.criadoEm && ds.has(iso(new Date(v.criadoEm))));
   const docs = new Set([...avaliacoes.filter(a => a.corretorUid === p.uid && ds.has(a.data)).map(a => 'a' + (a.cpfNorm || a.id)), ...pastas.filter(a => a.enviadaEm && ds.has(iso(new Date(a.enviadaEm)))).map(a => 'a' + (soDig(a.cliente?.cpf || '') || a.id))]).size;
@@ -8244,7 +8264,7 @@ function renderAcomp(soDados){
   const cabGrupo = (eq, l) => eq === null ? '' : `<div class="ac-eq"><h2>${esc(eq ? eqNome(eq) : 'Sem equipe')}</h2><span>${l.filter(x => x.pres).length} no escritório · ${l.reduce((s2, x) => s2 + x.leads, 0)} leads · ${l.reduce((s2, x) => s2 + x.lig, 0)} ligações · ${l.reduce((s2, x) => s2 + x.docs, 0)} docs</span><hr></div>`;
   const linha = x => `<tr class="${x.al.length ? 'alerta' : ''}"><td><b>${esc(x.nome)}</b><small>${sit(x)}</small></td><td>${x.leads ? `<button class="ac-lnk" onclick="acVerLeads('${x.p.uid}')">${x.leads}</button>` : z(0)}</td><td>${z(x.lig)}</td><td>${z(x.docs)}</td><td>${z(x.vm)}</td><td>${z(x.vr)}</td><td class="ac-prox">${x.agenda[0] ? `<button class="ac-lnk2" onclick="editarVisita('${x.agenda[0].id}')" title="Abrir a visita"><b>${dia(x.agenda[0].date)} ${esc(x.agenda[0].time || '')}</b><small>${esc(x.agenda[0].cliente || '')} · ${esc(x.agenda[0].status)}</small></button>${x.agenda.length > 1 ? `<small class="ac-mais">+${x.agenda.length - 1}</small>` : ''}` : '<i class="ac-z">—</i>'}</td><td>${metaPrin(x)}</td><td class="ac-als">${alHtml(x) || '<i class="ac-z">—</i>'}</td><td class="ac-mes">${x.aprovMes ? x.aprovMes + ' aprov. · ' : ''}${fmtVendas(x.vendasMes)} venda${x.vendasMes === 1 ? '' : 's'}</td><td class="ac-ics">${acoes(x)}</td></tr>`;
   const cartao = x => `<article class="card ac-card ${x.al.length ? 'alerta' : ''}">
-      <header class="ac-top"><div><b>${esc(x.nome)}${x.p.papel === 'anjo' ? ' <span class="ac-pap">Anjo</span>' : x.p.papel === 'coordenador' ? ' <span class="ac-pap">Coordenador</span>' : ''}</b><small>${sit(x)}${souGerente() && x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></div><div class="ac-ics">${acoes(x)}</div></header>
+      <header class="ac-top"><div><b>${esc(x.nome)}${x.p.papel === 'anjo' ? ' <span class="ac-pap">Anjo</span>' : x.p.papel === 'coordenador' ? ' <span class="ac-pap">Coordenador</span>' : x.p.papel === 'sdr' ? ' <span class="ac-pap">SDR</span>' : ''}</b><small>${sit(x)}${souGerente() && x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></div><div class="ac-ics">${acoes(x)}</div></header>
       <div class="ac-nums">${[['leads', x.leads], ['ligações', x.lig], ['números', x.num], ['docs', x.docs], ['marcou', x.vm], ['visitou', x.vr]].map(([r, v], i) => `<div class="${v ? '' : 'zz'}" ${i === 0 && v ? `role="button" onclick="acVerLeads('${x.p.uid}')"` : ''}><b>${v}</b><span>${r}</span></div>`).join('')}</div>
       ${metaPrin(x)}
       ${x.al.length ? `<div class="ac-als">${alHtml(x)}</div>` : ''}
@@ -10192,10 +10212,8 @@ function visitaDaConstrutora(v, cons){
 // v136: os FRD 50 vão só para quem realmente marcou a visita (quem criou no app). Marcada pela SDR = da SDR, mesmo sendo para outro corretor.
 // Sem registro de quem criou (ou criada pela gerência/importada da conversa da SDR): vai para a SDR da visita, se houver; senão para o corretor.
 const donoCart = v => {
-  if (!v) return '';
-  // v183: a visita vale para o corretor responsável pelo atendimento e fechamento, mesmo quando a SDR marcou
-  if (v.corretorUid) return v.corretorUid;
-  const cp = v.criadoPor || '';
+  // v186: quem recebe os FRD é quem marcou a visita (a SDR, quando foi ela) — regra confirmada pelo gestor em 17/10
+  if (!v) return ''; const cp = v.criadoPor || '';
   if (cp && v.sdrUid && cp === v.sdrUid) return v.sdrUid;
   if (cp && cp === v.corretorUid) return v.corretorUid;
   if (v.sdrUid && visitaDeSdr(v)) return v.sdrUid;
@@ -13048,11 +13066,63 @@ function leadsDoDia(dia){
   const g = new Map(), h = hojeISO();
   const pega = (nome, uid, equipe) => { nome = consertaTexto(nome); const k = chaveNomeLead(nome); if (!g.has(k)) g.set(k, { chave:k, uid:uid || '', nome:nome || '?', equipe:equipe || '', n:0, origens:{}, ultimo:0 }); const x = g.get(k); if (uid && !x.uid) { x.uid = uid; x.equipe = equipe || x.equipe; } return x; };
   if (dia === h) leadsHoje.filter(e => e.dia === h).forEach(e => { const x = pega(e.corretorCrm || e.corretorNome, e.corretorUid, e.equipe); x.n++; const o = e.origem || 'sem origem'; x.origens[o] = (x.origens[o] || 0) + 1; x.ultimo = Math.max(x.ultimo, e.em || 0); });
-  else (leadsDias.find(d => d.dia === dia)?.linhas || []).forEach(l => { const x = pega(l.nome, l.uid, l.equipe); x.n += Number(l.leads) || 0; });
+  else if (leadsDias.some(d => d.dia === dia)) (leadsDias.find(d => d.dia === dia)?.linhas || []).forEach(l => { const x = pega(l.nome, l.uid, l.equipe); x.n += Number(l.leads) || 0; });
+  else { const ev = leadsEvDia(dia); ev.forEach(e => { const x = pega(e.corretorCrm || e.corretorNome, e.corretorUid, e.equipe); x.n++; }); }
   Object.values(leadsAjustes[dia]?.itens || {}).forEach(a => { const x = pega(a.nome, a.uid, a.equipe); x.ajustado = true; x.original = x.n; x.n = Number(a.leads) || 0; });
   return [...g.values()].filter(x => x.n > 0 || x.ajustado).sort((a,b) => b.n - a.n);
 }
 function resumoLeadsHoje(){ return leadsDoDia(hojeISO()); }
+// v185: histórico do dia para o corretor (o que ele fez ontem ou em qualquer dia)
+const podeMeuDia = () => souAtivo() && ['corretor','coordenador','anjo','sdr'].includes(perfil?.papel);
+function mdResumoDia(d){
+  const u = uidAtual, ra = rankingAtiv.filter(r => r.uid === u && r.mes === d.slice(0, 7)), n = c => ra.reduce((a, r) => a + (Number((r[c] || {})[d]) || 0), 0);
+  const v = mdValores([d]).get(u) || mdVazio();
+  const vis = visitas.filter(x => (x.corretorUid === u || x.sdrUid === u) && x.status !== 'Cancelada' && !x.arquivado);
+  return { lig:n('lig') + n('rec'), num:n('ligu'), at:n('at'), docs:Number(v.docs) || 0, vm:Number(v.vm) || 0, vr:Number(v.vr) || 0,
+    pres:ra.some(r => (r.pres || {})[d] || (r.chk || {})[d]), via:(ra.find(r => (r.chk || {})[d]) || {}).chk?.[d] || '',
+    visDoDia:vis.filter(x => x.date === d).sort((a, b) => (a.time || '').localeCompare(b.time || '')), marcadas:vis.filter(x => x.criadoEm && iso(new Date(x.criadoEm)) === d && (x.criadoPor === u || x.corretorUid === u)) };
+}
+function htmlMeuDiaCard(){
+  if (view !== 'hoje' || !podeMeuDia()) return '';
+  const d = mdOntem(), r = mdResumoDia(d), dl = parseISO(d).toLocaleDateString('pt-BR', { weekday:'long' });
+  return `<button type="button" class="md-card" onclick="abrirMeuDia()"><span class="md-ic">📅</span><span class="md-tx"><small>Meu dia anterior · ${esc(dl)}, ${dataBR(d).slice(0, 5)}</small><b>${r.num || r.lig} ligações · ${r.docs} doc${r.docs === 1 ? '' : 's'} · ${r.vr} visita${r.vr === 1 ? '' : 's'} realizada${r.vr === 1 ? '' : 's'}</b></span><i class="md-ver">Ver tudo</i></button>`;
+}
+window.abrirMeuDia = (d) => { if (!podeMeuDia()) return; const dia = d || mdOntem(); $('mdDia').max = hojeISO(); pintarMeuDia(dia); abrir('meuDiaModal'); };
+window.mdNav = k => { let d = somaDias($('mdDia').value || mdOntem(), k); if (d > hojeISO()) return; pintarMeuDia(d); };
+window.pintarMeuDia = async d => {
+  if (!d) return; $('mdDia').value = d; const u = uidAtual, r = mdResumoDia(d), h = hojeISO();
+  const meta = metaDiaDe(u), temMeta = MD_ITENS.some(([k]) => meta[k]), feito = { lig:r.num, docs:r.docs, vm:r.vm, vr:r.vr };
+  const avs = (avaliacoes || []).filter(a => a.corretorUid === u && a.data === d), pastas = (analises || []).filter(a => a.corretorUid === u && a.enviadaEm && iso(new Date(a.enviadaEm)) === d);
+  const cs = cartas.filter(c => c.corretorUid === u && c.data === d && !c.arquivado), vds = rankingVendas.filter(v => !v.caiu && v.dia === d && (v.corretores || []).some(c => c.uid === u));
+  const bloco = (tit, val, corpo) => `<div class="md-b"><div class="md-bh"><b>${tit}</b><span>${val}</span></div>${corpo || ''}</div>`;
+  const li = (a, b) => `<div class="md-li"><span>${a}</span><small>${b ?? ''}</small></div>`;
+  $('mdCorpo').innerHTML = `<div class="md-titulo">${esc(maiuscula(parseISO(d).toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' })))}${d === h ? ' · hoje, até agora' : ''}</div>`
+    + bloco('Presença', r.pres ? (r.via === 'externo' ? 'Atendimento externo' : 'No escritório') : 'Sem presença marcada')
+    + bloco('Leads recebidos', '<span id="mdLeadsN">…</span>', '<div id="mdLeadsL"></div>')
+    + bloco('Ligações', `${r.num} números`, li('Tentativas no total', r.lig) + li('Atenderam', r.at))
+    + bloco('Documentações', String(r.docs), [...avs.map(a => li(esc(primeiro(nomeBonito(a.nome || 'Cliente'))), esc(a.status || 'aguardando retorno'))), ...pastas.map(a => li(esc(primeiro(nomeBonito(a.cliente?.nome || 'Cliente'))), 'pasta enviada para a Prime · ' + esc((AN_ST[a.status] || {}).nome || '')))].join(''))
+    + bloco('Visitas do dia', `${r.visDoDia.length} · ${r.vr} realizada${r.vr === 1 ? '' : 's'}`, r.visDoDia.map(v => li(`${esc(v.time || '--:--')} · ${esc(primeiro(nomeBonito(v.cliente || 'Cliente')))}`, esc(v.status))).join(''))
+    + bloco('Visitas que você marcou', String(r.marcadas.length), r.marcadas.slice(0, 15).map(v => li(esc(primeiro(nomeBonito(v.cliente || 'Cliente'))), 'para ' + dataBR(v.date).slice(0, 5))).join(''))
+    + (cs.length ? bloco('Cartas aprovadas', String(cs.length), cs.map(c => li(esc(primeiro(nomeBonito(c.cliente || 'Cliente'))), c.valor ? brl(c.valor) : '')).join('')) : '')
+    + (vds.length ? bloco('Vendas', String(vds.length), vds.map(v => li(v.ind ? 'Venda por indicação' : 'Venda de lead', v.valor ? brl(v.valor) : '')).join('')) : '')
+    + (temMeta ? bloco('Meta do dia', mdBateu(meta, feito) ? '<b style="color:var(--ok)">Bateu</b>' : 'Não bateu', MD_ITENS.filter(([k]) => meta[k]).map(([k, nm]) => li(esc(nm), `${feito[k] || 0} de ${meta[k]}${(feito[k] || 0) >= meta[k] ? ' ✓' : ''}`)).join('')) : '')
+    + '<p class="hint" style="margin-top:8px">A meta é comparada com a meta de hoje. Leads: os que ficaram com você no fim do dia.</p>';
+  // leads do dia (lidos na hora; cada um vê só os seus)
+  try { const sn = await getDocs(query(collection(db,'leads_ev'), where('corretorUid','==',u), where('dia','==',d)));
+    if ($('mdDia').value !== d) return; const l = sn.docs.map(x => x.data());
+    $('mdLeadsN').textContent = String(l.length);
+    $('mdLeadsL').innerHTML = l.slice(0, 30).map(e => li(esc(primeiro(nomeBonito(e.cliente || 'Lead'))), esc(e.origem || ''))).join('') + (l.length > 30 ? li(`e mais ${l.length - 30}`, '') : ''); }
+  catch(e) { if ($('mdLeadsN')) $('mdLeadsN').textContent = '—'; }
+};
+// v185: dia que o carteiro ainda não fechou (ex.: ontem cedo): conta direto pelos leads do dia
+const _leadsEvCache = {};
+function leadsEvDia(dia){
+  if (!podeGerir() || dia >= hojeISO()) return [];
+  const c = _leadsEvCache[dia]; if (c) return c.l;
+  _leadsEvCache[dia] = { l:[] };
+  getDocs(souGerente() ? query(collection(db,'leads_ev'), where('dia','==',dia)) : query(collection(db,'leads_ev'), where('dia','==',dia), where('equipe','==',perfil.equipe || '-'))).then(sn => { _leadsEvCache[dia].l = sn.docs.map(d => d.data()); render(); }).catch(() => {});
+  return [];
+}
 window.ajustarLeads = async (chave) => {
   const dia = leadsDiaSel || hojeISO(), x = leadsDoDia(dia).find(y => y.chave === chave); if (!x) return;
   const v = prompt(`Quantos leads ${x.nome} teve em ${dataBR(dia)}?\n(o app contou ${x.ajustado ? x.original : x.n}; deixe vazio para voltar ao número do app)`, x.n);
