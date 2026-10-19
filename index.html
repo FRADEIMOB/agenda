@@ -1059,6 +1059,10 @@ html.lenis,html.lenis body{height:auto}
 #fbModal .sheet{overflow-x:hidden}
 .cart-pix.falta b{word-break:normal;overflow-wrap:break-word}
 /* v187: o que precisa de ação hoje */
+.ah-sq header{align-items:center}.ah-sq header>div{flex:1;min-width:0}.ah-sq-bt{flex:0 0 auto}
+.ah-sq .ah-sq-l{display:none;max-height:420px;overflow-y:auto}.ah-sq.ab .ah-sq-l{display:block}
+.ah-nota{font-size:12px;color:var(--muted);margin:8px 0 0}
+
 @media (max-width:480px){.sheet-foot{flex-wrap:wrap;row-gap:8px}}
 .ah-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;margin-bottom:12px}
 .ah-card header{display:flex;gap:12px;align-items:flex-start}.ah-card header>span{font-size:22px;line-height:1}.ah-card header b{display:block;font-size:15px}.ah-card header small{color:var(--muted);font-size:12.5px}
@@ -1098,6 +1102,11 @@ html.lenis,html.lenis body{height:auto}
 .md-let.lt .lt-tx b{font-size:15.5px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.md-let.lt .lt-tx small{font-size:12.5px}.md-let.lt .lt-lado{display:none}
 .md-let.lt .lt-nav{position:absolute;top:10px;right:12px}.md-let.lt .lt-nav button{display:none}}
 @media (prefers-reduced-motion:reduce){.md-let.lt .lt-m{transition:none}.md-let.lt .lt-bar i{animation:none}}
+/* v188: letreiro sem cortar a foto e o selo */
+.md-let.lt .lt-vis{height:80px}
+.md-let.lt .lt-m{padding:0 0 0 4px}
+.md-let.lt .lt-av i{right:-3px;bottom:-1px}
+@media (max-width:700px){.md-let.lt .lt-vis{height:78px}}
 /* v185: meu dia anterior */
 .mdia-card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--border)}
 .mdia-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -6910,7 +6919,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 187;
+const APP_VERSAO = 188;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9746,9 +9755,10 @@ function htmlAcoesHoje0(onde){
   if (souGerente()) {
     const sq = saquesPend();
     if (sq.length) { const tot = sq.reduce((a, x) => a + (Number(x.valor) || 0), 0);
-      out.push(`<section class="ah-card ah-din"><header><span>💰</span><div><b>${sq.length} saque${sq.length > 1 ? 's' : ''} da Carteira Frade esperando pagamento</b><small>Total ${frd(tot)}. Este aviso fica aqui até marcar como pago.</small></div></header>
-        ${sq.slice(0, 8).map(x => li(`${esc(nomeBonito(x.nome || ''))} · ${frd(x.valor)}`, `PIX ${esc(((PIX_TIPOS.find(t => t[0] === (x.pix || {}).tipo) || [, 'chave'])[1]))}: ${esc((x.pix || {}).chave || '')} · pedido ${new Date(x.em).toLocaleDateString('pt-BR')}${Date.now() - (x.em || 0) > 2 * 864e5 ? ' · <b class="ah-atr">há ' + Math.floor((Date.now() - x.em) / 864e5) + ' dias</b>' : ''}`,
-          `<button class="btn btn-sm btn-ghost" onclick="navigator.clipboard.writeText('${esc((x.pix || {}).chave || '').replace(/'/g, '')}').then(()=>toast('Chave PIX copiada'))">Copiar PIX</button><button class="btn btn-sm btn-primary" onclick="if(confirm('Confirmar que o PIX de ${frd(x.valor)} para ${esc(primeiro(x.nome || '').replace(/'/g, ''))} foi feito?'))marcarSaque('${x.id}','pago')">Marcar pago</button>`)).join('')}</section>`); }
+      const dias = Math.floor((Date.now() - (sq[0].em || Date.now())) / 864e5), ab = !!window._sqAb;
+      out.push(`<section class="ah-card ah-din ah-sq${ab ? ' ab' : ''}"><header><span>💰</span><div><b>${sq.length} saque${sq.length > 1 ? 's' : ''} da Carteira Frade esperando pagamento</b><small>Total ${frd(tot)}${dias >= 1 ? ' · o mais antigo há ' + dias + ' dia' + (dias > 1 ? 's' : '') : ''}</small></div><button class="btn btn-sm btn-primary ah-sq-bt" onclick="window._sqAb=!window._sqAb;this.closest('.ah-sq').classList.toggle('ab',window._sqAb);this.textContent=window._sqAb?'Fechar':'Ver e pagar'">${ab ? 'Fechar' : 'Ver e pagar'}</button></header>
+        <div class="ah-sq-l">${sq.map(x => li(`${esc(nomeBonito(x.nome || ''))} · ${frd(x.valor)}`, `PIX ${esc(((PIX_TIPOS.find(t => t[0] === (x.pix || {}).tipo) || [, 'chave'])[1]))}: ${esc((x.pix || {}).chave || '')} · pedido ${new Date(x.em).toLocaleDateString('pt-BR')}${Date.now() - (x.em || 0) > 2 * 864e5 ? ' · <b class="ah-atr">há ' + Math.floor((Date.now() - x.em) / 864e5) + ' dias</b>' : ''}`,
+          `<button class="btn btn-sm btn-ghost" onclick="navigator.clipboard.writeText('${esc((x.pix || {}).chave || '').replace(/'/g, '')}').then(()=>toast('Chave PIX copiada'))">Copiar PIX</button><button class="btn btn-sm btn-primary" onclick="if(confirm('Confirmar que o PIX de ${frd(x.valor)} para ${esc(primeiro(x.nome || '').replace(/'/g, ''))} foi feito?'))marcarSaque('${x.id}','pago')">Marcar pago</button>`)).join('')}<p class="ah-nota">O aviso fica aqui até marcar como pago.</p></div></section>`); }
     lerResumoOntem();
     const r = _resOntem;
     out.push(`<section class="ah-card"><header><span>☀️</span><div><b>Resumo de ontem</b><small>${r ? 'O carteiro manda todo dia às 8h.' : 'Ainda não saiu. O carteiro monta às 8h.'}</small></div></header>
@@ -13607,6 +13617,7 @@ function numerosPeriodo(de, ate){
   const h = hojeISO(), noP = d => !!d && d >= de && d <= ate;
   const leadsLinhas = [];
   const diasComLead = new Set([...leadsDias.map(x => x.dia), ...Object.keys(leadsAjustes), h].filter(noP));
+  for (let d = de; d <= (ate > h ? h : ate); d = somaDias(d, 1)) diasComLead.add(d);
   diasComLead.forEach(d => leadsDoDia(d).forEach(x => leadsLinhas.push({ uid:x.uid, nome:x.nome, equipe:x.equipe, leads:x.n })));
   const avs = avaliacoes.filter(a => noP(a.data));
   const cs = cartas.filter(c => noP(c.data)), vds = cartas.filter(c => c.status === 'Venda fechada' && noP(c.vendaEm || c.data));
@@ -13813,7 +13824,8 @@ function calcDesempenho(de, ate){
   // vendas (reservas): em parceria, conta para cada corretor da reserva; no total conta uma vez
   const vendasP = vendasUnificadas(de, ate);
   vendasP.forEach(v => (v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor' }]).forEach(c => { pega(c.uid, c.nome, c.equipe).vendas++; }));
-  return { linhas:new Map([...linhas].filter(([, r]) => relSoCorretor(r.uid, r.nome))), vendasP };
+  // v188: a tabela mostra só corretores e coordenadores, mas os totais somam tudo (SDR, gestão, nomes sem cadastro)
+  return { linhas:new Map([...linhas].filter(([, r]) => relSoCorretor(r.uid, r.nome))), todas:linhas, vendasP };
 }
 function renderDesempenho(){
   if (!podeGerir()) { $('desConteudo').innerHTML = ''; return; }
@@ -13822,7 +13834,7 @@ function renderDesempenho(){
   $('desSeg').innerHTML = [['hoje','Hoje'],['semana','Semana'],['mes','Mês'],['passado','Mês passado']].map(([k,n]) => `<button class="${desPer===k?'on':''}" onclick="desSet('per','${k}')">${n}</button>`).join('')
     + `<select class="sel-mes ${desPer.startsWith('m:')?'on':''}" onchange="garantirHistorico(this.value.slice(2));desSet('per',this.value)"><option value="" disabled ${desPer.startsWith('m:')?'':'selected'}>Outro mês</option>${optsMesesP(desPer)}</select>`;
   $('desSub').textContent = (de === ate ? dataBR(de) : `${dataBR(de)} a ${dataBR(ate)}`) + (ate === h ? ' · atualiza sozinho' : '') + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
-  const { linhas, vendasP } = calcDesempenho(de, ate);
+  const { linhas, todas, vendasP } = calcDesempenho(de, ate);
   const media = r => r.docs ? Math.round(r.leads / r.docs * 100) / 100 : null;
   const corM = r => { const x = media(r); return x === null ? (r.leads ? 'var(--danger)' : 'var(--muted)') : x <= 5 ? 'var(--ok)' : x <= 10 ? '#ca8a04' : 'var(--danger)'; };
   const t = norm(desBusca);
@@ -13830,7 +13842,10 @@ function renderDesempenho(){
   const ord = { leads:(a,b) => b.leads - a.leads, docs:(a,b) => b.docs - a.docs, aprov:(a,b) => b.aprov - a.aprov, vendas:(a,b) => b.vendas - a.vendas,
     media:(a,b) => (media(a) ?? 1e9) - (media(b) ?? 1e9), nome:(a,b) => a.nome.localeCompare(b.nome,'pt-BR') }[desOrdem];
   lista.sort((a,b) => ord(a,b) || b.leads - a.leads || a.nome.localeCompare(b.nome,'pt-BR'));
-  const tot = lista.reduce((a,r) => ({ leads:a.leads + r.leads, docs:a.docs + r.docs, aprov:a.aprov + r.aprov, cond:a.cond + r.cond, reprov:a.reprov + r.reprov }), { leads:0, docs:0, aprov:0, cond:0, reprov:0 });
+  const somaL = l => l.reduce((a,r) => ({ leads:a.leads + r.leads, docs:a.docs + r.docs, aprov:a.aprov + r.aprov, cond:a.cond + r.cond, reprov:a.reprov + r.reprov }), { leads:0, docs:0, aprov:0, cond:0, reprov:0 });
+  const tot = somaL([...todas.values()].filter(r => !eqFiltro || r.equipe === eqFiltro)), totTab = somaL(lista);
+  const outros = { leads:tot.leads - totTab.leads, docs:tot.docs - totTab.docs, aprov:tot.aprov - totTab.aprov, cond:tot.cond - totTab.cond, reprov:tot.reprov - totTab.reprov };
+  const temOutros = !t && (outros.leads || outros.docs || outros.aprov);
   tot.vendas = eqFiltro ? vendasP.filter(v => v.corretores.some(c => c.equipe === eqFiltro)).length : vendasP.length;
   const th = (k, n, cls='') => `<th class="${cls}" style="cursor:pointer" onclick="desSet('ordem','${k}')">${n}${desOrdem===k?' ▾':''}</th>`;
   const fmtM = r => { const x = media(r); return x === null ? (r.leads ? 'sem doc' : '–') : x.toLocaleString('pt-BR'); };
@@ -13851,7 +13866,8 @@ function renderDesempenho(){
       <div style="overflow-x:auto"><table class="rank"><thead><tr>${th('nome','Corretor')}${th('leads','Leads')}${th('docs','Docs')}${th('media','Média')}${th('aprov','Aprov.')}${souGerente() ? th('vendas','Vendas') : ''}<th class="hide-m">Cond.</th><th class="hide-m">Reprov.</th></tr></thead><tbody>
       ${lista.map(r => `<tr><td>${souGerente() ? `<button class="al-btn ${alertasDe(r.uid, r.nome).some(a => !a.resolvido) ? 'on' : ''}" title="Criar alerta sobre ${esc(r.nome)}" aria-label="Criar alerta sobre ${esc(r.nome)}" onclick="abrirAlerta('${r.uid}', ${JSON.stringify(r.nome).replace(/"/g,'&quot;')}, '${r.equipe || ''}')">🔔${alertasDe(r.uid, r.nome).filter(a => !a.resolvido).length || ''}</button>` : ''}<span class="nm">${esc(r.nome)}</span>${souGerente() && r.equipe ? `<small class="muted" style="display:block">${esc(eqNome(r.equipe))}</small>` : ''}${!r.ligado ? '<small class="late" style="display:block">nome do CRM/planilha sem ligação</small>' : ''}</td>
         <td class="tot">${r.leads}</td><td>${r.docs}</td><td style="color:${corM(r)};font-weight:700">${fmtM(r)}</td><td>${r.aprov}</td>${souGerente() ? `<td>${r.vendas}</td>` : ''}<td class="hide-m">${r.cond}</td><td class="hide-m">${r.reprov}</td></tr>`).join('') || '<tr><td colspan="8" class="muted">Ninguém nesse filtro.</td></tr>'}
-      <tr style="font-weight:800;background:var(--soft,rgba(0,0,0,.03))"><td>Total</td><td>${tot.leads}</td><td>${tot.docs}</td><td style="color:${corM(tot)}">${fmtM(tot)}</td><td>${tot.aprov}</td>${souGerente() ? `<td>${tot.vendas}</td>` : ''}<td class="hide-m">${tot.cond}</td><td class="hide-m">${tot.reprov}</td></tr>
+      ${temOutros ? `<tr class="muted"><td>Outros <small>(SDR, gestão e nomes sem cadastro)</small></td><td>${outros.leads}</td><td>${outros.docs}</td><td>–</td><td>${outros.aprov}</td>${souGerente() ? '<td>–</td>' : ''}<td class="hide-m">${outros.cond}</td><td class="hide-m">${outros.reprov}</td></tr>` : ''}
+      <tr style="font-weight:800;background:var(--soft,rgba(0,0,0,.03))"><td>Total${t ? ' <small class="muted">(geral, sem a busca)</small>' : ''}</td><td>${tot.leads}</td><td>${tot.docs}</td><td style="color:${corM(tot)}">${fmtM(tot)}</td><td>${tot.aprov}</td>${souGerente() ? `<td>${tot.vendas}</td>` : ''}<td class="hide-m">${tot.cond}</td><td class="hide-m">${tot.reprov}</td></tr>
       </tbody></table></div>
       <div class="muted" style="font-size:12.5px;margin-top:10px">Média: verde até 5 · amarelo de 5 a 10 · vermelho acima de 10 ou sem doc. Toque no título da coluna para ordenar.${souGerente() ? ' Venda em parceria conta para cada corretor da reserva e uma vez só no total.' : ''}${semLiga ? ` · ${semLiga} nome${semLiga!==1?'s':''} ainda sem ligação com um corretor do app (aparecem separados até ligar).` : ''}${souCoord() ? ' · Os leads de hoje entram no fim do dia.' : ''}</div>
     </div>`;
