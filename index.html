@@ -1059,6 +1059,9 @@ html.lenis,html.lenis body{height:auto}
 #fbModal .sheet{overflow-x:hidden}
 .cart-pix.falta b{word-break:normal;overflow-wrap:break-word}
 /* v187: o que precisa de ação hoje */
+.ah-res header{align-items:center}.ah-res header>div{flex:1;min-width:0}.ah-res .ah-res-l{display:none}.ah-res.ab .ah-res-l{display:block}
+.ah-card header>div:first-child b{font-size:15px}
+
 .ah-sq header{align-items:center}.ah-sq header>div{flex:1;min-width:0}.ah-sq-bt{flex:0 0 auto}
 .ah-sq .ah-sq-l{display:none;max-height:420px;overflow-y:auto}.ah-sq.ab .ah-sq-l{display:block}
 .ah-nota{font-size:12px;color:var(--muted);margin:8px 0 0}
@@ -6919,7 +6922,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 188;
+const APP_VERSAO = 189;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9743,7 +9746,7 @@ function lerResumoOntem(){
   getDoc(doc(db,'resumos_gerencia', d)).then(sn => { _resOntem = sn.exists() ? sn.data() : null; render(); }).catch(() => {});
 }
 window.gerarResumoAgora = async () => {
-  try { const r = await carteiroJson({ tipo:'resumo_ontem' }); if (r && r.texto) { _resOntem = { texto:r.texto, dia:somaDias(hojeISO(), -1) }; render(); } else toast((r && r.erro) || 'O carteiro ainda não tem o resumo. Cole o carteiro v187 no Cloudflare.'); }
+  try { const r = await carteiroJson({ tipo:'resumo_ontem' }); if (r && r.texto) { _resOntem = { texto:r.texto, dados:r.dados || null, dia:somaDias(hojeISO(), -1) }; render(); toast('Resumo atualizado'); } else toast((r && r.erro) || 'O carteiro ainda não tem o resumo. Cole o carteiro v187 no Cloudflare.'); }
   catch(e) { toast('Não deu: ' + e.message); }
 };
 window.copiarResumo = async () => { const t = (_resOntem || {}).texto || ''; try { await navigator.clipboard.writeText(t); toast('Resumo copiado'); } catch(e) { toast('Não consegui copiar'); } };
@@ -9756,26 +9759,28 @@ function htmlAcoesHoje0(onde){
     const sq = saquesPend();
     if (sq.length) { const tot = sq.reduce((a, x) => a + (Number(x.valor) || 0), 0);
       const dias = Math.floor((Date.now() - (sq[0].em || Date.now())) / 864e5), ab = !!window._sqAb;
-      out.push(`<section class="ah-card ah-din ah-sq${ab ? ' ab' : ''}"><header><span>💰</span><div><b>${sq.length} saque${sq.length > 1 ? 's' : ''} da Carteira Frade esperando pagamento</b><small>Total ${frd(tot)}${dias >= 1 ? ' · o mais antigo há ' + dias + ' dia' + (dias > 1 ? 's' : '') : ''}</small></div><button class="btn btn-sm btn-primary ah-sq-bt" onclick="window._sqAb=!window._sqAb;this.closest('.ah-sq').classList.toggle('ab',window._sqAb);this.textContent=window._sqAb?'Fechar':'Ver e pagar'">${ab ? 'Fechar' : 'Ver e pagar'}</button></header>
+      out.push(`<section class="ah-card ah-din ah-sq${ab ? ' ab' : ''}"><header><div><b>${sq.length} saque${sq.length > 1 ? 's' : ''} da Carteira Frade esperando pagamento</b><small>Total ${frd(tot)}${dias >= 1 ? ' · o mais antigo há ' + dias + ' dia' + (dias > 1 ? 's' : '') : ''}</small></div><button class="btn btn-sm btn-primary ah-sq-bt" onclick="window._sqAb=!window._sqAb;this.closest('.ah-sq').classList.toggle('ab',window._sqAb);this.textContent=window._sqAb?'Fechar':'Ver e pagar'">${ab ? 'Fechar' : 'Ver e pagar'}</button></header>
         <div class="ah-sq-l">${sq.map(x => li(`${esc(nomeBonito(x.nome || ''))} · ${frd(x.valor)}`, `PIX ${esc(((PIX_TIPOS.find(t => t[0] === (x.pix || {}).tipo) || [, 'chave'])[1]))}: ${esc((x.pix || {}).chave || '')} · pedido ${new Date(x.em).toLocaleDateString('pt-BR')}${Date.now() - (x.em || 0) > 2 * 864e5 ? ' · <b class="ah-atr">há ' + Math.floor((Date.now() - x.em) / 864e5) + ' dias</b>' : ''}`,
           `<button class="btn btn-sm btn-ghost" onclick="navigator.clipboard.writeText('${esc((x.pix || {}).chave || '').replace(/'/g, '')}').then(()=>toast('Chave PIX copiada'))">Copiar PIX</button><button class="btn btn-sm btn-primary" onclick="if(confirm('Confirmar que o PIX de ${frd(x.valor)} para ${esc(primeiro(x.nome || '').replace(/'/g, ''))} foi feito?'))marcarSaque('${x.id}','pago')">Marcar pago</button>`)).join('')}<p class="ah-nota">O aviso fica aqui até marcar como pago.</p></div></section>`); }
     lerResumoOntem();
     const r = _resOntem;
-    out.push(`<section class="ah-card"><header><span>☀️</span><div><b>Resumo de ontem</b><small>${r ? 'O carteiro manda todo dia às 8h.' : 'Ainda não saiu. O carteiro monta às 8h.'}</small></div></header>
-      ${r ? `<pre class="ah-pre">${esc(String(r.texto || '').replace(/\*/g, ''))}</pre><div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="copiarResumo()">Copiar</button><a class="btn btn-sm btn-ghost wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(r.texto || '')}">Mandar no WhatsApp</a></div>` : `<div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="gerarResumoAgora()">Gerar agora</button></div>`}</section>`);
+    const rd = (r && r.dados) || {}, rab = !!window._resAb;
+    const linhaRes = r ? (r.dados ? `Leads ${rd.leads || 0} · Docs ${rd.docs || 0} · Visitas ${rd.realizadas || 0} realizadas · Vendas ${rd.vendas || 0}` : 'Toque para ler o resumo') : 'Ainda não saiu. O carteiro monta às 8h.';
+    out.push(`<section class="ah-card ah-res${rab ? ' ab' : ''}"><header><div><b>Resumo de ontem</b><small>${linhaRes}</small></div>${r ? `<button class="btn btn-sm btn-ghost ah-res-bt" onclick="window._resAb=!window._resAb;this.closest('.ah-res').classList.toggle('ab',window._resAb);this.textContent=window._resAb?'Fechar':'Ver resumo'">${rab ? 'Fechar' : 'Ver resumo'}</button>` : `<button class="btn btn-sm btn-ghost" onclick="gerarResumoAgora()">Gerar agora</button>`}</header>
+      ${r ? `<div class="ah-res-l"><pre class="ah-pre">${esc(String(r.texto || '').replace(/\*/g, ''))}</pre><div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="copiarResumo()">Copiar</button><a class="btn btn-sm btn-ghost wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(r.texto || '')}">Mandar no WhatsApp</a><button class="btn btn-sm btn-ghost" onclick="gerarResumoAgora()">Gerar de novo</button></div></div>` : ''}</section>`);
     const cv = cartasVencendoL(null, 30).filter(c => c.venc.slice(0, 7) === mesAtual());
-    if (cv.length) out.push(`<section class="ah-card"><header><span>⏳</span><div><b>${cv.length} carta${cv.length > 1 ? 's' : ''} aprovada${cv.length > 1 ? 's' : ''} vence${cv.length > 1 ? 'm' : ''} este mês sem venda</b><small>${brl(cv.reduce((a, c) => a + (Number(c.valor) || 0), 0))} em crédito aprovado. Vale chamar esses clientes esta semana.</small></div></header><div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="setView('cartas')">Ver cartas</button></div></section>`);
+    if (cv.length) out.push(`<section class="ah-card ah-res"><header><div><b>${cv.length} carta${cv.length > 1 ? 's' : ''} aprovada${cv.length > 1 ? 's' : ''} vence${cv.length > 1 ? 'm' : ''} este mês sem venda</b><small>${brl(cv.reduce((a, c) => a + (Number(c.valor) || 0), 0))} em crédito aprovado. Vale chamar esses clientes esta semana.</small></div><button class="btn btn-sm btn-ghost" onclick="setView('cartas')">Ver cartas</button></header></section>`);
   }
   if (ligaPontua()) {
     const ls = leadsSemContato();
-    if (ls.length) out.push(`<section class="ah-card ah-alerta"><header><span>⏰</span><div><b>${ls.length} lead${ls.length > 1 ? 's' : ''} esperando a sua ligação há mais de 2 horas</b><small>Quanto antes você liga, mais chance de virar visita.</small></div></header>
+    if (ls.length) out.push(`<section class="ah-card ah-alerta"><header><div><b>${ls.length} lead${ls.length > 1 ? 's' : ''} esperando a sua ligação há mais de 2 horas</b><small>Quanto antes você liga, mais chance de virar visita.</small></div></header>
       ${ls.slice(0, 6).map(e => li(esc(nomeBonito(e.cliente || 'Lead')), `chegou às ${new Date(e.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}${e.origem ? ' · ' + esc(e.origem) : ''}`, htmlLigar(e.telefone || '', e.cliente, 'lead'))).join('')}</section>`);
     const vs = visitasSemPasso([uidAtual]);
-    if (vs.length) out.push(`<section class="ah-card"><header><span>🏠</span><div><b>${vs.length} visita${vs.length > 1 ? 's' : ''} realizada${vs.length > 1 ? 's' : ''} sem próximo passo</b><small>Passou um dia e não virou documentação, pasta na Prime nem reserva. Qual o próximo passo?</small></div></header>
+    if (vs.length) out.push(`<section class="ah-card"><header><div><b>${vs.length} visita${vs.length > 1 ? 's' : ''} realizada${vs.length > 1 ? 's' : ''} sem próximo passo</b><small>Passou um dia e não virou documentação, pasta na Prime nem reserva. Qual o próximo passo?</small></div></header>
       ${vs.slice(0, 6).map(v => li(esc(nomeBonito(v.cliente || 'Cliente')), `visita em ${dataBR(v.date).slice(0, 5)}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}`,
         `${v.telefone ? `<button class="btn btn-sm btn-ghost wa" onclick="abrirWhats('${esc(soDig(v.telefone))}')">WhatsApp</button>` : ''}<button class="btn btn-sm btn-ghost" onclick="posVisita('${v.id}','sem_interesse')">Sem interesse</button><button class="btn btn-sm btn-ghost" onclick="posVisita('${v.id}','aguardando')">Vai mandar docs</button>`)).join('')}</section>`);
     const cs = cartasVencendoL([uidAtual], 15);
-    if (cs.length) out.push(`<section class="ah-card"><header><span>⏳</span><div><b>${cs.length} carta${cs.length > 1 ? 's' : ''} aprovada${cs.length > 1 ? 's' : ''} perto de vencer</b><small>Chame o cliente antes de perder a aprovação.</small></div></header>
+    if (cs.length) out.push(`<section class="ah-card"><header><div><b>${cs.length} carta${cs.length > 1 ? 's' : ''} aprovada${cs.length > 1 ? 's' : ''} perto de vencer</b><small>Chame o cliente antes de perder a aprovação.</small></div></header>
       ${cs.slice(0, 6).map(c => { const d = Math.round((Date.parse(c.venc) - Date.parse(hojeISO())) / 864e5); return li(esc(nomeBonito(c.cliente || 'Cliente')), `vence ${d === 0 ? 'hoje' : d === 1 ? 'amanhã' : 'em ' + d + ' dias'} (${dataBR(c.venc).slice(0, 5)})${c.valor ? ' · ' + brl(c.valor) : ''}`,
         telZap(c.telefone || '') ? `<a class="btn btn-sm btn-ghost wa" target="_blank" rel="noopener" href="https://wa.me/${telZap(c.telefone)}?text=${msgCartaVence(c)}">Mandar mensagem</a>` : ''); }).join('')}</section>`);
   }
