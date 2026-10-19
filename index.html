@@ -1049,15 +1049,64 @@ html.lenis,html.lenis body{height:auto}
 .ac-pap{font-size:10.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:1px 7px;vertical-align:middle;margin-left:4px}
 .bz-mv{display:flex;gap:4px;justify-content:flex-end}.bz-mv .icon-btn{width:32px;height:32px}
 .bz-seq{display:grid;gap:6px;margin:0 0 12px}.bz-seq small{color:var(--muted);font-size:12.5px}.bz-seq .seg{flex-wrap:wrap}
+
+
+/* v187: carteira com créditos por data */
+.cart-dia{margin:6px 0 12px;border:1px solid var(--border);border-radius:14px;padding:4px 12px;background:var(--card)}
+.cart-dia-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0 6px;font-size:13px;color:var(--muted);border-bottom:1px dashed var(--border)}
+.cart-dia-h b{color:var(--success,#1f8a4c);font-size:14px;white-space:nowrap}
+.cart-dia .cart-it:last-child{border-bottom:0}
+#fbModal .sheet{overflow-x:hidden}
+.cart-pix.falta b{word-break:normal;overflow-wrap:break-word}
+/* v187: o que precisa de ação hoje */
+@media (max-width:480px){.sheet-foot{flex-wrap:wrap;row-gap:8px}}
+.ah-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.ah-card header{display:flex;gap:12px;align-items:flex-start}.ah-card header>span{font-size:22px;line-height:1}.ah-card header b{display:block;font-size:15px}.ah-card header small{color:var(--muted);font-size:12.5px}
+.ah-card.ah-din{border-color:color-mix(in srgb,var(--accent) 45%,var(--border));background:color-mix(in srgb,var(--accent) 6%,var(--card))}
+.ah-card.ah-alerta{border-color:color-mix(in srgb,var(--danger) 40%,var(--border));background:color-mix(in srgb,var(--danger) 5%,var(--card))}
+.ah-li{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px dashed var(--border);margin-top:8px}
+.ah-li>div:first-child{min-width:0;flex:1 1 220px}.ah-li b{display:block;font-size:14px}.ah-li small{color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}
+.ah-ac,.ah-bts{display:flex;gap:6px;flex-wrap:wrap}.ah-bts{margin-top:10px}.ah-li b.ah-atr{color:var(--danger);display:inline;font-size:inherit}
+.ah-pre{white-space:pre-wrap;font-family:inherit;font-size:13.5px;line-height:1.5;margin:10px 0 0;background:var(--card2,#f6f3ee);border-radius:12px;padding:10px 12px}
+/* v187: letreiro em cartão no Hoje */
+.md-let.lt{background:none;border:0;margin:0 0 16px}
+.md-let.lt .lt-in{position:relative;display:flex;align-items:center;gap:16px;min-height:92px;padding:12px 16px 14px 12px;border-radius:18px;overflow:hidden;color:#fff;
+  background:radial-gradient(120% 140% at 100% 50%,rgba(230,81,0,.28),transparent 45%),linear-gradient(100deg,#0d2c47,#0b2236 55%,#13324d);box-shadow:0 10px 26px rgba(2,44,69,.18)}
+.md-let.lt .lt-vis{flex:1;min-width:0;position:relative;height:68px}
+.md-let.lt .lt-m{position:absolute;inset:0;display:flex;align-items:center;gap:14px;cursor:pointer;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s}
+.md-let.lt .lt-m.on{opacity:1;transform:none}.md-let.lt .lt-m.sai{opacity:0;transform:translateY(-10px)}
+.md-let.lt .lt-av{position:relative;flex-shrink:0;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#f7c64b,#e39b00);box-shadow:0 0 0 3px rgba(247,198,75,.35)}
+.md-let.lt .lt-av b{font-size:21px;font-weight:800;color:#0b2236;letter-spacing:.02em}
+.md-let.lt .lt-av i{position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:#fff;display:grid;place-items:center;font-style:normal;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.md-let.lt .lt-tx{min-width:0;display:grid;gap:3px}
+.md-let.lt .lt-chip{justify-self:start;font-size:11px;font-weight:800;letter-spacing:.06em;color:#3a2600;background:#f7c64b;border-radius:99px;padding:3px 10px}
+.md-let.lt .lt-tx b{font-size:18px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.md-let.lt .lt-tx small{font-size:13.5px;color:#c9d7e3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.md-let.lt .lt-m:hover .lt-tx b{text-decoration:underline;text-decoration-color:rgba(247,198,75,.6);text-underline-offset:4px}
+.md-let.lt .lt-lado{all:unset;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 16px;border-left:1px solid rgba(255,255,255,.14);align-self:stretch}
+.md-let.lt .lt-lado b{display:block;font-size:16px;color:#fff}.md-let.lt .lt-lado small{font-size:12.5px;color:#c9d7e3}
+.md-let.lt .lt-pilha{display:flex}.md-let.lt .lt-pilha i{width:34px;height:34px;border-radius:50%;margin-left:-10px;border:2px solid #0b2236;background:#e8eef4;color:#0b2236;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px}.md-let.lt .lt-pilha i:first-child{margin-left:0}
+.md-let.lt .lt-nav{flex-shrink:0;display:flex;align-items:center;gap:8px}
+.md-let.lt .lt-nav button{all:unset;cursor:pointer;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-size:18px;color:#dfe8f0;background:rgba(255,255,255,.08)}.md-let.lt .lt-nav button:hover{background:rgba(255,255,255,.16)}
+.md-let.lt .lt-nav button:focus-visible,.md-let.lt .lt-m:focus-visible,.md-let.lt .lt-lado:focus-visible{outline:2px solid #f7c64b;outline-offset:2px}
+.md-let.lt .lt-nav .md-let-pts i{background:rgba(255,255,255,.28)}.md-let.lt .lt-nav .md-let-pts i.on{width:18px;border-radius:99px;background:#f7c64b}
+.md-let.lt .lt-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.06)}
+.md-let.lt .lt-bar i{position:absolute;left:0;top:0;bottom:0;width:100%;transform-origin:left;background:linear-gradient(90deg,#E65100,#ff8a3d);animation:ltTempo 7s linear forwards}
+@keyframes ltTempo{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.md-let.lt:hover .lt-bar i{animation-play-state:paused}
+@media(max-width:700px){.md-let.lt .lt-in{min-height:0;padding:12px 12px 14px;gap:10px}.md-let.lt .lt-vis{height:76px}.md-let.lt .lt-av{width:50px;height:50px}.md-let.lt .lt-av b{font-size:17px}.md-let.lt .lt-av i{width:22px;height:22px;font-size:12px}
+.md-let.lt .lt-tx b{font-size:15.5px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.md-let.lt .lt-tx small{font-size:12.5px}.md-let.lt .lt-lado{display:none}
+.md-let.lt .lt-nav{position:absolute;top:10px;right:12px}.md-let.lt .lt-nav button{display:none}}
+@media (prefers-reduced-motion:reduce){.md-let.lt .lt-m{transition:none}.md-let.lt .lt-bar i{animation:none}}
 /* v185: meu dia anterior */
-.md-card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--border)}
-.md-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.md-ic{font-size:20px}.md-tx{flex:1;display:grid;gap:2px;min-width:0}.md-tx small{color:var(--muted);font-size:12px}.md-tx b{font-size:14.5px}.md-ver{font-style:normal;font-weight:700;color:var(--accent);font-size:13px}
-.md-nav{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:10px}.md-nav input{max-width:180px}
-.md-titulo{font-weight:800;font-size:16px;margin:4px 0 10px}
-.md-b{border:1px solid var(--border);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--card)}
-.md-bh{display:flex;justify-content:space-between;gap:10px}.md-bh span{font-weight:700}
-.md-li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px dashed var(--border);font-size:13.5px}.md-li small{color:var(--muted);text-align:right}
+.mdia-card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--border)}
+.mdia-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mdia-ic{font-size:20px}.mdia-tx{flex:1;display:grid;gap:2px;min-width:0}.mdia-tx small{color:var(--muted);font-size:12px}.mdia-tx b{font-size:14.5px}.mdia-ver{font-style:normal;font-weight:700;color:var(--accent);font-size:13px}
+.mdia-nav{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:10px}.mdia-nav input{max-width:180px}
+.mdia-titulo{font-weight:800;font-size:16px;margin:4px 0 10px}
+.mdia-b{border:1px solid var(--border);border-radius:14px;padding:10px 12px;margin-bottom:8px;background:var(--card)}
+.mdia-bh{display:flex;justify-content:space-between;gap:10px}.mdia-bh span{font-weight:700}
+.mdia-li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px dashed var(--border);font-size:13.5px}.mdia-li small{color:var(--muted);text-align:right}
 /* v172: abas de equipe na tela de vendas */
 .vend-eq{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
 .vend-eq button{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -2699,6 +2748,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
           <div id="bannerHoje"></div>
           <div id="alertasHoje"></div>
           <div id="mdHoje"></div>
+          <div id="acoesHoje"></div>
           <div id="mkHoje"></div>
           <div id="conviteNotif"></div>
           <div id="relDiaHoje"></div>
@@ -3922,7 +3972,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
   <div class="sheet" style="width:min(560px,100%)">
     <div class="sheet-head"><h2>Meu dia</h2><button class="icon-btn" onclick="fechar('meuDiaModal')" data-ic="x"></button></div>
     <div class="sheet-body" data-lenis-prevent>
-      <div class="md-nav"><button class="icon-btn" onclick="mdNav(-1)" aria-label="Dia anterior" title="Dia anterior">‹</button><input type="date" id="mdDia" onchange="pintarMeuDia(this.value)"><button class="icon-btn" onclick="mdNav(1)" aria-label="Próximo dia" title="Próximo dia">›</button></div>
+      <div class="mdia-nav"><button class="icon-btn" onclick="mdNav(-1)" aria-label="Dia anterior" title="Dia anterior">‹</button><input type="date" id="mdDia" onchange="pintarMeuDia(this.value)"><button class="icon-btn" onclick="mdNav(1)" aria-label="Próximo dia" title="Próximo dia">›</button></div>
       <div id="mdCorpo"></div>
     </div>
   </div>
@@ -4882,6 +4932,7 @@ function render(){
   if ($('meuDiaHoje')) { const hm = htmlMeuDiaCard(); if ($('meuDiaHoje')._h !== hm) { $('meuDiaHoje').innerHTML = hm; $('meuDiaHoje')._h = hm; } }
   if ($('poupHoje')) { const hp = htmlPoupanca(); if ($('poupHoje')._h !== hp) { $('poupHoje').innerHTML = hp; $('poupHoje')._h = hp; } }
   if ($('relDiaHoje')) { const hr = htmlRelDia(); if ($('relDiaHoje')._h !== hr) { $('relDiaHoje').innerHTML = hr; $('relDiaHoje')._h = hr; } }
+  if ($('acoesHoje')) { const ha = htmlAcoesHoje(); if ($('acoesHoje')._h !== ha) { $('acoesHoje').innerHTML = ha; $('acoesHoje')._h = ha; } }
   if ($('ligHoje') && document.activeElement?.id !== 'discNum') { const hl = htmlMeusLeads(); if ($('ligHoje')._h !== hl) { $('ligHoje').innerHTML = hl; $('ligHoje')._h = hl; } }
   if (!window._hashZap2 && perfil && podeZap() && (location.hash.startsWith('#whatsapp/') || location.hash === '#plantao')) { window._hashZap2 = window._hashZap = window._hashGen = true; const h = location.hash; history.replaceState(null, '', location.pathname);
     if (h === '#plantao') setTimeout(() => abrirPlantao(), 400); else setTimeout(() => abrirZapCid(decodeURIComponent(h.slice(10))), 0); }
@@ -5908,7 +5959,7 @@ window.salvarVisita = async () => {
 window.mudarStatus = async (id, st, motivo) => {
   const v = visitas.find(x => x.id === id); if (!v) return;
   if (PERDA_V.includes(st) && !motivo) { pedirMotivo('v', id, st); return; }
-  const dados = { ...v, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_V.includes(st) ? motivo : '' }; delete dados.id;
+  const dados = { ...v, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_V.includes(st) ? motivo : '', ...(st === 'Realizada' && v.status !== 'Realizada' ? { realizadaEm:Date.now() } : {}) }; delete dados.id;
   try {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
@@ -6859,7 +6910,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 186;
+const APP_VERSAO = 187;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9636,6 +9687,90 @@ window.anularLig = async id => {
 };
 window.ligarDiscadorZap = () => { const v = $('discNum').value; if (soDig(v).length < 10) { toast('Digite o número com DDD'); return; } ligarZap(v, '', 'discador'); $('discNum').value = ''; };
 window.ligarDiscador = () => { const v = $('discNum').value; if (soDig(v).length < 8) { toast('Digite o número com DDD'); return; } ligar(v, '', 'discador'); $('discNum').value = ''; };
+
+// =====================================================================
+// v187: o que precisa de ação hoje (aparece no Hoje de cada um)
+// =====================================================================
+const AC_H = 3600e3;
+const resAll = () => { try { return [...(reservas || []), ...(reservasTodas || [])]; } catch(e) { return []; } };
+function mesmoCli(a, b){ const ta = chaveTel(a.telefone || a.tel || ''), tb = chaveTel(b.telefone || b.tel || b.cliente?.telefone || ''), ca = soDig(a.cpf || ''), cb = soDig(b.cpf || b.cpfNorm || b.cliente?.cpf || '');
+  return (ca.length === 11 && ca === cb) || (!!ta && ta === tb) || (!!ta && ta === (b.telNorm || '')); }
+// 1) leads do CRM sem ligação há mais de 2 horas (só o próprio corretor vê)
+function leadsSemContato(){
+  if (!ligaPontua()) return [];
+  const feitos = new Set(minhasLigHoje.filter(x => !x.anulada).map(x => x.telNorm)), agora = Date.now();
+  return meusLeadsHoje.filter(e => e.telNorm && !feitos.has(e.telNorm) && (e.em || 0) && agora - e.em >= 2 * AC_H).sort((a, b) => (a.em || 0) - (b.em || 0));
+}
+// 2) visita realizada há mais de 24 horas sem documentação, pasta na Prime ou reserva
+function visitasSemPasso(uids){
+  const agora = Date.now(), lim = somaDias(hojeISO(), -30), us = new Set(uids);
+  return visitas.filter(v => us.has(v.corretorUid) && v.status === 'Realizada' && !v.arquivado && (v.date || '') >= lim && !v.posVisita && !v.resultado)
+    .filter(v => { const quando = Number(v.realizadaEm) || Date.parse((v.date || '') + 'T' + (v.time || '12:00') + ':00'); return quando && agora - quando >= 24 * AC_H; })
+    .filter(v => !(avaliacoes || []).some(a => (a.data || '') >= (v.date || '') && mesmoCli(v, a)) && !(analises || []).some(a => mesmoCli(v, a))
+      && !resAll().some(r => mesmoCli(v, r)) && !cartas.some(c => mesmoCli(v, c)))
+    .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+}
+window.visitasSemPasso = visitasSemPasso;
+window.posVisita = async (id, st) => {
+  const v = visitas.find(x => x.id === id); if (!v) return;
+  try { await gravar(updateDoc(doc(db,'visitas',id), { posVisita:{ status:st, em:Date.now(), por:perfil.nome } })); toast(st === 'sem_interesse' ? 'Anotado: cliente sem interesse' : 'Anotado'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+// 3) cartas aprovadas que vencem em até 15 dias e ainda não viraram venda
+const vencCarta = c => { if (c.validade) return c.validade; if (!c.data) return ''; const [a, m, d] = c.data.split('-').map(Number), x = new Date(Date.UTC(a, m - 1 + 6, d)); if (x.getUTCDate() !== d) x.setUTCDate(0); return x.toISOString().slice(0, 10); };
+function cartasVencendoL(uids, dias = 15){
+  const h = hojeISO(), ate = somaDias(h, dias), us = uids ? new Set(uids) : null;
+  return cartas.filter(c => !c.arquivado && ['Aprovada','Em negociação'].includes(c.status) && (!us || us.has(c.corretorUid)))
+    .map(c => ({ ...c, venc:vencCarta(c) })).filter(c => c.venc && c.venc >= h && c.venc <= ate && !resAll().some(r => !r.caiu && mesmoCli(c, r))).sort((a, b) => a.venc.localeCompare(b.venc));
+}
+window.cartasVencendoL = cartasVencendoL;
+const msgCartaVence = c => encodeURIComponent(`Oi, ${primeiro(nomeBonito(c.cliente || ''))}! Tudo bem? Aqui é ${primeiro(nomeBonito(perfil?.nome || ''))}, da Frade Imóveis. Passando para lembrar que a sua aprovação de crédito vence em ${dataBR(c.venc)}. Ainda dá tempo de garantir o seu apartamento com essa condição. Vamos marcar uma visita esta semana?`);
+// 4) saques da Carteira Frade esperando pagamento (gestor e CEO)
+const saquesPend = () => (saques || []).filter(x => x.status === 'solicitado').sort((a, b) => (a.em || 0) - (b.em || 0));
+// 5) resumo de ontem (gerência)
+let _resOntem = null, _resOntemDia = '';
+function lerResumoOntem(){
+  const d = somaDias(hojeISO(), -1); if (_resOntemDia === d || !souGerente()) return; _resOntemDia = d;
+  getDoc(doc(db,'resumos_gerencia', d)).then(sn => { _resOntem = sn.exists() ? sn.data() : null; render(); }).catch(() => {});
+}
+window.gerarResumoAgora = async () => {
+  try { const r = await carteiroJson({ tipo:'resumo_ontem' }); if (r && r.texto) { _resOntem = { texto:r.texto, dia:somaDias(hojeISO(), -1) }; render(); } else toast((r && r.erro) || 'O carteiro ainda não tem o resumo. Cole o carteiro v187 no Cloudflare.'); }
+  catch(e) { toast('Não deu: ' + e.message); }
+};
+window.copiarResumo = async () => { const t = (_resOntem || {}).texto || ''; try { await navigator.clipboard.writeText(t); toast('Resumo copiado'); } catch(e) { toast('Não consegui copiar'); } };
+function htmlAcoesHoje(onde){ try { return htmlAcoesHoje0(onde); } catch(e) { console.warn('acoesHoje', e); return ''; } }
+function htmlAcoesHoje0(onde){
+  if ((onde ? view !== 'painel' : view !== 'hoje') || !souAtivo()) return '';
+  const out = [], li = (a, b, acao) => `<div class="ah-li"><div><b>${a}</b><small>${b || ''}</small></div><div class="ah-ac">${acao || ''}</div></div>`;
+  // saques: só some quando alguém marca pago (o carteiro também lembra a cada 4 horas)
+  if (souGerente()) {
+    const sq = saquesPend();
+    if (sq.length) { const tot = sq.reduce((a, x) => a + (Number(x.valor) || 0), 0);
+      out.push(`<section class="ah-card ah-din"><header><span>💰</span><div><b>${sq.length} saque${sq.length > 1 ? 's' : ''} da Carteira Frade esperando pagamento</b><small>Total ${frd(tot)}. Este aviso fica aqui até marcar como pago.</small></div></header>
+        ${sq.slice(0, 8).map(x => li(`${esc(nomeBonito(x.nome || ''))} · ${frd(x.valor)}`, `PIX ${esc(((PIX_TIPOS.find(t => t[0] === (x.pix || {}).tipo) || [, 'chave'])[1]))}: ${esc((x.pix || {}).chave || '')} · pedido ${new Date(x.em).toLocaleDateString('pt-BR')}${Date.now() - (x.em || 0) > 2 * 864e5 ? ' · <b class="ah-atr">há ' + Math.floor((Date.now() - x.em) / 864e5) + ' dias</b>' : ''}`,
+          `<button class="btn btn-sm btn-ghost" onclick="navigator.clipboard.writeText('${esc((x.pix || {}).chave || '').replace(/'/g, '')}').then(()=>toast('Chave PIX copiada'))">Copiar PIX</button><button class="btn btn-sm btn-primary" onclick="if(confirm('Confirmar que o PIX de ${frd(x.valor)} para ${esc(primeiro(x.nome || '').replace(/'/g, ''))} foi feito?'))marcarSaque('${x.id}','pago')">Marcar pago</button>`)).join('')}</section>`); }
+    lerResumoOntem();
+    const r = _resOntem;
+    out.push(`<section class="ah-card"><header><span>☀️</span><div><b>Resumo de ontem</b><small>${r ? 'O carteiro manda todo dia às 8h.' : 'Ainda não saiu. O carteiro monta às 8h.'}</small></div></header>
+      ${r ? `<pre class="ah-pre">${esc(String(r.texto || '').replace(/\*/g, ''))}</pre><div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="copiarResumo()">Copiar</button><a class="btn btn-sm btn-ghost wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(r.texto || '')}">Mandar no WhatsApp</a></div>` : `<div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="gerarResumoAgora()">Gerar agora</button></div>`}</section>`);
+    const cv = cartasVencendoL(null, 30).filter(c => c.venc.slice(0, 7) === mesAtual());
+    if (cv.length) out.push(`<section class="ah-card"><header><span>⏳</span><div><b>${cv.length} carta${cv.length > 1 ? 's' : ''} aprovada${cv.length > 1 ? 's' : ''} vence${cv.length > 1 ? 'm' : ''} este mês sem venda</b><small>${brl(cv.reduce((a, c) => a + (Number(c.valor) || 0), 0))} em crédito aprovado. Vale chamar esses clientes esta semana.</small></div></header><div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="setView('cartas')">Ver cartas</button></div></section>`);
+  }
+  if (ligaPontua()) {
+    const ls = leadsSemContato();
+    if (ls.length) out.push(`<section class="ah-card ah-alerta"><header><span>⏰</span><div><b>${ls.length} lead${ls.length > 1 ? 's' : ''} esperando a sua ligação há mais de 2 horas</b><small>Quanto antes você liga, mais chance de virar visita.</small></div></header>
+      ${ls.slice(0, 6).map(e => li(esc(nomeBonito(e.cliente || 'Lead')), `chegou às ${new Date(e.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}${e.origem ? ' · ' + esc(e.origem) : ''}`, htmlLigar(e.telefone || '', e.cliente, 'lead'))).join('')}</section>`);
+    const vs = visitasSemPasso([uidAtual]);
+    if (vs.length) out.push(`<section class="ah-card"><header><span>🏠</span><div><b>${vs.length} visita${vs.length > 1 ? 's' : ''} realizada${vs.length > 1 ? 's' : ''} sem próximo passo</b><small>Passou um dia e não virou documentação, pasta na Prime nem reserva. Qual o próximo passo?</small></div></header>
+      ${vs.slice(0, 6).map(v => li(esc(nomeBonito(v.cliente || 'Cliente')), `visita em ${dataBR(v.date).slice(0, 5)}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}`,
+        `${v.telefone ? `<button class="btn btn-sm btn-ghost wa" onclick="abrirWhats('${esc(soDig(v.telefone))}')">WhatsApp</button>` : ''}<button class="btn btn-sm btn-ghost" onclick="posVisita('${v.id}','sem_interesse')">Sem interesse</button><button class="btn btn-sm btn-ghost" onclick="posVisita('${v.id}','aguardando')">Vai mandar docs</button>`)).join('')}</section>`);
+    const cs = cartasVencendoL([uidAtual], 15);
+    if (cs.length) out.push(`<section class="ah-card"><header><span>⏳</span><div><b>${cs.length} carta${cs.length > 1 ? 's' : ''} aprovada${cs.length > 1 ? 's' : ''} perto de vencer</b><small>Chame o cliente antes de perder a aprovação.</small></div></header>
+      ${cs.slice(0, 6).map(c => { const d = Math.round((Date.parse(c.venc) - Date.parse(hojeISO())) / 864e5); return li(esc(nomeBonito(c.cliente || 'Cliente')), `vence ${d === 0 ? 'hoje' : d === 1 ? 'amanhã' : 'em ' + d + ' dias'} (${dataBR(c.venc).slice(0, 5)})${c.valor ? ' · ' + brl(c.valor) : ''}`,
+        telZap(c.telefone || '') ? `<a class="btn btn-sm btn-ghost wa" target="_blank" rel="noopener" href="https://wa.me/${telZap(c.telefone)}?text=${msgCartaVence(c)}">Mandar mensagem</a>` : ''); }).join('')}</section>`);
+  }
+  return out.join('');
+}
 // card "Meus leads de hoje" na tela Hoje
 function htmlMeusLeads(){
   if (!ligaPontua() || view !== 'hoje') return '';
@@ -10281,7 +10416,7 @@ function htmlBonusMeu(){
 const PIX_TIPOS = [['cpf','CPF'], ['telefone','Telefone'], ['email','E-mail'], ['aleatoria','Chave aleatória'], ['cnpj','CNPJ']];
 window.abrirCarteira = (soAtualiza) => {
   const c = bvCfg(), k = saldoCarteira(uidAtual, c), pix = perfil?.pix || null, ult = k.saques.sort((a, b) => (b.em || 0) - (a.em || 0));
-  const item = (v, tipo) => `<div class="cart-it ${tipo}"><div><b>${esc(nomeBonito(v.cliente || 'Cliente'))}</b><small>${dataBR(v.date)}${v.time ? ' às ' + esc(v.time) : ''} · ${tipo === 'pend' ? 'aguardando a visita ser realizada' : 'visita realizada'}</small></div>${k.cada ? `<span>${tipo === 'pend' ? '' : '+ '}${frd(k.cada)}</span>` : ''}</div>`;
+  const item = (v, tipo) => `<div class="cart-it ${tipo}"><div><b>${esc(nomeBonito(v.cliente || 'Cliente'))}</b><small>${v.time ? esc(v.time) + ' · ' : ''}${tipo === 'pend' ? 'aguardando a visita ser realizada' : 'visita realizada'}</small></div>${k.cada ? `<span>${tipo === 'pend' ? '' : '+ '}${frd(k.cada)}</span>` : ''}</div>`;
   $('cartTot').textContent = frd(k.disponivel);
   $('cartSub').textContent = 'Saldo disponível';
   $('cartPend').textContent = frd(k.pend);
@@ -10291,9 +10426,16 @@ window.abrirCarteira = (soAtualiza) => {
     : `<div class="cart-pix falta"><b>Cadastre seu PIX para poder sacar</b><small>O pedido de saque já vai com a sua chave.</small><button class="btn btn-ghost" onclick="editarPix()">Cadastrar PIX</button></div>`;
   const pode = k.disponivel > 0;
   $('cartSaqueBt').disabled = !pode; $('cartSaqueBt').textContent = pode ? `Solicitar saque de ${frd(k.disponivel)}` : 'Sem saldo para sacar';
-  $('cartLista').innerHTML = (k.pendL.length ? `<h4 class="cart-h">Pendente</h4>` + k.pendL.sort((a, b) => (a.date || '').localeCompare(b.date || '')).map(v => item(v, 'pend')).join('') : '')
-    + (k.vendasA.length ? `<h4 class="cart-h">Vendas dos seus corretores</h4>` + k.vendasA.map(v => `<div class="cart-it ok"><div><b>Venda de ${esc(v.corretor || 'corretor')}</b><small>${dataBR(v.dia)} · venda feita</small></div><span>+ ${frd(v.valor)}</span></div>`).join('') : '')
-    + (k.vale.length ? `<h4 class="cart-h">Visitas realizadas</h4>` + k.vale.sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(v => item(v, 'ok')).join('') : '')
+  // v187: créditos separados por data (cada dia com o seu lançamento e o total do dia)
+  const diaTit = d => { if (!d) return 'Sem data'; const t = new Date(d + 'T12:00:00'); const w = t.toLocaleDateString('pt-BR', { weekday:'long' }); return w.charAt(0).toUpperCase() + w.slice(1) + ', ' + dataBR(d); };
+  const porDia = (lst, desc) => { const g = {}; lst.forEach(x => { (g[x.dia] = g[x.dia] || []).push(x); }); return Object.keys(g).sort((a, b) => desc ? b.localeCompare(a) : a.localeCompare(b)).map(d => [d, g[d]]); };
+  const blocoDias = (lst, desc, pend) => porDia(lst, desc).map(([d, l]) => { const tot = l.reduce((a, x) => a + (x.valor || 0), 0);
+    return `<div class="cart-dia"><div class="cart-dia-h"><span>${diaTit(d)}</span>${tot ? `<b>${pend ? '' : '+ '}${frd(tot)}</b>` : ''}</div>${l.map(x => x.html).join('')}</div>`; }).join('');
+  const cred = [...k.vendasA.map(v => ({ dia:v.dia || '', valor:Number(v.valor) || 0, html:`<div class="cart-it ok"><div><b>Venda de ${esc(v.corretor || 'corretor')}</b><small>venda feita</small></div><span>+ ${frd(v.valor)}</span></div>` })),
+    ...k.vale.map(v => ({ dia:v.date || '', valor:k.cada || 0, html:item(v, 'ok') }))];
+  const pendD = k.pendL.map(v => ({ dia:v.date || '', valor:k.cada || 0, html:item(v, 'pend') }));
+  $('cartLista').innerHTML = (pendD.length ? `<h4 class="cart-h">Pendente</h4>` + blocoDias(pendD, false, true) : '')
+    + (cred.length ? `<h4 class="cart-h">Créditos</h4>` + blocoDias(cred, true) : '')
     + (ult.length ? `<h4 class="cart-h">Saques</h4>` + ult.map(x => `<div class="cart-it"><div><b>${frd(x.valor)}</b><small>${new Date(x.em).toLocaleDateString('pt-BR')} · pedido nº ${esc(x.cod || '')}</small></div><span class="cart-st ${x.status}">${x.status === 'pago' ? 'Pago' : 'Solicitado'}</span></div>`).join('') : '')
     || `<div class="muted" style="padding:14px 0">Ainda não tem saldo. ${perfil?.papel === 'anjo' && avCfg().ativo ? `Cada venda de um corretor que você acompanha vale <b>${frd(avCfg().valor)}</b>. ` : ''}${c.ativo && c.soFeirao ? `Cada visita do <b>Feirão Tenda</b> realizada no sábado vale <b>${frd(valorVisitaCart(c))}</b>. Marcou a visita, o valor já aparece como pendente.` : ''}</div>`;
   const regraAnjo = perfil?.papel === 'anjo' && avCfg().ativo ? `Cada venda feita por um corretor que você acompanha vale <b>${frd(avCfg().valor)}</b> e entra direto no saldo disponível. Se a venda cair, o valor sai do saldo. ` : '';
@@ -10385,7 +10527,7 @@ function desenharBonus(){
 }
 function desenharSaques(){
   const sq = saques.slice().sort((x, y) => (x.status === 'solicitado' ? 0 : 1) - (y.status === 'solicitado' ? 0 : 1) || (y.em || 0) - (x.em || 0)).slice(0, 40);
-  $('bvTabela').insertAdjacentHTML('beforeend', `<h3 style="margin:18px 0 6px;font-size:15px">Pedidos de saque da Carteira Frade</h3>` + (sq.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Valor</th><th>PIX</th><th>Pedido</th><th></th></tr></thead><tbody>${sq.map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span></td><td><b>${frd(x.valor)}</b></td><td style="word-break:break-all">${esc((x.pix || {}).chave || '')}<br><small class="muted">${esc((x.pix || {}).titular || '')}</small></td><td>${new Date(x.em).toLocaleDateString('pt-BR')}<br><small class="muted">nº ${esc(x.cod || '')}</small></td><td>${x.status === 'solicitado' ? (souGerente() && !souCeo() ? `<button class="link" onclick="marcarSaque('${x.id}','pago')">marcar pago</button><br><button class="link" style="color:var(--danger)" onclick="marcarSaque('${x.id}','recusado')">recusar</button>` : 'solicitado') : x.status === 'pago' ? '<span class="fin-pos">pago</span>' : '<span class="muted">recusado</span>'}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted" style="font-size:13.5px">Nenhum pedido de saque ainda.</div>'));
+  $('bvTabela').insertAdjacentHTML('beforeend', `<h3 style="margin:18px 0 6px;font-size:15px">Pedidos de saque da Carteira Frade</h3>` + (sq.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th><th>Valor</th><th>PIX</th><th>Pedido</th><th></th></tr></thead><tbody>${sq.map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span></td><td><b>${frd(x.valor)}</b></td><td style="word-break:break-all">${esc((x.pix || {}).chave || '')}<br><small class="muted">${esc((x.pix || {}).titular || '')}</small></td><td>${new Date(x.em).toLocaleDateString('pt-BR')}<br><small class="muted">nº ${esc(x.cod || '')}</small></td><td>${x.status === 'solicitado' ? (souGerente() ? `<button class="link" onclick="marcarSaque('${x.id}','pago')">marcar pago</button><br><button class="link" style="color:var(--danger)" onclick="marcarSaque('${x.id}','recusado')">recusar</button>` : 'solicitado') : x.status === 'pago' ? '<span class="fin-pos">pago</span>' : '<span class="muted">recusado</span>'}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted" style="font-size:13.5px">Nenhum pedido de saque ainda.</div>'));
 }
 window.lancarBonus = async uid => {
   const c = bvCfg(), m = finMes || mesAtual(), p = perfisLista.find(x => x.uid === uid); if (!p) return;
@@ -13085,7 +13227,7 @@ function mdResumoDia(d){
 function htmlMeuDiaCard(){
   if (view !== 'hoje' || !podeMeuDia()) return '';
   const d = mdOntem(), r = mdResumoDia(d), dl = parseISO(d).toLocaleDateString('pt-BR', { weekday:'long' });
-  return `<button type="button" class="md-card" onclick="abrirMeuDia()"><span class="md-ic">📅</span><span class="md-tx"><small>Meu dia anterior · ${esc(dl)}, ${dataBR(d).slice(0, 5)}</small><b>${r.num || r.lig} ligações · ${r.docs} doc${r.docs === 1 ? '' : 's'} · ${r.vr} visita${r.vr === 1 ? '' : 's'} realizada${r.vr === 1 ? '' : 's'}</b></span><i class="md-ver">Ver tudo</i></button>`;
+  return `<button type="button" class="mdia-card" onclick="abrirMeuDia()"><span class="mdia-ic">📅</span><span class="mdia-tx"><small>Meu dia anterior · ${esc(dl)}, ${dataBR(d).slice(0, 5)}</small><b>${r.num || r.lig} ligações · ${r.docs} doc${r.docs === 1 ? '' : 's'} · ${r.vr} visita${r.vr === 1 ? '' : 's'} realizada${r.vr === 1 ? '' : 's'}</b></span><i class="mdia-ver">Ver tudo</i></button>`;
 }
 window.abrirMeuDia = (d) => { if (!podeMeuDia()) return; const dia = d || mdOntem(); $('mdDia').max = hojeISO(); pintarMeuDia(dia); abrir('meuDiaModal'); };
 window.mdNav = k => { let d = somaDias($('mdDia').value || mdOntem(), k); if (d > hojeISO()) return; pintarMeuDia(d); };
@@ -13094,9 +13236,9 @@ window.pintarMeuDia = async d => {
   const meta = metaDiaDe(u), temMeta = MD_ITENS.some(([k]) => meta[k]), feito = { lig:r.num, docs:r.docs, vm:r.vm, vr:r.vr };
   const avs = (avaliacoes || []).filter(a => a.corretorUid === u && a.data === d), pastas = (analises || []).filter(a => a.corretorUid === u && a.enviadaEm && iso(new Date(a.enviadaEm)) === d);
   const cs = cartas.filter(c => c.corretorUid === u && c.data === d && !c.arquivado), vds = rankingVendas.filter(v => !v.caiu && v.dia === d && (v.corretores || []).some(c => c.uid === u));
-  const bloco = (tit, val, corpo) => `<div class="md-b"><div class="md-bh"><b>${tit}</b><span>${val}</span></div>${corpo || ''}</div>`;
-  const li = (a, b) => `<div class="md-li"><span>${a}</span><small>${b ?? ''}</small></div>`;
-  $('mdCorpo').innerHTML = `<div class="md-titulo">${esc(maiuscula(parseISO(d).toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' })))}${d === h ? ' · hoje, até agora' : ''}</div>`
+  const bloco = (tit, val, corpo) => `<div class="mdia-b"><div class="mdia-bh"><b>${tit}</b><span>${val}</span></div>${corpo || ''}</div>`;
+  const li = (a, b) => `<div class="mdia-li"><span>${a}</span><small>${b ?? ''}</small></div>`;
+  $('mdCorpo').innerHTML = `<div class="mdia-titulo">${esc(maiuscula(parseISO(d).toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' })))}${d === h ? ' · hoje, até agora' : ''}</div>`
     + bloco('Presença', r.pres ? (r.via === 'externo' ? 'Atendimento externo' : 'No escritório') : 'Sem presença marcada')
     + bloco('Leads recebidos', '<span id="mdLeadsN">…</span>', '<div id="mdLeadsL"></div>')
     + bloco('Ligações', `${r.num} números`, li('Tentativas no total', r.lig) + li('Atenderam', r.at))
@@ -13563,7 +13705,7 @@ function renderPainel(){
     </svg>
     <div class="rt-pe"><span>Melhor dia: <b>${(() => { const b = dias.slice().sort((a,c) => docsDia(c) - docsDia(a))[0]; return b && docsDia(b) ? dataBR(b).slice(0,5) + ' · ' + docsDia(b) + ' docs' : '–'; })()}</b></span><span>Média: <b>${(A.docs / Math.max(dias.length, 1)).toLocaleString('pt-BR', { maximumFractionDigits:1 })} docs por dia</b></span></div></div>`;
   const funilC = `<div class="card fc-card"><div class="card-head"><h2>Funil do mês</h2><span class="muted">${selEq} ${atual ? 'até hoje' : 'mês fechado'}</span></div><div class="fc">${etapas.map(([nome, v, vb], i) => `${i ? `<div class="fc-seta"><span>${(() => { const c = pct(v, etapas[i-1][1]); return c === null ? '–' : c.toLocaleString('pt-BR') + '%'; })()}</span></div>` : ''}<div class="fc-et ${i === etapas.length - 1 ? 'fim' : ''}"><b>${v.toLocaleString('pt-BR')}</b><span>${nome}</span>${variacao(v, vb)}</div>`).join('')}</div></div>`;
-  let html = hero + (souGerente() ? htmlFinPainel(mesSel) : '') + (souCeo() ? funilC : funil) + '<!--SEC:numeros-->' + ritmo + `<details class="pd-todos" open><summary>Todos os números do mês</summary><div class="pd-kpis">
+  let html = (souCeo() ? htmlAcoesHoje('painel') : '') + hero + (souGerente() ? htmlFinPainel(mesSel) : '') + (souCeo() ? funilC : funil) + '<!--SEC:numeros-->' + ritmo + `<details class="pd-todos" open><summary>Todos os números do mês</summary><div class="pd-kpis">
     ${kpi('📥','Leads', A.leads, B.leads, 'do CRM')}
     ${kpi('🗂️','Docs', A.docs, B.docs, 'planilha de avaliações')}
     <div class="pd-kpi"><span>Média lead/doc</span><b style="color:${corM(mA)}">${mA === null ? '–' : mA.toLocaleString('pt-BR')}</b><small class="var">antes ${mB === null ? '–' : mB.toLocaleString('pt-BR')}</small><em>quanto menor, melhor</em></div>
@@ -14149,17 +14291,24 @@ function renderMetasDiaHoje(){ const el = $('mdHoje'); if (!el) return; const h 
 
 // ---------- letreiro (v160): fica no topo da tela e passa o tempo todo, com quem bateu as metas ontem e hoje ----------
 // v161: uma notícia por vez, trocando a cada 7 segundos; tocar leva para a tela certa
+// v187: letreiro em cartão (desenho aprovado pelo gestor): avatar com selo, etiqueta, título, detalhe, barra de tempo e quem já bateu hoje
+const ltIni = n => { const p = nomeBonito(n || '').split(/\s+/).filter(Boolean); return ((p[0] || '?')[0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase(); };
+const ltNums = v => [v.lig ? `${v.lig} ligaç${v.lig === 1 ? 'ão' : 'ões'}` : '', v.docs ? `${v.docs} doc${v.docs === 1 ? '' : 's'}` : '', v.vm ? `${v.vm} visita${v.vm === 1 ? '' : 's'} marcada${v.vm === 1 ? '' : 's'}` : '', v.vr ? `${v.vr} realizada${v.vr === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · ');
 function itensLetreiro(){
   const r = mdBateramOntem(), dd = parseISO(r.dia).toLocaleDateString('pt-BR', { weekday:'long' }), it = [];
   const sx = (typeof sxHistorico !== 'undefined' ? sxHistorico : []).find(x => (x.ganhadores || []).length);
-  if (sx && Date.now() - (sx.em || 0) < 7 * 864e5) it.push({ ic:'🎁', ir:'sorteio', h:`Último sorteio${sx.titulo && sx.titulo !== 'Sorteio Frade' ? ' (' + esc(sx.titulo) + ')' : ''}: <b>${sx.ganhadores.map(n => esc(nomeCurto(n))).join(', ')}</b> ${sx.ganhadores.length > 1 ? 'ganharam' : 'ganhou'}${sx.premio ? ' ' + esc(sx.premio) : ''}` });
+  // venda de hoje
+  try { (rankingVendas || []).filter(v => !v.caiu && v.dia === hojeISO()).slice(0, 4).forEach(v => { const cs = (v.corretores || []).filter(c => c.nome); if (!cs.length) return;
+    it.push({ ic:'🔑', ir:'vendas', chip:'VENDA DE HOJE', ini:ltIni(cs[0].nome), tit:`${cs.map(c => esc(nomeCurto(c.nome))).join(' e ')} ${cs.length > 1 ? 'venderam' : 'vendeu'}`, sub:[v.valor ? brl(v.valor) : '', v.ind ? 'venda por indicação' : 'venda de lead'].filter(Boolean).join(' · '), h:`Venda de hoje: <b>${cs.map(c => esc(nomeCurto(c.nome))).join(' e ')}</b>${v.valor ? ' · ' + brl(v.valor) : ''}` }); }); } catch(e) {}
+  if (sx && Date.now() - (sx.em || 0) < 7 * 864e5) it.push({ chip:'ÚLTIMO SORTEIO', ini:ltIni(sx.ganhadores[0]), tit:`${sx.ganhadores.map(n => esc(nomeCurto(n))).join(' e ')} ${sx.ganhadores.length > 1 ? 'ganharam' : 'ganhou'}${sx.premio ? ' ' + esc(sx.premio) : ''}`, sub:[sx.titulo && sx.titulo !== 'Sorteio Frade' ? esc(sx.titulo) : 'Sorteio Frade', sx.em ? new Date(sx.em).toLocaleDateString('pt-BR', { weekday:'long' }) + ' às ' + new Date(sx.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : ''].filter(Boolean).join(' · '), ic:'🎁', ir:'sorteio', h:`Último sorteio${sx.titulo && sx.titulo !== 'Sorteio Frade' ? ' (' + esc(sx.titulo) + ')' : ''}: <b>${sx.ganhadores.map(n => esc(nomeCurto(n))).join(', ')}</b> ${sx.ganhadores.length > 1 ? 'ganharam' : 'ganhou'}${sx.premio ? ' ' + esc(sx.premio) : ''}` });
   const hoje = mdLista([hojeISO()]).filter(x => x.bateu);
-  if (hoje.length) it.push({ ic:'✓', ir:'ranking', h:`Já bateram todas as metas hoje: <b>${hoje.slice(0, 6).map(x => esc(nomeCurto(x.p.nome))).join(', ')}</b>${hoje.length > 6 ? ' e mais ' + (hoje.length - 6) : ''}` });
-  if (r.todos.length) it.push({ ic:'★', ir:'ranking', h:`Bateram todas as metas de ${esc(dd)}: <b>${r.todos.slice(0, 6).map(x => esc(nomeCurto(x.p.nome))).join(', ')}</b>${r.todos.length > 6 ? ' e mais ' + (r.todos.length - 6) : ''}` });
-  r.parcial.slice(0, 6).forEach(x => it.push({ ic:'↑', ir:'ranking', h:`<b>${esc(nomeCurto(x.p.nome))}</b> bateu ${esc(x.quais.join(', ').toLowerCase())} na ${esc(dd)}` }));
+  if (hoje.length) it.push({ chip:'METAS DE HOJE', ini:ltIni(hoje[0].p.nome), tit:`${hoje.length === 1 ? esc(nomeCurto(hoje[0].p.nome)) + ' já bateu' : hoje.length + ' já bateram'} todas as metas hoje`, sub:hoje.slice(0, 4).map(x => esc(nomeCurto(x.p.nome))).join(', ') + (hoje.length > 4 ? ' e mais ' + (hoje.length - 4) : ''), ic:'✓', ir:'ranking', h:`Já bateram todas as metas hoje: <b>${hoje.slice(0, 6).map(x => esc(nomeCurto(x.p.nome))).join(', ')}</b>${hoje.length > 6 ? ' e mais ' + (hoje.length - 6) : ''}` });
+  r.todos.slice(0, 6).forEach(x => it.push({ chip:'METAS DE ' + (dd.startsWith('sex') || dd.startsWith('sáb') ? dd.split('-')[0].toUpperCase() : 'ONTEM'), ini:ltIni(x.p.nome), ic:'🏆', ir:'ranking', tit:`${esc(nomeCurto(x.p.nome))} bateu todas as metas`, sub:ltNums(x.v), h:`<b>${esc(nomeCurto(x.p.nome))}</b> bateu todas as metas de ${esc(dd)}` }));
+  r.parcial.slice(0, 6).forEach(x => it.push({ chip:'METAS DE ONTEM', ini:ltIni(x.p.nome), tit:`${esc(nomeCurto(x.p.nome))} bateu ${esc(x.quais.join(', ').toLowerCase())}`, sub:ltNums(x.v), ic:'⭐', ir:'ranking', h:`<b>${esc(nomeCurto(x.p.nome))}</b> bateu ${esc(x.quais.join(', ').toLowerCase())} na ${esc(dd)}` }));
   return it;
 }
 let _mdLetI = 0, _mdLetT = null, _mdLetSig = '';
+function ltBarra(){ const b = document.querySelector('#mdLetreiro .lt-bar i'); if (!b) return; b.style.animation = 'none'; void b.offsetWidth; b.style.animation = ''; }
 function mdLetEsconde(){ const el = $('mdLetreiro'); if (el) el.classList.remove('on'); document.documentElement.classList.remove('com-let'); clearInterval(_mdLetT); _mdLetT = null; _mdLetSig = ''; }
 let _mdLetPausa = false;
 function mdLetTroca(passo = 1, para){
@@ -14167,16 +14316,34 @@ function mdLetTroca(passo = 1, para){
   if (passo === 1 && para === undefined && _mdLetPausa) return; // mouse em cima: espera
   const a = _mdLetI; _mdLetI = para !== undefined ? para : (_mdLetI + passo + ms.length) % ms.length; if (a === _mdLetI) return;
   ms[a].classList.remove('on'); ms[a].classList.add('sai'); setTimeout(() => ms[a].classList.remove('sai'), 500);
-  ms[_mdLetI].classList.add('on'); pts.forEach((p, i) => p.classList.toggle('on', i === _mdLetI));
+  ms[_mdLetI].classList.add('on'); pts.forEach((p, i) => p.classList.toggle('on', i === _mdLetI)); ltBarra();
 }
 function mdLetreiroPulso(){
   const el = $('mdLetreiro'); if (!el) return;
   const mostrar = !!perfil && souAtivo() && (view === 'hoje' || view === 'tvrank');
   if (!mostrar) { mdLetEsconde(); return; }
-  const it = itensLetreiro(), sig = JSON.stringify(it);
+  const it = itensLetreiro(), sig = view + JSON.stringify(it) + (view === 'hoje' ? mdLista([hojeISO()]).filter(x => x.bateu).length : '');
   if (!it.length) { mdLetEsconde(); return; }
   if (sig === _mdLetSig && el.classList.contains('on')) return; // nada mudou: segue trocando
   _mdLetSig = sig; if (_mdLetI >= it.length) _mdLetI = 0;
+  const tv = view === 'tvrank';
+  // no Hoje o letreiro vira um cartão dentro da página; na TV continua a faixa no topo
+  const lugar = tv ? document.querySelector('main.main') : $('v-hoje');
+  if (lugar && el.parentElement !== lugar) { if (tv) lugar.insertBefore(el, lugar.firstChild); else lugar.insertBefore(el, lugar.firstChild); }
+  el.classList.toggle('lt', !tv);
+  if (!tv) {
+    const hj = mdLista([hojeISO()]).filter(x => x.bateu);
+    el.innerHTML = `<div class="lt-in"><div class="lt-vis">${it.map((x, i) => `<div class="md-let-msg lt-m ${i === _mdLetI ? 'on' : ''}" role="button" tabindex="0" onclick="setView('${x.ir}')" onkeydown="if(event.key==='Enter')setView('${x.ir}')" title="Abrir">
+        <div class="lt-av"><b>${esc(x.ini || '★')}</b><i aria-hidden="true">${x.ic}</i></div>
+        <div class="lt-tx"><span class="lt-chip">${esc(x.chip || 'DESTAQUE')}</span><b>${x.tit || x.h}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</div></div>`).join('')}</div>
+      ${hj.length ? `<button type="button" class="lt-lado" onclick="setView('ranking')" title="Ver o ranking de hoje"><span class="lt-pilha">${hj.slice(0, 3).map(x => `<i>${esc(ltIni(x.p.nome))}</i>`).join('')}</span><span><b>${hj.length} ${hj.length === 1 ? 'bateu' : 'bateram'}</b><small>a meta hoje</small></span></button>` : ''}
+      ${it.length > 1 ? `<div class="md-let-nav lt-nav"><button type="button" onclick="mdLetVai(-1)" aria-label="Notícia anterior">‹</button><div class="md-let-pts">${it.map((_, i) => `<i class="${i === _mdLetI ? 'on' : ''}" role="button" tabindex="0" aria-label="Notícia ${i + 1}" onclick="mdLetVai(0, ${i})"></i>`).join('')}</div><button type="button" onclick="mdLetVai(1)" aria-label="Próxima notícia">›</button></div>` : ''}
+      <div class="lt-bar" aria-hidden="true"><i></i></div></div>`;
+    el.classList.add('on'); document.documentElement.classList.remove('com-let');
+    el.onmouseenter = () => mdLetPausa(true); el.onmouseleave = () => mdLetPausa(false);
+    clearInterval(_mdLetT); _mdLetT = it.length > 1 ? setInterval(mdLetTroca, 7000) : null; ltBarra();
+    return;
+  }
   el.innerHTML = `<div class="md-let-in"><span class="md-let-tit">DESTAQUES</span><div class="md-let-vis">${it.map((x, i) => `<div class="md-let-msg ${i === _mdLetI ? 'on' : ''}" role="button" tabindex="0" onclick="setView('${x.ir}')" title="Abrir"><span class="ic" aria-hidden="true">${x.ic}</span><span>${x.h}</span></div>`).join('')}</div>${it.length > 1 ? `<div class="md-let-nav"><button type="button" onclick="mdLetVai(-1)" aria-label="Notícia anterior">‹</button><div class="md-let-pts">${it.map((_, i) => `<i class="${i === _mdLetI ? 'on' : ''}" role="button" tabindex="0" aria-label="Notícia ${i + 1}" onclick="mdLetVai(0, ${i})"></i>`).join('')}</div><button type="button" onclick="mdLetVai(1)" aria-label="Próxima notícia">›</button></div>` : ''}</div>`;
   el.classList.add('on'); document.documentElement.classList.add('com-let');
   el.onmouseenter = () => mdLetPausa(true); el.onmouseleave = () => mdLetPausa(false);
