@@ -1051,6 +1051,32 @@ html.lenis,html.lenis body{height:auto}
 .bz-seq{display:grid;gap:6px;margin:0 0 12px}.bz-seq small{color:var(--muted);font-size:12.5px}.bz-seq .seg{flex-wrap:wrap}
 
 
+
+/* v190: tela Reservas */
+.res-etapas{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;margin-bottom:4px;scrollbar-width:thin}
+.res-etapas button{all:unset;cursor:pointer;flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--border);font-size:13px;font-weight:600;color:var(--text);white-space:nowrap}
+.res-etapas button b{font-weight:800;color:var(--muted)}.res-etapas button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.res-etapas button.on b{color:var(--accent)}
+.res-etapas button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.res-dtm{display:none;color:var(--muted);font-size:12px}
+#v-reservas .tb-grid{grid-template-columns:minmax(0,1fr) 170px 190px}
+@media (max-width:760px){#v-reservas .tb-grid{grid-template-columns:1fr 1fr}#v-reservas .tb-grid input{grid-column:1/-1}.res-dtm{display:inline}}
+.et-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.et-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.01em;white-space:nowrap;line-height:1.35}
+.v-top .et-pill{margin-left:6px;font-size:10.5px;padding:2px 8px}
+.res-li{display:grid;grid-template-columns:minmax(0,1fr) 70px 120px 230px;gap:14px;align-items:center;padding:12px 4px;border-top:1px solid var(--border)}
+.res-li:first-child{border-top:0}
+.res-cli{min-width:0}.res-cli b{display:block;font-size:14.5px}.res-cli small{display:block;color:var(--muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-dt small,.res-val small{display:block;color:var(--muted);font-size:11px}.res-dt b,.res-val b{font-size:13.5px}
+.res-et{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.res-et small{font-size:11.5px;color:var(--muted)}.res-et small.res-parado{color:var(--danger);font-weight:700}
+.et-bt{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:var(--muted);border-radius:999px}.et-bt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.et-bt:hover .et-pill{filter:brightness(.95)}
+.et-opcoes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.et-op{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.et-op.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.et-op:focus-visible{outline:2px solid var(--accent)}
+.et-atual{font-size:11px;color:var(--accent);font-weight:700}
+.et-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-top:1px dashed var(--border)}.et-h small{color:var(--muted);font-size:12px;text-align:right}
+@media (max-width:760px){.res-li{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"cli et" "dv et";row-gap:6px}.res-cli{grid-area:cli}.res-et{grid-area:et;align-items:flex-end;text-align:right}.res-dt{display:none}.res-val{grid-area:dv;display:flex;gap:6px;align-items:baseline}.res-val small{display:none}}
+@media (max-width:420px){.et-opcoes{grid-template-columns:1fr}}
 /* v187: carteira com créditos por data */
 .cart-dia{margin:6px 0 12px;border:1px solid var(--border);border-radius:14px;padding:4px 12px;background:var(--card)}
 .cart-dia-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0 6px;font-size:13px;color:var(--muted);border-bottom:1px dashed var(--border)}
@@ -2170,12 +2196,8 @@ html.modo-tvr.com-let .tvr{padding-top:4.6vw}
 <style id="mkt154">
 /* v154: perfis ADM / Correspondente e Marketing */
 .so-adm,.so-mkt{display:none!important}html.modo-adm .so-adm,html.modo-mkt .so-mkt{display:flex!important}
-html.modo-adm .nav>button[data-view]:not([data-view="analises"]):not([data-view="vendas"]):not([data-view="cartas"]):not([data-view="avaliacoes"]):not([data-view="empreendimentos"]):not([data-view="config"]),
 html.modo-adm .mobilebar>button[data-view]:not(.so-adm),
-html.modo-adm #menuModal .menu-list>button:not([onclick*="'analises'"]):not([onclick*="'vendas'"]):not([onclick*="'cartas'"]):not([onclick*="'avaliacoes'"]):not([onclick*="'empreendimentos'"]):not([onclick*="'config'"]):not([onclick*="sair"]),
-html.modo-mkt .nav>button[data-view]:not([data-view="marketing"]):not([data-view="ranking"]):not([data-view="empreendimentos"]):not([data-view="config"]),
 html.modo-mkt .mobilebar>button[data-view]:not(.so-mkt):not([data-view="ranking"]),
-html.modo-mkt #menuModal .menu-list>button:not([onclick*="'marketing'"]):not([onclick*="'ranking'"]):not([onclick*="'empreendimentos'"]):not([onclick*="'config'"]):not([onclick*="sair"]),
 html.modo-adm #btnTopo,html.modo-adm #fab,html.modo-adm .profile .p-stats,html.modo-adm .zap-fab,html.modo-adm .disc-fab,
 html.modo-mkt #btnTopo,html.modo-mkt #fab,html.modo-mkt .profile .p-stats,html.modo-mkt .zap-fab,html.modo-mkt .disc-fab{display:none!important}
 html.modo-adm .nav .mk-nav{display:none!important}
@@ -2706,6 +2728,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
       <button data-view="vendas" class="nao-sdr" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
+      <button data-view="reservas" class="gerente-only hide res-nav" onclick="setView('reservas')"><i data-ic="list"></i>Reservas</button>
       <button data-view="comissoes" class="cor-only hide" onclick="setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
       <button data-view="financeiro" class="gerente-only hide" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
       <button data-view="cartas" class="nao-sdr" onclick="setView('cartas')"><i data-ic="card"></i>Cartas aprovadas<span class="count" id="cCartas">0</span></button>
@@ -3086,6 +3109,20 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         </div>
       </section>
 
+      <!-- RESERVAS (ADM): etapa de cada venda até a assinatura -->
+      <section class="view" id="v-reservas">
+        <div class="page-head"><div><h1>Reservas</h1><div class="sub" id="resSub">A etapa de cada reserva, da avaliação até a assinatura.</div></div><button class="btn btn-ghost" onclick="exportarReservas()">Exportar por mês (Excel)</button></div>
+        <div class="res-etapas" id="resEtapas" role="tablist" aria-label="Filtrar por etapa"></div>
+        <div class="card">
+          <div class="tb-grid">
+            <input id="resBusca" placeholder="Buscar cliente, CPF, corretor, empreendimento..." oninput="resSet('busca',this.value)">
+            <select id="resPeriodo" onchange="resSet('periodo',this.value)" aria-label="Período"><option value="todas">Qualquer data</option><option value="mes">Deste mês</option><option value="passado">Do mês passado</option></select>
+            <select id="resEquipe" onchange="resSet('equipe',this.value)" aria-label="Equipe"></select>
+          </div>
+          <div id="resLista"></div>
+        </div>
+      </section>
+
       <!-- RESUMO DO DIA (SDR) -->
       <section class="view" id="v-resumo">
         <div class="page-head"><div><h1>Resumo do dia</h1><div class="sub">Os mesmos dados da mensagem do grupo. Preencha todo dia o resumo de ontem.</div></div></div>
@@ -3448,7 +3485,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button data-view="analises" class="so-corresp" onclick="setView('analises')"><i data-ic="pasta"></i>Pastas</button>
   <button data-view="analises" class="so-adm" onclick="setView('analises')"><i data-ic="pasta"></i>Pastas</button>
-  <button data-view="vendas" class="so-adm" onclick="setView('vendas')"><i data-ic="chave"></i>Reservas</button>
+  <button data-view="reservas" class="so-adm" onclick="setView('reservas')"><i data-ic="list"></i>Reservas</button>
   <button data-view="cartas" class="so-adm" onclick="setView('cartas')"><i data-ic="doc"></i>Cartas</button>
   <button data-view="marketing" class="so-mkt" onclick="setView('marketing')"><i data-ic="cal"></i>Agenda</button>
   <button id="mbVoce" onclick="abrir('menuModal')"><i data-ic="tbVoce"></i>Você</button>
@@ -3883,6 +3920,12 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <div class="dono-only" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)"><button class="btn btn-ghost" style="color:var(--danger)" onclick="fechar('zapCfgModal');zapLimpar()">🗑️ Apagar todas as conversas do app</button><div class="hint" style="margin-top:6px">Só apaga do app. As conversas continuam no celular.</div></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('zapCfgModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarZapCfg()">Salvar</button></div>
+  </div>
+</div>
+<div class="modal" id="etapaModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-head"><div><h2>Etapa da reserva</h2><div class="sub" id="etCli"></div></div><button class="icon-btn" onclick="fechar('etapaModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="et-opcoes" id="etOpcoes"></div><div id="etHist"></div></div>
   </div>
 </div>
 <div class="modal" id="fvModal">
@@ -4348,6 +4391,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <button onclick="fechar('menuModal');setView('bolsao')"><i data-ic="users"></i>Bolsão de clientes</button>
       <button onclick="fechar('menuModal');setView('aulas')"><i data-ic="play"></i>Aulas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
+      <button class="gerente-only hide res-menu" onclick="fechar('menuModal');setView('reservas')"><i data-ic="list"></i>Reservas</button>
       <button class="cor-only hide" onclick="fechar('menuModal');setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
       <button onclick="fechar('menuModal');setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('avaliacoes')"><i data-ic="doc"></i>Avaliações de crédito</button>
@@ -4724,6 +4768,7 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   document.documentElement.classList.toggle('modo-tvr', v === 'tvrank');
   if (v === 'vendas' && !souGerente() && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('vendas')) v = 'hoje';
   if (v === 'financeiro' && !souGerente()) v = 'hoje';
+  if (v === 'reservas' && !opTudo() && !abaLiberada('reservas')) v = 'hoje';
   if (v === 'whatsapp' && !podeZap() && !abaLiberada('whatsapp')) v = 'hoje';
   if (v === 'apresentacao' && !souGerente()) v = 'hoje';
   if (v === 'assistente' && !podeIA()) v = 'hoje';
@@ -4736,9 +4781,9 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
   if (souCeo() && !VIEWS_CEO.includes(v)) v = 'painel';
   if (souCorresp() && !['analises','config'].includes(v)) v = 'analises';
-  if (souAdm() && !VIEWS_ADM.includes(v)) v = 'analises';
-  if (souMkt() && !VIEWS_MKT.includes(v)) v = 'marketing';
-  if (v === 'marketing' && !souMkt() && !souGerente()) v = 'hoje';
+  if (souAdm() && !viewsDoCargo('adm').includes(v)) v = viewsDoCargo('adm').find(x => x !== 'config') || 'config';
+  if (souMkt() && !viewsDoCargo('marketing').includes(v)) v = viewsDoCargo('marketing').find(x => x !== 'config') || 'config';
+  if (v === 'marketing' && !souMkt() && !souGerente() && !abaLiberada('marketing')) v = 'hoje';
   if (v === 'analises' && !anVisivel() && !abaLiberada('analises')) v = 'hoje';
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr' && !abaLiberada(v)) v = 'hoje';
@@ -5442,7 +5487,7 @@ window.souDono = souDono;
 // CEO: só visualiza os números e resultados; a agenda pessoal dele é particular. Só o gestor tem acesso a tudo.
 const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
-const VIEWS_CEO = ['bolsao','analises','painel','desempenho','vendas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
+const VIEWS_CEO = ['bolsao','analises','painel','desempenho','vendas','reservas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const souAnjo = () => souAtivo() && perfil.papel === 'anjo';
 const membrosAnjo = () => Array.isArray(perfil?.membros) ? perfil.membros : [];
@@ -5453,7 +5498,7 @@ const souAdm = () => souAtivo() && perfil.papel === 'adm';
 const souMkt = () => souAtivo() && perfil.papel === 'marketing';
 const opTudo = () => souGerente() || souAdm();      // vê e cuida da operação de todas as equipes
 const opGerir = () => podeGerir() || souAdm();
-const VIEWS_ADM = ['analises','vendas','cartas','avaliacoes','empreendimentos','config'];
+const VIEWS_ADM = ['analises','reservas','vendas','cartas','avaliacoes','empreendimentos','config'];
 const VIEWS_MKT = ['marketing','ranking','empreendimentos','config'];
 window.podeGerir = podeGerir;
 const eqNome = id => equipes[id] ? `${equipes[id].icone||''} ${equipes[id].nome}`.trim() : (id ? id : 'Sem equipe');
@@ -5696,8 +5741,8 @@ function renderPapel(){
   document.documentElement.classList.toggle('modo-corresp', souCorresp());
   if (souCorresp() && !['analises','config'].includes(view)) setTimeout(() => setView('analises'), 0);
   document.documentElement.classList.toggle('modo-adm', souAdm()); document.documentElement.classList.toggle('modo-mkt', souMkt());
-  if (souAdm() && !VIEWS_ADM.includes(view)) setTimeout(() => setView('analises'), 0);
-  if (souMkt() && !VIEWS_MKT.includes(view)) setTimeout(() => setView('marketing'), 0);
+  if (souAdm() && !viewsDoCargo('adm').includes(view)) setTimeout(() => setView(viewsDoCargo('adm').find(x => x !== 'config') || 'config'), 0);
+  if (souMkt() && !viewsDoCargo('marketing').includes(view)) setTimeout(() => setView(viewsDoCargo('marketing').find(x => x !== 'config') || 'config'), 0);
   document.querySelectorAll('.mk-nav').forEach(e => e.classList.toggle('hide', !(souMkt() || souGerente())));
   document.querySelectorAll('.an-nav').forEach(e => e.classList.toggle('hide', !anVisivel() && !abaLiberada('analises')));
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
@@ -6187,7 +6232,7 @@ window.abrirRelatorio = async uid => {
   } catch(e) { $('rmTarefas').textContent = 'Não foi possível ver as tarefas (' + e.message + ').'; }
 };
 setTimeout(() => {
-  const bloq = ['zapLimpar','zapApagarConversa','salvarZapCfg','zapAnexar','zapGravar','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria'];
+  const bloq = ['mudarEtapaRes','zapLimpar','zapApagarConversa','salvarZapCfg','zapAnexar','zapGravar','zapEnviar','zapAssumir','ajustarLeads','aprovar','criarEquipe','editarEquipe','excluirAviso','excluirCadastro','excluirCarta','excluirEquipe','excluirVisita','fotoDeOutro','importarAntigo','importarDocsWhats','importarLeadsAgora','importarReservas','limparAntigas','marcarPresenca','mudarCargo','mudarPermissao','mudarStatus','mudarStatusCarta','novaCarta','novaVisita','publicarAviso','recalcularMes','recusar','resolverRepetido','restaurar','restaurarModelos','salvarAbasIgnoradas','salvarCarta','salvarColados','salvarFotoDe','salvarGestao','salvarGrupos','salvarLigacoes','salvarListas','salvarModelos','salvarPontuacao','salvarResumoSdr','salvarScript','salvarVisita','senhaProvisoria'];
   bloq.forEach(n => { const f = window[n]; if (typeof f !== 'function' || f._ceo) return;
     const g = function(...a){ if (souCeo()) { toast('Perfil CEO: só visualização'); return; } return f.apply(this, a); }; g._ceo = true; window[n] = g; });
 }, 0);
@@ -6922,7 +6967,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 189;
+const APP_VERSAO = 192;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7207,12 +7252,19 @@ function filtrarAvaliacoes(){
   avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba)) && !(a.origem === 'whatsapp' && ((a.cpfNorm && naPlan.has('c' + a.cpfNorm)) || (a.telNorm && naPlan.has('t' + a.telNorm)))));
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
-const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], anjo:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[] };
-const ABAS_CARGO = [['assistente','Assistente (IA)'],['simulador','Simulador Caixa'],['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores']];
+const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], anjo:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[], adm:[], marketing:[] };
+const ABAS_CARGO = [['assistente','Assistente (IA)'],['simulador','Simulador Caixa'],['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['reservas','Reservas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores'],['marketing','Agenda do marketing']];
 const ABAS_DO_CARGO = { corretor:['simulador','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
   coordenador:['simulador','tvrank','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
   sdr:['simulador','discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'],
-  anjo:['simulador','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'] }; // v113: anjo tem tudo do corretor + funil da equipe dele
+  anjo:['simulador','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
+  // v190: ADM e Marketing também entram nas abas por cargo (o padrão é o que eles já tinham)
+  adm:['analises','reservas','vendas','cartas','avaliacoes','empreendimentos'],
+  marketing:['marketing','ranking','empreendimentos'] };
+// telas que o cargo pode abrir: o padrão do cargo, menos as ocultas, mais as liberadas (Configurações sempre)
+function viewsDoCargo(pap){ const oc = cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO, pap) || [], lib = cfgCargo(appCfg?.abasLiberadas || {}, pap) || [];
+  return [...new Set([...(ABAS_DO_CARGO[pap] || []).filter(v => !oc.includes(v)), ...lib, 'config'])]; }
+window.viewsDoCargo = viewsDoCargo; // v113: anjo tem tudo do corretor + funil da equipe dele
 const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador','anjo'].includes(perfil?.papel));
 window.podeZap = podeZap;
 const cfgCargo = (m, pap) => m ? (m[pap] !== undefined ? m[pap] : (pap === 'anjo' ? m.corretor : undefined)) : undefined; // v113: anjo sem config própria segue o corretor
@@ -7222,9 +7274,17 @@ const abaOculta = v => { const l = cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_
 window.abaOculta = abaOculta;
 function aplicarAbasOcultas(){
   let st = document.getElementById('abasOcCss'); if (!st) { st = document.createElement('style'); st.id = 'abasOcCss'; document.head.appendChild(st); }
-  const l = (cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO, perfil?.papel) || []).filter(v => ABAS_CARGO.some(([k]) => k === v));
-  st.textContent = l.map(v => `.nav [data-view="${v}"],.mobilebar [data-view="${v}"],#menuModal [onclick*="'${v}'"]{display:none!important}`).join('\n');
+  const l = ['adm','marketing'].includes(perfil?.papel) ? [] : (cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO, perfil?.papel) || []).filter(v => ABAS_CARGO.some(([k]) => k === v));
+  let css = l.map(v => `.nav [data-view="${v}"],.mobilebar [data-view="${v}"],#menuModal [onclick*="'${v}'"]{display:none!important}`).join('\n');
+  // v190: ADM e Marketing veem no menu só as abas liberadas para o cargo
+  const pap = perfil?.papel, md = pap === 'adm' ? 'modo-adm' : pap === 'marketing' ? 'modo-mkt' : '';
+  if (md) { const ok = viewsDoCargo(pap);
+    css += `\nhtml.${md} .nav>button[data-view]${ok.map(v => `:not([data-view="${v}"])`).join('')}{display:none!important}`
+      + `\nhtml.${md} #menuModal .menu-list>button${ok.map(v => `:not([onclick*="'${v}'"])`).join('')}:not([onclick*="sair"]){display:none!important}`
+      + ok.map(v => `\nhtml.${md} .nav>button[data-view="${v}"].hide,html.${md} #menuModal .menu-list>button[onclick*="'${v}'"].hide{display:flex!important}`).join(''); }
+  st.textContent = css;
   if (l.includes(view)) setTimeout(() => setView('hoje'), 0);
+  if (md && !viewsDoCargo(pap).includes(view)) setTimeout(() => setView(view), 0);
 }
 let appCfg = { ...JSON.parse(JSON.stringify(CFG_PADRAO)), mensagens:MSG_PADRAO }, repetidos = [], pontosMeses = {}, carregado = {};
 window.ptMesSel = ''; window.origPer = 'mes'; window.arqAba = 'visitas';
@@ -7691,14 +7751,14 @@ window.restaurar = async (tipo, id) => {
 let admAssin = '';
 function renderAbasAdm(){
   const el = $('admAbas'); if (!el || el.contains(document.activeElement)) return;
-  const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, lib = appCfg.abasLiberadas || {}, cargos = [['corretor','Corretor'],['anjo','Anjo'],['coordenador','Coordenador'],['sdr','SDR']];
+  const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, lib = appCfg.abasLiberadas || {}, cargos = [['corretor','Corretor'],['anjo','Anjo'],['coordenador','Coordenador'],['sdr','SDR'],['marketing','Marketing'],['adm','ADM']];
   const marcada = (c, k) => ABAS_DO_CARGO[c].includes(k) ? !(cfgCargo(oc, c) || []).includes(k) : (cfgCargo(lib, c) || []).includes(k);
   el.innerHTML = `<div class="tbl-wrap"><table class="rank ab-tab"><thead><tr><th>Aba</th>${cargos.map(([,n]) => `<th style="text-align:center">${n}</th>`).join('')}</tr></thead><tbody>${
     ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center"><input type="checkbox" data-c="${c}" data-a="${k}" ${marcada(c, k) ? 'checked' : ''} title="${ABAS_DO_CARGO[c].includes(k) ? '' : 'Fora do padrão deste cargo: a tela mostra só o que esse cargo tem permissão de ver'}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 window.salvarAbas = async () => {
   if (!souDono()) return;
-  const oc = { corretor:[], anjo:[], coordenador:[], sdr:[] }, lib = { corretor:[], anjo:[], coordenador:[], sdr:[] };
+  const oc = { corretor:[], anjo:[], coordenador:[], sdr:[], marketing:[], adm:[] }, lib = { corretor:[], anjo:[], coordenador:[], sdr:[], marketing:[], adm:[] };
   document.querySelectorAll('#admAbas input[data-c]').forEach(i => { const c = i.dataset.c, a = i.dataset.a;
     if (ABAS_DO_CARGO[c].includes(a)) { if (!i.checked) oc[c].push(a); } else if (i.checked) lib[c].push(a); });
   try { await gravar(setDoc(doc(db,'config','app'), { abasOcultas:oc, abasLiberadas:lib, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); toast('Abas salvas. Já valem para todos.'); }
@@ -13394,13 +13454,114 @@ function renderVendas(){
     + (l.length ? l.map(r => `<div class="vcard" style="--vc:${r.caiu ? 'var(--danger)' : 'var(--ok)'}">
       <div class="v-time"><b style="font-size:15px">${r.dia ? r.dia.slice(8,10) + '/' + r.dia.slice(5,7) : '--'}</b><span>${r.caiu ? 'caiu' : 'reserva'}</span></div>
       <div class="v-body" ${g || (r.corretorUids || []).includes(uidAtual) ? `onclick="editarReserva('${r.id}')"` : 'style="cursor:default"'}>
-        <div class="v-top"><b>${esc(nomeBonito(r.cliente) || 'Sem nome')}</b>${r.caiu ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">Venda caiu</span>' : '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">Vendida</span>'}<span class="v-docs ${rvTiposFeitos(r) >= 6 ? 'ok' : ''}" title="Tipos de documento anexados">📎 ${rvTiposFeitos(r)}/${DOCS_RES.length}</span></div>
+        <div class="v-top"><b>${esc(nomeBonito(r.cliente) || 'Sem nome')}</b>${r.etapa && !r.caiu ? pillEtapa(r.etapa) : ''}${r.caiu ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">Venda caiu</span>' : '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">Vendida</span>'}<span class="v-docs ${rvTiposFeitos(r) >= 6 ? 'ok' : ''}" title="Tipos de documento anexados">📎 ${rvTiposFeitos(r)}/${DOCS_RES.length}</span></div>
         <div class="v-meta">${r.valor ? `<span style="color:var(--text);font-weight:700">💰 ${brl(r.valor)}</span>` : ''}<span>👤 ${esc(r.cor.map(c => c.nome).join(' / ') || r.corretorTexto || '—')}</span>${r.empreendimento ? `<span>🏠 ${esc(r.empreendimento)}</span>` : ''}${r.construtora ? `<span>🏗️ ${esc(r.construtora)}</span>` : ''}${r.previsao ? `<span>✍️ ${esc(r.previsao)}</span>` : ''}${r.cpf ? `<span>🪪 ${cpfOculto(r.cpf)}</span>` : ''}</div>
         ${r.caiu && r.motivoCaiu ? `<div class="v-obs">✖ ${esc(r.motivoCaiu)}</div>` : r.obs ? `<div class="v-obs">📝 ${esc(r.obs)}</div>` : ''}
       </div>
       <div class="v-actions">${r.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(r.telefone)}')">${IC.wa}WhatsApp</button>` : ''}${g ? (r.caiu ? `<button class="snooze" onclick="restaurarReserva('${r.id}')">↩ Voltar a contar</button>` : `<button class="snooze" onclick="editarReserva('${r.id}')">Editar</button>`) : ''}</div>
     </div>`).join('') : vazio(vendFil.caidas ? 'Nenhuma venda caiu nesse período' : 'Nenhuma venda nesse período', 'Mude o período ou cadastre pelo botão "Nova reserva".'));
 }
+
+// =====================================================================
+// v190: tela Reservas (ADM): etapa de cada venda até a assinatura
+// =====================================================================
+const ETAPAS_RES = [
+  ['AVALIAÇÃO DO IMOVEL','#e8eaed','#3c4043'], ['RESTRIÇÃO','#e53935','#fff'], ['ENTREVISTA','#e6d4f5','#5b2c86'], ['FORMULÁRIO','#0b57d0','#fff'],
+  ['CONFORMIDADE','#b10202','#fff'], ['ASSINOU','#ffe08a','#6b4e00'], ['AGUARDANDO UND','#11734b','#fff'], ['CAIU RESERVA','#5a3286','#fff'],
+  ['ASSINATURA AGENDADA','#ffcfa8','#8a3d0d'], ['HABITE-SE','#ffd3d0','#a3150b'], ['RETORNO ENTREVISTA','#d4edbc','#1e5b2a'], ['STAND BY','#e6e6e6','#3c4043'],
+  ['ENVIAR DOSSIE P/ AGENCIA','#0a53a8','#fff']];
+const etapaDe = r => r.etapa || (r.caiu ? 'CAIU RESERVA' : '');
+const etapaCor = e => ETAPAS_RES.find(x => x[0] === e) || ['', 'var(--soft,#eef0f5)', 'var(--muted)'];
+const pillEtapa = (e, extra = '') => { const [, bg, fg] = etapaCor(e); return `<span class="et-pill" style="background:${bg};color:${fg}" ${extra}>${esc(e || 'SEM ETAPA')}</span>`; };
+window.pillEtapa = pillEtapa;
+const resFil = { busca:'', periodo:'todas', equipe:'', etapa:'' };
+window.resSet = (k, v) => { resFil[k] = v; if (k === 'busca') { clearTimeout(window._resT); window._resT = setTimeout(renderReservasAdm, 250); } else renderReservasAdm(); };
+const diasDesde = ms => ms ? Math.max(0, Math.floor((Date.now() - ms) / 864e5)) : null;
+function renderReservasAdm(){
+  if (view !== 'reservas' || (!opTudo() && !abaLiberada('reservas'))) return;
+  const t = norm(resFil.busca), dig = soDig(resFil.busca), eqF = resFil.equipe;
+  const [de, ate] = resFil.periodo === 'mes' ? faixa('mes') : resFil.periodo === 'passado' ? faixaMesRel(1) : ['0000-01-01', '9999-12-31'];
+  preencherSel('resEquipe', `<option value="">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('')}`, eqF);
+  const base = reservasTodas.filter(r => !r.arquivado && (r.dia || '') >= de && (r.dia || '') <= ate).map(r => ({ ...r, cor:corretoresDaReserva(r.corretorTexto), et:etapaDe(r) }))
+    .filter(r => !eqF || r.cor.some(c => c.equipe === eqF))
+    .filter(r => !t || norm([r.cliente, r.corretorTexto, r.empreendimento, r.construtora, r.cor.map(c => c.nome).join(' ')].join(' ')).includes(t) || (dig.length >= 3 && (soDig(r.cpf).includes(dig) || soDig(r.telefone).includes(dig))));
+  const conta = e => base.filter(r => e === '_sem' ? !r.et : r.et === e).length;
+  const ativas = base.filter(r => r.et !== 'CAIU RESERVA');
+  const chips = [['', 'Em andamento', ativas.length], ...ETAPAS_RES.map(([e]) => [e, e, conta(e)]).filter(x => x[2] || x[0] === resFil.etapa), ['_sem', 'Sem etapa', conta('_sem')]].filter(x => x[0] === '' || x[2] || x[0] === resFil.etapa);
+  $('resEtapas').innerHTML = chips.map(([k, n, q]) => { const [, bg, fg] = k && k !== '_sem' ? etapaCor(k) : ['', '', ''];
+    return `<button role="tab" aria-selected="${resFil.etapa === k}" class="${resFil.etapa === k ? 'on' : ''}" onclick="resSet('etapa','${k}')">${bg ? `<i class="et-dot" style="background:${bg};${bg === '#e8eaed' || bg === '#e6e6e6' ? 'box-shadow:inset 0 0 0 1px #c4c7cc' : ''}"></i>` : ''}<span>${esc(k === '' || k === '_sem' ? n : maiusculaPrimeira(n))}</span><b>${q}</b></button>`; }).join('');
+  const l = (resFil.etapa === '' ? ativas : resFil.etapa === '_sem' ? base.filter(r => !r.et) : base.filter(r => r.et === resFil.etapa))
+    .sort((a, b) => (a.etapaEm || a.criadoEm || 0) - (b.etapaEm || b.criadoEm || 0));
+  $('resSub').textContent = `${ativas.length} reserva${ativas.length === 1 ? '' : 's'} em andamento${base.length - ativas.length ? ` · ${base.length - ativas.length} caíram` : ''}. As paradas há mais tempo aparecem primeiro.`;
+  const g = opTudo() && !souCeo();
+  $('resLista').innerHTML = l.length ? `<div class="res-tab">${l.map(r => { const dd = diasDesde(r.etapaEm || r.criadoEm), parado = dd !== null && dd >= 15 && r.et !== 'ASSINOU' && r.et !== 'CAIU RESERVA';
+    return `<div class="res-li">
+      <div class="res-cli"><b>${esc(nomeBonito(r.cliente) || 'Sem nome')}</b><small>${esc(r.cor.map(c => nomeCurto(c.nome)).join(' / ') || r.corretorTexto || '—')}${r.empreendimento ? ' · ' + esc(r.empreendimento) : ''}${r.construtora ? ' · ' + esc(r.construtora) : ''}</small></div>
+      <div class="res-dt"><small>Reserva</small><b>${r.dia ? dataBR(r.dia).slice(0, 5) : '--'}</b></div>
+      <div class="res-val"><small>Valor</small><b>${r.valor ? brl(r.valor) : '—'}</b><span class="res-dtm">reserva ${r.dia ? dataBR(r.dia).slice(0, 5) : '--'}</span></div>
+      <div class="res-et">${g ? `<button class="et-bt" onclick="abrirEtapa('${r.id}')" aria-label="Mudar a etapa de ${esc(nomeBonito(r.cliente) || 'cliente')}">${pillEtapa(r.et)}<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>` : pillEtapa(r.et)}
+        <small class="${parado ? 'res-parado' : ''}">${r.et ? (dd === 0 ? 'desde hoje' : dd === 1 ? 'há 1 dia' : dd !== null ? 'há ' + dd + ' dias' : '') : 'escolha a etapa'}${r.etapaPor ? ' · ' + esc(primeiro(r.etapaPor)) : ''}</small></div>
+    </div>`; }).join('')}</div>` : vazio(resFil.etapa ? 'Nenhuma reserva nesta etapa' : 'Nenhuma reserva', 'Mude o filtro ou o período.');
+}
+window.renderReservasAdm = renderReservasAdm;
+const maiusculaPrimeira = x => { const t = String(x || '').toLowerCase(); return t.charAt(0).toUpperCase() + t.slice(1); };
+
+// v191: exporta todas as reservas de todos os meses (inclusive as que caíram) para o Excel, uma aba por mês
+window.exportarReservas = async () => {
+  if (!opTudo() && !abaLiberada('reservas')) return;
+  const l = reservasTodas.slice().sort((a, b) => (a.dia || '').localeCompare(b.dia || ''));
+  if (!l.length) { toast('Nenhuma reserva para exportar'); return; }
+  const dh = ms => ms ? new Date(ms).toLocaleDateString('pt-BR') : '';
+  const CAB = ['Data da reserva','Cliente','CPF','Telefone','Corretor(es)','Equipe','Empreendimento','Construtora','Valor','Entrada','Origem do lead','Criativo','Status do imóvel','Previsão de assinatura','Comissão','Percentual','Etapa','Etapa desde','Etapa mudada por','Situação','Motivo (caiu)','Caiu em','Observação'];
+  const linha = r => { const cor = corretoresDaReserva(r.corretorTexto);
+    return [dataBR(r.dia), nomeBonito(r.cliente || ''), r.cpf || '', r.telefone || '', cor.map(c => c.nome).join(' / ') || r.corretorTexto || '',
+      [...new Set(cor.map(c => eqNome(c.equipe)).filter(Boolean))].join(' / ').replace(/^[^\p{L}]+/u, ''), r.empreendimento || '', r.construtora || '', Number(r.valor) || 0, r.entrada || '', r.origem || '', r.criativo || '',
+      r.statusImovel || '', r.previsao || '', r.comissao || '', r.percentual || '', etapaDe(r) || 'Sem etapa', dh(r.etapaEm), r.etapaPor || '',
+      r.arquivado ? 'Excluída' : r.caiu ? 'Caiu' : 'Vendida', r.motivoCaiu || '', dh(r.caiuEm), r.obs || '']; };
+  const meses = {}; l.forEach(r => { const m = (r.dia || '').slice(0, 7) || 'sem-data'; (meses[m] = meses[m] || []).push(r); });
+  const ordem = Object.keys(meses).sort().reverse();
+  const nomeAba = m => m === 'sem-data' ? 'Sem data' : (['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][Number(m.slice(5, 7)) - 1] + ' ' + m.slice(0, 4));
+  let X;
+  try { X = await carregarXLSX(); } catch(e) { X = null; }
+  if (!X) { // sem internet para baixar o leitor do Excel: vai em CSV, com uma linha de título para cada mês
+    const out = []; ordem.forEach(m => { out.push([nomeAba(m).toUpperCase() + ` (${meses[m].length})`]); meses[m].forEach(r => out.push(linha(r).map((v, k) => k === 8 && v ? v.toLocaleString('pt-BR', { minimumFractionDigits:2 }) : v))); out.push([]); });
+    baixarCSV('reservas-por-mes', CAB, out); return; }
+  const wb = X.utils.book_new(), larg = [14,30,14,15,26,16,24,16,14,12,16,16,16,18,14,10,22,12,18,10,24,10,30].map(w => ({ wch:w }));
+  const vend = rs => rs.filter(r => !r.caiu && !r.arquivado);
+  const resumo = [['Mês','Reservas','Vendidas','Caíram','Excluídas','Valor vendido'], ...ordem.map(m => { const rs = meses[m], v = vend(rs);
+    return [m === 'sem-data' ? 'Sem data' : nomeMes(m), rs.length, v.length, rs.filter(r => r.caiu && !r.arquivado).length, rs.filter(r => r.arquivado).length, v.reduce((a, r) => a + (Number(r.valor) || 0), 0)]; })];
+  const tot = vend(l); resumo.push([], ['Total', l.length, tot.length, l.filter(r => r.caiu && !r.arquivado).length, l.filter(r => r.arquivado).length, tot.reduce((a, r) => a + (Number(r.valor) || 0), 0)]);
+  const wsR = X.utils.aoa_to_sheet(resumo); wsR['!cols'] = [{ wch:22 },{ wch:10 },{ wch:10 },{ wch:10 },{ wch:10 },{ wch:16 }];
+  for (let k = 1; k < resumo.length; k++) { const c = wsR[X.utils.encode_cell({ r:k, c:5 })]; if (c && typeof c.v === 'number') c.z = '"R$" #,##0.00'; }
+  X.utils.book_append_sheet(wb, wsR, 'Resumo');
+  ordem.forEach(m => { const ws = X.utils.aoa_to_sheet([CAB, ...meses[m].map(linha)]); ws['!cols'] = larg; ws['!autofilter'] = { ref:X.utils.encode_range({ s:{ r:0, c:0 }, e:{ r:meses[m].length, c:CAB.length - 1 } }) };
+    for (let k = 1; k <= meses[m].length; k++) { const c = ws[X.utils.encode_cell({ r:k, c:8 })]; if (c && typeof c.v === 'number') { c.z = '"R$" #,##0.00'; if (!c.v) { c.t = 's'; c.v = ''; } } }
+    X.utils.book_append_sheet(wb, ws, nomeAba(m)); });
+  X.writeFile(wb, `reservas-por-mes-${hojeISO()}.xlsx`);
+  toast(`${l.length} reservas exportadas, ${ordem.length} ${ordem.length === 1 ? 'mês' : 'meses'}`);
+};
+let etId = null;
+window.abrirEtapa = id => {
+  const r = reservasTodas.find(x => x.id === id); if (!r) return; etId = id; const atual = etapaDe(r);
+  $('etCli').textContent = `${nomeBonito(r.cliente) || 'Cliente'}${r.empreendimento ? ' · ' + r.empreendimento : ''}`;
+  $('etOpcoes').innerHTML = ETAPAS_RES.map(([e]) => `<button class="et-op ${e === atual ? 'on' : ''}" onclick="mudarEtapaRes('${e}')">${pillEtapa(e)}${e === atual ? '<span class="et-atual">etapa atual</span>' : ''}</button>`).join('');
+  const h = (r.etapaHist || []).slice().sort((a, b) => (b.em || 0) - (a.em || 0));
+  $('etHist').innerHTML = h.length ? `<h4 class="cart-h" style="margin-top:16px">Histórico</h4>${h.slice(0, 20).map(x => `<div class="et-h"><span>${pillEtapa(x.etapa)}</span><small>${new Date(x.em).toLocaleDateString('pt-BR')} às ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })} · ${esc(primeiro(x.por || ''))}</small></div>`).join('')}` : '';
+  abrir('etapaModal');
+};
+window.mudarEtapaRes = async e => {
+  const r = reservasTodas.find(x => x.id === etId); if (!r || !opTudo()) return;
+  if (etapaDe(r) === e) { fechar('etapaModal'); return; }
+  const dados = { etapa:e, etapaEm:Date.now(), etapaPor:perfil.nome, etapaHist:[...(r.etapaHist || []), { etapa:e, em:Date.now(), por:perfil.nome || '' }].slice(-40) };
+  if (e === 'CAIU RESERVA' && !r.caiu) {
+    if (!confirm('Marcar a venda como caiu também? Ela sai da contagem de vendas e dos pontos do corretor.')) return;
+    Object.assign(dados, { caiu:true, motivoCaiu:'Caiu reserva (etapa)', caiuEm:Date.now(), caiuPor:perfil.nome });
+  } else if (e !== 'CAIU RESERVA' && r.caiu) {
+    if (confirm('Essa venda estava como caiu. Voltar a contar a venda?')) Object.assign(dados, { caiu:false, motivoCaiu:'', voltouEm:Date.now() });
+  }
+  try { await gravar(updateDoc(doc(db,'reservas', etId), dados)); fechar('etapaModal'); toast('Etapa: ' + maiusculaPrimeira(e)); }
+  catch(err) { toast('Não foi possível mudar a etapa: ' + err.message); }
+};
 let rvId = null;
 // o mesmo texto que os corretores mandam no grupo de reservas
 const CAMPOS_RV = [['DATA','rvDia'],['CLIENTE','rvCli'],['CPF','rvCpf'],['TELEFONE','rvTel'],['CORRETOR','rvCor'],['EMPREENDIMENTO','rvEmp'],['ORIGEM LEAD','rvOrig'],['CRIATIVO (se do CRM)','rvCriativo'],['STATUS DO IMOVEL','rvStImo'],['CONSTRUTORA','rvConst'],['NÚMERO CONSTRUTORA','rvNumConst'],['PREVISÃO ASSINATURA','rvPrev'],['VALOR DE VENDA','rvValor'],['VALOR DA ENTRADA','rvEntrada'],['VALOR TOTAL COMISSÃO','rvCom'],['PERCENTUAL COMISSÃO','rvPerc'],['EMISSÃO PARTE DA NOTA CNPJ CORRETOR (sim/não)','rvNota']];
@@ -14637,7 +14798,7 @@ function renderEtapa3(){
   try { mdLetreiroPulso(); } catch(e) { console.warn('letreiro', e.message); }
   try { renderMarketing(); renderMkHoje(); } catch(e) { console.warn('mkt render', e.message); }
   if (view === 'desempenho') renderDesempenho();
-  renderVendas(); renderApEscolha(); renderAssistente();
+  renderVendas(); renderReservasAdm(); renderApEscolha(); renderAssistente();
   if ($('cVendas')) { const [mi, mf] = faixa('mes'); const n = reservas.filter(r => r.dia >= mi && r.dia <= mf).length; $('cVendas').textContent = n || ''; }
   if (view === 'painel') renderPainel();
   if (view === 'corretores') renderPresenca();
