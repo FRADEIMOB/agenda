@@ -1783,8 +1783,8 @@ html[data-theme="dark"] .an-alerta{background:#2a1a0c;border-color:#7c2d12;color
 .rc-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.rc-nums div{display:grid}.rc-nums b{font-size:clamp(30px,4vw,48px);line-height:1}.rc-nums span{opacity:.75;font-size:13px}
 .rc-prox{background:rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;display:grid;gap:6px}.rc-prox span{opacity:.75;font-size:13px}.rc-prox b{font-size:clamp(24px,3vw,36px)}.rc-prox .btn{justify-self:start}
 .rc-fila{flex:1;overflow:auto}.rc-fila h3{margin:0 0 8px;font-size:15px;opacity:.8}
-.rc-l{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;font-size:18px}.rc-l i{font-style:normal;font-weight:800;width:34px;color:#ff8a3d}.rc-l span{margin-left:auto;opacity:.65;font-size:14px}
-.rc-l.vez{background:rgba(255,138,61,.16)}.rc-vazio,.rc-ext{opacity:.7;font-size:14px;padding:8px 2px}
+.rcp-l{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;font-size:18px}.rcp-l i{font-style:normal;font-weight:800;width:34px;color:#ff8a3d}.rcp-l span{margin-left:auto;opacity:.65;font-size:14px}
+.rcp-l.vez{background:rgba(255,138,61,.16)}.rc-vazio,.rc-ext{opacity:.7;font-size:14px;padding:8px 2px}
 .rc-acoes .btn{color:#fff;background:transparent;border:1px solid rgba(255,255,255,.3)}.rc-acoes .btn:hover{background:rgba(255,255,255,.08)}
 @media(max-width:820px){.rc{grid-template-columns:1fr;padding:18px}}
 /* ===== aulas (v79) ===== */
@@ -6995,7 +6995,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 193;
+const APP_VERSAO = 194;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11546,7 +11546,7 @@ function pintarRecepcao(){
   const o = ordemFila(), nome = u => checkinsHoje.find(c => c.uid === u)?.nome || '?';
   const fora = checkinsHoje.filter(ciFora).length, sairam = checkinsHoje.filter(c => c.saida).length;
   $('rcProx').innerHTML = `<div class="rc-nums"><div><b>${o.length}</b><span>no escritório</span></div><div><b>${fora}</b><span>em atendimento externo</span></div><div><b>${sairam}</b><span>já saíram</span></div></div>`;
-  $('rcFila').innerHTML = o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="rc-l"><i>${i + 1}º</i><b>${esc(nome(u))}</b><span>${hm(ciChegada(c))}</span></div>`; }).join('') : '<div class="rc-vazio">Os corretores aparecem aqui na ordem em que chegarem.</div>';
+  $('rcFila').innerHTML = o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="rcp-l"><i>${i + 1}º</i><b>${esc(nome(u))}</b><span>${hm(ciChegada(c))}</span></div>`; }).join('') : '<div class="rc-vazio">Os corretores aparecem aqui na ordem em que chegarem.</div>';
   const ext = checkinsHoje.filter(ciFora); if (ext.length) $('rcFila').innerHTML += `<div class="rc-ext">🚗 Em atendimento externo: ${ext.map(c => esc(primeiro(c.nome))).join(', ')}</div>`;
 }
 window.recepcaoCheia = async () => { try { if (!document.fullscreenElement) await $('rcTela').requestFullscreen(); else await document.exitFullscreen(); } catch(e) {} };
