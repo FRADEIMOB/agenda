@@ -1052,6 +1052,12 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+
+/* v193: rankings novos */
+.rkn-novo{border:1px dashed var(--border)!important;color:var(--accent)!important;font-weight:700}
+.rkn-info{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:12px;width:100%}
+.rkn-info>div:first-child{flex:1 1 260px;min-width:0}.rkn-info b{display:block;font-size:15px}.rkn-info small{color:var(--muted);font-size:12.5px}
+.rkn-bts{display:flex;gap:6px}
 /* v190: tela Reservas */
 .res-etapas{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;margin-bottom:4px;scrollbar-width:thin}
 .res-etapas button{all:unset;cursor:pointer;flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--border);font-size:13px;font-weight:600;color:var(--text);white-space:nowrap}
@@ -3922,6 +3928,25 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('zapCfgModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarZapCfg()">Salvar</button></div>
   </div>
 </div>
+<div class="modal" id="gpsAjudaModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><h2>Não deu para confirmar a localização</h2><button class="icon-btn" onclick="fechar('gpsAjudaModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><p id="gpsAjudaTx" style="margin-top:0;line-height:1.5"></p><p class="hint">Enquanto isso, marque a presença lendo o código da recepção: ele não depende da localização.</p></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('gpsAjudaModal')">Fechar</button><button class="btn btn-ghost" onclick="fechar('gpsAjudaModal');chegueiEscritorio()">Tentar de novo</button><button class="btn btn-primary" onclick="fechar('gpsAjudaModal');abrirCamera()">Ler o código</button></div>
+  </div>
+</div>
+<div class="modal" id="rkNovoModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-head"><h2 id="rknTit">Novo ranking</h2><button class="icon-btn" onclick="fechar('rkNovoModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <p class="hint" style="margin-top:0">Todo mundo começa zerado neste ranking e só contam os pontos a partir da data de início. O ranking do mês continua somando tudo.</p>
+      <div class="fg"><label for="rknNome">Nome do ranking</label><input id="rknNome" maxlength="60" placeholder="Ex.: Arrancada de novembro"></div>
+      <div class="row2"><div class="fg"><label for="rknIni">Começa em</label><input type="date" id="rknIni"></div><div class="fg"><label for="rknFim">Termina em <span class="muted">(opcional)</span></label><input type="date" id="rknFim"></div></div>
+      <div id="rknEnc"></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('rkNovoModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarRkNovo()">Salvar ranking</button></div>
+  </div>
+</div>
 <div class="modal" id="etapaModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><div><h2>Etapa da reserva</h2><div class="sub" id="etCli"></div></div><button class="icon-btn" onclick="fechar('etapaModal')" data-ic="x"></button></div>
@@ -5865,11 +5890,14 @@ function agrupaRanking(rows){
 function renderRanking(){
   preencherSel('rPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option>', rankPeriodo);
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'],['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  const _rkN = rkNovos().filter(x => !x.encerrado || rankTipo === 'rk:' + x.id).map(x => ['rk:' + x.id, x.nome]);
+  $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'], ..._rkN, ['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}${k.startsWith('rk:') ? ' rkn-tab' : ''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  if (souDono()) $('segRank').insertAdjacentHTML('beforeend', `<button class="rkn-novo" onclick="abrirRkNovo()">+ Novo ranking</button>`);
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
-  $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos'); if ($('podio')) $('podio').innerHTML = '';
+  $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos' || rankTipo.startsWith('rk:')); if ($('podio')) $('podio').innerHTML = '';
   document.getElementById('paneRanking')?.classList.toggle('rk-hoje', rankTipo === 'hoje');
   if (rankTipo === 'hoje') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirMetasDia()">Metas do dia e de vendas</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Metas de hoje'; $('rankNota').textContent = 'Cada número mostra quanto falta para bater a meta de hoje.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankHoje(); return; }
+  if (rankTipo.startsWith('rk:')) { renderRankingNovo(rankTipo.slice(3)); return; }
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
   if (rankTipo === 'vgv') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'VGV = soma do valor das vendas (reservas) pela data da reserva. Venda em parceria divide o valor entre os corretores. Vendas que caíram não entram.'; renderRankingVgv(); return; }
@@ -6967,7 +6995,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 192;
+const APP_VERSAO = 193;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7331,10 +7359,14 @@ function assinarEtapa1(){
 }
 
 // ---------- pontos ----------
-function pontosDoMes(m, val){
+function pontosDoMes(m, val, corte){
+  // v193: corte = [de, até] para os rankings novos (só conta o que aconteceu entre essas datas)
   val = val || appCfg.pontos; const RK = pessoasRk;
+  const [cDe, cAte] = corte || ['', '9999-12-31'], naFaixa = d => !corte || (d >= cDe && d <= cAte);
+  const cortaDias = r => { if (!corte) return r; const o = { ...r }; Object.keys(o).forEach(k => { const v = o[k]; if (v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).some(x => /^\d{4}-\d{2}-\d{2}$/.test(x))) o[k] = Object.fromEntries(Object.entries(v).filter(([d]) => naFaixa(d))); }); return o; };
+  const ATV = corte ? rankingAtiv.filter(r => r.mes === m).map(cortaDias) : rankingAtiv;
   const n = k => Number(val[k]) || 0;
-  const noMes = d => !!d && d.slice(0,7) === m;
+  const noMes = d => !!d && d.slice(0,7) === m && naFaixa(d);
   const g = new Map();
   const pega = r => {
     const k = r.corretorUid || 'n:' + norm(r.corretorNome);
@@ -7352,7 +7384,7 @@ function pontosDoMes(m, val){
   });
   // v131: documentações do resumo do dia da SDR (ficam no resumo do ranking para todos verem o mesmo número)
   const docPts = val.docSdr !== undefined && val.docSdr !== '' ? n('docSdr') : n('docs');
-  rankingAtiv.filter(r => r.mes === m && r.uid && r.sdoc).forEach(r => { const q = Object.values(r.sdoc).reduce((a, v) => a + (Number(v) || 0), 0); if (!q) return;
+  ATV.filter(r => r.mes === m && r.uid && r.sdoc).forEach(r => { const q = Object.values(r.sdoc).reduce((a, v) => a + (Number(v) || 0), 0); if (!q) return;
     const ps = RK().find(p => p.uid === r.uid) || {}, x = pega({ corretorUid:r.uid, corretorNome:ps.nome || r.nome, equipe:ps.equipe || r.equipe || '' }); x.docsSdr = (x.docsSdr || 0) + q; x.docs += q; x.pontos += q * docPts; });
   rankingDocs.filter(r => noMes(r.date) && !r.semPontos && !visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
     const x = pega(r); x.visitas++;
@@ -7375,7 +7407,7 @@ function pontosDoMes(m, val){
     const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
     x.vendas++; if (v.ind) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!v.ind); }));
   // presença no plantão, ligações e recontatos (resumo por corretor e mês, sem dados de cliente)
-  rankingAtiv.filter(r => r.mes === m && r.uid).forEach(r => {
+  ATV.filter(r => r.mes === m && r.uid).forEach(r => {
     const x = pega({ corretorUid:r.uid, corretorNome:(RK().find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const diasPres = new Set([...Object.keys(r.pres || {}), ...Object.keys(r.chk || {})]);
     const pr = diasPres.size, l = somaCap(r.lig, val) + somaCap(r.rec, val), c = 0;
@@ -7393,7 +7425,7 @@ function pontosDoMes(m, val){
   // ausência: dia de trabalho (já passado) sem presença no escritório nem externa
   if (n('ausencia')) {
     const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO();
-    const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && k < hj && dias.includes(d.getDay())) uteis.push(k); }
+    const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay())) uteis.push(k); }
     const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
       const ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
@@ -7409,6 +7441,72 @@ function pontosDoMes(m, val){
   return [...g.values()].sort((a,b) => b.pontos-a.pontos || b.vendas-a.vendas || b.cartas-a.cartas || a.nome.localeCompare(b.nome,'pt-BR'));
 }
 window.pontosDoMes = pontosDoMes;
+
+// =====================================================================
+// v193: rankings novos. O dono cria um ranking com nome e data de início: todo mundo começa zerado nele,
+// e o ranking do mês continua somando tudo, como sempre
+// =====================================================================
+const rkNovos = () => Array.isArray(appCfg.rankingsNovos) ? appCfg.rankingsNovos : [];
+function pontosEntre(de, ate){
+  const g = new Map(), h = hojeISO(); ate = !ate || ate > h ? h : ate;
+  for (let m = de.slice(0, 7); m <= ate.slice(0, 7); m = (() => { const [a, b] = m.split('-').map(Number); return b === 12 ? `${a + 1}-01` : `${a}-${String(b + 1).padStart(2, '0')}`; })()) {
+    if (m !== mesAtual()) garantirHistorico(m);
+    pontosDoMes(m, appCfg.pontos, [de, ate]).forEach(x => { const k = x.uid || 'n:' + norm(x.nome); const y = g.get(k);
+      if (!y) { g.set(k, { ...x }); return; }
+      Object.keys(x).forEach(c => { if (typeof x[c] === 'number' && c !== 'pos') y[c] = (Number(y[c]) || 0) + x[c]; }); y.nome = x.nome || y.nome; y.equipe = x.equipe ?? y.equipe; });
+  }
+  return [...g.values()].filter(x => relSoCorretor(x.uid, x.nome) || (pessoasRk().find(p => p.uid === x.uid) || {}).papel === 'sdr' || (pessoasRk().find(p => p.uid === x.uid) || {}).papel === 'anjo')
+    .sort((a, b) => b.pontos - a.pontos || (b.vendas || 0) - (a.vendas || 0) || (b.cartas || 0) - (a.cartas || 0) || a.nome.localeCompare(b.nome, 'pt-BR'));
+}
+window.pontosEntre = pontosEntre;
+function renderRankingNovo(id){
+  const r = rkNovos().find(x => x.id === id);
+  if (!r) { rankTipo = 'pontos'; render(); return; }
+  const h = hojeISO(), fim = r.fim && r.fim < h ? r.fim : h, emCurso = !r.encerrado && (!r.fim || r.fim >= h) && r.inicio <= h;
+  const todos = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h);
+  const eqs = listaEquipes().map(e => ({ e, n:todos.filter(x => x.equipe === e.id).reduce((a, x) => a + x.pontos, 0) })), max = Math.max(0, ...eqs.map(x => x.n));
+  $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n === max ? 'lead' : ''}"><div class="ti">${esc(x.e.icone || '')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n === max ? ' · liderando' : ''}</span></div>`).join('');
+  const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
+  $('rankTit').textContent = r.nome;
+  const quando = `${dataBR(r.inicio).slice(0, 5)} até ${r.fim ? dataBR(r.fim).slice(0, 5) : 'hoje'}`;
+  $('janelaRank').innerHTML = `<div class="rkn-info"><div><b>${esc(r.nome)}</b><small>${r.inicio > h ? `Começa em ${dataBR(r.inicio)}. Até lá, todo mundo está zerado.` : `Conta os pontos de ${quando}${emCurso ? ', em andamento' : r.encerrado ? ', encerrado' : ''}. Todo mundo começou zerado; o ranking do mês continua somando tudo.`}</small></div>${souDono() ? `<div class="rkn-bts"><button class="btn btn-sm btn-ghost" onclick="abrirRkNovo('${r.id}')">Editar</button>${!r.encerrado ? `<button class="btn btn-sm btn-ghost" onclick="encerrarRkNovo('${r.id}')">Encerrar</button>` : ''}</div>` : ''}</div>`;
+  $('rankNota').textContent = 'Os pontos valem o mesmo do ranking do mês. Toque no nome para ver de onde vêm os pontos.';
+  if (!lista.length) { $('podio').innerHTML = ''; $('rankLista').innerHTML = vazio(r.inicio > h ? 'Ainda não começou' : 'Ninguém pontuou ainda', r.inicio > h ? `O ranking começa em ${dataBR(r.inicio)}.` : 'Os pontos aparecem aqui assim que alguém pontuar a partir da data de início.'); return; }
+  const pos = posicoes(lista), top = lista.slice(0, 3);
+  $('podio').innerHTML = top.length >= 2 ? `<div class="podio">${[1, 0, 2].filter(i => top[i]).map(i => `<div class="pd-deg p${i + 1} ${top[i].uid === uidAtual ? 'eu' : ''}"><div class="pd-av">${esc((top[i].nome || '?').trim()[0])}</div><b>${esc(primeiro(top[i].nome))}</b><span>${top[i].pontos} pts</span><div class="pd-base">${i + 1}º</div></div>`).join('')}</div>` : '';
+  window._rkLista = lista;
+  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Presenças</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
+    lista.map((x, i) => `<tr class="${x.uid && x.uid === uidAtual ? 'me' : ''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas || 0}</td><td>${x.cartas || 0}</td><td>${x.vendas || 0}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m">${x.ligacoes || 0}</td></tr>`).join('')}</tbody></table>`;
+}
+let rkNovoId = null;
+window.abrirRkNovo = id => {
+  if (!souDono()) return; const r = id ? rkNovos().find(x => x.id === id) : null; rkNovoId = r ? r.id : null;
+  $('rknTit').textContent = r ? 'Editar ranking' : 'Novo ranking';
+  $('rknNome').value = r ? r.nome : ''; $('rknIni').value = r ? r.inicio : hojeISO(); $('rknFim').value = r ? (r.fim || '') : '';
+  const enc = rkNovos().filter(x => x.encerrado);
+  $('rknEnc').innerHTML = enc.length ? `<h4 class="cart-h" style="margin-top:16px">Rankings encerrados</h4>${enc.slice().reverse().map(x => `<div class="et-h"><span><b>${esc(x.nome)}</b><small style="display:block">${dataBR(x.inicio).slice(0, 5)} a ${dataBR(x.fim || x.encerradoEm || x.inicio).slice(0, 5)}${x.vencedor ? ' · 1º ' + esc(x.vencedor) : ''}</small></span><button class="btn btn-sm btn-ghost" onclick="fechar('rkNovoModal');rankTipo='rk:${x.id}';render()">Ver</button></div>`).join('')}` : '';
+  abrir('rkNovoModal'); setTimeout(() => $('rknNome').focus(), 80);
+};
+window.salvarRkNovo = async () => {
+  if (!souDono()) return;
+  const nome = $('rknNome').value.trim().slice(0, 60), inicio = $('rknIni').value, fim = $('rknFim').value;
+  if (!nome) { toast('Dê um nome para o ranking'); $('rknNome').focus(); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(inicio)) { toast('Escolha a data de início'); return; }
+  if (fim && fim < inicio) { toast('A data final é antes do início'); return; }
+  const l = rkNovos().slice(), id = rkNovoId || ('r' + Date.now().toString(36));
+  const i = l.findIndex(x => x.id === id), obj = { ...(i >= 0 ? l[i] : { criadoEm:Date.now(), criadoPor:perfil.nome }), id, nome, inicio, fim:fim || '' };
+  if (i >= 0) l[i] = obj; else l.push(obj);
+  try { await gravar(setDoc(doc(db,'config','app'), { rankingsNovos:l.slice(-30) }, { merge:true })); appCfg.rankingsNovos = l.slice(-30); fechar('rkNovoModal'); rankTipo = 'rk:' + id; render(); toast(i >= 0 ? 'Ranking atualizado' : 'Ranking criado. Todo mundo começa zerado.'); }
+  catch(e) { toast('Não foi possível salvar: ' + e.message); }
+};
+window.encerrarRkNovo = async id => {
+  if (!souDono()) return; const l = rkNovos().slice(), i = l.findIndex(x => x.id === id); if (i < 0) return;
+  if (!confirm(`Encerrar o ranking "${l[i].nome}"? Ele sai das abas e fica guardado em Rankings encerrados.`)) return;
+  const h = hojeISO(), top = pontosEntre(l[i].inicio, l[i].fim || h);
+  l[i] = { ...l[i], encerrado:true, encerradoEm:h, fim:l[i].fim && l[i].fim < h ? l[i].fim : h, vencedor:top[0] ? top[0].nome : '', top3:top.slice(0, 3).map(x => ({ nome:x.nome, pontos:x.pontos })) };
+  try { await gravar(setDoc(doc(db,'config','app'), { rankingsNovos:l }, { merge:true })); appCfg.rankingsNovos = l; rankTipo = 'pontos'; render(); toast('Ranking encerrado'); }
+  catch(e) { toast('Não foi possível encerrar: ' + e.message); }
+};
 // v120: toque no nome do ranking mostra a conta dos pontos, item por item
 window.verPontosDe = i => {
   const x = (window._rkLista || [])[i]; if (!x) return; const P = appCfg.pontos, n = k => Number(P[k]) || 0, bloco = Math.max(1, n('ligBloco') || 1);
@@ -11265,8 +11363,15 @@ const ciChegada = c => c.via === 'externo' ? (c.chegouEscritorio || c.entrada) :
 const CI_MEIO = { qr:'📷', gps:'📍', manual:'✋', externo:'🚗' };
 function distanciaM(a, b){ const R = 6371000, r = x => x * Math.PI / 180, dLat = r(b.lat - a.lat), dLng = r(b.lng - a.lng);
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLng / 2) ** 2; return Math.round(2 * R * Math.asin(Math.sqrt(h))); }
-const pegarGps = () => new Promise(ok => { if (!navigator.geolocation) return ok(null);
-  navigator.geolocation.getCurrentPosition(p => ok({ lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6), prec:Math.round(p.coords.accuracy) }), () => ok(null), { timeout:12000, enableHighAccuracy:true, maximumAge:0 }); });
+// v193: fica até 12 s ouvindo o GPS e fica com a leitura mais precisa (alguns celulares mandam primeiro uma posição aproximada, pela antena)
+const pegarGps = () => new Promise(ok => { window._gpsErro = 0; if (!navigator.geolocation) { window._gpsErro = 9; return ok(null); }
+  let melhor = null, fim = false, wid = null;
+  const acaba = () => { if (fim) return; fim = true; try { if (wid !== null) navigator.geolocation.clearWatch(wid); } catch(e) {} clearTimeout(tm); ok(melhor); };
+  const tm = setTimeout(acaba, 12000);
+  try { wid = navigator.geolocation.watchPosition(p => { const g = { lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6), prec:Math.round(p.coords.accuracy) };
+      if (!melhor || g.prec < melhor.prec) melhor = g; if (g.prec <= 50) acaba(); },
+    e => { window._gpsErro = e.code || 2; if (e.code === 1 || melhor) acaba(); }, { enableHighAccuracy:true, maximumAge:0, timeout:12000 }); }
+  catch(e) { window._gpsErro = 2; acaba(); } });
 function assinarCheckins(){
   checkinsHoje = []; meuCheckin = null; filaHoje = null; checkinsMes = [];
   if (!souAtivo()) return;
@@ -11352,9 +11457,11 @@ window.chegueiEscritorio = async () => {
   const volta = () => { if (bt) { bt.disabled = false; bt.textContent = '🏢 Cheguei no escritório'; } };
   let via = 'manual', dist = null;
   if (cfg.local?.lat) {
-    if (!gps) { volta(); toast('Ative a localização do celular para marcar a presença (ou leia o código da recepção).'); return; }
+    if (!gps) { volta(); ajudaGps(window._gpsErro === 1 ? 'negado' : 'sem'); return; }
     dist = distanciaM(gps, cfg.local);
-    if (dist > (Number(cfg.raio) || 150) + Math.min(gps.prec || 0, 100)) { volta(); toast(`Você está a ${dist >= 1000 ? (dist / 1000).toFixed(1).replace('.', ',') + ' km' : dist + ' m'} do escritório. Marque quando chegar, ou use "Estou em atendimento externo".`); return; }
+    if (dist > (Number(cfg.raio) || 150) + Math.min(gps.prec || 0, 100)) { volta();
+      if ((gps.prec || 0) > 200) { ajudaGps('impreciso', gps.prec, dist); return; }
+      toast(`Você está a ${dist >= 1000 ? (dist / 1000).toFixed(1).replace('.', ',') + ' km' : dist + ' m'} do escritório. Marque quando chegar, ou use "Estou em atendimento externo".`); return; }
     via = 'gps';
   } else if (gps) via = 'gps';
   if (meuCheckin) return voltarEscritorio(via, gps, dist);
@@ -11363,6 +11470,18 @@ window.chegueiEscritorio = async () => {
     avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
   catch(e) { volta(); toast('Erro: ' + e.message); }
 };
+// v193: quando a localização falha, explica o que fazer naquele celular e oferece o código da recepção
+function ajudaGps(tipo, prec, dist){
+  const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const passo = tipo === 'negado'
+    ? (ios ? 'No iPhone: Ajustes > Privacidade e Segurança > Serviços de Localização > ligado. Desça até o navegador que você usa (Safari ou Chrome) e escolha "Durante o Uso", com "Localização Precisa" ligada.'
+           : 'No Android: toque no cadeado ao lado do endereço do app > Permissões > Localização > Permitir. Confira também se a Localização do celular está ligada e no modo de alta precisão.')
+    : tipo === 'impreciso'
+    ? `O celular mandou uma localização aproximada (erro de ${prec >= 1000 ? (prec / 1000).toFixed(1).replace('.', ',') + ' km' : prec + ' m'}). ` + (ios ? 'Ligue o Wi-Fi e a "Localização Precisa" do navegador (Ajustes > Privacidade e Segurança > Serviços de Localização > Safari ou Chrome).' : 'Ligue o Wi-Fi e a "Precisão da localização do Google" (Configurações > Localização).') + ' Depois tente de novo perto da janela.'
+    : 'Não deu para pegar a localização agora. Confira se a Localização do celular está ligada e tente de novo.';
+  $('gpsAjudaTx').textContent = passo; abrir('gpsAjudaModal');
+}
+window.ajudaGps = ajudaGps;
 async function voltarEscritorio(via, gps, dist){
   const c = meuCheckin; if (!c || !ciFora(c)) return;
   const agora = Date.now(), upd = {};
