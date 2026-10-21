@@ -1057,6 +1057,10 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+/* v209: fotos dos corretores na TV */
+.tva-ap .tvp-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-com-foto{overflow:hidden;padding:0!important}.tv-com-foto img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+.tva-mini2{display:inline-grid;place-items:center;width:1.7vw;height:1.7vw;min-width:22px;min-height:22px;border-radius:50%;margin-right:.55vw;vertical-align:middle;background:#1f3a52;color:#e8eef4;font:800 .8vw 'Saira Condensed',sans-serif}
 /* v208: QR do check-in na TV (coluna maximizada) */
 .tva-ap .tva-topo.com-qr{grid-template-columns:minmax(0,1.7fr) minmax(0,.55fr) auto;align-items:center}
 .tva-ap .tva-topo.com-qr .tvp-eq{padding:.35vw .7vw}.tva-ap .tva-topo.com-qr .tvp-eq b{font-size:1.25vw}.tva-ap .tva-topo.com-qr .tvp-eq span,.tva-ap .tva-topo.com-qr .tvp-eq small{font-size:.65vw}
@@ -7100,7 +7104,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 208;
+const APP_VERSAO = 209;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8706,6 +8710,10 @@ function dadosTvRkNovo(id){
 }
 // v204: nome que aparece na TV (o apelido, como a pessoa é chamada no escritório)
 const apelidosTv = () => (appCfg.apelidosTv && typeof appCfg.apelidosTv === 'object') ? appCfg.apelidosTv : {};
+// v209: foto do perfil para a TV (gerência lê os perfis; sem foto, fica a letra)
+function fotoTv(uid){ if (!uid) return ''; const p = (perfisTodos || []).find(x => x.uid === uid) || (pessoasRk() || []).find(x => x.uid === uid) || {}; return p.foto || ''; }
+function avTv(uid, nome, cls){ const f = fotoTv(uid); return f ? `<span class="${cls} tv-com-foto"><img src="${f}" alt=""></span>` : `<span class="${cls}">${esc(((nome || '?').trim()[0] || '?').toUpperCase())}</span>`; }
+window.fotoTv = fotoTv;
 function nomeTv(uid, nome){ const a = uid && String(apelidosTv()[uid] || '').trim(); if (a) return a; const p = String(nome || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); }
 window.nomeTv = nomeTv;
 window.abrirApelidos = () => {
@@ -8728,7 +8736,7 @@ function htmlTvApresenta(D){
   const lista = (de, ate) => (de > h ? [] : pontosEntre(de, ate)).map(x => ({ ...x, ck:(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0) })).filter(x => x.pontos > 0 || x.ck).sort((a, b) => b.pontos - a.pontos || b.ck - a.ck);
   const podio = l => { const t = l.slice(0, 3); if (!t.length) return '';
     const ordem = [t[1], t[0], t[2]].map((x, i) => x ? { x, pos:[2, 1, 3][i] } : null).filter(Boolean);
-    return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}"><span class="tvp-av">${esc((x.nome || '?').trim()[0] || '?')}</span><b>${esc(nomeTv(x.uid, x.nome))}</b><small>${x.pontos.toLocaleString('pt-BR')} pontos</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
+    return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}">${avTv(x.uid, x.nome, 'tvp-av')}<b>${esc(nomeTv(x.uid, x.nome))}</b><small>${x.pontos.toLocaleString('pt-BR')} pontos</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
   const equipes = l => { const es = listaEquipes().map(e => ({ e, n:l.filter(x => x.equipe === e.id).reduce((a, x) => a + Math.max(0, x.pontos), 0), q:l.filter(x => x.equipe === e.id).length })).filter(x => x.q);
     const max = Math.max(0, ...es.map(x => x.n));
     return es.length ? `<div class="tvp-eqs">${es.map(x => `<div class="tvp-eq ${x.n && x.n === max ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><small>pontos${x.n && x.n === max ? ' · liderando' : ''}</small></div>`).join('')}</div>` : ''; };
@@ -8741,7 +8749,7 @@ function htmlTvApresenta(D){
     return `<td style="--c:${COLS.find(c => c[0] === k)[2]}"><b>${v}</b><i>${k === 'lig' ? 'pelo app' : k === 'docs' ? 'completas' : k === 'vr' ? 'visitas' : 'reservas'}</i></td>`; };
   const cg = `<colgroup><col style="width:2.6vw"><col>${COLS.map(() => '<col style="width:11%">').join('')}</colgroup>`;
   const tabela = (l, dia) => l.length ? `<table class="tvp-tab tva-cab">${cg}<thead><tr><th>#</th><th>Nome</th>${COLS.map(([k, n, c]) => `<th style="--c:${c}">${n}</th>`).join('')}</tr></thead></table>
-    <div class="tva-rol"><div class="tva-rol-in"><table class="tvp-tab tva-corpo">${cg}<tbody>${l.slice(0, 40).map((x, i) => `<tr><td><span class="tvp-pos p${i + 1}">${i + 1}</span></td><td class="tvp-nm"><b>${esc(nomeTv(x.uid, x.nome))}</b><small>${esc(eqN(x.equipe))}</small></td>${COLS.map(([k]) => cel(x, k, dia)).join('')}</tr>`).join('')}</tbody></table></div></div>` : '<div class="tvr-vazio">Ainda ninguém pontuou</div>';
+    <div class="tva-rol"><div class="tva-rol-in"><table class="tvp-tab tva-corpo">${cg}<tbody>${l.slice(0, 40).map((x, i) => `<tr><td><span class="tvp-pos p${i + 1}">${i + 1}</span></td><td class="tvp-nm">${avTv(x.uid, x.nome, 'tva-mini2')}<b>${esc(nomeTv(x.uid, x.nome))}</b><small>${esc(eqN(x.equipe))}</small></td>${COLS.map(([k]) => cel(x, k, dia)).join('')}</tr>`).join('')}</tbody></table></div></div>` : '<div class="tvr-vazio">Ainda ninguém pontuou</div>';
   const fim = r.fim && r.fim < h ? r.fim : h, dias = r.fim ? Math.max(0, Math.round((Date.parse(r.fim) - Date.parse(h)) / 864e5)) : null;
   // v203: do lado direito vai a semana (de segunda até hoje, dentro do período do ranking)
   const seg = (() => { const d = new Date(h + 'T12:00:00'), w = (d.getDay() + 6) % 7; d.setDate(d.getDate() - w); return iso(d); })(), deSem = seg > r.inicio ? seg : r.inicio;
@@ -8889,7 +8897,7 @@ function renderTvRank(){
   const col = c => {
     const l = c.l.slice(0, 8), fmt = c.fmt || (v => Math.round(v).toLocaleString('pt-BR'));
     const linhas = l.length ? l.map((x, i) => i === 0
-      ? `<div class="tvr-r p1"><div class="tvr-1a"><span class="tvr-av">${esc((x.nome || '?').trim()[0] || '?')}</span><span class="tvr-coroa">1º</span></div><b class="tvr-1n">${esc(nomeTv(x.uid, x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small>${!x.sub && anj(x.uid) ? `<small class="tvr-anjo">${esc(anj(x.uid))}</small>` : ''}<span class="tvr-v">${fmt(x.v)}</span></div>`
+      ? `<div class="tvr-r p1"><div class="tvr-1a">${avTv(x.uid, x.nome, 'tvr-av')}<span class="tvr-coroa">1º</span></div><b class="tvr-1n">${esc(nomeTv(x.uid, x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small>${!x.sub && anj(x.uid) ? `<small class="tvr-anjo">${esc(anj(x.uid))}</small>` : ''}<span class="tvr-v">${fmt(x.v)}</span></div>`
       : `<div class="tvr-r p${i + 1}"><span class="tvr-pos">${i + 1}</span><span class="tvr-n"><b>${esc(nomeTv(x.uid, x.nome))}</b><small>${esc(x.sub || eqN(x.equipe))}</small>${!x.sub && anj(x.uid) ? `<small class="tvr-anjo">${esc(anj(x.uid))}</small>` : ''}</span><span class="tvr-v">${fmt(x.v)}</span></div>`).join('')
       : `<div class="tvr-vazio">Ainda ninguém<br>neste ranking</div>`;
     return `<section class="tvr-c k-${c.k}" style="--c:${c.c}"><header><h2>${c.t}</h2><span>${c.s}</span></header><div class="tvr-l">${linhas}</div></section>`;
@@ -15051,7 +15059,7 @@ function htmlTvMetas(){
   const nMetas = x => MD_ITENS.filter(([k]) => x.meta[k]).length;
   const podio = l => { const t = l.slice(0, 3); if (!t.length) return '';
     const ordem = [t[1], t[0], t[2]].map((x, i) => x ? { x, pos:[2, 1, 3][i] } : null).filter(Boolean);
-    return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}"><span class="tvp-av">${esc((x.p.nome || '?').trim()[0] || '?')}</span><b>${esc(nomeTv(x.p.uid, x.p.nome))}</b><small>${x.itens} de ${nMetas(x)} metas${x.bateu ? ' · bateu' : ''}</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
+    return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}">${avTv(x.p.uid, x.p.nome, 'tvp-av')}<b>${esc(nomeTv(x.p.uid, x.p.nome))}</b><small>${x.itens} de ${nMetas(x)} metas${x.bateu ? ' · bateu' : ''}</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
   const equipes = l => { const es = listaEquipes().map(e => { const m = l.filter(x => x.p.equipe === e.id); return { e, it:m.reduce((s, x) => s + x.itens, 0), tot:m.reduce((s, x) => s + nMetas(x), 0), bat:m.filter(x => x.bateu).length }; }).filter(x => x.tot);
     const max = Math.max(0, ...es.map(x => x.it / x.tot));
     return es.length ? `<div class="tvp-eqs">${es.map(x => `<div class="tvp-eq ${x.it && x.it / x.tot === max ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${Math.round(x.it / x.tot * 100)}%</b><small>das metas batidas${x.bat ? ' · ' + x.bat + (x.bat === 1 ? ' pessoa completa' : ' pessoas completas') : ''}</small></div>`).join('')}</div>` : ''; };
