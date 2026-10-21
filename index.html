@@ -1056,6 +1056,17 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+
+/* v208: QR do check-in na TV (coluna maximizada) */
+.tva-ap .tva-topo.com-qr{grid-template-columns:minmax(0,1.7fr) minmax(0,.55fr) auto;align-items:center}
+.tva-ap .tva-topo.com-qr .tvp-eq{padding:.35vw .7vw}.tva-ap .tva-topo.com-qr .tvp-eq b{font-size:1.25vw}.tva-ap .tva-topo.com-qr .tvp-eq span,.tva-ap .tva-topo.com-qr .tvp-eq small{font-size:.65vw}
+.tvm-col header.com-qr{flex-wrap:wrap}
+.tva-qr{display:flex;align-items:center;gap:.9vw;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1vw;padding:.7vw}
+.tva-qr-cod{width:9vw;height:9vw;background:#fff;border-radius:.7vw;padding:.4vw;display:grid;place-items:center}
+.tva-qr-cod svg{width:100%;height:100%}
+.tva-qr-load{color:#334155;font-size:.7vw;text-align:center}
+.tva-qr-tx b{display:block;font:800 1.5vw/1 'Saira Condensed',sans-serif;color:#fff}.tva-qr-tx span{display:block;font-size:.8vw;color:#9fbad0;margin:.3vw 0 .6vw;max-width:9vw}
+.tva-qr-bar{display:block;width:8vw;height:.35vw;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}.tva-qr-bar i{display:block;height:100%;width:100%;background:#f28c38}
 /* v205: maximizar Hoje ou Semana na TV */
 .tvm.tvm-max{grid-template-columns:1fr}
 .tvm-col header{position:relative}
@@ -7089,7 +7100,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 207;
+const APP_VERSAO = 208;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8897,12 +8908,27 @@ function renderTvRank(){
     tvm.classList.toggle('tvm-max', !!mx && cs.length > 1);
     cs.forEach((c, i) => { const k = i ? 'sem' : 'hoje', h = c.querySelector('header'); if (mx && mx !== k) c.style.display = 'none';
       if (h) h.insertAdjacentHTML('beforeend', `<button class="tvm-maxbt" onclick="tvMaxTroca('${k}')" title="${mx === k ? 'Voltar às duas colunas' : 'Mostrar só esta coluna'}">${mx === k ? 'Voltar às duas' : '⤢ Maximizar'}</button>`); }); }
+  // v208: coluna maximizada mostra o QR Code do check-in no espaço ao lado das equipes
+  if (tvm && window._tvMax && (souGerente() || souCoord()) && !souCeo()) { const c = tvm.querySelector(':scope > .tvm-col:not([style*="none"])'), alvo = c && (c.querySelector('.tva-topo') || c.querySelector('header'));
+    if (alvo) { alvo.classList.add('com-qr'); alvo.insertAdjacentHTML('beforeend', `<div class="tva-qr"><div class="tva-qr-cod" id="tvQrCod">${window._tvQrSvg || '<div class="tva-qr-load">Gerando o código…</div>'}</div><div class="tva-qr-tx"><b>Check-in</b><span>Aponte a câmera do celular</span><i class="tva-qr-bar"><i id="tvQrBar"></i></i></div></div>`); tvQrLiga(); } }
+  else tvQrDesliga();
   // v204: quando não cabem todos, a tabela passa de página sozinha (1º ao 3º, depois 4º ao 6º...)
   requestAnimationFrame(tvaPaginar); setTimeout(tvaPaginar, 500);
   conferirEventosTv();
   if (!_tvRelogio) _tvRelogio = setInterval(() => { if (view === 'tvrank') renderTvRank(); else { clearInterval(_tvRelogio); _tvRelogio = null; } }, 30000);
 }
 window.renderTvRank = renderTvRank;
+let _tvQrT = 0;
+async function tvQrPinta(){
+  if (view !== 'tvrank' || !window._tvMax) { tvQrDesliga(); return; }
+  try { const t = await tokenQrAtual(); await carregarQrGen(); if (!window.qrcode) return;
+    const q = qrcode(0, 'M'); q.addData(location.origin + location.pathname + '#ci-' + t); q.make();
+    window._tvQrSvg = q.createSvgTag({ cellSize:8, margin:2, scalable:true }); const el = $('tvQrCod'); if (el) el.innerHTML = window._tvQrSvg;
+    const b = $('tvQrBar'); if (b) { b.style.transition = 'none'; b.style.width = '100%'; void b.offsetWidth; b.style.transition = 'width 30s linear'; b.style.width = '0%'; } }
+  catch(e) { const el = $('tvQrCod'); if (el) el.innerHTML = '<div class="tva-qr-load">Não deu para gerar o código</div>'; }
+}
+function tvQrLiga(){ if (_tvQrT) return; tvQrPinta(); _tvQrT = setInterval(tvQrPinta, 30000); }
+function tvQrDesliga(){ if (_tvQrT) { clearInterval(_tvQrT); _tvQrT = 0; } }
 addEventListener('resize', () => { if (view === 'tvrank') tvaPaginar(); });
 // v206: as bolinhas e as setas da tabela levam direto para a página (e a troca automática recomeça a contar)
 window.tvaIr = (n, rel) => { const r = document.querySelector('#tvRank .tva-rol'), pags = (r && r._pags) || 1, atual = (window._tvaPag || 0) % pags;
@@ -11771,10 +11797,16 @@ async function carregarQrGen(){
   for (const u of ['https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js', 'https://unpkg.com/qrcode-generator@1.4.4/qrcode.js']) { try { await new Promise((ok, erro) => { const sc = document.createElement('script'); sc.src = u; sc.onload = ok; sc.onerror = erro; document.head.appendChild(sc); }); if (window.qrcode) return; } catch(e) {} }
 }
 const ciToken = () => { const a = new Uint8Array(12); crypto.getRandomValues(a); return [...a].map(x => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[x % 56]).join(''); };
+// v208: a recepção e a TV mostram o MESMO código. Quem passar dos 30 s gira; quem chegar antes reaproveita o código atual
+async function tokenQrAtual(){
+  const sn = await getDoc(doc(db,'checkin_qr','atual')), d = sn.exists() ? sn.data() : null, agora = Date.now();
+  if (d && d.token && (d.em || 0) > agora - 30000 && (d.exp || 0) > agora + 30000) return d.token;
+  const t = ciToken(); await setDoc(doc(db,'checkin_qr','atual'), { token:t, anterior:(d && d.token) || t, exp:agora + 75000, em:agora, por:perfil.nome }); return t;
+}
 async function girarCodigo(){
   if (view !== 'recepcao') return;
-  const t = ciToken(), ant = _rcToken; _rcToken = t;
-  try { await setDoc(doc(db,'checkin_qr','atual'), { token:t, anterior:ant || t, exp:Date.now() + 75000, em:Date.now(), por:perfil.nome }); } catch(e) { $('rcQr').innerHTML = `<div class="rc-load">Não deu para gerar o código (${esc(e.code || e.message)}). Publique as regras novas do Firebase.</div>`; return; }
+  let t;
+  try { t = await tokenQrAtual(); _rcToken = t; } catch(e) { $('rcQr').innerHTML = `<div class="rc-load">Não deu para gerar o código (${esc(e.code || e.message)}). Publique as regras novas do Firebase.</div>`; return; }
   await carregarQrGen();
   if (!window.qrcode) { $('rcQr').innerHTML = '<div class="rc-load">Sem internet para desenhar o código.</div>'; return; }
   const q = qrcode(0, 'M'); q.addData(location.origin + location.pathname + '#ci-' + t); q.make();
