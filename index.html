@@ -7016,7 +7016,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 198;
+const APP_VERSAO = 199;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7466,7 +7466,11 @@ function pontosDoMes(m, val, corte){
       const x = pega({ corretorUid:p.uid, corretorNome:p.nome, equipe:p.equipe });
       const folga = d => (x._abo && x._abo.has(d)) || ['folga','ferias','atestado'].includes((typeof presencas !== 'undefined' && presencas[d]?.marcados?.[p.uid]?.status) || '');
       const ausD = uteis.filter(d => d >= ini && !(x._pres && x._pres.has(d)) && !folga(d)), aus = ausD.length;
-      x._ausDias = ausD; x.ausencias = aus; x.pontos += aus * n('ausencia');
+      x._ausDias = ausD; x.ausencias = aus;
+      // v199: ausência antes da data nova vale o valor antigo; da data em diante, o valor de "Ausência"
+      const corteA = String(val.presencaDesde || ''), temAnt = val.ausenciaAntes !== undefined && val.ausenciaAntes !== '' && val.ausenciaAntes !== null;
+      const antes = corteA && temAnt ? ausD.filter(d => d < corteA).length : 0; x.ausAntes = antes;
+      x.pontos += (aus - antes) * n('ausencia') + antes * n('ausenciaAntes');
     });
   }
   // v97: os pontos acompanham o corretor na equipe em que ele está agora
@@ -7556,7 +7560,8 @@ window.verPontosDe = i => {
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
     ['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))], ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
-    ['Ausências', x.ausencias, n('ausencia'), (x.ausencias || 0) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
+    ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
+    ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
     ['Visitas agendadas (SDR)', x.agendSdr, n('agendSdr'), null]
   ].filter(r => Number(r[1]));
   $('ptDetTit').textContent = x.nome; $('ptDetTot').textContent = x.pontos + ' ponto' + (x.pontos === 1 ? '' : 's');
@@ -7910,7 +7915,8 @@ function renderAdm(){
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
     + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
-    + `<div class="pt-row"><span>Pontos de presença (manhã e tarde) contam a partir de. Antes dessa data, presença não dá pontos. A ausência segue a data dela, logo acima.</span><input type="date" id="pt_presencaDesde" style="width:150px" value="${esc(appCfg.pontos.presencaDesde || '2026-10-21')}"></div>`
+    + `<div class="pt-row"><span>Ausência antes da data abaixo vale (valor antigo, ex.: -15)</span><input type="number" step="1" id="pt_ausenciaAntes" value="${appCfg.pontos.ausenciaAntes !== undefined && appCfg.pontos.ausenciaAntes !== '' ? Number(appCfg.pontos.ausenciaAntes) : Number(appCfg.pontos.ausencia) || 0}"></div>`
+    + `<div class="pt-row"><span>Pontos de presença (manhã e tarde) e o valor novo da ausência contam a partir de. Antes dessa data, presença não dá pontos e a ausência vale o valor antigo.</span><input type="date" id="pt_presencaDesde" style="width:150px" value="${esc(appCfg.pontos.presencaDesde || '2026-10-21')}"></div>`
     + `<div class="pt-row"><span>Check-in da tarde começa no dia</span><input type="date" id="pt_tardeDesde" style="width:150px" value="${esc(appCfg.pontos.tardeDesde || '2026-10-22')}"></div>`
     + `<div class="pt-row"><span>Check-in da tarde abre a partir de (hora, ex.: 13)</span><input type="number" step="1" min="0" max="23" id="pt_tardeHora" value="${Number(appCfg.pontos.tardeHora ?? 13) || 13}"></div>`
     + `<div class="pt-row"><span>Horário limite do funil (hora, ex.: 18)</span><input type="number" step="1" min="0" max="23" id="pt_funilHora" value="${Number(appCfg.pontos.funilHora) || 18}"></div>`
@@ -7948,7 +7954,7 @@ window.salvarPontuacao = async () => {
     pontosNomes[k] = { nome:nome && nome !== n ? nome.slice(0,80) : '', desc:desc.slice(0,160) }; });
   pontos.ligBloco = Math.max(1, pontos.ligBloco || 1); pontos.funilHora = Math.min(23, Math.max(0, pontos.funilHora || 18));
   pontos.ligMinutos = 0; pontos.ausenciaDesde = $('pt_ausenciaDesde').value || '2026-10-07';
-  pontos.presencaDesde = $('pt_presencaDesde').value || '2026-10-21'; pontos.tardeDesde = $('pt_tardeDesde').value || '2026-10-22'; pontos.tardeHora = Math.min(23, Math.max(0, pontos.tardeHora || 13));
+  pontos.presencaDesde = $('pt_presencaDesde').value || '2026-10-21'; pontos.ausenciaAntes = Math.round(Number($('pt_ausenciaAntes').value) || 0); pontos.tardeDesde = $('pt_tardeDesde').value || '2026-10-22'; pontos.tardeHora = Math.min(23, Math.max(0, pontos.tardeHora || 13));
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, pontosNomes, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
