@@ -1055,7 +1055,10 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+/* v202: logo da Frade na TV */
+.tvr-logo.tvr-logo-img{background:#0f2a40;border:1px solid rgba(255,255,255,.14);padding:.35vw;box-shadow:0 .3vw 1vw rgba(0,0,0,.35)}.tvr-logo-img img{width:100%;height:100%;object-fit:contain;display:block}
 /* v201: apresentação do ranking novo na TV */
+.tvm-col header .tva-sub{display:block;font-size:.85vw;color:#9fbad0;margin-top:.2vw}
 .tva{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1.4vw}
 .tva-esq{display:flex;flex-direction:column;min-height:0;border-radius:1.4vw;padding:1.6vw 1.8vw 0;background:radial-gradient(120% 90% at 50% 100%,rgba(242,140,56,.22),transparent 60%),linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);overflow:hidden}
 .tva-tit b{display:block;font:800 3.2vw/1.02 'Saira Condensed',sans-serif;letter-spacing:-.01em;color:#fff}
@@ -7044,7 +7047,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 201;
+const APP_VERSAO = 203;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8648,20 +8651,32 @@ function dadosTvRkNovo(id){
   const eqs = listaEquipes().map(e => ({ e, n:l.filter(x => x.equipe === e.id).reduce((a, x) => a + Math.max(0, x.pontos), 0) })).sort((a, b) => b.n - a.n);
   return { r, cols, eqs };
 }
-// v201: apresentação do ranking novo: pódio grande e a lista completa, para a tela do escritório
+// v202: apresentação do ranking novo no mesmo formato do "Dia e semana": Hoje e o ranking inteiro, com pódio, equipes e tabela (com check-in)
 function htmlTvApresenta(D){
-  const r = D.r, h = hojeISO(), l = D.cols[0].l, curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
-  const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : '', foto = x => (pessoasRk().find(p => p.uid === x.uid) || perfisTodos.find(p => p.uid === x.uid) || {}).foto;
-  const av = (x, cls) => { const f = foto(x); return f ? `<img class="${cls}" src="${f}" alt="">` : `<span class="${cls}">${esc(((x.nome || '?').trim()[0] || '?').toUpperCase())}</span>`; };
-  const dias = r.fim ? Math.max(0, Math.round((Date.parse(r.fim) - Date.parse(h)) / 864e5)) : null;
-  const quando = r.fim ? (dias === 0 ? 'Termina hoje' : `Faltam ${dias} dia${dias === 1 ? '' : 's'} · até ${dataBR(r.fim).slice(0, 5)}`) : `Valendo desde ${dataBR(r.inicio).slice(0, 5)}`;
-  const top = l.slice(0, 3), resto = l.slice(3, 23), max = Math.max(1, ...l.map(x => x.v));
-  const deg = (x, i) => x ? `<div class="tva-deg p${i + 1}"><div class="tva-av">${av(x, 'tva-img')}<i>${i + 1}º</i></div><b>${esc(curto(x.nome))}</b><small>${esc(eqN(x.equipe))}</small><div class="tva-pts">${x.v.toLocaleString('pt-BR')}<span>pontos</span></div><div class="tva-base"></div></div>` : '<div class="tva-deg vazio"></div>';
-  return `<div class="tva">
-    <div class="tva-esq"><div class="tva-tit"><b>${esc(r.nome)}</b><span>${quando} · todo mundo começou do zero</span></div>
-      ${top.length ? `<div class="tva-podio">${deg(top[1], 1)}${deg(top[0], 0)}${deg(top[2], 2)}</div>` : '<div class="tvr-vazio" style="margin:auto">Ainda ninguém pontuou.<br>Quem vai sair na frente?</div>'}</div>
-    <div class="tva-dir">${resto.length ? resto.map((x, i) => `<div class="tva-li"><span class="tva-pos">${i + 4}º</span>${av(x, 'tva-mini')}<span class="tva-n"><b>${esc(curto(x.nome))}</b><small>${esc(eqN(x.equipe))}</small></span><span class="tva-bar"><i style="width:${Math.round(x.v / max * 100)}%"></i></span><span class="tva-v">${x.v.toLocaleString('pt-BR')}</span></div>`).join('') : `<div class="tvr-vazio">${l.length ? 'Só três no ranking até agora' : ''}</div>`}</div>
-  </div>`;
+  const r = D.r, h = hojeISO(), tc = tardeCfg(), tardeHoje = h >= tc.desde;
+  const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
+  const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : '';
+  const lista = (de, ate) => (de > h ? [] : pontosEntre(de, ate)).map(x => ({ ...x, ck:(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0) })).filter(x => x.pontos > 0 || x.ck).sort((a, b) => b.pontos - a.pontos || b.ck - a.ck);
+  const podio = l => { const t = l.slice(0, 3); if (!t.length) return '';
+    const ordem = [t[1], t[0], t[2]].map((x, i) => x ? { x, pos:[2, 1, 3][i] } : null).filter(Boolean);
+    return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}"><span class="tvp-av">${esc((x.nome || '?').trim()[0] || '?')}</span><b>${esc(curto(x.nome))}</b><small>${x.pontos.toLocaleString('pt-BR')} pontos</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
+  const equipes = l => { const es = listaEquipes().map(e => ({ e, n:l.filter(x => x.equipe === e.id).reduce((a, x) => a + Math.max(0, x.pontos), 0), q:l.filter(x => x.equipe === e.id).length })).filter(x => x.q);
+    const max = Math.max(0, ...es.map(x => x.n));
+    return es.length ? `<div class="tvp-eqs">${es.map(x => `<div class="tvp-eq ${x.n && x.n === max ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><small>pontos${x.n && x.n === max ? ' · liderando' : ''}</small></div>`).join('')}</div>` : ''; };
+  const COLS = [['pts','Pontos','#f28c38'],['ck','Check-in','#2dd4bf'],['lig','Ligações','#facc15'],['docs','Docs','#38bdf8'],['vr','Realizadas','#22c55e'],['vd','Vendas','#a78bfa']];
+  const cel = (x, k, dia) => {
+    if (k === 'pts') return `<td style="--c:#f28c38"><b>${x.pontos.toLocaleString('pt-BR')}</b><i>pontos</i></td>`;
+    if (k === 'ck') { const tot = dia ? (tardeHoje ? 2 : 1) : 0, ok = dia && x.ck >= tot;
+      return `<td class="${ok ? 'ok' : ''}" style="--c:#2dd4bf"><b>${x.ck}${dia ? `<small>/${tot}</small>` : ''}</b><i>${dia ? (ok ? '✓ completo' : x.ck ? 'falta a tarde' : 'sem check-in') : 'check-ins'}</i></td>`; }
+    const v = k === 'lig' ? (x.ligacoes || 0) : k === 'docs' ? (x.docs || 0) : k === 'vr' ? (x.realizadas || 0) : (x.vendas || 0);
+    return `<td style="--c:${COLS.find(c => c[0] === k)[2]}"><b>${v}</b><i>${k === 'lig' ? 'pelo app' : k === 'docs' ? 'completas' : k === 'vr' ? 'visitas' : 'reservas'}</i></td>`; };
+  const tabela = (l, dia) => l.length ? `<table class="tvp-tab"><thead><tr><th>#</th><th>Nome</th>${COLS.map(([k, n, c]) => `<th style="--c:${c}">${n}</th>`).join('')}</tr></thead><tbody>${l.slice(0, 7).map((x, i) => `<tr><td><span class="tvp-pos p${i + 1}">${i + 1}</span></td><td class="tvp-nm"><b>${esc(curto(x.nome))}</b><small>${esc(eqN(x.equipe))}</small></td>${COLS.map(([k]) => cel(x, k, dia)).join('')}</tr>`).join('')}</tbody></table>` : '<div class="tvr-vazio">Ainda ninguém pontuou</div>';
+  const fim = r.fim && r.fim < h ? r.fim : h, dias = r.fim ? Math.max(0, Math.round((Date.parse(r.fim) - Date.parse(h)) / 864e5)) : null;
+  // v203: do lado direito vai a semana (de segunda até hoje, dentro do período do ranking)
+  const seg = (() => { const d = new Date(h + 'T12:00:00'), w = (d.getDay() + 6) % 7; d.setDate(d.getDate() - w); return iso(d); })(), deSem = seg > r.inicio ? seg : r.inicio;
+  const lh = r.inicio <= h && (!r.fim || r.fim >= h) ? lista(h, h) : [], lt = lista(deSem, fim);
+  const coluna = (cls, tit, sub, l, dia) => `<section class="tvm-col ${cls}"><header><h2>${tit}</h2><span class="tva-sub">${sub}</span></header>${podio(l)}${equipes(l)}${tabela(l, dia)}</section>`;
+  return `<div class="tvm">${coluna('', 'Hoje', 'Pontos de hoje na ' + esc(r.nome), lh, true)}${coluna('sem', 'Semana', `de ${dataBR(deSem).slice(0, 5)} até hoje · ${esc(r.nome)}${dias !== null ? ` · ${dias === 0 ? 'termina hoje' : 'faltam ' + dias + ' dia' + (dias === 1 ? '' : 's')}` : ''}`, lt, false)}</div>`;
 }
 function dadosTvRank(){
   const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate;
@@ -8809,7 +8824,7 @@ function renderTvRank(){
     return `<section class="tvr-c k-${c.k}" style="--c:${c.c}"><header><h2>${c.t}</h2><span>${c.s}</span></header><div class="tvr-l">${linhas}</div></section>`;
   };
   const maxEq = Math.max(1, ...d.eqs.map(x => x.n));
-  el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo">F</span><div><b>Frade <i>Imóveis</i></b><small>${rkSel ? esc(rkSel.r.nome) + ' · desde ' + dataBR(rkSel.r.inicio).slice(0, 5) : fe ? 'Feirão Tenda · ' + nomeMes(d.m).split(' de ')[0].toLowerCase() : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
+  el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo tvr-logo-img"><img src="${MARCA_IMG}" alt="Frade Imóveis"></span><div><b>Frade <i>Imóveis</i></b><small>${rkSel ? esc(rkSel.r.nome) + ' · desde ' + dataBR(rkSel.r.inicio).slice(0, 5) : fe ? 'Feirão Tenda · ' + nomeMes(d.m).split(' de ')[0].toLowerCase() : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
     <div class="tvr-eqs">${d.eqs.map((x, i) => `<div class="tvr-eq ${i === 0 && x.n ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><i style="width:${Math.round(x.n / maxEq * 100)}%"></i></div>`).join('')}</div>
     <div class="tvr-hora"><span class="tvr-vivo">ao vivo</span><b>${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</b><small>${dataLonga(hojeISO())}</small></div>
     <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><span class="tvr-seg">${[['mes','Mês'], ...rkTv.flatMap(x => [['rk:' + x.id, x.nome], ['ap:' + x.id, rkTv.length > 1 ? 'Pódio · ' + x.nome : 'Pódio']]), ['metas','Dia e semana'],['feirao','Feirão']].map(([k, n]) => `<button class="tvr-modo ${(window.tvModo || 'mes') === k ? 'on' : ''}" onclick="tvModo='${k}';renderTvRank()">${n}</button>`).join('')}</span><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
