@@ -1095,6 +1095,8 @@ html.lenis,html.lenis body{height:auto}
 .tva-ap .tvp-tab{table-layout:fixed;width:100%}
 .tva-ap .tva-cab{margin-bottom:0}.tva-ap .tva-corpo thead{display:none}
 .tva-rol{flex:1;min-height:0;overflow:hidden;position:relative;}
+@keyframes tvaLoop{from{transform:translateY(0)}to{transform:translateY(var(--d,0))}}
+.tva-rol:hover .tva-rol-in{animation-play-state:paused}
 .tva-entra{animation:tvaEntra .5s ease-out}
 @keyframes tvaEntra{from{opacity:0;transform:translateY(.6vw)}to{opacity:1;transform:none}}
 .tva-pag{display:flex;align-items:center;justify-content:flex-end;gap:.35vw;min-height:1vw;font-size:.75vw;color:#9fbad0}.tva-pag span{margin-right:.4vw}
@@ -1102,7 +1104,7 @@ html.lenis,html.lenis body{height:auto}
 .tva-seta{all:unset;cursor:pointer;font:800 1.2vw/1 'Saira Condensed',sans-serif;color:#cfe0ec;padding:.1vw .5vw;border-radius:99px;background:rgba(255,255,255,.08)}.tva-seta:hover{background:rgba(242,140,56,.3);color:#fff}
 .tva-dot:focus-visible,.tva-seta:focus-visible{outline:2px solid #f28c38;outline-offset:2px}
 @keyframes tvaRola{0%,12%{transform:translateY(0)}88%,100%{transform:translateY(var(--d,0))}}
-@media (prefers-reduced-motion:reduce){.tva-entra{animation:none}}
+
 .tva-ap .tvp-tab td{padding-top:.3vw;padding-bottom:.3vw}
 .tva-ap .tvp-tab td i{display:none}.tva-ap .tvp-tab td.ckc i{display:block}
 /* v202: logo da Frade na TV */
@@ -7104,7 +7106,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 209;
+const APP_VERSAO = 210;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8942,22 +8944,27 @@ addEventListener('resize', () => { if (view === 'tvrank') tvaPaginar(); });
 window.tvaIr = (n, rel) => { const r = document.querySelector('#tvRank .tva-rol'), pags = (r && r._pags) || 1, atual = (window._tvaPag || 0) % pags;
   window._tvaPag = ((rel ? atual + n : n) % pags + pags) % pags; window._tvaDesde = Date.now(); tvaPaginar(); };
 window.tvMaxTroca = k => { window._tvMax = window._tvMax === k ? '' : k; window._tvaDesde = Date.now(); window._tvaPag = 0; renderTvRank(); };
+// v210: a tabela do Pódio rola devagar, sem parar e em looping (as linhas se repetem embaixo para emendar)
+const TVA_VEL = 22; // pixels por segundo
 function tvaPaginar(){
-  if (window._tvaModo !== window.tvModo) { window._tvaModo = window.tvModo; window._tvaPag = 0; window._tvaDesde = Date.now(); }
+  if (window._tvaModo !== window.tvModo + '|' + (window._tvMax || '')) { window._tvaModo = window.tvModo + '|' + (window._tvMax || ''); window._tvaOff = []; }
   document.querySelectorAll('#tvRank .tva-rol').forEach(r => {
-    const trs = [...r.querySelectorAll('tbody tr')]; if (!trs.length) return;
-    trs.forEach(t => t.style.display = '');
-    // v207: mede a altura média das linhas (com o espaço entre elas) para encher a coluna inteira
-    const tb0 = r.querySelector('tbody'), alt = trs.length > 1 ? (trs[trs.length - 1].getBoundingClientRect().bottom - trs[0].getBoundingClientRect().top) / trs.length : trs[0].getBoundingClientRect().height + 4;
-    const per = Math.max(1, Math.floor((r.getBoundingClientRect().height - 4) / alt)), pags = Math.ceil(trs.length / per), pg = (window._tvaPag || 0) % pags;
-    trs.forEach((t, i) => { t.style.display = Math.floor(i / per) === pg ? '' : 'none'; });
-    let ind = r.parentElement.querySelector('.tva-pag'); if (!ind) { ind = document.createElement('div'); ind.className = 'tva-pag'; r.after(ind); }
-    ind.innerHTML = pags > 1 ? `<button class="tva-seta" onclick="tvaIr(-1, true)" aria-label="Página anterior">‹</button><span>${pg * per + 1}º ao ${Math.min(trs.length, (pg + 1) * per)}º de ${trs.length}</span>${Array.from({ length:pags }, (_, i) => `<button class="tva-dot ${i === pg ? 'on' : ''}" onclick="tvaIr(${i})" aria-label="Página ${i + 1}"></button>`).join('')}<button class="tva-seta" onclick="tvaIr(1, true)" aria-label="Próxima página">›</button>` : '';
-    r._pags = pags;
-    const tb = r.querySelector('tbody'); if (tb && r._pg !== pg) { tb.classList.remove('tva-entra'); void tb.offsetWidth; tb.classList.add('tva-entra'); r._pg = pg; }
+    const inn = r.firstElementChild, tb = r.querySelector('tbody'); if (!inn || !tb) return;
+    tb.querySelectorAll('tr[data-clone]').forEach(t => t.remove()); r._dist = 0;
+    const tab = tb.closest('table'), h1 = tab.getBoundingClientRect().height, sp = parseFloat((getComputedStyle(tab).borderSpacing || '0 0').split(' ').pop()) || 0;
+    r.parentElement.querySelector('.tva-pag')?.remove();
+    if (h1 <= r.getBoundingClientRect().height + 2) return; // cabe todo mundo: fica parada
+    [...tb.querySelectorAll('tr')].forEach(t => { const c = t.cloneNode(true); c.dataset.clone = '1'; tb.appendChild(c); });
+    r._dist = h1 - sp; // a volta completa; o movimento fica no laço abaixo (continua de onde estava quando a TV atualiza)
   });
+  if (!window._tvaRaf) { let ant = performance.now(); const anda = t => { const dt = Math.min(0.1, (t - ant) / 1000); ant = t;
+      if (view === 'tvrank') document.querySelectorAll('#tvRank .tva-rol').forEach((r, i) => { const inn = r.firstElementChild; if (!inn) return;
+        if (!r._dist) { inn.style.transform = ''; return; } if (r.matches(':hover')) return;
+        const o = window._tvaOff || (window._tvaOff = []); o[i] = ((o[i] || 0) + TVA_VEL * dt) % r._dist; inn.style.transform = `translateY(${-o[i]}px)`; });
+      window._tvaRaf = requestAnimationFrame(anda); };
+    window._tvaRaf = requestAnimationFrame(anda); }
 }
-setInterval(() => { if (view === 'tvrank' && document.querySelector('#tvRank .tva-rol') && Date.now() - (window._tvaDesde || 0) >= 7000) { window._tvaDesde = Date.now(); window._tvaPag = (window._tvaPag || 0) + 1; tvaPaginar(); } }, 1000);
+
 window.tvCheia = async () => { try { if (!document.fullscreenElement) await document.documentElement.requestFullscreen(); else await document.exitFullscreen(); } catch(e) { toast('Use o modo tela cheia da TV (F11 no computador).'); } };
 function assinarRelDia(){
   const ger = souGerente() && !souCeo(), coord = souCoord() && perfil?.equipe, anj = souAnjo();
