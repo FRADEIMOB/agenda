@@ -1065,7 +1065,17 @@ html.lenis,html.lenis body{height:auto}
 .tva-ap .tvp-p.p1 .tvp-deg{height:3.2vw}.tva-ap .tvp-p.p2 .tvp-deg{height:2.3vw}.tva-ap .tvp-p.p3 .tvp-deg{height:1.7vw}
 .tva-ap .tvp-av{width:2.6vw;height:2.6vw;font-size:1.1vw}.tva-ap .tvp-p.p1 .tvp-av{width:3.4vw;height:3.4vw;font-size:1.5vw}
 .tva-ap .tvp-eq{padding:.45vw .9vw}.tva-ap .tvp-eq b{font-size:1.5vw}
-.tva-ap .tvp-tab td.ckc i{white-space:nowrap}
+.tva-ap .tvp-tab td.ckc i{white-space:nowrap;display:inline!important;margin-left:.4vw}
+.tva-ap .tvp-tab td.ckc b{display:inline!important}
+/* v207: pódio e equipes lado a lado, e linhas mais baixas, para caber mais nomes por página */
+.tva-ap .tva-topo{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:1vw;align-items:end}
+.tva-ap .tva-topo .tvp-eqs{display:flex;flex-direction:column;gap:.5vw}
+.tva-ap .tvp-pod{padding-top:0}
+.tva-ap .tvp-tab{border-spacing:0 .22vw}
+.tva-ap .tvp-tab td{padding-top:.18vw;padding-bottom:.18vw}
+.tva-ap .tvp-tab td b{font-size:1.05vw}
+.tva-ap .tvp-nm b{display:inline!important;margin-right:.5vw}.tva-ap .tvp-nm small{display:inline!important;font-size:.68vw}
+.tva-ap .tvp-pos{width:1.5vw;height:1.5vw;font-size:.8vw}
 .tva-ap .tvm-col{gap:.7vw}
 .tva-ap .tvp-tab{table-layout:fixed;width:100%}
 .tva-ap .tva-cab{margin-bottom:0}.tva-ap .tva-corpo thead{display:none}
@@ -1073,7 +1083,9 @@ html.lenis,html.lenis body{height:auto}
 .tva-entra{animation:tvaEntra .5s ease-out}
 @keyframes tvaEntra{from{opacity:0;transform:translateY(.6vw)}to{opacity:1;transform:none}}
 .tva-pag{display:flex;align-items:center;justify-content:flex-end;gap:.35vw;min-height:1vw;font-size:.75vw;color:#9fbad0}.tva-pag span{margin-right:.4vw}
-.tva-pag i{width:.5vw;height:.5vw;border-radius:50%;background:rgba(255,255,255,.18)}.tva-pag i.on{background:#f28c38}
+.tva-dot{all:unset;cursor:pointer;width:.75vw;height:.75vw;min-width:12px;min-height:12px;border-radius:50%;background:rgba(255,255,255,.22)}.tva-dot.on{background:#f28c38}.tva-dot:hover{background:rgba(255,255,255,.45)}
+.tva-seta{all:unset;cursor:pointer;font:800 1.2vw/1 'Saira Condensed',sans-serif;color:#cfe0ec;padding:.1vw .5vw;border-radius:99px;background:rgba(255,255,255,.08)}.tva-seta:hover{background:rgba(242,140,56,.3);color:#fff}
+.tva-dot:focus-visible,.tva-seta:focus-visible{outline:2px solid #f28c38;outline-offset:2px}
 @keyframes tvaRola{0%,12%{transform:translateY(0)}88%,100%{transform:translateY(var(--d,0))}}
 @media (prefers-reduced-motion:reduce){.tva-entra{animation:none}}
 .tva-ap .tvp-tab td{padding-top:.3vw;padding-bottom:.3vw}
@@ -7077,7 +7089,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 205;
+const APP_VERSAO = 207;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8723,7 +8735,7 @@ function htmlTvApresenta(D){
   // v203: do lado direito vai a semana (de segunda até hoje, dentro do período do ranking)
   const seg = (() => { const d = new Date(h + 'T12:00:00'), w = (d.getDay() + 6) % 7; d.setDate(d.getDate() - w); return iso(d); })(), deSem = seg > r.inicio ? seg : r.inicio;
   const lh = r.inicio <= h && (!r.fim || r.fim >= h) ? lista(h, h) : [], lt = lista(deSem, fim);
-  const coluna = (cls, tit, sub, l, dia) => `<section class="tvm-col ${cls}"><header><h2>${tit}</h2><span class="tva-sub">${sub}</span></header>${podio(l)}${equipes(l)}${tabela(l, dia)}</section>`;
+  const coluna = (cls, tit, sub, l, dia) => `<section class="tvm-col ${cls}"><header><h2>${tit}</h2><span class="tva-sub">${sub}</span></header><div class="tva-topo">${podio(l)}${equipes(l)}</div>${tabela(l, dia)}</section>`;
   return `<div class="tvm tva-ap">${coluna('', 'Hoje', 'Pontos de hoje na ' + esc(r.nome), lh, true)}${coluna('sem', 'Semana', `de ${dataBR(deSem).slice(0, 5)} até hoje · ${esc(r.nome)}${dias !== null ? ` · ${dias === 0 ? 'termina hoje' : 'faltam ' + dias + ' dia' + (dias === 1 ? '' : 's')}` : ''}`, lt, false)}</div>`;
 }
 function dadosTvRank(){
@@ -8886,21 +8898,28 @@ function renderTvRank(){
     cs.forEach((c, i) => { const k = i ? 'sem' : 'hoje', h = c.querySelector('header'); if (mx && mx !== k) c.style.display = 'none';
       if (h) h.insertAdjacentHTML('beforeend', `<button class="tvm-maxbt" onclick="tvMaxTroca('${k}')" title="${mx === k ? 'Voltar às duas colunas' : 'Mostrar só esta coluna'}">${mx === k ? 'Voltar às duas' : '⤢ Maximizar'}</button>`); }); }
   // v204: quando não cabem todos, a tabela passa de página sozinha (1º ao 3º, depois 4º ao 6º...)
-  requestAnimationFrame(tvaPaginar);
+  requestAnimationFrame(tvaPaginar); setTimeout(tvaPaginar, 500);
   conferirEventosTv();
   if (!_tvRelogio) _tvRelogio = setInterval(() => { if (view === 'tvrank') renderTvRank(); else { clearInterval(_tvRelogio); _tvRelogio = null; } }, 30000);
 }
 window.renderTvRank = renderTvRank;
+addEventListener('resize', () => { if (view === 'tvrank') tvaPaginar(); });
+// v206: as bolinhas e as setas da tabela levam direto para a página (e a troca automática recomeça a contar)
+window.tvaIr = (n, rel) => { const r = document.querySelector('#tvRank .tva-rol'), pags = (r && r._pags) || 1, atual = (window._tvaPag || 0) % pags;
+  window._tvaPag = ((rel ? atual + n : n) % pags + pags) % pags; window._tvaDesde = Date.now(); tvaPaginar(); };
 window.tvMaxTroca = k => { window._tvMax = window._tvMax === k ? '' : k; window._tvaDesde = Date.now(); window._tvaPag = 0; renderTvRank(); };
 function tvaPaginar(){
   if (window._tvaModo !== window.tvModo) { window._tvaModo = window.tvModo; window._tvaPag = 0; window._tvaDesde = Date.now(); }
   document.querySelectorAll('#tvRank .tva-rol').forEach(r => {
     const trs = [...r.querySelectorAll('tbody tr')]; if (!trs.length) return;
-    trs.forEach(t => t.style.display = ''); const alt = trs[0].getBoundingClientRect().height + 6;
-    const per = Math.max(1, Math.floor((r.clientHeight + 6) / alt)), pags = Math.ceil(trs.length / per), pg = (window._tvaPag || 0) % pags;
+    trs.forEach(t => t.style.display = '');
+    // v207: mede a altura média das linhas (com o espaço entre elas) para encher a coluna inteira
+    const tb0 = r.querySelector('tbody'), alt = trs.length > 1 ? (trs[trs.length - 1].getBoundingClientRect().bottom - trs[0].getBoundingClientRect().top) / trs.length : trs[0].getBoundingClientRect().height + 4;
+    const per = Math.max(1, Math.floor((r.getBoundingClientRect().height - 4) / alt)), pags = Math.ceil(trs.length / per), pg = (window._tvaPag || 0) % pags;
     trs.forEach((t, i) => { t.style.display = Math.floor(i / per) === pg ? '' : 'none'; });
     let ind = r.parentElement.querySelector('.tva-pag'); if (!ind) { ind = document.createElement('div'); ind.className = 'tva-pag'; r.after(ind); }
-    ind.innerHTML = pags > 1 ? `<span>${pg * per + 1}º ao ${Math.min(trs.length, (pg + 1) * per)}º de ${trs.length}</span>${Array.from({ length:pags }, (_, i) => `<i class="${i === pg ? 'on' : ''}"></i>`).join('')}` : '';
+    ind.innerHTML = pags > 1 ? `<button class="tva-seta" onclick="tvaIr(-1, true)" aria-label="Página anterior">‹</button><span>${pg * per + 1}º ao ${Math.min(trs.length, (pg + 1) * per)}º de ${trs.length}</span>${Array.from({ length:pags }, (_, i) => `<button class="tva-dot ${i === pg ? 'on' : ''}" onclick="tvaIr(${i})" aria-label="Página ${i + 1}"></button>`).join('')}<button class="tva-seta" onclick="tvaIr(1, true)" aria-label="Próxima página">›</button>` : '';
+    r._pags = pags;
     const tb = r.querySelector('tbody'); if (tb && r._pg !== pg) { tb.classList.remove('tva-entra'); void tb.offsetWidth; tb.classList.add('tva-entra'); r._pg = pg; }
   });
 }
