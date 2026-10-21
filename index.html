@@ -7016,7 +7016,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 197;
+const APP_VERSAO = 198;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7458,7 +7458,7 @@ function pontosDoMes(m, val, corte){
   });
   // ausência: dia de trabalho (já passado) sem presença no escritório nem externa
   if (n('ausencia')) {
-    const dias = ciCfg().dias || [1,2,3,4,5,6], desde = [String(val.ausenciaDesde || '2026-10-07'), String(val.presencaDesde || '')].sort().pop(), hj = hojeISO();
+    const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO(); // v198: ausência segue só a data dela (as antigas continuam valendo)
     const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay())) uteis.push(k); }
     const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
@@ -7567,7 +7567,7 @@ window.verPontosDe = i => {
 };
 // v135: a gerência ajusta presença / ausência de cada dia já passado (ex.: dias antes de começarem a marcar presença)
 function htmlDiasPres(x){
-  const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = [String(P.ausenciaDesde || '2026-10-07'), String(P.presencaDesde || '')].sort().pop();
+  const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = String(P.ausenciaDesde || '2026-10-07');
   const p = pessoasRk().find(y => y.uid === x.uid) || {}, ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
   const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && iso(d) >= ini) L.push(iso(d)); }
   if (!L.length) return '';
@@ -7910,7 +7910,7 @@ function renderAdm(){
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
     + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
-    + `<div class="pt-row"><span>Pontos de presença (manhã, tarde e ausência) contam a partir de. Antes dessa data, presença e ausência não dão pontos.</span><input type="date" id="pt_presencaDesde" style="width:150px" value="${esc(appCfg.pontos.presencaDesde || '2026-10-21')}"></div>`
+    + `<div class="pt-row"><span>Pontos de presença (manhã e tarde) contam a partir de. Antes dessa data, presença não dá pontos. A ausência segue a data dela, logo acima.</span><input type="date" id="pt_presencaDesde" style="width:150px" value="${esc(appCfg.pontos.presencaDesde || '2026-10-21')}"></div>`
     + `<div class="pt-row"><span>Check-in da tarde começa no dia</span><input type="date" id="pt_tardeDesde" style="width:150px" value="${esc(appCfg.pontos.tardeDesde || '2026-10-22')}"></div>`
     + `<div class="pt-row"><span>Check-in da tarde abre a partir de (hora, ex.: 13)</span><input type="number" step="1" min="0" max="23" id="pt_tardeHora" value="${Number(appCfg.pontos.tardeHora ?? 13) || 13}"></div>`
     + `<div class="pt-row"><span>Horário limite do funil (hora, ex.: 18)</span><input type="number" step="1" min="0" max="23" id="pt_funilHora" value="${Number(appCfg.pontos.funilHora) || 18}"></div>`
