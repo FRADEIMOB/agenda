@@ -594,6 +594,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 .pres-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .pres-row>b{font-size:14px}.pres-row .av{display:grid;place-items:center;flex:none;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800}.pres-row small{font-size:12px}
 .pres-op{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pres-zerar{all:unset;cursor:pointer;font-size:12px;font-weight:700;color:var(--danger);padding:6px 8px;border-radius:8px;border:1px dashed color-mix(in srgb,var(--danger) 40%,transparent)}.pres-zerar:focus-visible{outline:2px solid var(--danger)}
 .pres-op button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:6px 10px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
 .pres-op button.on{background:var(--pc);border-color:var(--pc);color:#fff}
 #v-painel:fullscreen{background:var(--bg);padding:24px;overflow:auto}
@@ -1053,6 +1054,10 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+/* v197: quem é quem */
+.lig-sug{border-color:var(--accent)!important;box-shadow:inset 0 0 0 1px var(--accent)}.lig-sug-t{font-size:11px;font-style:normal;color:var(--accent);font-weight:700;margin-left:6px;white-space:nowrap}
+/* v196: check-in da tarde */
+.ci-card.ci-tarde{border-color:color-mix(in srgb,var(--accent) 45%,var(--border));margin-bottom:10px}
 /* v193: rankings novos */
 .rkn-novo{border:1px dashed var(--border)!important;color:var(--accent)!important;font-weight:700}
 .rkn-info{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:12px;width:100%}
@@ -3201,6 +3206,11 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
           <div class="rep-sec" style="margin:16px 0 8px">Resumo do mês</div>
           <div id="presMes"></div>
         </div>
+        <div class="card hide" id="cardRecrut" style="margin-bottom:20px">
+          <div class="card-head"><h2>Recrutamentos</h2><button class="btn btn-ghost" onclick="abrirRecrut()">+ Registrar recrutamento</button></div>
+          <div class="hint" style="margin-top:0">Quem trouxe um corretor novo ganha os pontos de "Recrutamento" no mês em que você registrar.</div>
+          <div id="recrutLista"></div>
+        </div>
         <div class="card hide" id="cardPend" style="margin-bottom:20px">
           <div class="card-head"><h2>Aguardando aprovação</h2><span class="muted" id="pendQt"></span></div>
           <div id="pendLista"></div>
@@ -3926,6 +3936,17 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <div class="dono-only" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)"><button class="btn btn-ghost" style="color:var(--danger)" onclick="fechar('zapCfgModal');zapLimpar()">🗑️ Apagar todas as conversas do app</button><div class="hint" style="margin-top:6px">Só apaga do app. As conversas continuam no celular.</div></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('zapCfgModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarZapCfg()">Salvar</button></div>
+  </div>
+</div>
+<div class="modal" id="recrutModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><h2>Registrar recrutamento</h2><button class="icon-btn" onclick="fechar('recrutModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label for="rcQuem">Quem recrutou</label><select id="rcQuem"></select></div>
+      <div class="fg"><label for="rcNovo">Corretor novo</label><input id="rcNovo" maxlength="80" placeholder="Nome de quem entrou"></div>
+      <div class="fg"><label for="rcDia">Data</label><input type="date" id="rcDia"></div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('recrutModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarRecrut()">Registrar</button></div>
   </div>
 </div>
 <div class="modal" id="gpsAjudaModal">
@@ -6995,7 +7016,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 194;
+const APP_VERSAO = 197;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7214,7 +7235,7 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:-15, ausenciaDesde:'2026-10-07', agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:-15, ausenciaDesde:'2026-10-07', presencaTarde:0, vendaAssinada:0, recrutamento:0, presencaDesde:'2026-10-21', tardeDesde:'2026-10-22', tardeHora:13, agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
@@ -7228,9 +7249,12 @@ const PONTOS_ITENS = [
   ['docsAnexados','Documentação anexada na reserva (RG, CPF, renda e residência)'],
   ['venda','Venda de lead'],
   ['vendaInd','Venda por indicação'],
+  ['vendaAssinada','Venda assinada (reserva que chegou na etapa Assinou)'],
+  ['recrutamento','Recrutamento (corretor novo que a pessoa trouxe)'],
   ['indicacao','Indicação recebida (nome e telefone)'],
   ['prospecto','Prospecto (cliente com perfil e interesse)'],
-  ['presenca','Presença (escritório ou externa)'],
+  ['presenca','Presença da manhã (1º check-in: escritório ou externa)'],
+  ['presencaTarde','Presença da tarde (2º check-in, depois do horário da tarde)'],
   ['agendSdr','Visita agendada pela SDR (os pontos vão para a SDR)'],
   ['agendSdrReal','Visita agendada pela SDR e realizada (para a SDR)'],
   ['docSdr','Documentação no resumo do dia da SDR (cada uma)'],
@@ -7238,7 +7262,7 @@ const PONTOS_ITENS = [
   ['ausencia','Ausência (dia de trabalho sem presença; use número negativo, ex.: -10)'],
   ['funil','Não preencher o funil até o horário (use número negativo, ex.: -20)']
 ];
-const PONTOS_EXTRAS = ['ligLimite','ligBloco','funilHora'];
+const PONTOS_EXTRAS = ['ligLimite','ligBloco','funilHora','tardeHora'];
 // v96: o gestor pode renomear e descrever cada critério (vazio = volta ao texto padrão)
 const nomePonto = k => { const c = (appCfg.pontosNomes || {})[k]?.nome; return (c && c.trim()) || (PONTOS_ITENS.find(x => x[0] === k) || [, k])[1]; };
 const descPonto = k => ((appCfg.pontosNomes || {})[k]?.desc || '').trim();
@@ -7406,12 +7430,22 @@ function pontosDoMes(m, val, corte){
   if (usaReservas) rankingVendas.filter(v => !v.caiu && noMes(v.dia)).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
     const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
     x.vendas++; if (v.ind) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!v.ind); }));
+  // v196: venda assinada (a reserva chegou na etapa Assinou, pela data da etapa) e recrutamentos registrados pelo dono
+  if (n('vendaAssinada')) rankingVendas.filter(v => !v.caiu && v.ass && noMes(v.ass)).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
+    const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
+    x.assinadas = (x.assinadas || 0) + 1; x.pontos += n('vendaAssinada'); }));
+  (Array.isArray(appCfg.recrutamentos) ? appCfg.recrutamentos : []).filter(r => r.uid && noMes(r.dia)).forEach(r => {
+    const ps = RK().find(p => p.uid === r.uid) || {}, x = pega({ corretorUid:r.uid, corretorNome:ps.nome || r.nome || '', equipe:ps.equipe || '' });
+    x.recrut = (x.recrut || 0) + 1; x.pontos += n('recrutamento'); });
   // presença no plantão, ligações e recontatos (resumo por corretor e mês, sem dados de cliente)
   ATV.filter(r => r.mes === m && r.uid).forEach(r => {
     const x = pega({ corretorUid:r.uid, corretorNome:(RK().find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const diasPres = new Set([...Object.keys(r.pres || {}), ...Object.keys(r.chk || {})]);
     const pr = diasPres.size, l = somaCap(r.lig, val) + somaCap(r.rec, val), c = 0;
-    x.presencas += pr; x.ligacoes += l; (x._pres ||= new Set()); diasPres.forEach(d => x._pres.add(d));
+    // v196: presença só pontua a partir da data escolhida; a tarde é o 2º check-in do dia
+    const presDesde = String(val.presencaDesde || ''), prPts = [...diasPres].filter(d => !presDesde || d >= presDesde).length;
+    const tardes = Object.keys(r.chkt || {}).filter(d => (!presDesde || d >= presDesde) && d >= String(val.tardeDesde || '')).length;
+    x.presencas += pr; x.presPontua = (x.presPontua || 0) + prPts; x.tardes = (x.tardes || 0) + tardes; x.ligacoes += l; (x._pres ||= new Set()); diasPres.forEach(d => x._pres.add(d));
     (x._abo ||= new Set()); Object.keys(r.abo || {}).forEach(d => x._abo.add(d)); (x._chk ||= new Set()); Object.keys(r.chk || {}).forEach(d => x._chk.add(d));
     x.atendeu = (x.atendeu || 0) + Object.values(r.at || {}).reduce((a, v) => a + (Number(v) || 0), 0); x.naoAtendeu = (x.naoAtendeu || 0) + Object.values(r.na || {}).reduce((a, v) => a + (Number(v) || 0), 0);
     const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0), bloco = Math.max(1, n('ligBloco') || 1);
@@ -7419,12 +7453,12 @@ function pontosDoMes(m, val, corte){
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
     x.prospectos = (x.prospectos || 0) + pro; x.indicacoes = (x.indicacoes || 0) + ind; x.semFunil = (x.semFunil || 0) + semFunil;
-    x.pontos += pr * n('presenca') + Math.floor(l / bloco) * n('ligacao')
+    x.pontos += prPts * n('presenca') + tardes * n('presencaTarde') + Math.floor(l / bloco) * n('ligacao')
       + pro * n('prospecto') + ind * n('indicacao') + doca * n('docsAnexados') + semFunil * n('funil');
   });
   // ausência: dia de trabalho (já passado) sem presença no escritório nem externa
   if (n('ausencia')) {
-    const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO();
+    const dias = ciCfg().dias || [1,2,3,4,5,6], desde = [String(val.ausenciaDesde || '2026-10-07'), String(val.presencaDesde || '')].sort().pop(), hj = hojeISO();
     const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay())) uteis.push(k); }
     const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
@@ -7512,7 +7546,10 @@ window.verPontosDe = i => {
   const x = (window._rkLista || [])[i]; if (!x) return; const P = appCfg.pontos, n = k => Number(P[k]) || 0, bloco = Math.max(1, n('ligBloco') || 1);
   const pend = Math.max(0, (x.visitas || 0) - (x.confirmadas || 0) - (x.realizadas || 0) - (x.faltas || 0)), blocos = Math.floor((x.ligacoes || 0) / bloco);
   const L = [
-    ['Presenças', x.presencas, n('presenca'), (x.presencas || 0) * n('presenca')],
+    ['Presenças da manhã', x.presPontua ?? x.presencas, n('presenca'), (x.presPontua ?? x.presencas ?? 0) * n('presenca')],
+    ['Presenças da tarde', x.tardes, n('presencaTarde'), (x.tardes || 0) * n('presencaTarde')],
+    ['Vendas assinadas', x.assinadas, n('vendaAssinada'), (x.assinadas || 0) * n('vendaAssinada')],
+    ['Recrutamentos', x.recrut, n('recrutamento'), (x.recrut || 0) * n('recrutamento')],
     [`Ligações (${x.ligacoes || 0} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
@@ -7530,7 +7567,7 @@ window.verPontosDe = i => {
 };
 // v135: a gerência ajusta presença / ausência de cada dia já passado (ex.: dias antes de começarem a marcar presença)
 function htmlDiasPres(x){
-  const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = String(P.ausenciaDesde || '2026-10-07');
+  const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = [String(P.ausenciaDesde || '2026-10-07'), String(P.presencaDesde || '')].sort().pop();
   const p = pessoasRk().find(y => y.uid === x.uid) || {}, ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
   const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && iso(d) >= ini) L.push(iso(d)); }
   if (!L.length) return '';
@@ -7873,6 +7910,9 @@ function renderAdm(){
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
     + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
+    + `<div class="pt-row"><span>Pontos de presença (manhã, tarde e ausência) contam a partir de. Antes dessa data, presença e ausência não dão pontos.</span><input type="date" id="pt_presencaDesde" style="width:150px" value="${esc(appCfg.pontos.presencaDesde || '2026-10-21')}"></div>`
+    + `<div class="pt-row"><span>Check-in da tarde começa no dia</span><input type="date" id="pt_tardeDesde" style="width:150px" value="${esc(appCfg.pontos.tardeDesde || '2026-10-22')}"></div>`
+    + `<div class="pt-row"><span>Check-in da tarde abre a partir de (hora, ex.: 13)</span><input type="number" step="1" min="0" max="23" id="pt_tardeHora" value="${Number(appCfg.pontos.tardeHora ?? 13) || 13}"></div>`
     + `<div class="pt-row"><span>Horário limite do funil (hora, ex.: 18)</span><input type="number" step="1" min="0" max="23" id="pt_funilHora" value="${Number(appCfg.pontos.funilHora) || 18}"></div>`
 
     + `<button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="abrirLigLista()">Ver e conferir as ligações</button>`;
@@ -7908,6 +7948,7 @@ window.salvarPontuacao = async () => {
     pontosNomes[k] = { nome:nome && nome !== n ? nome.slice(0,80) : '', desc:desc.slice(0,160) }; });
   pontos.ligBloco = Math.max(1, pontos.ligBloco || 1); pontos.funilHora = Math.min(23, Math.max(0, pontos.funilHora || 18));
   pontos.ligMinutos = 0; pontos.ausenciaDesde = $('pt_ausenciaDesde').value || '2026-10-07';
+  pontos.presencaDesde = $('pt_presencaDesde').value || '2026-10-21'; pontos.tardeDesde = $('pt_tardeDesde').value || '2026-10-22'; pontos.tardeHora = Math.min(23, Math.max(0, pontos.tardeHora || 13));
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, pontosNomes, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
@@ -8142,7 +8183,8 @@ let integAssin = '';
 function renderIntegracoes(){
   if (!souDono()) return;
   const ativoEl = document.activeElement;
-  const ass = JSON.stringify([integ, perfisLista.length]);
+  // v197: refaz a lista quando qualquer cadastro muda (nome, cargo, aprovado ou desativado), não só quando entra gente nova
+  const ass = JSON.stringify([integ, perfisLista.map(p => [p.uid, p.nome, p.status, p.papel])]);
   if (ass === integAssin || (ativoEl && ativoEl.closest?.('#cardInteg'))) return;
   integAssin = ass;
   const tem = !!integ.chave;
@@ -8154,12 +8196,16 @@ function renderIntegracoes(){
   $('intScript').value = integ.scriptUrl || '';
   $('intUltSync').textContent = integ.ultimaSync ? 'Última leitura da planilha: ' + new Date(integ.ultimaSync).toLocaleString('pt-BR') : 'A planilha de avaliações ainda não foi lida.';
   const pessoas = perfisLista.filter(p => p.status === 'ativo').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
-  const sel = (tipo, nome, atual) => `<select data-tipo="${tipo}" data-nome="${esc(nome)}"><option value="">— sem ligação —</option>${pessoas.map(p => `<option value="${p.uid}" ${atual===p.uid?'selected':''}>${esc(p.nome)}</option>`).join('')}</select>`;
+  // v197: ligação que aponta para alguém que não está mais ativo, ou sem ligação, recebe a sugestão pelo nome (confira e salve)
+  let sugeridas = 0;
+  const sel = (tipo, nome, atual) => { let sug = false; if (!pessoas.some(p => p.uid === atual)) { const c = casaPerfilNome(nome, pessoas); atual = c ? c.uid : ''; sug = !!c; if (sug) sugeridas++; }
+    return `<select data-tipo="${tipo}" data-nome="${esc(nome)}" class="${sug ? 'lig-sug' : ''}"><option value="">— sem ligação —</option>${pessoas.map(p => `<option value="${p.uid}" ${atual===p.uid?'selected':''}>${esc(p.nome)}${p.papel && p.papel !== 'corretor' ? ' · ' + esc(({ coordenador:'coordenador', sdr:'SDR', anjo:'anjo', gerente:'gestão', adm:'ADM', marketing:'marketing', correspondente:'correspondente' })[p.papel] || p.papel) : ''}</option>`).join('')}</select>${sug ? '<em class="lig-sug-t">sugerido pelo nome</em>' : ''}`; };
   const abas = Object.entries(integ.abas || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
   const crm = Object.entries(integ.crmVistos || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
   $('intLigacoes').innerHTML = (abas.length ? `<div class="rep-sec" style="margin:6px 0 8px">Abas da planilha de avaliações</div>${abas.filter(([n]) => !abasIgnoradas().has(chaveAba(n))).map(([n,u]) => `<div class="pt-row"><span>📄 ${esc(n)}</span>${sel('aba', n, (integ.mapaAbas || {})[n] || u)}</div>`).join('')}` : '')
     + (crm.length ? `<div class="rep-sec" style="margin:14px 0 8px">Nomes que vieram do CRM</div>${crm.map(([n,u]) => `<div class="pt-row"><span>👤 ${esc(n)}</span>${sel('crm', n, (integ.mapaCrm || {})[n] || u)}</div>`).join('')}` : '')
     || '<div class="muted" style="font-size:13.5px">Os nomes aparecem aqui depois da primeira leitura da planilha e do primeiro lead do CRM. O app liga sozinho quando o nome bate; você só ajusta os que ficarem sem ligação.</div>';
+  if (sugeridas) $('intLigacoes').insertAdjacentHTML('afterbegin', `<div class="hint" style="margin:0 0 8px;color:var(--accent)"><b>${sugeridas} ligaç${sugeridas === 1 ? 'ão sugerida' : 'ões sugeridas'}</b> pelos cadastros novos. Confira e toque em "Salvar ligações".</div>`);
   $('btnSalvarLig').classList.toggle('hide', !(abas.length || crm.length));
   if (document.activeElement !== $('intIgnoradas')) $('intIgnoradas').value = (appCfg.abasIgnoradas || ABAS_IGNORADAS_PADRAO).join('\n');
   renderGruposAdm();
@@ -11402,11 +11448,44 @@ function htmlCheckinHoje(){
       <div class="ci-bts"><button class="btn btn-primary ci-bt" id="ciBtEsc" onclick="chegueiEscritorio()">Cheguei no escritório</button><button class="btn btn-ghost ci-bt" onclick="abrirExterno()">Estou em atendimento externo</button></div>
       <button class="link ci-qr" onclick="abrirCamera()">Ou leia o código da recepção</button></div>`; }
   // v140: depois de marcar, a presença vira uma faixa fina (o cartão grande só aparece enquanto falta marcar)
-  if (c.saida) return `<div class="ci-fino fim"><i></i><span>Dia encerrado · chegou ${hm(c.entrada)}, saiu ${hm(c.saida)}</span></div>`;
-  if (ciFora(c)) return htmlCiResumoGestor() + `<div class="ci-fino fora"><i></i><span>Em atendimento externo${ciOnde(c) ? ' · ' + esc(ciOnde(c)) : ''}</span><button id="ciBtEsc" onclick="chegueiEscritorio()">Voltei</button><button onclick="fazerCheckout()">Encerrar</button></div>`;
+  if (c.saida) return `<div class="ci-fino fim"><i></i><span>Dia encerrado · chegou ${hm(c.entrada)}, saiu ${hm(c.saida)}</span><button id="ciBtEsc" onclick="chegueiEscritorio()">Voltei</button><button onclick="abrirCamera()">Ler código</button></div>`;
+  const tardeH = precisaTarde(c) ? htmlTarde(c) : '', tardeOk = c.tarde ? ` · tarde ✓ ${hm(c.tarde)}` : '';
+  if (ciFora(c)) return htmlCiResumoGestor() + tardeH + `<div class="ci-fino fora"><i></i><span>Em atendimento externo${ciOnde(c) ? ' · ' + esc(ciOnde(c)) : ''}${tardeOk}</span><button id="ciBtEsc" onclick="chegueiEscritorio()">Voltei</button><button onclick="fazerCheckout()">Encerrar</button></div>`;
   const pos = posicaoMinha();
-  return htmlCiResumoGestor() + `<div class="ci-fino"><i></i><span>No escritório desde ${hm(ciChegada(c))}${pos ? ` · ${pos}º a chegar` : ''}</span><button onclick="abrirExterno()">Externo</button><button onclick="fazerCheckout()">Encerrar</button></div>`;
+  return htmlCiResumoGestor() + tardeH + `<div class="ci-fino"><i></i><span>No escritório desde ${hm(ciChegada(c))}${pos ? ` · ${pos}º a chegar` : ''}${tardeOk}</span><button onclick="abrirExterno()">Externo</button><button onclick="fazerCheckout()">Encerrar</button></div>`;
 }
+// v196: 2º check-in do dia (tarde). Só para quem fez o 1º antes do horário da tarde
+const tardeCfg = () => { const P = appCfg.pontos || {}; return { hora:Math.min(23, Math.max(0, Number(P.tardeHora ?? 13) || 13)), desde:String(P.tardeDesde || '2026-10-22') }; };
+function precisaTarde(c){
+  const t = tardeCfg(); if (!c || c.tarde || c.saida || !ligaPontua() || ciHoje() < t.desde || !(ciCfg().dias || [1,2,3,4,5,6]).includes(new Date().getDay())) return false;
+  return new Date().getHours() >= t.hora && new Date(c.entrada || 0).getHours() < t.hora;
+}
+window.precisaTarde = precisaTarde;
+function htmlTarde(c){
+  const fora = ciFora(c);
+  return `<div class="ci-card ci-tarde"><div class="ci-txt"><b>Check-in da tarde</b><small>${fora ? 'Confirme que você continua no atendimento externo.' : 'Confirme que você continua no escritório.'} Vale pontos no ranking.</small></div>
+    <div class="ci-bts">${fora ? `<button class="btn btn-primary ci-bt" onclick="checkinTarde('externo')">Continuo no atendimento</button>` : `<button class="btn btn-primary ci-bt" id="ciBtTarde" onclick="checkinTarde('gps')">Estou no escritório</button>`}<button class="btn btn-ghost ci-bt" onclick="abrirCamera()">Ler o código da recepção</button></div></div>`;
+}
+window.checkinTarde = async via => {
+  const c = meuCheckin; if (!precisaTarde(c)) return;
+  const bt = $('ciBtTarde'), volta = () => { if (bt) { bt.disabled = false; bt.textContent = 'Estou no escritório'; } };
+  let extra = {};
+  if (via === 'gps') { const cfg = ciCfg();
+    if (bt) { bt.disabled = true; bt.textContent = 'Conferindo a localização…'; }
+    const gps = await pegarGps();
+    if (cfg.local?.lat) {
+      if (!gps) { volta(); ajudaGps(window._gpsErro === 1 ? 'negado' : 'sem'); return; }
+      const dist = distanciaM(gps, cfg.local);
+      if (dist > (Number(cfg.raio) || 150) + Math.min(gps.prec || 0, 100)) { volta(); if ((gps.prec || 0) > 200) ajudaGps('impreciso', gps.prec, dist); else toast(`Você está a ${dist >= 1000 ? (dist / 1000).toFixed(1).replace('.', ',') + ' km' : dist + ' m'} do escritório. Se está atendendo fora, use "Externo".`); return; }
+      extra = { tardeLocal:gps, tardeDist:dist };
+    } else if (gps) extra = { tardeLocal:gps };
+  }
+  const agora = Date.now(), h = hojeISO();
+  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), { tarde:agora, tardeVia:via, ...extra });
+    await setDoc(doc(db,'ranking_ativ', h.slice(0, 7) + '_' + uidAtual), { mes:h.slice(0, 7), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', chkt:{ [h]:via }, atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('tarde ranking', e.message));
+    festejar(`✅ Check-in da tarde às ${hm(agora)}!`); }
+  catch(e) { volta(); toast('Erro: ' + e.message); }
+};
 function htmlCiGestao(){
   if (!podeGerir()) return '';
   const o = ordemFila(), ext = checkinsHoje.filter(ciFora), sairam = checkinsHoje.filter(c => c.saida);
@@ -11414,7 +11493,7 @@ function htmlCiGestao(){
   const faltam = pessoasPresenca().filter(p => ciMinhaVisao(p) && p.uid !== uidAtual).filter(p => !checkinsHoje.some(c => c.uid === p.uid) && !['folga','falta'].includes(presencas[ciHoje()]?.marcados?.[p.uid]?.status));
   const mapa = l => l ? ` · <a href="https://maps.google.com/?q=${l.lat},${l.lng}" target="_blank" rel="noopener">ver no mapa</a>` : '';
   return `<div class="ci-g"><div class="rep-sec" style="margin:0 0 6px">${souGerente() ? 'No escritório' : 'No escritório · sua equipe'} (ordem de chegada)</div>
-    ${o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="ci-l"><span class="ci-pos">${i + 1}º</span><b>${esc(nome(u))}</b><span class="ci-h"><span title="como marcou">${CI_MEIO[c.via] || ''}</span> ${hm(ciChegada(c))}${ciAtrasado(c) ? ' · <em class="ci-atr">atrasado</em>' : ''}${(c.externos || []).length ? ` · ${c.externos.length} saída${c.externos.length > 1 ? 's' : ''} para atendimento` : ''}</span></div>`; }).join('') : '<div class="muted" style="font-size:13px">Ninguém no escritório agora.</div>'}
+    ${o.length ? o.map((u, i) => { const c = checkinsHoje.find(x => x.uid === u); return `<div class="ci-l"><span class="ci-pos">${i + 1}º</span><b>${esc(nome(u))}</b><span class="ci-h"><span title="como marcou">${CI_MEIO[c.via] || ''}</span> ${hm(ciChegada(c))}${ciAtrasado(c) ? ' · <em class="ci-atr">atrasado</em>' : ''}${c.tarde ? ` · tarde ${hm(c.tarde)}` : ''}${(c.externos || []).length ? ` · ${c.externos.length} saída${c.externos.length > 1 ? 's' : ''} para atendimento` : ''}</span></div>`; }).join('') : '<div class="muted" style="font-size:13px">Ninguém no escritório agora.</div>'}
     ${ext.length ? `<div class="rep-sec" style="margin:10px 0 6px">Em atendimento externo</div>${ext.map(c => `<div class="ci-l"><span class="ci-pos">🚗</span><b>${esc(c.nome)}</b><span class="ci-h">desde ${hm(ciDesde(c))} · ${esc(ciOnde(c))}${mapa(c.externoAgora?.local || c.local)}</span></div>`).join('')}` : ''}
     ${sairam.length ? `<div class="ci-sairam">Já encerraram o dia: ${sairam.map(c => `${esc(primeiro(c.nome))} (${hm(c.saida)})`).join(', ')}</div>` : ''}
     ${faltam.length ? `<div class="ci-faltam">Ainda sem presença: ${faltam.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}
@@ -11443,7 +11522,7 @@ window.abrirCamera = async () => {
 };
 window.fecharCamera = () => { clearTimeout(_ciLoop); if (_ciStream) { _ciStream.getTracks().forEach(t => t.stop()); _ciStream = null; } fechar('ciCamModal'); };
 async function fazerCheckin(token){
-  if (meuCheckin) { if (ciFora(meuCheckin)) return voltarEscritorio('qr'); toast('Você já marcou a presença hoje ✓'); return; }
+  if (meuCheckin) { if (precisaTarde(meuCheckin)) return checkinTarde('qr'); if (ciFora(meuCheckin) || meuCheckin.saida) return voltarEscritorio('qr'); toast('Você já marcou a presença hoje ✓'); return; }
   const agora = Date.now();
   try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'qr', token }); marcarPresencaRanking('escritorio');
     avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
@@ -11452,6 +11531,7 @@ async function fazerCheckin(token){
 window.fazerCheckin = fazerCheckin;
 // "Cheguei no escritório": confere pela localização do celular quando a gerência cadastrou o endereço
 window.chegueiEscritorio = async () => {
+  if (meuCheckin && precisaTarde(meuCheckin) && !ciFora(meuCheckin)) return checkinTarde('gps');
   const bt = $('ciBtEsc'); if (bt) { bt.disabled = true; bt.textContent = 'Conferindo a localização…'; }
   const cfg = ciCfg(), gps = await pegarGps();
   const volta = () => { if (bt) { bt.disabled = false; bt.textContent = '🏢 Cheguei no escritório'; } };
@@ -11483,8 +11563,10 @@ function ajudaGps(tipo, prec, dist){
 }
 window.ajudaGps = ajudaGps;
 async function voltarEscritorio(via, gps, dist){
-  const c = meuCheckin; if (!c || !ciFora(c)) return;
+  const c = meuCheckin; if (!c || (!ciFora(c) && !c.saida)) return;
   const agora = Date.now(), upd = {};
+  // v195: encerrou o dia e voltou: reabre a presença e guarda o intervalo fora
+  if (c.saida) { upd.saida = deleteField(); upd.externos = [...(c.externos || []), { onde:'Saiu do escritório', desde:c.saida, voltou:agora }]; }
   if (c.externoAgora) { upd.externos = [...(c.externos || []), { ...c.externoAgora, voltou:agora }]; upd.externoAgora = deleteField(); }
   if (c.via === 'externo' && !c.chegouEscritorio) { upd.chegouEscritorio = agora; upd.chegouVia = via; }
   try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), upd); toast(`🏢 De volta ao escritório às ${hm(agora)}`); } catch(e) { toast('Erro: ' + e.message); }
@@ -13373,7 +13455,7 @@ function renderPresenca(){
   $('presLista').innerHTML = ps.length ? ps.map(p => {
     const x = m[p.uid] || {}, cab = p.equipe !== eqAnt ? `<div class="rep-sec" style="margin:12px 0 4px">${esc(eqNome(p.equipe))}</div>` : ''; eqAnt = p.equipe;
     return cab + `<div class="pres-row"><span class="av" style="width:34px;height:34px;font-size:13px">${p.foto ? `<img src="${p.foto}" alt="">` : esc(((p.nome || '?').trim()[0] || '?').toUpperCase())}</span><b>${esc(p.nome)}</b>${x.hora && x.status === 'presente' ? `<small class="muted">${esc(x.hora)}</small>` : ''}
-      <div class="pres-op">${PRES_OP.map(([k,r,c]) => `<button class="${x.status===k?'on':''}" style="--pc:${c}" onclick="marcarPresenca('${p.uid}','${k}')">${r}</button>`).join('')}</div></div>`;
+      <div class="pres-op">${PRES_OP.map(([k,r,c]) => `<button class="${x.status===k?'on':''}" style="--pc:${c}" onclick="marcarPresenca('${p.uid}','${k}')">${r}</button>`).join('')}${(() => { const ck = presDia === hojeISO() && checkinsHoje.find(c => c.uid === p.uid); return ck && !souCeo() ? `<button class="pres-zerar" onclick="zerarCheckin('${p.uid}')" title="Apaga o check-in de hoje para a pessoa marcar de novo">${ck.saida ? 'Reabrir dia' : 'Zerar check-in'}</button>` : ''; })()}</div></div>`;
   }).join('') : '<div class="muted" style="font-size:13.5px">Os corretores aparecem aqui assim que tiverem conta aprovada no app.</div>';
   // resumo do mês
   const [mi, mf] = faixa('mes'), dias = Object.keys(presencas).filter(d => d >= mi && d <= mf);
@@ -13381,6 +13463,38 @@ function renderPresenca(){
   const top = ps.filter(p => cont[p.uid]).sort((a,b) => cont[b.uid].p - cont[a.uid].p);
   $('presMes').innerHTML = top.length ? `<table class="rank"><thead><tr><th>Corretor</th><th>Dias no escritório</th><th>Faltas</th><th>Atrasos</th><th class="hide-m">Chegada média</th></tr></thead><tbody>${top.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span></td><td class="tot">${cont[p.uid].p}</td><td>${cont[p.uid].f || ''}</td><td>${ciResumoMes(p.uid).atr || ''}</td><td class="hide-m">${ciResumoMes(p.uid).media || '—'}</td></tr>`).join('')}</tbody></table>` : '<div class="muted" style="font-size:13px">Nenhuma presença marcada neste mês ainda.</div>';
 }
+// v195: a gerência apaga o check-in de hoje de alguém (ex.: encerrou o dia sem querer) para a pessoa marcar de novo
+window.zerarCheckin = async uid => {
+  if (!souGerente() || souCeo()) return; const c = checkinsHoje.find(x => x.uid === uid); if (!c) return;
+  if (!confirm(`Apagar o check-in de hoje de ${primeiro(c.nome || '')}? Ela vai poder marcar a presença de novo.`)) return;
+  try { await deleteDoc(doc(db,'checkins', c.id || (c.dia + '_' + uid))); toast('Check-in apagado. Já pode marcar de novo.'); }
+  catch(e) { toast('Não foi possível apagar: ' + e.message); }
+};
+// v196: recrutamentos (o dono registra; vale pontos para quem trouxe o corretor novo)
+const recrutamentos = () => Array.isArray(appCfg.recrutamentos) ? appCfg.recrutamentos : [];
+function renderRecrut(){
+  const card = $('cardRecrut'); if (!card) return; card.classList.toggle('hide', !souDono()); if (!souDono()) return;
+  const l = recrutamentos().slice().sort((a, b) => (b.dia || '').localeCompare(a.dia || '')).slice(0, 30), v = Number(appCfg.pontos?.recrutamento) || 0;
+  $('recrutLista').innerHTML = l.length ? l.map(r => `<div class="et-h"><span><b>${esc(nomeBonito(r.nome || ''))}</b> trouxe <b>${esc(nomeBonito(r.novo || ''))}</b><small style="display:block">${dataBR(r.dia)}${v ? ' · ' + (v > 0 ? '+' : '') + v + ' pontos' : ' · defina o valor em Configurações > Pontuação'}</small></span><button class="btn btn-sm btn-ghost" onclick="apagarRecrut('${r.id}')">Apagar</button></div>`).join('') : '<div class="muted" style="font-size:13.5px">Nenhum recrutamento registrado.</div>';
+}
+window.abrirRecrut = () => {
+  if (!souDono()) return;
+  const ps = pessoasRk().filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','sdr'].includes(p.papel)).sort((a, b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
+  $('rcQuem').innerHTML = '<option value="">Escolha</option>' + ps.map(p => `<option value="${p.uid}">${esc(nomeBonito(p.nome || ''))}</option>`).join('');
+  $('rcNovo').value = ''; $('rcDia').value = hojeISO(); abrir('recrutModal');
+};
+window.salvarRecrut = async () => {
+  if (!souDono()) return; const uid = $('rcQuem').value, novo = $('rcNovo').value.trim().slice(0, 80), dia = $('rcDia').value;
+  if (!uid) { toast('Escolha quem recrutou'); return; } if (!novo) { toast('Digite o nome do corretor novo'); $('rcNovo').focus(); return; } if (!dia) { toast('Escolha a data'); return; }
+  const p = pessoasRk().find(x => x.uid === uid) || {}, l = [...recrutamentos(), { id:'rc' + Date.now().toString(36), uid, nome:p.nome || '', novo, dia, por:perfil.nome, em:Date.now() }].slice(-200);
+  try { await gravar(setDoc(doc(db,'config','app'), { recrutamentos:l }, { merge:true })); appCfg.recrutamentos = l; fechar('recrutModal'); render(); toast('Recrutamento registrado'); }
+  catch(e) { toast('Não foi possível registrar: ' + e.message); }
+};
+window.apagarRecrut = async id => {
+  if (!souDono() || !confirm('Apagar este recrutamento? Os pontos saem do ranking.')) return;
+  const l = recrutamentos().filter(r => r.id !== id);
+  try { await gravar(setDoc(doc(db,'config','app'), { recrutamentos:l }, { merge:true })); appCfg.recrutamentos = l; render(); } catch(e) { toast('Erro: ' + e.message); }
+};
 window.mudarDiaPresenca = v => { window.presDia = v || hojeISO(); render(); };
 window.marcarPresenca = async (uid, st) => {
   if (!souGerente()) return;
@@ -13866,9 +13980,10 @@ function sincVendasRanking(){
   clearTimeout(_sincT); _sincT = setTimeout(async () => {
     const atual = new Map(rankingVendas.map(x => [x.id, x])), b = writeBatch(db); let n = 0;
     reservasTodas.forEach(r => {
-      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), ind:ehVendaIndicacao(r), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
+      const assH = (r.etapaHist || []).filter(x => x.etapa === 'ASSINOU').sort((x, y) => (x.em || 0) - (y.em || 0))[0], assEm = assH ? assH.em : (r.etapa === 'ASSINOU' ? r.etapaEm : 0);
+      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), ind:ehVendaIndicacao(r), ass:assEm ? iso(new Date(assEm)) : '', corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
       const a = atual.get(r.id);
-      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || !!a.ind !== d.ind || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
+      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || !!a.ind !== d.ind || (a.ass || '') !== d.ass || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
       // quem pode ver a reserva no app (o próprio corretor e o parceiro)
       const uids = d.corretores.map(c => c.uid).filter(Boolean); if (r.criadoPor && !uids.includes(r.criadoPor)) uids.push(r.criadoPor);
       if (JSON.stringify(r.corretorUids || []) !== JSON.stringify(uids) && n < 400) { b.set(doc(db,'reservas',r.id), { corretorUids:uids }, { merge:true }); n++; }
@@ -14920,7 +15035,7 @@ function renderEtapa3(){
   renderVendas(); renderReservasAdm(); renderApEscolha(); renderAssistente();
   if ($('cVendas')) { const [mi, mf] = faixa('mes'); const n = reservas.filter(r => r.dia >= mi && r.dia <= mf).length; $('cVendas').textContent = n || ''; }
   if (view === 'painel') renderPainel();
-  if (view === 'corretores') renderPresenca();
+  if (view === 'corretores') { renderPresenca(); renderRecrut(); }
 }
 
 
