@@ -1054,6 +1054,34 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+
+/* v201: apresentação do ranking novo na TV */
+.tva{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1.4vw}
+.tva-esq{display:flex;flex-direction:column;min-height:0;border-radius:1.4vw;padding:1.6vw 1.8vw 0;background:radial-gradient(120% 90% at 50% 100%,rgba(242,140,56,.22),transparent 60%),linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.tva-tit b{display:block;font:800 3.2vw/1.02 'Saira Condensed',sans-serif;letter-spacing:-.01em;color:#fff}
+.tva-tit span{display:block;margin-top:.4vw;font-size:1.05vw;color:#9fbad0}
+.tva-podio{flex:1;display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:1.2vw;margin-top:1vw}
+.tva-deg{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.tva-av{position:relative;margin-bottom:.7vw}
+.tva-img{width:7vw;height:7vw;border-radius:50%;object-fit:cover;display:grid;place-items:center;font:800 3vw 'Saira Condensed',sans-serif;color:#0b2236;background:linear-gradient(135deg,#f7c64b,#e39b00);box-shadow:0 0 0 .35vw rgba(247,198,75,.35)}
+.tva-deg.p1 .tva-img{width:9.5vw;height:9.5vw;font-size:4vw}
+.tva-deg.p2 .tva-img{background:linear-gradient(135deg,#e2e8f0,#94a3b8);box-shadow:0 0 0 .35vw rgba(226,232,240,.25)}
+.tva-deg.p3 .tva-img{background:linear-gradient(135deg,#f0b27a,#b5683a);box-shadow:0 0 0 .35vw rgba(240,178,122,.25)}
+.tva-av i{position:absolute;right:-.3vw;bottom:-.2vw;font:800 1.1vw/1 'Saira Condensed',sans-serif;font-style:normal;background:#081826;color:#f7c64b;border:.15vw solid #f7c64b;border-radius:99px;padding:.25vw .55vw}
+.tva-deg b{font:800 1.8vw/1.1 'Saira Condensed',sans-serif;color:#fff;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tva-deg.p1 b{font-size:2.3vw}
+.tva-deg small{font-size:.85vw;color:#9fbad0}
+.tva-pts{font:800 3vw/1 'Saira Condensed',sans-serif;color:#f7c64b;margin:.5vw 0 .7vw;font-variant-numeric:tabular-nums}.tva-deg.p1 .tva-pts{font-size:4vw}
+.tva-pts span{display:block;font:600 .75vw 'Plus Jakarta Sans',sans-serif;color:#9fbad0;letter-spacing:.04em}
+.tva-base{width:100%;border-radius:1vw 1vw 0 0;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.03))}
+.tva-deg.p1 .tva-base{height:9vw;background:linear-gradient(180deg,rgba(242,140,56,.45),rgba(242,140,56,.08))}.tva-deg.p2 .tva-base{height:6vw}.tva-deg.p3 .tva-base{height:4vw}
+.tva-dir{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:.45vw}
+.tva-li{display:grid;grid-template-columns:2.6vw 2.6vw minmax(0,1fr) 8vw 4vw;align-items:center;gap:.7vw;padding:.55vw .8vw;border-radius:.9vw;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+.tva-pos{font:800 1.3vw 'Saira Condensed',sans-serif;color:#7f9cb2;text-align:center}
+.tva-mini{width:2.6vw;height:2.6vw;border-radius:50%;object-fit:cover;display:grid;place-items:center;font:800 1.1vw 'Saira Condensed',sans-serif;background:#1f3a52;color:#e8eef4}
+.tva-n{min-width:0}.tva-n b{display:block;font-size:1.05vw;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tva-n small{font-size:.72vw;color:#87a6bb}
+.tva-bar{height:.5vw;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}.tva-bar i{display:block;height:100%;background:#f28c38;border-radius:99px}
+.tva-v{font:800 1.4vw 'Saira Condensed',sans-serif;color:#fff;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:900px){.tva{grid-template-columns:1fr;overflow:auto}.tva-img{width:16vw;height:16vw}.tva-deg.p1 .tva-img{width:20vw;height:20vw}.tva-tit b{font-size:7vw}.tva-tit span,.tva-deg small{font-size:3vw}.tva-deg b{font-size:4vw}.tva-pts{font-size:6vw}.tva-li{grid-template-columns:7vw 7vw minmax(0,1fr) 12vw;font-size:3vw}.tva-bar{display:none}.tva-n b{font-size:3.4vw}.tva-v,.tva-pos{font-size:4vw}.tva-mini{width:7vw;height:7vw}}
 /* v197: quem é quem */
 .lig-sug{border-color:var(--accent)!important;box-shadow:inset 0 0 0 1px var(--accent)}.lig-sug-t{font-size:11px;font-style:normal;color:var(--accent);font-weight:700;margin-left:6px;white-space:nowrap}
 /* v196: check-in da tarde */
@@ -2928,7 +2956,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
             </div>
             <div class="janela" id="janelaRank"></div>
             <div id="sorteiosRank"></div><div id="podio"></div><div class="battle" id="battle"></div>
-            <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2><button class="link gest hide" onclick="setView('tvrank')">Ver todos na TV</button></div><div id="rankLista"></div>
+            <div class="card"><div class="card-head"><h2 id="rankTit">Ranking de corretores</h2><button class="link gest hide" onclick="if(String(rankTipo).startsWith('rk:'))tvModo=rankTipo;else if(String(tvModo).startsWith('rk:'))tvModo='mes';setView('tvrank')">Ver todos na TV</button></div><div id="rankLista"></div>
               <details class="info-tog" style="margin-top:12px"><summary>ⓘ Como é contado</summary><div class="hint" style="margin-top:6px" id="rankNota"></div></details></div>
           </div>
         </div>
@@ -7016,7 +7044,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 199;
+const APP_VERSAO = 201;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7507,7 +7535,7 @@ function renderRankingNovo(id){
   const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
   $('rankTit').textContent = r.nome;
   const quando = `${dataBR(r.inicio).slice(0, 5)} até ${r.fim ? dataBR(r.fim).slice(0, 5) : 'hoje'}`;
-  $('janelaRank').innerHTML = `<div class="rkn-info"><div><b>${esc(r.nome)}</b><small>${r.inicio > h ? `Começa em ${dataBR(r.inicio)}. Até lá, todo mundo está zerado.` : `Conta os pontos de ${quando}${emCurso ? ', em andamento' : r.encerrado ? ', encerrado' : ''}. Todo mundo começou zerado; o ranking do mês continua somando tudo.`}</small></div>${souDono() ? `<div class="rkn-bts"><button class="btn btn-sm btn-ghost" onclick="abrirRkNovo('${r.id}')">Editar</button>${!r.encerrado ? `<button class="btn btn-sm btn-ghost" onclick="encerrarRkNovo('${r.id}')">Encerrar</button>` : ''}</div>` : ''}</div>`;
+  $('janelaRank').innerHTML = `<div class="rkn-info"><div><b>${esc(r.nome)}</b><small>${r.inicio > h ? `Começa em ${dataBR(r.inicio)}. Até lá, todo mundo está zerado.` : `Conta os pontos de ${quando}${emCurso ? ', em andamento' : r.encerrado ? ', encerrado' : ''}. Todo mundo começou zerado; o ranking do mês continua somando tudo.`}</small></div><div class="rkn-bts">${podeGerir() ? `<button class="btn btn-sm btn-primary" onclick="tvModo='ap:${r.id}';setView('tvrank')">Apresentar na TV</button>` : ''}${souDono() ? `<button class="btn btn-sm btn-ghost" onclick="abrirRkNovo('${r.id}')">Editar</button>${!r.encerrado ? `<button class="btn btn-sm btn-ghost" onclick="encerrarRkNovo('${r.id}')">Encerrar</button>` : ''}` : ''}</div></div>`;
   $('rankNota').textContent = 'Os pontos valem o mesmo do ranking do mês. Toque no nome para ver de onde vêm os pontos.';
   if (!lista.length) { $('podio').innerHTML = ''; $('rankLista').innerHTML = vazio(r.inicio > h ? 'Ainda não começou' : 'Ninguém pontuou ainda', r.inicio > h ? `O ranking começa em ${dataBR(r.inicio)}.` : 'Os pontos aparecem aqui assim que alguém pontuar a partir da data de início.'); return; }
   const pos = posicoes(lista), top = lista.slice(0, 3);
@@ -8608,6 +8636,33 @@ window.salvarEquipeAnjo = async () => {
 };
 // ---------- v105: rankings na TV (todos lado a lado) ----------
 function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate(d.getDate() + (dow === 0 ? -1 : 6 - dow)); return iso(d); }
+// v200: ranking novo na TV (mesmas colunas, contando só a partir da data de início)
+function dadosTvRkNovo(id){
+  const r = rkNovos().find(x => x.id === id); if (!r) return null;
+  const h = hojeISO(), l = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h);
+  const col = (k, t, sub, c, f) => ({ k, t, s:sub, c, l:l.map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:f(x) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v) });
+  const cols = [col('pts', 'Pontos', 'desde ' + dataBR(r.inicio).slice(0, 5), '#f28c38', x => x.pontos),
+    col('vis', 'Visitas', 'realizadas', '#38bdf8', x => x.realizadas || 0), col('apr', 'Aprovações', 'cartas aprovadas', '#a78bfa', x => x.cartas || 0),
+    col('vgv', 'Vendas', 'reservas', '#22c55e', x => x.vendas || 0), col('lig', 'Ligações', 'pelo app', '#facc15', x => x.ligacoes || 0),
+    col('bz', 'Presenças', 'manhã e tarde', '#2dd4bf', x => (x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0))];
+  const eqs = listaEquipes().map(e => ({ e, n:l.filter(x => x.equipe === e.id).reduce((a, x) => a + Math.max(0, x.pontos), 0) })).sort((a, b) => b.n - a.n);
+  return { r, cols, eqs };
+}
+// v201: apresentação do ranking novo: pódio grande e a lista completa, para a tela do escritório
+function htmlTvApresenta(D){
+  const r = D.r, h = hojeISO(), l = D.cols[0].l, curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
+  const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : '', foto = x => (pessoasRk().find(p => p.uid === x.uid) || perfisTodos.find(p => p.uid === x.uid) || {}).foto;
+  const av = (x, cls) => { const f = foto(x); return f ? `<img class="${cls}" src="${f}" alt="">` : `<span class="${cls}">${esc(((x.nome || '?').trim()[0] || '?').toUpperCase())}</span>`; };
+  const dias = r.fim ? Math.max(0, Math.round((Date.parse(r.fim) - Date.parse(h)) / 864e5)) : null;
+  const quando = r.fim ? (dias === 0 ? 'Termina hoje' : `Faltam ${dias} dia${dias === 1 ? '' : 's'} · até ${dataBR(r.fim).slice(0, 5)}`) : `Valendo desde ${dataBR(r.inicio).slice(0, 5)}`;
+  const top = l.slice(0, 3), resto = l.slice(3, 23), max = Math.max(1, ...l.map(x => x.v));
+  const deg = (x, i) => x ? `<div class="tva-deg p${i + 1}"><div class="tva-av">${av(x, 'tva-img')}<i>${i + 1}º</i></div><b>${esc(curto(x.nome))}</b><small>${esc(eqN(x.equipe))}</small><div class="tva-pts">${x.v.toLocaleString('pt-BR')}<span>pontos</span></div><div class="tva-base"></div></div>` : '<div class="tva-deg vazio"></div>';
+  return `<div class="tva">
+    <div class="tva-esq"><div class="tva-tit"><b>${esc(r.nome)}</b><span>${quando} · todo mundo começou do zero</span></div>
+      ${top.length ? `<div class="tva-podio">${deg(top[1], 1)}${deg(top[0], 0)}${deg(top[2], 2)}</div>` : '<div class="tvr-vazio" style="margin:auto">Ainda ninguém pontuou.<br>Quem vai sair na frente?</div>'}</div>
+    <div class="tva-dir">${resto.length ? resto.map((x, i) => `<div class="tva-li"><span class="tva-pos">${i + 4}º</span>${av(x, 'tva-mini')}<span class="tva-n"><b>${esc(curto(x.nome))}</b><small>${esc(eqN(x.equipe))}</small></span><span class="tva-bar"><i style="width:${Math.round(x.v / max * 100)}%"></i></span><span class="tva-v">${x.v.toLocaleString('pt-BR')}</span></div>`).join('') : `<div class="tvr-vazio">${l.length ? 'Só três no ranking até agora' : ''}</div>`}</div>
+  </div>`;
+}
 function dadosTvRank(){
   const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate;
   const nm = (uid, nome) => (pessoasRk().find(p => p.uid === uid) || {}).nome || nome || '';
@@ -8736,9 +8791,12 @@ function mostrarEventoTv(){
 }
 function renderTvRank(){
   const el = $('tvRank'); if (!el) return;
-  const d = dadosTvRank(), agora = new Date();
+  let d = dadosTvRank(), agora = new Date();
   if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'mes';
-  const fe = window.tvModo === 'feirao', mt = window.tvModo === 'metas', cols = fe ? d.feirao : d.cols;
+  const rkTv = rkNovos().filter(x => !x.encerrado), modoRk = String(window.tvModo).match(/^(rk|ap):(.+)$/), rkSel = modoRk ? dadosTvRkNovo(modoRk[2]) : null, ap = !!(modoRk && modoRk[1] === 'ap');
+  if (modoRk && !rkSel) window.tvModo = 'mes';
+  if (rkSel) d = { ...d, eqs:rkSel.eqs };
+  const fe = window.tvModo === 'feirao', mt = window.tvModo === 'metas', cols = rkSel ? rkSel.cols : fe ? d.feirao : d.cols;
   const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
   const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : ''; // v109: nome da equipe completo, como está cadastrado
   const anj = uid => { const a = anjoDe(uid); return a ? 'Anjo ' + curto(a) : ''; }; // v112: anjo responsável abaixo da equipe
@@ -8751,11 +8809,11 @@ function renderTvRank(){
     return `<section class="tvr-c k-${c.k}" style="--c:${c.c}"><header><h2>${c.t}</h2><span>${c.s}</span></header><div class="tvr-l">${linhas}</div></section>`;
   };
   const maxEq = Math.max(1, ...d.eqs.map(x => x.n));
-  el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo">F</span><div><b>Frade <i>Imóveis</i></b><small>${fe ? 'Feirão Tenda · ' + nomeMes(d.m).split(' de ')[0].toLowerCase() : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
+  el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo">F</span><div><b>Frade <i>Imóveis</i></b><small>${rkSel ? esc(rkSel.r.nome) + ' · desde ' + dataBR(rkSel.r.inicio).slice(0, 5) : fe ? 'Feirão Tenda · ' + nomeMes(d.m).split(' de ')[0].toLowerCase() : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
     <div class="tvr-eqs">${d.eqs.map((x, i) => `<div class="tvr-eq ${i === 0 && x.n ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><i style="width:${Math.round(x.n / maxEq * 100)}%"></i></div>`).join('')}</div>
     <div class="tvr-hora"><span class="tvr-vivo">ao vivo</span><b>${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</b><small>${dataLonga(hojeISO())}</small></div>
-    <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><span class="tvr-seg">${[['mes','Mês'],['metas','Dia e semana'],['feirao','Feirão']].map(([k, n]) => `<button class="tvr-modo ${(window.tvModo || 'mes') === k ? 'on' : ''}" onclick="tvModo='${k}';renderTvRank()">${n}</button>`).join('')}</span><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
-    ${mt ? htmlTvMetas() : `<div class="tvr-grade ${fe ? 'tvr-3' : ''}" style="--n:${cols.length}">${cols.map(col).join('')}</div>`}
+    <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><span class="tvr-seg">${[['mes','Mês'], ...rkTv.flatMap(x => [['rk:' + x.id, x.nome], ['ap:' + x.id, rkTv.length > 1 ? 'Pódio · ' + x.nome : 'Pódio']]), ['metas','Dia e semana'],['feirao','Feirão']].map(([k, n]) => `<button class="tvr-modo ${(window.tvModo || 'mes') === k ? 'on' : ''}" onclick="tvModo='${k}';renderTvRank()">${n}</button>`).join('')}</span><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
+    ${ap ? htmlTvApresenta(rkSel) : mt ? htmlTvMetas() : `<div class="tvr-grade ${fe ? 'tvr-3' : ''}" style="--n:${cols.length}">${cols.map(col).join('')}</div>`}
     <div class="tvr-rod"><div id="tvSp"></div></div>`;
   const sp = document.getElementById('tvSp'); if (sp) { sp._h = ''; spPintar(); }
   conferirEventosTv();
