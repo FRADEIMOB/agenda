@@ -1057,6 +1057,16 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+
+/* v212: check-in no ranking */
+.rk-ck small{display:block;font-size:11px;color:#0d9488;font-weight:700}
+/* v211: pontuação com coluna da SDR e data de início por item */
+.pt-cab{display:grid;grid-template-columns:minmax(0,1fr) 90px 90px 150px;gap:10px;font-size:11.5px;font-weight:700;color:var(--muted);text-transform:none;padding:4px 0 6px;border-bottom:1px solid var(--border)}
+.pt-cab span:not(:first-child){text-align:center}
+.pt-row.pt-3{grid-template-columns:minmax(0,1fr) 90px 90px 150px}
+.pt-row.pt-3 .pt-desde{width:150px}
+@media (max-width:640px){.pt-cab{display:none}.pt-row.pt-3{grid-template-columns:1fr 1fr 1fr}.pt-row.pt-3 .pt-txt{grid-column:1/-1}.pt-row.pt-3 input{width:100%}
+  .pt-row.pt-3 input[id^="pt_"]::before{content:'Corretor'}}
 /* v209: fotos dos corretores na TV */
 .tva-ap .tvp-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tv-com-foto{overflow:hidden;padding:0!important}.tv-com-foto img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
@@ -1080,8 +1090,8 @@ html.lenis,html.lenis body{height:auto}
 .tva-ap .tvp-p.p1 .tvp-deg{height:3.2vw}.tva-ap .tvp-p.p2 .tvp-deg{height:2.3vw}.tva-ap .tvp-p.p3 .tvp-deg{height:1.7vw}
 .tva-ap .tvp-av{width:2.6vw;height:2.6vw;font-size:1.1vw}.tva-ap .tvp-p.p1 .tvp-av{width:3.4vw;height:3.4vw;font-size:1.5vw}
 .tva-ap .tvp-eq{padding:.45vw .9vw}.tva-ap .tvp-eq b{font-size:1.5vw}
-.tva-ap .tvp-tab td.ckc i{white-space:nowrap;display:inline!important;margin-left:.4vw}
-.tva-ap .tvp-tab td.ckc b{display:inline!important}
+.tva-ap .tvp-tab td.ckc i{white-space:nowrap;display:block!important;margin-top:.1vw}
+.tva-ap .tvp-tab td.ckc{text-align:center}
 /* v207: pódio e equipes lado a lado, e linhas mais baixas, para caber mais nomes por página */
 .tva-ap .tva-topo{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:1vw;align-items:end}
 .tva-ap .tva-topo .tvp-eqs{display:flex;flex-direction:column;gap:.5vw}
@@ -7106,7 +7116,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 210;
+const APP_VERSAO = 212;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7473,7 +7483,38 @@ function assinarEtapa1(){
 }
 
 // ---------- pontos ----------
+// v211: pontos do mês com (1) a data de início de cada item e (2) os valores próprios das SDRs
+const papelDe = uid => (((perfisTodos || []).find(p => p.uid === uid)) || ((pessoasRk() || []).find(p => p.uid === uid)) || {}).papel || '';
+const temValSdr = () => Object.values(appCfg.pontosSdr || {}).some(v => v !== null && v !== undefined && v !== '');
+const valDaSdr = val => { const o = { ...val }; Object.entries(appCfg.pontosSdr || {}).forEach(([k, v]) => { if (v !== null && v !== undefined && v !== '') o[k] = Number(v) || 0; }); return o; };
+function somaPontos(a, b){ const o = { ...a };
+  Object.keys(b).forEach(c => { const v = b[c];
+    if (typeof v === 'number' && c !== 'pos') o[c] = (Number(o[c]) || 0) + v;
+    else if (v instanceof Set) { o[c] = new Set([...(o[c] || []), ...v]); }
+    else if (Array.isArray(v) && c !== '_segs') o[c] = [...(o[c] || []), ...v];
+    else if (o[c] === undefined) o[c] = v; });
+  return o; }
+function pontosSegmentado(m, val, corte){
+  const di = val.desdeItens || {}, [cDe, cAte] = corte || [m + '-01', fimDoMes(m)];
+  const cortes = [...new Set(Object.values(di).filter(d => d && d > cDe && d <= cAte))].sort(), lim = [cDe, ...cortes];
+  const g = new Map();
+  lim.forEach((a, i) => { const b = i + 1 < lim.length ? somaDias(lim[i + 1], -1) : cAte, v = { ...val };
+    Object.entries(di).forEach(([k, d]) => { if (d && d > a) v[k] = 0; });
+    const so = lim.length === 1 && !corte;
+    pontosDoMesBase(m, v, so ? undefined : [a, b]).forEach(x => { const k = x.uid || 'n:' + norm(x.nome), y = g.get(k);
+      const seg = { v, x }; if (!y) { g.set(k, { ...x, _segs:[seg] }); return; } const z = somaPontos(y, x); z._segs = [...y._segs, seg]; g.set(k, z); }); });
+  return [...g.values()];
+}
 function pontosDoMes(m, val, corte){
+  val = val || appCfg.pontos;
+  const ord = l => l.sort((a,b) => b.pontos-a.pontos || (b.vendas||0)-(a.vendas||0) || (b.cartas||0)-(a.cartas||0) || a.nome.localeCompare(b.nome,'pt-BR'));
+  const geral = pontosSegmentado(m, val, corte);
+  if (!temValSdr()) return ord(geral);
+  const sdr = new Map(pontosSegmentado(m, valDaSdr(val), corte).map(x => [x.uid || 'n:' + norm(x.nome), x]));
+  const ehSdr = x => x.uid && papelDe(x.uid) === 'sdr';
+  return ord(geral.map(x => ehSdr(x) ? (sdr.get(x.uid) || x) : x));
+}
+function pontosDoMesBase(m, val, corte){
   // v193: corte = [de, até] para os rankings novos (só conta o que aconteceu entre essas datas)
   val = val || appCfg.pontos; const RK = pessoasRk;
   const [cDe, cAte] = corte || ['', '9999-12-31'], naFaixa = d => !corte || (d >= cDe && d <= cAte);
@@ -7603,8 +7644,8 @@ function renderRankingNovo(id){
   const pos = posicoes(lista), top = lista.slice(0, 3);
   $('podio').innerHTML = top.length >= 2 ? `<div class="podio">${[1, 0, 2].filter(i => top[i]).map(i => `<div class="pd-deg p${i + 1} ${top[i].uid === uidAtual ? 'eu' : ''}"><div class="pd-av">${esc((top[i].nome || '?').trim()[0])}</div><b>${esc(primeiro(top[i].nome))}</b><span>${top[i].pontos} pts</span><div class="pd-base">${i + 1}º</div></div>`).join('')}</div>` : '';
   window._rkLista = lista;
-  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Presenças</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
-    lista.map((x, i) => `<tr class="${x.uid && x.uid === uidAtual ? 'me' : ''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas || 0}</td><td>${x.cartas || 0}</td><td>${x.vendas || 0}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m">${x.ligacoes || 0}</td></tr>`).join('')}</tbody></table>`;
+  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th title="check-ins da manhã e da tarde">Check-in</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
+    lista.map((x, i) => `<tr class="${x.uid && x.uid === uidAtual ? 'me' : ''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas || 0}</td><td>${x.cartas || 0}</td><td>${x.vendas || 0}</td><td class="rk-ck">${(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0)}${ptsCheckin(x) ? `<small>+${ptsCheckin(x)} pts</small>` : ''}</td><td class="hide-m">${x.ligacoes || 0}</td></tr>`).join('')}</tbody></table>`;
 }
 let rkNovoId = null;
 window.abrirRkNovo = id => {
@@ -7636,8 +7677,12 @@ window.encerrarRkNovo = async id => {
   catch(e) { toast('Não foi possível encerrar: ' + e.message); }
 };
 // v120: toque no nome do ranking mostra a conta dos pontos, item por item
-window.verPontosDe = i => {
-  const x = (window._rkLista || [])[i]; if (!x) return; const P = appCfg.pontos, n = k => Number(P[k]) || 0, bloco = Math.max(1, n('ligBloco') || 1);
+// v212: pontos que vieram do check-in (manhã + tarde)
+function ptsCheckin(x){ const P = x.uid && papelDe(x.uid) === 'sdr' && temValSdr() ? valDaSdr(appCfg.pontos) : appCfg.pontos;
+  return (Number(x.presPontua ?? x.presencas ?? 0) * (Number(P.presenca) || 0)) + (Number(x.tardes || 0) * (Number(P.presencaTarde) || 0)); }
+window.ptsCheckin = ptsCheckin;
+function linhasPontos(x, P){
+  const n = k => Number(P[k]) || 0, bloco = Math.max(1, n('ligBloco') || 1);
   const pend = Math.max(0, (x.visitas || 0) - (x.confirmadas || 0) - (x.realizadas || 0) - (x.faltas || 0)), blocos = Math.floor((x.ligacoes || 0) / bloco);
   const L = [
     ['Presenças da manhã', x.presPontua ?? x.presencas, n('presenca'), (x.presPontua ?? x.presencas ?? 0) * n('presenca')],
@@ -7653,10 +7698,23 @@ window.verPontosDe = i => {
     ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
     ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
     ['Visitas agendadas (SDR)', x.agendSdr, n('agendSdr'), null]
-  ].filter(r => Number(r[1]));
+  ];
+  return L;
+}
+window.verPontosDe = i => {
+  const x = (window._rkLista || [])[i]; if (!x) return; const P = appCfg.pontos, n = k => Number(P[k]) || 0;
+  const ehSdr = x.uid && papelDe(x.uid) === 'sdr';
+  const segs = (x._segs && x._segs.length) ? x._segs : [{ v:ehSdr ? valDaSdr(P) : P, x }];
+  const mapa = new Map();
+  segs.forEach(sg => linhasPontos(sg.x, sg.v).forEach(r => { const k = String(r[0]).replace(/\s*\(.*$/, ''); if (!mapa.has(k)) mapa.set(k, { nome:r[0], partes:[] }); if (Number(r[1])) { mapa.get(k).partes.push(r); mapa.get(k).nome = r[0]; } }));
+  const L = [...mapa.values()].map(({ nome, partes }) => { if (!partes.length) return null;
+    const valem = partes.filter(r => r[2] !== 0 && r[2] !== null), usa = valem.length && valem.length < partes.length ? valem : partes, fora = partes.length - usa.length ? partes.filter(r => !usa.includes(r)).reduce((a, r) => a + (Number(r[1]) || 0), 0) : 0;
+    const vs = [...new Set(usa.map(r => r[2]))], q = usa.reduce((a, r) => a + (Number(r[1]) || 0), 0), pts = usa.some(r => r[3] === null) ? null : usa.reduce((a, r) => a + (Number(r[3]) || 0), 0);
+    return [nome + (fora ? ` (mais ${fora} antes da data, sem ponto)` : ''), q, vs.length === 1 ? vs[0] : 'varia', pts]; }).filter(r => r && Number(r[1]));
   $('ptDetTit').textContent = x.nome; $('ptDetTot').textContent = x.pontos + ' ponto' + (x.pontos === 1 ? '' : 's');
   $('ptDetLista').innerHTML = L.length ? `<table class="rank"><thead><tr><th>O quê</th><th>Qtd.</th><th>Vale</th><th>Pontos</th></tr></thead><tbody>${L.map(r => `<tr><td>${esc(r[0])}</td><td>${r[1]}</td><td>${r[2] === null ? '—' : r[2]}</td><td><b>${r[3] === null ? '—' : r[3]}</b></td></tr>`).join('')}</tbody></table>` : '<div class="muted">Nada registrado neste mês.</div>';
-  $('ptDetObs').innerHTML = n('ligacao') ? '' : '<b>Atenção:</b> "Ligações" está valendo 0 em Configurações → Pontuação, por isso as ligações não dão ponto.';
+  const dsI = Object.entries(P.desdeItens || {}).filter(([, d]) => d), nota = dsI.length ? `Itens com data de início só contam a partir dela: ${dsI.map(([k, d]) => esc(nomePonto(k)) + ' desde ' + dataBR(d).slice(0, 5)).join(', ')}.` : '';
+  $('ptDetObs').innerHTML = (n('ligacao') ? '' : '<b>Atenção:</b> "Ligações" está valendo 0 em Configurações → Pontuação, por isso as ligações não dão ponto. ') + (ehSdr && temValSdr() ? 'Pontos com os valores das SDRs. ' : '') + nota;
   $('ptDetDias').innerHTML = souGerente() && !souCeo() && x.uid ? htmlDiasPres(x) : '';
   window._ptDetUid = x.uid; abrir('ptDetModal');
 };
@@ -7742,8 +7800,8 @@ function renderRankingPontos(){
   $('podio').innerHTML = top.length >= 2 ? `<div class="podio">${[1, 0, 2].filter(i => top[i]).map(i => `<div class="pd-deg p${i + 1} ${top[i].uid === uidAtual ? 'eu' : ''}"><div class="pd-av">${esc((top[i].nome || '?').trim()[0])}</div><b>${esc(primeiro(top[i].nome))}</b><span>${top[i].pontos} pts</span><div class="pd-col"><i>${MEDALHA(pos[i])}</i></div></div>`).join('')}</div>` : '';
   avisarSubiuRanking(lista, pos);
   window._rkLista = lista;
-  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th class="hide-m">Presenças</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
-    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="hide-m">${x.presencas || 0}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
+  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th title="check-ins da manhã e da tarde">Check-in</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
+    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="rk-ck">${(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0)}${ptsCheckin(x) ? `<small>+${ptsCheckin(x)} pts</small>` : ''}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
   }</tbody><tfoot></tfoot></table>
   ${rankingSdr(...faixa('mes')).length ? `<div class="rep-sec" style="margin:18px 0 8px">📞 Ranking das SDRs</div>${tabelaSdr(...faixa('mes'))}` : ''}
   <details class="info-tog" style="margin-top:10px"><summary>ⓘ Quanto vale cada ação</summary><div class="hint pt-vale" style="margin-top:6px">${PONTOS_ITENS.filter(([k]) => Number(appCfg.pontos[k])).map(([k]) => `<div><b>${esc(nomePonto(k))}</b> <span class="pt-vv">${Number(appCfg.pontos[k]) > 0 ? '+' : ''}${appCfg.pontos[k]}</span>${descPonto(k) ? `<small>${esc(descPonto(k))}</small>` : ''}</div>`).join('') || 'Nenhuma ação vale pontos ainda.'}${ligLimite() ? `<div class="muted" style="margin-top:6px">Até ${ligLimite()} ligações e ${ligLimite()} recontatos pontuam por dia (cada número conta uma vez por dia).</div>` : ''}</div></details>`;
@@ -8001,7 +8059,9 @@ function renderAdm(){
   const ativoEl = document.activeElement;
   if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
   admAssin = ass;
-  $('admPontos').innerHTML = `<div class="hint" style="margin:0 0 8px">Toque no nome ou na descrição para editar. Deixe o nome vazio para voltar ao texto padrão.</div>` + PONTOS_ITENS.map(([k,n]) => `<div class="pt-row pt-ed"><div class="pt-txt"><input class="pt-nome" data-k="${k}" value="${esc(nomePonto(k))}" placeholder="${esc(n)}" maxlength="80"><input class="pt-desc" data-k="${k}" value="${esc(descPonto(k))}" placeholder="Descrição (opcional)" maxlength="160"></div><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}"></div>`).join('')
+  $('admPontos').innerHTML = `<div class="hint" style="margin:0 0 8px">Toque no nome ou na descrição para editar. Deixe o nome vazio para voltar ao texto padrão.</div>` + `<div class="pt-cab"><span>Item</span><span>Corretor</span><span title="Em branco = vale o mesmo do corretor">SDR</span><span title="Em branco = vale desde sempre">Conta a partir de</span></div>`
+    + PONTOS_ITENS.map(([k,n]) => { const sv = (appCfg.pontosSdr || {})[k], dd = (appCfg.pontos.desdeItens || {})[k] || '';
+      return `<div class="pt-row pt-ed pt-3"><div class="pt-txt"><input class="pt-nome" data-k="${k}" value="${esc(nomePonto(k))}" placeholder="${esc(n)}" maxlength="80"><input class="pt-desc" data-k="${k}" value="${esc(descPonto(k))}" placeholder="Descrição (opcional)" maxlength="160"></div><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}" aria-label="Pontos do corretor"><input type="number" step="1" class="pt-sdr" data-k="${k}" value="${sv === undefined || sv === null || sv === '' ? '' : Number(sv)}" placeholder="igual" aria-label="Pontos da SDR"><input type="date" class="pt-desde" data-k="${k}" value="${esc(dd)}" aria-label="Conta a partir de"></div>`; }).join('')
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
     + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
@@ -8045,7 +8105,10 @@ window.salvarPontuacao = async () => {
   pontos.ligBloco = Math.max(1, pontos.ligBloco || 1); pontos.funilHora = Math.min(23, Math.max(0, pontos.funilHora || 18));
   pontos.ligMinutos = 0; pontos.ausenciaDesde = $('pt_ausenciaDesde').value || '2026-10-07';
   pontos.presencaDesde = $('pt_presencaDesde').value || '2026-10-21'; pontos.ausenciaAntes = Math.round(Number($('pt_ausenciaAntes').value) || 0); pontos.tardeDesde = $('pt_tardeDesde').value || '2026-10-22'; pontos.tardeHora = Math.min(23, Math.max(0, pontos.tardeHora || 13));
-  try { await gravar(setDoc(doc(db,'config','app'), { pontos, pontosNomes, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
+  // v211: pontos próprios das SDRs (em branco = igual ao corretor) e data a partir da qual cada item conta
+  const pontosSdr = {}; document.querySelectorAll('#admPontos .pt-sdr').forEach(i => { pontosSdr[i.dataset.k] = i.value.trim() !== '' ? Math.round(Number(i.value) || 0) : null; });
+  pontos.desdeItens = {}; document.querySelectorAll('#admPontos .pt-desde').forEach(i => { if (i.value) pontos.desdeItens[i.dataset.k] = i.value; });
+  try { await gravar(setDoc(doc(db,'config','app'), { pontos, pontosNomes, pontosSdr, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); appCfg.pontosSdr = pontosSdr; admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
 };
 window.salvarListas = async () => {
@@ -8746,10 +8809,11 @@ function htmlTvApresenta(D){
   const cel = (x, k, dia) => {
     if (k === 'pts') return `<td style="--c:#f28c38"><b>${x.pontos.toLocaleString('pt-BR')}</b><i>pontos</i></td>`;
     if (k === 'ck') { const tot = dia ? (tardeHoje ? 2 : 1) : 0, ok = dia && x.ck >= tot;
-      return `<td class="ckc ${ok ? 'ok' : ''}" style="--c:#2dd4bf"><b>${x.ck}${dia ? `<small>/${tot}</small>` : ''}</b><i>${dia ? (ok ? '✓ ok' : x.ck ? 'falta tarde' : 'nenhum') : 'check-ins'}</i></td>`; }
+      const pc = ptsCheckin(x);
+      return `<td class="ckc ${ok ? 'ok' : ''}" style="--c:#2dd4bf"><b>${x.ck}${dia ? `<small>/${tot}</small>` : ''}</b><i>${pc ? '+' + pc + ' pts' : 'sem pontos'}</i></td>`; }
     const v = k === 'lig' ? (x.ligacoes || 0) : k === 'docs' ? (x.docs || 0) : k === 'vr' ? (x.realizadas || 0) : (x.vendas || 0);
     return `<td style="--c:${COLS.find(c => c[0] === k)[2]}"><b>${v}</b><i>${k === 'lig' ? 'pelo app' : k === 'docs' ? 'completas' : k === 'vr' ? 'visitas' : 'reservas'}</i></td>`; };
-  const cg = `<colgroup><col style="width:2.6vw"><col>${COLS.map(() => '<col style="width:11%">').join('')}</colgroup>`;
+  const CW = { pts:'10%', ck:'12%', lig:'11%', docs:'9%', vr:'11%', vd:'9%' }, cg = `<colgroup><col style="width:2.6vw"><col>${COLS.map(([k]) => `<col style="width:${CW[k] || '10%'}">`).join('')}</colgroup>`;
   const tabela = (l, dia) => l.length ? `<table class="tvp-tab tva-cab">${cg}<thead><tr><th>#</th><th>Nome</th>${COLS.map(([k, n, c]) => `<th style="--c:${c}">${n}</th>`).join('')}</tr></thead></table>
     <div class="tva-rol"><div class="tva-rol-in"><table class="tvp-tab tva-corpo">${cg}<tbody>${l.slice(0, 40).map((x, i) => `<tr><td><span class="tvp-pos p${i + 1}">${i + 1}</span></td><td class="tvp-nm">${avTv(x.uid, x.nome, 'tva-mini2')}<b>${esc(nomeTv(x.uid, x.nome))}</b><small>${esc(eqN(x.equipe))}</small></td>${COLS.map(([k]) => cel(x, k, dia)).join('')}</tr>`).join('')}</tbody></table></div></div>` : '<div class="tvr-vazio">Ainda ninguém pontuou</div>';
   const fim = r.fim && r.fim < h ? r.fim : h, dias = r.fim ? Math.max(0, Math.round((Date.parse(r.fim) - Date.parse(h)) / 864e5)) : null;
