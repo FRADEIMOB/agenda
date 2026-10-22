@@ -7116,7 +7116,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 218;
+const APP_VERSAO = 219;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8507,10 +8507,13 @@ function acParar(){ _acSubs.forEach(u => { try { u(); } catch(e) {} }); _acSubs 
 const acNome = n => { const w = String(n || '').trim().toLowerCase().split(/\s+/).filter(Boolean); const ok = w.length > 1 ? [w[0], w[w.length - 1]] : w; return ok.map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(' ') || 'Corretor'; };
 const acTeste = p => /\bteste?\b/i.test(p.nome || '');
 function acPessoas(){ return acPessoas0().filter(p => !acTeste(p)); }
+// v219: se os cadastros não chegaram para o coordenador (consulta bloqueada ou sem índice no Firebase), usa a lista do ranking, que todos podem ler
+function equipeDoCoord(base){ const l = base.filter(p => p.equipe === perfil.equipe); if (l.length) return l;
+  return (rkPessoas || []).filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel) && p.equipe === perfil.equipe); }
 function acPessoas0(){
   const base = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador'].includes(p.papel));
   if (souAnjo()) return membrosAnjo().map(u => { const p = base.find(x => x.uid === u) || rkPessoas.find(x => x.uid === u) || {}; return { uid:u, nome:p.nome || (perfil.membrosNomes || [])[membrosAnjo().indexOf(u)] || 'Corretor', equipe:p.equipe || '', papel:p.papel || 'corretor' }; });
-  if (souCoord()) return base.filter(p => p.equipe === perfil.equipe);
+  if (souCoord()) return equipeDoCoord(base);
   // v175: a gerência vê também os anjos (e os coordenadores) na lista e na presença
   const comAnjos = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','sdr'].includes(p.papel)); // v185: SDRs também
   const f = window.acEq;
@@ -8673,7 +8676,8 @@ function renderAcomp(soDados){
     $('acFiltros').innerHTML = `<select id="acSel" onchange="acEq=this.value;renderAcomp()" aria-label="Quem mostrar"><option value="todas">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}" ${acEq === e.id ? 'selected' : ''}>${esc(eqNome(e.id))}</option>`).join('')}${anjos.length ? `<optgroup label="Anjos">${anjos.map(a => `<option value="anjo:${a.uid}" ${acEq === 'anjo:' + a.uid ? 'selected' : ''}>${esc(a.nome)}</option>`).join('')}</optgroup>` : ''}</select>`;
   } else if (!souGerente() && $('acFiltros')) $('acFiltros').innerHTML = '';
   $('acSub').textContent = souAnjo() ? 'Os corretores que você acompanha, ao vivo.' : souCoord() ? 'Sua equipe, ao vivo.' : 'Os corretores de cada equipe e de cada anjo, ao vivo.';
-  let ls = acPessoas().map(acDados); window._acLinhas = ls;
+  // v219: um cadastro com problema não pode deixar a tela vazia
+  let ls = acPessoas().map(p => { try { return acDados(p); } catch(e) { console.warn('acDados', p.uid, e); return null; } }).filter(Boolean); window._acLinhas = ls;
   if ($('acAgenda')) $('acAgenda').innerHTML = ls.length ? htmlAcAgenda(acPessoas()) : '';
   const t = k => ls.reduce((s2, x) => s2 + (Number(x[k]) || 0), 0), nAl = ls.filter(x => x.al.length).length;
   const tile = (f, val, rot, extra = '') => `<button type="button" class="${acFoco === f || (f === 'al' && acSoAlerta) ? 'on' : ''} ${extra}" onclick="acSetFoco('${f}')"><b>${val}</b><span>${rot}</span></button>`;
@@ -8707,7 +8711,7 @@ function renderAcomp(soDados){
       ${x.anal.length || x.pend.length ? `<div class="ac-prime">Na Prime: ${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''}</div>` : ''}
       <footer class="ac-pe3">${(() => { const pr = x.per === 'hoje' ? 'de hoje' : x.per === 'ontem' ? 'de ontem' : 'do mês'; return `<button class="ac-pb" ${x.leads ? '' : 'disabled'} onclick="acVer('leads','${x.p.uid}')"><b>${x.leads}</b><span>Ver leads ${pr}</span></button><button class="ac-pb" ${x.visL.length ? '' : 'disabled'} onclick="acVer('visitas','${x.p.uid}')"><b>${x.visL.length}</b><span>Ver visitas ${pr}</span></button><button class="ac-pb" ${x.aprov ? '' : 'disabled'} onclick="acVer('cartas','${x.p.uid}')"><b>${x.aprov}</b><span>Cartas aprovadas</span></button>`; })()}</footer>
     </article>`;
-  $('acCorpo').innerHTML = !ls.length ? vazio(acSoAlerta ? 'Ninguém com alerta agora' : souAnjo() ? 'Nenhum corretor ligado a você ainda' : 'Nenhum corretor para mostrar', acSoAlerta ? 'Tudo em dia.' : souAnjo() ? 'A gerência escolhe quem cada anjo acompanha.' : 'Mude o filtro acima.')
+  $('acCorpo').innerHTML = !ls.length ? vazio(acSoAlerta ? 'Ninguém com alerta agora' : souAnjo() ? 'Nenhum corretor ligado a você ainda' : 'Nenhum corretor para mostrar', acSoAlerta ? 'Tudo em dia.' : souAnjo() ? 'A gerência escolhe quem cada anjo acompanha.' : souCoord() ? `Sua equipe no cadastro: ${esc(eqNome(perfil.equipe || '') || 'nenhuma')}. Os corretores aparecem aqui quando estão aprovados e nessa mesma equipe.` : 'Mude o filtro acima.')
     : grupos.map(([eq, l]) => cabGrupo(eq, l) + (false
       ? `<div class="ac-tab-w"><table class="ac-tab"><thead><tr><th>Corretor</th><th>Leads</th><th>Ligações</th><th>Docs</th><th>Marcou</th><th>Visitou</th><th>Próxima visita</th><th>Meta do dia</th><th>Alertas</th><th>Mês</th><th></th></tr></thead><tbody>${l.map(linha).join('')}</tbody></table></div>`
       : `<div class="ac-grade">${l.map(cartao).join('')}</div>`)).join('');
@@ -8719,7 +8723,7 @@ function faixaFl(p){ const h = hojeISO(); if (p === 'hoje') return [h, h]; if (p
 function pessoasFunil(){
   if (souAnjo()) return [{ uid:uidAtual, nome:perfil.nome + ' (você)' }, ...membrosAnjo().map((u, i) => ({ uid:u, nome:(perfil.membrosNomes || [])[i] || (rankingAtiv.find(r => r.uid === u) || {}).nome || 'Corretor' })).filter(x => x.uid !== uidAtual)];
   const base = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel));
-  if (souCoord()) return base.filter(p => p.equipe === perfil.equipe);
+  if (souCoord()) return equipeDoCoord(base);
   const f = window.flEq;
   if (f && f.startsWith('anjo:')) { const a = perfisTodos.find(p => p.uid === f.slice(5)); const m = new Set(a?.membros || []); return base.filter(p => m.has(p.uid)); }
   return f && f !== 'todas' ? base.filter(p => p.equipe === f) : base;
