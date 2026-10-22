@@ -7116,7 +7116,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 217;
+const APP_VERSAO = 218;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7630,7 +7630,7 @@ function pontosEntre(de, ate){
       if (!y) { g.set(k, { ...x }); return; }
       Object.keys(x).forEach(c => { if (typeof x[c] === 'number' && c !== 'pos') y[c] = (Number(y[c]) || 0) + x[c]; }); y.nome = x.nome || y.nome; y.equipe = x.equipe ?? y.equipe; });
   }
-  return [...g.values()].filter(x => relSoCorretor(x.uid, x.nome) || (pessoasRk().find(p => p.uid === x.uid) || {}).papel === 'sdr' || (pessoasRk().find(p => p.uid === x.uid) || {}).papel === 'anjo')
+  return [...g.values()].filter(x => relSoCorretor(x.uid, x.nome) || ['sdr','anjo'].includes(papelDe(x.uid)))
     .sort((a, b) => b.pontos - a.pontos || (b.vendas || 0) - (a.vendas || 0) || (b.cartas || 0) - (a.cartas || 0) || a.nome.localeCompare(b.nome, 'pt-BR'));
 }
 window.pontosEntre = pontosEntre;
@@ -15458,6 +15458,8 @@ function rankingSdr(de, ate){
     x.dias.push({ dia:s.dia, leads:soma(nv, 'lead'), docs:soma(nv, 'doc') + soma(rc, 'doc') + soma(nv, 'cpf') + soma(rc, 'cpf') });
   });
   g.forEach(x => { x.diasMedia = diasNaMedia(x.dias, SDR_MEDIA_PADRAO).length; });
+  // v218: os pontos são os mesmos do ranking geral (com os valores das SDRs, check-in, docs, ausências etc.)
+  try { const ger = new Map(pontosEntre(de, ate).map(y => [y.uid, y.pontos])); g.forEach(x => { if (x.uid && ger.has(x.uid)) x.pontos = ger.get(x.uid); }); } catch(e) {}
   return [...g.values()].sort((a,b) => b.pontos - a.pontos || b.realizadas - a.realizadas || b.visitas - a.visitas);
 }
 function tabelaSdr(de, ate){
