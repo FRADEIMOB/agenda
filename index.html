@@ -7116,7 +7116,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 215;
+const APP_VERSAO = 217;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7335,7 +7335,7 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:-15, ausenciaDesde:'2026-10-07', presencaTarde:0, vendaAssinada:0, recrutamento:0, desdeItens:{ docs:'2026-10-22', docsAnexados:'2026-10-22', docSdr:'2026-10-22', vendaInd:'2026-10-22' }, presencaDesde:'2026-10-21', tardeDesde:'2026-10-22', tardeHora:13, agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:-15, ausenciaDesde:'2026-10-07', presencaTarde:0, vendaAssinada:0, recrutamento:0, docGeral:0, desdeItens:{ docGeral:'2026-10-22', docs:'2026-10-22', docsAnexados:'2026-10-22', docSdr:'2026-10-22', vendaInd:'2026-10-22', agendSdr:'2026-10-22', agendSdrReal:'2026-10-22' }, presencaDesde:'2026-10-21', tardeDesde:'2026-10-22', tardeHora:13, agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
@@ -7346,6 +7346,7 @@ const PONTOS_ITENS = [
   ['vFalta','Cliente não compareceu'],
   ['carta','Carta aprovada'],
   ['docs','Documentação completa (marcada na carta)'],
+  ['docGeral','Documentação (geral: cada doc da planilha de avaliações, inclusive as importadas, e CPF)'],
   ['docsAnexados','Documentação anexada na reserva (RG, CPF, renda e residência)'],
   ['venda','Venda de lead'],
   ['vendaInd','Venda por indicação'],
@@ -7364,7 +7365,9 @@ const PONTOS_ITENS = [
 ];
 const PONTOS_EXTRAS = ['ligLimite','ligBloco','funilHora','tardeHora'];
 // v213: só estes itens têm a data "conta a partir de" (as documentações)
-const PT_COM_DATA = ['docs','docsAnexados','docSdr','vendaInd'];
+const PT_COM_DATA = ['docGeral','docs','docsAnexados','docSdr','vendaInd','agendSdr','agendSdrReal'];
+// itens que tinham outro valor antes da data (os outros não pontuam antes dela)
+const PT_ANTES = ['vendaInd','agendSdr','agendSdrReal'];
 // v96: o gestor pode renomear e descrever cada critério (vazio = volta ao texto padrão)
 const nomePonto = k => { const c = (appCfg.pontosNomes || {})[k]?.nome; return (c && c.trim()) || (PONTOS_ITENS.find(x => x[0] === k) || [, k])[1]; };
 const descPonto = k => ((appCfg.pontosNomes || {})[k]?.desc || '').trim();
@@ -7535,7 +7538,7 @@ function pontosDoMesBase(m, val, corte){
     const ps = RK().find(p => p.uid === r.sdrUid) || {}, x = pega({ corretorUid:r.sdrUid, corretorNome:ps.nome || r.sdrNome || 'SDR', equipe:ps.equipe || r.sdrEquipe || '' });
     x.agendSdr = (x.agendSdr || 0) + 1;
     // v131: se a pontuação própria da SDR não foi definida, a visita dela vale o mesmo que a do corretor
-    if (n('agendSdr') || n('agendSdrReal')) x.pontos += n('agendSdr') + (r.status === 'Realizada' ? n('agendSdrReal') : 0);
+    if (n('agendSdr') || n('agendSdrReal')) { x.pontos += n('agendSdr') + (r.status === 'Realizada' ? n('agendSdrReal') : 0); x.agendProprio = (x.agendProprio || 0) + 1; if (r.status === 'Realizada') x.agendReal = (x.agendReal || 0) + 1; }
     else { if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); } else if (r.status === 'Realizada') { x.realizadas++; x.pontos += n('vRealizada'); } else if (r.status === 'Não compareceu') { x.faltas++; x.pontos += n('vFalta'); } else x.pontos += n('vPendente'); }
     x.visitas++;
   });
@@ -7582,12 +7585,13 @@ function pontosDoMesBase(m, val, corte){
     (x._abo ||= new Set()); Object.keys(r.abo || {}).forEach(d => x._abo.add(d)); (x._chk ||= new Set()); Object.keys(r.chk || {}).forEach(d => x._chk.add(d));
     x.atendeu = (x.atendeu || 0) + Object.values(r.at || {}).reduce((a, v) => a + (Number(v) || 0), 0); x.naoAtendeu = (x.naoAtendeu || 0) + Object.values(r.na || {}).reduce((a, v) => a + (Number(v) || 0), 0);
     const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0), bloco = Math.max(1, n('ligBloco') || 1);
-    const pro = soma(r.pro), ind = soma(r.ind), doca = Object.keys(r.doca || {}).length;
+    const pro = soma(r.pro), ind = soma(r.ind), doca = Object.keys(r.doca || {}).length, dg = soma(r.mddoc);
+    x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
     x.prospectos = (x.prospectos || 0) + pro; x.indicacoes = (x.indicacoes || 0) + ind; x.semFunil = (x.semFunil || 0) + semFunil;
     x.pontos += prPts * n('presenca') + tardes * n('presencaTarde') + Math.floor(l / bloco) * n('ligacao')
-      + pro * n('prospecto') + ind * n('indicacao') + doca * n('docsAnexados') + semFunil * n('funil');
+      + pro * n('prospecto') + ind * n('indicacao') + doca * n('docsAnexados') + semFunil * n('funil') + dg * n('docGeral');
   });
   // ausência: dia de trabalho (já passado) sem presença no escritório nem externa
   if (n('ausencia')) {
@@ -7685,7 +7689,7 @@ function ptsCheckin(x){ const P = x.uid && papelDe(x.uid) === 'sdr' && temValSdr
 window.ptsCheckin = ptsCheckin;
 function linhasPontos(x, P){
   const n = k => Number(P[k]) || 0, bloco = Math.max(1, n('ligBloco') || 1);
-  const pend = Math.max(0, (x.visitas || 0) - (x.confirmadas || 0) - (x.realizadas || 0) - (x.faltas || 0)), blocos = Math.floor((x.ligacoes || 0) / bloco);
+  const pend = Math.max(0, (x.visitas || 0) - (x.confirmadas || 0) - (x.realizadas || 0) - (x.faltas || 0) - (x.agendProprio || 0)), blocos = Math.floor((x.ligacoes || 0) / bloco);
   const L = [
     ['Presenças da manhã', x.presPontua ?? x.presencas, n('presenca'), (x.presPontua ?? x.presencas ?? 0) * n('presenca')],
     ['Presenças da tarde', x.tardes, n('presencaTarde'), (x.tardes || 0) * n('presencaTarde')],
@@ -7694,12 +7698,13 @@ function linhasPontos(x, P){
     [`Ligações (${x.ligacoes || 0} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
+    ['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')],
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
     ['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))], ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
     ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
-    ['Visitas agendadas (SDR)', x.agendSdr, n('agendSdr'), null]
+    ...((n('agendSdr') || n('agendSdrReal')) ? [['Visitas agendadas (SDR)', x.agendProprio, n('agendSdr'), (x.agendProprio || 0) * n('agendSdr')], ['Visitas agendadas e realizadas (SDR)', x.agendReal, n('agendSdrReal'), (x.agendReal || 0) * n('agendSdrReal')]] : [['Visitas agendadas (SDR)', x.agendSdr, '—', null]])
   ];
   return L;
 }
@@ -8061,12 +8066,12 @@ function renderAdm(){
   const ativoEl = document.activeElement;
   if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
   admAssin = ass;
-  $('admPontos').innerHTML = `<div class="hint" style="margin:0 0 8px">Toque no nome ou na descrição para editar. Deixe o nome vazio para voltar ao texto padrão.</div>` + `<div class="pt-cab"><span>Item</span><span>Corretor</span><span title="Em branco = vale o mesmo do corretor">SDR</span><span title="Só nas documentações e na venda por indicação. Em branco = vale desde sempre">Conta a partir de</span></div>`
+  $('admPontos').innerHTML = `<div class="hint" style="margin:0 0 8px">Toque no nome ou na descrição para editar. Deixe o nome vazio para voltar ao texto padrão.</div>` + `<div class="pt-cab"><span>Item</span><span>Corretor</span><span title="Em branco = vale o mesmo do corretor">SDR</span><span title="Só nas documentações, na venda por indicação e nas visitas das SDRs. Em branco = vale desde sempre">Conta a partir de</span></div>`
     + PONTOS_ITENS.map(([k,n]) => { const sv = (appCfg.pontosSdr || {})[k], dd = (appCfg.pontos.desdeItens || {})[k] || '';
       return `<div class="pt-row pt-ed pt-3"><div class="pt-txt"><input class="pt-nome" data-k="${k}" value="${esc(nomePonto(k))}" placeholder="${esc(n)}" maxlength="80"><input class="pt-desc" data-k="${k}" value="${esc(descPonto(k))}" placeholder="Descrição (opcional)" maxlength="160"></div><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}" aria-label="Pontos do corretor"><input type="number" step="1" class="pt-sdr" data-k="${k}" value="${sv === undefined || sv === null || sv === '' ? '' : Number(sv)}" placeholder="igual" aria-label="Pontos da SDR">${PT_COM_DATA.includes(k) ? `<input type="date" class="pt-desde" data-k="${k}" value="${esc(dd)}" aria-label="Conta a partir de">` : '<span class="pt-sem-data"></span>'}</div>`; }).join('')
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
     + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
-    + `<div class="pt-row"><span>Venda por indicação antes da data dela vale (valor antigo)</span><input type="number" step="1" id="pt_antes_vendaInd" value="${(appCfg.pontos.antesItens || {}).vendaInd !== undefined && (appCfg.pontos.antesItens || {}).vendaInd !== null ? Number(appCfg.pontos.antesItens.vendaInd) : Number(appCfg.pontos.vendaInd) || 0}"></div>`
+    + PT_ANTES.map(k => { const a = (appCfg.pontos.antesItens || {})[k]; return `<div class="pt-row"><span>${esc(nomePonto(k))}: antes da data dela vale (valor antigo)</span><input type="number" step="1" id="pt_antes_${k}" value="${a !== undefined && a !== null && a !== '' ? Number(a) : Number(appCfg.pontos[k]) || 0}"></div>`; }).join('')
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
     + `<div class="pt-row"><span>Ausência antes da data abaixo vale (valor antigo, ex.: -15)</span><input type="number" step="1" id="pt_ausenciaAntes" value="${appCfg.pontos.ausenciaAntes !== undefined && appCfg.pontos.ausenciaAntes !== '' ? Number(appCfg.pontos.ausenciaAntes) : Number(appCfg.pontos.ausencia) || 0}"></div>`
     + `<div class="pt-row"><span>Pontos de presença (manhã e tarde) e o valor novo da ausência contam a partir de. Antes dessa data, presença não dá pontos e a ausência vale o valor antigo.</span><input type="date" id="pt_presencaDesde" style="width:150px" value="${esc(appCfg.pontos.presencaDesde || '2026-10-21')}"></div>`
@@ -8110,7 +8115,7 @@ window.salvarPontuacao = async () => {
   pontos.presencaDesde = $('pt_presencaDesde').value || '2026-10-21'; pontos.ausenciaAntes = Math.round(Number($('pt_ausenciaAntes').value) || 0); pontos.tardeDesde = $('pt_tardeDesde').value || '2026-10-22'; pontos.tardeHora = Math.min(23, Math.max(0, pontos.tardeHora || 13));
   // v211: pontos próprios das SDRs (em branco = igual ao corretor) e data a partir da qual cada item conta
   const pontosSdr = {}; document.querySelectorAll('#admPontos .pt-sdr').forEach(i => { pontosSdr[i.dataset.k] = i.value.trim() !== '' ? Math.round(Number(i.value) || 0) : null; });
-  pontos.antesItens = { vendaInd:Math.round(Number($('pt_antes_vendaInd')?.value) || 0) };
+  pontos.antesItens = {}; PT_ANTES.forEach(k => { pontos.antesItens[k] = Math.round(Number($('pt_antes_' + k)?.value) || 0); });
   pontos.desdeItens = {}; document.querySelectorAll('#admPontos .pt-desde').forEach(i => { if (i.value) pontos.desdeItens[i.dataset.k] = i.value; });
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, pontosNomes, pontosSdr, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); appCfg.pontosSdr = pontosSdr; admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
@@ -8815,8 +8820,8 @@ function htmlTvApresenta(D){
     if (k === 'ck') { const tot = dia ? (tardeHoje ? 2 : 1) : 0, ok = dia && x.ck >= tot;
       const pc = ptsCheckin(x);
       return `<td class="ckc ${ok ? 'ok' : ''}" style="--c:#2dd4bf"><b>${x.ck}${dia ? `<small>/${tot}</small>` : ''}</b><i>${pc ? '+' + pc + ' pts' : 'sem pontos'}</i></td>`; }
-    const v = k === 'lig' ? (x.ligacoes || 0) : k === 'docs' ? (x.docs || 0) : k === 'vr' ? (x.realizadas || 0) : (x.vendas || 0);
-    return `<td style="--c:${COLS.find(c => c[0] === k)[2]}"><b>${v}</b><i>${k === 'lig' ? 'pelo app' : k === 'docs' ? 'completas' : k === 'vr' ? 'visitas' : 'reservas'}</i></td>`; };
+    const v = k === 'lig' ? (x.ligacoes || 0) : k === 'docs' ? (x.docGeral || x.docs || 0) : k === 'vr' ? (x.realizadas || 0) : (x.vendas || 0);
+    return `<td style="--c:${COLS.find(c => c[0] === k)[2]}"><b>${v}</b><i>${k === 'lig' ? 'pelo app' : k === 'docs' ? 'docs' : k === 'vr' ? 'visitas' : 'reservas'}</i></td>`; };
   const CW = { pts:'10%', ck:'12%', lig:'11%', docs:'9%', vr:'11%', vd:'9%' }, cg = `<colgroup><col style="width:2.6vw"><col>${COLS.map(([k]) => `<col style="width:${CW[k] || '10%'}">`).join('')}</colgroup>`;
   const tabela = (l, dia) => l.length ? `<table class="tvp-tab tva-cab">${cg}<thead><tr><th>#</th><th>Nome</th>${COLS.map(([k, n, c]) => `<th style="--c:${c}">${n}</th>`).join('')}</tr></thead></table>
     <div class="tva-rol"><div class="tva-rol-in"><table class="tvp-tab tva-corpo">${cg}<tbody>${l.slice(0, 40).map((x, i) => `<tr><td><span class="tvp-pos p${i + 1}">${i + 1}</span></td><td class="tvp-nm">${avTv(x.uid, x.nome, 'tva-mini2')}<b>${esc(nomeTv(x.uid, x.nome))}</b><small>${esc(eqN(x.equipe))}</small></td>${COLS.map(([k]) => cel(x, k, dia)).join('')}</tr>`).join('')}</tbody></table></div></div>` : '<div class="tvr-vazio">Ainda ninguém pontuou</div>';
