@@ -7116,7 +7116,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 212;
+const APP_VERSAO = 215;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7335,7 +7335,7 @@ $('taskModal').addEventListener('click', e => { if (e.target === $('taskModal'))
 const PERDA_V = ['Não compareceu','Cancelada'];
 const PERDA_C = ['Desistiu','Vencida'];
 const CFG_PADRAO = {
-  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:-15, ausenciaDesde:'2026-10-07', presencaTarde:0, vendaAssinada:0, recrutamento:0, presencaDesde:'2026-10-21', tardeDesde:'2026-10-22', tardeHora:13, agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
+  pontos:{ vPendente:1, vConfirmada:2, vRealizada:3, vFalta:0, carta:10, docs:3, venda:30, presenca:2, ligacao:2, ligBloco:10, recontato:0, ligLimite:0, ligMinutos:0, ausencia:-15, ausenciaDesde:'2026-10-07', presencaTarde:0, vendaAssinada:0, recrutamento:0, desdeItens:{ docs:'2026-10-22', docsAnexados:'2026-10-22', docSdr:'2026-10-22', vendaInd:'2026-10-22' }, presencaDesde:'2026-10-21', tardeDesde:'2026-10-22', tardeHora:13, agendSdr:0, agendSdrReal:0, docsAnexados:0, vendaInd:0, indicacao:0, prospecto:0, atraso:0, funil:0, atrasoTol:0, funilHora:18 },
   origens:['CRM','Instagram','Facebook','WhatsApp','Indicação','Plantão','Lista colibris','Panfleto','Portal de imóveis','Cliente antigo','Outro'],
   motivos:['Renda insuficiente','Nome com restrição','Sem valor para a entrada','Não gostou do imóvel','Não gostou da localização','Fechou com outra imobiliária','Parou de responder','Adiou a compra','Outro']
 };
@@ -7363,6 +7363,8 @@ const PONTOS_ITENS = [
   ['funil','Não preencher o funil até o horário (use número negativo, ex.: -20)']
 ];
 const PONTOS_EXTRAS = ['ligLimite','ligBloco','funilHora','tardeHora'];
+// v213: só estes itens têm a data "conta a partir de" (as documentações)
+const PT_COM_DATA = ['docs','docsAnexados','docSdr','vendaInd'];
 // v96: o gestor pode renomear e descrever cada critério (vazio = volta ao texto padrão)
 const nomePonto = k => { const c = (appCfg.pontosNomes || {})[k]?.nome; return (c && c.trim()) || (PONTOS_ITENS.find(x => x[0] === k) || [, k])[1]; };
 const descPonto = k => ((appCfg.pontosNomes || {})[k]?.desc || '').trim();
@@ -7499,7 +7501,7 @@ function pontosSegmentado(m, val, corte){
   const cortes = [...new Set(Object.values(di).filter(d => d && d > cDe && d <= cAte))].sort(), lim = [cDe, ...cortes];
   const g = new Map();
   lim.forEach((a, i) => { const b = i + 1 < lim.length ? somaDias(lim[i + 1], -1) : cAte, v = { ...val };
-    Object.entries(di).forEach(([k, d]) => { if (d && d > a) v[k] = 0; });
+    Object.entries(di).forEach(([k, d]) => { if (d && d > a) { const an = (val.antesItens || {})[k]; v[k] = an !== undefined && an !== null && an !== '' ? Number(an) || 0 : 0; } });
     const so = lim.length === 1 && !corte;
     pontosDoMesBase(m, v, so ? undefined : [a, b]).forEach(x => { const k = x.uid || 'n:' + norm(x.nome), y = g.get(k);
       const seg = { v, x }; if (!y) { g.set(k, { ...x, _segs:[seg] }); return; } const z = somaPontos(y, x); z._segs = [...y._segs, seg]; g.set(k, z); }); });
@@ -8059,11 +8061,12 @@ function renderAdm(){
   const ativoEl = document.activeElement;
   if (ass === admAssin || (ativoEl && (ativoEl.closest?.('#cardAdmPontos') || ativoEl.closest?.('#cardAdmListas') || ativoEl.closest?.('#cardAdmMsgs')))) return;
   admAssin = ass;
-  $('admPontos').innerHTML = `<div class="hint" style="margin:0 0 8px">Toque no nome ou na descrição para editar. Deixe o nome vazio para voltar ao texto padrão.</div>` + `<div class="pt-cab"><span>Item</span><span>Corretor</span><span title="Em branco = vale o mesmo do corretor">SDR</span><span title="Em branco = vale desde sempre">Conta a partir de</span></div>`
+  $('admPontos').innerHTML = `<div class="hint" style="margin:0 0 8px">Toque no nome ou na descrição para editar. Deixe o nome vazio para voltar ao texto padrão.</div>` + `<div class="pt-cab"><span>Item</span><span>Corretor</span><span title="Em branco = vale o mesmo do corretor">SDR</span><span title="Só nas documentações e na venda por indicação. Em branco = vale desde sempre">Conta a partir de</span></div>`
     + PONTOS_ITENS.map(([k,n]) => { const sv = (appCfg.pontosSdr || {})[k], dd = (appCfg.pontos.desdeItens || {})[k] || '';
-      return `<div class="pt-row pt-ed pt-3"><div class="pt-txt"><input class="pt-nome" data-k="${k}" value="${esc(nomePonto(k))}" placeholder="${esc(n)}" maxlength="80"><input class="pt-desc" data-k="${k}" value="${esc(descPonto(k))}" placeholder="Descrição (opcional)" maxlength="160"></div><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}" aria-label="Pontos do corretor"><input type="number" step="1" class="pt-sdr" data-k="${k}" value="${sv === undefined || sv === null || sv === '' ? '' : Number(sv)}" placeholder="igual" aria-label="Pontos da SDR"><input type="date" class="pt-desde" data-k="${k}" value="${esc(dd)}" aria-label="Conta a partir de"></div>`; }).join('')
+      return `<div class="pt-row pt-ed pt-3"><div class="pt-txt"><input class="pt-nome" data-k="${k}" value="${esc(nomePonto(k))}" placeholder="${esc(n)}" maxlength="80"><input class="pt-desc" data-k="${k}" value="${esc(descPonto(k))}" placeholder="Descrição (opcional)" maxlength="160"></div><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}" aria-label="Pontos do corretor"><input type="number" step="1" class="pt-sdr" data-k="${k}" value="${sv === undefined || sv === null || sv === '' ? '' : Number(sv)}" placeholder="igual" aria-label="Pontos da SDR">${PT_COM_DATA.includes(k) ? `<input type="date" class="pt-desde" data-k="${k}" value="${esc(dd)}" aria-label="Conta a partir de">` : '<span class="pt-sem-data"></span>'}</div>`; }).join('')
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
     + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
+    + `<div class="pt-row"><span>Venda por indicação antes da data dela vale (valor antigo)</span><input type="number" step="1" id="pt_antes_vendaInd" value="${(appCfg.pontos.antesItens || {}).vendaInd !== undefined && (appCfg.pontos.antesItens || {}).vendaInd !== null ? Number(appCfg.pontos.antesItens.vendaInd) : Number(appCfg.pontos.vendaInd) || 0}"></div>`
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
     + `<div class="pt-row"><span>Ausência antes da data abaixo vale (valor antigo, ex.: -15)</span><input type="number" step="1" id="pt_ausenciaAntes" value="${appCfg.pontos.ausenciaAntes !== undefined && appCfg.pontos.ausenciaAntes !== '' ? Number(appCfg.pontos.ausenciaAntes) : Number(appCfg.pontos.ausencia) || 0}"></div>`
     + `<div class="pt-row"><span>Pontos de presença (manhã e tarde) e o valor novo da ausência contam a partir de. Antes dessa data, presença não dá pontos e a ausência vale o valor antigo.</span><input type="date" id="pt_presencaDesde" style="width:150px" value="${esc(appCfg.pontos.presencaDesde || '2026-10-21')}"></div>`
@@ -8107,6 +8110,7 @@ window.salvarPontuacao = async () => {
   pontos.presencaDesde = $('pt_presencaDesde').value || '2026-10-21'; pontos.ausenciaAntes = Math.round(Number($('pt_ausenciaAntes').value) || 0); pontos.tardeDesde = $('pt_tardeDesde').value || '2026-10-22'; pontos.tardeHora = Math.min(23, Math.max(0, pontos.tardeHora || 13));
   // v211: pontos próprios das SDRs (em branco = igual ao corretor) e data a partir da qual cada item conta
   const pontosSdr = {}; document.querySelectorAll('#admPontos .pt-sdr').forEach(i => { pontosSdr[i.dataset.k] = i.value.trim() !== '' ? Math.round(Number(i.value) || 0) : null; });
+  pontos.antesItens = { vendaInd:Math.round(Number($('pt_antes_vendaInd')?.value) || 0) };
   pontos.desdeItens = {}; document.querySelectorAll('#admPontos .pt-desde').forEach(i => { if (i.value) pontos.desdeItens[i.dataset.k] = i.value; });
   try { await gravar(setDoc(doc(db,'config','app'), { pontos, pontosNomes, pontosSdr, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); appCfg.pontosSdr = pontosSdr; admAssin = ''; toast('Pontuação salva. Já vale para o mês em andamento.'); }
   catch(e) { toast('Erro ao salvar: ' + e.message); }
