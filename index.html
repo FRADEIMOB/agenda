@@ -1058,6 +1058,15 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+
+/* v220: quem é de cada equipe */
+.org-p{padding:1px 0}
+.org-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.org-eq{border:1px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--card)}
+.org-eq header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}.org-eq header b{font-size:16px}.org-eq header span{font-size:12.5px;color:var(--muted)}
+.org-li,.org-anjo{padding:7px 0;border-top:1px dashed var(--border);font-size:13.5px;line-height:1.45}
+.org-li small,.org-anjo small{display:block;font-size:11.5px;color:var(--muted);margin-bottom:2px}.org-anjo small b{color:var(--text)}
+.org-anjo.sem small{color:var(--danger)}
 /* v212: check-in no ranking */
 .rk-ck small{display:block;font-size:11px;color:#0d9488;font-weight:700}
 /* v211: pontuação com coluna da SDR e data de início por item */
@@ -3287,7 +3296,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <!-- CORRETORES (gestão) -->
       <section class="view" id="v-corretores">
         <div class="page-head"><div><h1>Corretores</h1><div class="sub" id="corSub"></div></div>
-          <div class="ph-acoes"><button class="btn btn-ghost gerente-only hide" onclick="verHistorico()">🕘 Histórico de edições</button><select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div></div>
+          <div class="ph-acoes"><button class="btn btn-ghost gerente-only hide" onclick="abrirOrganograma()">Quem é de cada equipe</button><button class="btn btn-ghost gerente-only hide" onclick="verHistorico()">🕘 Histórico de edições</button><select id="corPeriodo" style="width:auto" onchange="corPeriodo=this.value;render()"><option value="mes">Este mês</option><option value="semana">Esta semana</option><option value="todas">Todo o período</option></select></div></div>
         <div class="janela" id="janelaCor"></div>
         <div class="card gest hide" id="cardCheckin" style="margin-bottom:20px"><div class="card-head"><h2>🏢 Presença de hoje</h2><button class="btn btn-ghost" onclick="setView('recepcao')">Abrir a tela da recepção</button></div><div id="ciGestao"></div></div>
         <div class="card hide" id="cardPresenca" style="margin-bottom:20px">
@@ -4054,6 +4063,13 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-head"><h2>Não deu para confirmar a localização</h2><button class="icon-btn" onclick="fechar('gpsAjudaModal')" data-ic="x"></button></div>
     <div class="sheet-body"><p id="gpsAjudaTx" style="margin-top:0;line-height:1.5"></p><p class="hint">Enquanto isso, marque a presença lendo o código da recepção: ele não depende da localização.</p></div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('gpsAjudaModal')">Fechar</button><button class="btn btn-ghost" onclick="fechar('gpsAjudaModal');chegueiEscritorio()">Tentar de novo</button><button class="btn btn-primary" onclick="fechar('gpsAjudaModal');abrirCamera()">Ler o código</button></div>
+  </div>
+</div>
+<div class="modal" id="orgModal">
+  <div class="sheet" style="width:min(980px,100%)">
+    <div class="sheet-head"><div><h2>Quem é de cada equipe</h2><div class="sub">Gerente, coordenador, anjos e os corretores de cada um, pelos cadastros ativos.</div></div><button class="icon-btn" onclick="fechar('orgModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="orgCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('orgModal')">Fechar</button><button class="btn btn-ghost" onclick="copiarOrganograma()">Copiar como texto</button><button class="btn btn-ghost" onclick="imprimirOrganograma()">Imprimir para a parede</button><button class="btn btn-primary" onclick="exportarOrganograma()">Exportar (Excel)</button></div>
   </div>
 </div>
 <div class="modal" id="rkNovoModal">
@@ -7116,7 +7132,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 219;
+const APP_VERSAO = 220;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7681,6 +7697,90 @@ window.encerrarRkNovo = async id => {
   l[i] = { ...l[i], encerrado:true, encerradoEm:h, fim:l[i].fim && l[i].fim < h ? l[i].fim : h, vencedor:top[0] ? top[0].nome : '', top3:top.slice(0, 3).map(x => ({ nome:x.nome, pontos:x.pontos })) };
   try { await gravar(setDoc(doc(db,'config','app'), { rankingsNovos:l }, { merge:true })); appCfg.rankingsNovos = l; rankTipo = 'pontos'; render(); toast('Ranking encerrado'); }
   catch(e) { toast('Não foi possível encerrar: ' + e.message); }
+};
+
+// =====================================================================
+// v220: quem é de cada equipe (gerente, coordenador, anjos e corretores), pelos cadastros ativos
+// =====================================================================
+function dadosOrganograma(){
+  const ps = (perfisTodos.length ? perfisTodos : rkPessoas).filter(p => p.status === 'ativo' && !/\bteste?\b/i.test(p.nome || ''));
+  const nome = p => nomeBonito(p.nome || '');
+  const anjos = ps.filter(p => p.papel === 'anjo'), anjoDe = uid => anjos.find(a => (a.membros || []).includes(uid));
+  const eqs = [...listaEquipes(), { id:'', nome:'Sem equipe', icone:'' }];
+  return eqs.map(e => {
+    const da = p => (e.id ? p.equipe === e.id : !listaEquipes().some(x => x.id === p.equipe));
+    const ger = ps.filter(p => p.papel === 'gerente' && p.cargo !== 'dono' && e.id && p.equipe === e.id);
+    const coord = ps.filter(p => p.papel === 'coordenador' && da(p)), sdr = ps.filter(p => p.papel === 'sdr' && da(p));
+    const cors = ps.filter(p => ['corretor','coordenador'].includes(p.papel) && da(p));
+    const porAnjo = new Map(); const semAnjo = [];
+    cors.filter(p => p.papel === 'corretor').forEach(p => { const a = anjoDe(p.uid); if (a) { if (!porAnjo.has(a.uid)) porAnjo.set(a.uid, { a, l:[] }); porAnjo.get(a.uid).l.push(p); } else semAnjo.push(p); });
+    // anjo da equipe sem corretor nesta equipe também aparece
+    anjos.filter(a => da(a) && !porAnjo.has(a.uid) && !(a.membros || []).length).forEach(a => porAnjo.set(a.uid, { a, l:[] }));
+    const ord = l => l.sort((x, y) => nome(x).localeCompare(nome(y), 'pt-BR'));
+    return { e, ger:ord(ger), coord:ord(coord), sdr:ord(sdr), anjos:[...porAnjo.values()].sort((x, y) => nome(x.a).localeCompare(nome(y.a), 'pt-BR')).map(x => ({ a:x.a, l:ord(x.l) })), semAnjo:ord(semAnjo), total:cors.filter(p => p.papel === 'corretor').length };
+  }).filter(x => x.ger.length || x.coord.length || x.sdr.length || x.anjos.length || x.semAnjo.length);
+}
+window.abrirOrganograma = () => {
+  if (!souGerente()) return;
+  const D = dadosOrganograma(), nm = p => esc(nomeBonito(p.nome || '')), nt = p => nm(p) + (p.telefone ? ` <span class="muted">${esc(fmtFone(p.telefone))}</span>` : ''),
+    lst = l => l.length ? l.map(p => `<div class="org-p">${nt(p)}</div>`).join('') : '<span class="muted">ninguém cadastrado</span>';
+  const ger = (perfisTodos || []).filter(p => p.papel === 'gerente' && p.status === 'ativo' && !p.equipe && p.cargo !== 'dono');
+  $('orgCorpo').innerHTML = `<div class="org-grid">${D.map(x => `<section class="org-eq"><header><b>${esc((x.e.icone ? x.e.icone + ' ' : '') + (x.e.nome || 'Sem equipe'))}</b><span>${x.total} corretor${x.total === 1 ? '' : 'es'}</span></header>
+      <div class="org-li"><small>Gerente responsável</small><div>${lst(x.ger)}</div></div>
+      <div class="org-li"><small>Coordenador${x.coord.length > 1 ? 'es' : ''}</small><div>${lst(x.coord)}</div></div>
+      ${x.sdr.length ? `<div class="org-li"><small>SDR${x.sdr.length > 1 ? 's' : ''}</small><div>${lst(x.sdr)}</div></div>` : ''}
+      ${x.anjos.map(g => `<div class="org-anjo"><small>Anjo <b>${nt(g.a)}</b> · ${g.l.length} corretor${g.l.length === 1 ? '' : 'es'}</small><div>${lst(g.l)}</div></div>`).join('')}
+      ${x.semAnjo.length ? `<div class="org-anjo sem"><small>Sem anjo · ${x.semAnjo.length}</small><div>${lst(x.semAnjo)}</div></div>` : ''}
+    </section>`).join('')}</div>${ger.length ? `<p class="hint" style="margin-top:12px">Gerentes sem equipe no cadastro: ${ger.map(nm).join(', ')}. Para aparecerem como responsáveis, coloque a equipe no cadastro deles em Corretores.</p>` : ''}`;
+  abrir('orgModal');
+};
+function textoOrganograma(){
+  const D = dadosOrganograma(), nm = p => nomeBonito(p.nome || '') + (p.telefone ? ' ' + fmtFone(p.telefone) : ''), l = a => a.length ? a.map(nm).join(', ') : '—';
+  return D.map(x => [`*${(x.e.nome || 'Sem equipe').toUpperCase()}* (${x.total} corretores)`, `Gerente: ${l(x.ger)}`, `Coordenador: ${l(x.coord)}`, ...(x.sdr.length ? [`SDR: ${l(x.sdr)}`] : []),
+    ...x.anjos.map(g => `Anjo ${nm(g.a)}: ${l(g.l)}`), ...(x.semAnjo.length ? [`Sem anjo: ${l(x.semAnjo)}`] : [])].join('\n')).join('\n\n');
+}
+// v220: folha A4 deitada para colar na parede (uma coluna por equipe, letra grande)
+window.imprimirOrganograma = () => {
+  const D = dadosOrganograma().filter(x => x.e.id || x.total), nm = p => esc(nomeBonito(p.nome || '')), tl = p => p.telefone ? `<span class="t">${esc(fmtFone(p.telefone))}</span>` : '<span class="t v">sem telefone</span>',
+    pes = p => `<span class="p"><span class="nm">${nm(p)}</span>${tl(p)}</span>`, lst = l => l.length ? l.map(p => `<li>${pes(p)}</li>`).join('') : '<li class="v">—</li>';
+  const cores = ['#e8741d', '#0b57d0', '#11734b', '#7c3aed', '#b10202'];
+  const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Equipes Frade Imóveis</title><style>
+    @page{size:A4 landscape;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#0f1c2e;margin:0}
+    .topo{display:flex;align-items:center;gap:14px;margin-bottom:14px;border-bottom:3px solid #e8741d;padding-bottom:10px}.topo img{width:54px;height:54px}.topo h1{font-size:28px;margin:0}.topo h1 span{color:#e8741d}.topo small{display:block;font-size:13px;color:#5b6b7c;margin-top:2px}
+    .grade{display:grid;grid-template-columns:repeat(${Math.max(1, D.length)},1fr);gap:14px}
+    .eq{border:2px solid var(--c);border-radius:14px;padding:12px 14px;break-inside:avoid}.eq h2{margin:0 0 8px;font-size:22px;color:var(--c)}
+    .b{margin:8px 0}.b small{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5b6b7c;margin-bottom:2px}.b .n{font-size:17px;font-weight:700}
+    .anjo{border-top:1px dashed #c4ccd6;padding-top:7px;margin-top:7px}.anjo small{font-size:11px;font-weight:700;color:#5b6b7c;text-transform:uppercase;letter-spacing:.06em}.anjo b{font-size:15px;color:#0f1c2e}
+    ul{margin:4px 0 0;padding-left:16px;font-size:14px;line-height:1.35}li{margin:2px 0}li.v{list-style:none;margin-left:-16px;color:#8a96a3}
+    .p{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.p .t{font-weight:400;font-size:13px;color:#33475b;white-space:nowrap}.p .t.v{color:#a3adb8;font-size:11px}.anjo b .p{font-size:15px}
+    .rod{margin-top:10px;font-size:11px;color:#8a96a3;text-align:right}
+  </style></head><body>
+  <div class="topo"><img src="${MARCA_IMG}" alt=""><div><h1>Frade <span>Imóveis</span> · Quem é de cada equipe</h1><small>Nome e contato de cada um · atualizado em ${dataBR(hojeISO())}</small></div></div>
+  <div class="grade">${D.map((x, i) => `<section class="eq" style="--c:${cores[i % cores.length]}"><h2>${esc(x.e.nome || 'Sem equipe')}</h2>
+    <div class="b"><small>Gerente</small><div class="n">${x.ger.map(pes).join('') || '—'}</div></div>
+    <div class="b"><small>Coordenador</small><div class="n">${x.coord.map(pes).join('') || '—'}</div></div>
+    ${x.sdr.length ? `<div class="b"><small>SDR</small><div class="n">${x.sdr.map(pes).join('')}</div></div>` : ''}
+    ${x.anjos.map(g => `<div class="anjo"><small>Anjo</small> <b>${pes(g.a)}</b><ul>${lst(g.l)}</ul></div>`).join('')}
+    ${x.semAnjo.length ? `<div class="anjo"><small>Sem anjo</small><ul>${lst(x.semAnjo)}</ul></div>` : ''}</section>`).join('')}</div>
+  <div class="rod">Gerado pelo app Frade Imóveis</div>
+  <script>window.onload=()=>setTimeout(()=>window.print(),300)<\/script></body></html>`;
+  const w = window.open('', '_blank'); if (!w) { toast('Libere as janelas do navegador para imprimir'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+};
+window.copiarOrganograma = async () => { try { await navigator.clipboard.writeText(textoOrganograma()); toast('Lista copiada. É só colar no WhatsApp.'); } catch(e) { toast('Não consegui copiar'); } };
+window.exportarOrganograma = async () => {
+  const D = dadosOrganograma(), nm = p => nomeBonito(p.nome || ''), linhas = [];
+  D.forEach(x => { const eq = x.e.nome || 'Sem equipe';
+    x.ger.forEach(p => linhas.push([eq, 'Gerente', nm(p), '', fmtFone(p.telefone || '')])); x.coord.forEach(p => linhas.push([eq, 'Coordenador', nm(p), '', fmtFone(p.telefone || '')]));
+    x.sdr.forEach(p => linhas.push([eq, 'SDR', nm(p), '', fmtFone(p.telefone || '')])); x.anjos.forEach(g => { linhas.push([eq, 'Anjo', nm(g.a), '', fmtFone(g.a.telefone || '')]); g.l.forEach(p => linhas.push([eq, 'Corretor', nm(p), nm(g.a), fmtFone(p.telefone || '')])); });
+    x.semAnjo.forEach(p => linhas.push([eq, 'Corretor', nm(p), 'sem anjo', fmtFone(p.telefone || '')])); });
+  const cab = ['Equipe', 'Cargo', 'Nome', 'Anjo responsável', 'Telefone'];
+  let X = null; try { X = await carregarXLSX(); } catch(e) {}
+  if (!X) { baixarCSV('equipes', cab, linhas); return; }
+  const wb = X.utils.book_new(), ws = X.utils.aoa_to_sheet([cab, ...linhas]); ws['!cols'] = [{ wch:18 }, { wch:14 }, { wch:32 }, { wch:26 }, { wch:16 }];
+  X.utils.book_append_sheet(wb, ws, 'Todas as equipes');
+  D.forEach(x => { const l = linhas.filter(r => r[0] === (x.e.nome || 'Sem equipe')); const w = X.utils.aoa_to_sheet([cab, ...l]); w['!cols'] = ws['!cols']; X.utils.book_append_sheet(wb, w, String(x.e.nome || 'Sem equipe').replace(/[\\/?*[\]:]/g, '').slice(0, 30) || 'Equipe'); });
+  X.writeFile(wb, `equipes-${hojeISO()}.xlsx`); toast('Planilha das equipes baixada');
 };
 // v120: toque no nome do ranking mostra a conta dos pontos, item por item
 // v212: pontos que vieram do check-in (manhã + tarde)
