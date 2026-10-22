@@ -7132,7 +7132,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 220;
+const APP_VERSAO = 221;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7702,6 +7702,7 @@ window.encerrarRkNovo = async id => {
 // =====================================================================
 // v220: quem é de cada equipe (gerente, coordenador, anjos e corretores), pelos cadastros ativos
 // =====================================================================
+window.dadosOrganograma = (...a) => dadosOrganograma(...a);
 function dadosOrganograma(){
   const ps = (perfisTodos.length ? perfisTodos : rkPessoas).filter(p => p.status === 'ativo' && !/\bteste?\b/i.test(p.nome || ''));
   const nome = p => nomeBonito(p.nome || '');
@@ -7739,31 +7740,32 @@ function textoOrganograma(){
   return D.map(x => [`*${(x.e.nome || 'Sem equipe').toUpperCase()}* (${x.total} corretores)`, `Gerente: ${l(x.ger)}`, `Coordenador: ${l(x.coord)}`, ...(x.sdr.length ? [`SDR: ${l(x.sdr)}`] : []),
     ...x.anjos.map(g => `Anjo ${nm(g.a)}: ${l(g.l)}`), ...(x.semAnjo.length ? [`Sem anjo: ${l(x.semAnjo)}`] : [])].join('\n')).join('\n\n');
 }
-// v220: folha A4 deitada para colar na parede (uma coluna por equipe, letra grande)
-window.imprimirOrganograma = () => {
-  const D = dadosOrganograma().filter(x => x.e.id || x.total), nm = p => esc(nomeBonito(p.nome || '')), tl = p => p.telefone ? `<span class="t">${esc(fmtFone(p.telefone))}</span>` : '<span class="t v">sem telefone</span>',
+// v220: folha A4 deitada para colar na parede (cabe numa página: equipes lado a lado, anjos em 2 colunas dentro de cada equipe)
+window.imprimirOrganograma = (DD) => {
+  const D = (DD || dadosOrganograma()).filter(x => x.e.id || x.total), nm = p => esc(nomeBonito(p.nome || '')),
+    tl = p => p.telefone ? `<span class="t">${esc(fmtFone(p.telefone))}</span>` : '<span class="t v">sem telefone</span>',
     pes = p => `<span class="p"><span class="nm">${nm(p)}</span>${tl(p)}</span>`, lst = l => l.length ? l.map(p => `<li>${pes(p)}</li>`).join('') : '<li class="v">—</li>';
   const cores = ['#e8741d', '#0b57d0', '#11734b', '#7c3aed', '#b10202'];
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Equipes Frade Imóveis</title><style>
-    @page{size:A4 landscape;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#0f1c2e;margin:0}
-    .topo{display:flex;align-items:center;gap:14px;margin-bottom:14px;border-bottom:3px solid #e8741d;padding-bottom:10px}.topo img{width:54px;height:54px}.topo h1{font-size:28px;margin:0}.topo h1 span{color:#e8741d}.topo small{display:block;font-size:13px;color:#5b6b7c;margin-top:2px}
-    .grade{display:grid;grid-template-columns:repeat(${Math.max(1, D.length)},1fr);gap:14px}
-    .eq{border:2px solid var(--c);border-radius:14px;padding:12px 14px;break-inside:avoid}.eq h2{margin:0 0 8px;font-size:22px;color:var(--c)}
-    .b{margin:8px 0}.b small{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5b6b7c;margin-bottom:2px}.b .n{font-size:17px;font-weight:700}
-    .anjo{border-top:1px dashed #c4ccd6;padding-top:7px;margin-top:7px}.anjo small{font-size:11px;font-weight:700;color:#5b6b7c;text-transform:uppercase;letter-spacing:.06em}.anjo b{font-size:15px;color:#0f1c2e}
-    ul{margin:4px 0 0;padding-left:16px;font-size:14px;line-height:1.35}li{margin:2px 0}li.v{list-style:none;margin-left:-16px;color:#8a96a3}
-    .p{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.p .t{font-weight:400;font-size:13px;color:#33475b;white-space:nowrap}.p .t.v{color:#a3adb8;font-size:11px}.anjo b .p{font-size:15px}
-    .rod{margin-top:10px;font-size:11px;color:#8a96a3;text-align:right}
+    @page{size:A4 landscape;margin:0}*{box-sizing:border-box}html,body{margin:0}body{font-family:Arial,Helvetica,sans-serif;color:#0f1c2e;padding:8mm 9mm;width:297mm;overflow:hidden;font-size:16px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .topo{display:flex;align-items:center;gap:12px;margin-bottom:8px;border-bottom:3px solid #e8741d;padding-bottom:6px}.topo img{width:40px;height:40px}.topo h1{font-size:22px;margin:0}.topo h1 span{color:#e8741d}.topo small{display:block;font-size:11px;color:#5b6b7c;margin-top:1px}
+    .grade{display:grid;grid-template-columns:repeat(${Math.max(1, D.length)},minmax(0,1fr));gap:10px}
+    .eq{border:2px solid var(--c);border-radius:12px;padding:8px 10px}.eq h2{margin:0 0 4px;font-size:19px;color:var(--c)}
+    .chefes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px 14px;padding-bottom:5px;border-bottom:2px solid var(--c);margin-bottom:4px}
+    small.r{display:block;font-size:.78em;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#5b6b7c}
+    .chefes .p{font-size:1.12em;font-weight:700}
+    .anjos{column-count:2;column-gap:14px}.eq,.anjo,.chefes>div{min-width:0}
+    .anjo{break-inside:avoid;padding:4px 0 3px;border-bottom:1px dashed #c4ccd6}.anjo>b .p{font-weight:700;font-size:1.05em}
+    ul{margin:1px 0 0;padding-left:13px;line-height:1.3}li.v{list-style:none;margin-left:-13px;color:#8a96a3}
+    .p{display:flex;justify-content:space-between;gap:6px;align-items:baseline}.p .nm{min-width:0}.p .t{font-weight:400;font-size:.92em;color:#33475b;white-space:nowrap}.p .t.v{color:#a3adb8;font-size:.8em}
   </style></head><body>
   <div class="topo"><img src="${MARCA_IMG}" alt=""><div><h1>Frade <span>Imóveis</span> · Quem é de cada equipe</h1><small>Nome e contato de cada um · atualizado em ${dataBR(hojeISO())}</small></div></div>
   <div class="grade">${D.map((x, i) => `<section class="eq" style="--c:${cores[i % cores.length]}"><h2>${esc(x.e.nome || 'Sem equipe')}</h2>
-    <div class="b"><small>Gerente</small><div class="n">${x.ger.map(pes).join('') || '—'}</div></div>
-    <div class="b"><small>Coordenador</small><div class="n">${x.coord.map(pes).join('') || '—'}</div></div>
-    ${x.sdr.length ? `<div class="b"><small>SDR</small><div class="n">${x.sdr.map(pes).join('')}</div></div>` : ''}
-    ${x.anjos.map(g => `<div class="anjo"><small>Anjo</small> <b>${pes(g.a)}</b><ul>${lst(g.l)}</ul></div>`).join('')}
-    ${x.semAnjo.length ? `<div class="anjo"><small>Sem anjo</small><ul>${lst(x.semAnjo)}</ul></div>` : ''}</section>`).join('')}</div>
-  <div class="rod">Gerado pelo app Frade Imóveis</div>
-  <script>window.onload=()=>setTimeout(()=>window.print(),300)<\/script></body></html>`;
+    <div class="chefes"><div><small class="r">Gerente</small>${x.ger.map(pes).join('') || '—'}</div><div><small class="r">Coordenador</small>${x.coord.map(pes).join('') || '—'}</div>
+    ${x.sdr.length ? `<div style="grid-column:1/-1"><small class="r">SDR</small>${x.sdr.map(pes).join('')}</div>` : ''}</div>
+    <div class="anjos">${x.anjos.map(g => `<div class="anjo"><small class="r">Anjo</small><b>${pes(g.a)}</b><ul>${lst(g.l)}</ul></div>`).join('')}
+    ${x.semAnjo.length ? `<div class="anjo"><small class="r">Sem anjo</small><ul>${lst(x.semAnjo)}</ul></div>` : ''}</div></section>`).join('')}</div>
+  <script>window.onload=()=>{const H=document.body.offsetWidth*210/297-4;let f=22;document.body.style.fontSize=f+'px';while(document.body.offsetHeight>H&&f>7){f-=.5;document.body.style.fontSize=f+'px';}setTimeout(()=>window.print(),300);}<\/script></body></html>`;
   const w = window.open('', '_blank'); if (!w) { toast('Libere as janelas do navegador para imprimir'); return; }
   w.document.open(); w.document.write(html); w.document.close();
 };
