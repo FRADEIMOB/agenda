@@ -7132,7 +7132,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 221;
+const APP_VERSAO = 222;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8909,7 +8909,7 @@ window.salvarApelidos = async () => {
   catch(e) { toast('Não foi possível salvar: ' + e.message); }
 };
 // v202: apresentação do ranking novo no mesmo formato do "Dia e semana": Hoje e o ranking inteiro, com pódio, equipes e tabela (com check-in)
-function htmlTvApresenta(D){
+function htmlTvApresenta(D, modo){
   const r = D.r, h = hojeISO(), tc = tardeCfg(), tardeHoje = h >= tc.desde;
   const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
   const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : '';
@@ -8923,7 +8923,7 @@ function htmlTvApresenta(D){
   const COLS = [['pts','Pontos','#f28c38'],['ck','Check-in','#2dd4bf'],['lig','Ligações','#facc15'],['docs','Docs','#38bdf8'],['vr','Realizadas','#22c55e'],['vd','Vendas','#a78bfa']];
   const cel = (x, k, dia) => {
     if (k === 'pts') return `<td style="--c:#f28c38"><b>${x.pontos.toLocaleString('pt-BR')}</b><i>pontos</i></td>`;
-    if (k === 'ck') { const tot = dia ? (tardeHoje ? 2 : 1) : 0, ok = dia && x.ck >= tot;
+    if (k === 'ck') { const tot = dia ? ((typeof dia === 'string' ? dia >= tc.desde : tardeHoje) ? 2 : 1) : 0, ok = dia && x.ck >= tot;
       const pc = ptsCheckin(x);
       return `<td class="ckc ${ok ? 'ok' : ''}" style="--c:#2dd4bf"><b>${x.ck}${dia ? `<small>/${tot}</small>` : ''}</b><i>${pc ? '+' + pc + ' pts' : 'sem pontos'}</i></td>`; }
     const v = k === 'lig' ? (x.ligacoes || 0) : k === 'docs' ? (x.docGeral || x.docs || 0) : k === 'vr' ? (x.realizadas || 0) : (x.vendas || 0);
@@ -8934,9 +8934,14 @@ function htmlTvApresenta(D){
   const fim = r.fim && r.fim < h ? r.fim : h, dias = r.fim ? Math.max(0, Math.round((Date.parse(r.fim) - Date.parse(h)) / 864e5)) : null;
   // v203: do lado direito vai a semana (de segunda até hoje, dentro do período do ranking)
   const seg = (() => { const d = new Date(h + 'T12:00:00'), w = (d.getDay() + 6) % 7; d.setDate(d.getDate() - w); return iso(d); })(), deSem = seg > r.inicio ? seg : r.inicio;
-  const lh = r.inicio <= h && (!r.fim || r.fim >= h) ? lista(h, h) : [], lt = lista(deSem, fim);
-  const coluna = (cls, tit, sub, l, dia) => `<section class="tvm-col ${cls}"><header><h2>${tit}</h2><span class="tva-sub">${sub}</span></header><div class="tva-topo">${podio(l)}${equipes(l)}</div>${tabela(l, dia)}</section>`;
-  return `<div class="tvm tva-ap">${coluna('', 'Hoje', 'Pontos de hoje na ' + esc(r.nome), lh, true)}${coluna('sem', 'Semana', `de ${dataBR(deSem).slice(0, 5)} até hoje · ${esc(r.nome)}${dias !== null ? ` · ${dias === 0 ? 'termina hoje' : 'faltam ' + dias + ' dia' + (dias === 1 ? '' : 's')}` : ''}`, lt, false)}</div>`;
+  // v222: aba Ontem (o dia anterior; se cair no domingo, vale o sábado)
+  const ont = (() => { const d = new Date(h + 'T12:00:00'); d.setDate(d.getDate() - 1); if (d.getDay() === 0) d.setDate(d.getDate() - 1); return iso(d); })();
+  const ehOntem = modo === 'ontem', diaV = ehOntem ? ont : h, noPer = d => r.inicio <= d && (!r.fim || r.fim >= d);
+  const lh = noPer(diaV) ? lista(diaV, diaV) : [], lt = lista(deSem, fim);
+  const coluna = (cls, tit, sub, l, dia, extra) => `<section class="tvm-col ${cls}"><header><h2>${tit}</h2>${extra || ''}<span class="tva-sub">${sub}</span></header><div class="tva-topo">${podio(l)}${equipes(l)}</div>${tabela(l, dia)}</section>`;
+  const nomeDia = ehOntem ? (new Date(ont + 'T12:00:00').getDay() === 6 && ont !== iso(new Date(Date.parse(h + 'T12:00:00') - 864e5)) ? 'Sábado' : 'Ontem') : 'Hoje';
+  if (ehOntem) return `<div class="tvm tva-ap tvm-max tvm-so">${coluna('', nomeDia, `Pontos de ${dataLonga(ont)} na ${esc(r.nome)}`, lh, ont)}</div>`;
+  return `<div class="tvm tva-ap">${coluna('', nomeDia, 'Pontos de hoje na ' + esc(r.nome), lh, true)}${coluna('sem', 'Semana', `de ${dataBR(deSem).slice(0, 5)} até hoje · ${esc(r.nome)}${dias !== null ? ` · ${dias === 0 ? 'termina hoje' : 'faltam ' + dias + ' dia' + (dias === 1 ? '' : 's')}` : ''}`, lt, false)}</div>`;
 }
 function dadosTvRank(){
   const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate;
@@ -9068,7 +9073,7 @@ function renderTvRank(){
   const el = $('tvRank'); if (!el) return;
   let d = dadosTvRank(), agora = new Date();
   if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'mes';
-  const rkTv = rkNovos().filter(x => !x.encerrado), modoRk = String(window.tvModo).match(/^(rk|ap):(.+)$/), rkSel = modoRk ? dadosTvRkNovo(modoRk[2]) : null, ap = !!(modoRk && modoRk[1] === 'ap');
+  const rkTv = rkNovos().filter(x => !x.encerrado), modoRk = String(window.tvModo).match(/^(rk|ap|on):(.+)$/), rkSel = modoRk ? dadosTvRkNovo(modoRk[2]) : null, ap = !!(modoRk && /^(ap|on)$/.test(modoRk[1]));
   if (modoRk && !rkSel) window.tvModo = 'mes';
   if (rkSel) d = { ...d, eqs:rkSel.eqs };
   const fe = window.tvModo === 'feirao', mt = window.tvModo === 'metas', cols = rkSel ? rkSel.cols : fe ? d.feirao : d.cols;
@@ -9087,16 +9092,16 @@ function renderTvRank(){
   el.innerHTML = `<div class="tvr-topo"><div class="tvr-marca"><span class="tvr-logo tvr-logo-img"><img src="${MARCA_IMG}" alt="Frade Imóveis"></span><div><b>Frade <i>Imóveis</i></b><small>${rkSel ? esc(rkSel.r.nome) + ' · desde ' + dataBR(rkSel.r.inicio).slice(0, 5) : fe ? 'Feirão Tenda · ' + nomeMes(d.m).split(' de ')[0].toLowerCase() : 'Rankings de ' + nomeMes(d.m).split(' de ')[0].toLowerCase()}</small></div></div>
     <div class="tvr-eqs">${d.eqs.map((x, i) => `<div class="tvr-eq ${i === 0 && x.n ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><i style="width:${Math.round(x.n / maxEq * 100)}%"></i></div>`).join('')}</div>
     <div class="tvr-hora"><span class="tvr-vivo">ao vivo</span><b>${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</b><small>${dataLonga(hojeISO())}</small></div>
-    <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><span class="tvr-seg">${[['mes','Mês'], ...rkTv.flatMap(x => [['rk:' + x.id, x.nome], ['ap:' + x.id, rkTv.length > 1 ? 'Pódio · ' + x.nome : 'Pódio']]), ['metas','Dia e semana'],['feirao','Feirão']].map(([k, n]) => `<button class="tvr-modo ${(window.tvModo || 'mes') === k ? 'on' : ''}" onclick="tvModo='${k}';renderTvRank()">${n}</button>`).join('')}</span><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
-    ${ap ? htmlTvApresenta(rkSel) : mt ? htmlTvMetas() : `<div class="tvr-grade ${fe ? 'tvr-3' : ''}" style="--n:${cols.length}">${cols.map(col).join('')}</div>`}
+    <div class="tvr-bts"><button class="tvr-modo tvr-som ${tvSom && Som.pronto() ? 'liga' : 'desl'}" onclick="tvTrocaSom()" title="Som das comemorações">${tvSom && Som.pronto() ? 'Som ligado' : 'Ativar som'}</button><span class="tvr-seg">${[['mes','Mês'], ...rkTv.flatMap(x => [['rk:' + x.id, x.nome], ['ap:' + x.id, rkTv.length > 1 ? 'Pódio · ' + x.nome : 'Pódio'], ['on:' + x.id, rkTv.length > 1 ? 'Ontem · ' + x.nome : 'Ontem']]), ['metas','Dia e semana'],['feirao','Feirão']].map(([k, n]) => `<button class="tvr-modo ${(window.tvModo || 'mes') === k ? 'on' : ''}" onclick="tvModo='${k}';renderTvRank()">${n}</button>`).join('')}</span><button onclick="tvCheia()" title="Tela cheia">⤢</button><button onclick="setView('ranking')" title="Sair">✕</button></div></div>
+    ${ap ? htmlTvApresenta(rkSel, modoRk[1] === 'on' ? 'ontem' : '') : mt ? htmlTvMetas() : `<div class="tvr-grade ${fe ? 'tvr-3' : ''}" style="--n:${cols.length}">${cols.map(col).join('')}</div>`}
     <div class="tvr-rod"><div id="tvSp"></div></div>`;
   const sp = document.getElementById('tvSp'); if (sp) { sp._h = ''; spPintar(); }
   // v205: maximizar uma coluna (só Hoje ou só Semana) no Pódio e no Dia e semana
   const tvm = el.querySelector('.tvm');
   if (tvm) { const cs = [...tvm.querySelectorAll(':scope > .tvm-col')], mx = window._tvMax || '';
-    tvm.classList.toggle('tvm-max', !!mx && cs.length > 1);
-    cs.forEach((c, i) => { const k = i ? 'sem' : 'hoje', h = c.querySelector('header'); if (mx && mx !== k) c.style.display = 'none';
-      if (h) h.insertAdjacentHTML('beforeend', `<button class="tvm-maxbt" onclick="tvMaxTroca('${k}')" title="${mx === k ? 'Voltar às duas colunas' : 'Mostrar só esta coluna'}">${mx === k ? 'Voltar às duas' : '⤢ Maximizar'}</button>`); }); }
+    if (cs.length > 1) tvm.classList.toggle('tvm-max', !!mx);
+    cs.forEach((c, i) => { const k = i ? 'sem' : 'hoje', h = c.querySelector('header'); if (mx && mx !== k && cs.length > 1) c.style.display = 'none';
+      if (h && cs.length > 1) h.insertAdjacentHTML('beforeend', `<button class="tvm-maxbt" onclick="tvMaxTroca('${k}')" title="${mx === k ? 'Voltar às duas colunas' : 'Mostrar só esta coluna'}">${mx === k ? 'Voltar às duas' : '⤢ Maximizar'}</button>`); }); }
   // v208: coluna maximizada mostra o QR Code do check-in no espaço ao lado das equipes
   if (tvm && window._tvMax && (souGerente() || souCoord()) && !souCeo()) { const c = tvm.querySelector(':scope > .tvm-col:not([style*="none"])'), alvo = c && (c.querySelector('.tva-topo') || c.querySelector('header'));
     if (alvo) { alvo.classList.add('com-qr'); alvo.insertAdjacentHTML('beforeend', `<div class="tva-qr"><div class="tva-qr-cod" id="tvQrCod">${window._tvQrSvg || '<div class="tva-qr-load">Gerando o código…</div>'}</div><div class="tva-qr-tx"><b>Check-in</b><span>Aponte a câmera do celular</span><i class="tva-qr-bar"><i id="tvQrBar"></i></i></div></div>`); tvQrLiga(); } }
