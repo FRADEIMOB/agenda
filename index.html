@@ -7132,7 +7132,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 222;
+const APP_VERSAO = 223;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8468,14 +8468,20 @@ function renderIntegracoes(){
   const pessoas = perfisLista.filter(p => p.status === 'ativo').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
   // v197: ligação que aponta para alguém que não está mais ativo, ou sem ligação, recebe a sugestão pelo nome (confira e salve)
   let sugeridas = 0;
-  const sel = (tipo, nome, atual) => { let sug = false; if (!pessoas.some(p => p.uid === atual)) { const c = casaPerfilNome(nome, pessoas); atual = c ? c.uid : ''; sug = !!c; if (sug) sugeridas++; }
-    return `<select data-tipo="${tipo}" data-nome="${esc(nome)}" class="${sug ? 'lig-sug' : ''}"><option value="">— sem ligação —</option>${pessoas.map(p => `<option value="${p.uid}" ${atual===p.uid?'selected':''}>${esc(p.nome)}${p.papel && p.papel !== 'corretor' ? ' · ' + esc(({ coordenador:'coordenador', sdr:'SDR', anjo:'anjo', gerente:'gestão', adm:'ADM', marketing:'marketing', correspondente:'correspondente' })[p.papel] || p.papel) : ''}</option>`).join('')}</select>${sug ? '<em class="lig-sug-t">sugerido pelo nome</em>' : ''}`; };
+  // v223: o que você escolheu fica (inclusive "sem ligação", gravado como "-"); sugestão só para nome que nunca foi ligado, e só quando o nome bate de verdade
+  const sel = (tipo, nome, explicito, auto) => { let sug = false, atual = '', extra = '', nota = '';
+    if (explicito === '-') atual = '';
+    else if (explicito) { atual = explicito; if (!pessoas.some(p => p.uid === atual)) { const q = (perfisTodos || []).find(p => p.uid === atual); extra = `<option value="${esc(atual)}" selected>${esc(q ? q.nome : 'pessoa removida')} (fora da lista)</option>`; nota = '<em class="lig-sug-t">ligado a quem não está ativo: troque se precisar</em>'; } }
+    else if (auto && pessoas.some(p => p.uid === auto)) { atual = auto; sug = true; sugeridas++; nota = '<em class="lig-sug-t">ligado sozinho pelo nome: confira</em>'; }
+    else { const c = casaPerfilForte(nome, pessoas); if (c) { atual = c.uid; sug = true; sugeridas++; nota = '<em class="lig-sug-t">sugerido pelo nome: confira</em>'; } }
+    return `<select data-tipo="${tipo}" data-nome="${esc(nome)}" data-ini="${esc(explicito || '')}" class="${sug ? 'lig-sug' : ''}"><option value="">— sem ligação —</option>${extra}${pessoas.map(p => `<option value="${p.uid}" ${atual===p.uid?'selected':''}>${esc(p.nome)}${p.papel && p.papel !== 'corretor' ? ' · ' + esc(({ coordenador:'coordenador', sdr:'SDR', anjo:'anjo', gerente:'gestão', adm:'ADM', marketing:'marketing', correspondente:'correspondente' })[p.papel] || p.papel) : ''}</option>`).join('')}</select>${nota}`; };
   const abas = Object.entries(integ.abas || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
   const crm = Object.entries(integ.crmVistos || {}).sort((a,b) => a[0].localeCompare(b[0],'pt-BR'));
-  $('intLigacoes').innerHTML = (abas.length ? `<div class="rep-sec" style="margin:6px 0 8px">Abas da planilha de avaliações</div>${abas.filter(([n]) => !abasIgnoradas().has(chaveAba(n))).map(([n,u]) => `<div class="pt-row"><span>📄 ${esc(n)}</span>${sel('aba', n, (integ.mapaAbas || {})[n] || u)}</div>`).join('')}` : '')
-    + (crm.length ? `<div class="rep-sec" style="margin:14px 0 8px">Nomes que vieram do CRM</div>${crm.map(([n,u]) => `<div class="pt-row"><span>👤 ${esc(n)}</span>${sel('crm', n, (integ.mapaCrm || {})[n] || u)}</div>`).join('')}` : '')
+  $('intLigacoes').innerHTML = (abas.length ? `<div class="rep-sec" style="margin:6px 0 8px">Abas da planilha de avaliações</div>${abas.filter(([n]) => !abasIgnoradas().has(chaveAba(n))).map(([n,u]) => `<div class="pt-row"><span>📄 ${esc(n)}</span>${sel('aba', n, (integ.mapaAbas || {})[n], u)}</div>`).join('')}` : '')
+    + (crm.length ? `<div class="rep-sec" style="margin:14px 0 8px">Nomes que vieram do CRM</div>${crm.map(([n,u]) => `<div class="pt-row"><span>👤 ${esc(n)}</span>${sel('crm', n, (integ.mapaCrm || {})[n], u)}</div>`).join('')}` : '')
     || '<div class="muted" style="font-size:13.5px">Os nomes aparecem aqui depois da primeira leitura da planilha e do primeiro lead do CRM. O app liga sozinho quando o nome bate; você só ajusta os que ficarem sem ligação.</div>';
-  if (sugeridas) $('intLigacoes').insertAdjacentHTML('afterbegin', `<div class="hint" style="margin:0 0 8px;color:var(--accent)"><b>${sugeridas} ligaç${sugeridas === 1 ? 'ão sugerida' : 'ões sugeridas'}</b> pelos cadastros novos. Confira e toque em "Salvar ligações".</div>`);
+  if (sugeridas) $('intLigacoes').insertAdjacentHTML('afterbegin', `<div class="hint" style="margin:0 0 8px;color:var(--accent)"><b>${sugeridas} ligaç${sugeridas === 1 ? 'ão' : 'ões'} para conferir</b> (marcadas em laranja). O que estiver certo, deixe; o que estiver errado, troque ou escolha "sem ligação" e toque em "Salvar ligações". O que você salvar fica.</div>`);
+  $('intLigacoes').querySelectorAll('select').forEach(x => x.addEventListener('change', () => { x.dataset.mexeu = '1'; x.classList.remove('lig-sug'); const e = x.nextElementSibling; if (e && e.classList.contains('lig-sug-t')) e.remove(); }));
   $('btnSalvarLig').classList.toggle('hide', !(abas.length || crm.length));
   if (document.activeElement !== $('intIgnoradas')) $('intIgnoradas').value = (appCfg.abasIgnoradas || ABAS_IGNORADAS_PADRAO).join('\n');
   renderGruposAdm();
@@ -8523,7 +8529,9 @@ window.salvarAbasIgnoradas = async () => {
 };
 window.salvarLigacoes = async () => {
   const mapaAbas = { ...(integ.mapaAbas || {}) }, mapaCrm = { ...(integ.mapaCrm || {}) };
-  document.querySelectorAll('#intLigacoes select').forEach(s => { const m = s.dataset.tipo === 'aba' ? mapaAbas : mapaCrm; if (s.value) m[s.dataset.nome] = s.value; else delete m[s.dataset.nome]; });
+  // v223: "sem ligação" é gravado como "-" (apagar a chave não funcionava: o Firestore junta os mapas e a ligação antiga voltava)
+  document.querySelectorAll('#intLigacoes select').forEach(s => { const m = s.dataset.tipo === 'aba' ? mapaAbas : mapaCrm, n = s.dataset.nome;
+    if (s.value) m[n] = s.value; else if (s.dataset.ini || s.classList.contains('lig-sug') || s.dataset.mexeu) m[n] = '-'; });
   try {
     await gravar(setDoc(doc(db,'config','integracao'), { mapaAbas, mapaCrm }, { merge:true })); integAssin = '';
     toast('Ligações salvas. Passando os clientes antigos para os corretores certos…');
@@ -9224,6 +9232,14 @@ async function carregarExcelJS(){
   throw new Error('não deu para carregar o gerador de Excel');
 }
 // lê a tabela do relatório mensal (feito pelo carteiro) e junta contratos e reservas do app
+// v223: só sugere quando o nome bate de verdade (igual, ou todas as palavras do nome no cadastro e só uma pessoa assim)
+function casaPerfilForte(nome, lista){
+  const n = norm(String(nome || '').replace(/\(.*?\)/g, '')).replace(/\s+/g, ' ').trim(); if (!n) return null;
+  const tok = x => norm(x.nome || '').replace(/\s+/g, ' ').trim().split(' ');
+  const p = lista.find(x => tok(x).join(' ') === n); if (p) return p;
+  const tk = n.split(' ').filter(w => w.length > 1 && !['de','da','do','das','dos','e'].includes(w)); if (tk.length < 2) return null;
+  const c = lista.filter(x => { const t = tok(x); return tk.every(w => t.includes(w)); }); return c.length === 1 ? c[0] : null;
+}
 function casaPerfilNome(nome, lista){
   const n = norm(String(nome || '').replace(/\(.*?\)/g, '')).replace(/\s+/g, ' ').trim(); if (!n) return null;
   const tok = x => norm(x.nome || '').replace(/\s+/g, ' ').trim().split(' '), ativos = l => { const a = l.filter(x => x.status === 'ativo'); return a.length ? a : l; };
