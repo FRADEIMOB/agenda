@@ -3214,7 +3214,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div class="seg vend-eq hide" id="vendEqAbas" role="tablist" aria-label="Filtrar por equipe"></div>
         <div class="card">
           <div class="tb-grid">
-            <input id="vBusca" placeholder="Buscar cliente, CPF, corretor, empreendimento..." oninput="vSet('busca',this.value)">
+            <input id="vdBusca" placeholder="Buscar cliente, CPF, corretor, empreendimento..." oninput="vSet('busca',this.value)">
             <select id="vendPeriodo" onchange="if(this.value.startsWith('m:'))garantirHistorico(this.value.slice(2));vSet('periodo',this.value)"><option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option></select>
             <select id="vendEquipe" class="hide" onchange="vSet('equipe',this.value)" aria-label="Equipe"></select>
           </div>
@@ -3255,7 +3255,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div style="margin-top:10px"><button class="link" onclick="abrirColarSdr()">Ou cole a mensagem que você já mandou no grupo</button></div>
               </div>
         </div>
-        <div class="card"><div class="card-head"><h2>Meus resumos</h2><span class="muted">toque para abrir</span></div><div id="resLista"></div></div>
+        <div class="card"><div class="card-head"><h2>Meus resumos</h2><span class="muted">toque para abrir</span></div><div id="resMeus"></div></div>
       </section>
 
       <!-- DESEMPENHO POR CORRETOR -->
@@ -3488,7 +3488,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
             <div class="set-row"><div><b>Tema</b><span>Claro, escuro ou igual ao aparelho</span></div>
               <div class="seg" id="segTema"></div></div>
             <div class="set-row"><div><b>Lembretes</b><span>Aviso antes das tarefas com horário (com o app aberto)</span></div>
-              <label class="toggle"><input type="checkbox" id="cfgNotif" onchange="alternarNotif(this.checked)"><span></span></label></div>
+              <label class="toggle"><input type="checkbox" id="cfgNotifChk" onchange="alternarNotif(this.checked)"><span></span></label></div>
             <div class="set-row"><div><b>Avisar com antecedência de</b><span>Minutos antes do horário</span></div>
               <select id="cfgMin" style="width:auto" onchange="salvarMin(this.value)"><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hora</option></select></div>
           </div>
@@ -4053,7 +4053,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-body">
       <div class="fg"><label for="rcQuem">Quem recrutou</label><select id="rcQuem"></select></div>
       <div class="fg"><label for="rcNovo">Corretor novo</label><input id="rcNovo" maxlength="80" placeholder="Nome de quem entrou"></div>
-      <div class="fg"><label for="rcDia">Data</label><input type="date" id="rcDia"></div>
+      <div class="fg"><label for="rcrDia">Data</label><input type="date" id="rcrDia"></div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('recrutModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarRecrut()">Registrar</button></div>
   </div>
@@ -4190,7 +4190,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-head"><h2>Meu dia</h2><button class="icon-btn" onclick="fechar('meuDiaModal')" data-ic="x"></button></div>
     <div class="sheet-body" data-lenis-prevent>
       <div class="mdia-nav"><button class="icon-btn" onclick="mdNav(-1)" aria-label="Dia anterior" title="Dia anterior">‹</button><input type="date" id="mdDia" onchange="pintarMeuDia(this.value)"><button class="icon-btn" onclick="mdNav(1)" aria-label="Próximo dia" title="Próximo dia">›</button></div>
-      <div id="mdCorpo"></div>
+      <div id="mdiaCorpo"></div>
     </div>
   </div>
 </div>
@@ -4460,7 +4460,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 <div class="modal" id="histModal">
   <div class="sheet" style="width:min(620px,100%)">
     <div class="sheet-head"><h2>Histórico de mudanças</h2><button class="icon-btn" onclick="fechar('histModal')" data-ic="x"></button></div>
-    <div class="sheet-body" id="histCorpo"></div>
+    <div class="sheet-body" id="finHistCorpo"></div>
   </div>
 </div>
 <div class="modal" id="bkModal">
@@ -5168,7 +5168,7 @@ function render(){
     $('cfgEmail').value = emailAtual;
     if ($('cores')) $('cores').innerHTML = CORES.map(c => `<button class="color ${c===p.color?'sel':''}" style="background:${c}" onclick="setCor('${c}')" title="${c}"></button>`).join('');
     $('segTema').innerHTML = [['light','Claro'],['dark','Escuro'],['auto','Auto']].map(([k,v]) => `<button class="${p.theme===k?'on':''}" onclick="setTema('${k}')">${v}</button>`).join('');
-    $('cfgNotif').checked = !!p.notif;
+    $('cfgNotifChk').checked = !!p.notif;
     $('cfgMin').value = String(p.notifMin || 15);
   }
 }
@@ -7132,7 +7132,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 224;
+const APP_VERSAO = 226;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10563,10 +10563,10 @@ function ligarLogFin(){
     const w = function(...a){ try { logFin(desc(...a)); } catch(e) {} return orig.apply(this, a); }; w._log = true; window[fn] = w; });
 }
 window.abrirHistoricoFin = async () => {
-  $('histCorpo').innerHTML = '<div class="ax-load">Carregando…</div>'; abrir('histModal');
+  $('finHistCorpo').innerHTML = '<div class="ax-load">Carregando…</div>'; abrir('histModal');
   try { const s = await getDocs(query(collection(db,'fin_log'), orderBy('em','desc'), limit(150))); const l = s.docs.map(d => d.data());
-    $('histCorpo').innerHTML = l.length ? l.map(x => `<div class="hist-l"><span class="hist-q">${new Date(x.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })} ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</span><span><b>${esc(primeiro(x.por || ''))}</b> ${esc(x.acao || '')}</span></div>`).join('') : '<div class="ax-load">Nenhuma mudança registrada ainda. A partir de agora, tudo o que mudar no financeiro aparece aqui.</div>'; }
-  catch(e) { $('histCorpo').innerHTML = `<div class="ax-load">Não deu para carregar: ${esc(e.message)}</div>`; }
+    $('finHistCorpo').innerHTML = l.length ? l.map(x => `<div class="hist-l"><span class="hist-q">${new Date(x.em).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })} ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</span><span><b>${esc(primeiro(x.por || ''))}</b> ${esc(x.acao || '')}</span></div>`).join('') : '<div class="ax-load">Nenhuma mudança registrada ainda. A partir de agora, tudo o que mudar no financeiro aparece aqui.</div>'; }
+  catch(e) { $('finHistCorpo').innerHTML = `<div class="ax-load">Não deu para carregar: ${esc(e.message)}</div>`; }
 };
 
 // =====================================================================
@@ -10640,6 +10640,9 @@ const nomeCurto = n => { const p = String(n || '').trim().split(/\s+/); return p
 function renderBolsao(){
   const n = bzLivres().length; if ($('cBolsao')) { $('cBolsao').textContent = n; $('cBolsao').classList.toggle('hide', !n || souCorresp() || !bzPresente()); }
   if (view !== 'bolsao' || !$('bzLista')) return;
+  // v226: não redesenha enquanto a pessoa escolhe uma etapa, e guarda a rolagem (as colunas voltavam para o começo a cada atualização)
+  const _foco = document.activeElement; if (_foco && $('bzLista').contains(_foco) && /^(SELECT|INPUT|TEXTAREA)$/.test(_foco.tagName)) return;
+  const _sc = bzGuardaScroll();
   const gere = (souGerente() && !souCeo()) || souCoord();
   $('bzNovoBt').classList.toggle('hide', !gere); $('bzPerdBt').classList.toggle('hide', !gere); $('bzExpBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDispBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').textContent = _bzTimer ? 'Parar disparo' : 'Disparar'; $('bzDisparaBt').classList.toggle('btn-primary', !_bzTimer); $('bzDisparaBt').classList.toggle('btn-ghost', !!_bzTimer);
   const fila = bolsao.filter(x => x.status === 'fila').length;
@@ -10668,7 +10671,14 @@ function renderBolsao(){
     const res = {}; l.filter(x => x.resultado).forEach(x => res[x.resultado] = (res[x.resultado] || 0) + 1);
     $('bzLista').innerHTML = `<div class="bz-kpis">${bzRes().map(([k, n]) => `<div><b>${res[k] || 0}</b><span>${n}</span></div>`).join('')}</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Cliente</th><th>Corretor</th><th>Situação</th><th></th></tr></thead><tbody>${l.slice(0, 200).map(x => `<tr><td><span class="nm">${esc(x.nome || '')}</span><small class="muted"> ${esc(x.telefone || '')}</small></td><td>${esc(primeiro(x.pegoNome || ''))}</td><td>${x.status === 'pego' ? `em atendimento · ${tempo(x.pegoEm)}` : esc((bzRes().find(r => r[0] === x.resultado) || [, 'encerrado'])[1])}</td><td>${souGerente() && !souCeo() ? `<button class="link" onclick="voltarBolsao('${x.id}')">voltar ao bolsão</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Ninguém pegou cliente do bolsão ainda.</div>');
   }
+  bzVoltaScroll(_sc);
 }
+function bzGuardaScroll(){ const el = $('bzLista'); if (!el) return null;
+  return { aba:bzAba, x:[...el.querySelectorAll('.bzf, .tbl-wrap')].map(e => e.scrollLeft), y:[...el.querySelectorAll('.bzf-lista')].map(e => e.scrollTop), pg:(document.scrollingElement || document.documentElement).scrollTop }; }
+function bzVoltaScroll(sc){ const el = $('bzLista'); if (!sc || !el || sc.aba !== bzAba) return;
+  el.querySelectorAll('.bzf, .tbl-wrap').forEach((e, i) => { if (sc.x[i]) e.scrollLeft = sc.x[i]; });
+  el.querySelectorAll('.bzf-lista').forEach((e, i) => { if (sc.y[i]) e.scrollTop = sc.y[i]; });
+  const se = document.scrollingElement || document.documentElement; if (Math.abs(se.scrollTop - sc.pg) > 2) se.scrollTop = sc.pg; }
 window.bzVerAba = k => { bzAba = k; renderBolsao(); };
 // v144: "Os que eu peguei" em colunas por etapa, com todos os clientes que a pessoa pegou (os encerrados também)
 const bzTodosMeus = () => bolsao.filter(x => x.pegoPor === uidAtual && (x.status === 'pego' || x.status === 'encerrado'));
@@ -10677,7 +10687,7 @@ function bzCardFunil(x, et){
   const opts = bzEtapas().filter(e => e.k !== (x.resultado || '')).map(e => `<option value="${e.k}">${esc(e.n)}</option>`).join('');
   return `<div class="bzf-card${aberto && !x.resultado ? ' novo' : ''}">
     <div class="bzf-l1"><b>${esc(x.nome || 'Cliente')}</b><small>${tempo(x.resultadoEm || x.pegoEm)}</small></div>
-    <div class="bzf-l2">${x.telefone ? `<span>${esc(x.telefone)}</span>` : ''}${x.origem === 'perdido' ? '<span>cliente perdido</span>' : ''}${x.empreendimento ? `<span>${esc(x.empreendimento)}</span>` : ''}</div>
+    <div class="bzf-l2">${x.telefone ? `<span>${esc(String(x.telefone).replace(/^['’`\s]+/, ''))}</span>` : ''}${x.origem === 'perdido' ? '<span>cliente perdido</span>' : ''}${x.empreendimento ? `<span>${esc(x.empreendimento)}</span>` : ''}</div>
     ${x.obs ? `<div class="an-c3">${esc(x.obs)}</div>` : ''}
     <div class="bz-lig">${htmlLigar(x.telefone, x.nome, 'bolsão')}${x.zapConversaId ? `<button class="snooze wa" onclick="abrirZapCid('${esc(x.zapConversaId)}')">Abrir conversa</button>` : zapOficialOn() && x.telefone ? `<button class="snooze wa" onclick="zapChamarCrm('${x.id}')">WhatsApp da Frade</button>` : ''}</div>
     ${aberto ? htmlBzLigs(x) : ''}
@@ -10817,7 +10827,7 @@ async function bzGravar(itens, avisar, aosPoucos){
   const tels = new Set(bolsao.map(x => chaveTel(x.telefone)).filter(Boolean)); let n = 0, rep = 0; // v224: número que já passou pelo bolsão não entra de novo
   for (let i = 0; i < itens.length; i += 400) { const b = writeBatch(db);
     itens.slice(i, i + 400).forEach(x => { const t = chaveTel(x.telefone); if (t && tels.has(t)) { rep++; return; } if (t) tels.add(t);
-      b.set(doc(collection(db,'bolsao')), { criativo:String(x.criativo || '').slice(0, 120), nome:String(x.nome || '').slice(0, 80), telefone:String(x.telefone || '').slice(0, 25), origem:x.origem, motivo:String(x.motivo || '').slice(0, 80), empreendimento:String(x.empreendimento || '').slice(0, 80), obs:String(x.obs || '').slice(0, 200), ref:x.ref || '', status:'livre', pegoPor:'', criadoEm:Date.now(), criadoPor:uidAtual, criadoNome:perfil.nome, tentativas:0, ...(aosPoucos ? { status:'fila', ordem:Date.now() + n } : {}) }); n++; });
+      b.set(doc(collection(db,'bolsao')), { criativo:String(x.criativo || '').slice(0, 120), nome:String(x.nome || '').slice(0, 80), telefone:String(x.telefone || '').replace(/^['’`\s]+/, '').slice(0, 25), origem:x.origem, motivo:String(x.motivo || '').slice(0, 80), empreendimento:String(x.empreendimento || '').slice(0, 80), obs:String(x.obs || '').slice(0, 200), ref:x.ref || '', status:'livre', pegoPor:'', criadoEm:Date.now(), criadoPor:uidAtual, criadoNome:perfil.nome, tentativas:0, ...(aosPoucos ? { status:'fila', ordem:Date.now() + n } : {}) }); n++; });
     await b.commit(); }
   if (n && avisar && !aosPoucos) avisarCarteiro('bolsao', '', true, { n });
   return { n, rep };
@@ -13898,10 +13908,10 @@ window.abrirRecrut = () => {
   if (!souDono()) return;
   const ps = pessoasRk().filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','sdr'].includes(p.papel)).sort((a, b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
   $('rcQuem').innerHTML = '<option value="">Escolha</option>' + ps.map(p => `<option value="${p.uid}">${esc(nomeBonito(p.nome || ''))}</option>`).join('');
-  $('rcNovo').value = ''; $('rcDia').value = hojeISO(); abrir('recrutModal');
+  $('rcNovo').value = ''; $('rcrDia').value = hojeISO(); abrir('recrutModal');
 };
 window.salvarRecrut = async () => {
-  if (!souDono()) return; const uid = $('rcQuem').value, novo = $('rcNovo').value.trim().slice(0, 80), dia = $('rcDia').value;
+  if (!souDono()) return; const uid = $('rcQuem').value, novo = $('rcNovo').value.trim().slice(0, 80), dia = $('rcrDia').value;
   if (!uid) { toast('Escolha quem recrutou'); return; } if (!novo) { toast('Digite o nome do corretor novo'); $('rcNovo').focus(); return; } if (!dia) { toast('Escolha a data'); return; }
   const p = pessoasRk().find(x => x.uid === uid) || {}, l = [...recrutamentos(), { id:'rc' + Date.now().toString(36), uid, nome:p.nome || '', novo, dia, por:perfil.nome, em:Date.now() }].slice(-200);
   try { await gravar(setDoc(doc(db,'config','app'), { recrutamentos:l }, { merge:true })); appCfg.recrutamentos = l; fechar('recrutModal'); render(); toast('Recrutamento registrado'); }
@@ -13963,7 +13973,7 @@ window.pintarMeuDia = async d => {
   const cs = cartas.filter(c => c.corretorUid === u && c.data === d && !c.arquivado), vds = rankingVendas.filter(v => !v.caiu && v.dia === d && (v.corretores || []).some(c => c.uid === u));
   const bloco = (tit, val, corpo) => `<div class="mdia-b"><div class="mdia-bh"><b>${tit}</b><span>${val}</span></div>${corpo || ''}</div>`;
   const li = (a, b) => `<div class="mdia-li"><span>${a}</span><small>${b ?? ''}</small></div>`;
-  $('mdCorpo').innerHTML = `<div class="mdia-titulo">${esc(maiuscula(parseISO(d).toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' })))}${d === h ? ' · hoje, até agora' : ''}</div>`
+  $('mdiaCorpo').innerHTML = `<div class="mdia-titulo">${esc(maiuscula(parseISO(d).toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' })))}${d === h ? ' · hoje, até agora' : ''}</div>`
     + bloco('Presença', r.pres ? (r.via === 'externo' ? 'Atendimento externo' : 'No escritório') : 'Sem presença marcada')
     + bloco('Leads recebidos', '<span id="mdLeadsN">…</span>', '<div id="mdLeadsL"></div>')
     + bloco('Ligações', `${r.num} números`, li('Tentativas no total', r.lig) + li('Atenderam', r.at))
@@ -15964,7 +15974,7 @@ function renderResumoView(){
   { const m0 = mesAtual() + '-01', eu = rankingSdr(m0, fimDoMes(mesAtual())).find(x => x.uid === uidAtual);
     $('resAviso').innerHTML += `<div class="ci-resumo" style="margin:0 0 12px;font-size:14px">📊 <b>${nomeMes(mesAtual())}:</b> ${eu ? eu.docs : 0} docs · <b>${eu ? eu.diasMedia : 0} dia${(eu ? eu.diasMedia : 0) === 1 ? '' : 's'} na média</b> <span class="muted">(até ${SDR_MEDIA_PADRAO} leads novos por doc/CPF, nos dias com ${SDR_MIN_LEADS}+ leads)</span></div>`; }
   const naMedia = r => { const d = so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf'), l = so(r.novos,'lead'); return l >= SDR_MIN_LEADS && d > 0 && l / d <= SDR_MEDIA_PADRAO; };
-  $('resLista').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}${naMedia(r) ? ' <span style="color:var(--ok);font-weight:700">✓ na média</span>' : ''}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf')} docs (${so(r.novos,'cpf') + so(r.recuperados,'cpf')} de CPF) · ${v(r.aprovDia)} aprov.</b></div>`).join('')
+  $('resMeus').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}${naMedia(r) ? ' <span style="color:var(--ok);font-weight:700">✓ na média</span>' : ''}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf')} docs (${so(r.novos,'cpf') + so(r.recuperados,'cpf')} de CPF) · ${v(r.aprovDia)} aprov.</b></div>`).join('')
     : '<div class="muted" style="font-size:13.5px">Nenhum resumo ainda.</div>';
 }
 window.abrirColarSdr = () => {
