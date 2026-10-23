@@ -4350,7 +4350,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <div class="row2"><div class="fg"><label>Leads por vez</label><input type="number" id="bdQtd" min="1"></div><div class="fg"><label>A cada (minutos)</label><input type="number" id="bdInt" min="1"></div></div>
       <div class="fg"><label>Pausar quando houver quantos livres no bolsão</label><input type="number" id="bdMax" min="1"></div>
       <div class="fg"><label>Ligações mínimas antes de "Não atende", devolver ou pegar outro lead</label><input type="number" id="bdMinLig" min="0" max="10"></div>
-      <div class="fg"><label>Cliente sem sequência volta para a fila do bolsão depois de (horas)</label><input type="number" id="bdVoltaH" min="0" step="0.5"><small class="muted">Vale para quem foi pego e ficou sem resultado, "Retornar depois" e "Não atende". 0 = desligado.</small></div>
+      <div class="fg"><label>Cliente sem sequência volta para a fila do bolsão depois de (horas)</label><input type="number" id="bdVoltaH" min="0" step="0.5"><small class="muted">Vale para quem foi pego e ficou sem resultado, "Retornar depois" e "Não atende". 0 = desligado (os leads só voltam quando o corretor devolver ou a gerência voltar).</small></div>
       <div class="bd-crm"><label class="fv-chk"><input type="checkbox" id="bdCrmAtivo"> Leads do CRM direto para o bolsão</label>
         <div class="fg"><label>Perfil do CRM cujos leads vão para o bolsão</label><input id="bdCrmNomes" maxlength="120" placeholder="Allan ADM"><small class="muted">Escreva igual ao nome do perfil no CRM. Mais de um: separe por vírgula.</small></div>
         <div class="fg"><label>Quando o lead chegar</label><select id="bdCrmDest"><option value="livre">Fica disponível na hora</option><option value="fila">Entra na fila e sai pelo disparo</option></select></div></div>
@@ -7132,7 +7132,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 223;
+const APP_VERSAO = 224;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7492,6 +7492,7 @@ function assinarEtapa1(){
     carregado.cfg = true; render(); fecharMesesPendentes(); aplicarManutencao();
     // v120: pedido do Allan: cada 10 ligações valem 2 pontos (ajusta uma vez; depois ele muda em Pontuação quando quiser)
     if (souDono() && s.exists() && d.migrLig120 && !d.migrAus132 && !Number((d.pontos || {}).ausencia)) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ausencia:-15 }, migrAus132:true }, { merge:true }).catch(e => console.warn('ausência', e.message));
+    if (souDono() && s.exists() && !d.migrVolta224) setDoc(doc(db,'config','app'), { bolsaoVoltaHoras:0, migrVolta224:true }, { merge:true }).catch(e => console.warn('volta bolsão', e.message));
     if (souDono() && s.exists() && !d.migrLig120) setDoc(doc(db,'config','app'), { pontos:{ ...appCfg.pontos, ligacao:2, ligBloco:10 }, migrLig120:true }, { merge:true }).catch(e => console.warn('pontos ligação', e.message));
   }, e => { carregado.cfg = true; silencio(e); }));
   subsPapel.push(onSnapshot(collection(db,'pontos_meses'), s => {
@@ -10735,7 +10736,8 @@ window.salvarBzEtapas = async () => {
 const bzHist = (x, txt) => [...(x.historico || []).slice(-40), { em:Date.now(), por:perfil.nome, uid:uidAtual, txt }];
 // v125: histórico de ligações por número no bolsão + mínimo de tentativas antes de passar para o próximo
 // v135: cliente que não deu sequência volta para a fila do bolsão (padrão: 2 horas) — o Carteiro faz isso sozinho; o app do dono ajuda enquanto estiver aberto
-const BZ_VOLTA_H = () => { const v = Number(appCfg.bolsaoVoltaHoras); return isFinite(v) && v >= 0 && appCfg.bolsaoVoltaHoras !== undefined && appCfg.bolsaoVoltaHoras !== '' ? v : 2; };
+// v224: a volta automática ficou desligada por padrão (o gestor pediu que os leads não voltem sozinhos)
+const BZ_VOLTA_H = () => { const v = Number(appCfg.bolsaoVoltaHoras); return isFinite(v) && v >= 0 && appCfg.bolsaoVoltaHoras !== undefined && appCfg.bolsaoVoltaHoras !== '' ? v : 0; };
 const bzSemSeq = () => ['', ...bzEtapas().filter(e => e.volta).map(e => e.k)], BZ_VOLTA_MAX = 5; // depois de 5 voltas o cliente sai do giro
 function bzParaVoltar(agora = Date.now()){
   const h = BZ_VOLTA_H(); if (!h) return [];
@@ -10812,7 +10814,7 @@ function bzLerLinhas(txt){
 }
 window.abrirBolsaoNovo = () => { window._bzArq = []; $('bzArq').value = ''; $('bzArqInfo').textContent = ''; $('bzAosPoucos').checked = true; $('bzAosPoucos').closest('label').classList.toggle('hide', !(souGerente() && !souCeo())); ['bzLinhas','bzMotivo','bzEmp','bzObs','bzCriativo'].forEach(i => $(i).value = ''); $('bzOrigem').value = 'lead'; $('bzPrev').textContent = ''; $('bzLinhas').oninput = () => { const n = bzLerLinhas($('bzLinhas').value).length; $('bzPrev').textContent = n ? n + ' cliente' + (n > 1 ? 's' : '') : ''; }; abrir('bzModal'); };
 async function bzGravar(itens, avisar, aosPoucos){
-  const tels = new Set(bolsao.filter(x => x.status !== 'encerrado').map(x => chaveTel(x.telefone)).filter(Boolean)); let n = 0, rep = 0;
+  const tels = new Set(bolsao.map(x => chaveTel(x.telefone)).filter(Boolean)); let n = 0, rep = 0; // v224: número que já passou pelo bolsão não entra de novo
   for (let i = 0; i < itens.length; i += 400) { const b = writeBatch(db);
     itens.slice(i, i + 400).forEach(x => { const t = chaveTel(x.telefone); if (t && tels.has(t)) { rep++; return; } if (t) tels.add(t);
       b.set(doc(collection(db,'bolsao')), { criativo:String(x.criativo || '').slice(0, 120), nome:String(x.nome || '').slice(0, 80), telefone:String(x.telefone || '').slice(0, 25), origem:x.origem, motivo:String(x.motivo || '').slice(0, 80), empreendimento:String(x.empreendimento || '').slice(0, 80), obs:String(x.obs || '').slice(0, 200), ref:x.ref || '', status:'livre', pegoPor:'', criadoEm:Date.now(), criadoPor:uidAtual, criadoNome:perfil.nome, tentativas:0, ...(aosPoucos ? { status:'fila', ordem:Date.now() + n } : {}) }); n++; });
