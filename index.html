@@ -7142,7 +7142,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 233;
+const APP_VERSAO = 235;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10650,7 +10650,41 @@ function assinarBolsao(){
   else { sub('a', query(collection(db,'bolsao'), where('status','==','livre'))); sub('b', query(collection(db,'bolsao'), where('pegoPor','==',uidAtual)));
     if (souCoord()) sub('c', query(collection(db,'bolsao'), where('equipe','==', perfil.equipe || '-'))); }
 }
-const bzLivres = () => bolsao.filter(x => x.status === 'livre');
+let _bzHistTodos = null, _bzHistIndo = false;
+// v234: o mesmo cliente (mesmo telefone) aparece uma vez só nos disponíveis, some se alguém já está atendendo ele,
+// e o corretor não vê de novo um cliente que ele mesmo já pegou antes
+const bzTelK = x => chaveTel(x.telefone || '');
+const bzJaPeguei = () => { const t = new Set(); bolsao.filter(x => x.pegoPor === uidAtual).forEach(x => t.add(bzTelK(x)));
+  (_bzHistTodos || []).forEach(x => t.add(bzTelK(x))); Object.values(state?.bzPeguei || {}).forEach(v => t.add(chaveTel(v.t || '')));
+  bolsao.forEach(x => { if ((x.historico || []).some(e => e.uid === uidAtual && e.txt === 'pegou')) t.add(bzTelK(x)); }); t.delete(''); return t; };
+// v235: cliente que já foi atendido (alguém pegou e ligou, ou deu resultado) não volta para o bolsão; só se a gerência voltar com ele
+// "nada se repete": cliente que alguém já pegou uma vez, ou que já foi encerrado, não aparece de novo
+const bzAtendido = x => !x.repetidoDe && ((x.historico || []).some(e => e.txt === 'pegou') || !!x.resultado || ['pego','encerrado'].includes(x.status));
+const bzAtendidosTels = () => { const t = new Set(window._bzAtendTodos || []); bolsao.filter(x => x.status !== 'livre' && x.status !== 'fila' && bzAtendido(x)).forEach(x => t.add(bzTelK(x))); t.delete(''); return t; };
+const bzVoltaProibida = (x, at) => !x.liberadoGerencia && (bzAtendido(x) || at.has(bzTelK(x)));
+const bzLivres = () => { if (!souGerente()) bzCarregarHist(); const at = bzAtendidosTels(); const ocup = new Set([...bolsao.filter(x => x.status === 'pego').map(bzTelK).filter(Boolean), ...(window._bzOcupOutros || [])]), vistos = new Set(), meu = souGerente() ? new Set() : bzJaPeguei();
+  return bolsao.filter(x => x.status === 'livre' && !bzVoltaProibida(x, at)).sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0)).filter(x => { const k = bzTelK(x); if (!k) return true; if (ocup.has(k) || vistos.has(k) || meu.has(k)) return false; vistos.add(k); return true; }); };
+// o app do gestor junta os repetidos de verdade no banco: fica um por telefone (o que está com alguém, ou o mais antigo) e os outros saem do giro
+let _bzLimpT = 0;
+async function bzJuntarRepetidos(forcar){
+  if (!souDono() || (!forcar && Date.now() - _bzLimpT < 240000)) return 0; _bzLimpT = Date.now();
+  const ativos = bolsao.filter(x => ['livre','fila','pego'].includes(x.status)), grupos = new Map();
+  ativos.forEach(x => { const k = bzTelK(x); if (!k) return; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(x); });
+  const sai = [], marca = [];
+  grupos.forEach((l, k) => { l.filter(x => x.telNorm !== k).forEach(x => marca.push([x, k])); if (l.length < 2) return;
+    const fica = l.filter(x => x.status === 'pego').sort((a, b) => (a.pegoEm || 0) - (b.pegoEm || 0))[0] || l.slice().sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0))[0];
+    l.filter(x => x.id !== fica.id).forEach(x => sai.push([x, fica, k])); });
+  const at = bzAtendidosTels(), ja = new Set(sai.map(([x]) => x.id));
+  const atend = bolsao.filter(x => ['livre','fila'].includes(x.status) && !ja.has(x.id) && bzVoltaProibida(x, at));
+  if (!sai.length && !marca.length && !atend.length) return 0;
+  const lotes = [...atend.map(x => [x.id, { status:'encerrado', resultado:'', encerradoEm:Date.now(), jaAtendido:true, historico:bzHist(x, 'saiu do bolsão: cliente já atendido') }]),...sai.map(([x, f, k]) => [x.id, { status:'encerrado', resultado:'', pegoPor:'', pegoNome:'', pegoEm:0, telNorm:k, repetidoDe:f.id, encerradoEm:Date.now(), historico:bzHist(x, 'repetido: juntado com o mesmo cliente') }]),
+    ...marca.filter(([x]) => !sai.some(([y]) => y.id === x.id) && !atend.some(y => y.id === x.id)).map(([x, k]) => [x.id, { telNorm:k }])];
+  for (let i = 0; i < lotes.length; i += 400) { const b = writeBatch(db); lotes.slice(i, i + 400).forEach(([id, d]) => b.update(doc(db,'bolsao', id), d)); try { await b.commit(); } catch(e) { console.warn('juntar repetidos', e.message); return 0; } }
+  if (sai.length && forcar) toast(`${sai.length} cliente${sai.length > 1 ? 's' : ''} repetido${sai.length > 1 ? 's' : ''} tirado${sai.length > 1 ? 's' : ''} do bolsão`);
+  return sai.length;
+}
+window.bzJuntarRepetidos = bzJuntarRepetidos; window.bzLivres = bzLivres;
+setInterval(() => { try { bzJuntarRepetidos(); } catch(e) {} }, 300000); setTimeout(() => { try { bzJuntarRepetidos(); } catch(e) {} }, 15000);
 // v97: só vê e pega o bolsão quem marcou presença no escritório hoje
 // v152: atendimento externo também conta como presente (escritório, visita ou externo, sem ter encerrado o dia)
 const bzPresente = () => !['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) || (!!meuCheckin && !meuCheckin.saida);
@@ -10675,7 +10709,7 @@ function renderBolsao(){
     const m = mesAtual(), lst = rankingAtiv.filter(r => r.mes === m && r.bz).map(r => ({ uid:r.uid, nome:(perfisTodos.find(p => p.uid === r.uid) || {}).nome || r.nome, n:Object.values(r.bz).reduce((a, v) => a + (Number(v) || 0), 0) })).filter(x => x.n > 0).sort((a, b) => b.n - a.n);
     $('bzLista').innerHTML = lst.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Leads pegos em ${nomeMes(m).split(' de ')[0].toLowerCase()}</th></tr></thead><tbody>${lst.map((x, i) => `<tr class="${x.uid === uidAtual ? 'me' : ''}"><td class="pos">${i + 1}º</td><td>${esc(x.nome || '')}</td><td class="tot">${x.n}</td></tr>`).join('')}</tbody></table></div>` : '<div class="an-vazio"><span>🏆</span><b>Ninguém pegou lead do bolsão este mês</b><p>Quem pegar mais aparece aqui.</p></div>';
   } else if (bzAba === 'fila') {
-    const c = bzDisp(), l = bzOrdenar(bolsao.filter(x => x.status === 'fila')), md = bzOrdem(), dono = souGerente() && !souCeo();
+    const c = bzDisp(), l = bzOrdenar((() => { const v = new Set(bolsao.filter(x => ['livre','pego'].includes(x.status)).map(bzTelK).filter(Boolean)); return bolsao.filter(x => x.status === 'fila').filter(x => { const k = bzTelK(x); if (!k) return true; if (v.has(k)) return false; v.add(k); return true; }); })()), md = bzOrdem(), dono = souGerente() && !souCeo();
     const seq = htmlBzSeq();
     const _x = `<div class="bz-seq"><b>Sequência da fila</b><div class="seg">${[['antigos','Mais antigos primeiro'],['novos','Mais novos primeiro'],['manual','Eu escolho']].map(([k, n]) => `<button class="${md === k ? 'on' : ''}" ${dono ? `onclick="bzSetOrdem('${k}')"` : 'disabled'}>${n}</button>`).join('')}</div><small>${md === 'novos' ? 'Os leads que chegaram por último saem primeiro.' : md === 'manual' ? 'Use as setas para mudar a posição. O 1º da lista é o próximo a sair.' : 'Os leads que estão há mais tempo na fila saem primeiro.'}</small></div>`;
     $('bzLista').innerHTML = seq + `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th><th class="hide-m">Chegou</th>${md === 'manual' && dono ? '<th></th>' : ''}</tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td><td class="hide-m">${x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</td>${md === 'manual' && dono ? `<td><div class="bz-mv"><button class="icon-btn" title="Mandar para o começo" aria-label="Mandar para o começo" onclick="bzMover('${x.id}','topo')" ${i ? '' : 'disabled'}>⤒</button><button class="icon-btn" title="Subir" aria-label="Subir" onclick="bzMover('${x.id}',-1)" ${i ? '' : 'disabled'}>↑</button><button class="icon-btn" title="Descer" aria-label="Descer" onclick="bzMover('${x.id}',1)" ${i < l.length - 1 ? '' : 'disabled'}>↓</button></div></td>` : ''}</tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
@@ -10712,7 +10746,7 @@ function bzCardFunil(x, et){
     <div class="bz-lig">${htmlLigar(x.telefone, x.nome, 'bolsão')}${x.zapConversaId ? `<button class="snooze wa" onclick="abrirZapCid('${esc(x.zapConversaId)}')">Abrir conversa</button>` : zapOficialOn() && x.telefone ? `<button class="snooze wa" onclick="zapChamarCrm('${x.id}')">WhatsApp da Frade</button>` : ''}</div>
     ${aberto ? htmlBzLigs(x) : ''}
     <div class="bzf-mov"><select onchange="if(this.value)resultadoBolsao('${x.id}',this.value)" aria-label="Mover para outra etapa"><option value="">${x.resultado ? 'Mover para outra etapa' : 'Como foi? Mover para…'}</option>${opts}</select></div>
-    ${aberto ? `<button class="link" onclick="devolverBolsao('${x.id}')">Devolver ao bolsão</button>` : ''}</div>`;
+    ${aberto ? `<button class="link" onclick="devolverBolsao('${x.id}')">Devolver (não volta ao bolsão)</button>` : ''}</div>`;
 }
 function htmlBzFunil(){
   const l = bzTodosMeus().sort((a, b) => (b.resultadoEm || b.pegoEm || 0) - (a.resultadoEm || a.pegoEm || 0));
@@ -10732,10 +10766,14 @@ function htmlBzFunil(){
   return topo + `<div class="bzf">${cols.map(col).join('')}${colV}</div>`;
 }
 // v144: busca no histórico do bolsão todos os clientes que a pessoa já pegou (uma vez por sessão; a gerência já tem tudo)
-let _bzHistTodos = null, _bzHistIndo = false;
+
 function bzCarregarHist(){
   if (_bzHistTodos || _bzHistIndo || souGerente() || !uidAtual) return; _bzHistIndo = true;
-  getDocs(collection(db,'bolsao')).then(sn => { _bzHistTodos = sn.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => (x.historico || []).some(e => e.uid === uidAtual && e.txt === 'pegou')); if (view === 'bolsao') renderBolsao(); })
+  getDocs(collection(db,'bolsao')).then(sn => { const todos = sn.docs.map(d => ({ id:d.id, ...d.data() }));
+      _bzHistTodos = todos.filter(x => (x.historico || []).some(e => e.uid === uidAtual && e.txt === 'pegou'));
+      window._bzOcupOutros = new Set(todos.filter(x => x.status === 'pego' && x.pegoPor !== uidAtual).map(bzTelK).filter(Boolean)); // v234
+      window._bzAtendTodos = new Set(todos.filter(x => x.status !== 'livre' && x.status !== 'fila' && bzAtendido(x)).map(bzTelK).filter(Boolean)); // v235
+      if (view === 'bolsao') renderBolsao(); })
     .catch(e => { console.warn('bolsão histórico', e.code || e.message); _bzHistTodos = []; }).finally(() => { _bzHistIndo = false; });
 }
 // editor de etapas (gerência)
@@ -10801,6 +10839,13 @@ function htmlBzLigs(x){
 }
 window.pegarBolsao = async id => {
   const x = bolsao.find(b => b.id === id); if (!x) return;
+  // v234: não deixa pegar de novo o mesmo cliente (mesmo telefone) que já está com você ou que você já pegou antes
+  { const k = bzTelK(x); if (k && !souGerente() && bzJaPeguei().has(k)) { toast('Você já pegou esse cliente antes. Ele fica para outro corretor.'); render(); return; }
+    if (k && bolsao.some(b => b.id !== x.id && b.status === 'pego' && bzTelK(b) === k)) { toast('Esse cliente já está sendo atendido por outra pessoa.'); render(); return; }
+    // confere no banco na hora (pega também o que este celular ainda não carregou)
+    if (k) { try { const sn = await getDocs(query(collection(db,'bolsao'), where('telNorm','==',k))), ou = sn.docs.map(d => ({ id:d.id, ...d.data() })).filter(b => b.id !== x.id);
+      if (ou.some(b => b.status === 'pego' && b.pegoPor !== uidAtual)) { toast('Esse cliente já está sendo atendido por outra pessoa.'); return; }
+      if (!souGerente() && ou.some(b => b.pegoPor === uidAtual || (b.historico || []).some(e => e.uid === uidAtual && e.txt === 'pegou'))) { toast('Você já pegou esse cliente antes. Ele fica para outro corretor.'); return; } } catch(e) { console.warn('conferir repetido', e.message); } } }
   if (bzMeus().length >= BZ_LIMITE()) { toast(`Você já está com ${BZ_LIMITE()} clientes do bolsão. Dê o resultado de algum antes.`); return; }
   if (!bzPresente()) { toast('Marque sua presença (escritório ou atendimento externo) para pegar leads do bolsão.'); return; }
   { const f = bolsao.find(bzFaltaInsistir); if (f) { toast(`Antes de pegar outro, ligue pelo menos ${BZ_MIN_LIG()} vezes para ${nomeCurto(f.nome)} (feitas: ${bzMinhasLigs(f)}).`); bzAba = 'meus'; render(); return; } }
@@ -10834,10 +10879,10 @@ window.devolverBolsao = async id => {
   const x = bolsao.find(b => b.id === id); if (!x) return;
   if (!souGerente() && bzMinhasLigs(x) < BZ_MIN_LIG()) { toast(`Insista mais: ligue pelo menos ${BZ_MIN_LIG()} vezes antes de devolver (feitas: ${bzMinhasLigs(x)}).`); return; }
   const mot = prompt('Por que está devolvendo? (opcional)') ; if (mot === null) return;
-  try { await updateDoc(doc(db,'bolsao', id), { status:'livre', pegoPor:'', pegoNome:'', pegoEm:0, tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'devolveu' + (mot ? ': ' + mot : '')) }); toast('Devolvido ao bolsão'); } catch(e) { toast('Erro: ' + e.message); }
+  try { await updateDoc(doc(db,'bolsao', id), { status:'encerrado', resultado:'', pegoPor:'', pegoNome:'', pegoEm:0, encerradoEm:Date.now(), tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'devolveu' + (mot ? ': ' + mot : '')) }); toast('Cliente devolvido. Como já foi atendido, ele não volta para o bolsão.'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.voltarBolsao = async id => { const x = bolsao.find(b => b.id === id); if (!x) return;
-  try { await updateDoc(doc(db,'bolsao', id), { status:'livre', pegoPor:'', pegoNome:'', pegoEm:0, resultado:'', tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'gerência voltou ao bolsão') }); toast('Voltou ao bolsão'); } catch(e) { toast('Erro: ' + e.message); } };
+  try { await updateDoc(doc(db,'bolsao', id), { status:'livre', liberadoGerencia:true, pegoPor:'', pegoNome:'', pegoEm:0, resultado:'', tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'gerência voltou ao bolsão') }); toast('Voltou ao bolsão'); } catch(e) { toast('Erro: ' + e.message); } };
 // separa "nome telefone" de cada linha
 function bzLerLinhas(txt){
   return String(txt || '').split(/\n+/).map(l => l.trim()).filter(Boolean).map(l => { const m = l.match(/(\+?\(?\d[\d\s().-]{7,}\d)/); const tel = m ? m[1].trim() : ''; const nome = (m ? l.replace(m[1], '') : l).replace(/[-;,|:()]+/g, ' ').replace(/\s+/g, ' ').trim(); return { nome, telefone:tel }; }).filter(x => x.nome || x.telefone);
@@ -10847,7 +10892,7 @@ async function bzGravar(itens, avisar, aosPoucos){
   const tels = new Set(bolsao.map(x => chaveTel(x.telefone)).filter(Boolean)); let n = 0, rep = 0; // v224: número que já passou pelo bolsão não entra de novo
   for (let i = 0; i < itens.length; i += 400) { const b = writeBatch(db);
     itens.slice(i, i + 400).forEach(x => { const t = chaveTel(x.telefone); if (t && tels.has(t)) { rep++; return; } if (t) tels.add(t);
-      b.set(doc(collection(db,'bolsao')), { criativo:String(x.criativo || '').slice(0, 120), nome:String(x.nome || '').slice(0, 80), telefone:String(x.telefone || '').replace(/^['’`\s]+/, '').slice(0, 25), origem:x.origem, motivo:String(x.motivo || '').slice(0, 80), empreendimento:String(x.empreendimento || '').slice(0, 80), obs:String(x.obs || '').slice(0, 200), ref:x.ref || '', status:'livre', pegoPor:'', criadoEm:Date.now(), criadoPor:uidAtual, criadoNome:perfil.nome, tentativas:0, ...(aosPoucos ? { status:'fila', ordem:Date.now() + n } : {}) }); n++; });
+      b.set(doc(collection(db,'bolsao')), { criativo:String(x.criativo || '').slice(0, 120), nome:String(x.nome || '').slice(0, 80), telefone:String(x.telefone || '').replace(/^['’`\s]+/, '').slice(0, 25), telNorm:chaveTel(x.telefone || ''), origem:x.origem, motivo:String(x.motivo || '').slice(0, 80), empreendimento:String(x.empreendimento || '').slice(0, 80), obs:String(x.obs || '').slice(0, 200), ref:x.ref || '', status:'livre', pegoPor:'', criadoEm:Date.now(), criadoPor:uidAtual, criadoNome:perfil.nome, tentativas:0, ...(aosPoucos ? { status:'fila', ordem:Date.now() + n } : {}) }); n++; });
     await b.commit(); }
   if (n && avisar && !aosPoucos) avisarCarteiro('bolsao', '', true, { n });
   return { n, rep };
