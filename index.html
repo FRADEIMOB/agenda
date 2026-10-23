@@ -7142,7 +7142,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 229;
+const APP_VERSAO = 231;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7604,7 +7604,7 @@ function pontosDoMesBase(m, val, corte){
   ATV.filter(r => r.mes === m && r.uid).forEach(r => {
     const x = pega({ corretorUid:r.uid, corretorNome:(RK().find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const diasPres = new Set([...Object.keys(r.pres || {}), ...Object.keys(r.chk || {})]);
-    const pr = diasPres.size, l = ligUnicas(r, val), c = 0; x.tentativas = (x.tentativas || 0) + somaCap(r.lig, val) + somaCap(r.rec, val);
+    const pr = diasPres.size, l = somaCap(r.lig, val) + somaCap(r.rec, val), c = 0;
     // v196: presença só pontua a partir da data escolhida; a tarde é o 2º check-in do dia
     const presDesde = String(val.presencaDesde || ''), prPts = [...diasPres].filter(d => !presDesde || d >= presDesde).length;
     const tardes = Object.keys(r.chkt || {}).filter(d => (!presDesde || d >= presDesde) && d >= String(val.tardeDesde || '')).length;
@@ -7649,6 +7649,11 @@ window.pontosDoMes = pontosDoMes;
 // e o ranking do mês continua somando tudo, como sempre
 // =====================================================================
 const rkNovos = () => Array.isArray(appCfg.rankingsNovos) ? appCfg.rankingsNovos : [];
+// v230: gerente com equipe entra no ranking (só os pontos que ele faz, como as ligações); o gestor e o CEO ficam de fora
+function gerenteDeEquipeUid(uid){ if (!uid) return false; const p = (perfisTodos || []).find(x => x.uid === uid) || (pessoasRk() || []).find(x => x.uid === uid);
+  const gestor = (!!instalacao && instalacao.gerenteUid === uid) || String(p?.email || '').toLowerCase() === EMAIL_DONO;
+  return !!p && p.papel === 'gerente' && !!p.equipe && p.status !== 'inativo' && (gestor || p.cargo !== 'dono'); }
+window.gerenteDeEquipeUid = gerenteDeEquipeUid;
 function pontosEntre(de, ate){
   const g = new Map(), h = hojeISO(); ate = !ate || ate > h ? h : ate;
   for (let m = de.slice(0, 7); m <= ate.slice(0, 7); m = (() => { const [a, b] = m.split('-').map(Number); return b === 12 ? `${a + 1}-01` : `${a}-${String(b + 1).padStart(2, '0')}`; })()) {
@@ -7657,7 +7662,7 @@ function pontosEntre(de, ate){
       if (!y) { g.set(k, { ...x }); return; }
       Object.keys(x).forEach(c => { if (typeof x[c] === 'number' && c !== 'pos') y[c] = (Number(y[c]) || 0) + x[c]; }); y.nome = x.nome || y.nome; y.equipe = x.equipe ?? y.equipe; });
   }
-  return [...g.values()].filter(x => relSoCorretor(x.uid, x.nome) || ['sdr','anjo'].includes(papelDe(x.uid)))
+  return [...g.values()].filter(x => relSoCorretor(x.uid, x.nome) || ['sdr','anjo'].includes(papelDe(x.uid)) || gerenteDeEquipeUid(x.uid))
     .sort((a, b) => b.pontos - a.pontos || (b.vendas || 0) - (a.vendas || 0) || (b.cartas || 0) - (a.cartas || 0) || a.nome.localeCompare(b.nome, 'pt-BR'));
 }
 window.pontosEntre = pontosEntre;
@@ -7808,7 +7813,7 @@ function linhasPontos(x, P){
     ['Presenças da tarde', x.tardes, n('presencaTarde'), (x.tardes || 0) * n('presencaTarde')],
     ['Vendas assinadas', x.assinadas, n('vendaAssinada'), (x.assinadas || 0) * n('vendaAssinada')],
     ['Recrutamentos', x.recrut, n('recrutamento'), (x.recrut || 0) * n('recrutamento')],
-    [`Ligações para números diferentes (${x.ligacoes || 0}${x.tentativas > x.ligacoes ? ` de ${x.tentativas} tentativas` : ''} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
+    [`Ligações (${x.ligacoes || 0} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     ['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')],
@@ -7934,7 +7939,7 @@ function tabelaPontos(linhas){
   const pos = posicoes(linhas);
   return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th title="Dias no escritório">Presenças</th><th title="Ligações e recontatos registrados no app. Entre parênteses, os pontos que elas deram">Ligações</th><th class="hide-m" title="Dias de trabalho sem presença">Ausências</th><th>Pontos</th></tr></thead><tbody>${
     linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}${x.vendasInd ? ` <small class="muted">(${x.vendasInd} ind.)</small>` : ''}</td><td>${x.presencas ?? '–'}</td><td>${x.ligacoes === undefined ? '–' : `${x.ligacoes}${ptsLig(x.ligacoes) ? ` <small class="muted">(+${ptsLig(x.ligacoes)})</small>` : ''}`}</td><td class="hide-m">${x.ausencias ? `${x.ausencias} <small class="muted">(${x.ausencias * (Number(appCfg.pontos.ausencia) || 0)})</small>` : (x.ausencias === undefined ? '–' : 0)}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
-  }</tbody></table><div class="hint" style="margin-top:8px">Ligações: a cada ${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)} números diferentes no dia (ligar de novo para o mesmo número é tentativa, não conta outra vez), ${Number(appCfg.pontos.ligacao) || 0} ponto${Number(appCfg.pontos.ligacao) === 1 ? '' : 's'}. Os pontos de presença, ligações e ausências já estão somados no total.</div>`;
+  }</tbody></table><div class="hint" style="margin-top:8px">Ligações: a cada ${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)} registradas no app, ${Number(appCfg.pontos.ligacao) || 0} ponto${Number(appCfg.pontos.ligacao) === 1 ? '' : 's'}. Os pontos de presença, ligações e ausências já estão somados no total.</div>`;
 }
 function faixaOrig(){ const [mi, mf] = faixa('mes'); return origPer === '3m' ? [somaDias(hojeISO(), -89), mf] : [mi, mf]; }
 function renderRelGestao(){
@@ -8183,7 +8188,7 @@ function renderAdm(){
     + PONTOS_ITENS.map(([k,n]) => { const sv = (appCfg.pontosSdr || {})[k], dd = (appCfg.pontos.desdeItens || {})[k] || '';
       return `<div class="pt-row pt-ed pt-3"><div class="pt-txt"><input class="pt-nome" data-k="${k}" value="${esc(nomePonto(k))}" placeholder="${esc(n)}" maxlength="80"><input class="pt-desc" data-k="${k}" value="${esc(descPonto(k))}" placeholder="Descrição (opcional)" maxlength="160"></div><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}" aria-label="Pontos do corretor"><input type="number" step="1" class="pt-sdr" data-k="${k}" value="${sv === undefined || sv === null || sv === '' ? '' : Number(sv)}" placeholder="igual" aria-label="Pontos da SDR">${PT_COM_DATA.includes(k) ? `<input type="date" class="pt-desde" data-k="${k}" value="${esc(dd)}" aria-label="Conta a partir de">` : '<span class="pt-sem-data"></span>'}</div>`; }).join('')
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
-    + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 números diferentes valem os pontos de "Ligação"; tentativas no mesmo número não contam de novo)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
+    + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
     + PT_ANTES.map(k => { const a = (appCfg.pontos.antesItens || {})[k]; return `<div class="pt-row"><span>${esc(nomePonto(k))}: antes da data dela vale (valor antigo)</span><input type="number" step="1" id="pt_antes_${k}" value="${a !== undefined && a !== null && a !== '' ? Number(a) : Number(appCfg.pontos[k]) || 0}"></div>`; }).join('')
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
     + `<div class="pt-row"><span>Ausência antes da data abaixo vale (valor antigo, ex.: -15)</span><input type="number" step="1" id="pt_ausenciaAntes" value="${appCfg.pontos.ausenciaAntes !== undefined && appCfg.pontos.ausenciaAntes !== '' ? Number(appCfg.pontos.ausenciaAntes) : Number(appCfg.pontos.ausencia) || 0}"></div>`
@@ -8973,7 +8978,7 @@ function dadosTvRank(){
   const vgv = rankingVgv(de, ate, '').filter(x => x.vgv > 0).map(x => ({ uid:x.uid, nome:nm(x.uid, x.nome), equipe:eqDe(x.uid, x.equipe), v:x.vgv }));
   const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0);
   const bz = agrupa(rankingAtiv.filter(r => r.mes === m && r.bz), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.bz));
-  const lig = agrupa(rankingAtiv.filter(r => r.mes === m && (r.lig || r.rec)), r => r.uid, r => r.nome, r => r.equipe, r => ligUnicas(r, null));
+  const lig = agrupa(rankingAtiv.filter(r => r.mes === m && (r.lig || r.rec)), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.lig) + soma(r.rec));
   const sab = sabadoFeirao();
   const fonteSab = (souGerente() || souCoord()) && visitas.length ? visitas : rankingDocs;
   // v114: visitas do feirão contam o mês inteiro, inclusive as marcadas para dias que ainda vão chegar (ex.: o sábado do feirão)
@@ -8982,7 +8987,7 @@ function dadosTvRank(){
   // v136: visita marcada pela SDR conta só para a SDR (igual à carteira)
   const feiQuem = feiBase.map(r => { const u = donoCart(r); return u && u !== r.corretorUid ? { uid:u, nome:r.sdrNome || '', equipe:(pessoasRk().find(p => p.uid === u) || {}).equipe || '' } : { uid:r.corretorUid, nome:r.corretorNome, equipe:r.equipe }; }).filter(x => x.uid || x.nome);
   const fei = agrupa(feiQuem, r => r.uid, r => r.nome, r => r.equipe);
-  const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => ligUnicasDia(r, sab));
+  const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => (Number(r.lig?.[sab]) || 0) + (Number(r.rec?.[sab]) || 0));
   const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
   const sdr = rankingSdr(de, ate).map(x => ({ uid:x.uid, nome:x.nome, equipe:'', v:Number(x.docs) || 0, sub:'SDR' })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
   const eqs = listaEquipes().map(e => ({ e, n:pontosDoMes(m).filter(x => eqDe(x.uid, x.equipe) === e.id).reduce((a, x) => a + x.pontos, 0) })).sort((a, b) => b.n - a.n);
@@ -9017,7 +9022,7 @@ function contadoresTv(){
   rankingCartas.filter(x => noM(x.data) && !x.arquivado).forEach(x => soma('aprovacao', x.corretorUid));
   rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => (v.corretores || []).forEach(x => soma('venda', x.uid)));
   const tot = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0);
-  rankingAtiv.filter(r => r.mes === m).forEach(r => { soma('bolsao', r.uid, tot(r.bz)); soma('ligacao', r.uid, ligUnicas(r, null)); });
+  rankingAtiv.filter(r => r.mes === m).forEach(r => { soma('bolsao', r.uid, tot(r.bz)); soma('ligacao', r.uid, tot(r.lig) + tot(r.rec)); });
   return c;
 }
 // v162: só anuncia o que acontece COM A TV ABERTA. Ao abrir (ou voltar para) a TV, os números
@@ -10052,23 +10057,22 @@ function assinarEtapa3(){
 // =====================================================================
 let rankingAtiv = [], meusLeadsHoje = [], minhasLigHoje = [], _presSinc = false;
 const ligLimite = () => Math.max(0, Number(appCfg.pontos.ligLimite) || 0);
-// v229: ligação que vale ponto = número DIFERENTE no dia (tentativas no mesmo número não contam de novo).
-// "ligu" guarda os números diferentes de cada dia; dias antigos, de antes desse registro, usam o total que havia.
-function ligUnicasDia(r, d){ const u = r.ligu && r.ligu[d]; return u !== undefined && u !== null ? (Number(u) || 0) : (Number((r.lig || {})[d]) || 0) + (Number((r.rec || {})[d]) || 0); }
-function ligUnicas(r, val, filtro){ const cap = Math.max(0, Number((val || appCfg.pontos).ligLimite) || 0);
-  return [...new Set([...Object.keys(r.lig || {}), ...Object.keys(r.rec || {})])].filter(d => !filtro || filtro(d)).reduce((a, d) => { const n = ligUnicasDia(r, d); return a + (cap ? Math.min(n, cap) : n); }, 0); }
-window.ligUnicas = ligUnicas;
 function somaCap(mapa, val){
   const cap = Math.max(0, Number((val || appCfg.pontos).ligLimite) || 0);
   return Object.values(mapa || {}).reduce((a, n) => a + (cap ? Math.min(Number(n) || 0, cap) : (Number(n) || 0)), 0);
 }
 const ligaPontua = () => souAtivo() && !souCeo() && ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
+// v230: gerente de equipe (não o gestor nem o CEO) também registra ligações e ganha os pontos delas
+// v231: o gestor também conta quando é gerente de uma equipe (tem equipe no cadastro); o CEO fica de fora
+const gerenteEquipe = () => souAtivo() && perfil?.papel === 'gerente' && !!perfil?.equipe && !souCeo();
+const ligaConta = () => ligaPontua() || gerenteEquipe();
+window.ligaConta = ligaConta;
 function assinarEtapa4(){
   try { assinarMkt(); } catch(e) { console.warn('mkt', e.message); }
   rankingAtiv = []; meusLeadsHoje = []; minhasLigHoje = []; _presSinc = false;
   const silencio = e => console.warn('Etapa 4:', e.code || e.message);
   subsPapel.push(onSnapshot(query(collection(db,'ranking_ativ'), where('mes','>=', mesAnterior(1))), s => { rankingAtiv = s.docs.map(d => ({ id:d.id, ...d.data() })); sincPresencaRanking(); render(); }, silencio));
-  if (ligaPontua()) {
+  if (ligaConta()) {
     subsPapel.push(onSnapshot(query(collection(db,'leads_ev'), where('corretorUid','==',uidAtual), where('dia','==',hojeISO())), s => { meusLeadsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
     subsPapel.push(onSnapshot(query(collection(db,'ligacoes'), where('uid','==',uidAtual), where('dia','==',hojeISO())), s => { minhasLigHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
   }
@@ -10144,8 +10148,8 @@ window.ligar = (tel, cliente, origem) => {
   const a = document.createElement('a'); a.href = 'tel:' + n; document.body.appendChild(a); a.click(); a.remove();
 };
 async function registrarLigacao(tel, cliente, origem){
-  const sdr = !ligaPontua() && ligaSdr();
-  if (!ligaPontua() && !sdr) return '';
+  const sdr = !ligaConta() && ligaSdr();
+  if (!ligaConta() && !sdr) return '';
   const t = chaveTel(tel); if (!t) return '';
   const h = hojeISO(), m = h.slice(0,7), rec = minhasLigHoje.some(x => x.telNorm === t), b = writeBatch(db), ref = doc(collection(db,'ligacoes'));
   b.set(ref, { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec, v:97, ...(sdr ? { sdr:true } : {}) });
@@ -10169,7 +10173,7 @@ function iniciarLigacao(tel, cliente, origem){
   const pend = { tel:String(tel || ''), cliente:String(cliente || ''), origem:origem || '', ini:Date.now(), uid:uidAtual, saiu:false, id:'' };
   gravarLigPend(pend);
   bzRegistrarLigacao(tel); // v125: conta a tentativa no lead do bolsão
-  if (ligaPontua() || ligaSdr()) registrarLigacao(tel, cliente, origem).then(id => { const p = lerLigPend(); if (id && p && p.ini === pend.ini) gravarLigPend({ ...p, id }); }).catch(e => { console.warn('Ligação:', e.message); toast('A ligação não foi registrada: ' + (e.message || e)); }); // v114: avisa se a ligação não contou
+  if (ligaConta() || ligaSdr()) registrarLigacao(tel, cliente, origem).then(id => { const p = lerLigPend(); if (id && p && p.ini === pend.ini) gravarLigPend({ ...p, id }); }).catch(e => { console.warn('Ligação:', e.message); toast('A ligação não foi registrada: ' + (e.message || e)); }); // v114: avisa se a ligação não contou
   else toast('Teste do gestor: a ligação não é registrada.');
 }
 function voltouDaLigacao(){
@@ -10196,11 +10200,11 @@ window.ligConfResp = async sim => {
   // v112: marcou visita na ligação -> abre a visita já preenchida (cliente, telefone, hoje, Feirão)
   const abreVisita = () => { if (!vis) return; novaVisita(); setTimeout(() => { $('vmCliente').value = c.cliente || ''; $('vmFone').value = c.tel || ''; $('vmFeirao').checked = fei;
     const o = $('vmOrigem'); if (o && !o.value) { const op = [...o.options].find(x => /liga/i.test(x.value)); if (op) o.value = op.value; } }, 80); };
-  if (!ligaPontua() && !ligaSdr()) { toast('Teste do gestor: ' + (sim ? 'atendeu' : 'não atendeu') + '.'); abreVisita(); return; }
+  if (!ligaConta() && !ligaSdr()) { toast('Teste do gestor: ' + (sim ? 'atendeu' : 'não atendeu') + '.'); abreVisita(); return; }
   if (!c.id) { toast('A ligação ainda não tinha sido registrada. Tente de novo.'); abreVisita(); return; }
   const h = new Date(c.ini); const dia = iso(h), m = dia.slice(0,7), b = writeBatch(db);
   b.update(doc(db,'ligacoes',c.id), { atendeu:!!sim, prospecto:!!pro, durSeg:c.seg });
-  if (ligaPontua()) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [sim ? 'at' : 'na']:{ [dia]: increment(1) }, ...(pro ? { pro:{ [dia]: increment(1) } } : {}), atualizadoEm:Date.now() }, { merge:true });
+  if (ligaConta()) b.set(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', [sim ? 'at' : 'na']:{ [dia]: increment(1) }, ...(pro ? { pro:{ [dia]: increment(1) } } : {}), atualizadoEm:Date.now() }, { merge:true });
   try { await gravar(b.commit()); toast(sim ? (pro ? 'Atendeu · cliente com perfil' : 'Atendeu') : 'Não atendeu'); } catch(e) { toast('Erro ao registrar: ' + e.message); }
   abreVisita();
 };
