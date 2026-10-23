@@ -9,7 +9,7 @@ try {
 // Ao tocar na notificação, abre (ou traz para frente) o app
 self.addEventListener('notificationclick', e => {
   e.notification.close();
-  const link = (e.notification.data && e.notification.data.FCM_MSG && e.notification.data.FCM_MSG.data && e.notification.data.FCM_MSG.data.link) || './';
+  const d = e.notification.data || {}, link = (d.FCM_MSG && d.FCM_MSG.data && d.FCM_MSG.data.link) || d.link || './';
   e.waitUntil(clients.matchAll({ type:'window', includeUncontrolled:true }).then(ws => {
     for (const w of ws) if (w.url.includes('/agenda/') && 'focus' in w) {
       if (link.includes('#') && 'navigate' in w) return w.navigate(link).then(x => (x || w).focus());
@@ -18,7 +18,7 @@ self.addEventListener('notificationclick', e => {
     return clients.openWindow(link);
   }));
 });
-const CACHE = 'minha-agenda-v226';
+const CACHE = 'minha-agenda-v229';
 const ARQUIVOS = ['./', './index.html', './manifest.json', './frade-icone-192.png', './frade-icone-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './frade-icone-180.png', './logo-frade.png', './logo-frade-claro.png'];
 
 self.addEventListener('install', e => {

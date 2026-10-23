@@ -1059,6 +1059,8 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+/* v227: pergunta de saída */
+.saida-bts{flex-wrap:wrap}.saida-bts .btn{flex:1 1 100%}
 /* v220: quem é de cada equipe */
 .org-p{padding:1px 0}
 .org-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
@@ -4443,6 +4445,13 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('ciExtModal')">Cancelar</button><button class="btn btn-primary" id="ciExtBt" onclick="checkinExterno()">Marcar presença externa</button></div>
   </div>
 </div>
+<div class="modal" id="saidaModal">
+  <div class="sheet" style="width:min(440px,100%)">
+    <div class="sheet-head"><h2>Você está saindo para uma visita externa?</h2><button class="icon-btn" onclick="saidaResp('fica')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="hint" style="margin:0" id="saidaTx">O app percebeu que você saiu do escritório.</div></div>
+    <div class="sheet-foot saida-bts"><button class="btn btn-primary" onclick="saidaResp('externo')">Sim, vou atender fora</button><button class="btn btn-ghost" onclick="saidaResp('encerrar')">Não, encerrei o dia</button><button class="btn btn-ghost" onclick="saidaResp('fica')">Ainda estou no escritório</button></div>
+  </div>
+</div>
 <div class="modal" id="metasModal">
   <div class="sheet" style="width:min(620px,100%)">
     <div class="sheet-head"><h2 id="metasTit">Metas do mês</h2><button class="icon-btn" onclick="fechar('metasModal')" data-ic="x"></button></div>
@@ -5157,7 +5166,8 @@ function render(){
     if (h === '#plantao') setTimeout(() => abrirPlantao(), 400); else setTimeout(() => abrirZapCid(decodeURIComponent(h.slice(10))), 0); }
   if (!window._hashZap && podeZap() && location.hash === '#whatsapp') { window._hashZap = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('whatsapp'), 0); }
   if (!window._hashRep && perfil && souAtivo() && location.hash === '#reportar') { window._hashRep = true; window._hashGen = true; history.replaceState(null, '', location.pathname); setTimeout(() => abrirReporte(), 300); }
-  if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
+  if (perfil && souAtivo() && location.hash === '#saida') { history.replaceState(null, '', location.pathname); setTimeout(() => saidaConferir(true), 1500); }
+  if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo','#saida'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
   if (souSdr()) { const ontem = somaDias(hojeISO(), -1); $('cResumo').classList.toggle('hide', sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem)); }
@@ -7132,7 +7142,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 226;
+const APP_VERSAO = 229;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7594,7 +7604,7 @@ function pontosDoMesBase(m, val, corte){
   ATV.filter(r => r.mes === m && r.uid).forEach(r => {
     const x = pega({ corretorUid:r.uid, corretorNome:(RK().find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const diasPres = new Set([...Object.keys(r.pres || {}), ...Object.keys(r.chk || {})]);
-    const pr = diasPres.size, l = somaCap(r.lig, val) + somaCap(r.rec, val), c = 0;
+    const pr = diasPres.size, l = ligUnicas(r, val), c = 0; x.tentativas = (x.tentativas || 0) + somaCap(r.lig, val) + somaCap(r.rec, val);
     // v196: presença só pontua a partir da data escolhida; a tarde é o 2º check-in do dia
     const presDesde = String(val.presencaDesde || ''), prPts = [...diasPres].filter(d => !presDesde || d >= presDesde).length;
     const tardes = Object.keys(r.chkt || {}).filter(d => (!presDesde || d >= presDesde) && d >= String(val.tardeDesde || '')).length;
@@ -7798,7 +7808,7 @@ function linhasPontos(x, P){
     ['Presenças da tarde', x.tardes, n('presencaTarde'), (x.tardes || 0) * n('presencaTarde')],
     ['Vendas assinadas', x.assinadas, n('vendaAssinada'), (x.assinadas || 0) * n('vendaAssinada')],
     ['Recrutamentos', x.recrut, n('recrutamento'), (x.recrut || 0) * n('recrutamento')],
-    [`Ligações (${x.ligacoes || 0} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
+    [`Ligações para números diferentes (${x.ligacoes || 0}${x.tentativas > x.ligacoes ? ` de ${x.tentativas} tentativas` : ''} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     ['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')],
@@ -7924,7 +7934,7 @@ function tabelaPontos(linhas){
   const pos = posicoes(linhas);
   return `<table class="rank"><thead><tr><th>#</th><th>Corretor</th><th>Visitas</th><th class="hide-m">Realizadas</th><th class="hide-m">Faltas</th><th>Cartas</th><th class="hide-m">Docs</th><th>Vendas</th><th title="Dias no escritório">Presenças</th><th title="Ligações e recontatos registrados no app. Entre parênteses, os pontos que elas deram">Ligações</th><th class="hide-m" title="Dias de trabalho sem presença">Ausências</th><th>Pontos</th></tr></thead><tbody>${
     linhas.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="hide-m">${x.faltas}</td><td>${x.cartas}</td><td class="hide-m">${x.docs}</td><td>${x.vendas}${x.vendasInd ? ` <small class="muted">(${x.vendasInd} ind.)</small>` : ''}</td><td>${x.presencas ?? '–'}</td><td>${x.ligacoes === undefined ? '–' : `${x.ligacoes}${ptsLig(x.ligacoes) ? ` <small class="muted">(+${ptsLig(x.ligacoes)})</small>` : ''}`}</td><td class="hide-m">${x.ausencias ? `${x.ausencias} <small class="muted">(${x.ausencias * (Number(appCfg.pontos.ausencia) || 0)})</small>` : (x.ausencias === undefined ? '–' : 0)}</td><td class="tot pts">${x.pontos}</td></tr>`).join('')
-  }</tbody></table><div class="hint" style="margin-top:8px">Ligações: a cada ${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)} registradas no app, ${Number(appCfg.pontos.ligacao) || 0} ponto${Number(appCfg.pontos.ligacao) === 1 ? '' : 's'}. Os pontos de presença, ligações e ausências já estão somados no total.</div>`;
+  }</tbody></table><div class="hint" style="margin-top:8px">Ligações: a cada ${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)} números diferentes no dia (ligar de novo para o mesmo número é tentativa, não conta outra vez), ${Number(appCfg.pontos.ligacao) || 0} ponto${Number(appCfg.pontos.ligacao) === 1 ? '' : 's'}. Os pontos de presença, ligações e ausências já estão somados no total.</div>`;
 }
 function faixaOrig(){ const [mi, mf] = faixa('mes'); return origPer === '3m' ? [somaDias(hojeISO(), -89), mf] : [mi, mf]; }
 function renderRelGestao(){
@@ -8173,7 +8183,7 @@ function renderAdm(){
     + PONTOS_ITENS.map(([k,n]) => { const sv = (appCfg.pontosSdr || {})[k], dd = (appCfg.pontos.desdeItens || {})[k] || '';
       return `<div class="pt-row pt-ed pt-3"><div class="pt-txt"><input class="pt-nome" data-k="${k}" value="${esc(nomePonto(k))}" placeholder="${esc(n)}" maxlength="80"><input class="pt-desc" data-k="${k}" value="${esc(descPonto(k))}" placeholder="Descrição (opcional)" maxlength="160"></div><input type="number" step="1" id="pt_${k}" value="${Number(appCfg.pontos[k]) || 0}" aria-label="Pontos do corretor"><input type="number" step="1" class="pt-sdr" data-k="${k}" value="${sv === undefined || sv === null || sv === '' ? '' : Number(sv)}" placeholder="igual" aria-label="Pontos da SDR">${PT_COM_DATA.includes(k) ? `<input type="date" class="pt-desde" data-k="${k}" value="${esc(dd)}" aria-label="Conta a partir de">` : '<span class="pt-sem-data"></span>'}</div>`; }).join('')
     + `<div class="pt-row"><span>Máximo de ligações que pontuam por dia (0 = sem limite)</span><input type="number" step="1" min="0" id="pt_ligLimite" value="${Number(appCfg.pontos.ligLimite) || 0}"></div>`
-    + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 ligações valem os pontos de "Ligação"; 1 = cada ligação)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
+    + `<div class="pt-row"><span>Ligações por bloco (ex.: 10 = cada 10 números diferentes valem os pontos de "Ligação"; tentativas no mesmo número não contam de novo)</span><input type="number" step="1" min="1" id="pt_ligBloco" value="${Math.max(1, Number(appCfg.pontos.ligBloco) || 1)}"></div>`
     + PT_ANTES.map(k => { const a = (appCfg.pontos.antesItens || {})[k]; return `<div class="pt-row"><span>${esc(nomePonto(k))}: antes da data dela vale (valor antigo)</span><input type="number" step="1" id="pt_antes_${k}" value="${a !== undefined && a !== null && a !== '' ? Number(a) : Number(appCfg.pontos[k]) || 0}"></div>`; }).join('')
     + `<div class="pt-row"><span>Ausência conta a partir de</span><input type="date" id="pt_ausenciaDesde" style="width:150px" value="${esc(appCfg.pontos.ausenciaDesde || '2026-10-07')}"></div>`
     + `<div class="pt-row"><span>Ausência antes da data abaixo vale (valor antigo, ex.: -15)</span><input type="number" step="1" id="pt_ausenciaAntes" value="${appCfg.pontos.ausenciaAntes !== undefined && appCfg.pontos.ausenciaAntes !== '' ? Number(appCfg.pontos.ausenciaAntes) : Number(appCfg.pontos.ausencia) || 0}"></div>`
@@ -8963,7 +8973,7 @@ function dadosTvRank(){
   const vgv = rankingVgv(de, ate, '').filter(x => x.vgv > 0).map(x => ({ uid:x.uid, nome:nm(x.uid, x.nome), equipe:eqDe(x.uid, x.equipe), v:x.vgv }));
   const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0);
   const bz = agrupa(rankingAtiv.filter(r => r.mes === m && r.bz), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.bz));
-  const lig = agrupa(rankingAtiv.filter(r => r.mes === m && (r.lig || r.rec)), r => r.uid, r => r.nome, r => r.equipe, r => soma(r.lig) + soma(r.rec));
+  const lig = agrupa(rankingAtiv.filter(r => r.mes === m && (r.lig || r.rec)), r => r.uid, r => r.nome, r => r.equipe, r => ligUnicas(r, null));
   const sab = sabadoFeirao();
   const fonteSab = (souGerente() || souCoord()) && visitas.length ? visitas : rankingDocs;
   // v114: visitas do feirão contam o mês inteiro, inclusive as marcadas para dias que ainda vão chegar (ex.: o sábado do feirão)
@@ -8972,7 +8982,7 @@ function dadosTvRank(){
   // v136: visita marcada pela SDR conta só para a SDR (igual à carteira)
   const feiQuem = feiBase.map(r => { const u = donoCart(r); return u && u !== r.corretorUid ? { uid:u, nome:r.sdrNome || '', equipe:(pessoasRk().find(p => p.uid === u) || {}).equipe || '' } : { uid:r.corretorUid, nome:r.corretorNome, equipe:r.equipe }; }).filter(x => x.uid || x.nome);
   const fei = agrupa(feiQuem, r => r.uid, r => r.nome, r => r.equipe);
-  const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => (Number(r.lig?.[sab]) || 0) + (Number(r.rec?.[sab]) || 0));
+  const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => ligUnicasDia(r, sab));
   const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
   const sdr = rankingSdr(de, ate).map(x => ({ uid:x.uid, nome:x.nome, equipe:'', v:Number(x.docs) || 0, sub:'SDR' })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
   const eqs = listaEquipes().map(e => ({ e, n:pontosDoMes(m).filter(x => eqDe(x.uid, x.equipe) === e.id).reduce((a, x) => a + x.pontos, 0) })).sort((a, b) => b.n - a.n);
@@ -9007,7 +9017,7 @@ function contadoresTv(){
   rankingCartas.filter(x => noM(x.data) && !x.arquivado).forEach(x => soma('aprovacao', x.corretorUid));
   rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => (v.corretores || []).forEach(x => soma('venda', x.uid)));
   const tot = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0);
-  rankingAtiv.filter(r => r.mes === m).forEach(r => { soma('bolsao', r.uid, tot(r.bz)); soma('ligacao', r.uid, tot(r.lig) + tot(r.rec)); });
+  rankingAtiv.filter(r => r.mes === m).forEach(r => { soma('bolsao', r.uid, tot(r.bz)); soma('ligacao', r.uid, ligUnicas(r, null)); });
   return c;
 }
 // v162: só anuncia o que acontece COM A TV ABERTA. Ao abrir (ou voltar para) a TV, os números
@@ -10042,6 +10052,12 @@ function assinarEtapa3(){
 // =====================================================================
 let rankingAtiv = [], meusLeadsHoje = [], minhasLigHoje = [], _presSinc = false;
 const ligLimite = () => Math.max(0, Number(appCfg.pontos.ligLimite) || 0);
+// v229: ligação que vale ponto = número DIFERENTE no dia (tentativas no mesmo número não contam de novo).
+// "ligu" guarda os números diferentes de cada dia; dias antigos, de antes desse registro, usam o total que havia.
+function ligUnicasDia(r, d){ const u = r.ligu && r.ligu[d]; return u !== undefined && u !== null ? (Number(u) || 0) : (Number((r.lig || {})[d]) || 0) + (Number((r.rec || {})[d]) || 0); }
+function ligUnicas(r, val, filtro){ const cap = Math.max(0, Number((val || appCfg.pontos).ligLimite) || 0);
+  return [...new Set([...Object.keys(r.lig || {}), ...Object.keys(r.rec || {})])].filter(d => !filtro || filtro(d)).reduce((a, d) => { const n = ligUnicasDia(r, d); return a + (cap ? Math.min(n, cap) : n); }, 0); }
+window.ligUnicas = ligUnicas;
 function somaCap(mapa, val){
   const cap = Math.max(0, Number((val || appCfg.pontos).ligLimite) || 0);
   return Object.values(mapa || {}).reduce((a, n) => a + (cap ? Math.min(Number(n) || 0, cap) : (Number(n) || 0)), 0);
@@ -12005,6 +12021,74 @@ window.checkinExterno = async () => {
   } catch(e) { toast('Erro: ' + e.message); }
   $('ciExtBt').disabled = false;
 };
+// v227: percebe quando quem marcou presença no escritório sai de lá (com o app aberto ou ao voltar para ele) e pergunta se é visita externa
+// v228: mais precisa: leitura nova do GPS (nunca a guardada), só vale com erro de até 60 m, e só conta como fora quando nem o erro do GPS explica a distância
+const SAIDA_MARGEM = 40, SAIDA_PREC = 60, SAIDA_PAUSA = 45 * 60e3, SAIDA_INT = 60e3;
+let _saidaT = 0, _saidaFora = 0, _saidaAberta = false;
+function saidaVigia(){ const c = meuCheckin, cfg = ciCfg();
+  return !!(ciAutoLiga() && c && !c.saida && !ciFora(c) && cfg.local?.lat && ligaPontua() && ciHoje() === hojeISO() && new Date().getHours() >= 7 && new Date().getHours() < 21); }
+async function saidaPermitido(){ try { const r = await navigator.permissions.query({ name:'geolocation' }); return r.state === 'granted'; } catch(e) { return false; } }
+// v228: presença automática: com o app aberto e o GPS mostrando, com certeza, que a pessoa está dentro do escritório,
+// o app marca sozinho a chegada, a volta de um atendimento externo e o check-in da tarde
+const ciAutoLiga = () => (ciCfg().auto !== false);
+function entradaVigia(){ const c = meuCheckin, cfg = ciCfg(), hj = new Date();
+  if (!ciAutoLiga() || !cfg.local?.lat || !ligaPontua() || hj.getHours() < 7 || hj.getHours() >= 21 || !(cfg.dias || [1,2,3,4,5,6]).includes(hj.getDay())) return false;
+  return !c || ciFora(c) || precisaTarde(c); }
+let _autoIndo = false;
+async function ciAuto(gps, dist){
+  if (_autoIndo) return; _autoIndo = true;
+  try { const c = meuCheckin, agora = Date.now(), h = hojeISO();
+    if (!c) { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'gps', auto:true, local:gps, dist });
+      marcarPresencaRanking('escritorio'); avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada sozinha às ${hm(agora)} (você chegou no escritório)`); }
+    else if (ciFora(c)) { await voltarEscritorio('gps', gps, dist); }
+    else if (precisaTarde(c)) { await updateDoc(doc(db,'checkins', ciId(uidAtual)), { tarde:agora, tardeVia:'auto', tardeLocal:gps, tardeDist:dist });
+      await setDoc(doc(db,'ranking_ativ', h.slice(0, 7) + '_' + uidAtual), { mes:h.slice(0, 7), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', chkt:{ [h]:'gps' }, atualizadoEm:Date.now() }, { merge:true }).catch(() => {});
+      festejar(`✅ Check-in da tarde marcado sozinho às ${hm(agora)}`); }
+  } catch(e) { console.warn('presença automática', e.message); }
+  _autoIndo = false;
+}
+window.ciAuto = ciAuto;
+async function saidaConferir(forcar){
+  if (!(saidaVigia() || entradaVigia()) || _saidaAberta || document.visibilityState !== 'visible') return;
+  let pausa = 0; try { pausa = Number(localStorage.getItem('saidaPausa_' + uidAtual)) || 0; } catch(e) {}
+  if (!forcar && Date.now() < pausa) return;
+  if (!forcar && Date.now() - _saidaT < SAIDA_INT - 5e3) return; _saidaT = Date.now();
+  if (!(await saidaPermitido())) return; // nunca pede permissão sozinho; só usa se a pessoa já liberou no check-in
+  const gps = await pegarGps(); // até 12 s ouvindo o GPS e fica com a leitura mais precisa
+  if (!gps) return;
+  if (gps.prec > SAIDA_PREC) { if (!forcar) { setTimeout(() => { _saidaT = 0; saidaConferir(true); }, 20e3); } return; } // leitura fraca: tenta de novo logo
+  const cfg = ciCfg(), raio = Number(cfg.raio) || 150, dist = distanciaM(gps, cfg.local);
+  // dentro "com certeza": mesmo somando todo o erro do GPS, continua dentro do raio do escritório
+  if (dist + gps.prec <= raio) { _saidaFora = 0; window._saidaUlt = { em:Date.now(), dist, prec:gps.prec, fora:false, dentro:true }; if (entradaVigia()) await ciAuto(gps, dist); return; }
+  if (!saidaVigia()) return;
+  // fora "com certeza": mesmo descontando todo o erro do GPS, ainda passa do raio do escritório + 40 m
+  const fora = dist - gps.prec > raio + SAIDA_MARGEM;
+  if (!fora) { _saidaFora = 0; window._saidaUlt = { em:Date.now(), dist, prec:gps.prec, fora:false }; return; }
+  window._saidaUlt = { em:Date.now(), dist, prec:gps.prec, fora:true };
+  // confirma com uma segunda leitura 30 s depois, também fora (evita alarme falso de GPS pulando)
+  if (!_saidaFora) { _saidaFora = Date.now(); setTimeout(() => { _saidaT = 0; saidaConferir(true); }, 30e3); return; }
+  _saidaFora = 0; saidaPerguntar(dist);
+}
+function saidaPerguntar(dist){
+  if (_saidaAberta || !saidaVigia()) return; _saidaAberta = true;
+  $('saidaTx').textContent = `O app percebeu que você está a ${dist >= 1000 ? (dist / 1000).toFixed(1).replace('.', ',') + ' km' : dist + ' m'} do escritório. Se está indo atender um cliente, marque a visita externa para continuar contando como presença.`;
+  abrir('saidaModal');
+  try { if (Notification.permission === 'granted') navigator.serviceWorker?.ready.then(r => r.showNotification('Você está saindo para uma visita externa?', { body:'Toque para responder no app.', tag:'saida', icon:'frade-icone-192.png', data:{ link:'./#saida' } })).catch(() => {}); } catch(e) {}
+  try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch(e) {}
+}
+window.saidaResp = async r => {
+  _saidaAberta = false; fechar('saidaModal');
+  try { navigator.serviceWorker?.ready.then(x => x.getNotifications({ tag:'saida' })).then(l => (l || []).forEach(n => n.close())).catch(() => {}); } catch(e) {}
+  if (r === 'externo') { abrirExterno(); return; }
+  if (r === 'encerrar') { fazerCheckout(); return; }
+  try { localStorage.setItem('saidaPausa_' + uidAtual, String(Date.now() + SAIDA_PAUSA)); } catch(e) {}
+  toast('Certo. O app pergunta de novo só daqui a 45 minutos.');
+};
+setInterval(() => saidaConferir(), SAIDA_INT);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { _saidaT = 0; setTimeout(() => saidaConferir(), 1500); } });
+setTimeout(() => saidaConferir(), 6e3);
+window.saidaConferir = saidaConferir; window.saidaPerguntar = saidaPerguntar;
+addEventListener('hashchange', () => { if (location.hash === '#saida') { history.replaceState(null, '', location.pathname); _saidaT = 0; saidaConferir(true); } });
 window.fazerCheckout = async () => {
   if (!meuCheckin || meuCheckin.saida) return;
   if (!confirm('Encerrar o seu dia agora?')) return;
@@ -12065,11 +12149,11 @@ function htmlCiConfig(){
   const c = ciCfg(), D = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
   const loc = c.local?.lat ? `<span class="ci-ok">✓ Endereço do escritório cadastrado</span> <a href="https://maps.google.com/?q=${c.local.lat},${c.local.lng}" target="_blank" rel="noopener">ver no mapa</a>` : '<span class="ci-faltam" style="margin:0">Ainda sem endereço: o botão "Cheguei no escritório" funciona, mas sem conferir onde a pessoa está.</span>';
   return `<div class="ci-locbox"><b>Onde fica o escritório</b><div>${loc}</div><div class="ci-cfg"><button class="btn btn-ghost" id="ciLocBt" onclick="definirLocalEscritorio()">📍 Estou no escritório: usar a minha localização</button><label>Distância aceita (metros)<input type="number" id="ciRaio" min="50" max="1000" step="10" value="${Number(c.raio) || 150}"></label></div></div>
-    <div class="ci-cfg"><label>Horário de entrada<input type="time" id="ciHora" value="${c.hora}"></label><div class="ci-dias">${D.map((d, i) => `<label><input type="checkbox" data-d="${i}" ${c.dias.includes(i) ? 'checked' : ''}> ${d}</label>`).join('')}</div><button class="btn btn-ghost" onclick="salvarCiCfg()">Salvar</button></div>`;
+    <div class="ci-cfg"><label>Horário de entrada<input type="time" id="ciHora" value="${c.hora}"></label><div class="ci-dias">${D.map((d, i) => `<label><input type="checkbox" data-d="${i}" ${c.dias.includes(i) ? 'checked' : ''}> ${d}</label>`).join('')}</div><label class="fv-chk" style="flex-basis:100%"><input type="checkbox" id="ciAuto" ${c.auto !== false ? 'checked' : ''}> Presença automática pela localização (com o app aberto, marca sozinho a chegada, a volta do externo e o check-in da tarde, e pergunta quando a pessoa sai)</label><button class="btn btn-ghost" onclick="salvarCiCfg()">Salvar</button></div>`;
 }
 window.salvarCiCfg = async () => {
-  const hora = $('ciHora').value || '08:30', dias = [...document.querySelectorAll('.ci-dias input:checked')].map(i => Number(i.dataset.d)), raio = Math.min(1000, Math.max(50, Number($('ciRaio').value) || 150));
-  try { await gravar(setDoc(doc(db,'config','app'), { checkin:{ hora, dias, raio } }, { merge:true })); toast('Presença: configuração salva ✓'); } catch(e) { toast('Erro: ' + e.message); }
+  const hora = $('ciHora').value || '08:30', dias = [...document.querySelectorAll('.ci-dias input:checked')].map(i => Number(i.dataset.d)), raio = Math.min(1000, Math.max(50, Number($('ciRaio').value) || 150)), auto = !!$('ciAuto')?.checked;
+  try { await gravar(setDoc(doc(db,'config','app'), { checkin:{ hora, dias, raio, auto } }, { merge:true })); toast('Presença: configuração salva ✓'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.definirLocalEscritorio = async () => {
   const bt = $('ciLocBt'); bt.disabled = true; bt.textContent = 'Pegando a localização…';
