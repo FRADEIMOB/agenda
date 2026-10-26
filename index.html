@@ -2122,6 +2122,21 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
   .hx-lado b{font-size:22px}.hx-lado>div{padding:8px}
   #acResumo .ac-res button b small{display:block;font-size:11px}
 }
+
+/* v243: PDF do relatório de visitas */
+#rvPrint{display:none}
+@media print{@page{size:A4;margin:12mm}
+body.rv-imprime>*:not(#rvPrint){display:none!important}
+body.rv-imprime{background:#fff!important}
+body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#rvPrint header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #1c2430;padding-bottom:8px;margin-bottom:12px}
+#rvPrint .mk{font-size:10px;font-weight:700;color:#5b6b7c}#rvPrint h1{font-size:20px;margin:2px 0}#rvPrint .pr{font-size:12.5px;font-weight:600}#rvPrint .ge{font-size:9.5px;color:#5b6b7c;text-align:right}
+#rvPrint .cs{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}#rvPrint .pc{border-left:3px solid var(--c);background:#f6f7f9;border-radius:6px;padding:6px 8px}#rvPrint .pc b{display:block;font-size:17px;color:var(--c)}#rvPrint .pc span{font-size:9.5px;font-weight:600}
+#rvPrint .nt{font-size:9.5px;color:#5b6b7c;margin:6px 0 12px}
+#rvPrint h3{font-size:12.5px;margin:14px 0 6px}#rvPrint table{width:100%;border-collapse:collapse;font-size:10px}#rvPrint th{font-size:8.5px;color:#5b6b7c;text-align:center;border-bottom:1px solid #c9d0d8;padding:4px}#rvPrint th:first-child,#rvPrint td:first-child{text-align:left}#rvPrint td{text-align:center;border-bottom:1px solid #e6e9ee;padding:4px}#rvPrint td small{color:#5b6b7c}#rvPrint tr{break-inside:avoid}
+#rvPrint .gt{border-left:4px solid var(--c);padding-left:7px;display:flex;align-items:center;gap:6px;break-after:avoid}#rvPrint .gt span{font-size:10px;color:var(--c);background:color-mix(in srgb,var(--c) 12%,#fff);border-radius:10px;padding:0 7px}
+#rvPrint .v{display:grid;grid-template-columns:40px 1fr auto;gap:10px;padding:7px 9px;border:1px solid #e3e6eb;border-radius:7px;margin-bottom:5px;break-inside:avoid}#rvPrint .q span{display:block;color:#5b6b7c}#rvPrint .cl{font-size:12px}#rvPrint .tl{color:#5b6b7c}#rvPrint .r{color:#5b6b7c;margin-top:2px}#rvPrint .r.ok{color:#11734b;font-weight:700}#rvPrint .o{background:#f3f4f6;border-radius:5px;padding:3px 7px;margin-top:3px}#rvPrint .x{font-size:9.5px;color:#5b6b7c;margin-top:2px}#rvPrint .st{font-size:9.5px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 11%,#fff);border-radius:10px;padding:2px 8px;white-space:nowrap;align-self:start}
+}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -4463,7 +4478,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-body" data-lenis-prevent>
       <div class="rv-per"><div class="seg" id="rvAtalhos"></div><label>De<input type="date" id="rvDe" onchange="pintarRelVis()"></label><label>Até<input type="date" id="rvAte" onchange="pintarRelVis()"></label></div>
       <div id="rvCorpo"></div></div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('relVisModal')">Fechar</button><button class="btn btn-ghost" onclick="copiarRelVis()">Copiar para o WhatsApp</button><button class="btn btn-primary" onclick="exportarRelVis()">Exportar (Excel)</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('relVisModal')">Fechar</button><button class="btn btn-ghost" onclick="copiarRelVis()">Copiar para o WhatsApp</button><button class="btn btn-ghost" onclick="pdfRelVis()">Baixar PDF</button><button class="btn btn-primary" onclick="exportarRelVis()">Baixar Excel</button></div>
   </div>
 </div>
 <div class="modal" id="metasModal">
@@ -7156,7 +7171,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 242;
+const APP_VERSAO = 243;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12226,10 +12241,27 @@ function textoRelVis(){ const D = dadosRelVis(); if (!D) return ''; const fil = 
     return [`*${n.toUpperCase()} (${l.length})*`, ...l.slice().sort((a, b) => (a.date || '').localeCompare(b.date || '')).map(v => { const x = rvLinha(v, D); return `• ${x.data.slice(0, 5)} ${x.hora} · ${x.cliente}${x.tel ? ' · ' + x.tel : ''} · ${x.corretor}${x.emp ? ' · ' + x.emp : ''}${x.resultado && k !== 'venda' && k !== 'realSem' ? '' : x.resultado ? ' · ' + x.resultado : ''}${x.motivo ? ' · ' + x.motivo : ''}`; })].join('\n'); }).filter(Boolean);
   return [`*RELATÓRIO DE VISITAS · ${per}*`, '', ...RV_GRUPOS.map(([k, n]) => `${n}: ${D.g[k].length}`), `Viraram venda: ${D.g.venda.length}`, `Agendadas nesses dias (para qualquer data): ${D.g.agendadas.length}`, '', ...det.flatMap(t => [t, ''])].join('\n').trim(); }
 window.copiarRelVis = async () => { const t = textoRelVis(); if (!t) return; try { await navigator.clipboard.writeText(t); toast('Relatório copiado. É só colar no WhatsApp.'); } catch(e) { prompt('Copie o texto:', t); } };
+// v243: PDF do relatório (A4, mesmo visual da tela, respeita o filtro escolhido)
+window.pdfRelVis = () => { const D = dadosRelVis(); if (!D) return; const fil = window._rvFil || 'tudo';
+  const per = D.de === D.ate ? dataLonga(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`, nomeFil = RV_FILTROS.find(f => f[0] === fil)[1];
+  const ks = fil === 'tudo' ? ['venda','realSem','canceladas','pendentes','adiadas','faltaram'] : [fil];
+  const cards = RV_GRUPOS.map(([k, n, c]) => `<div class="pc" style="--c:${c}"><b>${D.g[k].length}</b><span>${n}</span></div>`).join('') + `<div class="pc" style="--c:#11734b"><b>${D.g.venda.length}</b><span>Viraram venda</span></div>`;
+  const tab = D.pessoas.length ? `<h3>Por corretor</h3><table><thead><tr><th>Corretor</th>${RV_GRUPOS.map(([, n]) => `<th>${n}</th>`).join('')}<th>Viraram venda</th><th>Agendou nesses dias</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><b>${esc(p.nome)}</b><br><small>${esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, ''))}</small></td>${[...RV_GRUPOS.map(([k]) => k), 'venda', 'agendadas'].map(k => `<td>${p.c[k] || 0}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '';
+  const listas = ks.map(k => { const l = D.g[k].slice().sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.time || '').localeCompare(b.time || '')), n = RV_FILTROS.find(x => x[0] === k)[1];
+    const cor = (RV_GRUPOS.find(g => g[0] === (k === 'venda' || k === 'realSem' ? 'realizadas' : k)) || RV_GRUPOS[0])[2];
+    return `<section style="--c:${cor}"><h3 class="gt">${n} <span>${l.length}</span></h3>${l.length ? l.map(v => { const x = rvLinha(v, D), cg = (RV_GRUPOS.find(g => g[0] === rvGrupoDe(v)) || RV_GRUPOS[0])[2], venda = /^Virou venda/.test(x.resultado);
+      const extra = [x.quem && 'Agendada por ' + x.quem, x.origem && 'Origem: ' + x.origem, x.agendada && 'Agendada em ' + x.agendada].filter(Boolean).join(' · ');
+      return `<div class="v"><div class="q"><b>${esc(x.data.slice(0, 5))}</b><span>${esc(x.hora)}</span></div><div class="m"><div><b class="cl">${esc(x.cliente)}</b> <span class="tl">${esc(x.tel || 'sem telefone')}</span></div><div>${esc([x.corretor, x.equipe, x.emp].filter(Boolean).join(' · '))}</div>${x.resultado ? `<div class="r${venda ? ' ok' : ''}">${esc(x.resultado)}</div>` : ''}${x.motivo ? `<div class="r">Motivo: ${esc(x.motivo)}</div>` : ''}${x.obs ? `<div class="o">${esc(x.obs)}</div>` : ''}${extra ? `<div class="x">${esc(extra)}</div>` : ''}</div><span class="st" style="--c:${cg}">${esc(x.st)}</span></div>`; }).join('') : '<p class="x">Nenhuma.</p>'}</section>`; }).join('');
+  let box = $('rvPrint'); if (!box) { box = document.createElement('div'); box.id = 'rvPrint'; document.body.appendChild(box); }
+  box.innerHTML = `<header><div><div class="mk">Frade Imóveis</div><h1>Relatório de visitas</h1><div class="pr">${esc(per)}${fil !== 'tudo' ? ' · ' + esc(nomeFil) : ''}</div></div><div class="ge">Gerado em ${new Date().toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })}<br>por ${esc(nomeBonito(perfil?.nome || ''))}</div></header>
+    <div class="cs">${cards}</div><p class="nt">Só visitas com data nesses dias. ${D.g.agendadas.length} visita${D.g.agendadas.length === 1 ? ' foi agendada' : 's foram agendadas'} nesses dias (para qualquer data).</p>${tab}${listas}`;
+  const tit = document.title; document.title = `Relatório de visitas ${D.de === D.ate ? dataBR(D.de) : dataBR(D.de) + ' a ' + dataBR(D.ate)}`.replace(/\//g, '-');
+  document.body.classList.add('rv-imprime'); const fim = () => { document.body.classList.remove('rv-imprime'); document.title = tit; window.removeEventListener('afterprint', fim); };
+  window.addEventListener('afterprint', fim); setTimeout(() => { window.print(); setTimeout(fim, 1500); }, 60); };
 window.exportarRelVis = async () => { const D = dadosRelVis(); if (!D) return;
-  const cab = ['Grupo', ...RV_COLS.map(([, t]) => t)], ks = ['venda','realSem','canceladas','pendentes','adiadas','faltaram'];
+  const fil = window._rvFil || 'tudo', cab = ['Grupo', ...RV_COLS.map(([, t]) => t)], ks = fil === 'tudo' ? ['venda','realSem','canceladas','pendentes','adiadas','faltaram'] : [fil];
   const linhas = ks.flatMap(k => D.g[k].map(v => { const x = rvLinha(v, D); return [RV_FILTROS.find(f => f[0] === k)[1], ...RV_COLS.map(([c]) => x[c] || '')]; }));
-  const nome = `visitas-${D.de}${D.ate !== D.de ? '-a-' + D.ate : ''}`;
+  const nome = `visitas-${D.de}${D.ate !== D.de ? '-a-' + D.ate : ''}${fil !== 'tudo' ? '-' + fil : ''}`;
   let X = null; try { X = await carregarXLSX(); } catch(e) {}
   if (!X) { baixarCSV(nome, cab, linhas); return; }
   const wb = X.utils.book_new(), resumo = [['Período', D.de === D.ate ? dataBR(D.de) : dataBR(D.de) + ' a ' + dataBR(D.ate)], [], ...RV_GRUPOS.map(([k, n]) => [n, D.g[k].length]), ['Viraram venda', D.g.venda.length], ['Agendadas nesses dias (para qualquer data)', D.g.agendadas.length], [], ['Corretor', 'Equipe', ...RV_GRUPOS.map(([, n]) => n), 'Viraram venda', 'Agendou nesses dias'], ...D.pessoas.map(p => [p.nome, eqNome(p.equipe), ...RV_GRUPOS.map(([k]) => p.c[k] || 0), p.c.venda || 0, p.c.agendadas || 0])];
