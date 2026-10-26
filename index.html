@@ -7191,7 +7191,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 250;
+const APP_VERSAO = 251;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -14500,8 +14500,26 @@ const maiusculaPrimeira = x => { const t = String(x || '').toLowerCase(); return
 // v250: relatório de reservas por origem: indicação x CRM (e as que estão sem origem, para corrigir)
 // Indicação = a origem fala em indicação (mesma regra dos pontos de "venda por indicação"). CRM = veio de lead (CRM, Meta, Instagram, site, WhatsApp, bolsão...)
 // =====================================================================
+// v251: descobre sozinho de onde veio o cliente da reserva, cruzando com o que o app já sabe dele
+// (indicação registrada, visita com origem, lead do bolsão/CRM, conversa no WhatsApp da Frade). Nunca troca a origem que alguém escreveu.
+let _rrInd = null, _rrIndIndo = false;
+function rrCarregarInd(){ if (_rrInd || _rrIndIndo || !opTudo()) return; _rrIndIndo = true;
+  getDocs(collection(db,'indicacoes')).then(s => { _rrInd = s.docs.map(d => ({ id:d.id, ...d.data() })); if (view === 'reservas' && $('relResModal')?.classList.contains('open')) pintarRelRes(); })
+    .catch(e => { console.warn('indicações', e.code || e.message); _rrInd = []; }).finally(() => { _rrIndIndo = false; }); }
+function origemDetectada(r){
+  const tel = r.telNorm || chaveTel(r.telefone || ''), cpf = soDig(r.cpfNorm || r.cpf || ''), nm = norm(r.cliente || '');
+  const mesmo = x => { const t = x.telNorm || chaveTel(x.telefone || x.tel || ''); if (tel && t && t === tel) return true; const c = soDig(x.cpf || x.cpfNorm || ''); if (cpf.length === 11 && c === cpf) return true;
+    const n = norm(x.cliente || x.nome || ''); return !tel && nm.length > 8 && n === nm; };
+  const ind = (_rrInd || []).find(mesmo); if (ind) return { origem:'Indicação', fonte:`indicação registrada por ${nomeCurto(ind.nome || '')}${ind.indicadoPor ? ', indicado por ' + ind.indicadoPor : ''}${ind.dia ? ' em ' + dataBR(ind.dia).slice(0, 5) : ''}` };
+  const vs = (visitasBrutas && visitasBrutas.length ? visitasBrutas : visitas).filter(v => v.origem && mesmo(v)).sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0));
+  if (vs.length) { const v = vs[0]; return { origem:v.origem === 'Outro' && v.origemDetalhe ? v.origemDetalhe : v.origem, fonte:`visita de ${dataBR(v.date || '').slice(0, 5)}${v.indicadoPor ? ' (indicado por ' + v.indicadoPor + ')' : ''}` }; }
+  const bz = (typeof bolsao !== 'undefined' ? bolsao : []).find(mesmo); if (bz) return { origem:'CRM', fonte:`lead do bolsão${bz.criativo ? ' · ' + bz.criativo : ''}` };
+  const zc = (typeof zapConvs !== 'undefined' ? zapConvs : []).find(mesmo); if (zc) return { origem:'WhatsApp', fonte:'conversa no WhatsApp da Frade' };
+  return null; }
+window.origemDetectada = origemDetectada;
 const RR_GR = [['ind','Indicação','#7c3aed'],['crm','CRM','#0b57d0'],['outra','Outras origens','#b45309'],['sem','Sem origem informada','#5b6b7c']];
-function rrGrupo(r){ if (ehVendaIndicacao(r)) return 'ind'; const t = norm([r.origem, r.origemLead, r.criativo].filter(Boolean).join(' '));
+function rrOrigemTxt(r){ const t = [r.origem, r.origemLead, r.criativo].filter(Boolean).join(' '); if (norm(t) && !/^(origem|planilha|-)$/.test(norm(t))) return t; const d = origemDetectada(r); return d ? d.origem : ''; }
+function rrGrupo(r){ if (ehVendaIndicacao(r) || ehVendaIndicacao({ origem:rrOrigemTxt(r) })) return 'ind'; const t = norm(rrOrigemTxt(r));
   if (!t || /^(origem|planilha|-)$/.test(t)) return 'sem';
   if (/crm|lead|meta|face|insta|anunc|trafego|site|portal|google|zap|whats|bolsao|campanha|criativo|dynamus|tiktok|olx|imovelweb|zap imoveis/.test(t)) return 'crm';
   return 'outra'; }
@@ -14509,7 +14527,7 @@ function rrAtalho(k){ const h = hojeISO(); if (k === 'mes') return [mesAtual() +
   if (k === 'ano') return [h.slice(0, 4) + '-01-01', h]; if (k === 'semana') return rvAtalhoDatas('semana'); return ['2000-01-01', h]; }
 window.rrAt = k => { const [a, b] = rrAtalho(k); $('rrDe').value = a; $('rrAte').value = b; window._rrK = k; pintarRelRes(); };
 window.rrFil = k => { window._rrFil = window._rrFil === k ? '' : k; pintarRelRes(); };
-window.abrirRelRes = () => { if (!opTudo()) return; window._rrFil = '';
+window.abrirRelRes = () => { if (!opTudo()) return; window._rrFil = ''; rrCarregarInd(); bzCarregarHist && bzCarregarHist();
   $('rrAtalhos').innerHTML = [['mes','Este mês'],['mesPas','Mês passado'],['semana','Esta semana'],['ano','Este ano'],['tudo','Tudo']].map(([k, n]) => `<button data-k="${k}" onclick="rrAt('${k}')">${n}</button>`).join('');
   ['rrDe','rrAte'].forEach(i => { $(i).oninput = () => { window._rrK = ''; pintarRelRes(); }; $(i).onchange = $(i).oninput; });
   rrAt('mes'); abrir('relResModal'); };
@@ -14521,6 +14539,15 @@ function dadosRelRes(){ let de = $('rrDe').value, ate = $('rrAte').value || de; 
   const pes = new Map(); ativas.forEach(r => { const cs = corretoresDaReserva(r.corretorTexto); (cs.length ? cs : [{ uid:'', nome:r.corretorTexto || 'Sem corretor' }]).forEach(c => {
     const k = c.uid || 'n:' + norm(c.nome); if (!pes.has(k)) pes.set(k, { nome:nomeBonito(c.nome || 'Sem corretor'), equipe:c.equipe || '', c:{}, v:0, t:0 }); const p = pes.get(k); const gr = rrGrupo(r); p.c[gr] = (p.c[gr] || 0) + 1; p.t++; p.v += Number(r.valor) || 0; }); });
   return { de, ate, ativas, caidas, g, soma, pessoas:[...pes.values()].sort((a, b) => b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR')) }; }
+const rrSemOrigem = r => { const t = norm([r.origem, r.origemLead, r.criativo].filter(Boolean).join(' ')); return !t || /^(origem|planilha|-)$/.test(t); };
+function rrDetHtml(r){ if (!rrSemOrigem(r)) return 'Origem: ' + esc(r.origem || r.origemLead || r.criativo) + (r.origemAuto ? ' <i>(descoberta pelo app)</i>' : ''); const d = origemDetectada(r);
+  return d ? `Origem descoberta: <b>${esc(d.origem)}</b> <i>(${esc(d.fonte)})</i>` : 'Origem: não informada e o app não achou'; }
+window.gravarOrigensDetectadas = async () => { const D = dadosRelRes(); if (!D || !opTudo()) return;
+  const l = [...D.ativas, ...D.caidas].filter(rrSemOrigem).map(r => [r, origemDetectada(r)]).filter(([, d]) => d);
+  if (!l.length) { toast('Nenhuma origem nova para gravar'); return; }
+  if (!confirm(`Gravar a origem descoberta em ${l.length} reserva${l.length === 1 ? '' : 's'}? Só entra nas que estão sem origem.`)) return;
+  try { for (let i = 0; i < l.length; i += 400) { const b = writeBatch(db); l.slice(i, i + 400).forEach(([r, d]) => b.update(doc(db,'reservas',r.id), { origem:d.origem, origemAuto:true, origemFonte:d.fonte.slice(0, 160), atualizadoEm:Date.now(), editadoPor:perfil.nome + ' (origem automática)' })); await gravar(b.commit()); }
+    toast(`Pronto ✓ origem gravada em ${l.length} reserva${l.length === 1 ? '' : 's'}`); } catch(e) { toast('Erro: ' + e.message); } };
 const rrPct = (n, t) => t ? Math.round(n * 100 / t) + '%' : '0%';
 window.pintarRelRes = () => {
   document.querySelectorAll('#rrAtalhos button').forEach(b => b.classList.toggle('on', b.dataset.k === window._rrK));
@@ -14529,10 +14556,10 @@ window.pintarRelRes = () => {
   const cards = `<div class="rvr-per">Período: <b>${esc(per)}</b> · pela data da reserva · reservas caídas ficam de fora</div><div class="rvr-cards">
     <div class="rvr-card" style="--c:#1c2430"><b>${tot}</b><span>Reservas</span><small>${brl(D.soma(D.ativas))}</small></div>
     ${RR_GR.map(([k, n, c]) => `<button class="rvr-card" style="--c:${c}${fil === k ? ';outline:2px solid ' + c : ''}" onclick="rrFil('${k}')"><b>${D.g[k].length}</b><span>${n}</span><small>${rrPct(D.g[k].length, tot)} · ${brl(D.soma(D.g[k]))}</small></button>`).join('')}</div>
-    <div class="hint" style="margin:6px 0 12px">${D.caidas.length ? `${D.caidas.length} reserva${D.caidas.length === 1 ? '' : 's'} desse período caiu (${D.caidas.filter(r => rrGrupo(r) === 'ind').length} de indicação, ${D.caidas.filter(r => rrGrupo(r) === 'crm').length} do CRM). ` : ''}Indicação: a origem da reserva fala em indicação. CRM: veio de lead (CRM, Meta, Instagram, site, WhatsApp, bolsão). Toque num quadro para ver as reservas dele.${D.g.sem.length ? ` <b>${D.g.sem.length} sem origem</b>: abra e preencha "Origem do lead".` : ''}</div>`;
+    <div class="hint" style="margin:6px 0 12px">${D.caidas.length ? `${D.caidas.length} reserva${D.caidas.length === 1 ? '' : 's'} desse período caiu (${D.caidas.filter(r => rrGrupo(r) === 'ind').length} de indicação, ${D.caidas.filter(r => rrGrupo(r) === 'crm').length} do CRM). ` : ''}Indicação: a origem da reserva fala em indicação. CRM: veio de lead (CRM, Meta, Instagram, site, WhatsApp, bolsão). Toque num quadro para ver as reservas dele.${D.g.sem.length ? ` <b>${D.g.sem.length} sem origem</b> e o app não achou de onde veio: abra e preencha "Origem do lead".` : ''}</div>${(() => { const n = [...D.ativas, ...D.caidas].filter(r => rrSemOrigem(r) && origemDetectada(r)).length; return n ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px"><span>O app descobriu a origem de <b>${n}</b> reserva${n === 1 ? '' : 's'} que estava${n === 1 ? '' : 'm'} sem, cruzando com indicações, visitas, bolsão e WhatsApp. Elas já entram no grupo certo aqui.</span><button class="btn btn-primary" onclick="gravarOrigensDetectadas()">Gravar nas reservas</button></div>` : ''; })()}`;
   const tab = D.pessoas.length ? `<details class="rvr-l" open><summary><b>Por corretor</b></summary><div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th>${RR_GR.map(([, n]) => `<th style="text-align:center">${n}</th>`).join('')}<th style="text-align:center">Total</th><th style="text-align:right">VGV</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span>${p.equipe ? `<span class="eq">${esc(eqNome(p.equipe))}</span>` : ''}</td>${RR_GR.map(([k]) => `<td style="text-align:center">${p.c[k] || '<span class="muted">0</span>'}</td>`).join('')}<td style="text-align:center"><b>${p.t}</b></td><td style="text-align:right">${brl(p.v)}</td></tr>`).join('')}</tbody></table></div><div class="hint">Venda em parceria conta para cada corretor da reserva e uma vez só no total.</div></details>` : '<div class="muted" style="margin:10px 0">Nenhuma reserva nesse período.</div>';
   const blocos = (fil ? RR_GR.filter(g => g[0] === fil) : RR_GR).map(([k, n, c]) => { const l = D.g[k].slice().sort((a, b) => (b.dia || '').localeCompare(a.dia || ''));
-    return `<div class="rvr-bl" style="--c:${c}"><h4>${n} <span>${l.length}</span></h4>${l.length ? `<div class="rvr-vs">${l.map(r => `<div class="rvr-v" style="cursor:pointer" onclick="fechar('relResModal');editarReserva('${r.id}')"><div class="rvr-q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="rvr-m"><div class="rvr-n"><b>${esc(nomeBonito(r.cliente || 'Cliente'))}</b>${r.telefone ? `<span class="muted" style="font-size:13px">${esc(fmtFone(r.telefone))}</span>` : ''}</div><div class="rvr-s">${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="rvr-x">Origem: ${esc(r.origem || r.origemLead || 'não informada')}${r.etapa ? ' · ' + esc(r.etapa) : ''}</div></div><span class="rvr-st" style="--c:${c}">${esc(n)}</span></div>`).join('')}</div>` : '<div class="muted" style="font-size:13px">Nenhuma.</div>'}</div>`; }).join('');
+    return `<div class="rvr-bl" style="--c:${c}"><h4>${n} <span>${l.length}</span></h4>${l.length ? `<div class="rvr-vs">${l.map(r => `<div class="rvr-v" style="cursor:pointer" onclick="fechar('relResModal');editarReserva('${r.id}')"><div class="rvr-q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="rvr-m"><div class="rvr-n"><b>${esc(nomeBonito(r.cliente || 'Cliente'))}</b>${r.telefone ? `<span class="muted" style="font-size:13px">${esc(fmtFone(r.telefone))}</span>` : ''}</div><div class="rvr-s">${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="rvr-x">${rrDetHtml(r)}${r.etapa ? ' · ' + esc(r.etapa) : ''}</div></div><span class="rvr-st" style="--c:${c}">${esc(n)}</span></div>`).join('')}</div>` : '<div class="muted" style="font-size:13px">Nenhuma.</div>'}</div>`; }).join('');
   $('rrCorpo').innerHTML = cards + tab + blocos; };
 function textoRelRes(){ const D = dadosRelRes(); if (!D) return ''; const tot = D.ativas.length, fil = window._rrFil || '';
   const per = D.de === '2000-01-01' ? 'todas' : D.de === D.ate ? dataBR(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`;
@@ -14543,7 +14570,7 @@ function textoRelRes(){ const D = dadosRelRes(); if (!D) return ''; const tot = 
 window.copiarRelRes = async () => { const t = textoRelRes(); if (!t) return; try { await navigator.clipboard.writeText(t); toast('Relatório copiado. É só colar no WhatsApp.'); } catch(e) { prompt('Copie o texto:', t); } };
 window.excelRelRes = async () => { const D = dadosRelRes(); if (!D) return; const tot = D.ativas.length;
   const cab = ['Origem (grupo)', 'Data', 'Cliente', 'Telefone', 'Corretor', 'Empreendimento', 'Construtora', 'Valor', 'Etapa', 'Origem escrita', 'Caiu'];
-  const linha = r => [(RR_GR.find(g => g[0] === rrGrupo(r)) || [])[1], dataBR(r.dia), nomeBonito(r.cliente || ''), r.telefone ? fmtFone(r.telefone) : '', r.corretorTexto || '', r.empreendimento || '', r.construtora || '', Number(r.valor) || 0, r.etapa || '', r.origem || r.origemLead || '', r.caiu ? 'sim' : ''];
+  const linha = r => [(RR_GR.find(g => g[0] === rrGrupo(r)) || [])[1], dataBR(r.dia), nomeBonito(r.cliente || ''), r.telefone ? fmtFone(r.telefone) : '', r.corretorTexto || '', r.empreendimento || '', r.construtora || '', Number(r.valor) || 0, r.etapa || '', rrSemOrigem(r) ? (origemDetectada(r) ? origemDetectada(r).origem + ' (descoberta: ' + origemDetectada(r).fonte + ')' : '') : (r.origem || r.origemLead || ''), r.caiu ? 'sim' : ''];
   const todas = [...D.ativas, ...D.caidas].sort((a, b) => (a.dia || '').localeCompare(b.dia || '')).map(linha), nome = `reservas-indicacao-crm-${D.de === '2000-01-01' ? 'tudo' : D.de + (D.ate !== D.de ? '-a-' + D.ate : '')}`;
   let X = null; try { X = await carregarXLSX(); } catch(e) {} if (!X) { baixarCSV(nome, cab, todas); return; }
   const wb = X.utils.book_new(), larg = [{ wch:20 }, { wch:11 }, { wch:28 }, { wch:16 }, { wch:24 }, { wch:22 }, { wch:14 }, { wch:12 }, { wch:18 }, { wch:22 }, { wch:6 }];
@@ -14557,7 +14584,7 @@ window.pdfRelRes = () => { const D = dadosRelRes(); if (!D) return; const tot = 
   const cards = `<div class="pc" style="--c:#1c2430"><b>${tot}</b><span>Reservas · ${brl(D.soma(D.ativas))}</span></div>` + RR_GR.map(([k, n, c]) => `<div class="pc" style="--c:${c}"><b>${D.g[k].length}</b><span>${n} · ${rrPct(D.g[k].length, tot)}<br>${brl(D.soma(D.g[k]))}</span></div>`).join('');
   const tab = D.pessoas.length ? `<h3>Por corretor</h3><table><thead><tr><th>Corretor</th>${RR_GR.map(([, n]) => `<th>${n}</th>`).join('')}<th>Total</th><th>VGV</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><b>${esc(p.nome)}</b></td>${RR_GR.map(([k]) => `<td>${p.c[k] || 0}</td>`).join('')}<td><b>${p.t}</b></td><td>${brl(p.v)}</td></tr>`).join('')}</tbody></table>` : '';
   const listas = (fil ? RR_GR.filter(g => g[0] === fil) : RR_GR).map(([k, n, c]) => { const l = D.g[k].slice().sort((a, b) => (a.dia || '').localeCompare(b.dia || ''));
-    return `<section style="--c:${c}"><h3 class="gt">${n} <span>${l.length}</span></h3>${l.length ? l.map(r => `<div class="v"><div class="q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="m"><div><b class="cl">${esc(nomeBonito(r.cliente || ''))}</b> <span class="tl">${esc(r.telefone ? fmtFone(r.telefone) : '')}</span></div><div>${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="x">Origem: ${esc(r.origem || r.origemLead || 'não informada')}${r.etapa ? ' · ' + esc(r.etapa) : ''}</div></div><span class="st" style="--c:${c}">${esc(n)}</span></div>`).join('') : '<p class="x">Nenhuma.</p>'}</section>`; }).join('');
+    return `<section style="--c:${c}"><h3 class="gt">${n} <span>${l.length}</span></h3>${l.length ? l.map(r => `<div class="v"><div class="q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="m"><div><b class="cl">${esc(nomeBonito(r.cliente || ''))}</b> <span class="tl">${esc(r.telefone ? fmtFone(r.telefone) : '')}</span></div><div>${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="x">${rrDetHtml(r)}${r.etapa ? ' · ' + esc(r.etapa) : ''}</div></div><span class="st" style="--c:${c}">${esc(n)}</span></div>`).join('') : '<p class="x">Nenhuma.</p>'}</section>`; }).join('');
   let box = $('rvPrint'); if (!box) { box = document.createElement('div'); box.id = 'rvPrint'; document.body.appendChild(box); }
   box.innerHTML = `<header><div><div class="mk">Frade Imóveis</div><h1>Reservas: indicação x CRM</h1><div class="pr">${esc(per)}</div></div><div class="ge">Gerado em ${new Date().toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })}<br>por ${esc(nomeBonito(perfil?.nome || ''))}</div></header>
     <div class="cs" style="grid-template-columns:repeat(5,1fr)">${cards}</div><p class="nt">Pela data da reserva. Reservas caídas ficam de fora${D.caidas.length ? ` (${D.caidas.length} caíram no período)` : ''}. Indicação: a origem fala em indicação. CRM: veio de lead.</p>${tab}${listas}`;
@@ -14836,6 +14863,7 @@ window.salvarReserva = async () => {
     empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), comissao:$('rvCom').value.trim(),
     percentual:$('rvPerc').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(), statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(),
     criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
+  if (!rvId && !d.origem) { try { const od = origemDetectada(d); if (od) { d.origem = od.origem; d.origemAuto = true; d.origemFonte = od.fonte.slice(0, 160); } } catch(e) {} } // v251
   if (!opTudo()) {
     // corretor cadastra a própria reserva; a gerência confere e edita depois
     if (!norm(d.corretorTexto).includes(norm(perfil.nome)) && !corretoresDaReserva(d.corretorTexto).some(c => c.uid === uidAtual)) d.corretorTexto = perfil.nome + (d.corretorTexto ? ' / ' + d.corretorTexto : '');
