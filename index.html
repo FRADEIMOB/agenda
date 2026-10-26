@@ -3697,7 +3697,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-head"><h2 id="vmTitulo">Nova visita</h2><button class="icon-btn" onclick="fechar('visModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <div class="row2 fg"><div><label>Data</label><input type="date" id="vmData"></div><div><label>Horário</label><input type="time" id="vmHora"></div></div>
-      <div class="row2 fg"><div><label>Cliente</label><input id="vmCliente" placeholder="Nome do cliente"></div><div><label>Telefone</label><input id="vmFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div></div>
+      <div class="row2 fg"><div><label>Cliente</label><input id="vmCliente" placeholder="Nome do cliente"></div><div><label>Telefone do cliente <span style="color:var(--danger,#b10202)">*</span></label><input id="vmFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999" required></div></div>
       <div class="fg hide"><label>Imóvel / empreendimento</label><input id="vmImovel" placeholder="Nome do empreendimento" list="listaImoveis"><datalist id="listaImoveis"></datalist></div>
       <div class="row2 fg">
         <div id="vmCorWrap"><label>Corretor</label><select id="vmCorretor" onchange="vmMostrarLivre()"></select><input id="vmCorLivre" class="hide" placeholder="Nome de quem vai atender" style="margin-top:8px"></div>
@@ -6196,6 +6196,8 @@ window.salvarVisita = async () => {
   const d = lerVisita();
   if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
   if (!d.cliente) { toast('Informe o nome do cliente'); $('vmCliente').focus(); return; }
+  // v247: só agenda com o contato do cliente (telefone com DDD). Visita já encerrada (realizada, cancelada, não compareceu) pode ser salva sem
+  { const dig = soDig(d.telefone || '').replace(/^55(?=\d{10,11}$)/, ''); if (!['Realizada','Cancelada','Não compareceu'].includes(d.status) && (dig.length < 10 || dig.length > 11)) { toast('Coloque o telefone do cliente com DDD para agendar a visita'); $('vmFone').focus(); return; } }
   if (!d.origem && !vOrig) { toast('Escolha a origem do cliente'); $('vmOrigem').focus(); return; }
   if (d.origem === 'Outro' && !d.origemDetalhe) { toast('Digite qual foi a origem'); $('vmOrigemOutro').focus(); return; }
   if (PERDA_V.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('vmMotivo').focus(); return; }
@@ -7174,7 +7176,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 246;
+const APP_VERSAO = 247;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12190,7 +12192,7 @@ window.saidaConferir = saidaConferir; window.saidaPerguntar = saidaPerguntar;
 addEventListener('hashchange', () => { if (location.hash === '#saida') { history.replaceState(null, '', location.pathname); _saidaT = 0; saidaConferir(true); } });
 // v241: relatório de visitas detalhado por período (a gerência e o coordenador escolhem as datas)
 const RV_GRUPOS = [['marcadas','Marcadas para essas datas','#0b57d0'],['realizadas','Realizadas','#11734b'],['canceladas','Canceladas','#b10202'],['pendentes','Pendentes','#b45309'],['adiadas','Adiadas','#7c3aed'],['faltaram','Não compareceu','#5b6b7c']];
-const RV_FILTROS = [['tudo','Tudo'],['venda','Realizadas que viraram venda'],['realSem','Realizadas sem venda'],['canceladas','Canceladas'],['pendentes','Pendentes'],['adiadas','Adiadas'],['faltaram','Não compareceu'],['agendadas','Agendadas nesses dias'],['sdr','Marcadas pelas SDRs']];
+const RV_FILTROS = [['tudo','Tudo'],['venda','Realizadas que viraram venda'],['realSem','Realizadas sem venda'],['canceladas','Canceladas'],['pendentes','Pendentes'],['adiadas','Adiadas'],['faltaram','Não compareceu'],['agendadas','Agendadas nesses dias'],['sdr','Agendadas pelas SDRs']];
 const rvGrupoDe = v => v.status === 'Realizada' ? 'realizadas' : v.status === 'Cancelada' ? 'canceladas' : v.status === 'Reagendada' ? 'adiadas' : v.status === 'Não compareceu' ? 'faltaram' : 'pendentes';
 // a venda que saiu da visita: a ligada pelo "Gerar venda", ou uma reserva do mesmo cliente feita a partir do dia da visita
 function rvVendaDe(v){ const rs = (typeof reservasTodas !== 'undefined' ? reservasTodas : []).filter(r => !r.arquivado && !r.caiu);
@@ -12204,8 +12206,10 @@ function rvAtalhoDatas(k){ const h = hojeISO(), d = new Date(h + 'T12:00:00'), w
   if (k === 'semPas') { const seg = new Date(d); seg.setDate(d.getDate() - ((w + 6) % 7) - 7); const dom = new Date(seg); dom.setDate(seg.getDate() + 6); return [iso(seg), iso(dom)]; }
   return [mesAtual() + '-01', h]; }
 window.rvAtalho = k => { const [a, b] = rvAtalhoDatas(k); $('rvDe').value = a; $('rvAte').value = b; pintarRelVis(); };
-window.rvFiltro = k => { window._rvFil = k; pintarRelVis(); };
-window.abrirRelVisitas = () => { if (!podeGerir()) return; window._rvFil = 'tudo';
+window.rvFiltro = k => { window._rvFil = k; if (k !== 'sdr') window._rvSdrUid = ''; pintarRelVis(); };
+window.rvSdrModo = m => { window._rvSdrModo = m; pintarRelVis(); };
+window.rvSdrVer = uid => { window._rvSdrUid = window._rvSdrUid === uid ? '' : uid; window._rvFil = window._rvSdrUid ? 'sdr' : 'tudo'; pintarRelVis(); };
+window.abrirRelVisitas = () => { if (!podeGerir()) return; window._rvFil = 'tudo'; window._rvSdrUid = '';
   $('rvAtalhos').innerHTML = [['fds','Fim de semana'],['ontem','Ontem'],['hoje','Hoje'],['semana','Esta semana'],['semPas','Semana passada'],['mes','Mês']].map(([k, n]) => `<button data-k="${k}" onclick="rvAtalho('${k}')">${n}</button>`).join('');
   ['rvDe','rvAte'].forEach(i => { $(i).oninput = () => pintarRelVis(); $(i).onchange = () => pintarRelVis(); });
   rvAtalho('fds'); abrir('relVisModal'); };
@@ -12221,11 +12225,15 @@ function dadosRelVis(){
     if (!pessoas.has(uid)) pessoas.set(uid, { nome:nomeBonito(v.corretorNome || 'Sem corretor'), equipe:v.equipe || '', c:{} }); const p = pessoas.get(uid); p.c[k] = (p.c[k] || 0) + 1; };
   [...RV_GRUPOS.map(([k]) => k), 'venda', 'agendadas'].forEach(k => g[k].forEach(v => add(v, k)));
   // v244: visitas marcadas pelas SDRs (data da visita no período) e o que cada SDR agendou nesses dias
-  g.sdr = doDia.filter(v => visitaDeSdr(v)); const sdrs = new Map(), addS = (v, k) => { const uid = v.sdrUid;
-    if (!sdrs.has(uid)) sdrs.set(uid, { nome:nomeBonito(v.sdrNome || 'SDR'), equipe:v.equipe || '', c:{} }); const p = sdrs.get(uid); p.c[k] = (p.c[k] || 0) + 1; };
-  g.sdr.forEach(v => { addS(v, 'marcadas'); addS(v, rvGrupoDe(v)); if (rvGrupoDe(v) === 'realizadas' && vendaDe.get(v.id)) addS(v, 'venda'); });
-  agendadas.filter(v => visitaDeSdr(v)).forEach(v => addS(v, 'agendou'));
-  return { de, ate, g, vendaDe, sdrs:[...sdrs.values()].sort((a, b) => (b.c.marcadas || 0) - (a.c.marcadas || 0) || (b.c.agendou || 0) - (a.c.agendou || 0) || a.nome.localeCompare(b.nome, 'pt-BR')), pessoas:[...pessoas.values()].sort((a, b) => (b.c.realizadas || 0) - (a.c.realizadas || 0) || (b.c.marcadas || 0) - (a.c.marcadas || 0) || a.nome.localeCompare(b.nome, 'pt-BR')) };
+  // v247: a tabela da SDR tem uma base só de cada vez (as colunas somam o total): pelo dia em que ela agendou, ou pelo dia da visita
+  const modo = window._rvSdrModo || 'ag', baseS = (modo === 'ag' ? agendadas : doDia).filter(v => visitaDeSdr(v));
+  baseS.forEach(v => { if (rvGrupoDe(v) === 'realizadas' && !vendaDe.has(v.id)) vendaDe.set(v.id, rvVendaDe(v)); });
+  const pessoaS = uid => (pessoasRk() || []).find(x => x.uid === uid) || (perfisTodos || []).find(x => x.uid === uid) || {};
+  const sdrs = new Map(), addS = (v, k) => { const uid = v.sdrUid;
+    if (!sdrs.has(uid)) { const ps = pessoaS(uid); sdrs.set(uid, { uid, nome:nomeBonito(ps.nome || v.sdrNome || 'SDR'), equipe:ps.equipe ?? v.equipe ?? '', c:{} }); } const p = sdrs.get(uid); p.c[k] = (p.c[k] || 0) + 1; };
+  baseS.forEach(v => { addS(v, 'total'); addS(v, rvGrupoDe(v)); if (rvGrupoDe(v) === 'realizadas' && vendaDe.get(v.id)) addS(v, 'venda'); });
+  g.sdr = baseS.filter(v => !window._rvSdrUid || v.sdrUid === window._rvSdrUid);
+  return { de, ate, g, vendaDe, modoSdr:modo, sdrs:[...sdrs.values()].sort((a, b) => (b.c.total || 0) - (a.c.total || 0) || a.nome.localeCompare(b.nome, 'pt-BR')), pessoas:[...pessoas.values()].sort((a, b) => (b.c.realizadas || 0) - (a.c.realizadas || 0) || (b.c.marcadas || 0) - (a.c.marcadas || 0) || a.nome.localeCompare(b.nome, 'pt-BR')) };
 }
 // as colunas de cada visita (tela, WhatsApp e Excel usam as mesmas)
 function rvLinha(v, D){ const vd = D.vendaDe.get(v.id);
@@ -12241,7 +12249,11 @@ window.pintarRelVis = () => {
   const cards = `<div class="rvr-per">Período: <b>${esc(per)}</b> · só visitas com data nesses dias</div><div class="rvr-cards">${RV_GRUPOS.map(([k, n, c]) => `<button class="rvr-card" style="--c:${c}" onclick="rvFiltro('${k === 'marcadas' ? 'tudo' : k === 'realizadas' ? 'venda' : k}')"><b>${D.g[k].length}</b><span>${n}</span>${k === 'realizadas' ? `<small>${D.g.venda.length} ${D.g.venda.length === 1 ? 'virou' : 'viraram'} venda</small>` : ''}</button>`).join('')}</div>
     <div class="hint" style="margin:6px 0 12px">Realizadas + canceladas + pendentes + adiadas + não compareceu = ${D.g.marcadas.length}. Pendentes inclui as confirmadas que ainda não foram dadas como realizadas. À parte: <b>${D.g.agendadas.length}</b> visita${D.g.agendadas.length === 1 ? ' foi agendada' : 's foram agendadas'} nesses dias (para qualquer data).</div>`;
   const tab = D.pessoas.length ? `<details class="rvr-l" open><summary><b>Por corretor</b></summary><div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th>${RV_GRUPOS.map(([, n]) => `<th style="text-align:center">${n}</th>`).join('')}<th style="text-align:center">Viraram venda</th><th style="text-align:center">Agendou nesses dias</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span><span class="eq">${esc(eqNome(p.equipe))}</span></td>${[...RV_GRUPOS.map(([k]) => k), 'venda', 'agendadas'].map(k => `<td style="text-align:center">${p.c[k] || '<span class="muted">0</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>` : '<div class="muted" style="margin:10px 0">Nenhuma visita nesse período.</div>';
-  const tabS = D.sdrs.length ? `<details class="rvr-l" open><summary><b>Por SDR</b> <span class="muted" style="font-size:12.5px">visitas marcadas pelas SDRs</span></summary><div class="tbl-wrap"><table class="rank"><thead><tr><th>SDR</th><th style="text-align:center">Agendou nesses dias</th>${RV_GRUPOS.map(([, n]) => `<th style="text-align:center">${n}</th>`).join('')}<th style="text-align:center">Viraram venda</th></tr></thead><tbody>${D.sdrs.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span><span class="eq">${esc(eqNome(p.equipe))}</span></td>${['agendou', ...RV_GRUPOS.map(([k]) => k), 'venda'].map(k => `<td style="text-align:center">${p.c[k] || '<span class="muted">0</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>` : '';
+  const colS = RV_GRUPOS.slice(1), totS = k => D.sdrs.reduce((a, p) => a + (p.c[k] || 0), 0);
+  const tabS = `<details class="rvr-l" open><summary><b>Por SDR</b> <span class="muted" style="font-size:12.5px">visitas que as SDRs agendaram</span></summary>
+    <div class="seg" style="margin:8px 0"><button class="${D.modoSdr === 'ag' ? 'on' : ''}" onclick="rvSdrModo('ag')">Agendadas nesses dias</button><button class="${D.modoSdr === 'dia' ? 'on' : ''}" onclick="rvSdrModo('dia')">Com visita nesses dias</button></div>
+    <div class="hint" style="margin:0 0 6px">${D.modoSdr === 'ag' ? 'Visitas que a SDR cadastrou entre essas datas (a visita pode ser para qualquer dia) e como cada uma está agora.' : 'Visitas da SDR com data entre essas datas, não importa quando ela agendou.'} As colunas somam o total. Toque no nome para ver os clientes.</div>
+    ${D.sdrs.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>SDR</th><th style="text-align:center">Total</th>${colS.map(([, n]) => `<th style="text-align:center">${n}</th>`).join('')}<th style="text-align:center">Viraram venda</th></tr></thead><tbody>${D.sdrs.map(p => `<tr style="cursor:pointer${window._rvSdrUid === p.uid ? ';background:color-mix(in srgb,var(--accent) 8%,transparent)' : ''}" onclick="rvSdrVer('${esc(p.uid)}')"><td><span class="nm">${esc(p.nome)}</span><span class="eq">${esc(eqNome(p.equipe))}</span></td>${['total', ...colS.map(([k]) => k), 'venda'].map(k => `<td style="text-align:center">${k === 'total' ? `<b>${p.c[k] || 0}</b>` : p.c[k] || '<span class="muted">0</span>'}</td>`).join('')}</tr>`).join('')}<tr style="font-weight:700"><td>Total</td>${['total', ...colS.map(([k]) => k), 'venda'].map(k => `<td style="text-align:center">${totS(k)}</td>`).join('')}</tr></tbody></table></div>` : '<div class="muted" style="font-size:13px">Nenhuma visita agendada por SDR nesse período.</div>'}</details>`;
   const chips = `<div class="seg rvr-fil">${RV_FILTROS.map(([k, n]) => `<button class="${fil === k ? 'on' : ''}" onclick="rvFiltro('${k}')">${n} <i>${k === 'tudo' ? D.g.marcadas.length : D.g[k].length}</i></button>`).join('')}</div>`;
   const blocos = (fil === 'tudo' ? ['venda','realSem','canceladas','pendentes','adiadas','faltaram'] : [fil]).map(k => { const l = D.g[k].slice().sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.time || '').localeCompare(b.time || '')), n = RV_FILTROS.find(x => x[0] === k)[1];
     const cor = (RV_GRUPOS.find(g => g[0] === (k === 'venda' || k === 'realSem' ? 'realizadas' : k)) || RV_GRUPOS[0])[2];
@@ -12254,7 +12266,7 @@ function textoRelVis(){ const D = dadosRelVis(); if (!D) return ''; const fil = 
   const per = D.de === D.ate ? dataBR(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`;
   const det = (fil === 'tudo' ? ['venda','realSem','canceladas','pendentes','adiadas','faltaram'] : [fil]).map(k => { const l = D.g[k]; if (!l.length) return ''; const n = RV_FILTROS.find(x => x[0] === k)[1];
     return [`*${n.toUpperCase()} (${l.length})*`, ...l.slice().sort((a, b) => (a.date || '').localeCompare(b.date || '')).map(v => { const x = rvLinha(v, D); return `• ${x.data.slice(0, 5)} ${x.hora} · ${x.cliente}${x.tel ? ' · ' + x.tel : ''} · ${x.corretor}${x.emp ? ' · ' + x.emp : ''}${x.resultado && k !== 'venda' && k !== 'realSem' ? '' : x.resultado ? ' · ' + x.resultado : ''}${x.motivo ? ' · ' + x.motivo : ''}`; })].join('\n'); }).filter(Boolean);
-  return [`*RELATÓRIO DE VISITAS · ${per}*`, '', ...RV_GRUPOS.map(([k, n]) => `${n}: ${D.g[k].length}`), `Viraram venda: ${D.g.venda.length}`, `Agendadas nesses dias (para qualquer data): ${D.g.agendadas.length}`, '', ...(D.sdrs.length ? ['*MARCADAS PELAS SDRs*', ...D.sdrs.map(p => `• ${p.nome}: agendou ${p.c.agendou || 0} nesses dias · ${p.c.marcadas || 0} marcadas para essas datas · ${p.c.realizadas || 0} realizadas · ${p.c.canceladas || 0} canceladas · ${p.c.faltaram || 0} não compareceram · ${p.c.venda || 0} viraram venda`), ''] : []), ...det.flatMap(t => [t, ''])].join('\n').trim(); }
+  return [`*RELATÓRIO DE VISITAS · ${per}*`, '', ...RV_GRUPOS.map(([k, n]) => `${n}: ${D.g[k].length}`), `Viraram venda: ${D.g.venda.length}`, `Agendadas nesses dias (para qualquer data): ${D.g.agendadas.length}`, '', ...(D.sdrs.length ? [`*SDRs · ${(D.modoSdr === 'ag' ? 'agendadas nesses dias' : 'com visita nesses dias')}*`, ...D.sdrs.map(p => `• ${p.nome}: ${p.c.total || 0} no total · ${p.c.realizadas || 0} realizadas · ${p.c.pendentes || 0} pendentes · ${p.c.adiadas || 0} adiadas · ${p.c.canceladas || 0} canceladas · ${p.c.faltaram || 0} não compareceram · ${p.c.venda || 0} ${(p.c.venda || 0) === 1 ? 'virou' : 'viraram'} venda`), ''] : []), ...det.flatMap(t => [t, ''])].join('\n').trim(); }
 window.copiarRelVis = async () => { const t = textoRelVis(); if (!t) return; try { await navigator.clipboard.writeText(t); toast('Relatório copiado. É só colar no WhatsApp.'); } catch(e) { prompt('Copie o texto:', t); } };
 // v243: PDF do relatório (A4, mesmo visual da tela, respeita o filtro escolhido)
 window.pdfRelVis = () => { const D = dadosRelVis(); if (!D) return; const fil = window._rvFil || 'tudo';
@@ -12262,7 +12274,7 @@ window.pdfRelVis = () => { const D = dadosRelVis(); if (!D) return; const fil = 
   const ks = fil === 'tudo' ? ['venda','realSem','canceladas','pendentes','adiadas','faltaram'] : [fil];
   const cards = RV_GRUPOS.map(([k, n, c]) => `<div class="pc" style="--c:${c}"><b>${D.g[k].length}</b><span>${n}</span></div>`).join('') + `<div class="pc" style="--c:#11734b"><b>${D.g.venda.length}</b><span>Viraram venda</span></div>`;
   const tab = D.pessoas.length ? `<h3>Por corretor</h3><table><thead><tr><th>Corretor</th>${RV_GRUPOS.map(([, n]) => `<th>${n}</th>`).join('')}<th>Viraram venda</th><th>Agendou nesses dias</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><b>${esc(p.nome)}</b><br><small>${esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, ''))}</small></td>${[...RV_GRUPOS.map(([k]) => k), 'venda', 'agendadas'].map(k => `<td>${p.c[k] || 0}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '';
-  const tabS = D.sdrs.length ? `<h3>Marcadas pelas SDRs</h3><table><thead><tr><th>SDR</th><th>Agendou nesses dias</th>${RV_GRUPOS.map(([, n]) => `<th>${n}</th>`).join('')}<th>Viraram venda</th></tr></thead><tbody>${D.sdrs.map(p => `<tr><td><b>${esc(p.nome)}</b><br><small>${esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, ''))}</small></td>${['agendou', ...RV_GRUPOS.map(([k]) => k), 'venda'].map(k => `<td>${p.c[k] || 0}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '';
+  const colS = RV_GRUPOS.slice(1), tabS = D.sdrs.length ? `<h3>SDRs · ${(D.modoSdr === 'ag' ? 'agendadas nesses dias' : 'com visita nesses dias')}</h3><table><thead><tr><th>SDR</th><th>Total</th>${colS.map(([, n]) => `<th>${n}</th>`).join('')}<th>Viraram venda</th></tr></thead><tbody>${D.sdrs.map(p => `<tr><td><b>${esc(p.nome)}</b><br><small>${esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, ''))}</small></td>${['total', ...colS.map(([k]) => k), 'venda'].map(k => `<td>${p.c[k] || 0}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '';
   const listas = ks.map(k => { const l = D.g[k].slice().sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.time || '').localeCompare(b.time || '')), n = RV_FILTROS.find(x => x[0] === k)[1];
     const cor = (RV_GRUPOS.find(g => g[0] === (k === 'venda' || k === 'realSem' ? 'realizadas' : k)) || RV_GRUPOS[0])[2];
     return `<section style="--c:${cor}"><h3 class="gt">${n} <span>${l.length}</span></h3>${l.length ? l.map(v => { const x = rvLinha(v, D), cg = (RV_GRUPOS.find(g => g[0] === rvGrupoDe(v)) || RV_GRUPOS[0])[2], venda = /^Virou venda/.test(x.resultado);
@@ -12281,12 +12293,12 @@ window.exportarRelVis = async () => { const D = dadosRelVis(); if (!D) return;
   let X = null; try { X = await carregarXLSX(); } catch(e) {}
   if (!X) { baixarCSV(nome, cab, linhas); return; }
   const wb = X.utils.book_new(), resumo = [['Período', D.de === D.ate ? dataBR(D.de) : dataBR(D.de) + ' a ' + dataBR(D.ate)], [], ...RV_GRUPOS.map(([k, n]) => [n, D.g[k].length]), ['Viraram venda', D.g.venda.length], ['Agendadas nesses dias (para qualquer data)', D.g.agendadas.length], [], ['Corretor', 'Equipe', ...RV_GRUPOS.map(([, n]) => n), 'Viraram venda', 'Agendou nesses dias'], ...D.pessoas.map(p => [p.nome, eqNome(p.equipe), ...RV_GRUPOS.map(([k]) => p.c[k] || 0), p.c.venda || 0, p.c.agendadas || 0]),
-    ...(D.sdrs.length ? [[], ['SDR', 'Equipe', ...RV_GRUPOS.map(([, n]) => n), 'Viraram venda', 'Agendou nesses dias'], ...D.sdrs.map(p => [p.nome, eqNome(p.equipe), ...RV_GRUPOS.map(([k]) => p.c[k] || 0), p.c.venda || 0, p.c.agendou || 0])] : [])];
+    ...(D.sdrs.length ? [[], ['SDRs · ' + (D.modoSdr === 'ag' ? 'agendadas nesses dias' : 'com visita nesses dias')], ['SDR', 'Equipe', 'Total', ...RV_GRUPOS.slice(1).map(([, n]) => n), 'Viraram venda'], ...D.sdrs.map(p => [p.nome, eqNome(p.equipe), p.c.total || 0, ...RV_GRUPOS.slice(1).map(([k]) => p.c[k] || 0), p.c.venda || 0])] : [])];
   const larg = [{ wch:24 }, { wch:11 }, { wch:6 }, { wch:28 }, { wch:16 }, { wch:22 }, { wch:14 }, { wch:20 }, { wch:18 }, { wch:12 }, { wch:14 }, { wch:30 }, { wch:20 }, { wch:30 }, { wch:14 }];
   const w1 = X.utils.aoa_to_sheet(resumo); w1['!cols'] = [{ wch:34 }, { wch:16 }, ...RV_GRUPOS.map(() => ({ wch:13 })), { wch:13 }, { wch:13 }]; X.utils.book_append_sheet(wb, w1, 'Resumo');
   const w2 = X.utils.aoa_to_sheet([cab, ...linhas]); w2['!cols'] = larg; X.utils.book_append_sheet(wb, w2, 'Todas');
   ks.forEach(k => { const l = linhas.filter(r => r[0] === RV_FILTROS.find(f => f[0] === k)[1]); if (!l.length) return; const w = X.utils.aoa_to_sheet([cab, ...l]); w['!cols'] = larg; X.utils.book_append_sheet(wb, w, RV_FILTROS.find(f => f[0] === k)[1].slice(0, 30)); });
-  if (fil === 'tudo' && D.g.sdr.length) { const w = X.utils.aoa_to_sheet([cab, ...D.g.sdr.map(v => { const x = rvLinha(v, D); return ['Marcadas pelas SDRs', ...RV_COLS.map(([c]) => x[c] || '')]; })]); w['!cols'] = larg; X.utils.book_append_sheet(wb, w, 'Marcadas pelas SDRs'); }
+  if (fil === 'tudo' && D.g.sdr.length) { const w = X.utils.aoa_to_sheet([cab, ...D.g.sdr.map(v => { const x = rvLinha(v, D); return ['Agendadas pelas SDRs', ...RV_COLS.map(([c]) => x[c] || '')]; })]); w['!cols'] = larg; X.utils.book_append_sheet(wb, w, 'Agendadas pelas SDRs'); }
   X.writeFile(wb, nome + '.xlsx'); toast('Relatório baixado'); };
 window.fazerCheckout = async () => {
   if (!meuCheckin || meuCheckin.saida) return;
