@@ -3026,7 +3026,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         <div id="visConteudo">
           <div id="paneLista">
             <div class="stats">
-              <div class="stat"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="house"></div><div><b id="vsTotal">0</b><span>Visitas</span></div></div>
+              <div class="stat" onclick="filtrarStatus('Cancelada')"><div class="stat-ic" style="background:var(--accent-soft);color:var(--accent)" data-ic="house"></div><div><b id="vsTotal">0</b><span>Visitas</span><small id="vsCanc"></small></div></div>
               <div class="stat" onclick="filtrarStatus('Confirmada')"><div class="stat-ic" style="background:var(--ok-soft);color:var(--ok)" data-ic="check"></div><div><b id="vsConf">0</b><span>Confirmadas</span></div></div>
               <div class="stat" onclick="filtrarStatus('Pendente')"><div class="stat-ic" style="background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)" data-ic="clock"></div><div><b id="vsPend">0</b><span>Pendentes</span></div></div>
               <div class="stat" onclick="filtrarStatus('Realizada')"><div class="stat-ic" style="background:color-mix(in srgb,#8b5cf6 14%,transparent);color:#8b5cf6" data-ic="star"></div><div><b id="vsReal">0</b><span>Realizadas</span></div></div>
@@ -6035,7 +6035,10 @@ function renderListaVisitas(){
 
   window._listaVis = lista;
   $('janelaVis').innerHTML = avisoJanela(souGerente() && ['anteriores','todas'].includes(vFil.periodo));
-  $('vsTotal').textContent = lista.length;
+  // v246: "Visitas" não conta as canceladas (igual ao cartão do perfil e ao ranking); as canceladas aparecem embaixo
+  const canc = lista.filter(v => v.status === 'Cancelada').length;
+  $('vsTotal').textContent = vFil.status === 'Cancelada' ? canc : lista.length - canc;
+  $('vsCanc').textContent = vFil.status === 'Cancelada' ? 'canceladas' : canc ? `+ ${canc} cancelada${canc === 1 ? '' : 's'}` : '';
   $('vsConf').textContent = lista.filter(v => v.status === 'Confirmada').length;
   $('vsPend').textContent = lista.filter(v => v.status === 'Pendente').length;
   $('vsReal').textContent = lista.filter(v => v.status === 'Realizada').length;
@@ -7044,11 +7047,11 @@ function renderPainelPapel(){
   // aprovações = planilha + cartas do app, sem repetir cliente; vendas = reservas + cartas vendidas
   const aprovMes = aprovUnificadas(avaliacoes.filter(a => a.data >= mi && a.data <= mf), cartas.filter(noMes));
   const minhasCartas = aprovMes.filter(x => x.uid === uidAtual).length;
-  const totMes = rankingDocs.filter(r => r.date >= mi && r.date <= mf && r.status !== 'Cancelada').length, cartasMes = cartas.filter(noMes).length;
+  const totMes = visitas.filter(v => v.date >= mi && v.date <= mf && v.status !== 'Cancelada').length /* v246: mesma lista da aba Visitas (Este mês) */, cartasMes = cartas.filter(noMes).length;
   const vendasMes = souGerente() ? vendasUnificadas(mi, mf).length : cartas.filter(vendaNoMes).length, minhasVendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
   const caixa = itens => `<div class="p-stats">${itens.map(([v,r]) => `<div><b>${v}</b><span>${r}</span></div>`).join('')}</div>`;
   $('pFootRank').innerHTML = souGerente()
-    ? caixa([[totMes,'visitas'],[aprovMes.length,'aprovações'],[vendasMes,'vendas']])
+    ? caixa([[totMes,'visitas no mês'],[aprovMes.length,'aprovações'],[vendasMes,'vendas']])
     : caixa([[pPos >= 0 ? (pPos+1) + 'º' : '–','ranking'],[pEu ? pEu.pontos : 0,'pontos'],[minhasCartas,'cartas']]);
 
   if (souSdr()) {
@@ -7171,7 +7174,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 245;
+const APP_VERSAO = 246;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
