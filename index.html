@@ -7225,7 +7225,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 254;
+const APP_VERSAO = 255;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8494,6 +8494,14 @@ window.cartaDaAvaliacao = id => {
 };
 window.af = (k, v) => { aFil[k] = v; render(); };
 // o mesmo cliente (CPF ou telefone) aparece uma vez só, com a última alteração; carta cadastrada no app conta como aprovado
+// v255: dia em que a documentação conta para a meta. Linha sem data na planilha (o app pegava a data da linha de cima, às vezes antiga)
+// conta no dia em que ela apareceu na planilha. E a aba que ainda não está ligada a ninguém é ligada pelo nome da pessoa.
+function diaDocAv(a){ const d = a.data || '', c = a.criadoEm ? iso(new Date(a.criadoEm)) : '';
+  if ((a.dataEstimada || !d) && c && c > d) return c; return d; }
+function uidDaAv(a){ if (a.corretorUid) return a.corretorUid; const n = norm(a.corretorNome || a.aba || ''); if (n.length < 3) return '';
+  const l = (typeof pessoasRk === 'function' ? pessoasRk() : []).filter(p => { const pn = norm(p.nome || ''); return pn === n || pn.startsWith(n + ' ') || n.startsWith(pn + ' ') || pn.split(' ')[0] === n; });
+  return l.length === 1 ? l[0].uid : ''; }
+window.diaDocAv = diaDocAv;
 function avaliacoesUnificadas(){
   const chave = a => a.cpfNorm ? 'c' + a.cpfNorm : (soDig(a.cpf).length === 11 ? 'c' + soDig(a.cpf) : (a.telNorm ? 't' + a.telNorm : 'i' + a.id));
   const quando = a => a.statusEm || a.atualizadoEm || Date.parse((a.data || '') + 'T12:00:00') || 0;
@@ -15229,8 +15237,8 @@ function calcDesempenho(de, ate){
   // leads: o que ficou com o corretor no fim de cada dia (hoje: ao vivo)
   for (let d = de; d <= ate; d = somaDias(d, 1)) leadsDoDia(d).forEach(x => { pega(x.uid, x.nome, x.equipe).leads += Number(x.n) || 0; });
   // docs: cada linha da planilha de avaliações, pela data
-  const avs = avaliacoes.filter(a => a.data && a.data >= de && a.data <= ate);
-  avs.forEach(a => { const r = pega(a.corretorUid, a.corretorNome || a.aba, a.equipe); r.docs++; const g = infoStatus(a.status).g; if (g === 'condicionado') r.cond++; if (g === 'reprovado') r.reprov++; });
+  const avs = avaliacoes.filter(a => { const d = diaDocAv(a); return d && d >= de && d <= ate; });
+  avs.forEach(a => { const r = pega(uidDaAv(a), a.corretorNome || a.aba, a.equipe); r.docs++; const g = infoStatus(a.status).g; if (g === 'condicionado') r.cond++; if (g === 'reprovado') r.reprov++; });
   // aprovações: planilha + cartas do app, sem repetir cliente
   const m = new Map(), chaveCli = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
   // v172: igual ao relatório do mês: toda linha aprovada da planilha com data no período conta, o mesmo cliente uma vez só
@@ -15688,7 +15696,7 @@ function mdValores(dias){
   });
   // docs: tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada), sem contar o mesmo cliente duas vezes no dia
   const vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); add(u, 'docs'); };
-  try { avaliacoesUnificadas().forEach(a => doc(a.corretorUid, a.data || '', a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id)); } catch(e) {}
+  try { avaliacoesUnificadas().forEach(a => doc(uidDaAv(a), diaDocAv(a), a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id)); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
   try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) add(x.uid, 'docs', Number(x.docs) || 0); })); } catch(e) {}
