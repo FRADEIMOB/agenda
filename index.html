@@ -3326,7 +3326,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <!-- AVALIAÇÕES DE CRÉDITO -->
       <section class="view" id="v-avaliacoes">
         <div class="page-head"><div><h1>Avaliações de crédito</h1><div class="sub" id="avalSub"></div></div>
-          <button class="btn btn-ghost hide" id="btnAvalSync" onclick="lerPlanilhaAgora()">Ler a planilha agora</button></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost hide" id="btnAvalConv" onclick="abrirImpConversa()">Importar conversa do WhatsApp</button><button class="btn btn-ghost hide" id="btnAvalSync" onclick="lerPlanilhaAgora()">Ler a planilha agora</button></div></div>
         <div id="bannerAval"></div>
         <div id="avalConteudo">
           <div class="stats aval-stats">
@@ -3963,6 +3963,15 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       </div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('vrModal')">Cancelar</button><button class="btn btn-primary" id="vrSalvar" onclick="salvarComoFoi()">Salvar registro</button></div>
+  </div>
+</div>
+<div class="modal" id="impConvModal">
+  <div class="sheet" style="width:min(620px,100%)">
+    <div class="sheet-head"><div><h2>Importar conversa do WhatsApp</h2><div class="sub" style="font-size:13px;color:var(--muted)">As análises pedidas na conversa contam como doc do corretor.</div></div><button class="icon-btn" onclick="fechar('impConvModal');irIntegracaoDocs()" data-ic="x"></button></div>
+    <div class="sheet-body"><button class="btn btn-primary" onclick="document.getElementById('icwArq').click()">Escolher conversa (.zip ou .txt)</button><input type="file" id="icwArq" class="hide" multiple accept=".zip,.txt,application/zip,text/plain" onchange="lerZipsWhats(this)">
+      <div id="icwInfo" class="hint" style="margin:10px 0"></div>
+      <div class="hint">No WhatsApp: abra a conversa › ⋮ (ou o nome do grupo) › Mais › Exportar conversa › Sem mídia. Pode escolher várias de uma vez. Cliente que já está na planilha não entra de novo.</div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('impConvModal');irIntegracaoDocs()">Fechar</button><button class="btn btn-primary hide" id="icwBt" onclick="importarDocsWhats()">Importar</button></div>
   </div>
 </div>
 <div class="modal" id="relResModal">
@@ -7225,7 +7234,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 255;
+const APP_VERSAO = 256;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8523,7 +8532,7 @@ function renderAvaliacoes(){
   $('avalConteudo').classList.toggle('hide', !ativo);
   if (!ativo) return;
   $('avalSub').textContent = opTudo() ? 'Avaliações de crédito de todas as equipes, vindas da planilha da administração.' : souCoord() ? 'Avaliações da ' + eqNome(perfil.equipe) + '.' : 'As avaliações de crédito dos seus clientes. Atualiza sozinho a cada 15 minutos.';
-  $('btnAvalSync').classList.toggle('hide', !opTudo());
+  $('btnAvalSync').classList.toggle('hide', !opTudo()); $('btnAvalConv').classList.toggle('hide', !souDono());
   $('aGrupo').innerHTML = '<option value="">Todos os grupos</option>' + Object.entries(GRUPOS_V).filter(([k]) => k).map(([k,g]) => `<option value="${k}" ${aFil.grupo===k?'selected':''}>${g.n}</option>`).join('');
   $('aCorretor').classList.toggle('hide', !opGerir());
   const nomes = [...new Set(avaliacoes.map(a => a.corretorNome || a.aba).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
@@ -9594,7 +9603,7 @@ const PC = (() => {
   }
   function msgsDe(txt){
     txt = String(txt || '').replace(/‎/g, '').replace(/ /g, ' ').replace(/‑/g, '-').replace(/\r/g, '');
-    const HDR = /^\[(\d{1,2})\/(\d{1,2})\/(\d{2,4}),\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*([AP]M)?\]\s*(?:-\s*)?([^:\n]{1,60}):\s?/gm;
+    const HDR = /^\[?(\d{1,2})\/(\d{1,2})\/(\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*([AaPp]\.?\s?[Mm]\.?)?\]?\s*(?:-\s*)?([^:\n]{1,60}):\s?/gm; // v256: iPhone e Android
     const ms = [...txt.matchAll(HDR)];
     const us = ms.some(m => +m[2] > 12) && !ms.some(m => +m[1] > 12);
     return ms.map((m, i) => { const a = +m[1], b = +m[2], [mo, d] = us ? [a, b] : [b, a]; let y = +m[3]; if (y < 100) y += 2000;
@@ -9708,8 +9717,9 @@ async function carregarJSZip(){
 }
 // v178: importar direto os .zip exportados do WhatsApp (sem precisar do arquivo pronto)
 window.lerZipsWhats = async input => {
+  { const m = input.id === 'icwArq'; IW.info = m ? 'icwInfo' : 'impWhatsInfo'; IW.bt = m ? 'icwBt' : 'btnImpWhats'; }
   const fs = [...(input.files || [])]; input.value = ''; if (!fs.length) return;
-  $('impWhatsInfo').textContent = `Lendo ${fs.length} arquivo${fs.length > 1 ? 's' : ''}…`; $('btnImpWhats').classList.add('hide');
+  $(IW.info).textContent = `Lendo ${fs.length} arquivo${fs.length > 1 ? 's' : ''}…`; $(IW.bt).classList.add('hide');
   try {
     const grupos = [], ignorados = [], semTexto = [];
     const nomeDoGrupo = (arq, txt) => { const m = [...String(txt).matchAll(/(?:mudou o nome do grupo para|mudou o nome de .{0,40}? para|criou o grupo|changed the group name to|created group)\s*[“"]([^”"\n]+)[”"]/gi)].pop(); return /cr.?dito|credito|sdr/i.test(PC.abaDoNome(arq) === 'WHATSAPP' ? '' : arq) ? arq : (m ? m[1] : arq); };
@@ -9725,28 +9735,38 @@ window.lerZipsWhats = async input => {
       grupos.push({ nome, texto:txt });
     }
     const lista = PC.converter(grupos);
+    // v256: mostra de quem é cada conversa (a doc conta para essa pessoa)
+    const pessoaDaAba = aba => { const ma = (integ && integ.mapaAbas) || {}; const u = ma[aba] || ma[String(aba).trim()]; const ps = pessoasRk(); if (u) return ps.find(p => p.uid === u) || null;
+      const n = norm(aba).replace(/[^a-z ]/g, ' ').trim(); const tk = n.split(/\s+/).filter(w => w.length > 1); const c = ps.filter(p => { const t = norm(p.nome || '').split(/\s+/); return tk.length && tk.every(w => t.includes(w)); }); return c.length === 1 ? c[0] : null; };
+    window._icwDonos = [...new Set(lista.map(a => a.aba))].map(aba => [aba, pessoaDaAba(aba), lista.filter(a => a.aba === aba).length]);
     const porAba = {}; lista.forEach(a => porAba[a.aba] = (porAba[a.aba] || 0) + 1);
     prepararImpWhats(lista, `${grupos.length} conversa${grupos.length !== 1 ? 's' : ''} lida${grupos.length !== 1 ? 's' : ''} (${Object.entries(porAba).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}: ${n}`).join(' · ')})${ignorados.length ? ` · ${ignorados.length} sem ser de crédito ficaram de fora` : ''}${semTexto.length ? ` · ${semTexto.length} .zip sem a conversa dentro` : ''}. `);
-  } catch(e) { $('impWhatsInfo').textContent = 'Não consegui ler os arquivos: ' + e.message; }
+  } catch(e) { $(IW.info).textContent = 'Não consegui ler os arquivos: ' + e.message; }
 };
 let impWhats = [];
+const IW = { info:'impWhatsInfo', bt:'btnImpWhats' };
+window.abrirImpConversa = () => { if (!souDono()) return; IW.info = 'icwInfo'; IW.bt = 'icwBt'; $('icwInfo').innerHTML = 'Escolha um ou vários .zip (ou .txt) exportados do WhatsApp: as conversas com o correspondente. Cada análise de crédito vira uma doc do corretor dono da conversa, no dia em que foi pedida.'; $('icwBt').classList.add('hide'); abrir('impConvModal'); };
+window.irIntegracaoDocs = () => { IW.info = 'impWhatsInfo'; IW.bt = 'btnImpWhats'; };
 window.lerDocsWhats = async input => {
+  IW.info = 'impWhatsInfo'; IW.bt = 'btnImpWhats';
   const f = input.files && input.files[0]; input.value = ''; if (!f) return;
   try { const j = JSON.parse(await f.text()); prepararImpWhats((Array.isArray(j) ? j : j.avaliacoes || []), ''); }
-  catch(e) { $('impWhatsInfo').textContent = 'Não consegui ler o arquivo: ' + e.message; }
+  catch(e) { $(IW.info).textContent = 'Não consegui ler o arquivo: ' + e.message; }
 };
 function prepararImpWhats(lista, antes){
   {
+    const donos = (window._icwDonos || []).length ? `<div style="margin:8px 0">${window._icwDonos.map(([aba, p, n]) => `<div>${esc(aba)} → ${p ? '<b>' + esc(nomeBonito(p.nome)) + '</b>' : '<b style="color:var(--danger,#b10202)">não reconheci</b> (ligue em Configurações › Integrações › Quem é quem)'} · ${n} cliente${n === 1 ? '' : 's'}</div>`).join('')}</div>` : ''; window._icwDonos = [];
     impWhats = (lista || []).filter(a => a && a.id && a.aba);
     const jaTem = new Set(avaliacoesTodas.filter(a => a.origem !== 'whatsapp').flatMap(a => [a.cpfNorm && 'c' + a.cpfNorm, a.telNorm && 't' + a.telNorm]).filter(Boolean));
     const ck = a => { const c = soDig(a.cpf); return c.length === 11 ? 'c' + c : 't' + chaveTel(a.telefone); };
     const novos = impWhats.filter(a => !jaTem.has(ck(a)));
     const ap = novos.filter(a => infoStatus(a.status).g === 'aprovado').length;
     const porMes = {}; novos.forEach(a => { const m = (a.data || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
-    $('impWhatsInfo').innerHTML = `${impWhats.length} clientes no arquivo · <b>${novos.length}</b> ainda não estão na planilha (${Object.entries(porMes).sort().map(([m,n]) => `${nomeMes(m)}: ${n}`).join(' · ')}) · <b>${ap}</b> aprovados.${impWhats.length > novos.length ? ` ${impWhats.length - novos.length} já foram lançados na planilha e ficam de fora.` : ''}`;
+    $(IW.info).innerHTML = `${impWhats.length} clientes no arquivo · <b>${novos.length}</b> ainda não estão na planilha (${Object.entries(porMes).sort().map(([m,n]) => `${nomeMes(m)}: ${n}`).join(' · ')}) · <b>${ap}</b> aprovados.${impWhats.length > novos.length ? ` ${impWhats.length - novos.length} já foram lançados na planilha e ficam de fora.` : ''}`;
     impWhats = novos;
-    $('btnImpWhats').classList.toggle('hide', !novos.length); $('btnImpWhats').textContent = `Importar ${novos.length} docs`;
-    if (antes) $('impWhatsInfo').innerHTML = esc(antes) + $('impWhatsInfo').innerHTML;
+    $(IW.bt).classList.toggle('hide', !novos.length); $(IW.bt).textContent = `Importar ${novos.length} docs`;
+    if (antes) $(IW.info).innerHTML = esc(antes) + $(IW.info).innerHTML;
+    if (donos) $(IW.info).innerHTML += donos;
   }
 }
 let impRes = [];
@@ -9777,7 +9797,7 @@ window.importarReservas = async () => {
 window.importarDocsWhats = async () => {
   if (!impWhats.length) return;
   if (!confirm(`Colocar ${impWhats.length} docs do WhatsApp no app? Eles passam a contar nas avaliações, no Desempenho, no Painel e nos relatórios.`)) return;
-  const btn = $('btnImpWhats'); btn.disabled = true; btn.textContent = 'Importando…';
+  const btn = $(IW.bt); btn.disabled = true; btn.textContent = 'Importando…';
   try {
     let tot = 0;
     for (let i = 0; i < impWhats.length; i += 200) {
@@ -9785,7 +9805,7 @@ window.importarDocsWhats = async () => {
       if (!r?.ok) throw new Error(r?.erro || 'sem resposta');
       tot += r.recebidas || 0;
     }
-    toast(`Pronto ✓ ${tot} docs do WhatsApp no app`); $('impWhatsInfo').textContent = `✓ ${tot} docs importados.`; btn.classList.add('hide'); impWhats = [];
+    toast(`Pronto ✓ ${tot} docs do WhatsApp no app`); $(IW.info).textContent = `✓ ${tot} docs importados.`; btn.classList.add('hide'); impWhats = [];
   } catch(e) { toast('Erro: ' + e.message); }
   btn.disabled = false;
 };
