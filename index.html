@@ -3167,7 +3167,8 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <section class="view" id="v-bolsao">
         <div class="an-topo"><div><h1>Bolsão de clientes</h1><p class="an-sub">Leads sem dono e clientes perdidos para tentar de novo. Pegue um, ligue e conte o que aconteceu.</p></div>
           <div class="an-topo-bts"><button class="btn btn-ghost hide" id="bzExpBt" onclick="exportarBolsao()">Exportar planilha</button><button class="btn btn-ghost hide" id="bzDispBt" onclick="abrirDisparo()">Configurar disparo</button><button class="btn btn-primary hide" id="bzDisparaBt" onclick="dispararBolsao()">Disparar</button><button class="btn btn-ghost hide" id="bzPerdBt" onclick="abrirPerdidos()">Trazer clientes perdidos</button><button class="btn btn-primary hide" id="bzNovoBt" onclick="abrirBolsaoNovo()">+ Adicionar</button></div></div>
-        <div class="an-tabs" id="bzTabs" style="margin-bottom:14px"></div>
+        <div class="an-tabs" id="bzTabs" style="margin-bottom:10px"></div>
+        <div class="bz-busca" style="margin-bottom:14px;position:relative"><input id="bzBuscaI" type="search" inputmode="search" placeholder="Pesquisar pelo número ou pelo nome do cliente" oninput="bzBuscar(this.value)" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:12px;font-size:15px;background:var(--card,#fff);color:inherit"></div>
         <div id="bzLista"></div>
       </section>
 
@@ -3246,7 +3247,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 
       <!-- RESERVAS (ADM): etapa de cada venda até a assinatura -->
       <section class="view" id="v-reservas">
-        <div class="page-head"><div><h1>Reservas</h1><div class="sub" id="resSub">A etapa de cada reserva, da avaliação até a assinatura.</div></div><button class="btn btn-ghost" onclick="exportarReservas()">Exportar por mês (Excel)</button></div>
+        <div class="page-head"><div><h1>Reservas</h1><div class="sub" id="resSub">A etapa de cada reserva, da avaliação até a assinatura.</div></div><div class="row-bts" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" onclick="abrirRelRes()">Relatório indicação x CRM</button><button class="btn btn-ghost" id="btnResImp" onclick="abrirImpRes()">Importar planilha</button><button class="btn btn-ghost" onclick="exportarReservas()">Exportar por mês (Excel)</button></div></div>
         <div class="res-etapas" id="resEtapas" role="tablist" aria-label="Filtrar por etapa"></div>
         <div class="card">
           <div class="tb-grid">
@@ -3928,6 +3929,20 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       </div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('vrModal')">Cancelar</button><button class="btn btn-primary" id="vrSalvar" onclick="salvarComoFoi()">Salvar registro</button></div>
+  </div>
+</div>
+<div class="modal" id="relResModal">
+  <div class="sheet" style="width:min(900px,100%)">
+    <div class="sheet-head"><div><h2>Relatório de reservas: indicação x CRM</h2><div class="sub" style="font-size:13px;color:var(--muted)">De onde vieram as vendas do período.</div></div><button class="icon-btn" onclick="fechar('relResModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="rv-per"><div class="seg" id="rrAtalhos"></div><label>De<input type="date" id="rrDe"></label><label>Até<input type="date" id="rrAte"></label></div><div id="rrCorpo"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('relResModal')">Fechar</button><button class="btn btn-ghost" onclick="copiarRelRes()">Copiar para o WhatsApp</button><button class="btn btn-ghost" onclick="pdfRelRes()">Baixar PDF</button><button class="btn btn-primary" onclick="excelRelRes()">Baixar Excel</button></div>
+  </div>
+</div>
+<div class="modal" id="resImpModal">
+  <div class="sheet" style="width:min(860px,100%)">
+    <div class="sheet-head"><div><h2>Importar planilha de reservas</h2><div class="sub" style="font-size:13px;color:var(--muted)">O app junta o que é do mesmo cliente e não cria reserva repetida.</div></div><button class="icon-btn" onclick="fechar('resImpModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="riCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('resImpModal')">Fechar</button><button class="btn btn-primary hide" id="riBtn" onclick="gravarImpRes()">Importar</button></div>
   </div>
 </div>
 <div class="modal" id="resvModal">
@@ -7176,7 +7191,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 247;
+const APP_VERSAO = 250;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10743,6 +10758,22 @@ const bzPresente = () => !['corretor','coordenador','sdr','anjo'].includes(perfi
 const bzDisp = () => ({ ativo:true, qtd:3, intervalo:2, max:15, ...(appCfg.bolsaoDisparo || {}) });
 const bzMeus = () => bolsao.filter(x => x.pegoPor === uidAtual && x.status === 'pego');
 const nomeCurto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : p[0] || 'Cliente'; };
+// v249: pesquisa no bolsão pelo número (ou pelo nome): mostra onde o cliente está, com quem e em que situação
+let bzBusca = '';
+window.bzBuscar = v => { bzBusca = String(v || ''); clearTimeout(window._bzBT); window._bzBT = setTimeout(renderBolsao, 200); };
+function bzBate(x){ const q = bzBusca.trim(); if (!q) return true; const dq = soDig(q);
+  if (dq.length >= 4) { const dt = soDig(String(x.telefone || '')); if (!dt) return false; const a = dq.replace(/^55(?=\d{10,11}$)/, ''), b = dt.replace(/^55(?=\d{10,11}$)/, '');
+    return b.includes(a) || (a.length >= 8 && b.slice(-8) === a.slice(-8)); }
+  return norm(String(x.nome || '')).includes(norm(q)); }
+function htmlBzBusca(){
+  const vistos = new Set(), todos = [...bolsao, ...(_bzHistTodos || [])].filter(x => { if (vistos.has(x.id)) return false; vistos.add(x.id); return bzBate(x); });
+  const podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo()), meus = bzMeus().length, livres = new Set(bzLivres().map(x => x.id));
+  const sit = x => x.status === 'livre' ? (livres.has(x.id) ? 'Disponível no bolsão' : 'No bolsão (já atendido ou repetido)') : x.status === 'fila' ? 'Na fila, ainda vai sair' : x.status === 'pego' ? `Com ${x.pegoPor === uidAtual ? 'você' : nomeCurto(x.pegoNome || 'outro corretor')}${x.resultado ? ' · ' + ((bzEtapas().find(e => e.k === x.resultado) || {}).n || x.resultado) : ''}` : `Encerrado${x.pegoNome ? ' · ' + nomeCurto(x.pegoNome) : ''}${x.resultado ? ' · ' + ((bzEtapas().find(e => e.k === x.resultado) || {}).n || x.resultado) : x.repetidoDe ? ' · repetido' : ''}`;
+  const cor = x => x.status === 'livre' && livres.has(x.id) ? 'var(--ok,#11734b)' : x.status === 'pego' ? 'var(--accent,#0b57d0)' : 'var(--muted,#5b6b7c)';
+  const ord = todos.sort((a, b) => (a.status === 'livre' ? 0 : a.status === 'pego' ? 1 : a.status === 'fila' ? 2 : 3) - (b.status === 'livre' ? 0 : b.status === 'pego' ? 1 : b.status === 'fila' ? 2 : 3) || (b.pegoEm || b.criadoEm || 0) - (a.pegoEm || a.criadoEm || 0));
+  return `<div class="bz-lim">${ord.length ? `${ord.length} resultado${ord.length === 1 ? '' : 's'} para “${esc(bzBusca.trim())}” em todo o bolsão` : `Nada encontrado para “${esc(bzBusca.trim())}”. Confira o número com DDD.`}</div>`
+    + (ord.length ? `<div class="rvr-vs">${ord.slice(0, 80).map(x => `<div class="rvr-v" style="grid-template-columns:1fr auto"><div class="rvr-m"><div class="rvr-n"><b>${esc(x.nome || 'Cliente')}</b>${x.telefone ? `<span class="muted" style="font-size:13px">${esc(String(x.telefone).replace(/^['’\`\s]+/, ''))}</span>` : ''}</div><div class="rvr-s" style="color:${cor(x)};font-weight:600">${esc(sit(x))}</div>${x.empreendimento || x.motivo ? `<div class="rvr-x">${esc([x.empreendimento, x.motivo].filter(Boolean).join(' · '))}</div>` : ''}</div>${podePegar && x.status === 'livre' && livres.has(x.id) && bzPresente() ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>Pegar</button>` : ''}</div>`).join('')}</div>` : '');
+}
 function renderBolsao(){
   const n = bzLivres().length; if ($('cBolsao')) { $('cBolsao').textContent = n; $('cBolsao').classList.toggle('hide', !n || souCorresp() || !bzPresente()); }
   if (view !== 'bolsao' || !$('bzLista')) return;
@@ -10755,7 +10786,9 @@ function renderBolsao(){
   const abas = [['livres', 'Disponíveis', bzLivres().length], ['meus', 'Os que eu peguei', bzTodosMeus().length], ['ranking', 'Ranking', 0], ...(podeGerir() ? [['todos', 'Acompanhar', bolsao.filter(x => x.status !== 'livre' && x.status !== 'fila').length]] : []), ...(souGerente() && !souCeo() ? [['fila', 'Na fila', fila]] : [])];
   $('bzTabs').innerHTML = abas.map(([k, r, q]) => `<button class="${bzAba === k ? 'on' : ''}" onclick="bzVerAba('${k}')">${r}${q ? ` <i>${q}</i>` : ''}</button>`).join('');
   const tempo = ms => anTempo(ms);
-  if (bzAba === 'livres' && !bzPresente()) {
+  if (bzBusca.trim()) {
+    $('bzLista').innerHTML = htmlBzBusca();
+  } else if (bzAba === 'livres' && !bzPresente()) {
     $('bzLista').innerHTML = `<div class="an-vazio"><span>🏢</span><b>Marque sua presença</b><p>O bolsão aparece para quem marcou presença hoje, no escritório ou em atendimento externo. Vá na tela Hoje e marque sua presença.</p></div>`;
   } else if (bzAba === 'ranking') {
     const m = mesAtual(), lst = rankingAtiv.filter(r => r.mes === m && r.bz).map(r => ({ uid:r.uid, nome:(perfisTodos.find(p => p.uid === r.uid) || {}).nome || r.nome, n:Object.values(r.bz).reduce((a, v) => a + (Number(v) || 0), 0) })).filter(x => x.n > 0).sort((a, b) => b.n - a.n);
@@ -14434,6 +14467,7 @@ window.resSet = (k, v) => { resFil[k] = v; if (k === 'busca') { clearTimeout(win
 const diasDesde = ms => ms ? Math.max(0, Math.floor((Date.now() - ms) / 864e5)) : null;
 function renderReservasAdm(){
   if (view !== 'reservas' || (!opTudo() && !abaLiberada('reservas'))) return;
+  if ($('btnResImp')) $('btnResImp').classList.toggle('hide', !opTudo());
   const t = norm(resFil.busca), dig = soDig(resFil.busca), eqF = resFil.equipe;
   const [de, ate] = resFil.periodo === 'mes' ? faixa('mes') : resFil.periodo === 'passado' ? faixaMesRel(1) : ['0000-01-01', '9999-12-31'];
   preencherSel('resEquipe', `<option value="">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('')}`, eqF);
@@ -14462,6 +14496,164 @@ window.renderReservasAdm = renderReservasAdm;
 const maiusculaPrimeira = x => { const t = String(x || '').toLowerCase(); return t.charAt(0).toUpperCase() + t.slice(1); };
 
 // v191: exporta todas as reservas de todos os meses (inclusive as que caíram) para o Excel, uma aba por mês
+// =====================================================================
+// v250: relatório de reservas por origem: indicação x CRM (e as que estão sem origem, para corrigir)
+// Indicação = a origem fala em indicação (mesma regra dos pontos de "venda por indicação"). CRM = veio de lead (CRM, Meta, Instagram, site, WhatsApp, bolsão...)
+// =====================================================================
+const RR_GR = [['ind','Indicação','#7c3aed'],['crm','CRM','#0b57d0'],['outra','Outras origens','#b45309'],['sem','Sem origem informada','#5b6b7c']];
+function rrGrupo(r){ if (ehVendaIndicacao(r)) return 'ind'; const t = norm([r.origem, r.origemLead, r.criativo].filter(Boolean).join(' '));
+  if (!t || /^(origem|planilha|-)$/.test(t)) return 'sem';
+  if (/crm|lead|meta|face|insta|anunc|trafego|site|portal|google|zap|whats|bolsao|campanha|criativo|dynamus|tiktok|olx|imovelweb|zap imoveis/.test(t)) return 'crm';
+  return 'outra'; }
+function rrAtalho(k){ const h = hojeISO(); if (k === 'mes') return [mesAtual() + '-01', h]; if (k === 'mesPas') { const m = mesAnterior(1); return [m + '-01', fimDoMes(m)]; }
+  if (k === 'ano') return [h.slice(0, 4) + '-01-01', h]; if (k === 'semana') return rvAtalhoDatas('semana'); return ['2000-01-01', h]; }
+window.rrAt = k => { const [a, b] = rrAtalho(k); $('rrDe').value = a; $('rrAte').value = b; window._rrK = k; pintarRelRes(); };
+window.rrFil = k => { window._rrFil = window._rrFil === k ? '' : k; pintarRelRes(); };
+window.abrirRelRes = () => { if (!opTudo()) return; window._rrFil = '';
+  $('rrAtalhos').innerHTML = [['mes','Este mês'],['mesPas','Mês passado'],['semana','Esta semana'],['ano','Este ano'],['tudo','Tudo']].map(([k, n]) => `<button data-k="${k}" onclick="rrAt('${k}')">${n}</button>`).join('');
+  ['rrDe','rrAte'].forEach(i => { $(i).oninput = () => { window._rrK = ''; pintarRelRes(); }; $(i).onchange = $(i).oninput; });
+  rrAt('mes'); abrir('relResModal'); };
+function dadosRelRes(){ let de = $('rrDe').value, ate = $('rrAte').value || de; if (!de) return null; if (ate < de) [de, ate] = [ate, de];
+  const todas = (typeof reservasTodas !== 'undefined' ? reservasTodas : []).filter(r => !r.arquivado && r.dia && r.dia >= de && r.dia <= ate);
+  const ativas = todas.filter(r => !r.caiu), caidas = todas.filter(r => r.caiu);
+  const g = {}; RR_GR.forEach(([k]) => g[k] = ativas.filter(r => rrGrupo(r) === k));
+  const soma = l => l.reduce((a, r) => a + (Number(r.valor) || 0), 0);
+  const pes = new Map(); ativas.forEach(r => { const cs = corretoresDaReserva(r.corretorTexto); (cs.length ? cs : [{ uid:'', nome:r.corretorTexto || 'Sem corretor' }]).forEach(c => {
+    const k = c.uid || 'n:' + norm(c.nome); if (!pes.has(k)) pes.set(k, { nome:nomeBonito(c.nome || 'Sem corretor'), equipe:c.equipe || '', c:{}, v:0, t:0 }); const p = pes.get(k); const gr = rrGrupo(r); p.c[gr] = (p.c[gr] || 0) + 1; p.t++; p.v += Number(r.valor) || 0; }); });
+  return { de, ate, ativas, caidas, g, soma, pessoas:[...pes.values()].sort((a, b) => b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR')) }; }
+const rrPct = (n, t) => t ? Math.round(n * 100 / t) + '%' : '0%';
+window.pintarRelRes = () => {
+  document.querySelectorAll('#rrAtalhos button').forEach(b => b.classList.toggle('on', b.dataset.k === window._rrK));
+  const D = dadosRelRes(); if (!D) { $('rrCorpo').innerHTML = '<div class="muted">Escolha as datas.</div>'; return; }
+  const per = D.de === '2000-01-01' ? 'todas as reservas' : D.de === D.ate ? dataLonga(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`, tot = D.ativas.length, fil = window._rrFil || '';
+  const cards = `<div class="rvr-per">Período: <b>${esc(per)}</b> · pela data da reserva · reservas caídas ficam de fora</div><div class="rvr-cards">
+    <div class="rvr-card" style="--c:#1c2430"><b>${tot}</b><span>Reservas</span><small>${brl(D.soma(D.ativas))}</small></div>
+    ${RR_GR.map(([k, n, c]) => `<button class="rvr-card" style="--c:${c}${fil === k ? ';outline:2px solid ' + c : ''}" onclick="rrFil('${k}')"><b>${D.g[k].length}</b><span>${n}</span><small>${rrPct(D.g[k].length, tot)} · ${brl(D.soma(D.g[k]))}</small></button>`).join('')}</div>
+    <div class="hint" style="margin:6px 0 12px">${D.caidas.length ? `${D.caidas.length} reserva${D.caidas.length === 1 ? '' : 's'} desse período caiu (${D.caidas.filter(r => rrGrupo(r) === 'ind').length} de indicação, ${D.caidas.filter(r => rrGrupo(r) === 'crm').length} do CRM). ` : ''}Indicação: a origem da reserva fala em indicação. CRM: veio de lead (CRM, Meta, Instagram, site, WhatsApp, bolsão). Toque num quadro para ver as reservas dele.${D.g.sem.length ? ` <b>${D.g.sem.length} sem origem</b>: abra e preencha "Origem do lead".` : ''}</div>`;
+  const tab = D.pessoas.length ? `<details class="rvr-l" open><summary><b>Por corretor</b></summary><div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th>${RR_GR.map(([, n]) => `<th style="text-align:center">${n}</th>`).join('')}<th style="text-align:center">Total</th><th style="text-align:right">VGV</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span>${p.equipe ? `<span class="eq">${esc(eqNome(p.equipe))}</span>` : ''}</td>${RR_GR.map(([k]) => `<td style="text-align:center">${p.c[k] || '<span class="muted">0</span>'}</td>`).join('')}<td style="text-align:center"><b>${p.t}</b></td><td style="text-align:right">${brl(p.v)}</td></tr>`).join('')}</tbody></table></div><div class="hint">Venda em parceria conta para cada corretor da reserva e uma vez só no total.</div></details>` : '<div class="muted" style="margin:10px 0">Nenhuma reserva nesse período.</div>';
+  const blocos = (fil ? RR_GR.filter(g => g[0] === fil) : RR_GR).map(([k, n, c]) => { const l = D.g[k].slice().sort((a, b) => (b.dia || '').localeCompare(a.dia || ''));
+    return `<div class="rvr-bl" style="--c:${c}"><h4>${n} <span>${l.length}</span></h4>${l.length ? `<div class="rvr-vs">${l.map(r => `<div class="rvr-v" style="cursor:pointer" onclick="fechar('relResModal');editarReserva('${r.id}')"><div class="rvr-q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="rvr-m"><div class="rvr-n"><b>${esc(nomeBonito(r.cliente || 'Cliente'))}</b>${r.telefone ? `<span class="muted" style="font-size:13px">${esc(fmtFone(r.telefone))}</span>` : ''}</div><div class="rvr-s">${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="rvr-x">Origem: ${esc(r.origem || r.origemLead || 'não informada')}${r.etapa ? ' · ' + esc(r.etapa) : ''}</div></div><span class="rvr-st" style="--c:${c}">${esc(n)}</span></div>`).join('')}</div>` : '<div class="muted" style="font-size:13px">Nenhuma.</div>'}</div>`; }).join('');
+  $('rrCorpo').innerHTML = cards + tab + blocos; };
+function textoRelRes(){ const D = dadosRelRes(); if (!D) return ''; const tot = D.ativas.length, fil = window._rrFil || '';
+  const per = D.de === '2000-01-01' ? 'todas' : D.de === D.ate ? dataBR(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`;
+  const lin = [`*RESERVAS: INDICAÇÃO x CRM · ${per}*`, '', `Reservas: ${tot} · ${brl(D.soma(D.ativas))}`, ...RR_GR.map(([k, n]) => `${n}: ${D.g[k].length} (${rrPct(D.g[k].length, tot)}) · ${brl(D.soma(D.g[k]))}`), ...(D.caidas.length ? [`Caíram no período: ${D.caidas.length}`] : []), ''];
+  if (D.pessoas.length) lin.push('*POR CORRETOR*', ...D.pessoas.map(p => `• ${p.nome}: ${p.c.ind || 0} indicação · ${p.c.crm || 0} CRM${p.c.outra ? ` · ${p.c.outra} outras` : ''}${p.c.sem ? ` · ${p.c.sem} sem origem` : ''}`), '');
+  (fil ? RR_GR.filter(g => g[0] === fil) : RR_GR.slice(0, 2)).forEach(([k, n]) => { if (!D.g[k].length) return; lin.push(`*${n.toUpperCase()} (${D.g[k].length})*`, ...D.g[k].slice().sort((a, b) => (a.dia || '').localeCompare(b.dia || '')).map(r => `• ${dataBR(r.dia).slice(0, 5)} · ${nomeBonito(r.cliente || '')} · ${r.corretorTexto || ''}${r.empreendimento ? ' · ' + r.empreendimento : ''}${r.valor ? ' · ' + brl(r.valor) : ''}`), ''); });
+  return lin.join('\n').trim(); }
+window.copiarRelRes = async () => { const t = textoRelRes(); if (!t) return; try { await navigator.clipboard.writeText(t); toast('Relatório copiado. É só colar no WhatsApp.'); } catch(e) { prompt('Copie o texto:', t); } };
+window.excelRelRes = async () => { const D = dadosRelRes(); if (!D) return; const tot = D.ativas.length;
+  const cab = ['Origem (grupo)', 'Data', 'Cliente', 'Telefone', 'Corretor', 'Empreendimento', 'Construtora', 'Valor', 'Etapa', 'Origem escrita', 'Caiu'];
+  const linha = r => [(RR_GR.find(g => g[0] === rrGrupo(r)) || [])[1], dataBR(r.dia), nomeBonito(r.cliente || ''), r.telefone ? fmtFone(r.telefone) : '', r.corretorTexto || '', r.empreendimento || '', r.construtora || '', Number(r.valor) || 0, r.etapa || '', r.origem || r.origemLead || '', r.caiu ? 'sim' : ''];
+  const todas = [...D.ativas, ...D.caidas].sort((a, b) => (a.dia || '').localeCompare(b.dia || '')).map(linha), nome = `reservas-indicacao-crm-${D.de === '2000-01-01' ? 'tudo' : D.de + (D.ate !== D.de ? '-a-' + D.ate : '')}`;
+  let X = null; try { X = await carregarXLSX(); } catch(e) {} if (!X) { baixarCSV(nome, cab, todas); return; }
+  const wb = X.utils.book_new(), larg = [{ wch:20 }, { wch:11 }, { wch:28 }, { wch:16 }, { wch:24 }, { wch:22 }, { wch:14 }, { wch:12 }, { wch:18 }, { wch:22 }, { wch:6 }];
+  const res = [['Período', D.de === '2000-01-01' ? 'tudo' : dataBR(D.de) + ' a ' + dataBR(D.ate)], [], ['Grupo', 'Reservas', '%', 'VGV'], ['Total', tot, '100%', D.soma(D.ativas)], ...RR_GR.map(([k, n]) => [n, D.g[k].length, rrPct(D.g[k].length, tot), D.soma(D.g[k])]), ['Caíram no período', D.caidas.length, '', D.soma(D.caidas)], [], ['Corretor', ...RR_GR.map(g => g[1]), 'Total', 'VGV'], ...D.pessoas.map(p => [p.nome, ...RR_GR.map(([k]) => p.c[k] || 0), p.t, p.v])];
+  const w1 = X.utils.aoa_to_sheet(res); w1['!cols'] = [{ wch:28 }, { wch:12 }, { wch:12 }, { wch:14 }, { wch:14 }, { wch:20 }, { wch:10 }, { wch:14 }]; X.utils.book_append_sheet(wb, w1, 'Resumo');
+  const w2 = X.utils.aoa_to_sheet([cab, ...todas]); w2['!cols'] = larg; X.utils.book_append_sheet(wb, w2, 'Todas');
+  RR_GR.forEach(([k, n]) => { if (!D.g[k].length) return; const w = X.utils.aoa_to_sheet([cab, ...D.g[k].map(linha)]); w['!cols'] = larg; X.utils.book_append_sheet(wb, w, n.slice(0, 30)); });
+  X.writeFile(wb, nome + '.xlsx'); toast('Relatório baixado'); };
+window.pdfRelRes = () => { const D = dadosRelRes(); if (!D) return; const tot = D.ativas.length, fil = window._rrFil || '';
+  const per = D.de === '2000-01-01' ? 'Todas as reservas' : D.de === D.ate ? dataLonga(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`;
+  const cards = `<div class="pc" style="--c:#1c2430"><b>${tot}</b><span>Reservas · ${brl(D.soma(D.ativas))}</span></div>` + RR_GR.map(([k, n, c]) => `<div class="pc" style="--c:${c}"><b>${D.g[k].length}</b><span>${n} · ${rrPct(D.g[k].length, tot)}<br>${brl(D.soma(D.g[k]))}</span></div>`).join('');
+  const tab = D.pessoas.length ? `<h3>Por corretor</h3><table><thead><tr><th>Corretor</th>${RR_GR.map(([, n]) => `<th>${n}</th>`).join('')}<th>Total</th><th>VGV</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><b>${esc(p.nome)}</b></td>${RR_GR.map(([k]) => `<td>${p.c[k] || 0}</td>`).join('')}<td><b>${p.t}</b></td><td>${brl(p.v)}</td></tr>`).join('')}</tbody></table>` : '';
+  const listas = (fil ? RR_GR.filter(g => g[0] === fil) : RR_GR).map(([k, n, c]) => { const l = D.g[k].slice().sort((a, b) => (a.dia || '').localeCompare(b.dia || ''));
+    return `<section style="--c:${c}"><h3 class="gt">${n} <span>${l.length}</span></h3>${l.length ? l.map(r => `<div class="v"><div class="q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="m"><div><b class="cl">${esc(nomeBonito(r.cliente || ''))}</b> <span class="tl">${esc(r.telefone ? fmtFone(r.telefone) : '')}</span></div><div>${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="x">Origem: ${esc(r.origem || r.origemLead || 'não informada')}${r.etapa ? ' · ' + esc(r.etapa) : ''}</div></div><span class="st" style="--c:${c}">${esc(n)}</span></div>`).join('') : '<p class="x">Nenhuma.</p>'}</section>`; }).join('');
+  let box = $('rvPrint'); if (!box) { box = document.createElement('div'); box.id = 'rvPrint'; document.body.appendChild(box); }
+  box.innerHTML = `<header><div><div class="mk">Frade Imóveis</div><h1>Reservas: indicação x CRM</h1><div class="pr">${esc(per)}</div></div><div class="ge">Gerado em ${new Date().toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })}<br>por ${esc(nomeBonito(perfil?.nome || ''))}</div></header>
+    <div class="cs" style="grid-template-columns:repeat(5,1fr)">${cards}</div><p class="nt">Pela data da reserva. Reservas caídas ficam de fora${D.caidas.length ? ` (${D.caidas.length} caíram no período)` : ''}. Indicação: a origem fala em indicação. CRM: veio de lead.</p>${tab}${listas}`;
+  const tit = document.title; document.title = 'Reservas indicacao x CRM ' + (D.de === '2000-01-01' ? 'tudo' : dataBR(D.de).replace(/\//g, '-') + ' a ' + dataBR(D.ate).replace(/\//g, '-'));
+  document.body.classList.add('rv-imprime'); const fim = () => { document.body.classList.remove('rv-imprime'); document.title = tit; window.removeEventListener('afterprint', fim); };
+  window.addEventListener('afterprint', fim); setTimeout(() => { window.print(); setTimeout(fim, 1500); }, 60); };
+// =====================================================================
+// v248: importar a planilha de reservas (Excel ou CSV) sem duplicar
+// O mesmo cliente (CPF, telefone, ou nome + empreendimento) vira uma reserva só. O que já está no app não é apagado:
+// só completa os campos vazios (ou, se marcar, a planilha manda nos campos que ela tem)
+// =====================================================================
+const RI_CAMPOS = [['dia','Data da reserva',['data da reserva','data reserva','data','dia','reserva em','data venda','data da venda']],['cliente','Cliente',['cliente','nome do cliente','nome','comprador','proponente']],
+  ['cpf','CPF',['cpf','cpf do cliente']],['telefone','Telefone',['telefone','celular','fone','contato','whatsapp','tel']],['empreendimento','Empreendimento',['empreendimento','residencial','imovel','projeto','produto','condominio']],
+  ['construtora','Construtora',['construtora','incorporadora']],['valor','Valor',['valor','valor do imovel','valor da venda','vgv','valor venda','preco']],['corretorTexto','Corretor',['corretor','corretores','corretor a','vendedor','corretor responsavel']],
+  ['etapa','Etapa',['etapa','status','situacao','fase']],['entrada','Entrada',['entrada','ato']],['origem','Origem',['origem','midia','canal']],['previsao','Previsão',['previsao','previsao de assinatura']],['obs','Observação',['obs','observacao','observacoes']]];
+let riLinhas = [], riCab = [], riMapa = {}, riPlano = null;
+window.abrirImpRes = () => { if (!opTudo()) return; riLinhas = []; riCab = []; riMapa = {}; riPlano = null; $('riBtn').classList.add('hide');
+  $('riCorpo').innerHTML = `<div class="fg"><label>Escolha a planilha (Excel ou CSV). A primeira linha deve ter os nomes das colunas.</label><input type="file" accept=".xlsx,.xls,.csv" onchange="lerImpRes(this)"></div><div id="riInfo" class="hint">Pode ser a planilha inteira: o app reconhece as colunas sozinho e você confere antes de importar.</div>`;
+  abrir('resImpModal'); };
+const riNormCab = t => norm(String(t || '')).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+function riData(v){ if (v instanceof Date && !isNaN(v)) return iso(v); if (typeof v === 'number' && v > 20000 && v < 80000) { const d = new Date(Date.UTC(1899, 11, 30) + v * 864e5); return d.toISOString().slice(0, 10); }
+  const t = String(v || '').trim(); let m = t.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/); if (m) { const a = m[3].length === 2 ? '20' + m[3] : m[3]; return `${a}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`; }
+  m = t.match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[0] : ''; }
+const riValor = v => typeof v === 'number' ? Math.round(v) : lerValor(v);
+function riEtapa(v){ const t = norm(String(v || '')); if (!t) return ''; if (/caiu|cancel|distrat/.test(t)) return 'CAIU RESERVA'; const e = ETAPAS_RES.find(x => norm(x[0]) === t) || ETAPAS_RES.find(x => t.includes(norm(x[0])) || norm(x[0]).includes(t)); return e ? e[0] : ''; }
+window.lerImpRes = async input => {
+  const f = input.files && input.files[0]; input.value = ''; if (!f) return; $('riInfo').textContent = 'Lendo a planilha…';
+  try { const X = await carregarXLSX(); const wb = X.read(await f.arrayBuffer(), { type:'array', cellDates:true });
+    // a aba com mais linhas que parecem reserva
+    let melhor = null; wb.SheetNames.forEach(n => { const a = X.utils.sheet_to_json(wb.Sheets[n], { header:1, raw:true, defval:'' }); const i = a.findIndex(r => r.filter(c => String(c).trim()).length >= 3);
+      if (i < 0) return; const cab = a[i].map(riNormCab), pts = RI_CAMPOS.filter(([, , al]) => cab.some(c => al.includes(c))).length; if (!melhor || pts > melhor.pts || (pts === melhor.pts && a.length > melhor.a.length)) melhor = { n, a, i, pts }; });
+    if (!melhor) throw new Error('não achei linhas na planilha');
+    riCab = melhor.a[melhor.i].map(c => String(c).trim()); riLinhas = melhor.a.slice(melhor.i + 1).filter(r => r.some(c => String(c).trim()));
+    const cab = riCab.map(riNormCab); riMapa = {}; RI_CAMPOS.forEach(([k, , al]) => { let i = cab.findIndex(c => al.includes(c)); if (i < 0) i = cab.findIndex(c => al.some(a => a.length > 3 && c.startsWith(a))); if (i >= 0 && !Object.values(riMapa).includes(i)) riMapa[k] = i; });
+    window._riAba = melhor.n; window._riIni = melhor.i + 2; pintarImpRes();
+  } catch(e) { $('riInfo').textContent = 'Não consegui ler a planilha: ' + e.message; }
+};
+window.riMudaMapa = (k, v) => { if (v === '') delete riMapa[k]; else riMapa[k] = Number(v); pintarImpRes(); };
+window.riManda = v => { window._riPlanilhaManda = v; pintarImpRes(); };
+function planoImpRes(){
+  const val = (r, k) => riMapa[k] !== undefined ? r[riMapa[k]] : '';
+  const ign = [], porChave = new Map(), ordem = [];
+  const L0 = window._riIni || 2;
+  riLinhas.forEach((r, n0) => { const n = n0 + L0 - 2, cli = String(val(r, 'cliente') || '').trim(), dia = riData(val(r, 'dia'));
+    if (!cli || !dia) { ign.push(n + 2); return; }
+    const cpf = soDig(val(r, 'cpf')), tel = String(val(r, 'telefone') || '').trim(), et = riEtapa(val(r, 'etapa'));
+    const d = { dia, cliente:nomeBonito(cli), cpf:cpf.length === 11 ? cpf : '', cpfNorm:cpf.length === 11 ? cpf : '', telefone:tel, telNorm:chaveTel(tel), empreendimento:String(val(r, 'empreendimento') || '').trim(),
+      construtora:String(val(r, 'construtora') || '').trim(), valor:riValor(val(r, 'valor')), corretorTexto:String(val(r, 'corretorTexto') || '').trim(), etapa:et && et !== 'CAIU RESERVA' ? et : '', caiu:et === 'CAIU RESERVA',
+      entrada:String(val(r, 'entrada') || '').trim(), origem:String(val(r, 'origem') || '').trim(), previsao:String(val(r, 'previsao') || '').trim(), obs:String(val(r, 'obs') || '').trim(), _linhas:[n + 2] };
+    // o mesmo cliente dentro da planilha: CPF, depois telefone, depois nome + empreendimento
+    const ch = d.cpfNorm ? 'c' + d.cpfNorm : d.telNorm ? 't' + d.telNorm : 'n' + norm(d.cliente) + '|' + norm(d.empreendimento);
+    const ja = porChave.get(ch);
+    if (ja) { Object.keys(d).forEach(k => { if (k === '_linhas') ja._linhas.push(n + 2); else if ((ja[k] === '' || ja[k] === 0 || ja[k] === false) && d[k]) ja[k] = d[k]; }); return; }
+    porChave.set(ch, d); ordem.push(d); });
+  // agora compara com o que já está no app
+  const todas = typeof reservasTodas !== 'undefined' ? reservasTodas : [], manda = !!window._riPlanilhaManda;
+  const acha = d => todas.find(x => (d.cpfNorm && x.cpfNorm === d.cpfNorm) || (d.telNorm && (x.telNorm || chaveTel(x.telefone)) === d.telNorm))
+    || todas.find(x => norm(x.cliente || '') === norm(d.cliente) && (!d.empreendimento || !x.empreendimento || norm(x.empreendimento) === norm(d.empreendimento)) && (!x.dia || !d.dia || Math.abs(new Date(x.dia) - new Date(d.dia)) < 120 * 864e5));
+  const novas = [], completar = [], iguais = [];
+  ordem.forEach(d => { const x = acha(d);
+    if (!x) { novas.push(d); return; }
+    const mud = {}; ['dia','cliente','cpf','cpfNorm','telefone','telNorm','empreendimento','construtora','valor','corretorTexto','etapa','entrada','origem','previsao','obs'].forEach(k => {
+      const nv = d[k], av = x[k]; if (nv === '' || nv === 0 || nv === undefined) return; const vazio = av === undefined || av === null || av === '' || av === 0;
+      if (vazio || (manda && String(av) !== String(nv))) mud[k] = nv; });
+    if (d.caiu && !x.caiu && manda) mud.caiu = true;
+    if (Object.keys(mud).length) completar.push({ x, d, mud }); else iguais.push({ x, d }); });
+  const repetidas = ordem.reduce((a, d) => a + d._linhas.length - 1, 0);
+  return { ign, novas, completar, iguais, repetidas, lidas:riLinhas.length };
+}
+function pintarImpRes(){
+  const P = riPlano = planoImpRes(), op = i => riCab.map((c, j) => `<option value="${j}" ${i === j ? 'selected' : ''}>${esc(c || 'Coluna ' + (j + 1))}</option>`).join('');
+  const mapa = `<details class="rvr-l" ${riMapa.cliente === undefined || riMapa.dia === undefined ? 'open' : ''}><summary><b>Colunas</b> <span class="muted" style="font-size:12.5px">o app reconheceu sozinho; corrija se precisar</span></summary><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-top:8px">${RI_CAMPOS.map(([k, n]) => `<label style="font-size:12.5px">${n}${['dia','cliente'].includes(k) ? ' *' : ''}<select onchange="riMudaMapa('${k}',this.value)"><option value="">não usar</option>${op(riMapa[k])}</select></label>`).join('')}</div></details>`;
+  const card = (n, t, c) => `<div class="rvr-card" style="--c:${c}"><b>${n}</b><span>${t}</span></div>`;
+  const resumo = `<div class="rvr-per">Aba <b>${esc(window._riAba || '')}</b> · ${P.lidas} linhas</div><div class="rvr-cards">${card(P.novas.length, 'Reservas novas', '#11734b')}${card(P.completar.length, 'Já no app, com informação nova', '#0b57d0')}${card(P.iguais.length, 'Já no app, iguais', '#5b6b7c')}${card(P.repetidas, 'Linhas repetidas juntadas', '#7c3aed')}${card(P.ign.length, 'Linhas sem cliente ou data', '#b45309')}</div>
+    <label class="fv-chk" style="margin:10px 0"><input type="checkbox" ${window._riPlanilhaManda ? 'checked' : ''} onchange="riManda(this.checked)"> Quando a planilha e o app tiverem valores diferentes, ficar com o da planilha (sem marcar, o app só completa o que está vazio)</label>`;
+  const linha = (d, tag, cor, extra = '') => `<div class="rvr-v"><div class="rvr-q"><b>${esc(dataBR(d.dia).slice(0, 5))}</b><span>${esc(d.dia.slice(0, 4))}</span></div><div class="rvr-m"><div class="rvr-n"><b>${esc(d.cliente)}</b>${d.telefone ? `<span class="muted" style="font-size:13px">${esc(fmtFone(d.telefone))}</span>` : ''}</div><div class="rvr-s">${esc([d.corretorTexto, d.empreendimento, d.valor ? brl(d.valor) : '', d.etapa || (d.caiu ? 'Caiu' : '')].filter(Boolean).join(' · '))}</div>${extra}${d._linhas.length > 1 ? `<div class="rvr-x">Juntou as linhas ${d._linhas.join(', ')} da planilha</div>` : `<div class="rvr-x">Linha ${d._linhas[0]}</div>`}</div><span class="rvr-st" style="--c:${cor}">${tag}</span></div>`;
+  const ROT = { dia:'data', cliente:'nome', cpf:'CPF', cpfNorm:'', telefone:'telefone', telNorm:'', empreendimento:'empreendimento', construtora:'construtora', valor:'valor', corretorTexto:'corretor', etapa:'etapa', entrada:'entrada', origem:'origem', previsao:'previsão', obs:'observação', caiu:'caiu' };
+  const lista = [...P.novas.map(d => linha(d, 'Nova', '#11734b')), ...P.completar.map(({ d, mud }) => linha(d, 'Completa', '#0b57d0', `<div class="rvr-r">Vai preencher: ${esc(Object.keys(mud).map(k => ROT[k]).filter(Boolean).join(', '))}</div>`))];
+  $('riCorpo').innerHTML = mapa + resumo + (P.ign.length ? `<div class="hint">Linhas ignoradas (sem cliente ou sem data): ${P.ign.slice(0, 30).join(', ')}${P.ign.length > 30 ? '…' : ''}</div>` : '')
+    + (lista.length ? `<div class="rvr-vs" style="margin-top:10px">${lista.slice(0, 300).join('')}</div>${lista.length > 300 ? `<div class="hint">E mais ${lista.length - 300}.</div>` : ''}` : '<div class="muted" style="margin-top:10px">Nada novo para importar: tudo o que está na planilha já está no app.</div>');
+  const n = P.novas.length + P.completar.length; $('riBtn').classList.toggle('hide', !n || riMapa.cliente === undefined || riMapa.dia === undefined);
+  $('riBtn').textContent = `Importar ${P.novas.length} nova${P.novas.length === 1 ? '' : 's'}${P.completar.length ? ` e completar ${P.completar.length}` : ''}`;
+}
+window.gravarImpRes = async () => {
+  const P = riPlano; if (!P || !opTudo()) return; const btn = $('riBtn'); btn.disabled = true; btn.textContent = 'Importando…';
+  const usados = new Set((typeof reservasTodas !== 'undefined' ? reservasTodas : []).map(x => x.id)); let feitas = 0;
+  try { const ops = [];
+    P.novas.forEach(d => { const { _linhas, ...dd } = d; let id = 'r' + (dd.cpf || (dd.telNorm ? 't' + dd.telNorm : 'p' + norm(dd.cliente).replace(/[^a-z0-9]/g, '').slice(0, 24) + dd.dia.replace(/-/g, '')));
+      while (usados.has(id)) id += '_' + Math.random().toString(36).slice(2, 6); usados.add(id);
+      const cor = corretoresDaReserva(dd.corretorTexto);
+      ops.push([id, { ...dd, corretorUids:cor.map(c => c.uid).filter(Boolean), fonte:'planilha', criadoEm:Date.now(), importadoEm:Date.now(), por:perfil.nome, ...(dd.caiu ? { caiuEm:Date.now() } : {}) }, false]); });
+    P.completar.forEach(({ x, mud }) => { const m = { ...mud, atualizadoEm:Date.now(), editadoPor:perfil.nome + ' (planilha)' }; if (mud.corretorTexto) m.corretorUids = [...new Set([...(x.corretorUids || []), ...corretoresDaReserva(mud.corretorTexto).map(c => c.uid).filter(Boolean)])]; if (mud.caiu) m.caiuEm = Date.now(); ops.push([x.id, m, true]); });
+    for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i + 400).forEach(([id, d, mg]) => mg ? b.update(doc(db,'reservas',id), d) : b.set(doc(db,'reservas',id), d)); await gravar(b.commit()); feitas += Math.min(400, ops.length - i); }
+    toast(`Pronto ✓ ${P.novas.length} novas e ${P.completar.length} completadas`); fechar('resImpModal');
+  } catch(e) { toast('Erro depois de ' + feitas + ' reservas: ' + e.message); }
+  btn.disabled = false; };
 window.exportarReservas = async () => {
   if (!opTudo() && !abaLiberada('reservas')) return;
   const l = reservasTodas.slice().sort((a, b) => (a.dia || '').localeCompare(b.dia || ''));
