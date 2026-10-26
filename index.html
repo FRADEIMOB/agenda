@@ -1059,6 +1059,10 @@ html.lenis,html.lenis body{height:auto}
 
 
 
+/* v239: relatório de visitas */
+.rv-per{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:14px}.rv-per label{display:flex;flex-direction:column;font-size:12.5px;font-weight:700;gap:4px}.rv-per input{width:auto}
+.rvr-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.rvr-card{all:unset;cursor:pointer;border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:10px 12px;background:var(--card)}.rvr-card b{display:block;font-size:26px;color:var(--c);line-height:1.1}.rvr-card span{font-size:13px;font-weight:700}
+.rvr-l{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:8px 12px}.rvr-l summary{cursor:pointer}.rvr-i{display:grid;grid-template-columns:90px 1fr;gap:2px 10px;padding:6px 0;border-top:1px solid var(--line);font-size:13.5px}.rvr-i small{grid-column:2;color:var(--muted)}
 /* v227: pergunta de saída */
 .saida-bts{flex-wrap:wrap}.saida-bts .btn{flex:1 1 100%}
 /* v220: quem é de cada equipe */
@@ -3001,7 +3005,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       <!-- VISITAS -->
       <section class="view" id="v-visitas">
         <div class="page-head"><div><h1>Visitas</h1><div class="sub" id="visSub"></div></div>
-          <div class="ph-acoes"><button class="btn btn-ghost wa" id="btnConfPag" onclick="abrirConfirmar()"><i data-ic="wa" style="width:17px;height:17px;display:grid"></i><span class="txtConfAm">Confirmar amanhã</span></button><div class="seg" id="segVis"></div><button class="btn btn-primary so-cel" id="btnNovaVisPag" onclick="novaVisita()">+ Nova visita</button></div></div>
+          <div class="ph-acoes"><button class="btn btn-ghost hide" id="btnRelVis" onclick="abrirRelVisitas()">Relatório de visitas</button><button class="btn btn-ghost wa" id="btnConfPag" onclick="abrirConfirmar()"><i data-ic="wa" style="width:17px;height:17px;display:grid"></i><span class="txtConfAm">Confirmar amanhã</span></button><div class="seg" id="segVis"></div><button class="btn btn-primary so-cel" id="btnNovaVisPag" onclick="novaVisita()">+ Nova visita</button></div></div>
         <div id="bannerVis"></div>
         <div id="visConteudo">
           <div id="paneLista">
@@ -4450,6 +4454,15 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-head"><h2>Você está saindo para uma visita externa?</h2><button class="icon-btn" onclick="saidaResp('fica')" data-ic="x"></button></div>
     <div class="sheet-body"><div class="hint" style="margin:0" id="saidaTx">O app percebeu que você saiu do escritório.</div></div>
     <div class="sheet-foot saida-bts"><button class="btn btn-primary" onclick="saidaResp('externo')">Sim, vou atender fora</button><button class="btn btn-ghost" onclick="saidaResp('encerrar')">Não, encerrei o dia</button><button class="btn btn-ghost" onclick="saidaResp('fica')">Ainda estou no escritório</button></div>
+  </div>
+</div>
+<div class="modal" id="relVisModal">
+  <div class="sheet" style="width:min(980px,100%)">
+    <div class="sheet-head"><div><h2>Relatório de visitas</h2><div class="muted" style="font-size:13px;margin-top:3px">Escolha as datas e o app monta: marcadas, realizadas, canceladas, pendentes e adiadas.</div></div><button class="icon-btn" onclick="fechar('relVisModal')" data-ic="x"></button></div>
+    <div class="sheet-body" data-lenis-prevent>
+      <div class="rv-per"><div class="seg" id="rvAtalhos"></div><label>De<input type="date" id="rvDe" onchange="pintarRelVis()"></label><label>Até<input type="date" id="rvAte" onchange="pintarRelVis()"></label></div>
+      <div id="rvCorpo"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('relVisModal')">Fechar</button><button class="btn btn-ghost" onclick="copiarRelVis()">Copiar para o WhatsApp</button><button class="btn btn-primary" onclick="exportarRelVis()">Exportar (Excel)</button></div>
   </div>
 </div>
 <div class="modal" id="metasModal">
@@ -5962,7 +5975,7 @@ function renderVisitasTudo(){
   $('visConteudo').classList.toggle('hide', !ativo);
   $('segVis').innerHTML = ''; $('segVis').classList.add('hide'); visAba = 'lista';
   $('btnNovaVisPag').classList.toggle('hide', !ativo);
-  $('btnConfPag').classList.toggle('hide', !ativo);
+  $('btnConfPag').classList.toggle('hide', !ativo); if ($('btnRelVis')) $('btnRelVis').classList.toggle('hide', !podeGerir());
   const nConf = paraConfirmar().length;
   document.querySelectorAll('.txtConfAm').forEach(e => e.textContent = 'Confirmar amanhã' + (nConf ? ` (${nConf})` : ''));
   if ($('confModal').classList.contains('open')) renderConfirmar();
@@ -7142,7 +7155,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 238;
+const APP_VERSAO = 239;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12150,6 +12163,56 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 setTimeout(() => saidaConferir(), 6e3);
 window.saidaConferir = saidaConferir; window.saidaPerguntar = saidaPerguntar;
 addEventListener('hashchange', () => { if (location.hash === '#saida') { history.replaceState(null, '', location.pathname); _saidaT = 0; saidaConferir(true); } });
+// v239: relatório de visitas por período (a gerência e o coordenador escolhem as datas)
+const RV_GRUPOS = [['marcadas','Marcadas','#0b57d0'],['realizadas','Realizadas','#11734b'],['canceladas','Canceladas','#b10202'],['pendentes','Pendentes','#b45309'],['adiadas','Adiadas','#7c3aed'],['faltaram','Não compareceu','#5b6b7c']];
+const rvGrupoDe = v => v.status === 'Realizada' ? 'realizadas' : v.status === 'Cancelada' ? 'canceladas' : v.status === 'Reagendada' ? 'adiadas' : v.status === 'Não compareceu' ? 'faltaram' : 'pendentes';
+function rvAtalhoDatas(k){ const h = hojeISO(), d = new Date(h + 'T12:00:00'), w = d.getDay();
+  if (k === 'fds') { const sab = new Date(d); sab.setDate(d.getDate() - (w === 6 ? 0 : w === 0 ? 1 : w + 1)); const dom = new Date(sab); dom.setDate(sab.getDate() + 1); return [iso(sab), iso(dom) > h ? h : iso(dom)]; }
+  if (k === 'ontem') { const o = somaDias(h, -1); return [o, o]; }
+  if (k === 'hoje') return [h, h];
+  if (k === 'semana') { const seg = new Date(d); seg.setDate(d.getDate() - ((w + 6) % 7)); return [iso(seg), h]; }
+  if (k === 'semPas') { const seg = new Date(d); seg.setDate(d.getDate() - ((w + 6) % 7) - 7); const dom = new Date(seg); dom.setDate(seg.getDate() + 6); return [iso(seg), iso(dom)]; }
+  return [mesAtual() + '-01', h]; }
+window.rvAtalho = k => { const [a, b] = rvAtalhoDatas(k); $('rvDe').value = a; $('rvAte').value = b; window._rvAt = k; pintarRelVis(); };
+window.abrirRelVisitas = () => { if (!podeGerir()) return;
+  $('rvAtalhos').innerHTML = [['fds','Fim de semana'],['ontem','Ontem'],['hoje','Hoje'],['semana','Esta semana'],['semPas','Semana passada'],['mes','Mês']].map(([k, n]) => `<button data-k="${k}" onclick="rvAtalho('${k}')">${n}</button>`).join('');
+  rvAtalho('fds'); abrir('relVisModal'); };
+function dadosRelVis(){
+  const de = $('rvDe').value, ate = $('rvAte').value || de; if (!de) return null;
+  const noP = d => !!d && d >= de && d <= ate, diaDe = ms => ms ? iso(new Date(ms)) : '';
+  const base = (visitasBrutas && visitasBrutas.length ? visitasBrutas : visitas).filter(v => !v.arquivado);
+  const marcadas = base.filter(v => noP(diaDe(v.criadoEm))), doDia = base.filter(v => noP(v.date));
+  const g = { marcadas }; RV_GRUPOS.slice(1).forEach(([k]) => g[k] = doDia.filter(v => rvGrupoDe(v) === k));
+  const pessoas = new Map(), add = (v, k) => { const uid = v.corretorUid || 'n:' + norm(v.corretorNome || 'Sem corretor');
+    if (!pessoas.has(uid)) pessoas.set(uid, { nome:nomeBonito(v.corretorNome || 'Sem corretor'), equipe:v.equipe || '', c:{} }); const p = pessoas.get(uid); p.c[k] = (p.c[k] || 0) + 1; };
+  RV_GRUPOS.forEach(([k]) => g[k].forEach(v => add(v, k)));
+  return { de, ate, g, pessoas:[...pessoas.values()].sort((a, b) => (b.c.realizadas || 0) - (a.c.realizadas || 0) || (b.c.marcadas || 0) - (a.c.marcadas || 0) || a.nome.localeCompare(b.nome, 'pt-BR')), noDia:doDia.length };
+}
+window.pintarRelVis = () => {
+  document.querySelectorAll('#rvAtalhos button').forEach(b => { const [a, z] = rvAtalhoDatas(b.dataset.k); b.classList.toggle('on', a === $('rvDe').value && z === $('rvAte').value); });
+  const D = dadosRelVis(); if (!D) { $('rvCorpo').innerHTML = '<div class="muted">Escolha a data.</div>'; return; }
+  const per = D.de === D.ate ? dataLonga(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`;
+  const cards = `<div class="rvr-cards">${RV_GRUPOS.map(([k, n, c]) => `<button class="rvr-card" style="--c:${c}" onclick="document.getElementById('rvl_${k}')?.setAttribute('open','');document.getElementById('rvl_${k}')?.scrollIntoView({behavior:'smooth',block:'start'})"><b>${D.g[k].length}</b><span>${n}</span></button>`).join('')}</div>
+    <div class="hint" style="margin:6px 0 12px">${esc(per)}. <b>Marcadas</b> = agendadas nesses dias (para qualquer data). As outras contam as visitas <b>com data</b> nesses dias (${D.noDia}): pendentes inclui as confirmadas que ainda não foram dadas como realizadas.</div>`;
+  const tab = D.pessoas.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th>${RV_GRUPOS.map(([, n]) => `<th style="text-align:center">${n}</th>`).join('')}</tr></thead><tbody>${D.pessoas.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span><span class="eq">${esc(eqNome(p.equipe))}</span></td>${RV_GRUPOS.map(([k]) => `<td style="text-align:center">${p.c[k] || '<span class="muted">0</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="muted" style="margin:10px 0">Nenhuma visita nesse período.</div>';
+  const lista = RV_GRUPOS.map(([k, n]) => D.g[k].length ? `<details class="rvr-l" id="rvl_${k}"><summary><b>${n}</b> · ${D.g[k].length}</summary>${D.g[k].slice().sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.time || '').localeCompare(b.time || '')).map(v => `<div class="rvr-i"><span>${dataBR(v.date || '').slice(0, 5)} ${esc(v.time || '')}</span><b>${esc(nomeBonito(v.cliente || 'Cliente'))}</b><small>${esc(nomeBonito(v.corretorNome || 'sem corretor'))}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}${k === 'marcadas' ? ' · ' + esc(v.status || '') : ''}${v.motivoPerda ? ' · ' + esc(v.motivoPerda) : ''}</small></div>`).join('')}</details>` : '').join('');
+  $('rvCorpo').innerHTML = cards + tab + lista;
+};
+function textoRelVis(){ const D = dadosRelVis(); if (!D) return '';
+  const per = D.de === D.ate ? dataBR(D.de) : `${dataBR(D.de)} a ${dataBR(D.ate)}`;
+  return [`*RELATÓRIO DE VISITAS · ${per}*`, '', ...RV_GRUPOS.map(([k, n]) => `${n}: ${D.g[k].length}`), '', '*Por corretor*',
+    ...D.pessoas.map(p => `${p.nome}: ${RV_GRUPOS.filter(([k]) => p.c[k]).map(([k, n]) => `${p.c[k]} ${n.toLowerCase()}`).join(' · ')}`)].join('\n'); }
+window.copiarRelVis = async () => { const t = textoRelVis(); if (!t) return; try { await navigator.clipboard.writeText(t); toast('Relatório copiado. É só colar no WhatsApp.'); } catch(e) { prompt('Copie o texto:', t); } };
+window.exportarRelVis = async () => { const D = dadosRelVis(); if (!D) return;
+  const cab = ['Grupo','Data da visita','Hora','Cliente','Corretor','Equipe','Empreendimento','Situação','Agendada em','Motivo'];
+  const linhas = RV_GRUPOS.flatMap(([k, n]) => D.g[k].map(v => [n, dataBR(v.date || ''), v.time || '', nomeBonito(v.cliente || ''), nomeBonito(v.corretorNome || ''), eqNome(v.equipe || ''), v.empreendimento || '', v.status || '', v.criadoEm ? new Date(v.criadoEm).toLocaleString('pt-BR') : '', v.motivoPerda || '']));
+  const nome = `visitas-${D.de}${D.ate !== D.de ? '-a-' + D.ate : ''}`;
+  let X = null; try { X = await carregarXLSX(); } catch(e) {}
+  if (!X) { baixarCSV(nome, cab, linhas); return; }
+  const wb = X.utils.book_new(), resumo = [['Período', D.de === D.ate ? dataBR(D.de) : dataBR(D.de) + ' a ' + dataBR(D.ate)], [], ...RV_GRUPOS.map(([k, n]) => [n, D.g[k].length]), [], ['Corretor', 'Equipe', ...RV_GRUPOS.map(([, n]) => n)], ...D.pessoas.map(p => [p.nome, eqNome(p.equipe), ...RV_GRUPOS.map(([k]) => p.c[k] || 0)])];
+  const w1 = X.utils.aoa_to_sheet(resumo); w1['!cols'] = [{ wch:28 }, { wch:18 }, ...RV_GRUPOS.map(() => ({ wch:13 }))]; X.utils.book_append_sheet(wb, w1, 'Resumo');
+  const w2 = X.utils.aoa_to_sheet([cab, ...linhas]); w2['!cols'] = [{ wch:14 }, { wch:12 }, { wch:7 }, { wch:30 }, { wch:24 }, { wch:16 }, { wch:22 }, { wch:16 }, { wch:18 }, { wch:24 }]; X.utils.book_append_sheet(wb, w2, 'Visitas');
+  X.writeFile(wb, nome + '.xlsx'); toast('Relatório baixado'); };
 window.fazerCheckout = async () => {
   if (!meuCheckin || meuCheckin.saida) return;
   if (!confirm('Encerrar o seu dia agora?')) return;
