@@ -2137,6 +2137,40 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 #rvPrint .gt{border-left:4px solid var(--c);padding-left:7px;display:flex;align-items:center;gap:6px;break-after:avoid}#rvPrint .gt span{font-size:10px;color:var(--c);background:color-mix(in srgb,var(--c) 12%,#fff);border-radius:10px;padding:0 7px}
 #rvPrint .v{display:grid;grid-template-columns:40px 1fr auto;gap:10px;padding:7px 9px;border:1px solid #e3e6eb;border-radius:7px;margin-bottom:5px;break-inside:avoid}#rvPrint .q span{display:block;color:#5b6b7c}#rvPrint .cl{font-size:12px}#rvPrint .tl{color:#5b6b7c}#rvPrint .r{color:#5b6b7c;margin-top:2px}#rvPrint .r.ok{color:#11734b;font-weight:700}#rvPrint .o{background:#f3f4f6;border-radius:5px;padding:3px 7px;margin-top:3px}#rvPrint .x{font-size:9.5px;color:#5b6b7c;margin-top:2px}#rvPrint .st{font-size:9.5px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 11%,#fff);border-radius:10px;padding:2px 8px;white-space:nowrap;align-self:start}
 }
+
+/* v254: capas das aulas e tela de entrada do material de estudo */
+.au-cv{position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 100%,color-mix(in srgb,var(--c) 70%,transparent) 0,transparent 60%),linear-gradient(160deg,#13233a 0%,#0c1726 100%);display:block;text-align:left;color:#fff}
+.au-cv::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:linear-gradient(120deg,transparent 30%,#000 90%);mask-image:linear-gradient(120deg,transparent 30%,#000 90%)}
+.au-cv svg.au-art{position:absolute;right:-6px;bottom:-4px;width:46%;height:auto;color:color-mix(in srgb,var(--c) 55%,#fff);opacity:.55}
+.au-cv .au-mk{position:absolute;left:14px;top:12px;display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:rgba(255,255,255,.75)}
+.au-cv .au-mk img{position:static;inset:auto;width:18px;height:18px;border-radius:5px;object-fit:contain}
+.au-cv .au-cvt{position:absolute;left:14px;right:42%;bottom:34px;font-size:clamp(15px,4.4vw,19px);font-weight:800;line-height:1.15;letter-spacing:-.01em;text-wrap:balance}
+.au-cv .au-cvm{position:absolute;left:14px;bottom:12px;font-size:11.5px;font-weight:600;color:rgba(255,255,255,.78)}
+.au-cv .au-cvp{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:var(--c);box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 6px color-mix(in srgb,var(--c) 30%,transparent)}
+.au-cv .au-cvp::after{content:"";position:absolute;left:18px;top:14px;border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent}
+.au-card:hover .au-cvp{transform:translateY(-50%) scale(1.06)}
+.au-capa .au-cv~em{z-index:2}.au-capa em.au-dur{display:none}
+.au-capa img+.au-cv{display:none}
+/* entrada do material */
+.al-capa{max-width:720px;margin:0 auto}
+.al-hero{position:relative;border-radius:20px;overflow:hidden;padding:26px 24px 22px;color:#fff;background:radial-gradient(110% 120% at 100% 100%,color-mix(in srgb,var(--c) 75%,transparent) 0,transparent 62%),linear-gradient(160deg,#13233a,#0b1624)}
+.al-hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:linear-gradient(120deg,transparent 35%,#000 95%);mask-image:linear-gradient(120deg,transparent 35%,#000 95%)}
+.al-hero>*{position:relative}.al-hero svg.au-art{position:absolute;right:-10px;bottom:-8px;width:230px;max-width:46%;color:color-mix(in srgb,var(--c) 55%,#fff);opacity:.5}
+.al-hero .au-mk{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.06em;color:rgba(255,255,255,.75)}.al-hero .au-mk img{width:22px;height:22px;border-radius:6px}
+.al-hero h2{font-size:clamp(24px,6vw,34px);line-height:1.08;margin:16px 0 8px;max-width:78%;letter-spacing:-.02em;text-wrap:balance}
+.al-hero p{margin:0;color:rgba(255,255,255,.8);font-size:14.5px;max-width:70%}
+.al-hero .al-hm{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.al-hero .al-hm span{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:99px;padding:5px 11px}
+.al-hero .al-hp{margin-top:18px;max-width:340px}.al-hero .al-hp small{display:block;font-size:12.5px;color:rgba(255,255,255,.8);margin-bottom:6px}.al-hero .al-hp div{height:7px;border-radius:9px;background:rgba(255,255,255,.18);overflow:hidden}.al-hero .al-hp i{display:block;height:100%;background:#3ddc97;border-radius:9px}
+.al-sum{margin-top:18px}.al-sum h3{font-size:15px;margin:0 0 8px}
+.al-sum ol{list-style:none;margin:0;padding:0;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--card)}
+.al-sum li{display:flex;align-items:center;gap:12px;padding:11px 14px;cursor:pointer}.al-sum li+li{border-top:1px solid var(--border)}.al-sum li:hover{background:color-mix(in srgb,var(--c) 6%,var(--card))}
+.al-sum .al-n{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:800;background:color-mix(in srgb,var(--c) 12%,var(--card));color:var(--c)}
+.al-sum li.ok .al-n{background:var(--ok);color:#fff}.al-sum li b{flex:1;font-size:14.5px;font-weight:600}.al-sum li small{color:var(--muted);font-size:12px;white-space:nowrap}
+.al-sum li.prova .al-n{background:#1c2430;color:#fff}
+.al-eq{margin-top:14px;font-size:13px;color:var(--muted)}
+.al-nav:empty{display:none}
+.au-capa .au-cv~em.au-ok,.au-capa .au-cv~em.au-meio,.au-capa .au-cv~em.au-nova{left:auto;right:10px;top:10px}
+@media(max-width:560px){.al-hero{padding:22px 18px 18px}.al-hero h2{max-width:100%}.al-hero p{max-width:100%}.al-hero svg.au-art{opacity:.28}}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -7191,7 +7225,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 253;
+const APP_VERSAO = 254;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11787,17 +11821,26 @@ const auVista = (aId, uid = uidAtual) => aulasVistas.find(v => v.aulaId === aId 
 const auAssistiu = (aId, uid = uidAtual) => !!auVista(aId, uid)?.assistiu;
 const auPublico = () => perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel));
 const auPendentes = () => ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && !auAssistiu(a.id)) : [];
+// v254: capa desenhada das aulas (sem emoji): fundo da marca, desenho do tema, título grande
+const AU_ART = {
+  estudo:'<svg class="au-art" viewBox="0 0 200 140" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M20 120V70l40-30 40 30v50z"/><path d="M48 120V92h24v28"/><path d="M100 120V50l35-26 35 26v70z"/><path d="M122 120V96h26v24"/><path d="M110 64h14v14h-14zM146 64h14v14h-14zM30 78h12v12H30zM78 78h12v12H78z"/><path d="M8 120h184"/></svg>',
+  crm:'<svg class="au-art" viewBox="0 0 200 140" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M30 22h140l-40 46v40l-20 14V68z"/><path d="M56 40h88M78 58h44"/><circle cx="160" cy="112" r="10"/><circle cx="182" cy="92" r="6"/><path d="M168 106l9-9"/></svg>',
+  financiamento:'<svg class="au-art" viewBox="0 0 200 140" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M40 120V66l50-36 50 36v54z"/><path d="M76 120V90h28v30"/><circle cx="160" cy="44" r="22"/><path d="M160 32v24M152 38h12a6 6 0 010 12h-8a6 6 0 000 12h12"/></svg>',
+  geral:'<svg class="au-art" viewBox="0 0 200 140" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M100 30l80 34-80 34-80-34z"/><path d="M52 78v28c0 10 22 20 48 20s48-10 48-20V78"/><path d="M180 64v40"/></svg>' };
+function auCapaHtml(a, t, ler){ const k = AU_ART[a.tema] ? a.tema : 'geral', nm = (a.modulos || []).length;
+  const meta = ler ? [nm ? `${nm} módulo${nm === 1 ? '' : 's'}` : '', a.duracao || '', 'com prova'].filter(Boolean).join(' · ') : ['Vídeo', a.duracao || ''].filter(Boolean).join(' · ');
+  return `<span class="au-cv">${AU_ART[k]}<span class="au-mk"><img src="${MARCA_IMG}" alt="">FRADE</span><span class="au-cvt">${esc(a.titulo)}</span><span class="au-cvm">${esc(meta)}</span>${ler ? '' : '<span class="au-cvp"></span>'}</span>`; }
 function htmlAulaCard(a){
   const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), abriu = !!auVista(a.id), ler = a.tipo === 'leitura';
   let rodape = '';
   if (ler) { const vv = auVista(a.id) || {}, nm = (a.modulos || []).length, nl = Object.keys(vv.lidos || {}).length;
     if (podeGerir()) { const pub = auPublico(), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((t, p) => t + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
       rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(fez.length / pub.length * 100) : 0}%"></i></div><small class="au-qt">${fez.length} de ${pub.length} fizeram a prova${fez.length ? ' · média ' + med.toFixed(1).replace('.', ',') : ''}</small>`; }
-    return `<button class="au-card" onclick="abrirAula('${a.id}')"><div class="au-capa au-capa-ler" style="--c:${t.cor}"><span class="au-ic">📖</span><span class="au-ler-tit">${esc(a.titulo)}</span>${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${vv.prova ? `<em class="au-ok">✓ Nota ${String(vv.prova.melhor).replace('.', ',')}</em>` : nl ? `<em class="au-meio">Lendo · ${nl} de ${nm}</em>` : a.obrigatoria ? '<em class="au-nova">Para estudar</em>' : ''}</div>
+    return `<button class="au-card" onclick="abrirAula('${a.id}')"><div class="au-capa" style="--c:${t.cor}">${auCapaHtml(a, t, true)}${vv.prova ? `<em class="au-ok">✓ Nota ${String(vv.prova.melhor).replace('.', ',')}</em>` : nl ? `<em class="au-meio">Lendo · ${nl} de ${nm}</em>` : a.obrigatoria ? '<em class="au-nova">Para estudar</em>' : ''}</div>
       <div class="au-txt"><b>${esc(a.titulo)}</b><span>${esc(a.professor || '')}</span>${rodape}</div></button>`; }
   if (podeGerir()) { const pub = auPublico(), n = pub.filter(p => auAssistiu(a.id, p.uid)).length; rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(n / pub.length * 100) : 0}%"></i></div><small class="au-qt">${n} de ${pub.length} da equipe assistiram</small>`; }
   return `<button class="au-card" onclick="abrirAula('${a.id}')">
-    <div class="au-capa" style="--c:${t.cor}">${v?.capa ? `<img src="${v.capa}" alt="" loading="lazy" onerror="this.remove()">` : `<span class="au-ic">${t.ic}</span>`}<span class="au-play"></span>${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${viu ? '<em class="au-ok">✓ Assistida</em>' : abriu ? '<em class="au-meio">Começou</em>' : a.obrigatoria ? '<em class="au-nova">Para assistir</em>' : ''}</div>
+    <div class="au-capa" style="--c:${t.cor}">${v?.capa ? `<img src="${v.capa}" alt="" loading="lazy" onerror="this.remove()"><span class="au-play"></span>` : ''}${auCapaHtml(a, t, false)}${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${viu ? '<em class="au-ok">✓ Assistida</em>' : abriu ? '<em class="au-meio">Começou</em>' : a.obrigatoria ? '<em class="au-nova">Para assistir</em>' : ''}</div>
     <div class="au-txt"><b>${esc(a.titulo)}</b><span>com ${esc(a.professor || '—')}</span>${rodape}</div></button>`;
 }
 function renderAulas(){
@@ -11865,20 +11908,38 @@ function mdHtml(t){
 window.abrirLeitura = async id => {
   const a = aulas.find(x => x.id === id); if (!a) return; alAula = id; alResp = {}; alResultado = null;
   const vv = auVista(id) || {}, lidos = vv.lidos || {}, n = (a.modulos || []).length;
-  alPos = Math.min(n, Object.keys(lidos).length && !vv.prova ? (a.modulos.findIndex((_, i) => !lidos[i]) + n + 1) % (n + 1) : 0);
-  pintarLeitura(); abrir('auLerModal');
+  alRetomar = Math.min(n, Object.keys(lidos).length && !vv.prova ? (a.modulos.findIndex((_, i) => !lidos[i]) + n + 1) % (n + 1) : 0);
+  alPos = -1; pintarLeitura(); abrir('auLerModal');
   if (alMeu() && !auVista(id)) { try { await setDoc(doc(db,'aulas_vistas', id + '_' + uidAtual), { aulaId:id, uid:uidAtual, nome:perfil.nome, abriu:Date.now() }, { merge:true }); } catch(e) {} }
 };
 window.fecharLeitura = () => { fechar('auLerModal'); alAula = null; };
+let alRetomar = 0;
+function htmlCapaLeitura(a, mods, lidos, nl, vv){
+  const t = AU_TEMAS[a.tema] || AU_TEMAS.geral, n = mods.length, k = AU_ART[a.tema] ? a.tema : 'geral', prova = vv.prova;
+  const meta = [n ? `${n} módulo${n === 1 ? '' : 's'}` : '', a.duracao || '', (a.prova?.perguntas || []).length ? `prova com ${a.prova.perguntas.length} pergunta${a.prova.perguntas.length === 1 ? '' : 's'}` : ''].filter(Boolean);
+  let eq = ''; if (podeGerir()) { const pub = auPublico(), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((s, p) => s + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
+    eq = `<div class="al-eq">Equipe: ${fez.length} de ${pub.length} fizeram a prova${fez.length ? ' · média ' + med.toFixed(1).replace('.', ',') : ''}. O resultado de cada um fica na prova, no fim.</div>`; }
+  return `<div class="al-capa" style="--c:${t.cor}"><div class="al-hero">${AU_ART[k]}<div class="au-mk"><img src="${MARCA_IMG}" alt="">FRADE · ${esc(t.nome.toUpperCase())}</div><h2>${esc(a.titulo)}</h2>${a.descricao ? `<p>${esc(a.descricao)}</p>` : a.professor ? `<p>Com ${esc(a.professor)}</p>` : ''}
+    <div class="al-hm">${meta.map(x => `<span>${esc(x)}</span>`).join('')}</div>
+    ${alMeu() ? `<div class="al-hp"><small>${prova ? `Concluído · sua nota ${String(prova.melhor).replace('.', ',')} (${alNivel(prova.melhor)})` : nl ? `Você leu ${nl} de ${n} módulos` : 'Você ainda não começou'}</small><div><i style="width:${Math.round(nl / Math.max(1, n) * 100)}%"></i></div></div>` : ''}</div>
+    <div class="al-sum"><h3>O que você vai ver</h3><ol>${mods.map((m, i) => `<li class="${lidos[i] ? 'ok' : ''}" onclick="alIr(${i})"><span class="al-n">${lidos[i] ? '✓' : i + 1}</span><b>${esc(String(m.titulo || '').replace(/^\d+[.)]\s*/, ''))}</b><small>${lidos[i] ? 'lido' : ''}</small></li>`).join('')}
+      <li class="prova" onclick="alIr(${n})"><span class="al-n">✎</span><b>Prova final</b><small>${prova ? 'nota ' + String(prova.melhor).replace('.', ',') : nl >= n ? 'liberada' : 'libera depois da leitura'}</small></li></ol></div>${eq}</div>`; }
 function pintarLeitura(){
   const a = aulas.find(x => x.id === alAula); if (!a || !$('alCorpo')) return;
   const mods = a.modulos || [], n = mods.length, vv = auVista(a.id) || {}, lidos = vv.lidos || {}, nl = mods.filter((_, i) => lidos[i]).length, todos = nl >= n || !alMeu();
   $('alTit').textContent = a.titulo;
   $('alNav').innerHTML = `<div class="al-prog"><i style="width:${Math.round(nl / Math.max(1, n) * 100)}%"></i></div><div class="al-chips">${mods.map((m, i) => `<button class="${i === alPos ? 'on' : ''} ${lidos[i] ? 'lido' : ''}" onclick="alIr(${i})">${lidos[i] ? '✓ ' : ''}${esc(m.titulo.replace(/^\d+\.\s*/, (x) => x))}</button>`).join('')}<button class="al-prova-chip ${alPos === n ? 'on' : ''} ${todos ? '' : 'trava'}" onclick="alIr(${n})">${todos ? '📝' : '🔒'} Prova final${vv.prova ? ' · ' + String(vv.prova.melhor).replace('.', ',') : ''}</button></div>`;
+  if (alPos === -1) {
+    $('alNav').innerHTML = '';
+    $('alCorpo').innerHTML = htmlCapaLeitura(a, mods, lidos, nl, vv);
+    const prova = vv.prova, rot = !alMeu() ? 'Ler o material' : prova ? 'Rever o material' : alRetomar >= n && nl >= n ? 'Ir para a prova' : nl ? `Continuar · parte ${alRetomar + 1}` : 'Começar a leitura';
+    $('alPe').innerHTML = `<button class="btn btn-ghost" onclick="fecharLeitura()">Fechar</button><span style="flex:1"></span>${prova ? `<button class="btn btn-ghost" onclick="alIr(${n})">Ver a prova</button>` : ''}<button class="btn btn-primary" onclick="alIr(${prova || !alMeu() ? 0 : alRetomar})">${rot}</button>`;
+    $('alCorpo').scrollTop = 0; return;
+  }
   if (alPos < n) {
     const m = mods[alPos];
     $('alCorpo').innerHTML = `<article class="al-texto"><span class="al-mod">Parte ${alPos + 1} de ${n}</span><h2>${esc(m.titulo)}</h2>${mdHtml(m.texto)}</article>`;
-    $('alPe').innerHTML = `<button class="btn btn-ghost" ${alPos ? '' : 'disabled'} onclick="alIr(${alPos - 1})">← Anterior</button><span style="flex:1"></span><button class="btn btn-primary" onclick="alLido()">${alPos === n - 1 ? 'Li tudo · ir para a prova' : lidos[alPos] ? 'Próximo →' : 'Li este módulo · próximo →'}</button>`;
+    $('alPe').innerHTML = `<button class="btn btn-ghost" onclick="alIr(${alPos - 1})">${alPos ? '← Anterior' : '← Capa'}</button><span style="flex:1"></span><button class="btn btn-primary" onclick="alLido()">${alPos === n - 1 ? 'Li tudo · ir para a prova' : lidos[alPos] ? 'Próximo →' : 'Li este módulo · próximo →'}</button>`;
   } else pintarProva(a, todos);
   $('alCorpo').scrollTop = 0; const ch = document.querySelector('.al-chips .on'); ch?.scrollIntoView({ block:'nearest', inline:'center' });
 }
