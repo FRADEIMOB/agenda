@@ -3974,6 +3974,12 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('impConvModal');irIntegracaoDocs()">Fechar</button><button class="btn btn-primary hide" id="icwBt" onclick="importarDocsWhats()">Importar</button></div>
   </div>
 </div>
+<div class="modal" id="docsHojeModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><h2>Docs de hoje</h2><button class="icon-btn" onclick="fechar('docsHojeModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="dhCorpo"></div>
+  </div>
+</div>
 <div class="modal" id="relResModal">
   <div class="sheet" style="width:min(900px,100%)">
     <div class="sheet-head"><div><h2>Relatório de reservas: indicação x CRM</h2><div class="sub" style="font-size:13px;color:var(--muted)">De onde vieram as vendas do período.</div></div><button class="icon-btn" onclick="fechar('relResModal')" data-ic="x"></button></div>
@@ -7234,7 +7240,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 256;
+const APP_VERSAO = 257;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15738,13 +15744,28 @@ function mdBateramOntem(){
   return { dia:d, todos:l.filter(x => x.bateu), parcial:l.filter(x => !x.bateu && x.itens > 0).map(x => ({ ...x, quais:MD_ITENS.filter(([k]) => x.meta[k] && x.v[k] >= x.meta[k]).map(([, n]) => n) })) };
 }
 
+// v257: tocar em "Docs" mostra quais documentações contaram hoje e de onde vieram (e, para a gerência, as que chegaram sem dono)
+function docsDoDiaLista(d, u){
+  const out = [], vistos = new Set(), add = (uu, ch, fonte, nome, quando) => { if (uu !== u) return; const k = ch; if (vistos.has(k)) return; vistos.add(k); out.push({ fonte, nome, quando }); };
+  try { avaliacoesUnificadas().forEach(a => { if (diaDocAv(a) !== d) return; add(uidDaAv(a), a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id, a.origem === 'whatsapp' ? 'Conversa do WhatsApp' : 'Planilha de avaliações · aba ' + (a.aba || ''), a.nome || 'Cliente', a.criadoEm); }); } catch(e) {}
+  (analises || []).forEach(a => { if (!a.enviadaEm || iso(new Date(a.enviadaEm)) !== d) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); add(a.corretorUid, cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id, 'Pasta enviada pelo app', c.nome || 'Cliente', a.enviadaEm); });
+  try { rankingSdr(d, d).forEach(x => { if (x.uid === u && x.docs) out.push({ fonte:'Resumo do dia (SDR)', nome:`${x.docs} documentaç${x.docs === 1 ? 'ão' : 'ões'} no resumo`, quando:0 }); }); } catch(e) {}
+  return out; }
+window.verDocsHoje = () => { const d = hojeISO(), l = docsDoDiaLista(d, uidAtual);
+  const semDono = opTudo() ? avaliacoesUnificadas().filter(a => diaDocAv(a) === d && !uidDaAv(a)) : [];
+  const atras = opTudo() ? avaliacoesUnificadas().filter(a => a.criadoEm && iso(new Date(a.criadoEm)) === d && diaDocAv(a) !== d && a.data) : [];
+  $('dhCorpo').innerHTML = `<p class="hint" style="margin-top:0">Conta como doc: cliente lançado na planilha de avaliações na sua aba, conversa do WhatsApp importada, pasta enviada pelo app e o resumo da SDR. O mesmo cliente conta uma vez por dia. A planilha chega ao app em 1 a 2 minutos.</p>
+    ${l.length ? `<div class="rvr-vs">${l.map(x => `<div class="rvr-v" style="grid-template-columns:1fr"><div class="rvr-m"><div class="rvr-n"><b>${esc(nomeBonito(x.nome))}</b>${x.quando ? `<span class="muted" style="font-size:12.5px">${hm(x.quando)}</span>` : ''}</div><div class="rvr-x">${esc(x.fonte)}</div></div></div>`).join('')}</div>` : '<div class="muted">Nenhuma doc contada para você hoje ainda.</div>'}
+    ${semDono.length ? `<h4 style="margin:16px 0 6px">Chegaram hoje sem dono (${semDono.length})</h4><p class="hint" style="margin:0 0 6px">A aba não está ligada a ninguém. Ligue em Configurações › Integrações › Quem é quem.</p><div class="rvr-vs">${semDono.slice(0, 40).map(a => `<div class="rvr-v" style="grid-template-columns:1fr"><div class="rvr-m"><b>${esc(nomeBonito(a.nome || ''))}</b><div class="rvr-x">Aba ${esc(a.aba || '?')}</div></div></div>`).join('')}</div>` : ''}
+    ${atras.length ? `<h4 style="margin:16px 0 6px">Lançadas hoje com data de outro dia (${atras.length})</h4><p class="hint" style="margin:0 0 6px">Contam no dia que está na coluna DATA da planilha, não hoje.</p><div class="rvr-vs">${atras.slice(0, 40).map(a => `<div class="rvr-v" style="grid-template-columns:1fr"><div class="rvr-m"><b>${esc(nomeBonito(a.nome || ''))}</b><div class="rvr-x">Aba ${esc(a.aba || '?')} · data ${esc(dataBR(a.data))}</div></div></div>`).join('')}</div>` : ''}`;
+  abrir('docsHojeModal'); };
 // ---------- tela Hoje: a meta vai diminuindo conforme a pessoa faz ----------
 function htmlMetasDiaHoje(){
   if (!perfil || !MD_PAPEIS.includes(perfil.papel) || view !== 'hoje') return '';
   const meta = metaDiaDe(uidAtual); if (!mdTem(meta)) return '';
   const v = mdValores([hojeISO()]).get(uidAtual) || mdVazio(), bateu = mdBateu(meta, v);
   const tiles = MD_ITENS.filter(([k]) => meta[k]).map(([k, n]) => { const f = Math.max(0, meta[k] - (v[k] || 0)), pct = Math.min(100, Math.round((v[k] || 0) / meta[k] * 100));
-    return `<div class="md-t ${f ? '' : 'ok'}" style="--c:${MD_COR[k]};--p:${pct}"><div class="md-anel"><b>${f ? f : '✓'}</b></div><span>${n}</span><small>${f ? (f === 1 ? 'falta 1' : 'faltam ' + f) + ' de ' + meta[k] : 'meta batida'}</small></div>`; }).join('');
+    return `<div class="md-t ${f ? '' : 'ok'}" style="--c:${MD_COR[k]};--p:${pct}${k === 'docs' ? ';cursor:pointer' : ''}" ${k === 'docs' ? 'onclick="verDocsHoje()" title="Ver as docs que contaram hoje"' : ''}><div class="md-anel"><b>${f ? f : '✓'}</b></div><span>${n}</span><small>${f ? (f === 1 ? 'falta 1' : 'faltam ' + f) + ' de ' + meta[k] : 'meta batida'}</small></div>`; }).join('');
   return `<div class="card md-card ${bateu ? 'bateu' : ''}"><div class="card-head"><h3>${bateu ? 'Metas de hoje batidas' : 'Suas metas de hoje'}</h3><span class="muted" style="font-size:12.5px">${bateu ? 'Você aparece no letreiro amanhã' : 'O número cai a cada uma que você faz'}</span></div><div class="md-ts">${tiles}</div></div>`;
 }
 function renderMetasDiaHoje(){ const el = $('mdHoje'); if (!el) return; const h = htmlMetasDiaHoje(); if (el._h !== h) { el.innerHTML = h; el._h = h; } }
