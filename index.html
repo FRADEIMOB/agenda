@@ -5945,7 +5945,7 @@ function configurarAcesso(){
   else qv = query(collection(db,'visitas'), where('corretorUid','==',uidAtual));
   // v133: a SDR também vê as visitas em que ela é a SDR (inclusive as importadas pela gerência), para a carteira e o ranking
   let _vA = [], _vB = [], _vC = [];
-  const juntaVis = () => { const m = new Map(); [..._vA, ..._vB, ..._vC].forEach(x => m.set(x.id, x)); visitasBrutas = [...m.values()]; visitas = visitasBrutas.filter(x => !x.arquivado); carregado.visitas = true; render(); };
+  const juntaVis = () => { const m = new Map(); [..._vA, ..._vB, ..._vC].forEach(x => m.set(x.id, x)); visitasBrutas = [...m.values()]; visitas = visitasBrutas.filter(x => !x.arquivado); carregado.visitas = true; render(); try { sincVendasRanking(); } catch(e) {} };
   subsPapel.push(onSnapshot(qv, s => { _vA = s.docs.map(d => ({ id:d.id, ...d.data() })); juntaVis(); }, erro));
   if (perfil.papel === 'sdr') subsPapel.push(onSnapshot(query(collection(db,'visitas'), where('sdrUid','==',uidAtual)), s => { _vB = s.docs.map(d => ({ id:d.id, ...d.data() })); juntaVis(); }, e => console.warn('visitas da SDR', e.code || e.message)));
   // v165: o anjo vê e edita as visitas dos corretores que acompanha
@@ -7350,7 +7350,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 268;
+const APP_VERSAO = 269;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7744,6 +7744,9 @@ const DEGRAUS_GERAL = { vPendente:[['2000-01-01', 0]], vConfirmada:[['2000-01-01
 const DEGRAUS_SDR = { ligacao:[['2026-10-27', 0]], docSdr:[['2026-10-27', 10]] }; // v262: começa em 27/10 (pedido do Allan)
 // v266: visita da SDR: vale 70 se for realizada, mas só as visitas MARCADAS a partir de 27/10 (as marcadas antes ficam com a pontuação antiga)
 const SDR_VISITA_NOVA = { desde:'2026-10-27', realizada:70 };
+// v269: venda (reserva) de cliente que veio de visita da SDR realizada: pontos para a SDR. Antes de 27/10 = 15, a partir de 27/10 = 70 (pela data da reserva)
+const SDR_VENDA = { desde:'2026-10-27', antes:15, depois:70 };
+const ptSdrVenda = d => (d || '') >= SDR_VENDA.desde ? SDR_VENDA.depois : SDR_VENDA.antes;
 const juntaDegraus = (...ls) => { const o = {}; ls.forEach(l => Object.entries(l || {}).forEach(([k, v]) => { o[k] = [...(o[k] || []), ...(Array.isArray(v) ? v : [])].sort((a, b) => String(a[0]).localeCompare(String(b[0]))); })); return o; };
 const valorNoDia = (val, k, dia) => { const st = ((val.degraus || {})[k] || []).filter(x => x[0] <= dia).pop(); return st ? Number(st[1]) || 0 : Number(val[k]) || 0; };
 function pontosSegmentado(m, val, corte){
@@ -7835,8 +7838,16 @@ function pontosDoMesBase(m, val, corte){
   if (usaReservas) rankingVendas.filter(v => !caiuV(v) && noMes(v.dia)).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
     const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
     x.vendas++; if (v.ind) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!v.ind); }));
+  // v269: venda que veio da SDR (visita agendada por ela e realizada) dá pontos para a SDR
+  const sdrDeV = v => v.sdr && v.sdr.uid && papelDe(v.sdr.uid) === 'sdr' ? v.sdr : null;
+  if (usaReservas) rankingVendas.filter(v => !caiuV(v) && noMes(v.dia) && sdrDeV(v)).forEach(v => { const s = sdrDeV(v), ps = RK().find(p => p.uid === s.uid) || {};
+    const x = pega({ corretorUid:s.uid, corretorNome:ps.nome || s.nome || 'SDR', equipe:ps.equipe || '' }), pt = ptSdrVenda(v.dia);
+    if (pt === SDR_VENDA.depois) x.vendaSdrNova = (x.vendaSdrNova || 0) + 1; else x.vendaSdrAntes = (x.vendaSdrAntes || 0) + 1; x.pontos += pt; });
+  if (usaReservas) rankingVendas.filter(v => caiuV(v) && v.dia && v.dia.slice(0, 7) < m && noMes(caiuEmV(v)) && sdrDeV(v)).forEach(v => { const s = sdrDeV(v), ps = RK().find(p => p.uid === s.uid) || {};
+    const x = pega({ corretorUid:s.uid, corretorNome:ps.nome || s.nome || 'SDR', equipe:ps.equipe || '' }), pt = ptSdrVenda(v.dia);
+    x.vendasCaidas = (x.vendasCaidas || 0) + 1; x.ptsCaidas = (x.ptsCaidas || 0) + pt; x.pontos -= pt; });
   // v196: venda assinada (a reserva chegou na etapa Assinou, pela data da etapa) e recrutamentos registrados pelo dono
-  if (n('vendaAssinada')) rankingVendas.filter(v => !caiuV(v) && v.ass && noMes(v.ass)).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
+  if (n('vendaAssinada')) rankingVendas.filter(v => !caiuV(v) && v.ass && noMes(v.ass) && (!_assDesde || (v.dia || '') >= _assDesde)).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
     const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
     x.assinadas = (x.assinadas || 0) + 1; x.pontos += n('vendaAssinada'); }));
   (Array.isArray(appCfg.recrutamentos) ? appCfg.recrutamentos : []).filter(r => r.uid && noMes(r.dia)).forEach(r => {
@@ -7896,7 +7907,13 @@ function gerenteDeEquipeUid(uid){ if (!uid) return false; const p = (perfisTodos
   const gestor = (!!instalacao && instalacao.gerenteUid === uid) || String(p?.email || '').toLowerCase() === EMAIL_DONO;
   return !!p && p.papel === 'gerente' && !!p.equipe && p.status !== 'inativo' && (gestor || p.cargo !== 'dono'); }
 window.gerenteDeEquipeUid = gerenteDeEquipeUid;
-function pontosEntre(de, ate){
+// v269: nos rankings novos, "Venda assinada" só conta se a venda (reserva) também foi feita a partir do início do ranking.
+// Venda antiga que só mudou para ASSINOU agora não pontua no ranking novo (no mensal continua igual)
+let _assDesde = '';
+function pontosEntre(de, ate, inicioRk){
+  _assDesde = inicioRk || ''; try { return pontosEntre0(de, ate); } finally { _assDesde = ''; }
+}
+function pontosEntre0(de, ate){
   const g = new Map(), h = hojeISO(); ate = !ate || ate > h ? h : ate;
   for (let m = de.slice(0, 7); m <= ate.slice(0, 7); m = (() => { const [a, b] = m.split('-').map(Number); return b === 12 ? `${a + 1}-01` : `${a}-${String(b + 1).padStart(2, '0')}`; })()) {
     if (m !== mesAtual()) garantirHistorico(m);
@@ -7912,7 +7929,7 @@ function renderRankingNovo(id){
   const r = rkNovos().find(x => x.id === id);
   if (!r) { rankTipo = 'pontos'; render(); return; }
   const h = hojeISO(), fim = r.fim && r.fim < h ? r.fim : h, emCurso = !r.encerrado && (!r.fim || r.fim >= h) && r.inicio <= h;
-  const todos = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h);
+  const todos = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h, r.inicio);
   const eqs = listaEquipes().map(e => ({ e, n:todos.filter(x => x.equipe === e.id).reduce((a, x) => a + x.pontos, 0) })), max = Math.max(0, ...eqs.map(x => x.n));
   $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n === max ? 'lead' : ''}"><div class="ti">${esc(x.e.icone || '')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n === max ? ' · liderando' : ''}</span></div>`).join('');
   const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
@@ -7951,7 +7968,7 @@ window.salvarRkNovo = async () => {
 window.encerrarRkNovo = async id => {
   if (!souDono()) return; const l = rkNovos().slice(), i = l.findIndex(x => x.id === id); if (i < 0) return;
   if (!confirm(`Encerrar o ranking "${l[i].nome}"? Ele sai das abas e fica guardado em Rankings encerrados.`)) return;
-  const h = hojeISO(), top = pontosEntre(l[i].inicio, l[i].fim || h);
+  const h = hojeISO(), top = pontosEntre(l[i].inicio, l[i].fim || h, l[i].inicio);
   l[i] = { ...l[i], encerrado:true, encerradoEm:h, fim:l[i].fim && l[i].fim < h ? l[i].fim : h, vencedor:top[0] ? top[0].nome : '', top3:top.slice(0, 3).map(x => ({ nome:x.nome, pontos:x.pontos })) };
   try { await gravar(setDoc(doc(db,'config','app'), { rankingsNovos:l }, { merge:true })); appCfg.rankingsNovos = l; rankTipo = 'pontos'; render(); toast('Ranking encerrado'); }
   catch(e) { toast('Não foi possível encerrar: ' + e.message); }
@@ -8065,6 +8082,8 @@ function linhasPontos(x, P){
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
     ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
+    ...(x.vendaSdrAntes ? [[`Vendas que vieram da SDR (antes de ${dataBR(SDR_VENDA.desde).slice(0, 5)})`, x.vendaSdrAntes, SDR_VENDA.antes, x.vendaSdrAntes * SDR_VENDA.antes]] : []),
+    ...(x.vendaSdrNova ? [[`Vendas que vieram da SDR (a partir de ${dataBR(SDR_VENDA.desde).slice(0, 5)})`, x.vendaSdrNova, SDR_VENDA.depois, x.vendaSdrNova * SDR_VENDA.depois]] : []),
     ...(x.sdrNovaReal ? [[`Visitas realizadas (SDR, marcadas a partir de ${dataBR(SDR_VISITA_NOVA.desde).slice(0, 5)})`, x.sdrNovaReal, SDR_VISITA_NOVA.realizada, x.sdrNovaReal * SDR_VISITA_NOVA.realizada]] : []),
     ...((n('agendSdr') || n('agendSdrReal')) ? [['Visitas agendadas (SDR)', x.agendProprio, n('agendSdr'), (x.agendProprio || 0) * n('agendSdr')], ['Visitas agendadas e realizadas (SDR)', x.agendReal, n('agendSdrReal'), (x.agendReal || 0) * n('agendSdrReal')]] : [['Visitas agendadas (SDR)', x.agendSdr, '—', null]])
   ];
@@ -9155,7 +9174,7 @@ function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate
 // v200: ranking novo na TV (mesmas colunas, contando só a partir da data de início)
 function dadosTvRkNovo(id){
   const r = rkNovos().find(x => x.id === id); if (!r) return null;
-  const h = hojeISO(), l = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h);
+  const h = hojeISO(), l = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h, r.inicio);
   const col = (k, t, sub, c, f) => ({ k, t, s:sub, c, l:l.map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:f(x) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v) });
   const cols = [col('pts', 'Pontos', 'desde ' + dataBR(r.inicio).slice(0, 5), '#f28c38', x => x.pontos),
     col('vis', 'Visitas', 'realizadas', '#38bdf8', x => x.realizadas || 0), col('apr', 'Aprovações', 'cartas aprovadas', '#a78bfa', x => x.cartas || 0),
@@ -9189,7 +9208,7 @@ function htmlTvApresenta(D, modo){
   const r = D.r, h = hojeISO(), tc = tardeCfg(), tardeHoje = h >= tc.desde;
   const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
   const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : '';
-  const lista = (de, ate) => (de > h ? [] : pontosEntre(de, ate)).map(x => ({ ...x, ck:(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0) })).filter(x => x.pontos > 0 || x.ck).sort((a, b) => b.pontos - a.pontos || b.ck - a.ck);
+  const lista = (de, ate) => (de > h ? [] : pontosEntre(de, ate, r.inicio)).map(x => ({ ...x, ck:(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0) })).filter(x => x.pontos > 0 || x.ck).sort((a, b) => b.pontos - a.pontos || b.ck - a.ck);
   const podio = l => { const t = l.slice(0, 3); if (!t.length) return '';
     const ordem = [t[1], t[0], t[2]].map((x, i) => x ? { x, pos:[2, 1, 3][i] } : null).filter(Boolean);
     return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}">${avTv(x.uid, x.nome, 'tvp-av')}<b>${esc(nomeTv(x.uid, x.nome))}</b><small>${x.pontos.toLocaleString('pt-BR')} pontos</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
@@ -13144,7 +13163,7 @@ function assinarFin2(){
   finVendas = {}; finFixas = []; _fixasFeitas = '';
   if (!souGerente()) return;
   const silencio = e => console.warn('Financeiro 2:', e.code || e.message);
-  subsPapel.push(onSnapshot(collection(db,'fin_vendas'), s => { finVendas = {}; s.docs.forEach(d => finVendas[d.id] = d.data()); render(); sincExtrato(); }, silencio));
+  subsPapel.push(onSnapshot(collection(db,'fin_vendas'), s => { finVendas = {}; s.docs.forEach(d => finVendas[d.id] = d.data()); render(); sincExtrato(); try { sincVendasRanking(); } catch(e) {} }, silencio));
   subsPapel.push(onSnapshot(collection(db,'fin_fixas'), s => { finFixas = s.docs.map(d => ({ id:d.id, ...d.data() })); _fixasFeitas = ''; render(); }, silencio));
   subsPapel.push(onSnapshot(collection(db,'fin_notas'), s => { window.finNotas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
 }
@@ -15274,9 +15293,13 @@ function sincVendasRanking(){
     const atual = new Map(rankingVendas.map(x => [x.id, x])), b = writeBatch(db); let n = 0;
     reservasTodas.forEach(r => {
       const assH = (r.etapaHist || []).filter(x => x.etapa === 'ASSINOU').sort((x, y) => (x.em || 0) - (y.em || 0))[0], assEm = assH ? assH.em : (r.etapa === 'ASSINOU' ? r.etapaEm : 0);
-      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), caiuEm:r.caiuEm ? iso(new Date(r.caiuEm)) : '', ind:ehVendaIndicacao(r), ass:assEm ? iso(new Date(assEm)) : '', corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
+      const assF = ((typeof finVendas !== 'undefined' ? finVendas : {})[r.id] || {}).assinaturaEm || '';
+      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), caiuEm:r.caiuEm ? iso(new Date(r.caiuEm)) : '', ind:ehVendaIndicacao(r), ass:assF || (!Object.keys(typeof finVendas !== 'undefined' ? finVendas : {}).length && (atual.get(r.id) || {}).ass) || (assEm ? iso(new Date(assEm)) : ''), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
       const a = atual.get(r.id);
-      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || (a.caiuEm || '') !== d.caiuEm || !!a.ind !== d.ind || (a.ass || '') !== d.ass || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
+      // v269: SDR da venda (visita dela realizada). Sem as visitas carregadas, ou sem achar a visita (fora da janela), mantém a que já estava; "Não veio de SDR" limpa
+      { let s = null; try { s = carregado.visitas || r.sdrManual || r.sdrUid ? sdrDaReserva(r) : undefined; } catch(e) {}
+        d.sdr = s && s.uid ? { uid:s.uid, nome:s.nome || '' } : (r.sdrManual ? null : (a && a.sdr) || null); }
+      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || (a.caiuEm || '') !== d.caiuEm || !!a.ind !== d.ind || (a.ass || '') !== d.ass || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores) || JSON.stringify(a.sdr || null) !== JSON.stringify(d.sdr)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
       // quem pode ver a reserva no app (o próprio corretor e o parceiro)
       const uids = d.corretores.map(c => c.uid).filter(Boolean); if (r.criadoPor && !uids.includes(r.criadoPor)) uids.push(r.criadoPor);
       if (JSON.stringify(r.corretorUids || []) !== JSON.stringify(uids) && n < 400) { b.set(doc(db,'reservas',r.id), { corretorUids:uids }, { merge:true }); n++; }
