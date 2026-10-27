@@ -2393,6 +2393,16 @@ html.modo-tvr.com-let .tvr{padding-top:4.6vw}
 .tvr-seg{display:inline-flex;gap:2px;padding:2px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
 .tvr-bts .tvr-seg button.tvr-modo{width:auto;height:auto;min-height:0;border:0;border-radius:99px;padding:.35vw .8vw;font-size:.8vw;font-weight:700;background:none;opacity:.6}
 .tvr-bts .tvr-seg button.tvr-modo.on{background:#f28c38;color:#081826;opacity:1}
+/* v270: Rankings na TV no celular: o topo quebra em linhas e tudo aparece (antes os botões saíam da tela) */
+@media (max-width:760px){.tvr-topo{display:flex!important;flex-wrap:wrap;align-items:center;gap:10px!important}
+.tvr-marca{flex:1 1 auto;min-width:0;max-width:none!important}.tvr-marca b{font-size:18px!important}.tvr-marca small{font-size:12px!important;max-width:60vw}
+.tvr-hora{flex:0 0 auto}.tvr-hora b{font-size:22px!important}.tvr-hora small,.tvr-vivo{display:none!important}
+.tvr-bts{flex:1 1 100%;flex-wrap:wrap!important;gap:8px!important}.tvr-sel{flex:1 1 150px;min-width:0!important;max-width:none!important}
+.tvr-bts .tvr-seg{flex:1 1 auto;justify-content:space-between}.tvr-bts .tvr-seg button.tvr-modo{font-size:13px!important;padding:0 12px!important;flex:1}}
+/* v270: celular com notch: o topo não fica embaixo da barra do relógio; o topo fica parado e só os quadros rolam */
+.tvr{padding-top:max(1.6vw,env(safe-area-inset-top))!important;padding-bottom:max(1.6vw,env(safe-area-inset-bottom))!important;padding-left:max(1.8vw,env(safe-area-inset-left))!important;padding-right:max(1.8vw,env(safe-area-inset-right))!important}
+@media (max-width:760px){.tvr{padding:max(10px,env(safe-area-inset-top)) 12px max(10px,env(safe-area-inset-bottom))!important;overflow:auto;overscroll-behavior:contain}
+.tvr-topo{position:sticky;top:calc(-1 * max(10px,env(safe-area-inset-top)));z-index:5;margin:calc(-1 * max(10px,env(safe-area-inset-top))) -12px 0;padding:max(10px,env(safe-area-inset-top)) 12px 10px;background:#0b2234;box-shadow:0 6px 16px rgba(0,0,0,.35)}}
 .tvm{flex:1;min-height:0;display:grid;grid-template-columns:1.15fr 1fr;gap:1.4vw}
 .tvm-col{min-height:0;display:flex;flex-direction:column;gap:.9vw;border-radius:1.2vw;padding:1.2vw 1.3vw;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .tvm-col:before{content:'';position:absolute;left:0;right:0;top:0;height:.32vw;background:linear-gradient(90deg,#facc15,#2dd4bf,#38bdf8,#22c55e)}
@@ -7350,7 +7360,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 269;
+const APP_VERSAO = 270;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
