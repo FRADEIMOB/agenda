@@ -2920,6 +2920,9 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 }
 @keyframes lpSobe{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.login.entra .auth-box>*{animation:none}}
+.av-restr{margin-top:8px}.av-restr summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;font-size:12.5px;font-weight:700;color:var(--danger,#b91c1c);background:var(--danger-soft,#fee2e2);border-radius:99px;padding:4px 12px}
+.av-restr summary::-webkit-details-marker{display:none}.av-restr summary::before{content:'▸';transition:transform .15s}.av-restr[open] summary::before{transform:rotate(90deg)}
+.av-restr-tx{margin-top:8px;white-space:pre-wrap;font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px 12px;max-height:260px;overflow:auto}
 </style>
 <script>
 (function(){
@@ -7372,7 +7375,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 271;
+const APP_VERSAO = 273;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8669,6 +8672,7 @@ function cardAvaliacao(a){
       <div class="v-top"><b>${esc(nomeBonito(a.nome) || 'Sem nome')}${seloRepetido('avaliacao', a.id)}</b>${a.dataEstimada ? '<span class="vst" style="background:color-mix(in srgb,#ca8a04 14%,transparent);color:#ca8a04" title="A linha está sem data na planilha; o app usou a data da linha de cima">data estimada</span>' : ''}<span class="vst" style="background:color-mix(in srgb,${inf.cor} 14%,transparent);color:${inf.cor}">${esc(a.status || 'SEM STATUS')}</span>${a.cartaApp ? '<span class="vst" style="background:var(--ok-soft);color:var(--ok)">carta no app</span>' : ''}${a.origem === 'whatsapp' ? '<span class="vst" style="background:color-mix(in srgb,#16a34a 14%,transparent);color:#16a34a" title="Tirado da conversa com o correspondente; ainda não está na planilha">do WhatsApp</span>' : a.naPlanilha === false ? '<span class="vst" style="background:var(--danger-soft);color:var(--danger)">saiu da planilha</span>' : ''}</div>
       <div class="v-meta">${meta.join('')}</div>
       ${hist ? `<div class="v-obs">🕘 ${hist}</div>` : ''}
+      ${a.restricoes ? `<details class="av-restr"><summary>Restrições que a Prime respondeu${a.restricoesEm ? ' · ' + esc(dataBR(a.restricoesEm).slice(0, 5)) : ''}</summary><div class="av-restr-tx">${esc(a.restricoes)}</div></details>` : ''}
     </div>
     <div class="v-actions">${acoes.join('')}</div>
   </div>`;
@@ -9791,14 +9795,26 @@ const PC = (() => {
       return { dia:`${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`, autor:m[7].trim(), t:txt.slice(m.index + m[0].length, i + 1 < ms.length ? ms[i + 1].index : txt.length) }; });
   }
   const ehPrime = a => norm(a).includes('prime') || norm(a).startsWith('david soares');
-  function blocos(t){
+  function blocos(t, solto){
     const out = [];
-    for (const p of t.split(/(?=(?:an[aá]lise de cr[eé]dito|verificar cpf|consulta cpf)\s*[:/*]?)/i)) {
-      if (!/nome\s*:/i.test(p)) continue;
-      const tipo = /^\s*(verificar|consulta) cpf/i.test(p) ? 'verificar' : 'avaliacao';
+    // v272: além de "Análise de crédito", "Verificar CPF" e "Consulta CPF", também "Nova documentação" e qualquer ficha parecida
+    // (Nome + CPF ou telefone, mesmo sem título). Linha só de emojis (❌❌❌, 🟨🟨🟨) separa fichas; um segundo "Nome:" começa outra ficha
+    const RX_NOME = /^[^a-z0-9\n]{0,6}nome(?: completo)?\s*:/im, partes = [];
+    for (const q of t.split(/(?=(?:an[aá]lise de cr[eé]dito|verificar cpf|consulta cpf|nova documenta[cç][aã]o|documenta[cç][aã]o nova)\s*[:/*]?)/i)) {
+      const tq = /^[^a-z0-9]*(verificar|consulta) cpf/i.test(q) ? 'verificar' : 'avaliacao';
+      if (!solto) { partes.push([q, tq]); continue; } // mensagem da Prime: como antes (só o título separa)
+      for (const q2 of q.split(/\n(?=[^\S\n]*[^\sa-z0-9à-ú]{3,}[^\S\n]*(?:\n|$))/i)) {
+        const ini = [...q2.matchAll(new RegExp(RX_NOME.source, 'gim'))].map(m => m.index);
+        if (ini.length < 2) { partes.push([q2, tq]); continue; }
+        ini.forEach((x, k) => partes.push([q2.slice(k ? x : 0, k + 1 < ini.length ? ini[k + 1] : q2.length), tq]));
+      }
+    }
+    for (const [p, tipo] of partes) {
+      const temNome = /nome(?: completo)?\s*:/i.test(p), cpf0 = dig((p.match(/cpf\s*:[ \t]*([^\n]*)/i) || [])[1] || '').slice(0, 11);
+      if (!temNome && !(solto && cpf0.length === 11)) continue;
       const g = rx => { const m = p.match(rx); return m ? m[1].trim() : ''; };
-      const nome = g(/nome\s*:[ \t]*([^\n]*)/i), cpf = dig(g(/cpf\s*:[ \t]*([^\n]*)/i)).slice(0, 11);
-      const tel = g(/telefone\s*:[ \t]*([^\n]*)/i), renda = g(/renda total\s*:[ \t]*([^\n]*)/i) || g(/renda informal\s*:[ \t]*([^\n]*)/i) || g(/renda cadastrada\s*:[ \t]*([^\n]*)/i);
+      const nome = g(/nome(?: completo)?\s*:[ \t]*([^\n]*)/i) || ((p.split('\n').map(l => l.replace(/[*_~]/g, '').trim()).map(l => l.replace(/^nome\s+/i, '')).find(l => /^[a-zà-ú][a-zà-ú .']{5,}$/i.test(l) && !/:/.test(l) && !/^(solteir|casad|divorciad|viuv|dependente|filhos|aut[oô]nom|vendedor|renda|profiss|verific|consult|confer|an[aá]lise|nova doc|bom dia|boa tarde|boa noite|ol[aá]\b|cliente)/i.test(l))) || ''), cpf = dig(g(/cpf\s*:[ \t]*([^\n]*)/i)).slice(0, 11);
+      const tel = g(/(?:telefone|contato|celular|cel|whatsapp|fone)\s*:[ \t]*([^\n]*)/i), renda = g(/renda total\s*:[ \t]*([^\n]*)/i) || g(/renda informal\s*:[ \t]*([^\n]*)/i) || g(/renda cadastrada\s*:[ \t]*([^\n]*)/i) || g(/renda formal\s*:[ \t]*([^\n]*)/i) || g(/renda\s*:[ \t]*([^\n]*)/i);
       out.push({ tipo, nome:nome.slice(0, 80), cpf:cpf.length === 11 ? cpf : '', tel:tel.slice(0, 30), renda:renda.slice(0, 30),
         restr:g(/ver se tem restri[cç][aã]o\s*:?[ \t]*([^\n]*)/i), parc:g(/parcela e prazo[^:\n]*:[ \t]*([^\n]*)/i), occa:g(/est[aá] em outro cca\??\s*:?[ \t]*([^\n]*)/i), corpo:norm(p) });
     }
@@ -9811,7 +9827,7 @@ const PC = (() => {
     if (s.includes('reprov') || /nao aprovad/.test(s)) return s.includes('bacen') ? 'REPROVADO/BACEN' : 'REPROVADO';
     if (s.includes('condicion')) return 'CONDICIONADO';
     if (s.includes('aprovad') && (m || !/carta aprovada|parcela aprovada|aprovada conosco|ja aprovad/.test(s))) return s.includes('bacen') ? 'APROVADO/BACEN' : (s.includes('outro') ? 'APROVADO/OUTRO CCA' : 'APROVADO');
-    if (/(consta|possui|tem|com)\s+restri|restri\w*\s*:\s*(sim|consta)/.test(s) || (s.includes('bloquead') && !s.includes('desbloq'))) return 'RESTRIÇÕES';
+    if (/(consta|possui|tem|com)\s+restri|restri\w*\s*:\s*(sim|consta)|sinad\s*:\s*restri|restricao (na )?caixa/.test(s) || (s.includes('bloquead') && !s.includes('desbloq'))) return 'RESTRIÇÕES';
     if (/outro cca|outro correspondente/.test(s)) return 'OUTRO CCA';
     if (/(?<!nao )(consta|tem|possui) carta|possui cara|carta (valida|ativa)|analise valida/.test(s) && !/(nao|sem) (tem |possui )?carta/.test(s)) return 'CONSTA CARTA';
     if (s.includes('possui imovel')) return 'POSSUI IMÓVEL';
@@ -9825,14 +9841,41 @@ const PC = (() => {
     else if ((x.match(/\./g) || []).length === 1 && x.split('.')[1].length === 3) x = x.replace('.', '');
     const n = parseFloat(x); return isNaN(n) ? 0 : n;
   }
+  // v272: a Prime às vezes responde vários clientes numa mensagem só ("*RETORNO DA ANÁLISE*" + CPF + resultado, um embaixo do outro):
+  // cada pedaço vira uma resposta separada, para cada CPF ficar com o seu resultado
+  function dividirRetornos(m){
+    const ps = m.t.split(/\n(?=[ \t*_]*retorno da an[aá]lise[ \t*_]*:?[ \t*_]*\n)/i).filter(x => x.trim());
+    return ps.length > 1 ? ps.map(t => ({ ...m, t })) : [m];
+  }
+  // v272: resumo das restrições que a Prime manda (consulta SERASA / SPC / CADIN / SINAD / protesto), para mostrar no card do cliente
+  const RX_REL = /\b(serasa|spc|cadin|sinad|protesto|refin|pefin|restri[cç][aã]o (na )?caixa|bloqueio)\b/i;
+  function resumoRestr(t){
+    if (!RX_REL.test(t)) return '';
+    const out = []; let cab = '';
+    for (const l0 of t.replace(/\r/g, '').split('\n')) {
+      const raw = l0.trim(); if (!raw) continue;
+      if (/^(nome do cliente|cpf\/cnpj|cpf\s*:|data \/ hora|dados gerais|registros|nome\s*:|telefone\s*:|verificar cpf|consulta cpf|an[aá]lise de cr[eé]dito|dt ocorr)/i.test(raw) || !/[a-z0-9]/i.test(raw)) continue;
+      if (/^sequencia|^data primeira|^data\s+tipo financ|^data\s+valor protesto|^filial\s+tipo|^até 30 dias/i.test(raw)) { cab = raw.toLowerCase(); continue; }
+      const cs = raw.split(/\t+/).map(x => x.trim()).filter(Boolean);
+      if (/^data primeira/.test(cab) && cs.length >= 3 && /^\d{2}\/\d{2}\/\d{4}$/.test(cs[0])) { out.push(`  ${cs[2]} ocorrência${cs[2] === '1' ? '' : 's'} (de ${cs[0]} a ${cs[1]})`); continue; }
+      if (/^data\s+valor protesto/.test(cab) && cs.length >= 2 && /^\d{2}\/\d{2}\/\d{4}$/.test(cs[0])) { out.push(`  ${cs[1]} em ${cs[0]}${cs[3] ? ' · ' + cs.slice(3).join('/') : ''}`); continue; }
+      if (/^data\s+tipo financ/.test(cab) && cs.length >= 4 && /^\d{2}\/\d{2}\/\d{4}$/.test(cs[0])) { out.push(`  ${cs[1]} ${cs.find(x => /R\$/.test(x)) || ''} em ${cs[0]}`.replace(/\s+/g, ' ').replace(/^ /, '  ')); continue; }
+      if (cab && /^[\d\s]+$/.test(cs.join(' '))) continue;
+      cab = cab && cs.length > 1 ? cab : '';
+      out.push(cs.join(' · '));
+    }
+    const sec = l => /^(cadin|serasa|spc|protesto|pend[eê]ncias[^:]*|sinad|cheques?[^:]*)$/i.test(l);
+    const lim = out.filter((l, i) => !(sec(l) && (i + 1 >= out.length || sec(out[i + 1]) || !/^ {2}/.test(out[i + 1]) && !/^sinad/i.test(l))));
+    return lim.join('\n').replace(/\d{3}\.?\d{3}\.?\d{3}-?\d{2}/g, '***').slice(0, 1500);
+  }
   // grupos: [{ nome:'Laiane Crédito - FRADE PRIME.zip', texto:'...' }]
   function converter(grupos, limite = 0.28){
     const clientes = {};
     for (const gr of grupos) {
-      const aba = abaDoNome(gr.nome), ms = msgsDe(gr.texto);
+      const aba = abaDoNome(gr.nome), ms = msgsDe(gr.texto).flatMap(m => ehPrime(m.autor) ? dividirRetornos(m) : [m]);
       let ultimo = null, pend = [];
       for (const m of ms) {
-        const prime = ehPrime(m.autor), bs = blocos(m.t);
+        const prime = ehPrime(m.autor), bs = blocos(m.t, !prime);
         if (!prime) {
           for (const b of bs) {
             const k = chave(b); if (!k) continue;
@@ -9879,13 +9922,14 @@ const PC = (() => {
           if (st) Object.assign(clientes[k], { status:st, final:true, ult:m.dia });
           else if (R || P || O) clientes[k].final = true;
         }
-        if (bs.length) v = null;
+        if (bs.length && !/retorno da an[a]?lise/.test(norm(m.t))) v = null; // v272: o retorno da análise com a ficha do cliente também dá o status
+        { const rs = resumoRestr(m.t); if (rs) { const ks = cpfs.map(c => 'c' + c).filter(k => clientes[k]); (ks.length ? ks : alvos).forEach(k => { clientes[k].restr = rs; clientes[k].restrEm = m.dia; }); } }
         if (v) for (const k of alvos) { const c = clientes[k]; c.status = v; c.final = true; c.ult = m.dia; if (v.startsWith('APROVADO') || v === 'CONDICIONADO') c.aprovadoEm = c.aprovadoEm || m.dia; }
       }
     }
     return Object.values(clientes).map(c => {
       const nome = c.nome || (c.cpf ? 'CLIENTE CPF ' + c.cpf.slice(0, 3) + '***' : 'CLIENTE TEL ' + dig(c.telefone).slice(-4));
-      return { id:c.cpf ? 'w' + c.cpf : 'wt' + dig(c.telefone).slice(-11), aba:c.aba, data:c.data, nome, cpf:c.cpf, telefone:c.telefone, renda:c.renda, status:c.status, aprovadoEm:c.aprovadoEm };
+      return { id:c.cpf ? 'w' + c.cpf : 'wt' + dig(c.telefone).slice(-11), aba:c.aba, data:c.data, nome, cpf:c.cpf, telefone:c.telefone, renda:c.renda, status:c.status, aprovadoEm:c.aprovadoEm, ...(c.restr ? { restricoes:c.restr, restricoesEm:c.restrEm || '' } : {}) };
     }).sort((a, b) => (a.data + a.aba).localeCompare(b.data + b.aba));
   }
   return { converter, abaDoNome };
@@ -12391,7 +12435,7 @@ function precisaTarde(c){
 window.precisaTarde = precisaTarde;
 function htmlTarde(c){
   const fora = ciFora(c);
-  return `<div class="ci-card ci-tarde"><div class="ci-txt"><b>Check-in da tarde</b><small>${fora ? 'Confirme que você continua no atendimento externo.' : 'Confirme que você continua no escritório.'} Vale pontos no ranking.</small></div>
+  return `<div class="ci-card ci-tarde"><div class="ci-txt"><b>Check-in da tarde</b><small>${fora ? 'Confirme que você continua no atendimento externo.' : ciAutoLiga() && ciCfg().local?.lat ? 'Se você está no escritório, o app marca sozinho em alguns segundos (com o app aberto e a localização ligada). Se não marcar, toque abaixo.' : 'Confirme que você continua no escritório.'} Vale pontos no ranking.</small></div>
     <div class="ci-bts">${fora ? `<button class="btn btn-primary ci-bt" onclick="checkinTarde('externo')">Continuo no atendimento</button>` : `<button class="btn btn-primary ci-bt" id="ciBtTarde" onclick="checkinTarde('gps')">Estou no escritório</button>`}<button class="btn btn-ghost ci-bt" onclick="abrirCamera()">Ler o código da recepção</button></div></div>`;
 }
 window.checkinTarde = async via => {
@@ -12542,11 +12586,16 @@ window.ciAuto = ciAuto;
 async function saidaConferir(forcar){
   if (!(saidaVigia() || entradaVigia()) || _saidaAberta || document.visibilityState !== 'visible') return;
   let pausa = 0; try { pausa = Number(localStorage.getItem('saidaPausa_' + uidAtual)) || 0; } catch(e) {}
-  if (!forcar && Date.now() < pausa) return;
+  const tardeAuto = () => { const c = meuCheckin; return !!(c && !ciFora(c) && precisaTarde(c) && ciCfg().local?.lat && ciAutoLiga()); };
+  if (!forcar && Date.now() < pausa && !tardeAuto()) return;
   if (!forcar && Date.now() - _saidaT < SAIDA_INT - 5e3) return; _saidaT = Date.now();
   if (!(await saidaPermitido())) return; // nunca pede permissão sozinho; só usa se a pessoa já liberou no check-in
   const gps = await pegarGps(); // até 12 s ouvindo o GPS e fica com a leitura mais precisa
   if (!gps) return;
+  // v273: quem continua no escritório ganha o check-in da tarde sozinho, assim que o app abre depois do horário da tarde
+  // (mesma régua do botão "Estou no escritório": dentro do raio, descontando até 100 m de erro do GPS)
+  if (tardeAuto()) { const cf = ciCfg(), d0 = distanciaM(gps, cf.local);
+    if ((gps.prec || 0) <= 150 && d0 <= (Number(cf.raio) || 150) + Math.min(gps.prec || 0, 100)) { await ciAuto(gps, d0); return; } }
   if (gps.prec > SAIDA_PREC) { if (!forcar) { setTimeout(() => { _saidaT = 0; saidaConferir(true); }, 20e3); } return; } // leitura fraca: tenta de novo logo
   const cfg = ciCfg(), raio = Number(cfg.raio) || 150, dist = distanciaM(gps, cfg.local);
   // dentro "com certeza": mesmo somando todo o erro do GPS, continua dentro do raio do escritório
