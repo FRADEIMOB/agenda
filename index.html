@@ -3008,7 +3008,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 .simf-chip{margin-left:auto;font-style:normal;font-size:12px;font-weight:800;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:5px 12px;white-space:nowrap}
 @media(max-width:760px){.simf-logo{width:38px;height:38px;border-radius:11px}.simf-chip{display:none}.simf-topo span{display:block!important;font-size:11px}}
 /* v282: financeiro de comissões enxuto */
-.fin-subseg{margin:0 0 14px}
+.fin-subseg{margin:0 0 14px}.fc-segs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.fc-segs .fin-subseg{margin-bottom:14px}
 .fc-ks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
 .fc-k{--c:#334155;text-align:left;border:1px solid color-mix(in srgb,var(--c) 25%,var(--border));background:color-mix(in srgb,var(--c) 7%,var(--card));border-radius:16px;padding:14px 16px;cursor:pointer;font:inherit;color:inherit;display:grid;gap:3px;min-width:0}
 .fc-k span{font-size:13px;font-weight:800;color:var(--c)}.fc-k b{font-size:24px;letter-spacing:-.01em;color:var(--c);font-variant-numeric:tabular-nums}.fc-k small{font-size:12.5px;color:var(--muted)}
@@ -3023,9 +3023,11 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 .fc-st{margin-left:auto;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
 .fc-l2{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;font-size:13px;color:var(--muted)}.fc-vals{display:flex;flex-wrap:wrap;gap:4px 14px}.fc-vals i{font-style:normal}.fc-vals b{color:var(--text,inherit)}.fc-prev{color:#0B4669!important;font-weight:700}
 .fc-at{font-size:12.5px;color:#b91c1c;background:color-mix(in srgb,#dc2626 8%,transparent);border-radius:8px;padding:5px 9px}
+.fc-tag.fc-conf{color:#b45309;background:color-mix(in srgb,#f59e0b 16%,transparent)}
 .fc-vazio{border:1px dashed var(--border);border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
 .fin-lanc-sec{margin-top:18px}.fin-sec-h{margin:0 2px 10px;font-size:15px}
 .ic-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}.ic-res>div{border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}.ic-res b{display:block;font-size:20px}.ic-res span{font-size:12px;color:var(--muted)}
+.ic-chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:13.5px;cursor:pointer}.ic-chk input{margin-top:3px;width:18px;height:18px;flex:none}.ic-sem{margin-top:10px;font-size:13px}.ic-sem summary{cursor:pointer;color:var(--muted)}.ic-sem div{padding:3px 0}.ic-sem small{color:var(--muted)}
 .ic-lista{margin-top:12px;max-height:46vh;overflow:auto;display:grid;gap:6px}.ic-l{border:1px solid var(--border);border-radius:10px;padding:8px 11px;display:grid}.ic-l small{color:var(--muted);font-size:12.5px}.ic-l.nova em{font-style:normal;font-size:11px;color:#16a34a;font-weight:800;margin-left:6px}
 @media(max-width:760px){.fc-ks{grid-template-columns:1fr 1fr;gap:8px}.fc-k{padding:11px 12px}.fc-k b{font-size:19px}.fc-fil{flex-wrap:wrap}.fc-fil .btn{flex:1}.ic-res{grid-template-columns:1fr 1fr}}
 </style>
@@ -7547,7 +7549,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 282;
+const APP_VERSAO = 285;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13303,7 +13305,7 @@ function renderFinanceiro(){
   document.querySelectorAll('#finAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === finAba));
   const ativo = document.activeElement;
   if (finAba === 'salarios' && ativo && /^(INPUT|TEXTAREA|SELECT)$/.test(ativo.tagName) && ativo.closest('#finCorpo')) return; // não apaga o que está sendo digitado
-  $('finKpis').classList.toggle('hide', finAba !== 'salarios'); $('finAviso').classList.toggle('hide', finAba !== 'geral');
+  $('finKpis').classList.add('hide'); $('finAviso').classList.toggle('hide', finAba !== 'geral');
   if (finAba === 'cats') window.finAba = 'geral';
   // v282: só 3 abas. Notas fiscais ficam dentro de Comissões; Entradas e saídas ficam na Visão geral
   if (finAba === 'notas') { window.finAba = 'comissoes'; window.finComSub = 'notas'; }
@@ -13447,7 +13449,26 @@ const somaDiasISO = (d, n) => d ? somaDias(d, Number(n) || 0) : '';
 // vendas do financeiro = reservas do app + vendas antigas trazidas da planilha (ficam só no financeiro, não contam no ranking)
 function vendasFin(){
   const man = Object.entries(finVendas).filter(([, f]) => f.manual && f.r).map(([id, f]) => ({ id, ...f.r, manual:true }));
-  return man.length ? [...reservas, ...man] : reservas;
+  return semRepetir(man.length ? [...reservas, ...man] : reservas);
+}
+// v285: o mesmo cliente aparece uma vez só — fica o registro mais atual (CPF, telefone ou nome completo)
+let _srCache = { a:null, n:-1, fv:null, out:null };
+function semRepetir(lista){
+  if (_srCache.a === reservas && _srCache.n === lista.length && _srCache.fv === finVendas) return _srCache.out;
+  const chaves = r => { const k = [], c = soDig(r.cpf || r.cpfNorm || ''), t = r.telNorm || (r.telefone ? chaveTel(r.telefone) : ''), nm = norm(r.cliente || '').replace(/\s+/g, ' ').trim();
+    if (c.length === 11) k.push('c' + c); if (t && t.length >= 8) k.push('t' + t); if (nm.split(' ').length >= 2) k.push('n' + nm); return k; };
+  const melhor = (a, b) => { const fa = finVendas[a.id] || {}, fb = finVendas[b.id] || {};
+    if (!!fa.excluida !== !!fb.excluida) return fa.excluida ? b : a;
+    const da = a.dia || '', db = b.dia || ''; if (da !== db) return da > db ? a : b;
+    if (!!a.manual !== !!b.manual) return a.manual ? b : a;
+    return (fa.atualizadoEm || 0) >= (fb.atualizadoEm || 0) ? a : b; };
+  const dono = new Map(), grupos = [];
+  lista.forEach(r => { const ks = chaves(r); let g = ks.map(k => dono.get(k)).find(x => x != null);
+    if (g != null) { const c1 = soDig(r.cpf || r.cpfNorm || ''), c2 = soDig(grupos[g].cpf || grupos[g].cpfNorm || ''); if (c1.length === 11 && c2.length === 11 && c1 !== c2) g = null; }
+    if (g == null) { g = grupos.length; grupos.push(r); } else grupos[g] = melhor(grupos[g], r);
+    ks.forEach(k => { if (!dono.has(k)) dono.set(k, g); }); });
+  const out = grupos.length === lista.length ? lista : grupos;
+  _srCache = { a:reservas, n:lista.length, fv:finVendas, out }; return out;
 }
 // tudo o que se sabe da comissão de uma venda (reserva + acompanhamento financeiro)
 window.fvEditar = id => { const el = document.getElementById(id); if (!el) return; const d = el.closest('details'); if (d) d.open = true;
@@ -13483,12 +13504,14 @@ function previsaoMes(m){
   const lM = finDoMes(m), auto = id => /^cv_/.test(id);
   let entrou = 0, vaiEntrar = 0, semData = 0; const fontes = [];
   lM.filter(x => x.tipo === 'entrada').forEach(x => { if (x.pago) entrou += Number(x.valor) || 0; else if (!auto(x.id)) vaiEntrar += Number(x.valor) || 0; });
-  vendasFin().forEach(r => { if (finVendas[r.id]?.excluida) return; const v = vendaFin(r);
-    if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant) { if (noM(v.prevA) || (v.prevA && v.prevA < de && m === mesAtual())) { vaiEntrar += v.adiant; fontes.push(v); } }
-    if (!v.f.recRestante && v.rest) { if (!v.prevR) semData += v.rest; else if (noM(v.prevR) || (v.prevR < de && m === mesAtual())) { vaiEntrar += v.rest; fontes.push(v); } } });
+  vendasFin().forEach(r => { if (finVendas[r.id]?.excluida || planPend(r.id)) return; const v = vendaFin(r);
+    // v284: atrasado só entra na conta do mês atual se for dos últimos 60 dias (pendência antiga fica em Comissões › Precisa de atenção)
+    const recente = d => d && d >= somaDias(de, -60);
+    if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant) { if (noM(v.prevA) || (v.prevA && v.prevA < de && recente(v.prevA) && m === mesAtual())) { vaiEntrar += v.adiant; fontes.push(v); } }
+    if (!v.f.recRestante && v.rest) { if (!v.prevR) { if ((v.r.dia || '') >= somaDias(de, -120)) semData += v.rest; } else if (noM(v.prevR) || (v.prevR < de && recente(v.prevR) && m === mesAtual())) { vaiEntrar += v.rest; fontes.push(v); } } });
   const sai = lM.filter(x => x.tipo === 'saida'), pago = sai.filter(x => x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0), aPagar = sai.filter(x => !x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0);
   // pagamento dos corretores previsto (vendas recebidas e corretor ainda não pago)
-  const corPrev = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0);
+  const corPrev = vendasFin().filter(r => !finVendas[r.id]?.excluida && !planPend(r.id)).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0); // v284: o que veio da planilha não entra na previsão até você conferir
   return { entrou, vaiEntrar, semData, pago, aPagar: aPagar + corPrev, saldo: entrou + vaiEntrar - pago - aPagar - corPrev, fontes };
 }
 // despesas fixas: viram lançamentos do mês sozinhas
@@ -13667,7 +13690,7 @@ window.excluirNota = async () => {
   try { await gravar(deleteDoc(doc(db,'fin_notas',n.id))); apagarAnexo(n.anexo); fechar('notaModal'); toast('Nota excluída'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // ===== v282: Comissões em uma tela só: o que falta receber, o que falta pagar, o que precisa de atenção =====
-window.finComSub = 'vendas'; window.finComFil = 'atencao';
+window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false;
 function atencaoVenda(v, h){
   const a = [], f = v.f, pl = f.plan || {};
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
@@ -13677,6 +13700,7 @@ function atencaoVenda(v, h){
   if (v.tipo === 'adiantamento' && !f.recAdiant && v.prevA && v.prevA < h && v.adiant) a.push(`Adiantamento atrasado (era ${dataBR(v.prevA)})`);
   if (!f.recRestante && v.prevR && v.prevR < h && v.rest) a.push(`Recebimento atrasado (era ${dataBR(v.prevR)})`);
   if (v.ok.recebida && !f.corPago && v.valCor > 0) a.push('Comissão recebida e o corretor ainda não foi pago');
+  if (planPend(v.r.id)) a.push('Veio da planilha: abra, confira e salve (só depois entra no caixa e na folha)');
   return a;
 }
 function htmlComissoes(){
@@ -13684,7 +13708,10 @@ function htmlComissoes(){
   const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
   if (sub === 'notas') return seg + htmlNotas2();
   const h = hojeISO(), tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
-  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida && !(r.caiu || r.arquivado)).map(vendaFin).map(v => ({ ...v, at:atencaoVenda(v, h) }));
+  // v283: segue o mês escolhido lá em cima (vendas pela data da reserva); dá para ver todos os meses
+  const mesSel = finMes || mesAtual(), todosM = !!window.finComTodos, noMes = r => todosM || (r.dia || '').slice(0, 7) === mesSel;
+  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida && !(r.caiu || r.arquivado) && noMes(r)).map(vendaFin).map(v => ({ ...v, at:atencaoVenda(v, h) }));
+  const mN = nomeMes(mesSel).split(' de ')[0].toLowerCase(), segM = `<div class="seg fin-subseg fc-mes"><button class="${todosM ? '' : 'on'}" onclick="finComTodos=false;render()">Vendas de ${mN}</button><button class="${todosM ? 'on' : ''}" onclick="finComTodos=true;render()">Todos os meses</button></div>`;
   const aReceber = vs.filter(v => v.aReceber > 0 && !v.ok.recebida), aPagar = vs.filter(v => v.ok.recebida && !v.f.corPago && v.valCor > 0), atencao = vs.filter(v => v.at.length), concl = vs.filter(v => v.ok.recebida && (v.f.corPago || !(v.valCor > 0)));
   const soma = (l, k) => l.reduce((a, v) => a + (Number(typeof k === 'function' ? k(v) : v[k]) || 0), 0);
   const fil = window.finComFil || 'atencao', grupos = { atencao, receber:aReceber, pagar:aPagar, todas:vs, concl };
@@ -13694,10 +13721,10 @@ function htmlComissoes(){
   const status = v => { const e = v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída'; return e; };
   const linha = v => { const corN = v.cor.map(c => primeiro(c.nome)).join(' + ') || esc(v.r.corretorTexto || '');
     const prev = !v.ok.recebida ? (v.tipo === 'adiantamento' && !v.f.recAdiant && v.prevA ? `adiant. ${dataBR(v.prevA).slice(0, 5)}` : v.prevR ? `receber ${dataBR(v.prevR).slice(0, 5)}` : '') : (!v.f.corPago && v.valCor > 0 ? 'pagar o corretor' : 'concluída');
-    return `<button class="fc-l ${v.at.length ? 'at' : ''}" onclick="abrirVendaFin('${v.r.id}')"><div class="fc-l1"><b>${esc(v.r.cliente || 'Cliente')}</b>${v.f.manual ? '<em class="fc-tag">planilha</em>' : ''}<span class="fc-st">${status(v)}</span></div>
+    return `<button class="fc-l ${v.at.length ? 'at' : ''}" onclick="abrirVendaFin('${v.r.id}')"><div class="fc-l1"><b>${esc(v.r.cliente || 'Cliente')}</b>${planPend(v.r.id) ? '<em class="fc-tag fc-conf">a conferir</em>' : v.f.manual ? '<em class="fc-tag">planilha</em>' : ''}<span class="fc-st">${status(v)}</span></div>
       <div class="fc-l2"><span>${corN}${v.cons ? ' · ' + esc(v.cons) : v.r.empreendimento ? ' · ' + esc(v.r.empreendimento) : ''} · ${dataBR(v.r.dia).slice(0, 5)}</span><span class="fc-vals"><i>Comissão <b>${brl(v.total)}</b></i><i>Corretor <b>${brl(v.valCor)}</b> (${Math.round(v.pctCor)}%)</i>${prev ? `<i class="fc-prev">${prev}</i>` : ''}</span></div>
       ${v.at.length ? `<div class="fc-at">⚠ ${v.at.map(esc).join(' · ')}</div>` : ''}</button>`; };
-  return seg + `<div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
+  return `<div class="fc-segs">${seg}${segM}</div><div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
     <div class="fin-filtros fc-fil"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)},0)"><button class="btn btn-ghost" onclick="abrirImpComissoes()">Importar planilha</button></div>
     <div class="fc-h">${{ atencao:'Precisa de atenção', receber:'Falta receber das construtoras', pagar:'Falta pagar aos corretores', todas:'Todas as vendas', concl:'Concluídas' }[fil]} <span>${lista.length}</span></div>
     <div class="fc-lista">${lista.map(linha).join('') || `<div class="fc-vazio">${fil === 'atencao' ? 'Nada precisando de atenção agora.' : 'Nenhuma venda aqui.'}</div>`}</div>
@@ -13705,13 +13732,31 @@ function htmlComissoes(){
 }
 // ----- importar a planilha de reservas/comissões (.xlsx) -----
 let _icPlano = null;
+// v284: venda que veio da planilha fica "a conferir": não mexe no caixa, na folha nem no ranking até você abrir e salvar a venda
+function planPend(id){ const f = (typeof finVendas !== 'undefined' ? finVendas : {})[id]; return !!f && !f.planOk && (!!f.plan || /^pl_[a-z0-9]+$/.test(id)); }
+window.planPend = planPend;
 const icHash = s => { let a = 5381, b = 52711; for (const c of String(s)) { const k = c.charCodeAt(0); a = (a * 33) ^ k; b = (b * 33) ^ k; } return (a >>> 0).toString(36) + (b >>> 0).toString(36); };
 const MES_N = { janeiro:1, fevereiro:2, marco:3, abril:4, maio:5, junho:6, julho:7, agosto:8, setembro:9, outubro:10, novembro:11, dezembro:12 };
 function icNum(x){ if (x == null || x === '') return 0; if (typeof x === 'number') return x; const s = String(x); const mil = /\bmil\b|\dk\b/i.test(s); let n = lerColado(s.replace(/mil|k/gi, '')); if (mil && n < 1000) n *= 1000; return n; }
 function icData(x){ if (!x) return ''; if (x instanceof Date) return iso(new Date(x.getTime() + 12 * 3600e3)); if (typeof x === 'number') { const d = new Date(Math.round((x - 25569) * 864e5) + 12 * 3600e3); return iso(d); } const m = String(x).match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/); if (m) { const y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return `${y}-${String(m[2]).padStart(2, '0')}-${String(m[1]).padStart(2, '0')}`; } return /^\d{4}-\d{2}-\d{2}/.test(String(x)) ? String(x).slice(0, 10) : ''; }
 function icLinhas(X, wb){
   const out = [];
-  wb.SheetNames.forEach(nome => { const a = X.utils.sheet_to_json(wb.Sheets[nome], { header:1, raw:true, defval:'' });
+  wb.SheetNames.forEach(nome => { if (/^\W*(copia|backup|rascunho)/.test(norm(nome))) return; // cópias antigas da planilha: ignora
+    const a = X.utils.sheet_to_json(wb.Sheets[nome], { header:1, raw:true, defval:'' });
+    // v285: aba "COMISSÕES RECEBIDAS" (conferência geral): MÊS, CLIENTE, CORRETOR, TOTAL, % COR., STATUS, PREVISÃO, OBSERVAÇÃO
+    const hr = a.findIndex(r => r.some(c => /^cliente$/i.test(String(c).trim())) && r.some(c => /^status$/i.test(String(c).trim())) && r.some(c => /^% ?cor/i.test(String(c).trim())));
+    if (hr >= 0) { const cab = a[hr].map(c => norm(String(c)).trim()), col = re => cab.findIndex(c => re.test(c));
+      const C = { mes:col(/^mes$/), cli:col(/^cliente$/), cor:col(/^corretor/), emp:col(/^empreendimento/), tot:col(/^total$/), pc:col(/^% ?cor/), st:col(/^status$/), prev:col(/^previsao/), obs:col(/^observac/) };
+      for (let i = hr + 1; i < a.length; i++) { const r = a[i], g = k => C[k] >= 0 ? r[C[k]] : ''; const cli = String(g('cli') || '').trim(); if (!cli || /^cliente$/i.test(cli)) continue;
+        const pv = g('prev'); out.push({ rec:true, aba:nome, linha:i + 1, mes:MES_N[Object.keys(MES_N).find(m => norm(String(g('mes'))).trim().slice(0, 3) === m.slice(0, 3))] || 0, cliente:cli, corretor:String(g('cor') || '').trim(), emp:String(g('emp') || '').trim(),
+          comissao:icNum(g('tot')), pct:icNum(g('pc')), status:norm(String(g('st') || '')).trim(), prevMes:pv instanceof Date ? pv.getMonth() + 1 : MES_N[norm(String(pv || '')).trim()] || 0, obs:String(g('obs') || '').trim() }); }
+      return; }
+    // aba NOTAS (planilha de NF): CLIENTE, CPF, NF, DATA DA EMISSÃO → nota emitida
+    const hn = a.findIndex(r => r.some(c => /^cliente$/i.test(String(c).trim())) && r.some(c => /^nf$/i.test(String(c).trim())) && r.some(c => /^data da emiss/i.test(norm(String(c)).trim())));
+    if (hn >= 0) { const cab = a[hn].map(c => norm(String(c)).trim()), col = re => cab.findIndex(c => re.test(c)), C = { cli:col(/^cliente$/), cpf:col(/^cpf$/), cor:col(/^corretor/), nf:col(/^nf$/), dt:col(/^data da emiss/) };
+      for (let i = hn + 1; i < a.length; i++) { const r = a[i], g = k => C[k] >= 0 ? r[C[k]] : ''; const cli = String(g('cli') || '').trim(); if (!cli || /^cliente$/i.test(cli)) continue;
+        out.push({ rec:true, nota:true, aba:nome, linha:i + 1, mes:0, cliente:cli, cpf:soDig(g('cpf')), corretor:String(g('cor') || '').trim(), status:'nota', nf:String(g('nf') || '').replace(/\.0$/, ''), nfDia:icData(g('dt')), comissao:0, pct:0, prevMes:0, obs:'' }); }
+      return; }
     const hi = a.findIndex(r => r.some(c => /^cliente$/i.test(String(c).trim())) && r.some(c => /^%$/.test(String(c).trim()) || /comiss/i.test(String(c)))); if (hi < 0) return;
     const cab = a[hi].map(c => norm(String(c)).trim()), col = (re, n = 0) => { let k = -1, q = 0; cab.forEach((c, i) => { if (k < 0 && re.test(c)) { if (q === n) k = i; q++; } }); return k; };
     const C = { data:col(/^data$/), cli:col(/^cliente$/), cpf:col(/^cpf$/), tel:col(/^telefone$/), cor:col(/^corretor/), emp:col(/^empreendimento/), pct:col(/^%$/), valor:col(/^valor do imovel/), com:col(/^comiss/), funil:col(/^funil$/), atu:col(/^atualizado/), txt:col(/^atualizac/), corV:col(/^corretor/, 1), imoV:col(/^imobiliaria$/) };
@@ -13729,24 +13774,34 @@ function icEtapas(x, f, reserva){
   const PROC = [[/avaliac/, 'Avaliação do imóvel'], [/conformidade/, 'Conformidade'], [/assinatura agendada/, 'Assinatura agendada'], [/aguardando und|unidade/, 'Aguardando unidade'], [/formulario/, 'Formulário'], [/extrato/, 'Extrato'], [/obra/, 'Obra'], [/suspensiva/, 'Suspensiva']];
   const pr = PROC.find(([re]) => re.test(fu)); if (pr && !f.processo) up.processo = pr[1];
   if (assinou) { up.processo = 'Assinou';
-    if (!f.assinaturaEm) { const mm = (x.txt.match(/assin\w* em (\w+)/) || [])[1], mn = MES_N[mm];
-      if (mn) { const base = x.dia || reserva?.dia || hojeISO(); let ano = +base.slice(0, 4); if (mn < +base.slice(5, 7) - 6) ano++; const ym = `${ano}-${String(mn).padStart(2, '0')}`;
-        up.assinaturaEm = x.atu && x.atu.slice(0, 7) === ym ? x.atu : ym + '-15'; }
-      else if (x.atu) up.assinaturaEm = x.atu; } }
+    // v284: a data da assinatura vem só do mês escrito ("ASSINOU EM JUNHO"); a data de atualização sozinha não serve (é o dia em que mexeram na linha)
+    const mm = (x.txt.match(/assin\w* em (\w+)/) || [])[1], mn = MES_N[mm];
+    let certa = '';
+    if (mn) { const base = x.dia || reserva?.dia || hojeISO(); let ano = +base.slice(0, 4); if (mn < +base.slice(5, 7) - 6) ano++; const ym = `${ano}-${String(mn).padStart(2, '0')}`; certa = x.atu && x.atu.slice(0, 7) === ym ? x.atu : ym + '-15'; }
+    if (!f.assinaturaEm) { if (certa) up.assinaturaEm = certa; }
+    else if (f.plan || f.importadoEm) { // a importação anterior pode ter posto a data errada: corrige
+      if (certa && f.assinaturaEm.slice(0, 7) !== certa.slice(0, 7)) up.assinaturaEm = certa;
+      else if (!certa && x.atu && f.assinaturaEm === x.atu) up.assinaturaEm = ''; } }
   if (/nota/.test(fu) && !f.faturada) up.faturada = true;
   if (/parte recebid/.test(fu) && !f.recAdiant) up.recAdiant = true;
   if (/^recebid|^pago/.test(fu)) { if (!f.recAdiant) up.recAdiant = true; if (!f.recRestante) up.recRestante = true; if (!f.faturada) up.faturada = true; }
   return up;
 }
-window.abrirImpComissoes = () => { $('icCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Escolha a planilha de reservas (.xlsx). O app lê as abas que têm CLIENTE com % e COMISSÃO (ex.: PROCESSOS e RESERVA DO COLIBRIS). A coluna % é a parte da <b>imobiliária</b>: 40% para a imobiliária = 60% para o corretor. Antes de gravar, você confere.</div><button class="btn btn-primary" onclick="document.getElementById('icArq').click()">Escolher planilha</button><input type="file" id="icArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerImpComissoes(this)"><div id="icRes"></div>`;
+window.abrirImpComissoes = () => { $('icCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Escolha a planilha de reservas (.xlsx). O app lê as abas que têm CLIENTE com % e COMISSÃO (ex.: PROCESSOS e RESERVA DO COLIBRIS). A coluna % é a parte da <b>imobiliária</b>: 40% para a imobiliária = 60% para o corretor. Também lê a aba <b>COMISSÕES RECEBIDAS</b> da gestão financeira: marca o que já foi recebido (PAGO / PARTE PAGO) e a previsão de recebimento. Antes de gravar, você confere.</div><button class="btn btn-primary" onclick="document.getElementById('icArq').click()">Escolher planilha</button><input type="file" id="icArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerImpComissoes(this)"><div id="icRes"></div>`;
   $('icOk').classList.add('hide'); abrir('icModal'); };
 window.lerImpComissoes = async input => {
   const f = input.files && input.files[0]; input.value = ''; if (!f) return; $('icRes').innerHTML = '<div class="ax-load">Lendo a planilha…</div>';
-  try { const X = await carregarXLSX(), wb = X.read(await f.arrayBuffer(), { type:'array', cellDates:true }), linhas = icLinhas(X, wb);
-    if (!linhas.length) throw new Error('não achei nenhuma aba com CLIENTE, % e COMISSÃO');
-    // a mesma venda pode estar em mais de uma aba: a aba com a conta completa (que tem a coluna do corretor) manda
-    const porCli = new Map(); linhas.forEach(x => { const k = x.cpf.length === 11 ? 'c' + x.cpf : x.tel ? 't' + x.tel : 'n' + norm(x.cliente); const a = porCli.get(k); if (!a || (x.corV && !a.corV) || (!a.comissao && x.comissao)) porCli.set(k, a ? { ...a, ...Object.fromEntries(Object.entries(x).filter(([, v]) => v !== '' && v !== 0)) } : x); });
-    const vs = vendasFin(), acha = x => vs.find(r => x.cpf.length === 11 && soDig(r.cpf || r.cpfNorm || '') === x.cpf) || vs.find(r => x.tel && (r.telNorm || chaveTel(r.telefone || '')) === x.tel) || vs.find(r => norm(r.cliente || '') === norm(x.cliente) && (!x.dia || !r.dia || Math.abs(new Date(r.dia) - new Date(x.dia)) < 120 * 864e5));
+  try { const X = await carregarXLSX(), wb = X.read(await f.arrayBuffer(), { type:'array', cellDates:true }), todas = icLinhas(X, wb), recs = todas.filter(x => x.rec), linhas = todas.filter(x => !x.rec);
+    if (!todas.length) throw new Error('não achei nenhuma aba com CLIENTE, % e COMISSÃO (ou a aba de COMISSÕES RECEBIDAS)');
+    // a mesma pessoa pode estar em várias linhas/abas: junta tudo e a linha mais recente manda
+    const porCli = [], dono = new Map();
+    [...linhas].sort((a, b) => (a.dia || '').localeCompare(b.dia || '') || (a.atu || '').localeCompare(b.atu || '')).forEach(x => {
+      const nm = norm(x.cliente).replace(/\s+/g, ' ').trim(), ks = [x.cpf.length === 11 ? 'c' + x.cpf : '', x.tel ? 't' + x.tel : '', nm.split(' ').length >= 2 ? 'n' + nm : 'u' + nm + '|' + x.aba + x.linha].filter(Boolean);
+      let g = ks.map(k => dono.get(k)).find(v => v != null);
+      if (g != null && x.cpf.length === 11 && porCli[g].cpf.length === 11 && porCli[g].cpf !== x.cpf) g = null; // mesmo nome, CPF diferente: outra pessoa
+      if (g == null) { g = porCli.length; porCli.push(x); } else porCli[g] = { ...porCli[g], ...Object.fromEntries(Object.entries(x).filter(([, v]) => v !== '' && v !== 0)) };
+      ks.forEach(k => { if (!dono.has(k)) dono.set(k, g); }); });
+    const vs = vendasFin(), acha = x => vs.find(r => x.cpf.length === 11 && soDig(r.cpf || r.cpfNorm || '') === x.cpf) || vs.find(r => x.tel && (r.telNorm || chaveTel(r.telefone || '')) === x.tel) || vs.find(r => norm(r.cliente || '') === norm(x.cliente) && (norm(x.cliente).trim().split(/\s+/).length >= 2 || !x.dia || !r.dia || Math.abs(new Date(r.dia) - new Date(x.dia)) < 120 * 864e5));
     const muda = [], novas = [], iguais = [], caiu = [];
     porCli.forEach(x => { const r = acha(x), f = r ? (finVendas[r.id] || {}) : {}, up = icEtapas(x, f, r);
       if (x.comissao > 0 && Math.abs((Number(f.comissao) || 0) - x.comissao) > 0.5) up.comissao = Math.round(x.comissao * 100) / 100;
@@ -13754,23 +13809,53 @@ window.lerImpComissoes = async input => {
       if (up.plan?.caiu) { if (r) caiu.push({ x, r }); return; }
       if (!r) { if (/assinou|nota|recebid|avaliac|conformidade|entrevista|agendada|und/.test(x.funil) || x.comissao) novas.push({ x, up }); return; }
       if (Object.keys(up).length) muda.push({ x, r, up }); else iguais.push(x); });
+    // v285: comissões recebidas — só marca o que já aconteceu; não cria venda nova nem lançamento no caixa
+    const semAcho = [], mAt = +hojeISO().slice(5, 7), anoAt = +hojeISO().slice(0, 4);
+    const achaRec = x => { const t = norm(x.cliente).split(' ').filter(Boolean), tk = s => norm(s || '').split(' ').filter(Boolean);
+      if (x.cpf && x.cpf.length === 11) { const k = vs.filter(r => soDig(r.cpf || r.cpfNorm || '') === x.cpf); if (k.length === 1) return k[0]; }
+      let c = vs.filter(r => norm(r.cliente || '') === t.join(' '));
+      if (!c.length) c = vs.filter(r => { const u = tk(r.cliente); return u[0] === t[0] && (t.slice(1).every(w => u.includes(w)) || u.slice(1).every(w => t.includes(w))); });
+      if (c.length > 1 && x.mes) { const c2 = c.filter(r => r.dia && Math.abs(+r.dia.slice(5, 7) - x.mes) <= 1); if (c2.length) c = c2; }
+      if (c.length > 1 && x.corretor) { const p1 = norm(x.corretor).split(' ')[0]; const c2 = c.filter(r => norm(r.corretorTexto || '').includes(p1) || (r.corretores || []).some(k => norm(k.nome || '').includes(p1))); if (c2.length) c = c2; }
+      return c.length === 1 ? c[0] : null; };
+    recs.forEach(x => { const st = x.status;
+      if (/caiu/.test(st)) { const r = achaRec(x); if (r && !finVendas[r.id]?.excluida) caiu.push({ x, r }); return; }
+      const r = achaRec(x); if (!r) { if (st) semAcho.push(x); return; }
+      if (x.nota) { const f = finVendas[r.id] || {}, up = {}, nf = `NF ${x.nf}${x.nfDia ? ' emitida em ' + dataBR(x.nfDia) : ''}`; if (!f.faturada) up.faturada = true; if (x.nf && f.nfPlan !== nf) up.nfPlan = nf;
+        if (!Object.keys(up).length) { iguais.push(x); return; } const ja = muda.find(m => m.r.id === r.id); if (ja) Object.assign(ja.up, up); else muda.push({ x, r, up }); return; }
+      const f = finVendas[r.id] || {}, up = {}, pago = /^pago/.test(st), parte = /parte pago/.test(st);
+      const prevISO = x.prevMes ? `${x.prevMes < (x.mes || 1) - 3 ? anoAt + 1 : anoAt}-${String(x.prevMes).padStart(2, '0')}-15` : '';
+      if (pago || parte || /assinou/.test(st)) { if (f.processo !== 'Assinou') up.processo = 'Assinou'; }
+      else { const e = icEtapas({ funil:st, txt:'' }, f, r); if (e.processo) up.processo = e.processo; }
+      if (pago) { if (!f.recAdiant) up.recAdiant = true; if (!f.recRestante) up.recRestante = true; if (!f.faturada) up.faturada = true; }
+      else if (parte && !f.recAdiant) up.recAdiant = true;
+      if (!pago && prevISO && !f.prevRestante) up.prevRestante = prevISO;
+      if (x.comissao > 0 && !(Number(f.comissao) > 0)) up.comissao = Math.round(x.comissao * 100) / 100;
+      if (x.pct > 0 && x.pct <= 1) { const pc = Math.round(x.pct * 10000) / 100; if (Number(f.pctCor) !== pc) up.pctCor = pc; }
+      if (x.obs && f.obsPlan !== x.obs) up.obsPlan = x.obs;
+      const antigo = pago && !f.corPago && (!prevISO || prevISO.slice(0, 7) < hojeISO().slice(0, 7));
+      if (!Object.keys(up).length && !antigo) { iguais.push(x); return; }
+      const ja = muda.find(m => m.r.id === r.id); if (ja) Object.assign(ja.up, up); else muda.push({ x, r, up, antigo }); if (ja && antigo) ja.antigo = true; });
+    const nAntigo = muda.filter(m => m.antigo).length;
     _icPlano = { muda, novas, caiu };
-    const nAba = [...new Set(linhas.map(x => x.aba))];
-    $('icRes').innerHTML = `<div class="ic-res"><div><b>${linhas.length}</b><span>linhas lidas (${nAba.map(esc).join(', ')})</span></div><div><b>${muda.length}</b><span>vendas do app atualizadas</span></div><div><b>${novas.length}</b><span>vendas novas no financeiro</span></div><div><b>${iguais.length}</b><span>já estavam certas</span></div></div>
+    const nAba = [...new Set(todas.map(x => x.aba))];
+    $('icRes').innerHTML = `<div class="ic-res"><div><b>${todas.length}</b><span>linhas lidas (${nAba.map(esc).join(', ')})</span></div><div><b>${muda.length}</b><span>vendas do app atualizadas</span></div><div><b>${novas.length}</b><span>vendas novas no financeiro</span></div><div><b>${iguais.length}</b><span>já estavam certas</span></div></div>
       ${caiu.length ? `<div class="fin-alerta fin-alerta-s" style="margin-top:10px">⚠ ${caiu.length} venda${caiu.length > 1 ? 's' : ''} que a planilha marca como CAIU RESERVA ainda ${caiu.length > 1 ? 'estão' : 'está'} no app: ${caiu.slice(0, 6).map(c => esc(nomeBonito(c.r.cliente))).join(', ')}. Confira em Vendas.</div>` : ''}
-      <div class="ic-lista">${muda.slice(0, 80).map(({ x, r, up }) => `<div class="ic-l"><b>${esc(nomeBonito(r.cliente))}</b><small>${[up.comissao ? 'comissão ' + brl2(up.comissao) : '', up.pctCor != null ? 'corretor ' + up.pctCor + '%' : '', up.assinaturaEm ? 'assinou ' + dataBR(up.assinaturaEm) : '', up.faturada ? 'nota emitida' : '', up.recRestante ? 'recebido' : up.recAdiant ? 'parte recebida' : '', up.processo && !up.assinaturaEm ? up.processo.toLowerCase() : ''].filter(Boolean).join(' · ')}</small></div>`).join('')}
+      ${nAntigo ? `<label class="ic-chk"><input type="checkbox" id="icCorPago" checked><span><b>${nAntigo} venda${nAntigo > 1 ? 's' : ''} PAGO de meses anteriores:</b> o corretor também já recebeu. Ficam como concluídas e saem da lista "a conferir". Desmarque se ainda falta pagar algum corretor.</span></label>` : ''}
+      ${semAcho.length ? `<details class="ic-sem"><summary>${semAcho.length} da aba de recebidas que não achei no app</summary>${semAcho.map(x => `<div>${esc(nomeBonito(x.cliente))} <small>${[x.corretor, x.emp, x.status.toUpperCase()].filter(Boolean).map(esc).join(' · ')}</small></div>`).join('')}</details>` : ''}
+      <div class="ic-lista">${muda.slice(0, 80).map(({ x, r, up }) => `<div class="ic-l"><b>${esc(nomeBonito(r.cliente))}</b><small>${[up.comissao ? 'comissão ' + brl2(up.comissao) : '', up.pctCor != null ? 'corretor ' + up.pctCor + '%' : '', up.assinaturaEm ? 'assinou ' + dataBR(up.assinaturaEm) : up.assinaturaEm === '' ? 'tira a data de assinatura errada' : '', up.nfPlan ? up.nfPlan : up.faturada ? 'nota emitida' : '', up.recRestante ? 'recebido' : up.recAdiant ? 'parte recebida' : '', up.prevRestante ? 'receber em ' + dataBR(up.prevRestante).slice(3) : '', up.processo && !up.assinaturaEm ? up.processo.toLowerCase() : ''].filter(Boolean).join(' · ')}</small></div>`).join('')}
         ${novas.slice(0, 40).map(({ x }) => `<div class="ic-l nova"><b>${esc(nomeBonito(x.cliente))} <em>nova</em></b><small>${[dataBR(x.dia), x.corretor, x.emp, x.comissao ? 'comissão ' + brl2(x.comissao) : ''].filter(Boolean).map(esc).join(' · ')}</small></div>`).join('')}</div>`;
     $('icOk').classList.toggle('hide', !(muda.length + novas.length)); $('icOk').textContent = `Gravar ${muda.length + novas.length} vendas`;
   } catch(e) { $('icRes').innerHTML = `<div class="fin-alerta fin-alerta-s">Não consegui ler: ${esc(e.message)}</div>`; }
 };
 window.gravarImpComissoes = async () => {
   const p = _icPlano; if (!p) return; const bt = $('icOk'); bt.disabled = true; bt.textContent = 'Gravando…';
-  try { const ops = [...p.muda.map(({ r, up }) => [r.id, { ...up, plan:{ em:Date.now() }, atualizadoEm:Date.now() }]),
+  try { const corOk = !!$('icCorPago')?.checked, ops = [...p.muda.map(({ r, up, antigo }) => [r.id, { ...up, ...(antigo && corOk ? { corPago:true, planOk:true } : {}), plan:{ em:Date.now() }, atualizadoEm:Date.now() }]),
       ...p.novas.map(({ x, up }) => { const id = 'pl_' + icHash((x.cpf || '') + '|' + norm(x.cliente)); return [id, { manual:true, r:{ dia:x.dia, cliente:nomeBonito(x.cliente), corretorTexto:x.corretor, empreendimento:x.emp, construtora:'', comissao:x.comissao ? String(x.comissao) : '', percentual:x.pct ? String(x.pct) : '', valor:x.valor || 0, origem:'planilha' },
-        reservaId:id, cliente:nomeBonito(x.cliente), ...(x.comissao ? { comissao:Math.round(x.comissao * 100) / 100 } : {}), ...up, sinalPago:true, geraEntrada:'nao', importadoEm:Date.now(), importadoPor:perfil.nome, atualizadoEm:Date.now() }]; })];
+        reservaId:id, plan:{ em:Date.now() }, cliente:nomeBonito(x.cliente), ...(x.comissao ? { comissao:Math.round(x.comissao * 100) / 100 } : {}), ...up, sinalPago:true, geraEntrada:'nao', importadoEm:Date.now(), importadoPor:perfil.nome, atualizadoEm:Date.now() }]; })];
     for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i + 400).forEach(([id, d]) => b.set(doc(db,'fin_vendas',id), d, { merge:true })); await gravar(b.commit()); }
     logFin(`Leu a planilha de comissões: ${p.muda.length} atualizadas, ${p.novas.length} novas`);
-    fechar('icModal'); window.finAba = 'comissoes'; window.finComSub = 'vendas'; window.finComFil = 'atencao'; render(); toast(`Pronto ✓ ${ops.length} vendas atualizadas no financeiro`); }
+    fechar('icModal'); window.finAba = 'comissoes'; window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false; render(); toast(`Pronto ✓ ${ops.length} vendas atualizadas no financeiro`); }
   catch(e) { toast('Erro: ' + e.message); }
   bt.disabled = false;
 };
@@ -13814,6 +13899,7 @@ window.abrirVendaFin = (id, semAbrir) => {
   const notasV = (window.finNotas || []).filter(n => n.vendaId === r.id);
   $('fvCorpo').innerHTML = `
     <div class="fv-topo" title="Toque num valor para editar"><div onclick="fvEditar('fvBruta')"><span>Comissão bruta ✏️</span><b>${brl2(v.total)}</b></div><div onclick="fvEditar('fvImpV')"><span>Imposto (${String(v.pctNF).replace('.', ',')}%) ✏️</span><b class="fin-neg">− ${brl2(v.imposto)}</b></div><div onclick="fvEditar('fvValCor')"><span>Corretor${v.descTotal ? ' (já com descontos)' : ''} ✏️</span><b>${brl2(v.valCor)}</b>${v.descTotal ? `<small class="fv-desc-s">${brl2(v.valCorBruto)} − ${brl2(v.descTotal)}</small>` : ''}</div><div onclick="fvEditar('fvPctC')"><span>Fica na imobiliária ✏️</span><b class="fin-pos">${brl2(v.valImob)}</b></div></div>
+    ${f.obsPlan || f.nfPlan ? `<div class="fv-parc fv-obsplan">Planilha: ${esc([f.nfPlan, f.obsPlan].filter(Boolean).join(' · '))}</div>` : ''}
     ${v.tipo === 'adiantamento' ? `<div class="fv-parc">Adiantamento <b>${brl2(v.adiant)}</b>${v.prevA ? ' em ' + dataBR(v.prevA) : ''} · restante <b>${brl2(v.rest)}</b>${v.prevR ? ' em ' + dataBR(v.prevR) : ' depois da assinatura'}</div>` : `<div class="fv-parc">Paga tudo de uma vez${v.prevR ? ' em ' + dataBR(v.prevR) : ', depois da assinatura'}</div>`}
     <div class="fv-bloco"><h4>Comissão</h4>
       <div class="row2"><div class="fg"><label>Construtora</label><input id="fvCons" list="fvConsL" value="${esc(v.cons)}" oninput="fvTipoAuto()"><datalist id="fvConsL">${construtoras().map(c => `<option value="${esc(c.nome)}">`).join('')}</datalist></div>
@@ -13932,7 +14018,7 @@ window.salvarVendaFin = async () => {
     descontos:(window._fvDesc || []).filter(x => Number(x.valor) > 0).map(x => ({ tipo:x.tipo || 'avulso', descricao:String(x.descricao || '').trim().slice(0, 100), valor:Math.round(Number(x.valor) * 100) / 100, uid:x.uid || '' })),
     identificada:$('fvIdent').checked, assinaturaEm:$('fvAss').value, nota:$('fvNota').value, faturada:$('fvFat').checked,
     prevAdiant:$('fvPrevA').value, prevRestante:$('fvPrevR').value, recAdiant:$('fvTipo').value === 'adiantamento' && $('fvRecA').checked, recRestante:$('fvRecR').checked, corPago:$('fvCorP').checked,
-    obs:$('fvObs').value.trim(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
+    obs:$('fvObs').value.trim(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome, planOk:true };
   // só guarda a previsão se a pessoa mudou a data sugerida
   const rg = regraConst(d.construtora);
   if (d.prevAdiant === somaDiasISO(r.dia, rg.diasAdiant)) d.prevAdiant = '';
@@ -14061,7 +14147,7 @@ window.salvarVT = async () => {
 const nomeDaFixa = d => { const m = String(d || '').match(/\(([^)]+)\)/); return (m ? m[1] : d).trim(); };
 function numerosDoMesSal(m){
   const de = m + '-01', ate = fimDoMes(m);
-  const contratos = Object.values(finVendas).filter(f => f.assinaturaEm && f.assinaturaEm >= de && f.assinaturaEm <= ate).length;
+  const contratos = Object.entries(finVendas).filter(([id, f]) => f.assinaturaEm && f.assinaturaEm >= de && f.assinaturaEm <= ate && !f.excluida && !planPend(id)).length; // v284: o que veio da planilha só conta depois de conferido
   const rs = reservas.filter(r => r.dia >= de && r.dia <= ate), crm = rs.filter(r => /crm/i.test(r.origem || '')).length;
   return { contratos, reservas:rs.length, pctCRM: rs.length ? Math.round(crm / rs.length * 100) : 0 };
 }
@@ -15557,7 +15643,7 @@ function sdrCamposReserva(d){ const el = $('rvSdr'); const sel = el ? el.value :
   if (sel) { const p = listaSdrs().find(x => x.uid === sel) || {}; return { sdrUid:sel, sdrNome:p.nome || '', sdrManual:true }; }
   const a = sdrAutoDaReserva(d); return { sdrUid:a ? a.uid : '', sdrNome:a ? a.nome : '', sdrManual:false }; }
 // data em que o contrato foi assinado: a do Financeiro ou a da etapa ASSINOU da reserva
-function assinaturaDaReserva(r){ const f = (typeof finVendas !== 'undefined' ? finVendas : {})[r.id]; if (f && f.assinaturaEm) return f.assinaturaEm;
+function assinaturaDaReserva(r){ const f = (typeof finVendas !== 'undefined' ? finVendas : {})[r.id]; if (f && f.assinaturaEm && !planPend(r.id)) return f.assinaturaEm;
   const h = (r.etapaHist || []).filter(x => x.etapa === 'ASSINOU').sort((x, y) => (x.em || 0) - (y.em || 0))[0], em = h ? h.em : (r.etapa === 'ASSINOU' ? r.etapaEm : 0); return em ? iso(new Date(em)) : ''; }
 window.editarReserva = id => {
   window._vendaDaVisita = null;
@@ -15676,7 +15762,7 @@ function sincVendasRanking(){
     const atual = new Map(rankingVendas.map(x => [x.id, x])), b = writeBatch(db); let n = 0;
     reservasTodas.forEach(r => {
       const assH = (r.etapaHist || []).filter(x => x.etapa === 'ASSINOU').sort((x, y) => (x.em || 0) - (y.em || 0))[0], assEm = assH ? assH.em : (r.etapa === 'ASSINOU' ? r.etapaEm : 0);
-      const assF = ((typeof finVendas !== 'undefined' ? finVendas : {})[r.id] || {}).assinaturaEm || '';
+      const assF = planPend(r.id) ? '' : (((typeof finVendas !== 'undefined' ? finVendas : {})[r.id] || {}).assinaturaEm || '');
       const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), caiuEm:r.caiuEm ? iso(new Date(r.caiuEm)) : '', ind:ehVendaIndicacao(r), ass:assF || (!Object.keys(typeof finVendas !== 'undefined' ? finVendas : {}).length && (atual.get(r.id) || {}).ass) || (assEm ? iso(new Date(assEm)) : ''), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
       const a = atual.get(r.id);
       // v269: SDR da venda (visita dela realizada). Sem as visitas carregadas, ou sem achar a visita (fora da janela), mantém a que já estava; "Não veio de SDR" limpa
