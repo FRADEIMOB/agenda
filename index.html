@@ -7372,7 +7372,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 270;
+const APP_VERSAO = 271;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7763,21 +7763,21 @@ function somaPontos(a, b){ const o = { ...a };
 // v258: regras que mudam numa data (degraus): até a véspera vale o valor antigo, da data em diante o novo
 // 26/10/2026: visita só pontua se for realizada (para todos); SDR sem pontos de ligação, doc 10 e visita realizada 70
 const DEGRAUS_GERAL = { vPendente:[['2000-01-01', 0]], vConfirmada:[['2000-01-01', 0]], vFalta:[['2000-01-01', 0]] }; // v265: visita só pontua se for realizada, para todo mundo e sempre
-const DEGRAUS_SDR = { ligacao:[['2026-10-27', 0]], docSdr:[['2026-10-27', 10]] }; // v262: começa em 27/10 (pedido do Allan)
+const DEGRAUS_SDR = { ligacao:[['2026-10-27', 0], ['2026-11-01', null]], docSdr:[['2026-10-27', 10], ['2026-11-01', null]], docGeral:[['2026-10-27', 10], ['2026-11-01', null]] }; // v271: só na semana 27 a 31/10 (Allan ainda decide novembro); null = volta ao valor da tela de Pontuação // v271: toda doc da SDR (resumo, planilha, WhatsApp) vale 10 a partir de 27/10 // v262: começa em 27/10 (pedido do Allan)
 // v266: visita da SDR: vale 70 se for realizada, mas só as visitas MARCADAS a partir de 27/10 (as marcadas antes ficam com a pontuação antiga)
-const SDR_VISITA_NOVA = { desde:'2026-10-27', realizada:70 };
+const SDR_VISITA_NOVA = { desde:'2026-10-27', ate:'2026-10-31', realizada:70 }; // v271: visitas MARCADAS de 27 a 31/10
 // v269: venda (reserva) de cliente que veio de visita da SDR realizada: pontos para a SDR. Antes de 27/10 = 15, a partir de 27/10 = 70 (pela data da reserva)
-const SDR_VENDA = { desde:'2026-10-27', antes:15, depois:70 };
-const ptSdrVenda = d => (d || '') >= SDR_VENDA.desde ? SDR_VENDA.depois : SDR_VENDA.antes;
+const SDR_VENDA = { desde:'2026-10-27', ate:'2026-10-31', antes:15, depois:70 }; // v271: 70 só nas reservas de 27 a 31/10; fora disso 15
+const ptSdrVenda = d => (d || '') >= SDR_VENDA.desde && (d || '') <= SDR_VENDA.ate ? SDR_VENDA.depois : SDR_VENDA.antes;
 const juntaDegraus = (...ls) => { const o = {}; ls.forEach(l => Object.entries(l || {}).forEach(([k, v]) => { o[k] = [...(o[k] || []), ...(Array.isArray(v) ? v : [])].sort((a, b) => String(a[0]).localeCompare(String(b[0]))); })); return o; };
-const valorNoDia = (val, k, dia) => { const st = ((val.degraus || {})[k] || []).filter(x => x[0] <= dia).pop(); return st ? Number(st[1]) || 0 : Number(val[k]) || 0; };
+const valorNoDia = (val, k, dia) => { const st = ((val.degraus || {})[k] || []).filter(x => x[0] <= dia).pop(); return st && st[1] !== null && st[1] !== undefined ? Number(st[1]) || 0 : Number(val[k]) || 0; };
 function pontosSegmentado(m, val, corte){
   const di = val.desdeItens || {}, dg = val.degraus || {}, [cDe, cAte] = corte || [m + '-01', fimDoMes(m)];
   const cortes = [...new Set([...Object.values(di), ...Object.values(dg).flatMap(l => l.map(x => x[0]))].filter(d => d && d > cDe && d <= cAte))].sort(), lim = [cDe, ...cortes];
   const g = new Map();
   lim.forEach((a, i) => { const b = i + 1 < lim.length ? somaDias(lim[i + 1], -1) : cAte, v = { ...val };
     Object.entries(di).forEach(([k, d]) => { if (d && d > a) { const an = (val.antesItens || {})[k]; v[k] = an !== undefined && an !== null && an !== '' ? Number(an) || 0 : 0; } });
-    Object.entries(dg).forEach(([k, l]) => { const st = l.filter(x => x[0] <= a).pop(); if (st) v[k] = Number(st[1]) || 0; });
+    Object.entries(dg).forEach(([k, l]) => { const st = l.filter(x => x[0] <= a).pop(); if (st && st[1] !== null && st[1] !== undefined) v[k] = Number(st[1]) || 0; });
     const so = lim.length === 1 && !corte;
     pontosDoMesBase(m, v, so ? undefined : [a, b]).forEach(x => { const k = x.uid || 'n:' + norm(x.nome), y = g.get(k);
       const seg = { v, x }; if (!y) { g.set(k, { ...x, _segs:[seg] }); return; } const z = somaPontos(y, x); z._segs = [...y._segs, seg]; g.set(k, z); }); });
@@ -7821,7 +7821,7 @@ function pontosDoMesBase(m, val, corte){
     const ps = RK().find(p => p.uid === r.sdrUid) || {}, x = pega({ corretorUid:r.sdrUid, corretorNome:ps.nome || r.sdrNome || 'SDR', equipe:ps.equipe || r.sdrEquipe || '' });
     x.agendSdr = (x.agendSdr || 0) + 1;
     const marc = Number(r.criadoEm) ? iso(new Date(Number(r.criadoEm))) : '';
-    if (marc && marc >= SDR_VISITA_NOVA.desde) { x.visitas++; x.sdrNova = (x.sdrNova || 0) + 1; if (r.status === 'Realizada') { x.sdrNovaReal = (x.sdrNovaReal || 0) + 1; x.pontos += SDR_VISITA_NOVA.realizada; } return; }
+    if (marc && marc >= SDR_VISITA_NOVA.desde && marc <= SDR_VISITA_NOVA.ate) { x.visitas++; x.sdrNova = (x.sdrNova || 0) + 1; if (r.status === 'Realizada') { x.sdrNovaReal = (x.sdrNovaReal || 0) + 1; x.pontos += SDR_VISITA_NOVA.realizada; } return; }
     // v131: se a pontuação própria da SDR não foi definida, a visita dela vale o mesmo que a do corretor
     if (n('agendSdr') || n('agendSdrReal')) { x.pontos += n('agendSdr') + (r.status === 'Realizada' ? n('agendSdrReal') : 0); x.agendProprio = (x.agendProprio || 0) + 1; if (r.status === 'Realizada') x.agendReal = (x.agendReal || 0) + 1; }
     else { if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); } else if (r.status === 'Realizada') { x.realizadas++; x.pontos += n('vRealizada'); } else if (r.status === 'Não compareceu') { x.faltas++; x.pontos += n('vFalta'); } else x.pontos += n('vPendente'); }
@@ -7887,7 +7887,9 @@ function pontosDoMesBase(m, val, corte){
     (x._abo ||= new Set()); Object.keys(r.abo || {}).forEach(d => x._abo.add(d)); (x._chk ||= new Set()); Object.keys(r.chk || {}).forEach(d => x._chk.add(d));
     x.atendeu = (x.atendeu || 0) + Object.values(r.at || {}).reduce((a, v) => a + (Number(v) || 0), 0); x.naoAtendeu = (x.naoAtendeu || 0) + Object.values(r.na || {}).reduce((a, v) => a + (Number(v) || 0), 0);
     const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0), bloco = Math.max(1, n('ligBloco') || 1);
-    const pro = soma(r.pro), ind = soma(r.ind), doca = Object.keys(r.doca || {}).length, dg = soma(r.mddoc);
+    const pro = soma(r.pro), ind = soma(r.ind), doca = Object.keys(r.doca || {}).length;
+    // v271: na SDR, as docs do resumo do dia já pontuam em "Documentações do resumo (SDR)"; aqui ficam só as outras (planilha, WhatsApp), sem contar duas vezes
+    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => a + Math.max(0, (Number(v) || 0) - (Number((r.sdoc || {})[d]) || 0)), 0) : soma(r.mddoc);
     x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
@@ -8104,9 +8106,9 @@ function linhasPontos(x, P){
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
     ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
-    ...(x.vendaSdrAntes ? [[`Vendas que vieram da SDR (antes de ${dataBR(SDR_VENDA.desde).slice(0, 5)})`, x.vendaSdrAntes, SDR_VENDA.antes, x.vendaSdrAntes * SDR_VENDA.antes]] : []),
-    ...(x.vendaSdrNova ? [[`Vendas que vieram da SDR (a partir de ${dataBR(SDR_VENDA.desde).slice(0, 5)})`, x.vendaSdrNova, SDR_VENDA.depois, x.vendaSdrNova * SDR_VENDA.depois]] : []),
-    ...(x.sdrNovaReal ? [[`Visitas realizadas (SDR, marcadas a partir de ${dataBR(SDR_VISITA_NOVA.desde).slice(0, 5)})`, x.sdrNovaReal, SDR_VISITA_NOVA.realizada, x.sdrNovaReal * SDR_VISITA_NOVA.realizada]] : []),
+    ...(x.vendaSdrAntes ? [[`Vendas que vieram da SDR (fora de ${dataBR(SDR_VENDA.desde).slice(0, 5)} a ${dataBR(SDR_VENDA.ate).slice(0, 5)})`, x.vendaSdrAntes, SDR_VENDA.antes, x.vendaSdrAntes * SDR_VENDA.antes]] : []),
+    ...(x.vendaSdrNova ? [[`Vendas que vieram da SDR (${dataBR(SDR_VENDA.desde).slice(0, 5)} a ${dataBR(SDR_VENDA.ate).slice(0, 5)})`, x.vendaSdrNova, SDR_VENDA.depois, x.vendaSdrNova * SDR_VENDA.depois]] : []),
+    ...(x.sdrNovaReal ? [[`Visitas realizadas (SDR, marcadas de ${dataBR(SDR_VISITA_NOVA.desde).slice(0, 5)} a ${dataBR(SDR_VISITA_NOVA.ate).slice(0, 5)})`, x.sdrNovaReal, SDR_VISITA_NOVA.realizada, x.sdrNovaReal * SDR_VISITA_NOVA.realizada]] : []),
     ...((n('agendSdr') || n('agendSdrReal')) ? [['Visitas agendadas (SDR)', x.agendProprio, n('agendSdr'), (x.agendProprio || 0) * n('agendSdr')], ['Visitas agendadas e realizadas (SDR)', x.agendReal, n('agendSdrReal'), (x.agendReal || 0) * n('agendSdrReal')]] : [['Visitas agendadas (SDR)', x.agendSdr, '—', null]])
   ];
   return L;
@@ -9984,7 +9986,8 @@ window.importarDocsWhats = async () => {
       if (!r?.ok) throw new Error(r?.erro || 'sem resposta');
       tot += r.recebidas || 0;
     }
-    toast(`Pronto ✓ ${tot} docs do WhatsApp no app`); $(IW.info).textContent = `✓ ${tot} docs importados.`; btn.classList.add('hide'); impWhats = [];
+    toast(`Pronto ✓ ${tot} docs do WhatsApp no app`); $(IW.info).textContent = `✓ ${tot} docs importados. Os pontos de documentação entram no ranking em seguida.`; btn.classList.add('hide'); impWhats = [];
+    [8e3, 30e3].forEach(ms => setTimeout(() => { try { sincMetasDia(true); } catch(e) {} }, ms));
   } catch(e) { toast('Erro: ' + e.message); }
   btn.disabled = false;
 };
@@ -16126,18 +16129,22 @@ window.mdLetPausa = v => { _mdLetPausa = v; };
 
 // ---------- gerência: guarda os números de cada um para o ranking de todos (corretor não lê os dados dos outros) ----------
 let _mdSinc = 0;
-async function sincMetasDia(){
-  if (!souGerente() || souCeo() || Date.now() - _mdSinc < 3 * 60e3 || !carregado.visitas) return;
+async function sincMetasDia(forcar){
+  if (!souGerente() || souCeo() || (!forcar && Date.now() - _mdSinc < 3 * 60e3) || !carregado.visitas) return;
   _mdSinc = Date.now();
   try {
-    const dias = [...new Set([mdOntem(), ...mdDiasSemana()])], b = writeBatch(db); let n = 0;
+    // v271: as documentações valem para o ranking do mês inteiro. Antes só ontem e a semana eram guardados, e as docs
+    // de dias anteriores (ex.: conversas do WhatsApp importadas depois) nunca chegavam ao ranking
+    const curtos = new Set([mdOntem(), ...mdDiasSemana()]), h0 = hojeISO(), mesDias = [];
+    for (let d = h0.slice(0, 7) + '-01'; d <= h0; d = somaDias(d, 1)) mesDias.push(d);
+    const dias = [...new Set([...curtos, ...mesDias])], b = writeBatch(db); let n = 0;
     const porUid = new Map();
     dias.forEach(d => mdValores([d]).forEach((v, u) => { const o = porUid.get(u) || {}; o[d] = v; porUid.set(u, o); }));
     pessoasRk().filter(p => MD_PAPEIS.includes(p.papel)).forEach(p => {
       const meses = {}; dias.forEach(d => { (meses[d.slice(0, 7)] = meses[d.slice(0, 7)] || []).push(d); });
       Object.entries(meses).forEach(([m, ds]) => {
         const id = m + '_' + p.uid, ra = rankingAtiv.find(r => r.id === id) || {}, up = {};
-        [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => ds.forEach(d => { const val = ((porUid.get(p.uid) || {})[d] || {})[k] || 0, ant = (ra[c] || {})[d] || 0; if (val !== ant) { up[c] = up[c] || {}; up[c][d] = val; } }));
+        [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => ds.filter(d => k === 'docs' || curtos.has(d)).forEach(d => { const val = ((porUid.get(p.uid) || {})[d] || {})[k] || 0, ant = (ra[c] || {})[d] || 0; if (val !== ant) { up[c] = up[c] || {}; up[c][d] = val; } }));
         if (Object.keys(up).length && n < 400) { b.set(doc(db,'ranking_ativ', id), { mes:m, uid:p.uid, nome:p.nome || '', equipe:p.equipe || '', ...up, atualizadoEm:Date.now() }, { merge:true }); n++; }
       });
     });
