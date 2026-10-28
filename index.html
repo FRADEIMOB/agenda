@@ -2992,8 +2992,21 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
   .simq{padding:14px!important}.simq-head{margin:0 auto 12px}.simq-head h2{font-size:18px}.simq-head p{font-size:13px}
   .simq-op{padding:12px 10px 0;gap:4px}.simq-ic{width:36px;height:36px;font-size:15px}.simq-op b{font-size:14px}.simq-op small{font-size:12px}.simq-op em{font-size:11.5px;margin:auto -10px 0;padding:8px 10px}
 }
-body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)!important;box-shadow:none!important;border-radius:14px!important;font-weight:400!important;background-color:var(--card);padding-top:0!important;padding-bottom:0!important}
+body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)!important;box-shadow:none!important;border-radius:12px!important;font-weight:400!important;background-color:var(--card);padding:0 34px 0 12px!important;height:44px!important;line-height:42px}
+#v-simulador .sim-form .fg input,#v-simulador .simq-campos .fg input{height:44px;border-radius:12px;padding:0 12px;width:100%}
+#v-simulador .sim-form .fg,#v-simulador .simq-campos .fg{margin-bottom:10px}
+#v-simulador .fg label{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px;margin-bottom:5px}#v-simulador .fg label .muted{display:none}
+#v-simulador .sim-g3{align-items:end}
+#v-simulador .sim-form .sim-sw{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:4px 0 8px}
+#v-simulador .sim-form .sim-sw .sim-chk{border:1px solid var(--border);border-radius:12px;padding:11px 12px;margin:0;font-size:13.5px;min-width:0;background:var(--card)}
+#v-simulador .sim-form .sim-sw .sim-chk small{display:none}
+#v-simulador .sim-form .sim-sw .sim-chk:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--card))}
+@media(max-width:600px){#v-simulador .sim-form .sim-sw{grid-template-columns:1fr}}
 #v-simulador .sim-g3>.fg{min-width:0}
+.simf-logo{width:46px;height:46px;border-radius:13px;flex:0 0 auto;box-shadow:0 0 0 2px rgba(255,255,255,.18),0 6px 14px rgba(0,0,0,.25)}
+.simf-topo b{font-size:17px;letter-spacing:-.01em}.simf-topo span{font-size:12.5px;color:#F28C38!important;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.simf-chip{margin-left:auto;font-style:normal;font-size:12px;font-weight:800;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:5px 12px;white-space:nowrap}
+@media(max-width:760px){.simf-logo{width:38px;height:38px;border-radius:11px}.simf-chip{display:none}.simf-topo span{display:block!important;font-size:11px}}
 </style>
 <script>
 (function(){
@@ -3629,7 +3642,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
         </div>
         <div id="simCompleta">
         <div class="card sim-form">
-          <div class="simf-topo"><div class="simf-ic">⌂</div><div><b>Simulação completa</b><span>Preencha os dados do cliente. O resultado mostra parcela, financiamento, entrada e o desconto do governo.</span></div></div>
+          <div class="simf-topo"><img class="simf-logo" src="frade-icone-192.png" alt=""><div><b>Simulação completa</b><span>Minha Casa Minha Vida</span></div><em class="simf-chip">Frade Imóveis</em></div>
           <div class="simf-sec"><i>1</i>Cliente e renda</div>
           <div class="sim-g3">
             <div class="fg"><label>Nome do cliente</label><input id="simNome" autocomplete="off" placeholder="Nome completo"></div>
@@ -3637,7 +3650,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
             <div class="fg"><label>Data de nascimento</label><input type="date" id="simNasc"></div>
             <div class="fg"><label>Renda mensal</label><input id="simRenda" inputmode="decimal" placeholder="R$"></div>
             <div class="fg"><label>Tipo de renda</label><select id="simTipo"><option value="formal">Formal</option><option value="mista">Mista</option><option value="informal">Informal</option></select></div>
-            <div class="fg"><label>Valor do imóvel <span class="muted">(opcional)</span></label><input id="simValor" inputmode="decimal" placeholder="R$"></div>
+            <div class="fg"><label>Valor do imóvel</label><input id="simValor" inputmode="decimal" placeholder="R$"></div>
           </div>
           <div class="simf-sec"><i>2</i>Situação do cliente</div>
           <div class="sim-sw">
@@ -3653,10 +3666,10 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div class="simf-sec"><i>3</i>Condições do financiamento <small>opcional</small></div>
           <div class="sim-g3">
             <div class="fg hide" id="simFgtsSaldoW"><label>Saldo do FGTS <span class="muted">(se souber)</span></label><input id="simFgtsSaldo" inputmode="decimal" placeholder="R$"></div>
-            <div class="fg"><label>Quanto quer dar de entrada <span class="muted">(opcional)</span></label><input id="simEntrada" inputmode="decimal" placeholder="R$ (vazio = a menor possível)"></div>
+            <div class="fg"><label>Entrada desejada</label><input id="simEntrada" inputmode="decimal" placeholder="R$ (vazio = mínima)"></div>
             <div class="fg"><label>Sistema</label><select id="simSist"><option value="price">PRICE / TR - Tabela Price</option><option value="sac">SAC / TR - Amortização Constante</option></select></div>
-            <div class="fg"><label>Prazo <span class="muted">(meses, vazio = máximo)</span></label><input id="simPrazo" inputmode="numeric" placeholder="420"></div>
-            <div class="fg"><label>Valor máximo da parcela <span class="muted">(opcional)</span></label><input id="simParcMax" inputmode="decimal" placeholder="R$"></div>
+            <div class="fg"><label>Prazo em meses</label><input id="simPrazo" inputmode="numeric" placeholder="420 (máximo)"></div>
+            <div class="fg"><label>Parcela máxima</label><input id="simParcMax" inputmode="decimal" placeholder="R$"></div>
           </div>
           <div id="simParts"></div>
           <details class="sim-mais"><summary>Mais informações</summary>
@@ -7506,7 +7519,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 280;
+const APP_VERSAO = 281;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
