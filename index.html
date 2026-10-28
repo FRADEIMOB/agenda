@@ -3007,6 +3007,27 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 .simf-topo b{font-size:17px;letter-spacing:-.01em}.simf-topo span{font-size:12.5px;color:#F28C38!important;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .simf-chip{margin-left:auto;font-style:normal;font-size:12px;font-weight:800;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:5px 12px;white-space:nowrap}
 @media(max-width:760px){.simf-logo{width:38px;height:38px;border-radius:11px}.simf-chip{display:none}.simf-topo span{display:block!important;font-size:11px}}
+/* v282: financeiro de comissões enxuto */
+.fin-subseg{margin:0 0 14px}
+.fc-ks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.fc-k{--c:#334155;text-align:left;border:1px solid color-mix(in srgb,var(--c) 25%,var(--border));background:color-mix(in srgb,var(--c) 7%,var(--card));border-radius:16px;padding:14px 16px;cursor:pointer;font:inherit;color:inherit;display:grid;gap:3px;min-width:0}
+.fc-k span{font-size:13px;font-weight:800;color:var(--c)}.fc-k b{font-size:24px;letter-spacing:-.01em;color:var(--c);font-variant-numeric:tabular-nums}.fc-k small{font-size:12.5px;color:var(--muted)}
+.fc-k.on{box-shadow:0 0 0 2px var(--c)}.fc-k.k-at{--c:#dc2626}.fc-k.k-rec{--c:#0B4669}.fc-k.k-pag{--c:#E65100}.fc-k.k-tod{--c:#475569}
+[data-theme="dark"] .fc-k.k-rec{--c:#7cc4f0}
+.fc-fil{display:flex;gap:10px;align-items:center}.fc-fil input{flex:1}
+.fc-h{display:flex;align-items:center;gap:8px;margin:16px 2px 8px;font-weight:800;font-size:14px}.fc-h span{font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
+.fc-lista{display:grid;gap:8px}
+.fc-l{display:grid;gap:5px;text-align:left;width:100%;border:1px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--card);cursor:pointer;font:inherit;color:inherit}
+.fc-l:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}.fc-l.at{border-left:4px solid #dc2626}
+.fc-l1{display:flex;align-items:center;gap:8px;min-width:0}.fc-l1 b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fc-tag{font-style:normal;font-size:11px;font-weight:700;color:#7c3aed;background:color-mix(in srgb,#7c3aed 12%,transparent);border-radius:99px;padding:1px 8px}
+.fc-st{margin-left:auto;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
+.fc-l2{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;font-size:13px;color:var(--muted)}.fc-vals{display:flex;flex-wrap:wrap;gap:4px 14px}.fc-vals i{font-style:normal}.fc-vals b{color:var(--text,inherit)}.fc-prev{color:#0B4669!important;font-weight:700}
+.fc-at{font-size:12.5px;color:#b91c1c;background:color-mix(in srgb,#dc2626 8%,transparent);border-radius:8px;padding:5px 9px}
+.fc-vazio{border:1px dashed var(--border);border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
+.fin-lanc-sec{margin-top:18px}.fin-sec-h{margin:0 2px 10px;font-size:15px}
+.ic-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}.ic-res>div{border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}.ic-res b{display:block;font-size:20px}.ic-res span{font-size:12px;color:var(--muted)}
+.ic-lista{margin-top:12px;max-height:46vh;overflow:auto;display:grid;gap:6px}.ic-l{border:1px solid var(--border);border-radius:10px;padding:8px 11px;display:grid}.ic-l small{color:var(--muted);font-size:12.5px}.ic-l.nova em{font-style:normal;font-size:11px;color:#16a34a;font-weight:800;margin-left:6px}
+@media(max-width:760px){.fc-ks{grid-template-columns:1fr 1fr;gap:8px}.fc-k{padding:11px 12px}.fc-k b{font-size:19px}.fc-fil{flex-wrap:wrap}.fc-fil .btn{flex:1}.ic-res{grid-template-columns:1fr 1fr}}
 </style>
 <script>
 (function(){
@@ -3388,7 +3409,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
             <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas e parcelamentos</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="abrirBonus()">🎯 Bônus e Carteira Frade</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
         <div id="finKpis"></div>
         <div id="finAviso"></div>
-        <div class="seg pn-abas" id="finAbas"><button data-a="geral" onclick="finAba='geral';render()">Visão geral</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões</button><button data-a="notas" onclick="finAba='notas';render()">Notas fiscais</button><button data-a="lanc" onclick="finAba='lanc';render()">Entradas e saídas</button><button data-a="salarios" onclick="finAba='salarios';render()">Salários</button></div>
+        <div class="seg pn-abas" id="finAbas"><button data-a="geral" onclick="finAba='geral';render()">Visão geral</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões</button><button data-a="salarios" onclick="finAba='salarios';render()">Salários</button></div>
         <div id="finCorpo"></div>
       </section>
 
@@ -4417,6 +4438,13 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><div><h2>Etapa da reserva</h2><div class="sub" id="etCli"></div></div><button class="icon-btn" onclick="fechar('etapaModal')" data-ic="x"></button></div>
     <div class="sheet-body"><div class="et-opcoes" id="etOpcoes"></div><div id="etHist"></div></div>
+  </div>
+</div>
+<div class="modal" id="icModal">
+  <div class="sheet" style="width:min(680px,100%)">
+    <div class="sheet-head"><h2>Importar planilha de comissões</h2><button class="icon-btn" onclick="fechar('icModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="icCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('icModal')">Cancelar</button><button class="btn btn-primary hide" id="icOk" onclick="gravarImpComissoes()">Gravar</button></div>
   </div>
 </div>
 <div class="modal" id="fvModal">
@@ -7519,7 +7547,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 281;
+const APP_VERSAO = 282;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13275,9 +13303,15 @@ function renderFinanceiro(){
   document.querySelectorAll('#finAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === finAba));
   const ativo = document.activeElement;
   if (finAba === 'salarios' && ativo && /^(INPUT|TEXTAREA|SELECT)$/.test(ativo.tagName) && ativo.closest('#finCorpo')) return; // não apaga o que está sendo digitado
-  $('finKpis').classList.toggle('hide', finAba === 'geral'); $('finAviso').classList.toggle('hide', finAba === 'geral');
+  $('finKpis').classList.toggle('hide', finAba !== 'salarios'); $('finAviso').classList.toggle('hide', finAba !== 'geral');
   if (finAba === 'cats') window.finAba = 'geral';
-  $('finCorpo').innerHTML = finAba === 'geral' ? htmlFinGeral(l) : finAba === 'comissoes' ? htmlFunil() : finAba === 'salarios' ? htmlSalarios() : finAba === 'notas' ? htmlNotas2() : finAba === 'cats' ? htmlFinCats(l) : htmlFinLanc(l);
+  // v282: só 3 abas. Notas fiscais ficam dentro de Comissões; Entradas e saídas ficam na Visão geral
+  if (finAba === 'notas') { window.finAba = 'comissoes'; window.finComSub = 'notas'; }
+  if (finAba === 'lanc') { window.finAba = 'geral'; window._finVerLanc = true; }
+  document.querySelectorAll('#finAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === finAba));
+  $('finCorpo').innerHTML = finAba === 'geral' ? htmlFinGeral(l) + `<div class="fin-lanc-sec" id="finLancSec"><div class="fin-sec-h"><b>Entradas e saídas de ${nomeMes(finMes).split(' de ')[0].toLowerCase()}</b></div>${htmlFinLanc(l)}</div>`
+    : finAba === 'comissoes' ? htmlComissoes() : finAba === 'salarios' ? htmlSalarios() : htmlFinGeral(l);
+  if (window._finVerLanc) { window._finVerLanc = false; setTimeout(() => $('finLancSec')?.scrollIntoView({ behavior:'smooth', block:'start' }), 80); }
 }
 function htmlFinLanc(l){
   const t = norm(finBusca), h = hojeISO();
@@ -13422,7 +13456,8 @@ function vendaFin(r){
   const f = finVendas[r.id] || {}, cons = f.construtora || r.construtora || '', rg = regraConst(cons);
   const tipo = f.tipo || rg.tipo, vgv = Number(r.valor) || 0;
   // o "percentual" da reserva: até 10 é % sobre o imóvel; acima disso (ou 0,5 / 0,6) é a parte do corretor
-  const pr = lerDec(r.percentual), prCor = pr > 0 && pr <= 1 ? pr * 100 : pr > 10 ? pr : 0, prImo = pr > 1 && pr <= 10 ? pr : 0;
+  // v282: o "%" da planilha (0,4 / 0,5 / 0,7 / 40%) é a parte da IMOBILIÁRIA; o corretor fica com o resto (40% imobiliária = 60% corretor). Até 10 continua sendo % sobre o imóvel
+  const pr = lerDec(r.percentual), prCor = pr > 0 && pr <= 1 ? 100 - pr * 100 : pr > 10 && pr <= 100 ? 100 - pr : 0, prImo = pr > 1 && pr <= 10 ? pr : 0;
   const pctImob = Number(f.pctImob ?? (prImo || finCfg.pctImob || 5)) || 0;
   // comissão escrita na reserva: vale o maior valor plausível (1% a 15% do imóvel); textos como "5%" ou "entre 10k e 11.250" caem no cálculo
   const brutaRes = (() => { const t = String(r.comissao || ''); if (!t || /%/.test(t)) return 0;
@@ -13630,6 +13665,114 @@ window.excluirNota = async () => {
   const n = finNotas.find(x => x.id === nfEdit); if (!n) return;
   if (!confirm(`Excluir a nota ${n.numero || ''} de ${brl2(n.valor)}? Se ela foi cancelada na prefeitura, prefira marcar como “Cancelada”.`)) return;
   try { await gravar(deleteDoc(doc(db,'fin_notas',n.id))); apagarAnexo(n.anexo); fechar('notaModal'); toast('Nota excluída'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// ===== v282: Comissões em uma tela só: o que falta receber, o que falta pagar, o que precisa de atenção =====
+window.finComSub = 'vendas'; window.finComFil = 'atencao';
+function atencaoVenda(v, h){
+  const a = [], f = v.f, pl = f.plan || {};
+  if (pl.caiu) a.push('A planilha diz que a reserva caiu');
+  if (!v.total) a.push('Sem valor de comissão');
+  if (v.ok.assinatura && !f.faturada && f.assinaturaEm && diffDias(f.assinaturaEm) <= -7) a.push(`Assinou há ${-diffDias(f.assinaturaEm)} dias e a nota não foi emitida`);
+  if (v.ok.assinatura && !v.ok.recebida && !v.prevR && !(v.tipo === 'adiantamento' && !f.recAdiant && v.prevA)) a.push('Assinou e está sem data para receber');
+  if (v.tipo === 'adiantamento' && !f.recAdiant && v.prevA && v.prevA < h && v.adiant) a.push(`Adiantamento atrasado (era ${dataBR(v.prevA)})`);
+  if (!f.recRestante && v.prevR && v.prevR < h && v.rest) a.push(`Recebimento atrasado (era ${dataBR(v.prevR)})`);
+  if (v.ok.recebida && !f.corPago && v.valCor > 0) a.push('Comissão recebida e o corretor ainda não foi pago');
+  return a;
+}
+function htmlComissoes(){
+  const sub = window.finComSub === 'notas' ? 'notas' : 'vendas';
+  const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
+  if (sub === 'notas') return seg + htmlNotas2();
+  const h = hojeISO(), tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
+  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida && !(r.caiu || r.arquivado)).map(vendaFin).map(v => ({ ...v, at:atencaoVenda(v, h) }));
+  const aReceber = vs.filter(v => v.aReceber > 0 && !v.ok.recebida), aPagar = vs.filter(v => v.ok.recebida && !v.f.corPago && v.valCor > 0), atencao = vs.filter(v => v.at.length), concl = vs.filter(v => v.ok.recebida && (v.f.corPago || !(v.valCor > 0)));
+  const soma = (l, k) => l.reduce((a, v) => a + (Number(typeof k === 'function' ? k(v) : v[k]) || 0), 0);
+  const fil = window.finComFil || 'atencao', grupos = { atencao, receber:aReceber, pagar:aPagar, todas:vs, concl };
+  const t = norm(finBusca), lista = (grupos[fil] || vs).filter(v => !t || norm([v.r.cliente, v.r.corretorTexto, v.cons, v.r.empreendimento].join(' ')).includes(t))
+    .sort((a, b) => fil === 'receber' ? ((a.prevR || a.prevA || '9') + '').localeCompare((b.prevR || b.prevA || '9') + '') : (b.r.dia || '').localeCompare(a.r.dia || ''));
+  const card = (k, rot, val, sub, cls) => `<button class="fc-k ${cls} ${fil === k ? 'on' : ''}" onclick="finComFil='${k}';render()"><span>${rot}</span><b>${val}</b><small>${sub}</small></button>`;
+  const status = v => { const e = v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída'; return e; };
+  const linha = v => { const corN = v.cor.map(c => primeiro(c.nome)).join(' + ') || esc(v.r.corretorTexto || '');
+    const prev = !v.ok.recebida ? (v.tipo === 'adiantamento' && !v.f.recAdiant && v.prevA ? `adiant. ${dataBR(v.prevA).slice(0, 5)}` : v.prevR ? `receber ${dataBR(v.prevR).slice(0, 5)}` : '') : (!v.f.corPago && v.valCor > 0 ? 'pagar o corretor' : 'concluída');
+    return `<button class="fc-l ${v.at.length ? 'at' : ''}" onclick="abrirVendaFin('${v.r.id}')"><div class="fc-l1"><b>${esc(v.r.cliente || 'Cliente')}</b>${v.f.manual ? '<em class="fc-tag">planilha</em>' : ''}<span class="fc-st">${status(v)}</span></div>
+      <div class="fc-l2"><span>${corN}${v.cons ? ' · ' + esc(v.cons) : v.r.empreendimento ? ' · ' + esc(v.r.empreendimento) : ''} · ${dataBR(v.r.dia).slice(0, 5)}</span><span class="fc-vals"><i>Comissão <b>${brl(v.total)}</b></i><i>Corretor <b>${brl(v.valCor)}</b> (${Math.round(v.pctCor)}%)</i>${prev ? `<i class="fc-prev">${prev}</i>` : ''}</span></div>
+      ${v.at.length ? `<div class="fc-at">⚠ ${v.at.map(esc).join(' · ')}</div>` : ''}</button>`; };
+  return seg + `<div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
+    <div class="fin-filtros fc-fil"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)},0)"><button class="btn btn-ghost" onclick="abrirImpComissoes()">Importar planilha</button></div>
+    <div class="fc-h">${{ atencao:'Precisa de atenção', receber:'Falta receber das construtoras', pagar:'Falta pagar aos corretores', todas:'Todas as vendas', concl:'Concluídas' }[fil]} <span>${lista.length}</span></div>
+    <div class="fc-lista">${lista.map(linha).join('') || `<div class="fc-vazio">${fil === 'atencao' ? 'Nada precisando de atenção agora.' : 'Nenhuma venda aqui.'}</div>`}</div>
+    ${tiradas.length ? `<div class="fv-tiradas"><button class="btn btn-ghost" onclick="finVerTiradas=!finVerTiradas;render()">🗑️ ${tiradas.length} venda${tiradas.length > 1 ? 's' : ''} excluída${tiradas.length > 1 ? 's' : ''} do financeiro · ${finVerTiradas ? 'esconder' : 'ver'}</button>${finVerTiradas ? tiradas.map(r => `<div class="arq-row"><div class="ai"><b>${esc(r.cliente || 'Cliente')}</b><span class="muted" style="font-size:12.5px">${dataBR(r.dia)} · ${esc(r.corretorTexto || '')}</span></div><button class="snooze" onclick="voltarVendaFin('${r.id}')">Voltar</button></div>`).join('') : ''}</div>` : ''}`;
+}
+// ----- importar a planilha de reservas/comissões (.xlsx) -----
+let _icPlano = null;
+const icHash = s => { let a = 5381, b = 52711; for (const c of String(s)) { const k = c.charCodeAt(0); a = (a * 33) ^ k; b = (b * 33) ^ k; } return (a >>> 0).toString(36) + (b >>> 0).toString(36); };
+const MES_N = { janeiro:1, fevereiro:2, marco:3, abril:4, maio:5, junho:6, julho:7, agosto:8, setembro:9, outubro:10, novembro:11, dezembro:12 };
+function icNum(x){ if (x == null || x === '') return 0; if (typeof x === 'number') return x; const s = String(x); const mil = /\bmil\b|\dk\b/i.test(s); let n = lerColado(s.replace(/mil|k/gi, '')); if (mil && n < 1000) n *= 1000; return n; }
+function icData(x){ if (!x) return ''; if (x instanceof Date) return iso(new Date(x.getTime() + 12 * 3600e3)); if (typeof x === 'number') { const d = new Date(Math.round((x - 25569) * 864e5) + 12 * 3600e3); return iso(d); } const m = String(x).match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/); if (m) { const y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return `${y}-${String(m[2]).padStart(2, '0')}-${String(m[1]).padStart(2, '0')}`; } return /^\d{4}-\d{2}-\d{2}/.test(String(x)) ? String(x).slice(0, 10) : ''; }
+function icLinhas(X, wb){
+  const out = [];
+  wb.SheetNames.forEach(nome => { const a = X.utils.sheet_to_json(wb.Sheets[nome], { header:1, raw:true, defval:'' });
+    const hi = a.findIndex(r => r.some(c => /^cliente$/i.test(String(c).trim())) && r.some(c => /^%$/.test(String(c).trim()) || /comiss/i.test(String(c)))); if (hi < 0) return;
+    const cab = a[hi].map(c => norm(String(c)).trim()), col = (re, n = 0) => { let k = -1, q = 0; cab.forEach((c, i) => { if (k < 0 && re.test(c)) { if (q === n) k = i; q++; } }); return k; };
+    const C = { data:col(/^data$/), cli:col(/^cliente$/), cpf:col(/^cpf$/), tel:col(/^telefone$/), cor:col(/^corretor/), emp:col(/^empreendimento/), pct:col(/^%$/), valor:col(/^valor do imovel/), com:col(/^comiss/), funil:col(/^funil$/), atu:col(/^atualizado/), txt:col(/^atualizac/), corV:col(/^corretor/, 1), imoV:col(/^imobiliaria$/) };
+    for (let i = hi + 1; i < a.length; i++) { const r = a[i], g = k => C[k] >= 0 ? r[C[k]] : '';
+      const cli = String(g('cli') || '').trim(); if (!cli || /^cliente$/i.test(cli)) continue;
+      out.push({ aba:nome, linha:i + 1, dia:icData(g('data')), cliente:cli, cpf:soDig(g('cpf')), tel:chaveTel(String(g('tel') || '')), corretor:String(g('cor') || '').trim(), emp:String(g('emp') || '').trim(),
+        pct:icNum(g('pct')), valor:icNum(g('valor')), comissao:icNum(g('com')), funil:norm(String(g('funil') || '')).trim(), atu:icData(g('atu')), txt:norm(String(g('txt') || '')), corV:icNum(g('corV')), imoV:icNum(g('imoV')) }); }
+  });
+  return out;
+}
+// o que a coluna FUNIL diz vira as etapas do financeiro
+function icEtapas(x, f, reserva){
+  const fu = x.funil, up = {}, assinou = /assinou|nota|recebid|pago/.test(fu);
+  if (/caiu/.test(fu)) { up.plan = { caiu:true }; return up; }
+  const PROC = [[/avaliac/, 'Avaliação do imóvel'], [/conformidade/, 'Conformidade'], [/assinatura agendada/, 'Assinatura agendada'], [/aguardando und|unidade/, 'Aguardando unidade'], [/formulario/, 'Formulário'], [/extrato/, 'Extrato'], [/obra/, 'Obra'], [/suspensiva/, 'Suspensiva']];
+  const pr = PROC.find(([re]) => re.test(fu)); if (pr && !f.processo) up.processo = pr[1];
+  if (assinou) { up.processo = 'Assinou';
+    if (!f.assinaturaEm) { const mm = (x.txt.match(/assin\w* em (\w+)/) || [])[1], mn = MES_N[mm];
+      if (mn) { const base = x.dia || reserva?.dia || hojeISO(); let ano = +base.slice(0, 4); if (mn < +base.slice(5, 7) - 6) ano++; const ym = `${ano}-${String(mn).padStart(2, '0')}`;
+        up.assinaturaEm = x.atu && x.atu.slice(0, 7) === ym ? x.atu : ym + '-15'; }
+      else if (x.atu) up.assinaturaEm = x.atu; } }
+  if (/nota/.test(fu) && !f.faturada) up.faturada = true;
+  if (/parte recebid/.test(fu) && !f.recAdiant) up.recAdiant = true;
+  if (/^recebid|^pago/.test(fu)) { if (!f.recAdiant) up.recAdiant = true; if (!f.recRestante) up.recRestante = true; if (!f.faturada) up.faturada = true; }
+  return up;
+}
+window.abrirImpComissoes = () => { $('icCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Escolha a planilha de reservas (.xlsx). O app lê as abas que têm CLIENTE com % e COMISSÃO (ex.: PROCESSOS e RESERVA DO COLIBRIS). A coluna % é a parte da <b>imobiliária</b>: 40% para a imobiliária = 60% para o corretor. Antes de gravar, você confere.</div><button class="btn btn-primary" onclick="document.getElementById('icArq').click()">Escolher planilha</button><input type="file" id="icArq" class="hide" accept=".xlsx,.xls,.csv" onchange="lerImpComissoes(this)"><div id="icRes"></div>`;
+  $('icOk').classList.add('hide'); abrir('icModal'); };
+window.lerImpComissoes = async input => {
+  const f = input.files && input.files[0]; input.value = ''; if (!f) return; $('icRes').innerHTML = '<div class="ax-load">Lendo a planilha…</div>';
+  try { const X = await carregarXLSX(), wb = X.read(await f.arrayBuffer(), { type:'array', cellDates:true }), linhas = icLinhas(X, wb);
+    if (!linhas.length) throw new Error('não achei nenhuma aba com CLIENTE, % e COMISSÃO');
+    // a mesma venda pode estar em mais de uma aba: a aba com a conta completa (que tem a coluna do corretor) manda
+    const porCli = new Map(); linhas.forEach(x => { const k = x.cpf.length === 11 ? 'c' + x.cpf : x.tel ? 't' + x.tel : 'n' + norm(x.cliente); const a = porCli.get(k); if (!a || (x.corV && !a.corV) || (!a.comissao && x.comissao)) porCli.set(k, a ? { ...a, ...Object.fromEntries(Object.entries(x).filter(([, v]) => v !== '' && v !== 0)) } : x); });
+    const vs = vendasFin(), acha = x => vs.find(r => x.cpf.length === 11 && soDig(r.cpf || r.cpfNorm || '') === x.cpf) || vs.find(r => x.tel && (r.telNorm || chaveTel(r.telefone || '')) === x.tel) || vs.find(r => norm(r.cliente || '') === norm(x.cliente) && (!x.dia || !r.dia || Math.abs(new Date(r.dia) - new Date(x.dia)) < 120 * 864e5));
+    const muda = [], novas = [], iguais = [], caiu = [];
+    porCli.forEach(x => { const r = acha(x), f = r ? (finVendas[r.id] || {}) : {}, up = icEtapas(x, f, r);
+      if (x.comissao > 0 && Math.abs((Number(f.comissao) || 0) - x.comissao) > 0.5) up.comissao = Math.round(x.comissao * 100) / 100;
+      if (x.pct > 0 && x.pct <= 1) { const pc = Math.round((100 - x.pct * 100) * 100) / 100; if (Number(f.pctCor) !== pc) up.pctCor = pc; }
+      if (up.plan?.caiu) { if (r) caiu.push({ x, r }); return; }
+      if (!r) { if (/assinou|nota|recebid|avaliac|conformidade|entrevista|agendada|und/.test(x.funil) || x.comissao) novas.push({ x, up }); return; }
+      if (Object.keys(up).length) muda.push({ x, r, up }); else iguais.push(x); });
+    _icPlano = { muda, novas, caiu };
+    const nAba = [...new Set(linhas.map(x => x.aba))];
+    $('icRes').innerHTML = `<div class="ic-res"><div><b>${linhas.length}</b><span>linhas lidas (${nAba.map(esc).join(', ')})</span></div><div><b>${muda.length}</b><span>vendas do app atualizadas</span></div><div><b>${novas.length}</b><span>vendas novas no financeiro</span></div><div><b>${iguais.length}</b><span>já estavam certas</span></div></div>
+      ${caiu.length ? `<div class="fin-alerta fin-alerta-s" style="margin-top:10px">⚠ ${caiu.length} venda${caiu.length > 1 ? 's' : ''} que a planilha marca como CAIU RESERVA ainda ${caiu.length > 1 ? 'estão' : 'está'} no app: ${caiu.slice(0, 6).map(c => esc(nomeBonito(c.r.cliente))).join(', ')}. Confira em Vendas.</div>` : ''}
+      <div class="ic-lista">${muda.slice(0, 80).map(({ x, r, up }) => `<div class="ic-l"><b>${esc(nomeBonito(r.cliente))}</b><small>${[up.comissao ? 'comissão ' + brl2(up.comissao) : '', up.pctCor != null ? 'corretor ' + up.pctCor + '%' : '', up.assinaturaEm ? 'assinou ' + dataBR(up.assinaturaEm) : '', up.faturada ? 'nota emitida' : '', up.recRestante ? 'recebido' : up.recAdiant ? 'parte recebida' : '', up.processo && !up.assinaturaEm ? up.processo.toLowerCase() : ''].filter(Boolean).join(' · ')}</small></div>`).join('')}
+        ${novas.slice(0, 40).map(({ x }) => `<div class="ic-l nova"><b>${esc(nomeBonito(x.cliente))} <em>nova</em></b><small>${[dataBR(x.dia), x.corretor, x.emp, x.comissao ? 'comissão ' + brl2(x.comissao) : ''].filter(Boolean).map(esc).join(' · ')}</small></div>`).join('')}</div>`;
+    $('icOk').classList.toggle('hide', !(muda.length + novas.length)); $('icOk').textContent = `Gravar ${muda.length + novas.length} vendas`;
+  } catch(e) { $('icRes').innerHTML = `<div class="fin-alerta fin-alerta-s">Não consegui ler: ${esc(e.message)}</div>`; }
+};
+window.gravarImpComissoes = async () => {
+  const p = _icPlano; if (!p) return; const bt = $('icOk'); bt.disabled = true; bt.textContent = 'Gravando…';
+  try { const ops = [...p.muda.map(({ r, up }) => [r.id, { ...up, plan:{ em:Date.now() }, atualizadoEm:Date.now() }]),
+      ...p.novas.map(({ x, up }) => { const id = 'pl_' + icHash((x.cpf || '') + '|' + norm(x.cliente)); return [id, { manual:true, r:{ dia:x.dia, cliente:nomeBonito(x.cliente), corretorTexto:x.corretor, empreendimento:x.emp, construtora:'', comissao:x.comissao ? String(x.comissao) : '', percentual:x.pct ? String(x.pct) : '', valor:x.valor || 0, origem:'planilha' },
+        reservaId:id, cliente:nomeBonito(x.cliente), ...(x.comissao ? { comissao:Math.round(x.comissao * 100) / 100 } : {}), ...up, sinalPago:true, geraEntrada:'nao', importadoEm:Date.now(), importadoPor:perfil.nome, atualizadoEm:Date.now() }]; })];
+    for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i + 400).forEach(([id, d]) => b.set(doc(db,'fin_vendas',id), d, { merge:true })); await gravar(b.commit()); }
+    logFin(`Leu a planilha de comissões: ${p.muda.length} atualizadas, ${p.novas.length} novas`);
+    fechar('icModal'); window.finAba = 'comissoes'; window.finComSub = 'vendas'; window.finComFil = 'atencao'; render(); toast(`Pronto ✓ ${ops.length} vendas atualizadas no financeiro`); }
+  catch(e) { toast('Erro: ' + e.message); }
+  bt.disabled = false;
 };
 function htmlFunil(){
   const tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
