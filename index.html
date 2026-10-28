@@ -7380,7 +7380,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 274;
+const APP_VERSAO = 275;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9996,11 +9996,20 @@ function prepararImpWhats(lista, antes){
     const jaTem = new Set(avaliacoesTodas.filter(a => a.origem !== 'whatsapp').flatMap(a => [a.cpfNorm && 'c' + a.cpfNorm, a.telNorm && 't' + a.telNorm]).filter(Boolean));
     const ck = a => { const c = soDig(a.cpf); return c.length === 11 ? 'c' + c : 't' + chaveTel(a.telefone); };
     const novos = impWhats.filter(a => !jaTem.has(ck(a)));
+    // v275: as restrições que a Prime respondeu também vão para o cliente que já está na planilha (pelo CPF ou telefone)
+    { const plan = avaliacoesTodas.filter(a => a.origem !== 'whatsapp'), porC = new Map(), porT = new Map();
+      plan.forEach(a => { if (a.cpfNorm) (porC.get(a.cpfNorm) || porC.set(a.cpfNorm, []).get(a.cpfNorm)).push(a); const t = a.telNorm || chaveTel(a.telefone); if (t) (porT.get(t) || porT.set(t, []).get(t)).push(a); });
+      const itens = new Map();
+      impWhats.filter(a => a.restricoes && jaTem.has(ck(a))).forEach(a => { const c = soDig(a.cpf), alvo = (c.length === 11 && porC.get(c)) || porT.get(chaveTel(a.telefone)) || [];
+        alvo.forEach(x => { if (x.restricoes === a.restricoes) return; const ant = itens.get(x.id); if (!ant || (a.restricoesEm || '') > (ant.restricoesEm || '')) itens.set(x.id, { id:x.id, restricoes:a.restricoes, restricoesEm:a.restricoesEm || '' }); }); });
+      window._impRestrPlan = [...itens.values()]; }
     const ap = novos.filter(a => infoStatus(a.status).g === 'aprovado').length;
     const porMes = {}; novos.forEach(a => { const m = (a.data || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
     $(IW.info).innerHTML = `${impWhats.length} clientes no arquivo · <b>${novos.length}</b> ainda não estão na planilha (${Object.entries(porMes).sort().map(([m,n]) => `${nomeMes(m)}: ${n}`).join(' · ')}) · <b>${ap}</b> aprovados.${impWhats.length > novos.length ? ` ${impWhats.length - novos.length} já foram lançados na planilha e ficam de fora.` : ''}`;
     impWhats = novos;
-    $(IW.bt).classList.toggle('hide', !novos.length); $(IW.bt).textContent = `Importar ${novos.length} docs`;
+    const nR = (window._impRestrPlan || []).length;
+    $(IW.bt).classList.toggle('hide', !novos.length && !nR); $(IW.bt).textContent = novos.length ? `Importar ${novos.length} docs${nR ? ` e ${nR} restrições` : ''}` : `Colocar ${nR} restrições nos clientes da planilha`;
+    if (nR) $(IW.info).innerHTML += ` <b>${nR}</b> clientes da planilha vão ganhar o resumo das restrições que a Prime respondeu.`;
     if (antes) $(IW.info).innerHTML = esc(antes) + $(IW.info).innerHTML;
     if (donos) $(IW.info).innerHTML += donos;
   }
@@ -10031,17 +10040,24 @@ window.importarReservas = async () => {
   btn.disabled = false;
 };
 window.importarDocsWhats = async () => {
-  if (!impWhats.length) return;
-  if (!confirm(`Colocar ${impWhats.length} docs do WhatsApp no app? Eles passam a contar nas avaliações, no Desempenho, no Painel e nos relatórios.`)) return;
+  const restr = window._impRestrPlan || [];
+  if (!impWhats.length && !restr.length) return;
+  if (impWhats.length && !confirm(`Colocar ${impWhats.length} docs do WhatsApp no app? Eles passam a contar nas avaliações, no Desempenho, no Painel e nos relatórios.`)) return;
   const btn = $(IW.bt); btn.disabled = true; btn.textContent = 'Importando…';
   try {
-    let tot = 0;
+    let tot = 0, totR = 0;
+    for (let i = 0; i < restr.length; i += 200) {
+      const r = await chamarCarteiro({ tipo:'importar_restricoes', itens:restr.slice(i, i + 200) });
+      if (!r?.ok) { if (i === 0) toast('As restrições não entraram: cole o carteiro novo (v260) no Cloudflare'); break; }
+      totR += r.recebidas || 0;
+    }
+    window._impRestrPlan = [];
     for (let i = 0; i < impWhats.length; i += 200) {
       const r = await chamarCarteiro({ tipo:'importar_avaliacoes', avaliacoes:impWhats.slice(i, i + 200) });
       if (!r?.ok) throw new Error(r?.erro || 'sem resposta');
       tot += r.recebidas || 0;
     }
-    toast(`Pronto ✓ ${tot} docs do WhatsApp no app`); $(IW.info).textContent = `✓ ${tot} docs importados. Os pontos de documentação entram no ranking em seguida.`; btn.classList.add('hide'); impWhats = [];
+    toast(`Pronto ✓ ${tot} docs do WhatsApp no app${totR ? ` e ${totR} restrições` : ''}`); $(IW.info).textContent = `✓ ${tot} docs importados${totR ? ` · ${totR} clientes da planilha com o resumo das restrições` : ''}. Os pontos de documentação entram no ranking em seguida.`; btn.classList.add('hide'); impWhats = [];
     [8e3, 30e3].forEach(ms => setTimeout(() => { try { sincMetasDia(true); } catch(e) {} }, ms));
   } catch(e) { toast('Erro: ' + e.message); }
   btn.disabled = false;
