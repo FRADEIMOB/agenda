@@ -7462,14 +7462,14 @@ $('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classLi
 const podeCartMenu = () => souAtivo() && !souCorresp() && (participaCarteira() || souGerente());
 const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente() || (['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) && !abaOculta('bolsao')));
 // v279: quem usa o bolsão vê ele no meio da barra de baixo, em destaque (com quantos leads estão livres); a Agenda vai para o menu do +
-function mbBolsaoVis(){ const b = $('mbBolsao'), a = $('mbAgenda'); if (!b || !a) return; const tem = podeBzMenu() && !souGerente();
+function mbBolsaoVis(){ const b = $('mbBolsao'), a = $('mbAgenda'); if (!b || !a) return; const tem = podeBzMenu(); // v280: também para a gerência (só o CEO e quem tem o bolsão escondido ficam com a Agenda)
   b.classList.toggle('hide', !tem); a.classList.toggle('hide', tem); const n = tem && _bzHistTodos && bzPresente() ? bzLivres().length : 0; /* só conta quando o bolsão já foi carregado (não gasta leituras do Firebase) */ const e = $('mbBzN'); if (e) e.textContent = n ? (n > 99 ? '99+' : String(n)) : ''; }
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
   const lig = $('discFab') && !$('discFab').classList.contains('hide'), zap = $('zapFab') && !$('zapFab').classList.contains('hide');
   const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu(), ia = podeIA(), sim = souAtivo() && !souCorresp() && !abaOculta('simulador');
   if (!lig && !zap && !ind && !bz && !cart && !ia && !sim || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
-  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !(bz && !souGerente()));
+  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !bz);
   $('fmCart').classList.toggle('hide', !cart);
   $('fmIa').classList.toggle('hide', !ia); $('fmSim').classList.toggle('hide', !sim);
   $('fmBzN').textContent = ''; // v279: o bolsão foi para a barra de baixo; aqui fica a Agenda
@@ -7506,7 +7506,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 279;
+const APP_VERSAO = 280;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
