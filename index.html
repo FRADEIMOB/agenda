@@ -1635,7 +1635,7 @@ html,body{overflow-x:clip;touch-action:manipulation}
   .fab-menu span{background:var(--card,#fff);color:var(--text);font-weight:700;font-size:15px;padding:8px 14px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   .fab-menu i{position:relative;display:grid;place-items:center;width:52px;height:52px;margin-right:2px;border-radius:50%;color:#fff;font-style:normal;box-shadow:0 8px 20px rgba(0,0,0,.25)}
   .fab-menu i svg{width:24px;height:24px}
-  .fab-menu .fm-lig i{background:#1f6feb}.fab-menu .fm-ind i{background:#7c3aed}.fab-menu .fm-bz i{background:#db2777}.fab-menu .fm-cart i{background:#16a34a}.fab-menu .fm-zap i{background:#25d366}.fab-menu .fm-add i{background:var(--destaque,#f5841f);font-size:28px;font-weight:400}
+  .fab-menu .fm-lig i{background:#1f6feb}.fab-menu .fm-ind i{background:#7c3aed}.fab-menu .fm-bz i{background:#0B4669}.fab-menu .fm-cart i{background:#16a34a}.fab-menu .fm-zap i{background:#25d366}.fab-menu .fm-add i{background:var(--destaque,#f5841f);font-size:28px;font-weight:400}
   .fab-menu b{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;padding:0 5px}
   .fab-menu b:empty{display:none}
   #fab svg{transition:transform .18s}
@@ -2943,6 +2943,57 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 .simq-imp{border:1px solid color-mix(in srgb,#d97706 45%,var(--border));border-left:4px solid #d97706;border-radius:12px;padding:10px 14px;margin-top:12px;font-size:13px;color:var(--muted)}.simq-imp b{color:var(--text,inherit);display:block;margin-bottom:2px}
 .simq-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.simq-acoes .btn{flex:1 1 180px}
 @media(max-width:760px){.simq-ops{grid-template-columns:1fr 1fr}.simq-ops .simq-op:last-child{grid-column:1/-1}.simq-t{padding:10px 11px;min-width:0}.simq-t b{font-size:16px;overflow-wrap:anywhere}.simq-grade{gap:8px}.simq-tabs button{white-space:nowrap;padding:8px 12px;font-size:13.5px}}
+.simh-busca{max-width:260px;height:36px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--bg);color:inherit;font:inherit;font-size:13.5px}#simHistCard .card-head{gap:10px;flex-wrap:wrap}
+.simh tr.rk-toca{cursor:pointer}.simh-m{display:none}.simh .simh-ver{color:var(--accent);font-weight:700;white-space:nowrap}
+.simv-doc{overflow:hidden;border:1px solid var(--border);border-radius:12px;background:#fff}.simv-doc .sd{transform-origin:0 0}
+.simv-foot{flex-wrap:wrap}.simv-foot .btn{flex:1 1 140px}
+@media(max-width:760px){.simh-busca{max-width:none;width:100%}.simh thead{display:none}.simh,.simh tbody{display:block}.simh tr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:12px 4px;border-bottom:1px solid var(--border)}.simh td{border:0!important;padding:0!important;font-size:13px;color:var(--muted)}.simh td:nth-child(2){grid-column:1;grid-row:1;font-size:15px;color:var(--text,inherit)}.simh td:nth-child(1){grid-column:1;grid-row:2}.simh td.simh-ver{grid-column:2;grid-row:1/3;align-self:center}.simh td:nth-child(n+3):not(.simh-ver){display:none}.simh .simh-m{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}.simh td:nth-child(2) .nm{font-weight:800}}
+/* v279: simulador mais bonito */
+.simf-topo{display:flex;gap:14px;align-items:center;margin:-4px 0 6px;padding:14px 16px;border-radius:16px;background:linear-gradient(135deg,#022C45,#0B4669);color:#fff}
+.simf-ic{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:22px;color:#F28C38;flex:0 0 auto}.simf-topo b{display:block;font-size:16.5px}.simf-topo span{display:block;font-size:13px;color:#bcd3e3;margin-top:2px}
+.simf-sec{display:flex;align-items:center;gap:10px;margin:16px 0 6px;font-size:13px;font-weight:800;letter-spacing:.02em;color:var(--text,inherit)}.simf-sec i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);font-size:12.5px}
+.simf-sec small{font-weight:600;color:var(--muted);font-size:12px}.simf-sec:after{content:'';flex:1;height:1px;background:var(--border)}
+.simr{padding:0!important;overflow:hidden}
+.simr-topo{display:flex;align-items:center;gap:16px;padding:20px 22px;background:linear-gradient(135deg,#022C45,#0B4669);color:#fff}
+.simr-cli{flex:1;min-width:0}.simr-cli small{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#F28C38;font-weight:800}.simr-cli h2{margin:3px 0 4px;font-size:22px;color:#fff}.simr-cli span{font-size:13px;color:#bcd3e3}
+.simr-nota{text-align:center;background:#fff;color:#0f172a;border-radius:16px;padding:8px 16px;min-width:104px;box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 60%,transparent)}.simr-nota b{display:block;font-size:28px;line-height:1;color:var(--c)}.simr-nota small{display:block;font-size:10.5px;color:#64748b;margin-top:3px}.simr-nota span{font-size:12px;font-weight:800;color:var(--c)}
+.simr-dest{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:18px 22px 4px}
+.simr-d{--f:#334155;border:1px solid color-mix(in srgb,var(--f) 25%,var(--border));background:color-mix(in srgb,var(--f) 8%,var(--card));border-radius:16px;padding:14px 14px 12px;min-width:0}
+.simr-d span{display:block;font-size:12.5px;font-weight:800;color:var(--f)}.simr-d b{display:block;font-size:22px;margin:4px 0 2px;color:var(--f);letter-spacing:-.01em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.simr-d small{font-size:12px;color:var(--muted)}
+.simr-d.or{--f:#E65100}.simr-d.az{--f:#0B4669}.simr-d.vd{--f:#15803d}
+[data-theme="dark"] .simr-d.az{--f:#7cc4f0}
+.simr-h{display:flex;align-items:center;gap:10px;margin:18px 22px 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.simr-h:after{content:'';flex:1;height:1px;background:var(--border)}
+.simr-tab{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0 22px;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.simr-tab>div{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13.5px}.simr-tab>div:nth-child(4n+1),.simr-tab>div:nth-child(4n+2){background:color-mix(in srgb,var(--muted) 6%,transparent)}
+.simr-tab>div:nth-child(odd){border-right:1px solid var(--border)}.simr-tab span{color:var(--muted)}.simr-tab b{text-align:right}
+.simr-props{display:grid;gap:8px;margin:0 22px}.simr-props>div{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:13.5px;color:var(--muted)}.simr-props i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);font-weight:800;font-size:12px}.simr-props b{color:var(--text,inherit)}
+.simr .sim-hist,.simr .sim-aviso{margin-left:22px;margin-right:22px}
+.simr-acoes{display:flex;flex-wrap:wrap;gap:8px;margin:18px 22px 0}.simr-acoes .btn{flex:1 1 160px}
+.simr .sim-obs{margin:12px 22px 20px}
+@media(max-width:760px){.simr-topo{padding:16px}.simr-cli h2{font-size:19px}.simr-nota{min-width:84px;padding:6px 10px}.simr-nota b{font-size:22px}.simr-dest{grid-template-columns:1fr 1fr;padding:14px 14px 2px;gap:8px}.simr-d{padding:11px}.simr-d b{font-size:17px}
+  .simr-h{margin:16px 14px 8px}.simr-tab{grid-template-columns:1fr;margin:0 14px}.simr-tab>div:nth-child(odd){border-right:0}.simr-tab>div:nth-child(4n+1),.simr-tab>div:nth-child(4n+2){background:none}.simr-tab>div:nth-child(even){background:color-mix(in srgb,var(--muted) 6%,transparent)}
+  .simr-props{margin:0 14px}.simr .sim-hist,.simr .sim-aviso{margin-left:14px;margin-right:14px}.simr-acoes{margin:16px 14px 0}.simr .sim-obs{margin:12px 14px 16px}.simf-topo{padding:12px}}
+.mobilebar .mb-bz{position:relative;color:#0B4669!important;font-weight:800!important}[data-theme="dark"] .mobilebar .mb-bz{color:#7cc4f0!important}
+.mb-bz-c{position:relative;width:54px;height:54px;margin-top:-26px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#1d6fa5,#022C45);box-shadow:0 8px 20px rgba(2,44,69,.45),0 0 0 4px var(--card);animation:mbBzPulso 2.6s ease-in-out infinite}
+.mobilebar .mb-bz-c svg{width:27px!important;height:27px!important}
+.mb-bz-c b{position:absolute;top:-3px;right:-5px;min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:#F28C38;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 2px var(--card)}.mb-bz-c b:empty{display:none}
+.mobilebar .mb-bz.active .mb-bz-c{background:linear-gradient(145deg,#0B4669,#011a2a)}
+@keyframes mbBzPulso{0%,100%{box-shadow:0 8px 20px rgba(2,44,69,.45),0 0 0 4px var(--card),0 0 0 4px rgba(11,70,105,0)}50%{box-shadow:0 8px 20px rgba(2,44,69,.45),0 0 0 4px var(--card),0 0 0 10px rgba(11,70,105,.2)}}
+@media (prefers-reduced-motion:reduce){.mb-bz-c{animation:none}}
+@media(max-width:760px){
+  #v-simulador .page-head{margin-bottom:8px}#v-simulador .page-head .sub{display:none}#v-simulador .page-head h1{font-size:24px}
+  .simq-tabs{display:flex;margin-bottom:10px}.simq-tabs button{flex:1}
+  .sim-form{padding:14px!important}.simf-topo{padding:10px 12px;gap:10px;border-radius:14px}.simf-topo span{display:none}.simf-ic{width:36px;height:36px;font-size:18px}
+  .simf-sec{margin:12px 0 4px;font-size:12.5px}.sim-form .fg{margin-bottom:8px}.sim-form .fg label{font-size:12px;margin-bottom:4px}
+  .sim-form .fg input,.sim-form .fg select{height:42px;padding:0 11px;border-radius:11px}.sim-form .fg small{font-size:11px}
+  .sim-g3{gap:0 10px;align-items:end}.sim-sw{gap:6px 14px;margin:2px 0 6px}
+  .sim-form .fg label,.simq-campos .fg label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sim-form .fg label .muted,.simq-campos .fg label .muted{display:none}.sim-chk{font-size:13px}.sim-chk small{display:none}
+  .sim-bts{gap:8px}.sim-bts .btn{flex:1}
+  .simq{padding:14px!important}.simq-head{margin:0 auto 12px}.simq-head h2{font-size:18px}.simq-head p{font-size:13px}
+  .simq-op{padding:12px 10px 0;gap:4px}.simq-ic{width:36px;height:36px;font-size:15px}.simq-op b{font-size:14px}.simq-op small{font-size:12px}.simq-op em{font-size:11.5px;margin:auto -10px 0;padding:8px 10px}
+}
+body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)!important;box-shadow:none!important;border-radius:14px!important;font-weight:400!important;background-color:var(--card);padding-top:0!important;padding-bottom:0!important}
+#v-simulador .sim-g3>.fg{min-width:0}
 </style>
 <script>
 (function(){
@@ -3553,8 +3604,8 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
       </section>
       <section class="view" id="v-simulador">
         <div class="page-head"><div><h1>Simulador Caixa</h1><div class="sub">Minha Casa Minha Vida em poucos campos: quanto o cliente financia, o desconto e a parcela.</div></div><div class="ph-acoes"><button class="btn btn-ghost hide" id="simCfgBox" onclick="abrirSimCfg()">Tabela do simulador</button></div></div>
-        <div class="simq-tabs" role="tablist"><button type="button" id="simTabR" class="on" onclick="simModo('rapida')">Simulação rápida</button><button type="button" id="simTabC" onclick="simModo('completa')">Simulação completa</button></div>
-        <div id="simRapida">
+        <div class="simq-tabs" role="tablist"><button type="button" id="simTabC" class="on" onclick="simModo('completa')">Simulação completa</button><button type="button" id="simTabR" onclick="simModo('rapida')">Simulação rápida</button></div>
+        <div id="simRapida" class="hide">
           <div class="card simq">
             <div class="simq-head"><span class="simq-chip">Simulação rápida</span><h2>Como você quer simular?</h2><p>Escolha a forma que faz mais sentido para descobrir quanto o cliente pode financiar.</p></div>
             <div class="simq-ops">
@@ -3564,6 +3615,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
             </div>
             <div class="simq-campos hide" id="simqCampos">
               <div class="sim-g3">
+                <div class="fg"><label>Nome do cliente <span class="muted">(para salvar e imprimir)</span></label><input id="simqNome" autocomplete="off" placeholder="Nome completo"></div>
                 <div class="fg"><label>Data de nascimento *</label><input type="date" id="simqNasc"></div>
                 <div class="fg" id="simqPrestW"><label>Prestação desejada *</label><input id="simqPrest" inputmode="decimal" placeholder="R$ 0,00"></div>
                 <div class="fg" id="simqRendaW"><label>Renda mensal *</label><input id="simqRenda" inputmode="decimal" placeholder="R$ 0,00"><small class="muted">Renda bruta somando todos os compradores</small></div>
@@ -3575,8 +3627,10 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
           </div>
           <div id="simqRes"></div>
         </div>
-        <div id="simCompleta" class="hide">
+        <div id="simCompleta">
         <div class="card sim-form">
+          <div class="simf-topo"><div class="simf-ic">⌂</div><div><b>Simulação completa</b><span>Preencha os dados do cliente. O resultado mostra parcela, financiamento, entrada e o desconto do governo.</span></div></div>
+          <div class="simf-sec"><i>1</i>Cliente e renda</div>
           <div class="sim-g3">
             <div class="fg"><label>Nome do cliente</label><input id="simNome" autocomplete="off" placeholder="Nome completo"></div>
             <div class="fg"><label>CPF</label><input id="simCpf" inputmode="numeric" autocomplete="off" placeholder="Só números" oninput="this.value=fmtCpf(this.value)"></div>
@@ -3585,6 +3639,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
             <div class="fg"><label>Tipo de renda</label><select id="simTipo"><option value="formal">Formal</option><option value="mista">Mista</option><option value="informal">Informal</option></select></div>
             <div class="fg"><label>Valor do imóvel <span class="muted">(opcional)</span></label><input id="simValor" inputmode="decimal" placeholder="R$"></div>
           </div>
+          <div class="simf-sec"><i>2</i>Situação do cliente</div>
           <div class="sim-sw">
             <label class="sim-chk"><input type="checkbox" id="simFgts" onchange="simFgtsVis()"> 3 anos ou mais de FGTS <small>(carteira assinada ou contribuição)</small></label>
             <label class="sim-chk"><input type="checkbox" id="simDep"> Possui dependente <small>(fator social)</small></label>
@@ -3595,6 +3650,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
             <div class="fg"><label>Prazo da carta <span class="muted">(meses, se tiver)</span></label><input id="simCondPrazo" inputmode="numeric" placeholder="Ex.: 420"></div>
             <div class="fg"><label>Renda da carta <span class="muted">(se for outra)</span></label><input id="simCondRenda" inputmode="decimal" placeholder="R$"></div>
           </div>
+          <div class="simf-sec"><i>3</i>Condições do financiamento <small>opcional</small></div>
           <div class="sim-g3">
             <div class="fg hide" id="simFgtsSaldoW"><label>Saldo do FGTS <span class="muted">(se souber)</span></label><input id="simFgtsSaldo" inputmode="decimal" placeholder="R$"></div>
             <div class="fg"><label>Quanto quer dar de entrada <span class="muted">(opcional)</span></label><input id="simEntrada" inputmode="decimal" placeholder="R$ (vazio = a menor possível)"></div>
@@ -3612,7 +3668,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
         </div>
         <div id="simRes"></div>
         </div>
-        <div class="card"><div class="card-head"><h2>Simulações salvas</h2><span class="muted"></span></div><div id="simHist"></div></div>
+        <div class="card" id="simHistCard"><div class="card-head"><h2>Simulações salvas</h2><input id="simHistBusca" class="simh-busca" placeholder="Buscar cliente, CPF ou corretor" oninput="renderSimHist()" autocomplete="off"><span class="muted"></span></div><div id="simHist"></div></div>
       </section>
       <section class="view" id="v-relatorios">
         <div class="page-head"><div><h1>Relatórios</h1><div class="sub" id="relSub">Como anda a sua produtividade.</div></div></div>
@@ -3801,7 +3857,7 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
 </div>
 <button class="tv-sair" onclick="sairTelaCheia()" aria-label="Sair da tela cheia">✕ Sair da tela cheia</button>
 <div class="fab-fundo" onclick="fabFechar()"></div>
-<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-cart" id="fmCart" onclick="fabFechar();abrirCarteira()"><span>Carteira</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1.3" fill="currentColor"/></svg><b id="fmCartN"></b></i></button><button class="fm-bz" id="fmBz" onclick="fabFechar();setView('bolsao')"><span>Bolsão</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="fmBzN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-sim" id="fmSim" onclick="fabFechar();setView('simulador')"><span>Simular</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h8"/></svg></i></button><button class="fm-ia hide" id="fmIa" onclick="fabFechar();iaAlternar()"><span>Assistente</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
+<div class="fab-menu" id="fabMenu"><button class="fm-lig" id="fmLig" onclick="fabFechar();abrirDiscador()"><span>Ligar</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></i></button><button class="fm-zap" id="fmZap" onclick="fabFechar();setView('whatsapp')"><span>WhatsApp</span><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg><b id="fmZapN"></b></i></button><button class="fm-cart" id="fmCart" onclick="fabFechar();abrirCarteira()"><span>Carteira</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1.3" fill="currentColor"/></svg><b id="fmCartN"></b></i></button><button class="fm-bz" id="fmBz" onclick="fabFechar();setView('calendario')"><span>Agenda</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><b id="fmBzN"></b></i></button><button class="fm-ind" id="fmInd" onclick="fabFechar();abrirIndicacao()"><span>Indicação</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></i></button><button class="fm-sim" id="fmSim" onclick="fabFechar();setView('simulador')"><span>Simular</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h8"/></svg></i></button><button class="fm-ia hide" id="fmIa" onclick="fabFechar();iaAlternar()"><span>Assistente</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></i></button><button class="fm-add" onclick="fabFechar();abrirMais()"><span>Adicionar</span><i>+</i></button></div>
 <button class="fab hide" id="fab" onclick="fabClique()" title="Adicionar" data-ic="plus"></button>
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
@@ -3811,7 +3867,8 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
   <button data-view="painel" class="so-ceo" onclick="setView('painel')"><i data-ic="painel"></i>Painel</button>
   <button data-view="desempenho" class="so-ceo" onclick="setView('desempenho')"><i data-ic="trend"></i>Equipe</button>
   <button data-view="vendas" class="so-ceo" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas</button>
-  <button data-view="calendario" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
+  <button data-view="calendario" id="mbAgenda" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
+  <button data-view="bolsao" id="mbBolsao" class="mb-bz hide" onclick="setView('bolsao')"><span class="mb-bz-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="mbBzN"></b></span>Bolsão</button>
   <button data-view="ranking" class="nao-sdr" onclick="setView('ranking')"><i data-ic="tbRank"></i>Ranking</button>
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button data-view="analises" class="so-corresp" onclick="setView('analises')"><i data-ic="pasta"></i>Pastas</button>
@@ -4582,6 +4639,13 @@ html[data-theme="dark"] #frAbre .fa-nome b{color:#fff}
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('vincWaModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarVinculoWa()">Vincular</button></div>
   </div>
 </div>
+<div class="modal" id="simVerModal">
+  <div class="sheet" style="width:min(760px,100%)">
+    <div class="sheet-head"><div><h2 id="simVerTit">Simulação salva</h2><div class="sub" id="simVerSub" style="font-size:13px;color:var(--muted)"></div></div><button class="icon-btn" onclick="fechar('simVerModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="simVerCorpo"></div>
+    <div class="sheet-foot simv-foot"><button class="btn btn-ghost" onclick="fechar('simVerModal')">Fechar</button><button class="btn btn-ghost" onclick="simAcao('salva','compartilhar')">Compartilhar PDF</button><button class="btn btn-primary" onclick="simAcao('salva','imprimir')">Imprimir</button></div>
+  </div>
+</div>
 <div class="modal" id="simCfgModal">
   <div class="sheet" style="width:min(680px,100%)">
     <div class="sheet-head"><h2>Tabela do simulador</h2><button class="icon-btn" onclick="fechar('simCfgModal')" data-ic="x"></button></div>
@@ -5296,7 +5360,7 @@ function streak(){
 }
 function render(){
   if (!state) return;
-  aplicarTema(); iaBolhaVis();
+  aplicarTema(); iaBolhaVis(); try { mbBolsaoVis(); } catch(e) {}
   pintarIcones();
   const p = state.profile, T = state.tasks, h = hojeISO();
   const deHoje = T.filter(t => t.date === h);
@@ -6796,7 +6860,19 @@ window.mascaraCpf = el => {
 };
 const brl = n => (Number(n)||0).toLocaleString('pt-BR', { style:'currency', currency:'BRL', maximumFractionDigits:0 });
 const lerValor = s => { const t = String(s||'').replace(/[^\d,]/g,'').replace(',','.'); return t ? Math.round(parseFloat(t)) : 0; };
-const fmtValorInput = n => n ? (Number(n)).toLocaleString('pt-BR') : '';
+const fmtValorInput = n => n ? (Number(n)).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '';
+// v279: campos em reais com máscara automática (igual ao site da Caixa): digitar 2500000 vira 25.000,00; colar "2.500" vira 2.500,00
+const fmtReaisIn = n => (Number(n) || 0) ? Number(n).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '';
+window.fmtReaisIn = fmtReaisIn;
+const REAIS_IDS = new Set(['rvValor','cmRenda','cmValor','fxValor','pzValor','anRendaF','anRendaI','anRendaT','anRFin','anRSub','anRParc','anVParc','anVRenda','simqPrest','simqRenda','simqValor','simRenda','simValor','simCondVal','simCondRenda','simFgtsSaldo','simEntrada','simParcMax']);
+const ehReais = el => !!el && el.tagName === 'INPUT' && (REAIS_IDS.has(el.id) || /^simPR\d+$/.test(el.id) || el.dataset?.reais === '1');
+window.ehReais = ehReais;
+const lerColado = t => { let s = String(t || '').replace(/[^\d,.]/g, ''); if (!s) return 0; if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.'); else if ((s.match(/\./g) || []).length > 1 || /\.\d{3}$/.test(s)) s = s.replace(/\./g, ''); return Number(s) || 0; };
+document.addEventListener('input', e => { const el = e.target; if (!ehReais(el)) return;
+  const d = el.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 13); el.value = d ? (parseInt(d, 10) / 100).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '';
+  try { el.setSelectionRange(el.value.length, el.value.length); } catch(x) {} }, true);
+document.addEventListener('paste', e => { const el = e.target; if (!ehReais(el)) return; e.preventDefault(); el.value = fmtReaisIn(lerColado(e.clipboardData?.getData('text'))); el.dispatchEvent(new Event('input', { bubbles:true })); }, true);
+document.addEventListener('focusin', e => { const el = e.target; if (ehReais(el)) { if (el.getAttribute('inputmode') !== 'numeric') el.setAttribute('inputmode', 'numeric'); if (el.value && !/,\d{2}$/.test(el.value)) el.value = fmtReaisIn(lerColado(el.value)); } }, true);
 function cStCls(st){ return 'cst-' + norm(st).replace(/[^a-z0-9]+/g,'-'); }
 function rankingCartaDe(c){ return { equipe:c.equipe||'', corretorUid:c.corretorUid||'', corretorNome:c.corretorNome||'', data:c.data||'', status:c.status||'', valor:c.valor||0,
   vendaEm:c.vendaEm||'', docsCompletos: docsOk(c) === DOCS.length, semPontos:!!c.semPontos, indicacao:!!c.indicacao }; }
@@ -7020,7 +7096,7 @@ window.excluirCarta = async (id, doModal) => {
   try { const b = writeBatch(db); b.set(doc(db,'cartas',id), marcaArquivo(), { merge:true }); b.set(doc(db,'ranking_cartas',id), { arquivado:true }, { merge:true }); await gravar(b.commit()); syncPlanilha('cartas', id); if (doModal) fechar('cartaModal'); toast('Carta arquivada'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
-window.formatarValor = el => { const n = lerValor(el.value); el.value = n ? n.toLocaleString('pt-BR') : ''; };
+window.formatarValor = el => { if (ehReais(el)) return; const n = lerValor(el.value); el.value = n ? n.toLocaleString('pt-BR') : ''; };
 
 // ---------- ranking de VGV (valor geral de vendas) ----------
 function rankingVgv(de, ate, eqF){
@@ -7385,15 +7461,18 @@ $('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classLi
 // v118: Carteira Frade no (+) (corretor, coordenador e anjo com o bônus ligado; a gerência vê sempre, para testar)
 const podeCartMenu = () => souAtivo() && !souCorresp() && (participaCarteira() || souGerente());
 const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente() || (['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) && !abaOculta('bolsao')));
+// v279: quem usa o bolsão vê ele no meio da barra de baixo, em destaque (com quantos leads estão livres); a Agenda vai para o menu do +
+function mbBolsaoVis(){ const b = $('mbBolsao'), a = $('mbAgenda'); if (!b || !a) return; const tem = podeBzMenu() && !souGerente();
+  b.classList.toggle('hide', !tem); a.classList.toggle('hide', tem); const n = tem && _bzHistTodos && bzPresente() ? bzLivres().length : 0; /* só conta quando o bolsão já foi carregado (não gasta leituras do Firebase) */ const e = $('mbBzN'); if (e) e.textContent = n ? (n > 99 ? '99+' : String(n)) : ''; }
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
   const lig = $('discFab') && !$('discFab').classList.contains('hide'), zap = $('zapFab') && !$('zapFab').classList.contains('hide');
   const ind = ligaPontua(), bz = podeBzMenu(), cart = podeCartMenu(), ia = podeIA(), sim = souAtivo() && !souCorresp() && !abaOculta('simulador');
   if (!lig && !zap && !ind && !bz && !cart && !ia && !sim || !matchMedia('(max-width:900px)').matches) { fabFechar(); abrirMais(); return; }
-  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !bz);
+  $('fmLig').classList.toggle('hide', !lig); $('fmZap').classList.toggle('hide', !zap); $('fmInd').classList.toggle('hide', !ind); $('fmBz').classList.toggle('hide', !(bz && !souGerente()));
   $('fmCart').classList.toggle('hide', !cart);
   $('fmIa').classList.toggle('hide', !ia); $('fmSim').classList.toggle('hide', !sim);
-  const nBz = bz && bzPresente() ? bzLivres().length : 0; $('fmBzN').textContent = nBz ? String(nBz) : '';
+  $('fmBzN').textContent = ''; // v279: o bolsão foi para a barra de baixo; aqui fica a Agenda
   $('fmZapN').textContent = $('zapFabN') && !$('zapFabN').classList.contains('hide') ? $('zapFabN').textContent : '';
   document.documentElement.classList.toggle('fab-aberto');
 };
@@ -7427,7 +7506,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 278;
+const APP_VERSAO = 279;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12056,7 +12135,7 @@ window.abrirResultado = () => {
   if (!cpGarante()) return;
   _cpCola.forEach(f => URL.revokeObjectURL(f.url)); _cpCola = []; setTimeout(() => { cpPintaCola(); const q = document.getElementById('anRQuem'); if (q) q.innerHTML = htmlCpQuem().replace('id="cpQuemSel"', 'id="cpQuemSelR"'); }, 0);
   const v = AN_RESP.includes(a.status) ? a.status : 'aprovada'; document.querySelectorAll('input[name=anRes]').forEach(i => i.checked = i.value === v);
-  $('anRFin').value = r.financiado ? fmtValorInput(r.financiado) : ''; $('anRSub').value = r.subsidio ? fmtValorInput(r.subsidio) : ''; $('anRParc').value = r.parcela ? String(r.parcela).replace('.', ',') : '';
+  $('anRFin').value = r.financiado ? fmtValorInput(r.financiado) : ''; $('anRSub').value = r.subsidio ? fmtValorInput(r.subsidio) : ''; $('anRParc').value = r.parcela ? fmtReaisIn(r.parcela) : '';
   $('anRPrazo').value = r.prazo || ''; $('anRTaxa').value = r.taxa ? String(r.taxa).replace('.', ',') : ''; $('anRVal').value = r.validade || ''; $('anRCond').value = r.condicao || ''; $('anRObs').value = r.obs || ''; $('anRArq').value = ''; $('anRRest').checked = !!r.restricao;
   anResVis(); abrir('anRespModal');
 };
@@ -12082,7 +12161,7 @@ window.abrirVerificacao = () => {
   if (!cpGarante()) return;
   setTimeout(() => { const q = document.getElementById('anVQuem'); if (q) q.innerHTML = htmlCpQuem().replace('id="cpQuemSel"', 'id="cpQuemSelV"'); }, 0);
   $('anVCca').value = v.cca || 'nao'; $('anVCcaQ').value = v.ccaQual || ''; $('anVRest').value = v.restricao || 'nao'; $('anVRestQ').value = v.restricaoQual || '';
-  $('anVParc').value = v.parcela ? String(v.parcela).replace('.', ',') : ''; $('anVPrazo').value = v.prazo || ''; $('anVRenda').value = v.renda ? fmtValorInput(v.renda) : ''; $('anVObs').value = v.obs || '';
+  $('anVParc').value = v.parcela ? fmtReaisIn(v.parcela) : ''; $('anVPrazo').value = v.prazo || ''; $('anVRenda').value = v.renda ? fmtValorInput(v.renda) : ''; $('anVObs').value = v.obs || '';
   abrir('anVerifModal');
 };
 window.enviarVerificacao = async () => {
@@ -16923,7 +17002,7 @@ function simLer(){
 }
 function htmlSimPart(){
   return simPart.map((p, k) => `<div class="sim-part"><b>${k + 2}º participante</b><div class="sim-g3"><div class="fg"><label>Data de nascimento</label><input type="date" id="simPN${k}" value="${esc(p.nasc || '')}"></div>
-    <div class="fg"><label>Renda mensal</label><input id="simPR${k}" inputmode="decimal" placeholder="R$" value="${p.renda ? String(p.renda).replace('.', ',') : ''}"></div>
+    <div class="fg"><label>Renda mensal</label><input id="simPR${k}" inputmode="numeric" placeholder="R$" value="${p.renda ? fmtReaisIn(p.renda) : ''}"></div>
     <label class="sim-chk"><input type="checkbox" id="simPF${k}" ${p.fgts ? 'checked' : ''}> 3 anos de FGTS</label></div><button class="link" onclick="simTirarPart(${k})">Tirar</button></div>`).join('');
 }
 window.simAddPart = () => { const e = simLer(); simPart = [...e.parts, {}]; if (simPart.length > 3) { simPart.length = 3; toast('Até 4 participantes'); } $('simParts').innerHTML = htmlSimPart(); };
@@ -16935,6 +17014,7 @@ window.simular = () => {
   if (e.cpf && soDig(e.cpf).length !== 11) { toast('CPF incompleto'); $('simCpf').focus(); return; }
   simUlt = { e, r, hist, nota, em:Date.now(), salvo:false };
   $('simRes').innerHTML = htmlSimResultado(simUlt); $('simRes').scrollIntoView({ behavior:'smooth', block:'start' });
+  if (ehCelular() && !r.bloqueios.length) setTimeout(() => simPdf(simDocCompleta(simUlt)).catch(() => {}), 1200);
 };
 function simLinhasCaixa(r){
   const ent = r.valor ? Math.max(0, r.valor - r.fin - r.subsidio) : null;
@@ -16957,15 +17037,20 @@ function simProponentes(e, r){
 function htmlSimResultado(s){
   const { e, r, hist, nota } = s;
   if (r.bloqueios.length) return `<div class="card sim-res"><div class="sim-bloq"><b>Não dá para seguir pelo Minha Casa Minha Vida</b>${r.bloqueios.map(x => `<div>${esc(x)}</div>`).join('')}</div>${r.avisos.map(x => `<div class="sim-aviso">${esc(x)}</div>`).join('')}</div>`;
-  return `<div class="card sim-res">
-    <div class="sim-topo"><div><small>${esc(nomeBonito(e.nome))}${e.cpf ? ' · CPF ' + esc(fmtCpf(e.cpf)) : ''}</small><h2>Resultado da simulação</h2></div>
-      <div class="sim-nota" style="--c:${nota.cor}"><b>${nota.n}</b><small>Nota de perfil</small><span>${nota.rot}</span></div></div>
-    <table class="sim-cx">${simLinhasCaixa(r).map(([a, b, c2, d]) => `<tr><td>${a}:</td><td>${b}</td><td>${c2}:</td><td class="${/amortiza/.test(c2) ? 'sim-or' : ''}">${d}</td></tr>`).join('')}</table>
-    <h3 class="sim-sub">Proponente(s)</h3>
-    <table class="sim-pr"><thead><tr><th>Data de nascimento</th><th>Renda individual</th><th>Participação</th></tr></thead><tbody>${simProponentes(e, r).map(p => `<tr><td>${p.nasc ? dataBR(p.nasc) : '—'}</td><td>${brl2(p.renda)}</td><td>${p.part.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 })}%</td></tr>`).join('')}</tbody></table>
+  const ent = r.valor ? Math.max(0, r.valor - r.fin - r.subsidio) : null;
+  const dest = [['1ª prestação', brl2(r.parcPrice), `${pctBR(r.comprom)} da renda · ${r.prazo} meses`, 'or'], ['Financiamento', brl2(r.valor ? r.fin : r.finPriceRenda), r.valor ? `de ${brl2(r.valor)} do imóvel` : 'máximo pela renda', 'az'],
+    ['Entrada', ent !== null ? brl2(ent) : '—', ent !== null ? 'já descontado o subsídio' : 'informe o valor do imóvel', 'cz'], ['Desconto do governo', brl2(r.subsidio || 0), r.subsidio ? `Faixa ${r.faixa} do MCMV` : `Faixa ${r.faixa || '—'} · sem subsídio`, 'vd']];
+  return `<div class="card sim-res simr">
+    <div class="simr-topo"><div class="simr-cli"><small>Resultado da simulação</small><h2>${esc(nomeBonito(e.nome))}</h2><span>${e.cpf ? 'CPF ' + esc(fmtCpf(e.cpf)) + ' · ' : ''}Renda ${brl2(r.renda)} · ${r.sac ? 'SAC' : 'PRICE'} · Faixa ${r.faixa}</span></div>
+      <div class="simr-nota" style="--c:${nota.cor}"><b>${nota.n}</b><small>Nota de perfil</small><span>${esc(nota.rot)}</span></div></div>
+    <div class="simr-dest">${dest.map(([a, b, c, k]) => `<div class="simr-d ${k}"><span>${a}</span><b>${b}</b><small>${c}</small></div>`).join('')}</div>
+    <div class="simr-h">Detalhes do financiamento</div>
+    <div class="simr-tab">${simLinhasCaixa(r).flatMap(([a, b, c2, d]) => [[a, b], [c2, d]]).map(([a, b]) => `<div><span>${esc(a)}</span><b class="${/Tabela|Constante/.test(b) ? 'sim-or' : ''}">${esc(b)}</b></div>`).join('')}</div>
+    <div class="simr-h">Proponente(s)</div>
+    <div class="simr-props">${simProponentes(e, r).map((p, k) => `<div><i>${k + 1}</i><span>Nascido em <b>${p.nasc ? dataBR(p.nasc) : '—'}</b></span><span>Renda <b>${brl2(p.renda)}</b></span><span><b>${p.part.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 })}%</b> da renda</span></div>`).join('')}</div>
     ${hist.length ? `<div class="sim-hist"><b>Histórico deste CPF</b>${hist.slice(0, 4).map(h => `<div class="g-${h.g}">${dataBR(h.data) || ''} · ${esc(h.txt)}</div>`).join('')}</div>` : ''}
     ${r.avisos.map(x => `<div class="sim-aviso">${esc(x)}</div>`).join('')}
-    <div class="sim-acoes"><button class="btn btn-primary" onclick="salvarSim()" ${s.salvo ? 'disabled' : ''}>${s.salvo ? 'Simulação salva' : 'Salvar simulação'}</button><button class="btn btn-ghost" onclick="imprimirSim()">Imprimir</button><button class="btn btn-ghost" onclick="novaSim()">Nova simulação</button></div>
+    <div class="simr-acoes"><button class="btn btn-primary" onclick="salvarSim()" ${s.salvo ? 'disabled' : ''}>${s.salvo ? '✓ Simulação salva' : 'Salvar simulação'}</button><button class="btn btn-ghost" onclick="imprimirSim()">Imprimir</button><button class="btn btn-ghost" onclick="simAcao('completa','compartilhar')">Compartilhar PDF</button><button class="btn btn-ghost" onclick="novaSim()">Nova simulação</button></div>
     <p class="hint sim-obs">Estimativa pelas regras do Minha Casa Minha Vida (Nordeste), com seguros estimados. O valor do subsídio é estimado: o valor final é confirmado pela Caixa na análise de crédito.</p></div>`;
 }
 window.novaSim = () => { ['simNome','simCpf','simNasc','simRenda','simFgtsSaldo','simValor','simEntrada','simCondVal','simCondPrazo','simCondRenda','simPrazo','simParcMax'].forEach(i => $(i).value = ''); $('simSist').value = 'price'; ['simFgts','simDep','simImovel','simPcd','simCond','simSubJa'].forEach(i => $(i).checked = false); $('simCondW').classList.add('hide'); $('simTipo').value = 'formal'; simPart = []; $('simParts').innerHTML = ''; simFgtsVis(); $('simRes').innerHTML = ''; simUlt = null; $('simNome').focus(); };
@@ -16973,31 +17058,130 @@ window.salvarSim = async () => {
   if (!simUlt || simUlt.salvo) return; const { e, r, nota } = simUlt;
   const d = { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', cliente:e.nome.slice(0, 80), cpf:fmtCpf(e.cpf), cpfNorm:soDig(e.cpf), nasc:e.nasc, tipoRenda:e.tipoRenda, fgts:e.fgts, dependente:e.dependente,
     participantes:r.partes, condicionada:!!r.cond, parcelaCond:r.cond ? r.condVal : null, renda:r.renda, valor:r.valor, faixa:r.faixa, taxa:r.taxa, prazo:r.prazo, financiamento:Math.round(r.valor ? r.fin : r.finPriceRenda), subsidio:Math.round(r.subsidio), parcela:Math.round(r.parcPrice * 100) / 100,
-    entradaFalta:r.entradaFalta === null ? null : Math.round(r.entradaFalta), nota:nota.n, dia:hojeISO(), em:Date.now() };
+    entradaFalta:r.entradaFalta === null ? null : Math.round(r.entradaFalta), nota:nota.n, dia:hojeISO(), em:Date.now(),
+    tipo:'completa', linhas:simLinhasCaixa(r).map(([a, b, c2, d4]) => ({ a, b, c:c2, d:d4 })), proponentes:simProponentes(e, r), avisos:(r.avisos || []).slice(0, 8), notaRot:nota.rot || '' };
   try { await gravar(setDoc(doc(collection(db,'simulacoes')), d)); simUlt.salvo = true; $('simRes').innerHTML = htmlSimResultado(simUlt); toast('Simulação salva'); }
   catch(err) { toast('Não foi possível salvar: ' + err.message + ' (publique as regras novas do Firebase)'); }
 };
-window.imprimirSim = () => {
-  if (!simUlt) return; const { e, r, nota, hist } = simUlt, cfg = simCfg();
-  const lin = (a, b) => `<tr><td>${a}</td><td><b>${b}</b></td></tr>`;
-  const linhas = simLinhasCaixa(r).map(([a, b, c2, d]) => `<tr><td class="r">${a}:</td><td>${b}</td><td class="r">${c2}:</td><td class="${/amortiza/.test(c2) ? 'or' : ''}">${d}</td></tr>`).join('');
-  const props = simProponentes(e, r).map(p => `<tr><td>${p.nasc ? dataBR(p.nasc) : '—'}</td><td>${brl2(p.renda)}</td><td>${p.part.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 })}%</td></tr>`).join('');
-  const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Simulação · ${esc(e.nome)}</title><style>body{font-family:Arial,Helvetica,sans-serif;color:#1f2937;margin:28px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #f28c38;padding-bottom:10px;margin-bottom:14px}.top img{height:42px}h1{font-size:18px;margin:0}.sub{font-size:12px;color:#64748b}h2{font-size:13px;margin:18px 0 6px;color:#0f172a;text-transform:uppercase;letter-spacing:.02em}table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px 6px;border-bottom:1px dashed #cbd5e1}tr:nth-child(odd) td{background:#f1f5f9}td.r{text-align:right;color:#475569;width:22%}.or{color:#f28c38;font-weight:700}th{background:#e2e8f0;font-weight:600}.pr td,.pr th{text-align:center}.av{font-size:12px;background:#fff7ed;border:1px solid #fed7aa;padding:6px 8px;border-radius:6px;margin-top:6px}.obs{font-size:11px;color:#64748b;margin-top:18px;line-height:1.5}</style></head><body>
-    <div class="top"><div><h1>Simulação de financiamento · Minha Casa Minha Vida</h1><div class="sub">${esc(nomeBonito(e.nome))}${e.cpf ? ' · CPF ' + esc(fmtCpf(e.cpf)) : ''} · ${new Date().toLocaleString('pt-BR')}</div></div><img src="${location.origin + location.pathname.replace(/[^/]*$/, '')}logo-frade.png" alt="Frade Imóveis"></div>
-    <h2>Resultado da simulação</h2><table>${linhas}</table>
-    <h2>Proponente(s)</h2><table class="pr"><thead><tr><th>Data de nascimento</th><th>Renda individual</th><th>Participação</th></tr></thead><tbody>${props}</tbody></table>
-    ${r.avisos.map(x => `<div class="av">${esc(x)}</div>`).join('')}
-    <div class="obs">Simulação feita por ${esc(perfil.nome)} · Frade Imóveis · nota de perfil ${nota.n} (${nota.rot}). Estimativa pelas regras do Minha Casa Minha Vida, com seguros estimados. O valor do subsídio é estimado e o resultado final é confirmado pela Caixa na análise de crédito.</div></body></html>`;
-  const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
-  const d = f.contentWindow.document; d.open(); d.write(html); d.close();
-  setTimeout(() => { try { f.contentWindow.focus(); f.contentWindow.print(); } catch(err) { toast('Não deu para imprimir neste aparelho'); } setTimeout(() => f.remove(), 60000); }, 400);
+window.imprimirSim = () => { if (simUlt) simDocAcao(simDocCompleta(simUlt), 'imprimir'); };
+// v279: documento único da simulação (completa, rápida ou salva) → impressão no computador, PDF no celular, e compartilhar o PDF
+function simDocCompleta(s){ if (!s) return null; const { e, r, nota } = s;
+  return { titulo:'Simulação de financiamento · Minha Casa Minha Vida', cliente:nomeBonito(e.nome || ''), cpf:e.cpf ? fmtCpf(e.cpf) : '', quando:new Date(s.em || Date.now()).toLocaleString('pt-BR'), por:perfil?.nome || '',
+    destaques:[['1ª prestação', brl2(r.parcPrice), 'or'], ['Financiamento', brl2(r.valor ? r.fin : r.finPriceRenda), 'az'], ['Entrada', r.valor ? brl2(Math.max(0, r.valor - r.fin - r.subsidio)) : '—', 'cz'], ['Desconto do governo', brl2(r.subsidio || 0), 'vd']],
+    nota:{ n:nota.n, rot:nota.rot }, tabela:simLinhasCaixa(r), proponentes:simProponentes(e, r), avisos:r.avisos || [], obs:`Nota de perfil ${nota.n} (${nota.rot}). Estimativa pelas regras do Minha Casa Minha Vida, com seguros estimados. O valor do subsídio é estimado e o resultado final é confirmado pela Caixa na análise de crédito.` }; }
+function simDocRapida(u){ if (!u) return null; const x = u.x, m = u.modo || simqM;
+  const cart = [...(m === 'prest' ? [['Renda estimada necessária', brl2(x.rendaNecessaria)]] : []), ['Valor do imóvel', brl2(x.valorImovel)], ['Valor mínimo de entrada', brl2(x.valorEntrada)], ['Valor máximo de financiamento', brl2(x.valorFinanciado)],
+    ['Taxa efetiva', (x.jurosEfetivo * 100).toFixed(2).replace('.', ',') + '% a.a.'], ['Sistema de amortização', String(x.sistema || 'price').toUpperCase()], ['Primeira parcela', brl2(x.primeiraParcela)], ['ITBI e outras despesas', brl2(x.outrasDespesas)], ['Prazo máximo', (x.prazoMeses || 0) + ' meses'],
+    ...(u.sub ? [['Desconto do governo estimado', brl2(u.sub)]] : [])];
+  return { titulo:'Simulação rápida de financiamento', cliente:nomeBonito(u.e?.nome || u.cliente || ''), cpf:'', quando:new Date(u.em || Date.now()).toLocaleString('pt-BR'), por:u.por || perfil?.nome || '',
+    destaques:[['1ª prestação', brl2(x.primeiraParcela), 'or'], ['Financiamento', brl2(x.valorFinanciado), 'az'], ['Entrada mínima', brl2(x.valorEntrada), 'cz'], ...(u.sub ? [['Desconto do governo', brl2(u.sub), 'vd']] : [['Valor do imóvel', brl2(x.valorImovel), 'vd']])],
+    cartoes:cart, dados:[['Data de nascimento', u.e?.nasc ? dataBR(u.e.nasc) : '—'], ...(m === 'prest' ? [['Prestação desejada', brl2(u.e?._prest)]] : [['Renda mensal', brl2(u.e?.renda)]]), ...(m === 'valor' ? [['Valor do imóvel informado', brl2(u.e?.valor)]] : [])],
+    avisos:['O FGTS ou o subsídio do Minha Casa Minha Vida poderão compor o valor mínimo de entrada.'], obs:'Estimativa inicial com os parâmetros da calculadora da Caixa. Os valores podem variar porque não consideram análise de crédito, perfil do cliente, tipo de financiamento ou localização do imóvel. As condições finais dependem da simulação completa e da análise da CAIXA.' }; }
+function simDocHtml(d){
+  const base = location.origin + location.pathname.replace(/[^/]*$/, ''), E = s => esc(String(s ?? ''));
+  const COR = { or:['#E65100','#fff3e8'], az:['#0B4669','#e8f1f8'], cz:['#334155','#f1f5f9'], vd:['#15803d','#eaf7ee'] };
+  const dest = (d.destaques || []).length ? `<div class="sd-dest">${d.destaques.map(([a, b, c]) => { const [f, bg] = COR[c] || COR.cz; return `<div class="sd-d" style="border-color:${f}33;background:${bg}"><span style="color:${f}">${E(a)}</span><b style="color:${f}">${E(b)}</b></div>`; }).join('')}</div>` : '';
+  const linhas = d.tabela ? d.tabela.map(l => Array.isArray(l) ? l : [l.a, l.b, l.c, l.d]) : null;
+  const tab = linhas ? `<div class="sd-h">Detalhes do financiamento</div><table class="sd-t">${linhas.map(([a, b, c2, d4]) => `<tr><td class="r">${E(a)}</td><td>${E(b)}</td><td class="r">${E(c2)}</td><td>${E(d4)}</td></tr>`).join('')}</table>` : '';
+  const cards = d.cartoes ? `<div class="sd-h">Resultado da simulação</div><table class="sd-t">${(() => { const c = d.cartoes, out = []; for (let k = 0; k < c.length; k += 2) out.push(`<tr><td class="r">${E(c[k][0])}</td><td>${E(c[k][1])}</td>${c[k + 1] ? `<td class="r">${E(c[k + 1][0])}</td><td>${E(c[k + 1][1])}</td>` : '<td class="r"></td><td></td>'}</tr>`); return out.join(''); })()}</table>` : '';
+  const dados = d.dados ? `<div class="sd-h">Dados informados</div><table class="sd-t">${d.dados.map(([a, b]) => `<tr><td class="r">${E(a)}</td><td colspan="3">${E(b)}</td></tr>`).join('')}</table>` : '';
+  const props = d.proponentes && d.proponentes.length ? `<div class="sd-h">Proponente(s)</div><table class="sd-t sd-p"><tr><th>Data de nascimento</th><th>Renda individual</th><th>Participação</th></tr>${d.proponentes.map(p => `<tr><td>${p.nasc ? E(dataBR(p.nasc)) : '—'}</td><td>${E(brl2(p.renda))}</td><td>${(Number(p.part) || 0).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 })}%</td></tr>`).join('')}</table>` : '';
+  const nota = d.nota ? `<div class="sd-nota"><b>${E(d.nota.n)}</b><span>Nota de perfil</span><em>${E(d.nota.rot)}</em></div>` : '';
+  return `<div class="sd"><style>
+.sd{font-family:'Helvetica Neue',Arial,sans-serif;color:#1e293b;background:#fff;width:760px;box-sizing:border-box;padding:0 0 22px}
+.sd *{box-sizing:border-box}
+.sd-top{background:linear-gradient(135deg,#022C45 0%,#0B4669 100%);color:#fff;padding:22px 30px 20px;display:flex;align-items:center;gap:16px}
+.sd-logo{width:58px;height:58px;border-radius:14px;overflow:hidden;flex:0 0 auto;box-shadow:0 0 0 2px rgba(255,255,255,.25)}.sd-logo img{width:58px;height:58px;object-fit:cover;display:block}
+.sd-top h1{font-size:20px;margin:0 0 4px;line-height:1.2;font-weight:800}.sd-top p{margin:0;font-size:12.5px;color:#bcd3e3}
+.sd-top .sd-marca{margin-left:auto;text-align:right;font-size:12px;color:#bcd3e3}.sd-top .sd-marca b{display:block;color:#fff;font-size:15px;letter-spacing:.02em}.sd-top .sd-marca b i{font-style:normal;color:#F28C38}
+.sd-faixa{height:4px;background:linear-gradient(90deg,#F28C38,#E65100)}
+.sd-cli{display:flex;align-items:center;gap:16px;padding:18px 30px 6px}.sd-cli>div:first-child{flex:1}.sd-cli small{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#64748b}.sd-cli strong{font-size:18px;color:#0f172a}.sd-cli span{display:block;font-size:12.5px;color:#64748b;margin-top:2px}
+.sd-nota{text-align:center;border:1px solid #e2e8f0;border-radius:14px;padding:8px 14px;min-width:96px}.sd-nota b{display:block;font-size:24px;color:#0B4669;line-height:1}.sd-nota span{display:block;font-size:10.5px;color:#64748b;margin-top:3px}.sd-nota em{font-style:normal;font-size:11px;font-weight:700;color:#E65100}
+.sd-dest{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px 30px 4px}
+.sd-d{border:1px solid;border-radius:14px;padding:12px 12px 11px}.sd-d span{display:block;font-size:11.5px;font-weight:700}.sd-d b{display:block;font-size:18px;margin-top:4px;letter-spacing:-.01em}
+.sd-h{margin:18px 30px 8px;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0B4669;display:flex;align-items:center;gap:8px}.sd-h:after{content:'';flex:1;height:1px;background:#e2e8f0}
+.sd-t{width:calc(100% - 60px);margin:0 30px;border-collapse:separate;border-spacing:0;font-size:12.5px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden}
+.sd-t td,.sd-t th{padding:8px 11px;border-bottom:1px solid #eef2f6;text-align:left;vertical-align:top}.sd-t tr:last-child td{border-bottom:0}.sd-t tr:nth-child(even) td{background:#f8fafc}
+.sd-t td.r{color:#64748b;width:24%}.sd-t td:not(.r){font-weight:700;color:#0f172a}.sd-p th{background:#f1f5f9;font-size:11.5px;color:#475569}.sd-p td{font-weight:600!important}
+.sd-av{margin:10px 30px 0;font-size:12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 12px;color:#7c2d12}
+.sd-obs{margin:18px 30px 0;padding-top:12px;border-top:1px solid #e2e8f0;font-size:11px;line-height:1.5;color:#64748b}.sd-obs b{color:#0B4669}
+</style>
+    <div class="sd-top"><div class="sd-logo"><img src="${base}frade-icone-192.png" alt=""></div><div><h1>${E(String(d.titulo).split(' · ')[0])}</h1><p>${E(String(d.titulo).split(' · ')[1] || 'Estimativa de financiamento')} · ${E(d.quando)}</p></div><div class="sd-marca"><b>Frade <i>Imóveis</i></b>10 anos realizando sonhos</div></div>
+    <div class="sd-faixa"></div>
+    <div class="sd-cli"><div><small>Cliente</small><strong>${d.cliente ? E(d.cliente) : 'Não informado'}</strong><span>${d.cpf ? 'CPF ' + E(d.cpf) + ' · ' : ''}Simulado por ${E(d.por)}</span></div>${nota}</div>
+    ${dest}${tab}${cards}${dados}${props}${(d.avisos || []).map(x => `<div class="sd-av">${E(x)}</div>`).join('')}
+    <div class="sd-obs"><b>Frade Imóveis</b> · ${E(d.obs || '')}</div></div>`;
+}
+const carregarJs = (src, glob) => window[glob] ? Promise.resolve(window[glob]) : new Promise((ok, er) => { const s = document.createElement('script'); s.src = src; s.onload = () => ok(window[glob]); s.onerror = () => er(new Error('sem internet para gerar o PDF')); document.head.appendChild(s); });
+const _simPdfCache = new Map();
+async function simPdf(d){
+  const k = JSON.stringify(d); if (_simPdfCache.has(k)) return _simPdfCache.get(k);
+  await carregarJs('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', 'html2canvas');
+  await carregarJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf');
+  const box = document.createElement('div'); box.style.cssText = 'position:fixed;left:-12000px;top:0;z-index:-1'; box.innerHTML = simDocHtml(d); document.body.appendChild(box);
+  // o logo vai embutido no PDF (sem isso o navegador pode recusar gerar a imagem)
+  for (const im of box.querySelectorAll('img')) { try { const bl = await (await fetch(im.src)).blob(); im.src = await new Promise((ok, er) => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.onerror = er; fr.readAsDataURL(bl); }); } catch(e) { im.remove(); } }
+  await Promise.all([...box.querySelectorAll('img')].map(im => im.complete ? 0 : new Promise(r => { im.onload = im.onerror = r; setTimeout(r, 3000); })));
+  let cv; try { cv = await window.html2canvas(box.firstElementChild, { scale:2, backgroundColor:'#ffffff', useCORS:true, logging:false }); } finally { box.remove(); }
+  const pdf = new window.jspdf.jsPDF({ unit:'pt', format:'a4' }), W = pdf.internal.pageSize.getWidth(), H = pdf.internal.pageSize.getHeight(), m = 24, w = W - 2 * m, pagPx = Math.floor((H - 2 * m) * cv.width / w);
+  for (let y = 0, pg = 0; y < cv.height; y += pagPx, pg++) { const hpx = Math.min(pagPx, cv.height - y), c2 = document.createElement('canvas'); c2.width = cv.width; c2.height = hpx; c2.getContext('2d').drawImage(cv, 0, y, cv.width, hpx, 0, 0, cv.width, hpx);
+    if (pg) pdf.addPage(); pdf.addImage(c2.toDataURL('image/jpeg', 0.92), 'JPEG', m, m, w, hpx * w / cv.width); }
+  const nome = ('Simulacao ' + (d.cliente || 'cliente')).normalize('NFD').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') + '.pdf';
+  const out = { blob:pdf.output('blob'), nome }; _simPdfCache.set(k, out); return out;
+}
+window.simAcao = (qual, acao) => simDocAcao(qual === 'completa' ? simDocCompleta(simUlt) : qual === 'salva' ? window._simVerDoc : simDocRapida(window._simqUlt), acao);
+window.__simPdf = d => simPdf(d); window.__simDocRapida = u => simDocRapida(u);
+const ehCelular = () => matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
+window.simDocAcao = async (d, acao) => {
+  if (!d) { toast('Faça a simulação primeiro'); return; }
+  if (acao === 'imprimir' && !ehCelular()) { // computador: abre a janela de impressão (dá para escolher "Salvar como PDF")
+    const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
+    const dd = f.contentWindow.document; dd.open(); dd.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${esc(d.titulo)}</title><style>@page{margin:12mm}body{margin:0}.sd{width:auto!important;padding:0!important}</style></head><body>${simDocHtml(d)}</body></html>`); dd.close();
+    setTimeout(() => { try { f.contentWindow.focus(); f.contentWindow.print(); } catch(err) { toast('Não deu para imprimir neste aparelho'); } setTimeout(() => f.remove(), 60000); }, 500); return; }
+  const ios = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document;
+  toast('Gerando o PDF…');
+  let r; try { r = await simPdf(d); } catch(err) { toast('Não consegui gerar o PDF: ' + err.message); return; }
+  const arq = new File([r.blob], r.nome, { type:'application/pdf' }), url = URL.createObjectURL(r.blob);
+  const baixar = () => { const a = document.createElement('a'); a.href = url; a.download = r.nome; document.body.appendChild(a); a.click(); a.remove(); };
+  // iPhone: a folha de compartilhar já tem "Imprimir"; no compartilhar, abre WhatsApp, e-mail etc.
+  if ((acao === 'compartilhar' || ios) && navigator.canShare && navigator.canShare({ files:[arq] })) {
+    try { await navigator.share({ files:[arq], title:d.titulo, text:(d.cliente ? d.cliente + ' · ' : '') + 'Simulação de financiamento' }); return; }
+    catch(err) { if (err && err.name === 'AbortError') return; if (err && err.name === 'NotAllowedError') { toast(`PDF pronto. Toque em "${acao === 'imprimir' ? 'Imprimir' : 'Compartilhar PDF'}" de novo.`); return; } }
+  }
+  // Android e outros: abre o PDF no leitor do celular (lá tem o botão de imprimir) ou baixa
+  if (acao === 'imprimir') { const w = window.open(url, '_blank'); if (!w) baixar(); else toast('No PDF, toque nos três pontinhos › Imprimir'); }
+  else { baixar(); toast('PDF baixado'); }
+  setTimeout(() => URL.revokeObjectURL(url), 120000);
 };
 function renderSimHist(){
   const el = $('simHist'); if (!el) return;
-  const l = simulacoes.slice().sort((a, b) => (b.em || 0) - (a.em || 0)).slice(0, 60), lider = souGerente() || souCoord() || souAnjo();
-  el.innerHTML = l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Data</th><th>Cliente</th>${lider ? '<th>Corretor</th>' : ''}<th>Renda</th><th>Faixa</th><th>Financia</th><th>Desconto</th><th>Nota</th></tr></thead><tbody>${l.map(x => `<tr><td>${dataBR(x.dia)}</td><td><span class="nm">${esc(nomeBonito(x.cliente || ''))}</span></td>${lider ? `<td>${esc(primeiro(x.nome || ''))}</td>` : ''}<td>${brl2(x.renda)}</td><td>${x.faixa || '—'}</td><td>${brl2(x.financiamento)}</td><td>${x.subsidio ? brl2(x.subsidio) : '—'}</td><td>${x.nota ?? '—'}</td></tr>`).join('')}</tbody></table></div>`
-    : '<div class="muted" style="font-size:13.5px">Nenhuma simulação salva ainda.</div>';
+  const q = norm($('simHistBusca')?.value || ''), dq = soDig($('simHistBusca')?.value || '');
+  const todas = simulacoes.slice().sort((a, b) => (b.em || 0) - (a.em || 0)), lider = souGerente() || souCoord() || souAnjo();
+  const l = todas.filter(x => !q || norm([x.cliente, x.nome].join(' ')).includes(q) || (dq.length >= 3 && soDig(x.cpf || '').includes(dq))).slice(0, 150);
+  window._simLista = l;
+  el.innerHTML = l.length ? `<div class="tbl-wrap"><table class="rank simh"><thead><tr><th>Data</th><th>Cliente</th>${lider ? '<th>Corretor</th>' : ''}<th>Tipo</th><th>Renda</th><th>Financia</th><th>Parcela</th><th></th></tr></thead><tbody>${l.map((x, i) => `<tr class="rk-toca" onclick="simVerSalva(${i})" title="Ver, imprimir ou compartilhar"><td>${dataBR(x.dia)}</td><td><span class="nm">${esc(nomeBonito(x.cliente || '') || 'Sem nome')}</span><small class="simh-m">${x.tipo === 'rapida' ? 'Rápida' : 'Completa'} · financia ${brl(x.financiamento)}${x.parcela ? ' · parcela ' + brl2(x.parcela) : ''}${lider && x.nome ? ' · ' + esc(primeiro(x.nome)) : ''}</small></td>${lider ? `<td>${esc(primeiro(x.nome || ''))}</td>` : ''}<td>${x.tipo === 'rapida' ? 'Rápida' : 'Completa'}</td><td>${brl(x.renda)}</td><td>${brl(x.financiamento)}</td><td>${x.parcela ? brl2(x.parcela) : '—'}</td><td class="simh-ver">Ver ›</td></tr>`).join('')}</tbody></table></div>`
+    : `<div class="muted" style="font-size:13.5px">${todas.length ? 'Nenhuma simulação com essa busca.' : 'Nenhuma simulação salva ainda. Depois de simular, toque em "Salvar".'}</div>`;
 }
+function simDocSalva(x){
+  const quando = new Date(x.em || Date.now()).toLocaleString('pt-BR');
+  if (x.tipo === 'rapida' && x.cx) return { ...simDocRapida({ x:x.cx, modo:x.modo, sub:x.subsidio || 0, e:{ nome:x.cliente, nasc:x.nasc, renda:x.renda, valor:x.valorInformado || 0, _prest:x.prestacao || 0 }, em:x.em, por:x.nome }), quando };
+  const tabela = Array.isArray(x.linhas) && x.linhas.length ? x.linhas : [
+    { a:'Valor do imóvel', b:x.valor ? brl2(x.valor) : 'não informado', c:'Faixa do programa', d:x.faixa ? 'Faixa ' + x.faixa : '—' },
+    { a:'Valor do financiamento', b:brl2(x.financiamento), c:'Subsídio', d:brl2(x.subsidio || 0) },
+    { a:'1ª prestação', b:x.parcela ? brl2(x.parcela) : '—', c:'Prazo', d:(x.prazo || '—') + ' meses' },
+    { a:'Juros nominais', b:x.taxa ? pctBR(x.taxa) + ' a.a.' : '—', c:'Entrada que falta', d:x.entradaFalta == null ? '—' : brl2(x.entradaFalta) },
+    { a:'Renda', b:brl2(x.renda), c:'Carta', d:x.condicionada ? 'Condicionada' + (x.parcelaCond ? ' (' + brl2(x.parcelaCond) + ')' : '') : 'Não condicionada' }];
+  return { titulo:'Simulação de financiamento · Minha Casa Minha Vida', cliente:nomeBonito(x.cliente || ''), cpf:x.cpf || '', quando, por:x.nome || '', tabela,
+    destaques:[['1ª prestação', x.parcela ? brl2(x.parcela) : '—', 'or'], ['Financiamento', brl2(x.financiamento), 'az'], ['Entrada que falta', x.entradaFalta == null ? '—' : brl2(x.entradaFalta), 'cz'], ['Desconto do governo', brl2(x.subsidio || 0), 'vd']],
+    nota:x.nota != null ? { n:x.nota, rot:x.notaRot || '' } : null, proponentes:x.proponentes || [], avisos:x.avisos || [],
+    obs:`${x.nota != null ? 'Nota de perfil ' + x.nota + (x.notaRot ? ' (' + x.notaRot + ')' : '') + '. ' : ''}Estimativa pelas regras do Minha Casa Minha Vida, com seguros estimados. O resultado final é confirmado pela Caixa na análise de crédito.` };
+}
+// o documento tem o tamanho da folha (760 px): na tela ele é reduzido para caber, igual a uma prévia
+function simVerAjusta(){ const w = $('simVerCorpo')?.querySelector('.simv-doc'), sd = w?.querySelector('.sd'); if (!w || !sd) return; const s = Math.min(1, w.clientWidth / 760); sd.style.transform = s < 1 ? `scale(${s})` : ''; w.style.height = s < 1 ? Math.ceil(sd.offsetHeight * s) + 'px' : ''; }
+addEventListener('resize', () => { try { simVerAjusta(); } catch(e) {} });
+window.simVerSalva = i => { const x = (window._simLista || [])[i]; if (!x) return; const d = simDocSalva(x); window._simVerDoc = d;
+  $('simVerTit').textContent = d.cliente || 'Simulação salva'; $('simVerSub').textContent = `${x.tipo === 'rapida' ? 'Simulação rápida' : 'Simulação completa'} · ${d.quando}${x.nome ? ' · por ' + primeiro(x.nome) : ''}`;
+  $('simVerCorpo').innerHTML = `<div class="simv-doc">${simDocHtml(d)}</div>`; abrir('simVerModal'); setTimeout(simVerAjusta, 30); if (ehCelular()) setTimeout(() => simPdf(d).catch(() => {}), 600); };
 // v277: simulação rápida no mesmo passo a passo do site da Caixa (pela prestação, pela renda, ou valor do imóvel + renda)
 let simqM = '';
 window.simModo = m => { $('simRapida').classList.toggle('hide', m !== 'rapida'); $('simCompleta').classList.toggle('hide', m === 'rapida'); $('simTabR').classList.toggle('on', m === 'rapida'); $('simTabC').classList.toggle('on', m !== 'rapida'); };
@@ -17057,22 +17241,31 @@ window.simqCalcular = () => {
     t('vd', 'R$', 'Primeira Parcela', brl2(x.primeiraParcela), ''),
     t('vm', 'R$', 'ITBI e outras despesas', brl2(x.outrasDespesas), 'Aproximadamente 5% do valor'),
     t('am', '▤', 'Prazo máximo', x.prazoMeses + ' meses', 'Prazo estimado de acordo com a idade')];
-  window._simqUlt = { e, x, sub };
+  e.nome = ($('simqNome')?.value || '').trim(); window._simqUlt = { e, x, sub, modo:simqM, em:Date.now(), salvo:false };
   $('simqRes').innerHTML = `<div class="card simq-res">
     <div class="simq-aviso">O seu FGTS ou o subsídio do PMCMV poderão compor o Valor mínimo de entrada.<br><br>Os cálculos apresentados foram enquadrados com base nos limites dos Programas Habitacionais, a fim de apresentar a condição mais benéfica de acordo com os dados informados. Imóveis ou rendas mais elevadas podem exigir entradas maiores ou se enquadrar em outra taxa de juros. Neste caso, utilize a opção "Valor do imóvel + renda" para um novo cálculo.</div>
     <div class="simq-grade">${cards.join('')}</div>
     ${sub ? `<div class="simq-sub"><b>Desconto do governo estimado: ${brl2(sub)}</b><span>Não aparece na calculadora rápida da Caixa (só na simulação completa). Pela tabela do simulador do app, ele ajuda a pagar a entrada: falta ${brl2(Math.max(0, x.valorEntrada - sub))}.</span></div>` : ''}
     <div class="simq-imp"><b>Importante</b>Este resultado é apenas uma estimativa inicial. Os valores apresentados usam parâmetros médios de mercado e podem variar porque não consideram análise de crédito, perfil do cliente, tipo de financiamento ou localização do imóvel. As condições finais dependem da simulação completa e análise da CAIXA. Taxas e regras podem mudar conforme as políticas vigentes.</div>
-    <div class="simq-acoes"><button type="button" class="btn btn-ghost" onclick="simqOp(simqM);window.scrollTo({top:0,behavior:'smooth'})">Nova simulação</button><button type="button" class="btn btn-ghost" onclick="simqCopiar()">Copiar resultado</button><button type="button" class="btn btn-primary" onclick="simqCompleta()">Fazer simulação completa</button></div>
+    <div class="simq-acoes"><button type="button" class="btn btn-primary" id="simqSalvarBt" onclick="simqSalvar()">Salvar simulação</button><button type="button" class="btn btn-ghost" onclick="simAcao('rapida','imprimir')">Imprimir</button><button type="button" class="btn btn-ghost" onclick="simAcao('rapida','compartilhar')">Compartilhar PDF</button><button type="button" class="btn btn-ghost" onclick="simqCopiar()">Copiar resultado</button><button type="button" class="btn btn-ghost" onclick="simqNova()">Nova simulação</button><button type="button" class="btn btn-ghost" onclick="simqCompleta()">Fazer simulação completa</button></div>
   </div>`;
   setTimeout(() => $('simqRes').scrollIntoView({ behavior:'smooth', block:'start' }), 60);
+  if (ehCelular()) setTimeout(() => simPdf(simDocRapida(window._simqUlt)).catch(() => {}), 1200); // deixa o PDF pronto (no celular o compartilhar precisa ser na hora do toque)
 };
+window.simqSalvar = async () => { const u = window._simqUlt; if (!u || u.salvo) return;
+  if (!u.e.nome) { toast('Digite o nome do cliente para salvar'); $('simqNome').focus(); window.scrollTo({ top:0, behavior:'smooth' }); return; }
+  const x = u.x, d = { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', cliente:u.e.nome.slice(0, 80), cpf:'', cpfNorm:'', nasc:u.e.nasc, renda:Math.round((u.modo === 'prest' ? x.rendaNecessaria : u.e.renda) * 100) / 100,
+    valor:x.valorImovel, valorInformado:u.modo === 'valor' ? u.e.valor : 0, prestacao:u.modo === 'prest' ? u.e._prest : 0, fgts:!!u.e.fgts, dependente:!!u.e.dependente, financiamento:Math.round(x.valorFinanciado), subsidio:Math.round(u.sub || 0), parcela:x.primeiraParcela, prazo:x.prazoMeses, taxa:Math.round(x.jurosEfetivo * 10000) / 100,
+    tipo:'rapida', modo:u.modo, cx:x, dia:hojeISO(), em:Date.now() };
+  try { await gravar(setDoc(doc(collection(db,'simulacoes')), d)); u.salvo = true; const b = $('simqSalvarBt'); if (b) { b.disabled = true; b.textContent = 'Simulação salva'; } toast('Simulação salva'); }
+  catch(err) { toast('Não foi possível salvar: ' + err.message); } };
+window.simqNova = () => { simqOp(simqM); window.scrollTo({ top:0, behavior:'smooth' }); };
 window.simqCopiar = () => { const u = window._simqUlt; if (!u) return; const x = u.x;
   const txt = `*Simulação de financiamento (estimativa)*${simqM === 'prest' ? `\nRenda estimada necessária: ${brl2(x.rendaNecessaria)}` : ''}\nValor do imóvel: ${brl2(x.valorImovel)}\nValor mínimo de entrada: ${brl2(x.valorEntrada)}\nValor máximo de financiamento: ${brl2(x.valorFinanciado)}\nTaxa efetiva: ${(x.jurosEfetivo * 100).toFixed(2).replace('.', ',')}% a.a.\nSistema: ${x.sistema.toUpperCase()}\nPrimeira parcela: ${brl2(x.primeiraParcela)}\nITBI e outras despesas: ${brl2(x.outrasDespesas)}\nPrazo máximo: ${x.prazoMeses} meses${u.sub ? `\nDesconto do governo estimado: ${brl2(u.sub)}` : ''}\n_O FGTS ou o subsídio podem compor a entrada. Valores finais dependem da análise da Caixa._`;
   try { navigator.clipboard.writeText(txt).then(() => toast('Resultado copiado'), () => toast('Não consegui copiar')); } catch(e) { toast('Não consegui copiar'); } };
 window.simqCompleta = () => { const u = window._simqUlt, e = u ? { ...u.e, renda:u.e.renda || u.x.rendaNecessaria, valor:u.e.valor || u.x.valorImovel } : simqDados();
-  simModo('completa'); if (e.nasc) $('simNasc').value = e.nasc; if (e.renda) $('simRenda').value = String(e.renda).replace('.', ','); if (e.valor) $('simValor').value = String(e.valor).replace('.', ',');
-  $('simFgts').checked = !!e.fgts; try { simFgtsVis(); } catch(x) {} $('simDep').checked = !!e.dependente; if (e._prest) $('simParcMax').value = String(e._prest).replace('.', ',');
+  simModo('completa'); if (e.nasc) $('simNasc').value = e.nasc; if (e.renda) $('simRenda').value = fmtReaisIn(e.renda); if (e.valor) $('simValor').value = fmtReaisIn(e.valor);
+  $('simFgts').checked = !!e.fgts; try { simFgtsVis(); } catch(x) {} $('simDep').checked = !!e.dependente; if (e._prest) $('simParcMax').value = fmtReaisIn(e._prest);
   setTimeout(() => $('simNome').focus(), 100); toast('Dados levados para a simulação completa. Falta o nome do cliente.'); };
 function renderSimulador(){
   renderSimHist();
