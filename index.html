@@ -3016,6 +3016,12 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 [data-theme="dark"] .fc-k.k-rec{--c:#7cc4f0}
 .fc-fil{display:flex;gap:10px;align-items:center}.fc-fil input{flex:1}.fc-fil select{width:auto;min-width:190px}
 .fc-l3{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:8px}.fc-pgbt{font-size:12.5px;font-weight:800;color:#16a34a;border:1px solid #16a34a55;background:#16a34a12;border-radius:99px;padding:5px 12px;cursor:pointer}.fc-pgbt:hover{background:#16a34a22}.fc-pgbt.fc-des{color:var(--muted);border-color:var(--border);background:none;font-weight:600}.fc-pago{font-size:12.5px;font-weight:800;color:#16a34a}
+.fc-ass{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.fc-ass button{border:1.5px solid var(--border);background:var(--card);color:inherit;border-radius:12px;padding:11px 12px;font:inherit;font-weight:800;font-size:14.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}.fc-ass button span{font-size:12.5px;border-radius:99px;padding:1px 9px;background:var(--bg);border:1px solid var(--border)}
+.fc-ass button.on{border-color:#1C5F8E;background:rgba(28,95,142,.08);color:#1C5F8E}.fc-ass button.a-sim.on{border-color:#16a34a;background:#16a34a14;color:#15803d}.fc-ass button.a-nao.on{border-color:#c2410c;background:#c2410c12;color:#c2410c}
+.fc-tag.fc-ass-s{background:#16a34a18;color:#15803d}.fc-tag.fc-ass-n{background:#c2410c14;color:#c2410c}
+@media(max-width:760px){.fc-ass button{font-size:12.5px;padding:9px 6px;flex-direction:column;gap:3px}}
+.fc-cons{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px;scrollbar-width:thin}.fc-cons button{flex:none;border:1px solid var(--border);background:var(--card);color:inherit;border-radius:99px;padding:7px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;gap:6px;align-items:center}.fc-cons button span{font-size:11.5px;color:var(--muted)}.fc-cons button.on{background:#1C5F8E;border-color:#1C5F8E;color:#fff}.fc-cons button.on span{color:#ffffffcc}.fc-cons button.sem{border-style:dashed}
+.ceo-abas{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}.ceo-ab{display:flex;gap:9px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;font-size:14px}.ceo-ab input{width:18px;height:18px;flex:none}
 .fc-cor{margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden}.fc-cor summary{cursor:pointer;padding:12px 14px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}.fc-cor summary span{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 .fc-cor-t{display:grid;border-top:1px solid var(--border)}.fc-cor-h,.fc-cor-l{display:grid;grid-template-columns:1.6fr .6fr 1fr 1fr 1fr 1fr;gap:8px;padding:8px 14px;align-items:center;text-align:right;font-size:13.5px}.fc-cor-h>:first-child,.fc-cor-l>:first-child{text-align:left}
 .fc-cor-h{font-size:12px;color:var(--muted);font-weight:700}.fc-cor-l{border:0;border-top:1px solid var(--border);background:none;color:inherit;font:inherit;cursor:pointer}.fc-cor-l:hover{background:var(--bg)}.fc-cor-l.on{background:rgba(28,95,142,.08)}.fc-cor-l .ok{color:#16a34a}.fc-cor-l .zero{color:var(--muted)}.fc-cor-tot{font-weight:800;cursor:default!important;background:var(--bg)!important}.fc-cor-l .pg{color:#c2410c;font-weight:700}
@@ -3813,6 +3819,12 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
             <div id="admAbas"></div>
             <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarAbas()">Salvar abas</button>
           </div>
+          <div class="card dono-only hide" id="cardCeoAbas">
+            <div class="card-head"><h2>O que o CEO vê</h2><span class="muted">Só o gestor</span></div>
+            <div class="hint" style="margin:0 0 10px">Marque as telas que aparecem para o CEO. O resto some do menu dele. Configurações aparece sempre.</div>
+            <div id="admCeoAbas" class="ceo-abas"></div>
+            <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="salvarCeoAbas()">Salvar o que o CEO vê</button>
+          </div>
           <div class="card dono-only hide" id="cardIndPed">
             <div class="card-head"><h2>Pedido de indicação depois da venda</h2><span class="muted">Só o dono</span></div>
             <div class="hint" style="margin:0 0 10px">Depois da venda, o app lembra o corretor de pedir uma indicação ao cliente, com a mensagem pronta no WhatsApp. Quem traz a indicação ganha os pontos de indicação.</div>
@@ -3907,6 +3919,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
   <button data-view="painel" class="so-ceo" onclick="setView('painel')"><i data-ic="painel"></i>Painel</button>
   <button data-view="desempenho" class="so-ceo" onclick="setView('desempenho')"><i data-ic="trend"></i>Equipe</button>
   <button data-view="vendas" class="so-ceo" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas</button>
+  <button data-view="financeiro" class="so-ceo" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
   <button data-view="calendario" id="mbAgenda" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
   <button data-view="bolsao" id="mbBolsao" class="mb-bz hide" onclick="setView('bolsao')"><span class="mb-bz-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="mbBzN"></b></span>Bolsão</button>
   <button data-view="ranking" class="nao-sdr" onclick="setView('ranking')"><i data-ic="tbRank"></i>Ranking</button>
@@ -5327,7 +5340,7 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'recepcao' && !podeGerir() && !abaLiberada('recepcao')) v = 'hoje';
   if (v !== 'recepcao') pararRecepcao();
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
-  if (souCeo() && !VIEWS_CEO.includes(v)) v = 'painel';
+  if (souCeo() && !viewsCeo().includes(v)) v = viewsCeo()[0];
   if (souCorresp() && !['analises','config'].includes(v)) v = 'analises';
   if (souAdm() && !viewsDoCargo('adm').includes(v)) v = viewsDoCargo('adm').find(x => x !== 'config') || 'config';
   if (souMkt() && !viewsDoCargo('marketing').includes(v)) v = viewsDoCargo('marketing').find(x => x !== 'config') || 'config';
@@ -6037,6 +6050,10 @@ window.souDono = souDono;
 const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
 const VIEWS_CEO = ['bolsao','analises','painel','desempenho','vendas','reservas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
+// v290: o gestor escolhe em Configurações o que o CEO vê (padrão: Painel executivo e Financeiro)
+const CEO_ABAS = [['painel','Painel executivo'],['financeiro','Financeiro'],['desempenho','Desempenho da equipe'],['vendas','Vendas'],['reservas','Reservas'],['ranking','Ranking'],['cartas','Cartas aprovadas'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['bolsao','Bolsão'],['apresentacao','Apresentação'],['tarefas','Tarefas'],['calendario','Calendário / Agenda']];
+const CEO_PADRAO = ['painel','financeiro'];
+const viewsCeo = () => { const l = Array.isArray(appCfg?.ceoViews) ? appCfg.ceoViews.filter(v => VIEWS_CEO.includes(v)) : CEO_PADRAO; return [...(l.length ? l : CEO_PADRAO), 'config']; };
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
 const souAnjo = () => souAtivo() && perfil.papel === 'anjo';
 const membrosAnjo = () => Array.isArray(perfil?.membros) ? perfil.membros : [];
@@ -6289,7 +6306,7 @@ function renderPapel(){
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
   document.querySelectorAll('.direcao-only').forEach(e => e.classList.toggle('hide', !souDirecao()));
   document.documentElement.classList.toggle('modo-ceo', souCeo());
-  if (souCeo() && !VIEWS_CEO.includes(view)) setTimeout(() => setView('painel'), 0);
+  if (souCeo() && !viewsCeo().includes(view)) setTimeout(() => setView(viewsCeo()[0]), 0);
   document.documentElement.classList.toggle('modo-corresp', souCorresp());
   if (souCorresp() && !['analises','config'].includes(view)) setTimeout(() => setView('analises'), 0);
   document.documentElement.classList.toggle('modo-adm', souAdm()); document.documentElement.classList.toggle('modo-mkt', souMkt());
@@ -7553,7 +7570,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 287;
+const APP_VERSAO = 290;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7876,6 +7893,12 @@ function aplicarAbasOcultas(){
     css += `\nhtml.${md} .nav>button[data-view]${ok.map(v => `:not([data-view="${v}"])`).join('')}{display:none!important}`
       + `\nhtml.${md} #menuModal .menu-list>button${ok.map(v => `:not([onclick*="'${v}'"])`).join('')}:not([onclick*="sair"]){display:none!important}`
       + ok.map(v => `\nhtml.${md} .nav>button[data-view="${v}"].hide,html.${md} #menuModal .menu-list>button[onclick*="'${v}'"].hide{display:flex!important}`).join(''); }
+  if (souCeo()) { const ok = viewsCeo(); // v290: CEO vê só o que o gestor marcou
+    css += `\nhtml.modo-ceo .nav>button[data-view]${ok.map(v => `:not([data-view="${v}"])`).join('')}{display:none!important}`
+      + `\nhtml.modo-ceo .mobilebar>button[data-view]${ok.map(v => `:not([data-view="${v}"])`).join('')}{display:none!important}`
+      + `\nhtml.modo-ceo #menuModal .menu-list>button[onclick*="setView"]${ok.map(v => `:not([onclick*="'${v}'"])`).join('')}{display:none!important}`
+      + ok.map(v => `\nhtml.modo-ceo .nav>button[data-view="${v}"].hide{display:flex!important}`).join('')
+      + `\nhtml.modo-ceo .nav-title{display:none!important}`; }
   st.textContent = css;
   if (l.includes(view)) setTimeout(() => setView('hoje'), 0);
   if (md && !viewsDoCargo(pap).includes(view)) setTimeout(() => setView(view), 0);
@@ -8631,12 +8654,23 @@ window.restaurar = async (tipo, id) => {
 // ---------- administração (Configurações, só gerente) ----------
 let admAssin = '';
 function renderAbasAdm(){
+  try { renderCeoAbas(); } catch(e) {}
   const el = $('admAbas'); if (!el || el.contains(document.activeElement)) return;
   const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, lib = appCfg.abasLiberadas || {}, cargos = [['corretor','Corretor'],['anjo','Anjo'],['coordenador','Coordenador'],['sdr','SDR'],['marketing','Marketing'],['adm','ADM']];
   const marcada = (c, k) => ABAS_DO_CARGO[c].includes(k) ? !(cfgCargo(oc, c) || []).includes(k) : (cfgCargo(lib, c) || []).includes(k);
   el.innerHTML = `<div class="tbl-wrap"><table class="rank ab-tab"><thead><tr><th>Aba</th>${cargos.map(([,n]) => `<th style="text-align:center">${n}</th>`).join('')}</tr></thead><tbody>${
     ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center"><input type="checkbox" data-c="${c}" data-a="${k}" ${marcada(c, k) ? 'checked' : ''} title="${ABAS_DO_CARGO[c].includes(k) ? '' : 'Fora do padrão deste cargo: a tela mostra só o que esse cargo tem permissão de ver'}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
+function renderCeoAbas(){
+  const el = $('admCeoAbas'); if (!el || el.contains(document.activeElement)) return; const ok = viewsCeo();
+  el.innerHTML = CEO_ABAS.map(([k, n]) => `<label class="ceo-ab"><input type="checkbox" data-ceo="${k}" ${ok.includes(k) ? 'checked' : ''}><span>${n}</span></label>`).join('');
+}
+window.salvarCeoAbas = async () => {
+  if (!souDono()) return; const l = [...document.querySelectorAll('#admCeoAbas input[data-ceo]:checked')].map(i => i.dataset.ceo);
+  if (!l.length) { toast('Marque pelo menos uma tela'); return; }
+  try { await gravar(setDoc(doc(db,'config','app'), { ceoViews:l, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true })); toast('Pronto. O CEO passa a ver só o que está marcado.'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 window.salvarAbas = async () => {
   if (!souDono()) return;
   const oc = { corretor:[], anjo:[], coordenador:[], sdr:[], marketing:[], adm:[] }, lib = { corretor:[], anjo:[], coordenador:[], sdr:[], marketing:[], adm:[] };
@@ -13487,8 +13521,29 @@ function semRepetir(lista){
 // tudo o que se sabe da comissão de uma venda (reserva + acompanhamento financeiro)
 window.fvEditar = id => { const el = document.getElementById(id); if (!el) return; const d = el.closest('details'); if (d) d.open = true;
   el.scrollIntoView({ block:'center', behavior:'smooth' }); setTimeout(() => { el.focus(); if (el.select) el.select(); }, 300); };
+// v290: descobre a construtora pelo que o corretor escreveu (empreendimento): cadastro de empreendimentos, outras vendas do mesmo empreendimento ou o nome da construtora no texto
+let _consCache = { r:null, fv:null, e:null, m:null };
+function consNome(c){ const t = String(c || '').replace(/\s+/g, ' ').trim(); if (!t) return ''; const k = norm(t), oficial = construtoras().find(x => norm(x.nome) === k); return oficial ? oficial.nome : t.length <= 4 ? t.toUpperCase() : nomeBonito(t.toLowerCase()); }
+function mapaConstrutoras(){
+  if (_consCache.r === reservas && _consCache.fv === finVendas && _consCache.e === empreendimentos) return _consCache.m;
+  const porEmp = new Map(), conta = (emp, c) => { const k = norm(emp || '').trim(); if (!k || !c) return; const o = porEmp.get(k) || {}; o[consNome(c)] = (o[consNome(c)] || 0) + 1; porEmp.set(k, o); };
+  reservas.forEach(r => conta(r.empreendimento, (finVendas[r.id] || {}).construtora || r.construtora));
+  Object.values(finVendas).forEach(f => { if (f.r) conta(f.r.empreendimento, f.construtora || f.r.construtora); });
+  const m = { porEmp:new Map([...porEmp].map(([k, o]) => [k, Object.entries(o).sort((a, b) => b[1] - a[1])[0][0]])),
+    nomes:[...new Set([...construtoras().map(c => c.nome).filter(n => !/^outras/i.test(n)), ...empreendimentos.map(e => e.construtora).filter(Boolean).map(consNome), ...[...porEmp.values()].flatMap(o => Object.keys(o))])] };
+  _consCache = { r:reservas, fv:finVendas, e:empreendimentos, m }; return m;
+}
+function acharConstrutora(r){
+  const emp = norm(r.empreendimento || '').trim(); if (!emp) return '';
+  const e = empreendimentos.find(x => { const n = norm(x.nome || '').trim(); return n.length >= 4 && (n === emp || emp.includes(n) || n.includes(emp)); });
+  if (e && e.construtora) return consNome(e.construtora);
+  const m = mapaConstrutoras(); if (m.porEmp.has(emp)) return m.porEmp.get(emp);
+  const parecido = [...m.porEmp.keys()].find(k => k.length >= 5 && (emp.includes(k) || k.includes(emp))); if (parecido) return m.porEmp.get(parecido);
+  const palavras = ' ' + emp.replace(/[^a-z0-9]+/g, ' ') + ' ', nome = m.nomes.find(n => { const k = norm(n).trim(); return k.length >= 2 && palavras.includes(' ' + k + ' '); });
+  return nome || '';
+}
 function vendaFin(r){
-  const f = finVendas[r.id] || {}, cons = f.construtora || r.construtora || '', rg = regraConst(cons);
+  const f = finVendas[r.id] || {}, consAuto = !(f.construtora || r.construtora), cons = consNome(f.construtora || r.construtora || '') || acharConstrutora(r), rg = regraConst(cons);
   const tipo = f.tipo || rg.tipo, vgv = Number(r.valor) || 0;
   // o "percentual" da reserva: até 10 é % sobre o imóvel; acima disso (ou 0,5 / 0,6) é a parte do corretor
   // v282: o "%" da planilha (0,4 / 0,5 / 0,7 / 40%) é a parte da IMOBILIÁRIA; o corretor fica com o resto (40% imobiliária = 60% corretor). Até 10 continua sendo % sobre o imóvel
@@ -13510,7 +13565,7 @@ function vendaFin(r){
     recebida: tipo === 'adiantamento' ? !!(f.recAdiant && f.recRestante) : !!f.recRestante, paga:!!f.corPago };
   const etapa = ETAPAS_FIN.findIndex(([k]) => !ok[k]);
   const aReceber = (tipo === 'adiantamento' && !f.recAdiant ? adiant : 0) + (!f.recRestante ? rest : 0);
-  return { r, f, cons, rg, tipo, pctImob, vgv, total, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valCorBruto, descontos, descTotal, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
+  return { r, f, cons, consAuto:consAuto && !!cons, rg, tipo, pctImob, vgv, total, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valCorBruto, descontos, descTotal, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
 }
 // o que entra e o que sai em um mês (para o golpe de vista)
 function previsaoMes(m){
@@ -13575,25 +13630,26 @@ function htmlFinPainel(m){
 // ---------- notas fiscais ----------
 window.nfFiltro = '';
 function vendasSemNota(){
-  return vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.f.nota !== 'sem' && !v.ok.recebida
+  return vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.f.nota !== 'sem' && !v.ok.recebida && !v.f.faturada
     && (v.ok.assinatura || (v.tipo === 'adiantamento' && !v.f.recAdiant))
     && !finNotas.some(n => n.vendaId === v.r.id && n.status !== 'cancelada'));
 }
 function htmlNotas2(){
   const m = finMes, noMes = n => (n.emitidaEm || '').slice(0,7) === m;
-  const pend = vendasSemNota(), abertas = finNotas.filter(n => n.status === 'emitida'), doMes = finNotas.filter(noMes);
+  // v288: tudo segue o mês escolhido lá em cima (vendas pela data da reserva, notas pela data de emissão)
+  const pend = vendasSemNota().filter(v => (v.r.dia || '').slice(0, 7) === m), doMes = finNotas.filter(noMes), abertas = doMes.filter(n => n.status === 'emitida');
   const impMes = doMes.filter(n => n.status !== 'cancelada').reduce((a,n) => a + nfImposto(n), 0);
   const soma = l => l.reduce((a,n) => a + (Number(n.valor) || 0), 0);
   const t = norm(finBusca);
-  let lista = window.nfFiltro === 'abertas' ? abertas : window.nfFiltro === 'todas' ? finNotas.slice() : doMes;
+  let lista = window.nfFiltro === 'abertas' ? abertas : window.nfFiltro === 'todas' ? finNotas.filter(n => (n.emitidaEm || '').slice(0, 7) >= FIN_DESDE) : doMes;
   lista = lista.filter(n => !t || norm([n.numero, n.tomador, n.cliente, n.emissor, n.obs].join(' ')).includes(t)).sort((a,b) => (b.emitidaEm || '').localeCompare(a.emitidaEm || '') || String(b.numero || '').localeCompare(String(a.numero || '')));
   const resumo = `<div class="nf-resumo">
     <button class="nf-box ${pend.length ? 'alerta' : ''}" onclick="document.getElementById('nfPend')?.scrollIntoView({behavior:'smooth',block:'center'})"><span>Para emitir</span><b>${pend.length}</b><em>${pend.length ? brl(pend.reduce((a,v) => a + (v.tipo === 'adiantamento' && !v.f.recAdiant && !v.ok.assinatura ? v.adiant : v.aReceber), 0)) + ' em comissão' : 'nada pendente'}</em></button>
     <button class="nf-box" onclick="nfFiltro='abertas';render()"><span>Esperando pagamento</span><b>${abertas.length}</b><em>${brl(soma(abertas))}</em></button>
     <div class="nf-box"><span>Emitidas em ${nomeMes(m).split(' de ')[0].toLowerCase()}</span><b>${doMes.filter(n => n.status !== 'cancelada').length}</b><em>${brl(soma(doMes.filter(n => n.status !== 'cancelada')))}</em></div>
     ${(() => { const im = impostoDoMes(m); return `<div class="nf-box nf-imp ${im.valor && !im.recolhido ? 'alerta' : ''}"><span>Imposto a recolher (${String(finCfg.pctImposto ?? 15.7).replace('.', ',')}%)</span><b class="fin-neg">${brl2(im.valor)}</b><em>${!im.valor ? 'nenhuma nota no mês' : im.recolhido ? '✓ recolhido' : im.lanc ? 'lançado · falta pagar' : `<button class="link" onclick="event.stopPropagation();lancarImposto('${m}')">guardar e lançar o DAS</button>`}</em></div>`; })()}</div>`;
-  const pendH = pend.length ? `<div class="nf-pend" id="nfPend"><h4>Vendas que precisam de nota</h4>${pend.map(v => `<div class="nf-pl"><div><b>${esc(v.r.cliente || 'Cliente')}</b><small>${esc(v.cons || 'sem construtora')} · ${v.ok.assinatura ? 'assinou' : 'adiantamento'} · ${brl2(v.tipo === 'adiantamento' && !v.f.recAdiant && !v.ok.assinatura ? v.adiant : v.aReceber)}${v.rg.obs ? ' · ⚠️ ' + esc(v.rg.obs) : ''}</small></div><button class="btn btn-ghost" onclick="editarNota(null,'${v.r.id}')">Registrar nota</button></div>`).join('')}</div>` : '';
-  const filtros = [['','Do mês'],['abertas','Esperando pagamento'],['todas','Todas']];
+  const pendH = pend.length ? `<div class="nf-pend" id="nfPend"><h4>Vendas de ${nomeMes(m).split(' de ')[0].toLowerCase()} que precisam de nota</h4>${pend.slice().sort((a, b) => nomeBonito(a.r.cliente || '').localeCompare(nomeBonito(b.r.cliente || ''), 'pt-BR')).map(v => `<div class="nf-pl"><div><b>${esc(v.r.cliente || 'Cliente')}</b><small>${esc(v.cons || 'sem construtora')} · ${v.ok.assinatura ? 'assinou' : 'adiantamento'} · ${brl2(v.tipo === 'adiantamento' && !v.f.recAdiant && !v.ok.assinatura ? v.adiant : v.aReceber)}${v.rg.obs ? ' · ⚠️ ' + esc(v.rg.obs) : ''}</small></div><button class="btn btn-ghost" onclick="editarNota(null,'${v.r.id}')">Registrar nota</button></div>`).join('')}</div>` : '';
+  const filtros = [['','Do mês'],['abertas','Esperando pagamento'],['todas','Desde agosto']];
   const cab = `<div class="fin-filtros"><div class="seg">${filtros.map(([k,n]) => `<button class="${window.nfFiltro === k ? 'on' : ''}" onclick="nfFiltro='${k}';render()">${n}</button>`).join('')}</div><input id="finBuscaI" placeholder="Buscar número, construtora ou cliente..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"><button class="btn btn-primary" onclick="editarNota()">+ Nota fiscal</button></div>`;
   const linhas = lista.length ? `<div class="fl-lista">${lista.map(n => `<div class="fl-row nf-row" onclick="editarNota('${n.id}')"><div class="fl-data"><b>${(n.emitidaEm || '').slice(8,10) || '—'}</b><span>${n.emitidaEm ? ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][Number(n.emitidaEm.slice(5,7)) - 1] : ''}</span></div>
       <div class="fl-txt"><b>NF ${esc(n.numero || 's/ nº')} · ${esc(n.tomador || 'sem tomador')}</b><small>${[n.cliente, n.emissor].filter(Boolean).map(esc).join(' · ')}${n.anexo ? ` · <button class="link nf-ver" onclick="event.stopPropagation();abrirAnexoNota('${n.id}')">📎 ver nota</button>` : n.link ? ` · <a href="${esc(n.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 ver nota</a>` : ' · <span class="nf-sem">sem arquivo</span>'}</small></div>
@@ -13703,7 +13759,7 @@ window.excluirNota = async () => {
   try { await gravar(deleteDoc(doc(db,'fin_notas',n.id))); apagarAnexo(n.anexo); fechar('notaModal'); toast('Nota excluída'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // ===== v282: Comissões em uma tela só: o que falta receber, o que falta pagar, o que precisa de atenção =====
-window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false; window.finComCor = '';
+window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false; window.finComCor = ''; window.finComAss = ''; window.finComCons = '';
 function atencaoVenda(v, h){
   const a = [], f = v.f, pl = f.plan || {};
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
@@ -13737,23 +13793,33 @@ function htmlComissoes(){
     cs.forEach(c => { const k = ckey(c); const o = porCor.get(k) || { k, nome:c.nome, n:0, total:0, pago:0, pagar:0, receber:0 }; o.n++; o.total += parte;
       if (v.f.corPago) o.pago += parte; else if (v.ok.recebida) o.pagar += parte; else o.receber += parte; porCor.set(k, o); }); });
   const zv = (n, cls) => n > 0.5 ? `<span class="${cls}">${brl(n)}</span>` : '<span class="zero">—</span>', somaC = k => [...porCor.values()].reduce((a, c) => a + c[k], 0);
-  const cores = [...porCor.values()].sort((a, b) => b.total - a.total), corSel = porCor.has(window.finComCor || '') ? window.finComCor : '';
-  const vs = corSel ? vsMes.filter(v => corsDe(v).some(c => ckey(c) === corSel)) : vsMes;
+  const cores = [...porCor.values()].sort((a, b) => nomeBonito(a.nome).localeCompare(nomeBonito(b.nome), 'pt-BR')), corSel = porCor.has(window.finComCor || '') ? window.finComCor : '';
+  const vsCor = corSel ? vsMes.filter(v => corsDe(v).some(c => ckey(c) === corSel)) : vsMes;
+  // v289: separa quem já assinou o contrato de quem ainda não assinou
+  const assinou = v => !!(v.f.assinaturaEm || v.f.processo === 'Assinou' || v.f.faturada || v.ok.recebida), ass = ['sim', 'nao'].includes(window.finComAss) ? window.finComAss : '';
+  const nSim = vsCor.filter(assinou).length, nNao = vsCor.length - nSim;
+  const vsAss = ass ? vsCor.filter(v => ass === 'sim' ? assinou(v) : !assinou(v)) : vsCor;
+  // v290: abas por construtora
+  const SEMC = 'Sem construtora', cOf = v => v.cons || SEMC, cCont = new Map(); vsAss.forEach(v => cCont.set(cOf(v), (cCont.get(cOf(v)) || 0) + 1));
+  const consL = [...cCont.keys()].sort((a, b) => a === SEMC ? 1 : b === SEMC ? -1 : a.localeCompare(b, 'pt-BR')), consSel = cCont.has(window.finComCons || '') ? window.finComCons : '';
+  const vs = consSel ? vsAss.filter(v => cOf(v) === consSel) : vsAss;
+  const segCons = consL.length > 1 || consSel ? `<div class="fc-cons">${[['', 'Todas as construtoras', vsAss.length], ...consL.map(c => [c, c, cCont.get(c)])].map(([k, t, n]) => `<button class="${consSel === k ? 'on' : ''} ${k === SEMC ? 'sem' : ''}" onclick="finComCons=${k ? `'${esc(k).replace(/'/g, '')}'` : "''"};render()">${esc(t)}<span>${n}</span></button>`).join('')}</div>` : '';
+  const segAss = `<div class="fc-ass">${[['', 'Todas', vsCor.length], ['sim', 'Já assinou', nSim], ['nao', 'Ainda não assinou', nNao]].map(([k, t, n]) => `<button class="${ass === k ? 'on' : ''} ${k ? 'a-' + k : ''}" onclick="finComAss='${k}';render()">${t}<span>${n}</span></button>`).join('')}</div>`;
   const mN = nomeMes(mesSel).split(' de ')[0].toLowerCase(), segM = `<div class="seg fin-subseg fc-mes"><button class="${todosM ? '' : 'on'}" onclick="finComTodos=false;render()">Vendas de ${mN}</button><button class="${todosM ? 'on' : ''}" onclick="finComTodos=true;render()">Todos os meses</button></div>`;
   const aReceber = vs.filter(v => v.aReceber > 0 && !v.ok.recebida), aPagar = vs.filter(v => v.ok.recebida && !v.f.corPago && v.valCor > 0), atencao = vs.filter(v => v.at.length), concl = vs.filter(v => v.ok.recebida && (v.f.corPago || !(v.valCor > 0)));
   const soma = (l, k) => l.reduce((a, v) => a + (Number(typeof k === 'function' ? k(v) : v[k]) || 0), 0);
   const fil = window.finComFil || 'atencao', grupos = { atencao, receber:aReceber, pagar:aPagar, todas:vs, concl };
   const t = norm(finBusca), lista = (grupos[fil] || vs).filter(v => !t || norm([v.r.cliente, v.r.corretorTexto, v.cons, v.r.empreendimento].join(' ')).includes(t))
-    .sort((a, b) => fil === 'receber' ? ((a.prevR || a.prevA || '9') + '').localeCompare((b.prevR || b.prevA || '9') + '') : (b.r.dia || '').localeCompare(a.r.dia || ''));
+    .sort((a, b) => nomeBonito(a.r.cliente || '').localeCompare(nomeBonito(b.r.cliente || ''), 'pt-BR')); // v289: ordem alfabética
   const card = (k, rot, val, sub, cls) => `<button class="fc-k ${cls} ${fil === k ? 'on' : ''}" onclick="finComFil='${k}';render()"><span>${rot}</span><b>${val}</b><small>${sub}</small></button>`;
   const status = v => { if (v.ok.recebida && (v.f.corPago || !(v.valCor > 0))) return 'Concluída'; const e = v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída'; return e; };
   const linha = v => { const corN = v.cor.map(c => primeiro(c.nome)).join(' + ') || esc(v.r.corretorTexto || '');
     const prev = !v.ok.recebida ? (v.tipo === 'adiantamento' && !v.f.recAdiant && v.prevA ? `adiant. ${dataBR(v.prevA).slice(0, 5)}` : v.prevR ? `receber ${dataBR(v.prevR).slice(0, 5)}` : '') : (!v.f.corPago && v.valCor > 0 ? 'pagar o corretor' : 'concluída');
-    return `<button class="fc-l ${v.at.length ? 'at' : ''}" onclick="abrirVendaFin('${v.r.id}')"><div class="fc-l1"><b>${esc(v.r.cliente || 'Cliente')}</b>${planPend(v.r.id) ? '<em class="fc-tag fc-conf">a conferir</em>' : v.f.manual ? '<em class="fc-tag">planilha</em>' : ''}<span class="fc-st">${status(v)}</span></div>
+    return `<button class="fc-l ${v.at.length ? 'at' : ''}" onclick="abrirVendaFin('${v.r.id}')"><div class="fc-l1"><b>${esc(v.r.cliente || 'Cliente')}</b>${assinou(v) ? '<em class="fc-tag fc-ass-s">assinou</em>' : '<em class="fc-tag fc-ass-n">não assinou</em>'}${planPend(v.r.id) ? '<em class="fc-tag fc-conf">a conferir</em>' : v.f.manual ? '<em class="fc-tag">planilha</em>' : ''}<span class="fc-st">${status(v)}</span></div>
       <div class="fc-l2"><span>${corN}${v.cons ? ' · ' + esc(v.cons) : v.r.empreendimento ? ' · ' + esc(v.r.empreendimento) : ''} · ${dataBR(v.r.dia).slice(0, 5)}</span><span class="fc-vals"><i>Comissão <b>${brl(v.total)}</b></i><i>Corretor <b>${brl(v.valCor)}</b> (${Math.round(v.pctCor)}%)</i>${prev ? `<i class="fc-prev">${prev}</i>` : ''}</span></div>
       <div class="fc-l3">${v.ok.recebida && (v.f.corPago || !(v.valCor > 0)) ? `<span class="fc-pago">✓ Paga</span><span class="fc-pgbt fc-des" onclick="event.stopPropagation();fcMarcarPaga('${v.r.id}',false)">Desmarcar</span>` : `<span class="fc-pgbt" onclick="event.stopPropagation();fcMarcarPaga('${v.r.id}',true)">Marcar como paga</span>`}</div>
       ${v.at.length ? `<div class="fc-at">⚠ ${v.at.map(esc).join(' · ')}</div>` : ''}</button>`; };
-  return `<div class="fc-segs">${seg}</div><div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
+  return `<div class="fc-segs">${seg}</div>${segAss}${segCons}<div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
     <div class="fin-filtros fc-fil"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)},0)"><select id="fcCorSel" onchange="finComCor=this.value;render()"><option value="">Todos os corretores</option>${cores.map(c => `<option value="${esc(c.k)}" ${c.k === corSel ? 'selected' : ''}>${esc(nomeBonito(c.nome))}</option>`).join('')}</select><button class="btn btn-ghost" onclick="abrirImpComissoes()">Importar planilha</button></div>
     ${cores.length ? `<details class="fc-cor" ${corSel || window._fcCorAberto ? 'open' : ''} ontoggle="window._fcCorAberto=this.open"><summary>Comissão de cada corretor em ${nomeMes(mesSel).split(' de ')[0].toLowerCase()} <span>${cores.length}</span></summary>
       <div class="fc-cor-t"><div class="fc-cor-h"><span>Corretor</span><span>Vendas</span><span>Comissão</span><span>Já pago</span><span>Falta pagar</span><span>A receber</span></div>
@@ -13779,16 +13845,16 @@ function icLinhas(X, wb){
     // v285: aba "COMISSÕES RECEBIDAS" (conferência geral): MÊS, CLIENTE, CORRETOR, TOTAL, % COR., STATUS, PREVISÃO, OBSERVAÇÃO
     const hr = a.findIndex(r => r.some(c => /^cliente$/i.test(String(c).trim())) && r.some(c => /^status$/i.test(String(c).trim())) && r.some(c => /^% ?cor/i.test(String(c).trim())));
     if (hr >= 0) { const cab = a[hr].map(c => norm(String(c)).trim()), col = re => cab.findIndex(c => re.test(c));
-      const C = { mes:col(/^mes$/), cli:col(/^cliente$/), cor:col(/^corretor/), emp:col(/^empreendimento/), tot:col(/^total$/), pc:col(/^% ?cor/), st:col(/^status$/), prev:col(/^previsao/), obs:col(/^observac/) };
+      const C = { mes:col(/^mes$/), cli:col(/^cliente$/), cor:col(/^corretor/), emp:col(/^empreendimento/), tot:col(/^total$/), pc:col(/^% ?cor/), st:col(/^status$/), prev:col(/^previsao/), obs:col(/^observac/), cons:col(/^const/) };
       for (let i = hr + 1; i < a.length; i++) { const r = a[i], g = k => C[k] >= 0 ? r[C[k]] : ''; const cli = String(g('cli') || '').trim(); if (!cli || /^cliente$/i.test(cli)) continue;
         const pv = g('prev'); out.push({ rec:true, aba:nome, linha:i + 1, mes:MES_N[Object.keys(MES_N).find(m => norm(String(g('mes'))).trim().slice(0, 3) === m.slice(0, 3))] || 0, cliente:cli, corretor:String(g('cor') || '').trim(), emp:String(g('emp') || '').trim(),
-          comissao:icNum(g('tot')), pct:icNum(g('pc')), status:norm(String(g('st') || '')).trim(), prevMes:pv instanceof Date ? pv.getMonth() + 1 : MES_N[norm(String(pv || '')).trim()] || 0, obs:String(g('obs') || '').trim() }); }
+          comissao:icNum(g('tot')), pct:icNum(g('pc')), status:norm(String(g('st') || '')).trim(), prevMes:pv instanceof Date ? pv.getMonth() + 1 : MES_N[norm(String(pv || '')).trim()] || 0, obs:String(g('obs') || '').trim(), cons:String(g('cons') || '').trim() }); }
       return; }
     // aba NOTAS (planilha de NF): CLIENTE, CPF, NF, DATA DA EMISSÃO → nota emitida
     const hn = a.findIndex(r => r.some(c => /^cliente$/i.test(String(c).trim())) && r.some(c => /^nf$/i.test(String(c).trim())) && r.some(c => /^data da emiss/i.test(norm(String(c)).trim())));
-    if (hn >= 0) { const cab = a[hn].map(c => norm(String(c)).trim()), col = re => cab.findIndex(c => re.test(c)), C = { cli:col(/^cliente$/), cpf:col(/^cpf$/), cor:col(/^corretor/), nf:col(/^nf$/), dt:col(/^data da emiss/) };
+    if (hn >= 0) { const cab = a[hn].map(c => norm(String(c)).trim()), col = re => cab.findIndex(c => re.test(c)), C = { cli:col(/^cliente$/), cpf:col(/^cpf$/), cor:col(/^corretor/), nf:col(/^nf$/), dt:col(/^data da emiss/), cons:col(/^construtora/) };
       for (let i = hn + 1; i < a.length; i++) { const r = a[i], g = k => C[k] >= 0 ? r[C[k]] : ''; const cli = String(g('cli') || '').trim(); if (!cli || /^cliente$/i.test(cli)) continue;
-        out.push({ rec:true, nota:true, aba:nome, linha:i + 1, mes:0, cliente:cli, cpf:soDig(g('cpf')), corretor:String(g('cor') || '').trim(), status:'nota', nf:String(g('nf') || '').replace(/\.0$/, ''), nfDia:icData(g('dt')), comissao:0, pct:0, prevMes:0, obs:'' }); }
+        out.push({ rec:true, nota:true, aba:nome, linha:i + 1, mes:0, cliente:cli, cpf:soDig(g('cpf')), corretor:String(g('cor') || '').trim(), status:'nota', nf:String(g('nf') || '').replace(/\.0$/, ''), nfDia:icData(g('dt')), comissao:0, pct:0, prevMes:0, obs:'', cons:String(g('cons') || '').trim() }); }
       return; }
     const hi = a.findIndex(r => r.some(c => /^cliente$/i.test(String(c).trim())) && r.some(c => /^%$/.test(String(c).trim()) || /comiss/i.test(String(c)))); if (hi < 0) return;
     const cab = a[hi].map(c => norm(String(c)).trim()), col = (re, n = 0) => { let k = -1, q = 0; cab.forEach((c, i) => { if (k < 0 && re.test(c)) { if (q === n) k = i; q++; } }); return k; };
@@ -13851,10 +13917,11 @@ window.lerImpComissoes = async input => {
       if (c.length > 1 && x.mes) { const c2 = c.filter(r => r.dia && Math.abs(+r.dia.slice(5, 7) - x.mes) <= 1); if (c2.length) c = c2; }
       if (c.length > 1 && x.corretor) { const p1 = norm(x.corretor).split(' ')[0]; const c2 = c.filter(r => norm(r.corretorTexto || '').includes(p1) || (r.corretores || []).some(k => norm(k.nome || '').includes(p1))); if (c2.length) c = c2; }
       return c.length === 1 ? c[0] : null; };
+    const comCons = (x, r, up) => { const c = consNome(x.cons); if (c && !MES_N[norm(c).trim()] && !/pago|^\d/i.test(c) && !(finVendas[r.id] || {}).construtora && !r.construtora && /[a-z]/i.test(c)) up.construtora = c; return up; };
     recs.forEach(x => { const st = x.status;
       if (/caiu/.test(st)) { const r = achaRec(x); if (r && !finVendas[r.id]?.excluida) caiu.push({ x, r }); return; }
       const r = achaRec(x); if (!r) { if (st) semAcho.push(x); return; }
-      if (x.nota) { const f = finVendas[r.id] || {}, up = {}, nf = `NF ${x.nf}${x.nfDia ? ' emitida em ' + dataBR(x.nfDia) : ''}`; if (!f.faturada) up.faturada = true; if (x.nf && f.nfPlan !== nf) up.nfPlan = nf;
+      if (x.nota) { const f = finVendas[r.id] || {}, up = {}, nf = `NF ${x.nf}${x.nfDia ? ' emitida em ' + dataBR(x.nfDia) : ''}`; if (!f.faturada) up.faturada = true; if (x.nf && f.nfPlan !== nf) up.nfPlan = nf; comCons(x, r, up);
         if (!Object.keys(up).length) { iguais.push(x); return; } const ja = muda.find(m => m.r.id === r.id); if (ja) Object.assign(ja.up, up); else muda.push({ x, r, up }); return; }
       const f = finVendas[r.id] || {}, up = {}, pago = /^pago/.test(st), parte = /parte pago/.test(st);
       const prevISO = x.prevMes ? `${x.prevMes < (x.mes || 1) - 3 ? anoAt + 1 : anoAt}-${String(x.prevMes).padStart(2, '0')}-15` : '';
@@ -13866,6 +13933,7 @@ window.lerImpComissoes = async input => {
       if (x.comissao > 0 && !(Number(f.comissao) > 0)) up.comissao = Math.round(x.comissao * 100) / 100;
       if (x.pct > 0 && x.pct <= 1) { const pc = Math.round(x.pct * 10000) / 100; if (Number(f.pctCor) !== pc) up.pctCor = pc; }
       if (x.obs && f.obsPlan !== x.obs) up.obsPlan = x.obs;
+      comCons(x, r, up);
       const antigo = pago && !f.corPago && (!prevISO || prevISO.slice(0, 7) < hojeISO().slice(0, 7));
       if (!Object.keys(up).length && !antigo) { iguais.push(x); return; }
       const ja = muda.find(m => m.r.id === r.id); if (ja) Object.assign(ja.up, up); else muda.push({ x, r, up, antigo }); if (ja && antigo) ja.antigo = true; });
@@ -13876,7 +13944,7 @@ window.lerImpComissoes = async input => {
       ${caiu.length ? `<div class="fin-alerta fin-alerta-s" style="margin-top:10px">⚠ ${caiu.length} venda${caiu.length > 1 ? 's' : ''} que a planilha marca como CAIU RESERVA ainda ${caiu.length > 1 ? 'estão' : 'está'} no app: ${caiu.slice(0, 6).map(c => esc(nomeBonito(c.r.cliente))).join(', ')}. Confira em Vendas.</div>` : ''}
       ${nAntigo ? `<label class="ic-chk"><input type="checkbox" id="icCorPago" checked><span><b>${nAntigo} venda${nAntigo > 1 ? 's' : ''} PAGO de meses anteriores:</b> o corretor também já recebeu. Ficam como concluídas e saem da lista "a conferir". Desmarque se ainda falta pagar algum corretor.</span></label>` : ''}
       ${semAcho.length ? `<details class="ic-sem"><summary>${semAcho.length} da aba de recebidas que não achei no app</summary>${semAcho.map(x => `<div>${esc(nomeBonito(x.cliente))} <small>${[x.corretor, x.emp, x.status.toUpperCase()].filter(Boolean).map(esc).join(' · ')}</small></div>`).join('')}</details>` : ''}
-      <div class="ic-lista">${muda.slice(0, 80).map(({ x, r, up }) => `<div class="ic-l"><b>${esc(nomeBonito(r.cliente))}</b><small>${[up.comissao ? 'comissão ' + brl2(up.comissao) : '', up.pctCor != null ? 'corretor ' + up.pctCor + '%' : '', up.assinaturaEm ? 'assinou ' + dataBR(up.assinaturaEm) : up.assinaturaEm === '' ? 'tira a data de assinatura errada' : '', up.nfPlan ? up.nfPlan : up.faturada ? 'nota emitida' : '', up.recRestante ? 'recebido' : up.recAdiant ? 'parte recebida' : '', up.prevRestante ? 'receber em ' + dataBR(up.prevRestante).slice(3) : '', up.processo && !up.assinaturaEm ? up.processo.toLowerCase() : ''].filter(Boolean).join(' · ')}</small></div>`).join('')}
+      <div class="ic-lista">${muda.slice(0, 80).map(({ x, r, up }) => `<div class="ic-l"><b>${esc(nomeBonito(r.cliente))}</b><small>${[up.comissao ? 'comissão ' + brl2(up.comissao) : '', up.pctCor != null ? 'corretor ' + up.pctCor + '%' : '', up.assinaturaEm ? 'assinou ' + dataBR(up.assinaturaEm) : up.assinaturaEm === '' ? 'tira a data de assinatura errada' : '', up.nfPlan ? up.nfPlan : up.faturada ? 'nota emitida' : '', up.recRestante ? 'recebido' : up.recAdiant ? 'parte recebida' : '', up.prevRestante ? 'receber em ' + dataBR(up.prevRestante).slice(3) : '', up.construtora ? up.construtora : '', up.processo && !up.assinaturaEm ? up.processo.toLowerCase() : ''].filter(Boolean).join(' · ')}</small></div>`).join('')}
         ${novas.slice(0, 40).map(({ x }) => `<div class="ic-l nova"><b>${esc(nomeBonito(x.cliente))} <em>nova</em></b><small>${[dataBR(x.dia), x.corretor, x.emp, x.comissao ? 'comissão ' + brl2(x.comissao) : ''].filter(Boolean).map(esc).join(' · ')}</small></div>`).join('')}</div>`;
     $('icOk').classList.toggle('hide', !(muda.length + novas.length)); $('icOk').textContent = `Gravar ${muda.length + novas.length} vendas`;
   } catch(e) { $('icRes').innerHTML = `<div class="fin-alerta fin-alerta-s">Não consegui ler: ${esc(e.message)}</div>`; }
@@ -13936,11 +14004,11 @@ window.abrirVendaFin = (id, semAbrir) => {
     ${v.tipo === 'adiantamento' ? `<div class="fv-parc">Adiantamento <b>${brl2(v.adiant)}</b>${v.prevA ? ' em ' + dataBR(v.prevA) : ''} · restante <b>${brl2(v.rest)}</b>${v.prevR ? ' em ' + dataBR(v.prevR) : ' depois da assinatura'}</div>` : `<div class="fv-parc">Paga tudo de uma vez${v.prevR ? ' em ' + dataBR(v.prevR) : ', depois da assinatura'}</div>`}
     <div class="fv-bloco"><h4>Comissão</h4>
       <div class="row2"><div class="fg"><label>Construtora</label><input id="fvCons" list="fvConsL" value="${esc(v.cons)}" oninput="fvTipoAuto()"><datalist id="fvConsL">${construtoras().map(c => `<option value="${esc(c.nome)}">`).join('')}</datalist></div>
-      <div class="fg"><label>Como paga</label><select id="fvTipo"><option value="integral" ${v.tipo === 'integral' ? 'selected' : ''}>Tudo de uma vez</option><option value="adiantamento" ${v.tipo === 'adiantamento' ? 'selected' : ''}>Adiantamento + restante</option></select></div></div>
+      <div class="fg"><label>Como paga</label><select id="fvTipo" onchange="document.getElementById('fvPctABox')?.classList.toggle('hide',this.value!=='adiantamento');document.getElementById('fvBoxA')?.classList.toggle('hide',this.value!=='adiantamento')"><option value="integral" ${v.tipo === 'integral' ? 'selected' : ''}>Tudo de uma vez</option><option value="adiantamento" ${v.tipo === 'adiantamento' ? 'selected' : ''}>Adiantamento + restante</option></select></div></div>
       ${v.rg.obs ? `<div class="fv-obs">⚠️ ${esc(v.rg.obs)}</div>` : ''}
       <div class="row2"><div class="fg"><label>% sobre o imóvel</label><input id="fvPct" type="number" step="0.01" value="${v.pctImob}"></div><div class="fg"><label>% do corretor (sobre o líquido)</label><input id="fvPctC" type="number" step="0.01" value="${v.pctCor}"></div></div>
       <details class="fv-manual"><summary>✏️ Editar valores (comissão, imposto, corretor)</summary>
-        <div class="row2"><div class="fg"><label>Comissão bruta (R$)</label><input id="fvBruta" inputmode="decimal" value="${val(f.comissao)}" placeholder="${val(v.total)}"></div><div class="fg"><label>% do adiantamento</label><input id="fvPctA" type="number" step="1" value="${v.tipo === 'adiantamento' ? v.pctA : (regraConst('Tenda').pctAdiant || 30)}"></div></div>
+        <div class="row2"><div class="fg"><label>Comissão bruta (R$)</label><input id="fvBruta" inputmode="decimal" value="${val(f.comissao)}" placeholder="${val(v.total)}"></div><div class="fg ${v.tipo === 'adiantamento' ? '' : 'hide'}" id="fvPctABox"><label>% do adiantamento</label><input id="fvPctA" type="number" step="1" value="${v.tipo === 'adiantamento' ? v.pctA : (v.rg.pctAdiant || '')}"></div></div>
         <div class="row2"><div class="fg"><label>Comissão do corretor (R$)</label><input id="fvValCor" inputmode="decimal" value="${val(f.valCor)}" placeholder="${val(Math.round(v.liquido * v.pctCor) / 100)}"></div><div class="fg"><label>Imposto da nota (R$)</label><input id="fvImpV" inputmode="decimal" value="${val(f.impostoV)}" placeholder="${val(Math.round(v.total * v.pctNF) / 100)}"></div></div>
         <div class="hint" style="margin:0">Deixe em branco para o app calcular sozinho.</div></details>
       <div class="fg" style="margin-top:10px"><label>Andamento do processo</label><select id="fvProc">${['','Formulário','Avaliação do imóvel','Conformidade','Extrato','Aguardando unidade','Obra','Suspensiva','Assinatura agendada','Assinou'].map(x => `<option ${f.processo === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
@@ -14039,12 +14107,12 @@ function fvDescDesenha(){
 }
 window.fvDescDesenha = fvDescDesenha;
 window.fvDescAdd = () => { (window._fvDesc ||= []).push({ tipo:'adiantamento', descricao:'', valor:0, uid:'' }); fvDescDesenha(); };
-window.fvTipoAuto = () => { const rg = regraConst($('fvCons').value); $('fvTipo').value = rg.tipo; };
+window.fvTipoAuto = () => { const rg = regraConst($('fvCons').value); $('fvTipo').value = rg.tipo; $('fvTipo').onchange?.(); if (rg.tipo === 'adiantamento' && rg.pctAdiant && !Number($('fvPctA').value)) $('fvPctA').value = rg.pctAdiant; };
 window.salvarVendaFin = async () => {
   const r = vendasFin().find(x => x.id === finVEdit); if (!r) return;
   const num = id => lerDec($(id).value) || 0, v0 = vendaFin(r);
   const bruta = $('fvBruta').value.trim();
-  const d = { reservaId:r.id, cliente:r.cliente || '', construtora:$('fvCons').value.trim(), tipo:$('fvTipo').value, pctImob:Number($('fvPct').value) || 0, pctAdiant:Number($('fvPctA').value) || 0, pctCor:Number($('fvPctC').value) || 0,
+  const d = { reservaId:r.id, cliente:r.cliente || '', construtora:$('fvCons').value.trim(), tipo:$('fvTipo').value, pctImob:Number($('fvPct').value) || 0, pctAdiant:$('fvTipo').value === 'adiantamento' ? Number($('fvPctA').value) || 0 : 0, pctCor:Number($('fvPctC').value) || 0,
     comissao:bruta ? lerDec(bruta) : '', valCor:$('fvValCor').value.trim() ? lerDec($('fvValCor').value) : '', impostoV:$('fvImpV').value.trim() ? lerDec($('fvImpV').value) : '', processo:$('fvProc').value, emissor:$('fvEmissor').value, nf:$('fvNF').value.trim(), pctImposto:Number($('fvPctNF').value) || 0,
     sinalPago:$('fvSinal').checked, sinalValor:num('fvSinalV'), sinalData:$('fvSinalD').value, sinalForma:$('fvSinalF').value, sinalQuem:$('fvSinalQ').value,
     geraEntrada:$('fvGera').value, entradaValor:num('fvEntV'), entradaForma:$('fvForma').value, entradaPaga:$('fvEntPaga').checked, entradaParcelas:Number($('fvEntParc').value) || 0, entradaPagas:Number($('fvEntPagas').value) || 0,
