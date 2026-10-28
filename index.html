@@ -6837,16 +6837,21 @@ function renderCartas(){
   $('cartasConteudo').classList.toggle('hide', !ativo);
   $('btnNovaCartaPag').classList.toggle('hide', !ativo);
   if (!ativo) return;
-  $('cartasSub').textContent = opTudo() ? 'Aprovações de todas as equipes: cartas do app + planilha, sem repetir cliente.' : souCoord() ? 'Cartas da ' + eqNome(perfil.equipe) + '.' : 'As suas cartas de crédito aprovadas.';
+  $('cartasSub').textContent = opTudo() ? 'Aprovações de todas as equipes: cartas do app + planilha, sem repetir cliente.' : souCoord() ? 'Cartas da ' + eqNome(perfil.equipe) + '.' : souAnjo() && membrosAnjo().length ? 'As suas cartas e, separadas no filtro, as dos corretores que você acompanha.' : 'As suas cartas de crédito aprovadas.';
   $('cStatus').innerHTML = '<option value="">Todos os status</option>' + C_STATUS.map(s => `<option ${cFil.status===s?'selected':''}>${s}</option>`).join('');
   $('cEquipe').classList.toggle('hide', !opTudo());
   $('cEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${cFil.equipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  $('cCorretor').classList.toggle('hide', !opGerir());
+  // v274: o anjo vê as cartas dele separadas das dos corretores que ele acompanha (começa nas dele)
+  const anjoSep = souAnjo() && membrosAnjo().length > 0 && !opGerir();
+  if (anjoSep && !window._cFilAnjo) { window._cFilAnjo = true; if (!cFil.corretor) cFil.corretor = uidAtual; }
+  $('cCorretor').classList.toggle('hide', !opGerir() && !anjoSep);
   // aprovações da planilha que ainda não têm carta no app (mesmo cliente por CPF ou telefone não repete)
   const planAprov = souSdr() ? [] : avaliacoesUnificadas().filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a));
   const nomes = new Map(); cartas.forEach(c => { if (!nomes.has(c.corretorUid)) nomes.set(c.corretorUid, c.corretorNome || 'Sem nome'); });
   planAprov.forEach(a => { if (a.corretorUid && !nomes.has(a.corretorUid)) nomes.set(a.corretorUid, a.corretorNome || a.aba || 'Sem nome'); });
-  $('cCorretor').innerHTML = '<option value="">Todos os corretores</option>' + [...nomes].sort((a,b) => a[1].localeCompare(b[1],'pt-BR')).map(([k,n]) => `<option value="${esc(k)}" ${cFil.corretor===k?'selected':''}>${esc(n)}</option>`).join('');
+  if (anjoSep) { const nm = u => nomeBonito(nomes.get(u) || (perfil.membrosNomes || [])[membrosAnjo().indexOf(u)] || (rkPessoas.find(x => x.uid === u) || {}).nome || 'Corretor');
+    $('cCorretor').innerHTML = `<option value="${esc(uidAtual)}" ${cFil.corretor === uidAtual ? 'selected' : ''}>Minhas cartas</option><option value="_meus" ${cFil.corretor === '_meus' ? 'selected' : ''}>Dos meus corretores</option>${membrosAnjo().map(u => `<option value="${esc(u)}" ${cFil.corretor === u ? 'selected' : ''}>${esc(nm(u))}</option>`).join('')}<option value="" ${!cFil.corretor ? 'selected' : ''}>Todas (minhas e dos corretores)</option>`; }
+  else $('cCorretor').innerHTML = '<option value="">Todos os corretores</option>' + [...nomes].sort((a,b) => a[1].localeCompare(b[1],'pt-BR')).map(([k,n]) => `<option value="${esc(k)}" ${cFil.corretor===k?'selected':''}>${esc(n)}</option>`).join('');
   preencherSel('cPeriodo', '<option value="mes">Aprovadas este mês</option><option value="semana">Esta semana</option><option value="todas">Todas</option>', cFil.periodo);
   const faixaC = p => p === 'todas' ? ['0000','9999'] : p.startsWith('m:') ? faixaDoMes(p) : faixa(p);
   const [de, ate] = faixaC(cFil.periodo), t = norm(cFil.busca);
@@ -6854,7 +6859,7 @@ function renderCartas(){
     if (!c.data || c.data < de || c.data > ate) return false;
     if (cFil.status && c.status !== cFil.status) return false;
     if (cFil.equipe && c.equipe !== cFil.equipe) return false;
-    if (cFil.corretor && c.corretorUid !== cFil.corretor) return false;
+    if (cFil.corretor === '_meus' ? !membrosAnjo().includes(c.corretorUid) : cFil.corretor && c.corretorUid !== cFil.corretor) return false;
     if (t && !norm([c.cliente, c.telefone, c.empreendimento, c.corretorNome, c.obs, c.banco].join(' ')).includes(t) && !(soDig(t).length >= 3 && soDig(c.cpf).includes(soDig(t)))) return false;
     return true;
   }).sort((a,b) => (b.data||'').localeCompare(a.data||''));
@@ -6862,7 +6867,7 @@ function renderCartas(){
   const listaPlan = (cFil.status && cFil.status !== 'Aprovada') ? [] : planAprov.filter(a => {
     if (!a.data || a.data < de || a.data > ate) return false;
     if (cFil.equipe && a.equipe !== cFil.equipe) return false;
-    if (cFil.corretor && a.corretorUid !== cFil.corretor) return false;
+    if (cFil.corretor === '_meus' ? !membrosAnjo().includes(a.corretorUid) : cFil.corretor && a.corretorUid !== cFil.corretor) return false;
     if (t && !norm([a.nome, a.telefone, a.corretorNome, a.aba].join(' ')).includes(t) && !(soDig(t).length >= 3 && (soDig(a.cpf).includes(soDig(t)) || soDig(a.telefone).includes(soDig(t))))) return false;
     return true;
   });
@@ -7375,7 +7380,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 273;
+const APP_VERSAO = 274;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8715,17 +8720,23 @@ function renderAvaliacoes(){
   $('avalSub').textContent = opTudo() ? 'Avaliações de crédito de todas as equipes, vindas da planilha da administração.' : souCoord() ? 'Avaliações da ' + eqNome(perfil.equipe) + '.' : 'As avaliações de crédito dos seus clientes. Atualiza sozinho a cada 15 minutos.';
   $('btnAvalSync').classList.toggle('hide', !opTudo()); $('btnAvalConv').classList.toggle('hide', !souDono());
   $('aGrupo').innerHTML = '<option value="">Todos os grupos</option>' + Object.entries(GRUPOS_V).filter(([k]) => k).map(([k,g]) => `<option value="${k}" ${aFil.grupo===k?'selected':''}>${g.n}</option>`).join('');
-  $('aCorretor').classList.toggle('hide', !opGerir());
+  // v274: o anjo vê as avaliações dele separadas das dos corretores que ele acompanha (começa nas dele)
+  const anjoSep = souAnjo() && membrosAnjo().length > 0 && !opGerir();
+  if (anjoSep && !window._aFilAnjo) { window._aFilAnjo = true; if (!aFil.corretor) aFil.corretor = '_eu'; }
+  $('aCorretor').classList.toggle('hide', !opGerir() && !anjoSep);
   const nomes = [...new Set(avaliacoes.map(a => a.corretorNome || a.aba).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
-  $('aCorretor').innerHTML = '<option value="">Todos os corretores</option>' + nomes.map(n => `<option value="${esc(n)}" ${aFil.corretor===n?'selected':''}>${esc(n)}</option>`).join('');
+  const nmA = u => nomeBonito((perfil.membrosNomes || [])[membrosAnjo().indexOf(u)] || (rkPessoas.find(x => x.uid === u) || {}).nome || (avaliacoes.find(a => uidDaAv(a) === u) || {}).corretorNome || 'Corretor');
+  if (anjoSep) $('aCorretor').innerHTML = `<option value="_eu" ${aFil.corretor === '_eu' ? 'selected' : ''}>Minhas avaliações</option><option value="_meus" ${aFil.corretor === '_meus' ? 'selected' : ''}>Dos meus corretores</option>${membrosAnjo().map(u => `<option value="u:${esc(u)}" ${aFil.corretor === 'u:' + u ? 'selected' : ''}>${esc(nmA(u))}</option>`).join('')}<option value="" ${!aFil.corretor ? 'selected' : ''}>Todas (minhas e dos corretores)</option>`;
+  else $('aCorretor').innerHTML = '<option value="">Todos os corretores</option>' + nomes.map(n => `<option value="${esc(n)}" ${aFil.corretor===n?'selected':''}>${esc(n)}</option>`).join('');
   $('aPeriodo').value = aFil.periodo;
   const [de, ate] = faixaAval(aFil.periodo), t = norm(aFil.busca), dig = soDig(aFil.busca);
   const unif = avaliacoesUnificadas(), ocultos = avaliacoes.length - unif.length;
-  const noPer = unif.filter(a => (a.data || '') >= de && (a.data || '') <= ate);
+  const sepA = a => { const f = aFil.corretor, u = uidDaAv(a); return !anjoSep || !f ? true : f === '_eu' ? u === uidAtual : f === '_meus' ? membrosAnjo().includes(u) : f.startsWith('u:') ? u === f.slice(2) : true; };
+  const noPer = unif.filter(a => (a.data || '') >= de && (a.data || '') <= ate && sepA(a));
   const conta = g => noPer.filter(a => infoStatus(a.status).g === g).length;
   $('asTotal').textContent = noPer.length; $('asAnalise').textContent = conta('analise'); $('asCond').textContent = conta('condicionado');
   $('asAprov').textContent = conta('aprovado'); $('asReprov').textContent = conta('reprovado');
-  const l = noPer.filter(a => (!aFil.grupo || infoStatus(a.status).g === aFil.grupo) && (!aFil.corretor || (a.corretorNome || a.aba) === aFil.corretor)
+  const l = noPer.filter(a => (!aFil.grupo || infoStatus(a.status).g === aFil.grupo) && (anjoSep || !aFil.corretor || (a.corretorNome || a.aba) === aFil.corretor)
     && (!t || norm([a.nome, a.status, a.corretorNome, a.aba].join(' ')).includes(t) || (dig.length >= 3 && (soDig(a.cpf).includes(dig) || soDig(a.telefone).includes(dig)))))
     .sort((a,b) => (b.statusEm || 0) - (a.statusEm || 0) || (b.data || '').localeCompare(a.data || ''));
   $('janelaAval').innerHTML = opTudo() ? avisoJanela(aFil.periodo === 'todas') : '';
