@@ -3014,7 +3014,11 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 .fc-k span{font-size:13px;font-weight:800;color:var(--c)}.fc-k b{font-size:24px;letter-spacing:-.01em;color:var(--c);font-variant-numeric:tabular-nums}.fc-k small{font-size:12.5px;color:var(--muted)}
 .fc-k.on{box-shadow:0 0 0 2px var(--c)}.fc-k.k-at{--c:#dc2626}.fc-k.k-rec{--c:#0B4669}.fc-k.k-pag{--c:#E65100}.fc-k.k-tod{--c:#475569}
 [data-theme="dark"] .fc-k.k-rec{--c:#7cc4f0}
-.fc-fil{display:flex;gap:10px;align-items:center}.fc-fil input{flex:1}
+.fc-fil{display:flex;gap:10px;align-items:center}.fc-fil input{flex:1}.fc-fil select{width:auto;min-width:190px}
+.fc-l3{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:8px}.fc-pgbt{font-size:12.5px;font-weight:800;color:#16a34a;border:1px solid #16a34a55;background:#16a34a12;border-radius:99px;padding:5px 12px;cursor:pointer}.fc-pgbt:hover{background:#16a34a22}.fc-pgbt.fc-des{color:var(--muted);border-color:var(--border);background:none;font-weight:600}.fc-pago{font-size:12.5px;font-weight:800;color:#16a34a}
+.fc-cor{margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden}.fc-cor summary{cursor:pointer;padding:12px 14px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}.fc-cor summary span{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
+.fc-cor-t{display:grid;border-top:1px solid var(--border)}.fc-cor-h,.fc-cor-l{display:grid;grid-template-columns:1.6fr .6fr 1fr 1fr 1fr 1fr;gap:8px;padding:8px 14px;align-items:center;text-align:right;font-size:13.5px}.fc-cor-h>:first-child,.fc-cor-l>:first-child{text-align:left}
+.fc-cor-h{font-size:12px;color:var(--muted);font-weight:700}.fc-cor-l{border:0;border-top:1px solid var(--border);background:none;color:inherit;font:inherit;cursor:pointer}.fc-cor-l:hover{background:var(--bg)}.fc-cor-l.on{background:rgba(28,95,142,.08)}.fc-cor-l .ok{color:#16a34a}.fc-cor-l .zero{color:var(--muted)}.fc-cor-tot{font-weight:800;cursor:default!important;background:var(--bg)!important}.fc-cor-l .pg{color:#c2410c;font-weight:700}
 .fc-h{display:flex;align-items:center;gap:8px;margin:16px 2px 8px;font-weight:800;font-size:14px}.fc-h span{font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 .fc-lista{display:grid;gap:8px}
 .fc-l{display:grid;gap:5px;text-align:left;width:100%;border:1px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--card);cursor:pointer;font:inherit;color:inherit}
@@ -3029,7 +3033,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 .ic-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}.ic-res>div{border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}.ic-res b{display:block;font-size:20px}.ic-res span{font-size:12px;color:var(--muted)}
 .ic-chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:13.5px;cursor:pointer}.ic-chk input{margin-top:3px;width:18px;height:18px;flex:none}.ic-sem{margin-top:10px;font-size:13px}.ic-sem summary{cursor:pointer;color:var(--muted)}.ic-sem div{padding:3px 0}.ic-sem small{color:var(--muted)}
 .ic-lista{margin-top:12px;max-height:46vh;overflow:auto;display:grid;gap:6px}.ic-l{border:1px solid var(--border);border-radius:10px;padding:8px 11px;display:grid}.ic-l small{color:var(--muted);font-size:12.5px}.ic-l.nova em{font-style:normal;font-size:11px;color:#16a34a;font-weight:800;margin-left:6px}
-@media(max-width:760px){.fc-ks{grid-template-columns:1fr 1fr;gap:8px}.fc-k{padding:11px 12px}.fc-k b{font-size:19px}.fc-fil{flex-wrap:wrap}.fc-fil .btn{flex:1}.ic-res{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.fc-fil select{flex:1;min-width:0}.fc-cor-h,.fc-cor-l{grid-template-columns:1.4fr .5fr 1fr 1fr;font-size:12.5px;padding:8px 10px}.fc-cor-h>:nth-child(4),.fc-cor-l>:nth-child(4),.fc-cor-h>:nth-child(6),.fc-cor-l>:nth-child(6){display:none}.fc-ks{grid-template-columns:1fr 1fr;gap:8px}.fc-k{padding:11px 12px}.fc-k b{font-size:19px}.fc-fil{flex-wrap:wrap}.fc-fil .btn{flex:1}.ic-res{grid-template-columns:1fr 1fr}}
 </style>
 <script>
 (function(){
@@ -3407,7 +3411,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <!-- FINANCEIRO -->
       <section class="view" id="v-financeiro">
         <div class="page-head"><div><h1>Financeiro</h1><div class="sub">Só a gerência e o CEO veem esta tela.</div></div>
-          <div class="ph-acoes fin-acoes"><select id="finMesSel" onchange="finMes=this.value;render()"></select><button class="btn btn-primary" onclick="editarFin()">+ Lançamento</button>
+          <div class="ph-acoes fin-acoes"><select id="finMesSel" onchange="finEscolheMes(this.value)"></select><button class="btn btn-primary" onclick="editarFin()">+ Lançamento</button>
             <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas e parcelamentos</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="abrirBonus()">🎯 Bônus e Carteira Frade</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
         <div id="finKpis"></div>
         <div id="finAviso"></div>
@@ -7549,7 +7553,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 285;
+const APP_VERSAO = 287;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13259,6 +13263,14 @@ window.baixarBackup = async (id, n) => {
 // ================= FINANCEIRO (só gerência e CEO) ====================
 // =====================================================================
 let finLanc = [], finCfg = { pctImob:5, pctCor:1.5, pctImposto:15.7 }, finEdit = null;
+// v286: o financeiro mostra de agosto/2026 até o mês atual; em Comissões dá para ver todos de uma vez
+const FIN_DESDE = '2026-08'; // o financeiro começa em agosto de 2026
+function mesesFin(){
+  const ini = FIN_DESDE, out = []; let m = mesAtual();
+  while (m >= ini && out.length < 120) { out.push(m); const [a, mm] = m.split('-').map(Number); m = mm === 1 ? `${a-1}-12` : `${a}-${String(mm-1).padStart(2,'0')}`; }
+  return out;
+}
+window.finEscolheMes = v => { if (v === 'todos') { window.finComTodos = true; render(); return; } window.finComTodos = false; window.finMes = v; try { garantirHistorico(v); } catch(e) {} render(); };
 window.finMes = ''; window.finAba = 'geral'; window.finBusca = ''; window.finTipo = '';
 const FIN_CONTAS = ['PJ Principal (66)', 'PB Frade (69)', 'Pessoa Física'];
 const FIN_CATS = { entrada:['Comissão de venda','Recebimento imobiliária','Recebimento parcelado','Sinal / reserva','Resgate de aplicação','Devolução de adiantamento','Outros recebimentos'],
@@ -13292,8 +13304,10 @@ function renderExtrato(){ renderPrefNotif();
   if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlBonusMeu() + htmlExtrato(); }
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
-  if (!finMes) window.finMes = mesAtual();
-  if (document.activeElement?.id !== 'finMesSel') { $('finMesSel').innerHTML = opcoesMeses(finMes); $('finMesSel').value = finMes; }
+  if (!finMes || finMes < FIN_DESDE) window.finMes = mesAtual();
+  if (document.activeElement?.id !== 'finMesSel') { const todos = false; window.finComTodos = false;
+    $('finMesSel').innerHTML = mesesFin().map(m => `<option value="${m}">${nomeMes(m)}${m === mesAtual() ? ' (até hoje)' : ''}</option>`).join('');
+    $('finMesSel').value = todos ? 'todos' : finMes; }
   const l = finDoMes(finMes), h = hojeISO();
   const soma = f => l.filter(f).reduce((a,x) => a + (Number(x.valor) || 0), 0);
   const rec = soma(x => x.tipo === 'entrada' && x.pago), pag = soma(x => x.tipo === 'saida' && x.pago);
@@ -13505,13 +13519,12 @@ function previsaoMes(m){
   let entrou = 0, vaiEntrar = 0, semData = 0; const fontes = [];
   lM.filter(x => x.tipo === 'entrada').forEach(x => { if (x.pago) entrou += Number(x.valor) || 0; else if (!auto(x.id)) vaiEntrar += Number(x.valor) || 0; });
   vendasFin().forEach(r => { if (finVendas[r.id]?.excluida || planPend(r.id)) return; const v = vendaFin(r);
-    // v284: atrasado só entra na conta do mês atual se for dos últimos 60 dias (pendência antiga fica em Comissões › Precisa de atenção)
-    const recente = d => d && d >= somaDias(de, -60);
-    if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant) { if (noM(v.prevA) || (v.prevA && v.prevA < de && recente(v.prevA) && m === mesAtual())) { vaiEntrar += v.adiant; fontes.push(v); } }
-    if (!v.f.recRestante && v.rest) { if (!v.prevR) { if ((v.r.dia || '') >= somaDias(de, -120)) semData += v.rest; } else if (noM(v.prevR) || (v.prevR < de && recente(v.prevR) && m === mesAtual())) { vaiEntrar += v.rest; fontes.push(v); } } });
+    // v286: cada mês mostra só o que é dele (atrasado de outro mês fica em Comissões › Precisa de atenção daquele mês)
+    if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant && noM(v.prevA)) { vaiEntrar += v.adiant; fontes.push(v); }
+    if (!v.f.recRestante && v.rest) { if (!v.prevR) { if (noM(v.r.dia)) semData += v.rest; } else if (noM(v.prevR)) { vaiEntrar += v.rest; if (!fontes.includes(v)) fontes.push(v); } } });
   const sai = lM.filter(x => x.tipo === 'saida'), pago = sai.filter(x => x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0), aPagar = sai.filter(x => !x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0);
   // pagamento dos corretores previsto (vendas recebidas e corretor ainda não pago)
-  const corPrev = vendasFin().filter(r => !finVendas[r.id]?.excluida && !planPend(r.id)).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0); // v284: o que veio da planilha não entra na previsão até você conferir
+  const corPrev = vendasFin().filter(r => !finVendas[r.id]?.excluida && !planPend(r.id)).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && noM(v.prevR || v.prevA || v.r.dia) && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0); // v284: o que veio da planilha não entra na previsão até você conferir
   return { entrou, vaiEntrar, semData, pago, aPagar: aPagar + corPrev, saldo: entrou + vaiEntrar - pago - aPagar - corPrev, fontes };
 }
 // despesas fixas: viram lançamentos do mês sozinhas
@@ -13690,7 +13703,7 @@ window.excluirNota = async () => {
   try { await gravar(deleteDoc(doc(db,'fin_notas',n.id))); apagarAnexo(n.anexo); fechar('notaModal'); toast('Nota excluída'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // ===== v282: Comissões em uma tela só: o que falta receber, o que falta pagar, o que precisa de atenção =====
-window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false;
+window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false; window.finComCor = '';
 function atencaoVenda(v, h){
   const a = [], f = v.f, pl = f.plan || {};
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
@@ -13703,14 +13716,29 @@ function atencaoVenda(v, h){
   if (planPend(v.r.id)) a.push('Veio da planilha: abra, confira e salve (só depois entra no caixa e na folha)');
   return a;
 }
+// v286: marcar direto na lista que a comissão já foi paga (recebida da construtora e paga ao corretor). Não cria lançamento no caixa.
+window.fcMarcarPaga = async (id, sim) => {
+  const v = vendasFin().find(r => r.id === id), nome = v ? nomeBonito(v.cliente || '') : '';
+  const d = sim ? { recAdiant:true, recRestante:true, faturada:true, corPago:true, planOk:true, pagaMarcadaEm:hojeISO(), atualizadoEm:Date.now() } : { corPago:false, recAdiant:false, recRestante:false, pagaMarcadaEm:'', atualizadoEm:Date.now() };
+  try { await gravar(setDoc(doc(db,'fin_vendas',id), d, { merge:true })); logFin(`${sim ? 'Marcou como paga' : 'Desmarcou paga'}: ${nome}`); toast(sim ? `Comissão de ${nome} marcada como paga ✓` : `${nome} voltou para pendente`); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 function htmlComissoes(){
   const sub = window.finComSub === 'notas' ? 'notas' : 'vendas';
   const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
   if (sub === 'notas') return seg + htmlNotas2();
   const h = hojeISO(), tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
   // v283: segue o mês escolhido lá em cima (vendas pela data da reserva); dá para ver todos os meses
-  const mesSel = finMes || mesAtual(), todosM = !!window.finComTodos, noMes = r => todosM || (r.dia || '').slice(0, 7) === mesSel;
-  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida && !(r.caiu || r.arquivado) && noMes(r)).map(vendaFin).map(v => ({ ...v, at:atencaoVenda(v, h) }));
+  const mesSel = finMes || mesAtual(), todosM = !!window.finComTodos, noMes = r => todosM ? (r.dia || '').slice(0, 7) >= FIN_DESDE : (r.dia || '').slice(0, 7) === mesSel;
+  const vsMes = vendasFin().filter(r => !finVendas[r.id]?.excluida && !(r.caiu || r.arquivado) && noMes(r)).map(vendaFin).map(v => ({ ...v, at:atencaoVenda(v, h) }));
+  // v286: comissão de cada corretor no mês (a parte do corretor é dividida igual quando a venda tem mais de um)
+  const ckey = c => c.uid || 'n:' + norm(c.nome || ''), corsDe = v => v.cor.length ? v.cor : [{ uid:'', nome:nomeBonito(v.r.corretorTexto || 'Sem corretor') }], porCor = new Map();
+  vsMes.forEach(v => { const cs = corsDe(v), parte = (v.valCor || 0) / cs.length;
+    cs.forEach(c => { const k = ckey(c); const o = porCor.get(k) || { k, nome:c.nome, n:0, total:0, pago:0, pagar:0, receber:0 }; o.n++; o.total += parte;
+      if (v.f.corPago) o.pago += parte; else if (v.ok.recebida) o.pagar += parte; else o.receber += parte; porCor.set(k, o); }); });
+  const zv = (n, cls) => n > 0.5 ? `<span class="${cls}">${brl(n)}</span>` : '<span class="zero">—</span>', somaC = k => [...porCor.values()].reduce((a, c) => a + c[k], 0);
+  const cores = [...porCor.values()].sort((a, b) => b.total - a.total), corSel = porCor.has(window.finComCor || '') ? window.finComCor : '';
+  const vs = corSel ? vsMes.filter(v => corsDe(v).some(c => ckey(c) === corSel)) : vsMes;
   const mN = nomeMes(mesSel).split(' de ')[0].toLowerCase(), segM = `<div class="seg fin-subseg fc-mes"><button class="${todosM ? '' : 'on'}" onclick="finComTodos=false;render()">Vendas de ${mN}</button><button class="${todosM ? 'on' : ''}" onclick="finComTodos=true;render()">Todos os meses</button></div>`;
   const aReceber = vs.filter(v => v.aReceber > 0 && !v.ok.recebida), aPagar = vs.filter(v => v.ok.recebida && !v.f.corPago && v.valCor > 0), atencao = vs.filter(v => v.at.length), concl = vs.filter(v => v.ok.recebida && (v.f.corPago || !(v.valCor > 0)));
   const soma = (l, k) => l.reduce((a, v) => a + (Number(typeof k === 'function' ? k(v) : v[k]) || 0), 0);
@@ -13718,14 +13746,19 @@ function htmlComissoes(){
   const t = norm(finBusca), lista = (grupos[fil] || vs).filter(v => !t || norm([v.r.cliente, v.r.corretorTexto, v.cons, v.r.empreendimento].join(' ')).includes(t))
     .sort((a, b) => fil === 'receber' ? ((a.prevR || a.prevA || '9') + '').localeCompare((b.prevR || b.prevA || '9') + '') : (b.r.dia || '').localeCompare(a.r.dia || ''));
   const card = (k, rot, val, sub, cls) => `<button class="fc-k ${cls} ${fil === k ? 'on' : ''}" onclick="finComFil='${k}';render()"><span>${rot}</span><b>${val}</b><small>${sub}</small></button>`;
-  const status = v => { const e = v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída'; return e; };
+  const status = v => { if (v.ok.recebida && (v.f.corPago || !(v.valCor > 0))) return 'Concluída'; const e = v.etapa < ETAPAS_FIN.length ? ETAPAS_FIN[v.etapa][1] : 'Concluída'; return e; };
   const linha = v => { const corN = v.cor.map(c => primeiro(c.nome)).join(' + ') || esc(v.r.corretorTexto || '');
     const prev = !v.ok.recebida ? (v.tipo === 'adiantamento' && !v.f.recAdiant && v.prevA ? `adiant. ${dataBR(v.prevA).slice(0, 5)}` : v.prevR ? `receber ${dataBR(v.prevR).slice(0, 5)}` : '') : (!v.f.corPago && v.valCor > 0 ? 'pagar o corretor' : 'concluída');
     return `<button class="fc-l ${v.at.length ? 'at' : ''}" onclick="abrirVendaFin('${v.r.id}')"><div class="fc-l1"><b>${esc(v.r.cliente || 'Cliente')}</b>${planPend(v.r.id) ? '<em class="fc-tag fc-conf">a conferir</em>' : v.f.manual ? '<em class="fc-tag">planilha</em>' : ''}<span class="fc-st">${status(v)}</span></div>
       <div class="fc-l2"><span>${corN}${v.cons ? ' · ' + esc(v.cons) : v.r.empreendimento ? ' · ' + esc(v.r.empreendimento) : ''} · ${dataBR(v.r.dia).slice(0, 5)}</span><span class="fc-vals"><i>Comissão <b>${brl(v.total)}</b></i><i>Corretor <b>${brl(v.valCor)}</b> (${Math.round(v.pctCor)}%)</i>${prev ? `<i class="fc-prev">${prev}</i>` : ''}</span></div>
+      <div class="fc-l3">${v.ok.recebida && (v.f.corPago || !(v.valCor > 0)) ? `<span class="fc-pago">✓ Paga</span><span class="fc-pgbt fc-des" onclick="event.stopPropagation();fcMarcarPaga('${v.r.id}',false)">Desmarcar</span>` : `<span class="fc-pgbt" onclick="event.stopPropagation();fcMarcarPaga('${v.r.id}',true)">Marcar como paga</span>`}</div>
       ${v.at.length ? `<div class="fc-at">⚠ ${v.at.map(esc).join(' · ')}</div>` : ''}</button>`; };
-  return `<div class="fc-segs">${seg}${segM}</div><div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
-    <div class="fin-filtros fc-fil"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)},0)"><button class="btn btn-ghost" onclick="abrirImpComissoes()">Importar planilha</button></div>
+  return `<div class="fc-segs">${seg}</div><div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
+    <div class="fin-filtros fc-fil"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)},0)"><select id="fcCorSel" onchange="finComCor=this.value;render()"><option value="">Todos os corretores</option>${cores.map(c => `<option value="${esc(c.k)}" ${c.k === corSel ? 'selected' : ''}>${esc(nomeBonito(c.nome))}</option>`).join('')}</select><button class="btn btn-ghost" onclick="abrirImpComissoes()">Importar planilha</button></div>
+    ${cores.length ? `<details class="fc-cor" ${corSel || window._fcCorAberto ? 'open' : ''} ontoggle="window._fcCorAberto=this.open"><summary>Comissão de cada corretor em ${nomeMes(mesSel).split(' de ')[0].toLowerCase()} <span>${cores.length}</span></summary>
+      <div class="fc-cor-t"><div class="fc-cor-h"><span>Corretor</span><span>Vendas</span><span>Comissão</span><span>Já pago</span><span>Falta pagar</span><span>A receber</span></div>
+      ${cores.map(c => `<button class="fc-cor-l ${c.k === corSel ? 'on' : ''}" onclick="finComCor=${c.k === corSel ? "''" : `'${esc(c.k).replace(/'/g, '')}'`};render()"><b>${esc(nomeBonito(c.nome))}</b><span>${c.n}</span><span>${brl(c.total)}</span>${zv(c.pago, 'ok')}${zv(c.pagar, 'pg')}${zv(c.receber, '')}</button>`).join('')}
+      <div class="fc-cor-l fc-cor-tot"><b>Total</b><span>${vsMes.length}</span><span>${brl(somaC('total'))}</span>${zv(somaC('pago'), 'ok')}${zv(somaC('pagar'), 'pg')}${zv(somaC('receber'), '')}</div></div></details>` : ''}
     <div class="fc-h">${{ atencao:'Precisa de atenção', receber:'Falta receber das construtoras', pagar:'Falta pagar aos corretores', todas:'Todas as vendas', concl:'Concluídas' }[fil]} <span>${lista.length}</span></div>
     <div class="fc-lista">${lista.map(linha).join('') || `<div class="fc-vazio">${fil === 'atencao' ? 'Nada precisando de atenção agora.' : 'Nenhuma venda aqui.'}</div>`}</div>
     ${tiradas.length ? `<div class="fv-tiradas"><button class="btn btn-ghost" onclick="finVerTiradas=!finVerTiradas;render()">🗑️ ${tiradas.length} venda${tiradas.length > 1 ? 's' : ''} excluída${tiradas.length > 1 ? 's' : ''} do financeiro · ${finVerTiradas ? 'esconder' : 'ver'}</button>${finVerTiradas ? tiradas.map(r => `<div class="arq-row"><div class="ai"><b>${esc(r.cliente || 'Cliente')}</b><span class="muted" style="font-size:12.5px">${dataBR(r.dia)} · ${esc(r.corretorTexto || '')}</span></div><button class="snooze" onclick="voltarVendaFin('${r.id}')">Voltar</button></div>`).join('') : ''}</div>` : ''}`;
