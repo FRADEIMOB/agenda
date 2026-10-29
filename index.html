@@ -3022,6 +3022,8 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 @media(max-width:760px){.fc-ass button{font-size:12.5px;padding:9px 6px;flex-direction:column;gap:3px}}
 .fc-cons{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px;scrollbar-width:thin}.fc-cons button{flex:none;border:1px solid var(--border);background:var(--card);color:inherit;border-radius:99px;padding:7px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;gap:6px;align-items:center}.fc-cons button span{font-size:11.5px;color:var(--muted)}.fc-cons button.on{background:#1C5F8E;border-color:#1C5F8E;color:#fff}.fc-cons button.on span{color:#ffffffcc}.fc-cons button.sem{border-style:dashed}
 .ceo-abas{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}.ceo-ab{display:flex;gap:9px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;font-size:14px}.ceo-ab input{width:18px;height:18px;flex:none}
+.fv-rc .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.fv-rc-lista{display:grid;gap:4px;margin:4px 0 12px;border:1px solid var(--border);border-radius:10px;padding:8px 12px;background:var(--bg)}.fv-rc-lista div{display:flex;justify-content:space-between;align-items:center;font-size:13.5px}.fv-rc-lista label{display:flex;gap:7px;align-items:center;cursor:pointer}.fv-rc-lista input{width:16px;height:16px}.fv-rc-lista em{font-style:normal;font-size:11px;font-weight:800;border-radius:99px;padding:1px 7px;background:#c2410c18;color:#c2410c}.fv-rc-lista .pg{color:var(--muted)}.fv-rc-lista .pg em{background:#16a34a18;color:#15803d}.fv-rc-lista .at em{background:#dc262618;color:#b91c1c}.fv-rc-lista .tot{border-top:1px solid var(--border);padding-top:5px;margin-top:2px;font-weight:800}.fv-rc-lista span::first-letter{text-transform:uppercase}
+.fv-rc-bts{display:flex;gap:10px;margin:6px 0}.fv-rc-bts .btn{flex:1}@media(max-width:760px){.fv-rc .row3{grid-template-columns:1fr 1fr}}
 .fc-cor{margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden}.fc-cor summary{cursor:pointer;padding:12px 14px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}.fc-cor summary span{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 .fc-cor-t{display:grid;border-top:1px solid var(--border)}.fc-cor-h,.fc-cor-l{display:grid;grid-template-columns:1.6fr .6fr 1fr 1fr 1fr 1fr;gap:8px;padding:8px 14px;align-items:center;text-align:right;font-size:13.5px}.fc-cor-h>:first-child,.fc-cor-l>:first-child{text-align:left}
 .fc-cor-h{font-size:12px;color:var(--muted);font-weight:700}.fc-cor-l{border:0;border-top:1px solid var(--border);background:none;color:inherit;font:inherit;cursor:pointer}.fc-cor-l:hover{background:var(--bg)}.fc-cor-l.on{background:rgba(28,95,142,.08)}.fc-cor-l .ok{color:#16a34a}.fc-cor-l .zero{color:var(--muted)}.fc-cor-tot{font-weight:800;cursor:default!important;background:var(--bg)!important}.fc-cor-l .pg{color:#c2410c;font-weight:700}
@@ -7570,7 +7572,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 290;
+const APP_VERSAO = 292;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13523,7 +13525,7 @@ window.fvEditar = id => { const el = document.getElementById(id); if (!el) retur
   el.scrollIntoView({ block:'center', behavior:'smooth' }); setTimeout(() => { el.focus(); if (el.select) el.select(); }, 300); };
 // v290: descobre a construtora pelo que o corretor escreveu (empreendimento): cadastro de empreendimentos, outras vendas do mesmo empreendimento ou o nome da construtora no texto
 let _consCache = { r:null, fv:null, e:null, m:null };
-function consNome(c){ const t = String(c || '').replace(/\s+/g, ' ').trim(); if (!t) return ''; const k = norm(t), oficial = construtoras().find(x => norm(x.nome) === k); return oficial ? oficial.nome : t.length <= 4 ? t.toUpperCase() : nomeBonito(t.toLowerCase()); }
+function consNome(c){ const t = String(c || '').replace(/\s+/g, ' ').trim(); if (!t) return ''; if (/colibri/.test(norm(t))) return 'Tenda'; /* Reserva dos Colibris é da Tenda */ const k = norm(t), oficial = construtoras().find(x => norm(x.nome) === k); return oficial ? oficial.nome : t.length <= 4 ? t.toUpperCase() : nomeBonito(t.toLowerCase()); }
 function mapaConstrutoras(){
   if (_consCache.r === reservas && _consCache.fv === finVendas && _consCache.e === empreendimentos) return _consCache.m;
   const porEmp = new Map(), conta = (emp, c) => { const k = norm(emp || '').trim(); if (!k || !c) return; const o = porEmp.get(k) || {}; o[consNome(c)] = (o[consNome(c)] || 0) + 1; porEmp.set(k, o); };
@@ -13534,7 +13536,7 @@ function mapaConstrutoras(){
   _consCache = { r:reservas, fv:finVendas, e:empreendimentos, m }; return m;
 }
 function acharConstrutora(r){
-  const emp = norm(r.empreendimento || '').trim(); if (!emp) return '';
+  const emp = norm(r.empreendimento || '').trim(); if (!emp) return ''; if (/colibri/.test(emp)) return 'Tenda';
   const e = empreendimentos.find(x => { const n = norm(x.nome || '').trim(); return n.length >= 4 && (n === emp || emp.includes(n) || n.includes(emp)); });
   if (e && e.construtora) return consNome(e.construtora);
   const m = mapaConstrutoras(); if (m.porEmp.has(emp)) return m.porEmp.get(emp);
@@ -13760,8 +13762,14 @@ window.excluirNota = async () => {
 };
 // ===== v282: Comissões em uma tela só: o que falta receber, o que falta pagar, o que precisa de atenção =====
 window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false; window.finComCor = ''; window.finComAss = ''; window.finComCons = '';
+// v292: parcelas da entrada do cliente que vencem hoje ou já venceram (as pagas são as marcadas na venda)
+function parcelasCobrar(f, h){
+  if (!(Number(f.entradaValor) > 0) || !f.entradaPrimeira || f.entradaPaga || f.excluida) return [];
+  const pagas = Number(f.entradaPagas) || 0; return parcelasEntrada({ total:f.entradaValor, n:f.entradaParcelas || 1, ato:f.entradaAto, primeira:f.entradaPrimeira }).filter(p => p.i > pagas && p.data <= h);
+}
 function atencaoVenda(v, h){
   const a = [], f = v.f, pl = f.plan || {};
+  parcelasCobrar(f, h).forEach(p => a.push(`Cobrar ${p.ato ? 'o ato' : 'a parcela ' + p.i} da entrada (${brl2(p.valor)}) · ${p.data === h ? 'vence hoje' : 'venceu ' + dataBR(p.data)}`));
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
   if (!v.total) a.push('Sem valor de comissão');
   if (v.ok.assinatura && !f.faturada && f.assinaturaEm && diffDias(f.assinaturaEm) <= -7) a.push(`Assinou há ${-diffDias(f.assinaturaEm)} dias e a nota não foi emitida`);
@@ -13987,7 +13995,119 @@ window.excluirVendaFin = async () => {
 window.voltarVendaFin = async id => {
   try { await gravar(setDoc(doc(db,'fin_vendas',id), { excluida:false }, { merge:true })); toast('Venda de volta no funil'); } catch(e) { toast('Erro: ' + e.message); }
 };
+// ---------- v291: cliente, entrada e recibo de pagamento (dentro da venda) ----------
+const RECIBO_PADRAO = { beneficiario:'ANDRE VINICIUS FRADE', beneficiarioNome:'André Vinicius Frade', banco:'Banco Santander', pix:'imoveisfrade@gmail.com', empresa:'Frade Imobiliária Ltda', cnpj:'65.441.676/0001-66', email:'imoveisfrade@gmail.com' };
+const reciboCfg = () => ({ ...RECIBO_PADRAO, ...(finCfg.recibo || {}) });
+const MESES_UP = ['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
+function numExtenso(n){
+  n = Math.floor(Math.abs(n)); if (!n) return 'zero';
+  const U = ['','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez','onze','doze','treze','quatorze','quinze','dezesseis','dezessete','dezoito','dezenove'], D = ['','','vinte','trinta','quarenta','cinquenta','sessenta','setenta','oitenta','noventa'], C = ['','cento','duzentos','trezentos','quatrocentos','quinhentos','seiscentos','setecentos','oitocentos','novecentos'];
+  const ate999 = x => { if (x === 100) return 'cem'; const c = Math.floor(x / 100), r = x % 100, p = []; if (c) p.push(C[c]); if (r) p.push(r < 20 ? U[r] : D[Math.floor(r / 10)] + (r % 10 ? ' e ' + U[r % 10] : '')); return p.join(' e '); };
+  const grupos = [[1e9, 'bilhão', 'bilhões'], [1e6, 'milhão', 'milhões'], [1e3, 'mil', 'mil']], partes = []; let resto = n;
+  for (const [base, s1, sN] of grupos) { const q = Math.floor(resto / base); if (q) { partes.push(base === 1e3 && q === 1 ? 'mil' : ate999(q) + ' ' + (q === 1 ? s1 : sN)); resto %= base; } }
+  if (resto) partes.push(ate999(resto));
+  if (partes.length > 1) { const ult = resto; return partes.slice(0, -1).join(' ') + (ult < 100 || ult % 100 === 0 ? ' e ' : ' ') + partes[partes.length - 1]; }
+  return partes[0];
+}
+function reaisExtenso(v){
+  const t = Math.round((Number(v) || 0) * 100), r = Math.floor(t / 100), c = t % 100, p = [];
+  if (r) p.push(numExtenso(r) + (/(lhão|lhões)$/.test(numExtenso(r)) ? ' de' : '') + (r === 1 ? ' real' : ' reais'));
+  if (c) p.push(numExtenso(c) + (c === 1 ? ' centavo' : ' centavos'));
+  return p.join(' e ') || 'zero reais';
+}
+// parcelas da entrada: "ATO + 4x" (ato com valor próprio, o resto dividido igual) ou tudo igual; à vista = 1
+function parcelasEntrada(e){
+  const T = Math.round((Number(e.total) || 0) * 100) / 100, n = Math.max(1, Math.round(Number(e.n) || 1)), ato = n > 1 ? Math.round((Number(e.ato) || 0) * 100) / 100 : 0;
+  const [a0, m0, d0] = String(e.primeira || hojeISO()).split('-').map(Number), dia = d0 || 10;
+  const mes = k => { const m = (m0 - 1 + k) % 12, a = a0 + Math.floor((m0 - 1 + k) / 12), ult = new Date(Date.UTC(a, m + 1, 0)).getUTCDate(), ym = `${a}-${String(m + 1).padStart(2, '0')}`; return { mes:MESES_UP[m], ym, data:`${ym}-${String(Math.min(dia, ult)).padStart(2, '0')}` }; };
+  if (!T) return [];
+  if (n === 1) return [{ i:1, ...mes(0), valor:T, ato:true }];
+  const comAto = ato > 0 && ato < T, resto = comAto ? T - ato : T, qtd = comAto ? n - 1 : n, cada = Math.floor(resto / qtd * 100) / 100, out = [];
+  if (comAto) out.push({ i:1, ...mes(0), valor:ato, ato:true });
+  for (let k = 0; k < qtd; k++) out.push({ i:out.length + 1, ...mes(out.length), valor:k === qtd - 1 ? Math.round((resto - cada * (qtd - 1)) * 100) / 100 : cada });
+  return out;
+}
+function fvBlocoRecibo(r, v, f){
+  const n = Number(f.entradaParcelas) || 1, parc = n > 1, iv = x => x ? fmtReaisIn(x) : '';
+  return `<div class="fv-bloco fv-rc"><h4>Cliente, entrada e recibo</h4>
+    <div class="row2"><div class="fg"><label>Valor de avaliação (R$)</label><input id="fvAval" data-reais="1" inputmode="numeric" value="${iv(f.valorAvaliacao)}" placeholder="0,00"></div><div class="fg"><label>Sinal (R$)</label><input id="fvSinalV" data-reais="1" inputmode="numeric" value="${iv(f.sinalValor)}" placeholder="0,00"></div></div>
+    <div class="row2"><div class="fg"><label>Valor total da entrada (R$)</label><input id="fvEntV" data-reais="1" inputmode="numeric" value="${iv(f.entradaValor || lerDec(r.entrada))}" placeholder="0,00" oninput="fvRcPrev()"></div>
+      <div class="fg"><label>À vista ou parcelado</label><select id="fvRcModo" onchange="fvRcModo()"><option value="avista" ${parc ? '' : 'selected'}>À vista</option><option value="parcelado" ${parc ? 'selected' : ''}>Parcelado</option></select></div></div>
+    <div id="fvRcParc" class="${parc ? '' : 'hide'}"><div class="row3"><div class="fg"><label>Quantas vezes (com ato)</label><input id="fvEntParc" type="number" min="1" max="60" value="${parc ? n : ''}" placeholder="5" oninput="fvRcPrev()"></div>
+      <div class="fg"><label>Valor no ato (R$)</label><input id="fvEntAto" data-reais="1" inputmode="numeric" value="${iv(f.entradaAto)}" placeholder="opcional" oninput="fvRcPrev()"></div>
+      <div class="fg"><label>Vencimento da 1ª parcela</label><input id="fvEnt1" type="date" value="${/^\d{4}-\d{2}-\d{2}$/.test(f.entradaPrimeira || '') ? f.entradaPrimeira : /^\d{4}-\d{2}$/.test(f.entradaPrimeira || '') ? f.entradaPrimeira + '-10' : hojeISO()}" oninput="fvRcPrev()"></div></div></div>
+    <div id="fvRcLista" class="fv-rc-lista"></div>
+    <div class="row2"><div class="fg"><label>CPF do cliente</label><input id="fvCpfC" inputmode="numeric" value="${esc(f.cpfCli || r.cpf || '')}"></div><div class="fg"><label>Telefone do cliente</label><input id="fvTelC" inputmode="tel" value="${esc(f.telCli || r.telefone || '')}"></div></div>
+    <div class="row3"><div class="fg"><label>Unidade (apto)</label><input id="fvUnid" value="${esc(f.unidade || '')}" placeholder="Apto."></div><div class="fg"><label>Bloco</label><input id="fvBloco" value="${esc(f.bloco || '')}" placeholder="BL."></div><div class="fg"><label>Nº do recibo</label><input id="fvRcNum" value="${esc(f.reciboNum || proxRecibo())}"></div></div>
+    <div class="fv-rc-bts"><button class="btn btn-primary" onclick="fvRecibo('imprimir')">Gerar recibo</button><button class="btn btn-ghost" onclick="fvRecibo('compartilhar')">Compartilhar recibo</button></div>
+    ${f.reciboEm ? `<small class="muted">Último recibo: ${esc(f.reciboNum || '')} gerado em ${dataBR(f.reciboEm)}</small>` : ''}</div>`;
+}
+function proxRecibo(){
+  const ano = hojeISO().slice(0, 4), nums = Object.values(finVendas).map(x => String(x.reciboNum || '')).filter(x => x.endsWith('/' + ano)).map(x => parseInt(x, 10) || 0);
+  return String((nums.length ? Math.max(...nums) : 0) + 1).padStart(3, '0') + '/' + ano;
+}
+function rcEntrada(){
+  const modo = $('fvRcModo')?.value || 'avista';
+  return { total:lerDec($('fvEntV')?.value), n:modo === 'parcelado' ? Math.max(2, Number($('fvEntParc')?.value) || 2) : 1, ato:modo === 'parcelado' ? lerDec($('fvEntAto')?.value) : 0, primeira:$('fvEnt1')?.value || hojeISO() };
+}
+function rcCampos(){
+  if (!$('fvRcModo')) return {}; const e = rcEntrada();
+  return { valorAvaliacao:lerDec($('fvAval').value) || 0, entradaValor:e.total || 0, entradaParcelas:e.n, entradaAto:e.n > 1 ? e.ato || 0 : 0, entradaPrimeira:e.primeira,
+    cpfCli:$('fvCpfC').value.trim(), telCli:$('fvTelC').value.trim(), unidade:$('fvUnid').value.trim().slice(0, 30), bloco:$('fvBloco').value.trim().slice(0, 30), reciboNum:$('fvRcNum').value.trim().slice(0, 20) };
+}
+window.fvParcPaga = (i, sim) => { const el = $('fvEntPagas'); if (el) el.value = sim ? i : i - 1; const ps = parcelasEntrada(rcEntrada()); const n = sim ? i : i - 1, todas = ps.length > 0 && n >= ps.length; if ($('fvEntPaga')) $('fvEntPaga').checked = todas; fvRcPrev();
+  if (finVEdit) gravar(setDoc(doc(db,'fin_vendas',finVEdit), { entradaPagas:n, entradaPaga:todas, atualizadoEm:Date.now() }, { merge:true })).then(() => toast(sim ? 'Parcela marcada como paga ✓' : 'Parcela voltou para pendente')).catch(e => toast('Erro: ' + e.message)); };
+window.fvRcModo = () => { const p = $('fvRcModo').value === 'parcelado'; $('fvRcParc').classList.toggle('hide', !p); if (p && !$('fvEntParc').value) $('fvEntParc').value = 5; fvRcPrev(); };
+window.fvRcPrev = () => { const el = $('fvRcLista'); if (!el) return; const ps = parcelasEntrada(rcEntrada()), pagas = Number($('fvEntPagas')?.value) || 0, h = hojeISO();
+  el.innerHTML = ps.length ? `<small class="muted">Marque as parcelas que o cliente já pagou. No dia do vencimento de cada uma, o app avisa a gerência para cobrar.</small>` + ps.map(p => { const paga = p.i <= pagas, st = paga ? 'paga' : p.data < h ? 'atrasada' : p.data === h ? 'vence hoje' : '';
+    return `<div class="${paga ? 'pg' : p.data < h ? 'at' : ''}"><label><input type="checkbox" ${paga ? 'checked' : ''} onchange="fvParcPaga(${p.i},this.checked)"> ${ps.length === 1 ? 'À vista' : (p.ato ? 'Ato' : 'Parcela ' + String(p.i).padStart(2, '0'))} · ${dataBR(p.data)}${st ? ` <em>${st}</em>` : ''}</label><b>${brl2(p.valor)}</b></div>`; }).join('') + (ps.length > 1 ? `<div class="tot"><span>Total</span><b>${brl2(ps.reduce((a, p) => a + p.valor, 0))}</b></div>` : '') : '<small class="muted">Coloque o valor da entrada para ver as parcelas.</small>'; };
+function reciboHtml(x){
+  const c = reciboCfg(), E = s => esc(String(s ?? '')), base = location.origin + location.pathname.replace(/[^/]*$/, '');
+  const ps = parcelasEntrada(x.ent), T = ps.reduce((a, p) => a + p.valor, 0), n = ps.length, comAto = n > 1 && ps[0].ato, viaTxt = { boleto:'NO BOLETO', cartao_construtora:'NO CARTÃO', cartao_imobiliaria:'NO CARTÃO' }[x.forma] || 'NO PIX';
+  const desc = n === 1 ? ['ENTRADA À VISTA ' + viaTxt, 'À VISTA'] : ['ENTRADA DIVIDIDA ' + viaTxt, comAto ? `ATO + ${n - 1}x` : `${n}x`];
+  const linhas = ps.map(p => `<tr><td>${n === 1 ? 'PAGAMENTO À VISTA' : 'PARCELA ' + String(p.i).padStart(2, '0')} (<b>${p.mes}</b>)</td><td class="v">${brl2(p.valor)}</td></tr>`).join('');
+  const resto = comAto ? ps.slice(1) : ps, cada = resto[0]?.valor || 0, ultDif = resto.length > 1 && Math.abs(resto[resto.length - 1].valor - cada) > 0.009;
+  const pagto = `O pagamento deverá ser realizado via PIX, para a chave ${E(c.pix)}, em nome de ${E(c.beneficiarioNome)}, ${E(c.banco)}.`;
+  const obs = [`O valor total da entrada é de <b>${brl2(T)}</b>.`];
+  if (x.sinal > 0) obs.push(`Sinal já pago na reserva: <b>${brl2(x.sinal)}</b> (${reaisExtenso(x.sinal)}).`);
+  if (n === 1) obs.push(`O valor de ${brl2(T)} (${reaisExtenso(T)}) será pago à vista. ${pagto}`);
+  else if (comAto) obs.push(`O saldo de ${brl2(T)} será quitado em ${n}x (${numExtenso(n)}) parcelas. ${pagto} No ato da assinatura de compra e venda será pago ${brl2(ps[0].valor)} (${reaisExtenso(ps[0].valor)}), o restante dos <b>${brl2(T - ps[0].valor)}</b> (${reaisExtenso(T - ps[0].valor)}), será pago em ${resto.length} (${numExtenso(resto.length)}) parcela${resto.length > 1 ? 's' : ''} de <b>${brl2(cada)}</b> (${reaisExtenso(cada)})${ultDif ? `, sendo a última de ${brl2(resto[resto.length - 1].valor)}` : ''}, a cada 30 (trinta) dias.`);
+  else obs.push(`O saldo de ${brl2(T)} será quitado em ${n}x (${numExtenso(n)}) parcelas de <b>${brl2(cada)}</b> (${reaisExtenso(cada)})${ultDif ? `, sendo a última de ${brl2(resto[resto.length - 1].valor)}` : ''}, a cada 30 (trinta) dias. ${pagto}`);
+  obs.push('O não pagamento na data estabelecida neste recibo, conforme acordado entre as partes, implicará a solicitação de distrato junto à CAIXA Econômica Federal.');
+  const clausula = 'Caso a avaliação do imóvel realizada pela instituição financeira resulte em valor superior ao valor de compra e venda efetivamente pactuado entre as partes e, em razão dessa avaliação, seja efetivamente liberado e recebido valor superior ao necessário para a quitação da operação, eventual quantia excedente será devolvida ao CLIENTE/COMPRADOR, após a efetiva liberação e disponibilidade dos recursos, observadas as condições, limites e regras estabelecidas pela instituição financeira responsável pelo financiamento. A devolução somente ocorrerá sobre valores efetivamente recebidos e que possam ser legalmente restituídos ao CLIENTE/COMPRADOR, não constituindo a presente cláusula garantia de liberação de valor adicional pela instituição financeira.';
+  const sec = (k, t) => `<div class="rc-sec">■ ${k}. ${t}</div>`, cel = (l, val) => `<div><span>${l}</span><b>${E(val) || '&nbsp;'}</b></div>`;
+  const [a, m, d] = x.emissao.split('-');
+  return `<div class="sd rc-doc"><style>.rc-doc{width:760px;padding:34px 40px;background:#fff;color:#1b2433;font:13px/1.45 Arial,Helvetica,sans-serif}.rc-doc *{box-sizing:border-box}
+.rc-top{display:flex;align-items:center;background:#1f2d4f;min-height:104px}.rc-logo{background:#17233f;height:104px;display:flex;align-items:center;padding:0 22px}.rc-logo img{width:150px;display:block}.rc-tit{padding:0 22px}.rc-tit h1{margin:0;color:#ef7d22;font-size:23px;letter-spacing:.2px}.rc-tit small{color:#dfe6f2;font-size:12px}
+.rc-g{display:grid;gap:4px 18px;margin:16px 0 4px}.rc-g div{display:grid}.rc-g span{font-size:9.5px;color:#6b7686;letter-spacing:.3px}.rc-g b{font-size:13.5px;color:#1f2d4f}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1.25fr .9fr .9fr}
+.rc-sec{background:#1f2d4f;color:#fff;font-weight:700;font-size:12px;padding:8px 12px;margin-top:22px}
+.rc-t{width:100%;border-collapse:collapse;margin-top:12px}.rc-t td,.rc-t th{border:1px solid #d8dde5;padding:6px 8px;font-size:12px;text-align:left}.rc-t th{background:#eef1f5;color:#4a5566;font-size:11px}.rc-t .v{text-align:right;white-space:nowrap}.rc-t tr.d td{font-weight:700}.rc-t tr.tot td{background:#fdeee2;color:#e5711b;font-weight:700}.rc-t .lb{background:#eef1f5;font-weight:700;font-size:11px;width:150px}.rc-t .pix{color:#e5711b;font-weight:700}
+.rc-obs{margin:12px 0 0;padding-left:16px}.rc-obs li{margin:4px 0;text-align:justify}.rc-cl{text-align:justify;margin:4px 0 0}
+.pdf-quebra{break-before:page;page-break-before:always;height:0}.rc-ass{margin-top:90px;display:grid;gap:52px}.rc-ass div{border-top:1px solid #9aa3b1;padding-top:6px}.rc-ass b{display:block;font-size:12.5px}.rc-ass span{font-size:10px;color:#6b7686}.rc-pe{margin-top:40px;border-top:1px solid #d8dde5;padding-top:8px;text-align:center;font-size:9.5px;color:#7a8494}</style>
+  <div class="rc-top"><div class="rc-logo"><img src="${base}logo-frade.png" alt="Frade Imóveis"></div><div class="rc-tit"><h1>RECIBO DE PAGAMENTO</h1><small>${E(c.email)}</small></div></div>
+  <div class="rc-g g2">${cel('Nº DO RECIBO', x.num)}${cel('DATA DE EMISSÃO', `${d} / ${m} / ${a}`)}</div>
+  ${sec(1, 'DADOS DO CLIENTE')}<div class="rc-g g3">${cel('NOME COMPLETO', x.cliente)}${cel('CPF', x.cpf)}${cel('TELEFONE', x.tel)}</div>
+  ${sec(2, 'DADOS DO IMÓVEL')}<div class="rc-g ${x.aval ? 'g3' : 'g3'}">${cel('EMPREENDIMENTO', x.emp)}${cel('UNIDADE', x.unid || 'Apto.')}${cel('BLOCO', x.bloco || 'BL.')}${x.aval ? cel('VALOR DE AVALIAÇÃO', brl2(x.aval)) : ''}</div>
+  ${sec(3, 'CONDIÇÕES FINANCEIRAS')}<table class="rc-t"><tr><th>DESCRIÇÃO</th><th class="v">VALOR</th></tr><tr class="d"><td>${desc[0]}</td><td class="v">${desc[1]}</td></tr>${linhas}<tr class="tot"><td>TOTAL DO SALDO DEVEDOR</td><td class="v">${brl2(T)}</td></tr></table>
+  ${sec(4, 'DADOS PARA PAGAMENTO DAS PARCELAS')}<table class="rc-t"><tr><td class="lb">BENEFICIÁRIO</td><td>${E(c.beneficiario)}</td></tr><tr><td class="lb">FORMA DE PAGAMENTO</td><td class="pix">PIX</td></tr><tr><td class="lb">CHAVE PIX (E-MAIL)</td><td>${E(c.pix)}</td></tr></table>
+  <div class="pdf-quebra"></div>${sec(5, 'OBSERVAÇÕES')}<ul class="rc-obs">${obs.map(o => `<li>${o}</li>`).join('')}<li><b>CLÁUSULA – DA DIFERENÇA DECORRENTE DA AVALIAÇÃO DO IMÓVEL –</b><p class="rc-cl">${clausula}</p></li><li>Este recibo é válido somente após assinatura do sócio responsável.</li><li>Em caso de dúvidas, entrar em contato pelo e-mail ${E(c.email)}.</li></ul>
+  <div class="rc-ass"><div><b>${E(x.cliente)}</b><span>CLIENTE${x.cpf ? ' • CPF: ' + E(x.cpf) : ''}</span></div><div><b>${E(c.empresa)}</b><span>SÓCIO RESPONSÁVEL • CNPJ: ${E(c.cnpj)}</span></div></div>
+  <div class="rc-pe">${E(c.empresa)} • CNPJ: ${E(c.cnpj)} • ${E(c.email)}<br><i>Este documento é um comprovante de pagamento parcial e não substitui o contrato de compra e venda.</i></div></div>`;
+}
+window.fvRecibo = async acao => {
+  const r = vendasFin().find(x => x.id === finVEdit); if (!r) return; const e = rcEntrada();
+  if (!e.total) { toast('Coloque o valor total da entrada'); $('fvEntV').focus(); return; }
+  const campos = rcCampos(); if (!campos.reciboNum) campos.reciboNum = proxRecibo();
+  const cpf = soDig(campos.cpfCli), tel = soDig(campos.telCli);
+  const d = { titulo:'Recibo ' + campos.reciboNum, cliente:nomeBonito(r.cliente || ''), arquivo:`Recibo ${campos.reciboNum.replace('/', '-')} ${nomeBonito(r.cliente || '')}`, texto:'Recibo de pagamento · Frade Imóveis',
+    html:reciboHtml({ num:campos.reciboNum, emissao:hojeISO(), cliente:nomeBonito(r.cliente || ''), cpf:cpf.length === 11 ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : campos.cpfCli, tel:tel.length >= 10 ? tel.replace(/^(\d{2})(\d)(\d{4})(\d{4})$/, '($1) $2 $3-$4').replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3') : campos.telCli,
+      emp:r.empreendimento || '', unid:campos.unidade, bloco:campos.bloco, aval:campos.valorAvaliacao, sinal:lerDec($('fvSinalV').value), forma:$('fvForma')?.value || 'pix', ent:e }) };
+  try { await gravar(setDoc(doc(db,'fin_vendas',r.id), { ...campos, sinalValor:lerDec($('fvSinalV').value) || 0, reciboEm:hojeISO(), atualizadoEm:Date.now() }, { merge:true })); } catch(err) {}
+  $('fvRcNum').value = campos.reciboNum;
+  simDocAcao(d, acao);
+};
 window.abrirVendaFin = (id, semAbrir) => {
+  setTimeout(() => { try { fvRcPrev(); } catch(e) {} }, 0);
   const r = vendasFin().find(x => x.id === id); if (!r) return; finVEdit = id; window._fvId = id;
   const v = vendaFin(r), f = v.f, ro = '';
   const chk = (idc, val, txt) => `<label class="fv-chk"><input type="checkbox" id="${idc}" ${val ? 'checked' : ''} ${ro}> ${txt}</label>`;
@@ -14012,13 +14132,14 @@ window.abrirVendaFin = (id, semAbrir) => {
         <div class="row2"><div class="fg"><label>Comissão do corretor (R$)</label><input id="fvValCor" inputmode="decimal" value="${val(f.valCor)}" placeholder="${val(Math.round(v.liquido * v.pctCor) / 100)}"></div><div class="fg"><label>Imposto da nota (R$)</label><input id="fvImpV" inputmode="decimal" value="${val(f.impostoV)}" placeholder="${val(Math.round(v.total * v.pctNF) / 100)}"></div></div>
         <div class="hint" style="margin:0">Deixe em branco para o app calcular sozinho.</div></details>
       <div class="fg" style="margin-top:10px"><label>Andamento do processo</label><select id="fvProc">${['','Formulário','Avaliação do imóvel','Conformidade','Extrato','Aguardando unidade','Obra','Suspensiva','Assinatura agendada','Assinou'].map(x => `<option ${f.processo === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
+    ${fvBlocoRecibo(r, v, f)}
     <div class="fv-etapas"><h4>Etapas</h4>
-    ${sec(0, 'Reserva e sinal', f.sinalPago ? 'sinal pago' + (f.sinalValor ? ' · ' + brl2(f.sinalValor) : '') : '', `${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="row2"><div class="fg"><label>Valor do sinal</label><input id="fvSinalV" inputmode="decimal" value="${f.sinalValor ? val(f.sinalValor) : ''}"></div><div class="fg"><label>Data do pagamento</label><input id="fvSinalD" type="date" value="${f.sinalData || ''}"></div></div>
+    ${sec(0, 'Reserva e sinal', f.sinalPago ? 'sinal pago' + (f.sinalValor ? ' · ' + brl2(f.sinalValor) : '') : '', `${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="row2"><div class="fg"><label>Data do pagamento</label><input id="fvSinalD" type="date" value="${f.sinalData || ''}"></div><div class="fg" style="align-self:end"><small class="muted">O valor do sinal fica em "Cliente, entrada e recibo".</small></div></div>
       <div class="row2"><div class="fg"><label>Como pagou</label><select id="fvSinalF">${FORMAS_SINAL.map(([k,n]) => `<option value="${k}" ${f.sinalForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg"><label>Quem recebeu</label><select id="fvSinalQ"><option value="">—</option><option value="construtora" ${f.sinalQuem === 'construtora' ? 'selected' : ''}>Construtora</option><option value="imobiliaria" ${f.sinalQuem === 'imobiliaria' ? 'selected' : ''}>Imobiliária</option></select></div></div>`)}
     ${sec(1, 'Entrada', f.geraEntrada === 'nao' ? 'não tem entrada' : f.entradaPaga ? 'entrada paga' : '', `<div class="row2"><div class="fg"><label>Vai gerar entrada?</label><select id="fvGera"><option value="">—</option><option value="sim" ${f.geraEntrada === 'sim' ? 'selected' : ''}>Sim</option><option value="nao" ${f.geraEntrada === 'nao' ? 'selected' : ''}>Não</option></select></div>
-      <div class="fg"><label>Valor da entrada</label><input id="fvEntV" inputmode="decimal" value="${f.entradaValor ? val(f.entradaValor) : (r.entrada || '')}"></div></div>
+      <div class="fg" style="align-self:end"><small class="muted">Valor e parcelas da entrada ficam em "Cliente, entrada e recibo".</small></div></div>
       <div class="row2"><div class="fg"><label>Como vai pagar</label><select id="fvForma">${FORMAS_ENT.map(([k,n]) => `<option value="${k}" ${f.entradaForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg" style="align-self:end">${chk('fvEntPaga', f.entradaPaga, 'Entrada paga')}</div></div>
-      <div class="row2"><div class="fg"><label>Em quantas vezes</label><input id="fvEntParc" type="number" min="1" max="60" value="${f.entradaParcelas || ''}" placeholder="1"></div><div class="fg"><label>Parcelas já pagas</label><input id="fvEntPagas" type="number" min="0" max="60" value="${f.entradaPagas || ''}" placeholder="0"></div></div>
+      <div class="row2"><div class="fg"><label>Parcelas já pagas</label><input id="fvEntPagas" type="number" min="0" max="60" value="${f.entradaPagas || ''}" placeholder="0" oninput="fvRcPrev()"></div></div>
       ${Number(f.entradaParcelas) > 1 ? `<div class="fv-parc-bar"><i style="width:${Math.min(100, Math.round((Number(f.entradaPagas) || 0) / f.entradaParcelas * 100))}%"></i></div><small class="muted">${Number(f.entradaPagas) || 0} de ${f.entradaParcelas} parcelas pagas${f.entradaValor ? ' · ' + brl2(f.entradaValor / f.entradaParcelas) + ' cada' : ''}</small>` : ''}`)}
     ${sec(2, 'Identificação', f.identificada ? 'identificada' : '', chk('fvIdent', f.identificada, 'Venda identificada no nome do corretor na construtora'))}
     ${sec(3, 'Assinatura com a Caixa', f.assinaturaEm ? 'assinou em ' + dataBR(f.assinaturaEm) : '', `<div class="fg"><label>Data da assinatura</label><input id="fvAss" type="date" value="${f.assinaturaEm || ''}"></div>`)}
@@ -14119,7 +14240,7 @@ window.salvarVendaFin = async () => {
     descontos:(window._fvDesc || []).filter(x => Number(x.valor) > 0).map(x => ({ tipo:x.tipo || 'avulso', descricao:String(x.descricao || '').trim().slice(0, 100), valor:Math.round(Number(x.valor) * 100) / 100, uid:x.uid || '' })),
     identificada:$('fvIdent').checked, assinaturaEm:$('fvAss').value, nota:$('fvNota').value, faturada:$('fvFat').checked,
     prevAdiant:$('fvPrevA').value, prevRestante:$('fvPrevR').value, recAdiant:$('fvTipo').value === 'adiantamento' && $('fvRecA').checked, recRestante:$('fvRecR').checked, corPago:$('fvCorP').checked,
-    obs:$('fvObs').value.trim(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome, planOk:true };
+    obs:$('fvObs').value.trim(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome, planOk:true, ...rcCampos() };
   // só guarda a previsão se a pessoa mudou a data sugerida
   const rg = regraConst(d.construtora);
   if (d.prevAdiant === somaDiasISO(r.dia, rg.diasAdiant)) d.prevAdiant = '';
@@ -17421,6 +17542,7 @@ function simDocRapida(u){ if (!u) return null; const x = u.x, m = u.modo || simq
     cartoes:cart, dados:[['Data de nascimento', u.e?.nasc ? dataBR(u.e.nasc) : '—'], ...(m === 'prest' ? [['Prestação desejada', brl2(u.e?._prest)]] : [['Renda mensal', brl2(u.e?.renda)]]), ...(m === 'valor' ? [['Valor do imóvel informado', brl2(u.e?.valor)]] : [])],
     avisos:['O FGTS ou o subsídio do Minha Casa Minha Vida poderão compor o valor mínimo de entrada.'], obs:'Estimativa inicial com os parâmetros da calculadora da Caixa. Os valores podem variar porque não consideram análise de crédito, perfil do cliente, tipo de financiamento ou localização do imóvel. As condições finais dependem da simulação completa e da análise da CAIXA.' }; }
 function simDocHtml(d){
+  if (d && d.html) return d.html; // v291: recibo e outros documentos prontos usam o mesmo PDF/impressão
   const base = location.origin + location.pathname.replace(/[^/]*$/, ''), E = s => esc(String(s ?? ''));
   const COR = { or:['#E65100','#fff3e8'], az:['#0B4669','#e8f1f8'], cz:['#334155','#f1f5f9'], vd:['#15803d','#eaf7ee'] };
   const dest = (d.destaques || []).length ? `<div class="sd-dest">${d.destaques.map(([a, b, c]) => { const [f, bg] = COR[c] || COR.cz; return `<div class="sd-d" style="border-color:${f}33;background:${bg}"><span style="color:${f}">${E(a)}</span><b style="color:${f}">${E(b)}</b></div>`; }).join('')}</div>` : '';
@@ -17465,11 +17587,15 @@ async function simPdf(d){
   // o logo vai embutido no PDF (sem isso o navegador pode recusar gerar a imagem)
   for (const im of box.querySelectorAll('img')) { try { const bl = await (await fetch(im.src)).blob(); im.src = await new Promise((ok, er) => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.onerror = er; fr.readAsDataURL(bl); }); } catch(e) { im.remove(); } }
   await Promise.all([...box.querySelectorAll('img')].map(im => im.complete ? 0 : new Promise(r => { im.onload = im.onerror = r; setTimeout(r, 3000); })));
-  let cv; try { cv = await window.html2canvas(box.firstElementChild, { scale:2, backgroundColor:'#ffffff', useCORS:true, logging:false }); } finally { box.remove(); }
-  const pdf = new window.jspdf.jsPDF({ unit:'pt', format:'a4' }), W = pdf.internal.pageSize.getWidth(), H = pdf.internal.pageSize.getHeight(), m = 24, w = W - 2 * m, pagPx = Math.floor((H - 2 * m) * cv.width / w);
-  for (let y = 0, pg = 0; y < cv.height; y += pagPx, pg++) { const hpx = Math.min(pagPx, cv.height - y), c2 = document.createElement('canvas'); c2.width = cv.width; c2.height = hpx; c2.getContext('2d').drawImage(cv, 0, y, cv.width, hpx, 0, 0, cv.width, hpx);
-    if (pg) pdf.addPage(); pdf.addImage(c2.toDataURL('image/jpeg', 0.92), 'JPEG', m, m, w, hpx * w / cv.width); }
-  const nome = ('Simulacao ' + (d.cliente || 'cliente')).normalize('NFD').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') + '.pdf';
+  // v291: quebra de página onde o documento pede (.pdf-quebra), sem cortar linha no meio
+  const raiz = box.firstElementChild, topo = raiz.getBoundingClientRect().top, alt = raiz.offsetHeight || 1, quebras = [...raiz.querySelectorAll('.pdf-quebra')].map(q => q.getBoundingClientRect().top - topo);
+  let cv; try { cv = await window.html2canvas(raiz, { scale:2, backgroundColor:'#ffffff', useCORS:true, logging:false }); } finally { box.remove(); }
+  const pdf = new window.jspdf.jsPDF({ unit:'pt', format:'a4' }), W = pdf.internal.pageSize.getWidth(), H = pdf.internal.pageSize.getHeight(), m = 24, w = W - 2 * m, pagPx = Math.floor((H - 2 * m) * cv.width / w), kq = cv.height / alt;
+  const cortes = [0, ...quebras.map(y => Math.round(y * kq)).filter(y => y > 0 && y < cv.height), cv.height], fatias = [];
+  for (let i = 0; i < cortes.length - 1; i++) for (let y = cortes[i]; y < cortes[i + 1]; y += pagPx) fatias.push([y, Math.min(pagPx, cortes[i + 1] - y)]);
+  fatias.forEach(([y, hpx], pg) => { const c2 = document.createElement('canvas'); c2.width = cv.width; c2.height = hpx; c2.getContext('2d').drawImage(cv, 0, y, cv.width, hpx, 0, 0, cv.width, hpx);
+    if (pg) pdf.addPage(); pdf.addImage(c2.toDataURL('image/jpeg', 0.92), 'JPEG', m, m, w, hpx * w / cv.width); });
+  const nome = (d.arquivo || ('Simulacao ' + (d.cliente || 'cliente'))).normalize('NFD').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') + '.pdf';
   const out = { blob:pdf.output('blob'), nome }; _simPdfCache.set(k, out); return out;
 }
 window.simAcao = (qual, acao) => simDocAcao(qual === 'completa' ? simDocCompleta(simUlt) : qual === 'salva' ? window._simVerDoc : simDocRapida(window._simqUlt), acao);
@@ -17488,7 +17614,7 @@ window.simDocAcao = async (d, acao) => {
   const baixar = () => { const a = document.createElement('a'); a.href = url; a.download = r.nome; document.body.appendChild(a); a.click(); a.remove(); };
   // iPhone: a folha de compartilhar já tem "Imprimir"; no compartilhar, abre WhatsApp, e-mail etc.
   if ((acao === 'compartilhar' || ios) && navigator.canShare && navigator.canShare({ files:[arq] })) {
-    try { await navigator.share({ files:[arq], title:d.titulo, text:(d.cliente ? d.cliente + ' · ' : '') + 'Simulação de financiamento' }); return; }
+    try { await navigator.share({ files:[arq], title:d.titulo, text:(d.cliente ? d.cliente + ' · ' : '') + (d.texto || 'Simulação de financiamento') }); return; }
     catch(err) { if (err && err.name === 'AbortError') return; if (err && err.name === 'NotAllowedError') { toast(`PDF pronto. Toque em "${acao === 'imprimir' ? 'Imprimir' : 'Compartilhar PDF'}" de novo.`); return; } }
   }
   // Android e outros: abre o PDF no leitor do celular (lá tem o botão de imprimir) ou baixa
