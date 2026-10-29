@@ -7572,7 +7572,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 293;
+const APP_VERSAO = 295;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8900,17 +8900,33 @@ window.af = (k, v) => { aFil[k] = v; render(); };
 // o mesmo cliente (CPF ou telefone) aparece uma vez só, com a última alteração; carta cadastrada no app conta como aprovado
 // v255: dia em que a documentação conta para a meta. Linha sem data na planilha (o app pegava a data da linha de cima, às vezes antiga)
 // conta no dia em que ela apareceu na planilha. E a aba que ainda não está ligada a ninguém é ligada pelo nome da pessoa.
+// v294: cada ficha mandada na conversa (análise de crédito / verificar CPF) é uma doc, no dia e para quem mandou.
+// Sem a lista de envios (planilha ou importação antiga): uma doc, no dia do cliente.
+function docsDaAv(a){
+  const base = { dia:diaDocAv(a), uid:uidDaAv(a) };
+  if (Array.isArray(a.envios) && a.envios.length) { const l = a.envios.map(e => { const [dia, aba] = String(e).split('|'); return { dia, uid:!aba || aba.trim() === String(a.aba || '').trim() ? uidDaAv(a) : uidDaAv({ aba }) }; }).filter(x => x.dia);
+    return a.origem === 'whatsapp' ? l : [base, ...l]; } // cliente da planilha: a linha da planilha + cada ficha mandada na conversa
+  return [base];
+}
 function diaDocAv(a){ const d = a.data || '', c = a.criadoEm ? iso(new Date(a.criadoEm)) : '';
   if ((a.dataEstimada || !d) && c && c > d) return c; return d; }
 // v293: nome escrito diferente (Camila/Camilla, Matheus/Mateus) também liga; e o "Quem é quem" das Integrações vale para as docs
-const nomeSimples = s => norm(s || '').replace(/[^a-z ]/g, ' ').replace(/th/g, 't').replace(/y/g, 'i').replace(/([a-z])\1+/g, '$1').replace(/\s+/g, ' ').trim();
+const nomeBase = s => norm(s || '').replace(/[^a-z ]/g, ' ').replace(/([a-z])\1+/g, '$1').replace(/\s+/g, ' ').trim();
+const nomeSimples = s => nomeBase(String(s || '')).replace(/th/g, 't').replace(/y/g, 'i').replace(/([a-z])\1+/g, '$1');
 function uidDaAv(a){ if (a.corretorUid) return a.corretorUid; const bruto = a.corretorNome || a.aba || '';
   const ma = (typeof integ !== 'undefined' && integ && integ.mapaAbas) || {}, mu = ma[bruto] || ma[String(bruto).trim()] || ma[String(a.aba || '').trim()]; if (mu) return mu;
   const n = norm(bruto); if (n.length < 3) return '';
   const ps = typeof pessoasRk === 'function' ? pessoasRk() : [];
   let l = ps.filter(p => { const pn = norm(p.nome || ''); return pn === n || pn.startsWith(n + ' ') || n.startsWith(pn + ' ') || pn.split(' ')[0] === n; });
-  if (l.length !== 1) { const ns = nomeSimples(bruto).split(' ').filter(w => w.length > 1 && w !== 'sdr'); if (ns.length) { const l2 = ps.filter(p => { const t = nomeSimples(p.nome).split(' '); return ns.every(w => t.includes(w)); }); if (l2.length === 1) l = l2; } }
+  if (l.length !== 1) { const p2 = pessoaPorApelido(bruto, ps); if (p2) l = [p2]; }
   return l.length === 1 ? l[0].uid : ''; }
+// nome da conversa → pessoa: todas as palavras no nome dela; se não achar, apelido no começo do nome (Dani → Danielle, Karol → Karolliny)
+function pessoaPorApelido(bruto, ps){
+  const tenta = (f, prefixo) => { const ns = f(bruto).split(' ').filter(w => w.length > 1 && w !== 'sdr'); if (!ns.length) return [];
+    return ps.filter(p => { const t = f(p.nome).split(' '); return ns.every(w => prefixo ? w.length >= 4 && t.some(x => x.startsWith(w)) : t.includes(w)); }); };
+  for (const [f, pre] of [[nomeBase, false], [nomeSimples, false], [nomeBase, true]]) { const c = tenta(f, pre); if (c.length === 1) return c[0]; if (c.length > 1) return null; }
+  return null;
+}
 window.diaDocAv = diaDocAv;
 function avaliacoesUnificadas(){
   const chave = a => a.cpfNorm ? 'c' + a.cpfNorm : (soDig(a.cpf).length === 11 ? 'c' + soDig(a.cpf) : (a.telNorm ? 't' + a.telNorm : 'i' + a.id));
@@ -10006,7 +10022,7 @@ window.previaLeads = () => {
 const PC = (() => {
   const norm = s => String(s || '').normalize('NFD').replace(/[^\x00-\x7f]/g, '').toLowerCase();
   const dig = s => String(s || '').replace(/\D/g, '');
-  const ABA_ESP = { 'mateus silva':'MATEUS S.', 'guilherme m.':'GUILHERME M.', 'anna rafaella':'ANNA', 'ana flavia':'ANA FLAVIA', 'eustaquio':'EUSTAQUIO', 'robson barreto':'ROBSON', 'luis':'LUIS EDUARDO', 'ewerton':'EWERTON' };
+  const ABA_ESP = { 'arthur abrantes':'ARTHUR ABRANTES', 'mateus silva':'MATEUS S.', 'guilherme m.':'GUILHERME M.', 'anna rafaella':'ANNA RAFAELLA', 'ana flavia':'ANA FLAVIA', 'eustaquio':'EUSTAQUIO', 'robson barreto':'ROBSON', 'luis':'LUIS EDUARDO', 'ewerton':'EWERTON' };
   function abaDoNome(arq){
     let n = String(arq || '').replace(/\.(zip|txt)$/i, '').replace(/^[0-9a-f]{8}-/i, '').replace(/^(whatsapp chat( with| -)?|conversa do whatsapp com)\s*/i, '');
     n = norm(n.replace(/_/g, ' ')).split(/\s+cr\s?e?dito\b/)[0].replace('fl via', 'flavia').replace('eust quio', 'eustaquio').replace(/\s+/g, ' ').trim();
@@ -10106,7 +10122,7 @@ const PC = (() => {
   }
   // grupos: [{ nome:'Laiane Crédito - FRADE PRIME.zip', texto:'...' }]
   function converter(grupos, limite = 0.28){
-    const clientes = {};
+    const clientes = {}, envios = {};
     for (const gr of grupos) {
       const aba = abaDoNome(gr.nome), ms = msgsDe(gr.texto).flatMap(m => ehPrime(m.autor) ? dividirRetornos(m) : [m]);
       let ultimo = null, pend = [];
@@ -10116,9 +10132,11 @@ const PC = (() => {
           for (const b of bs) {
             const k = chave(b); if (!k) continue;
             let c = clientes[k];
+            (envios[k] ||= new Set()).add(m.dia + '|' + aba); // v294: cada ficha mandada (análise de crédito / verificar CPF) conta no dia em que foi mandada
             if (!c) c = clientes[k] = { k, aba, data:m.dia, nome:b.nome, cpf:b.cpf, telefone:b.tel, renda:b.renda, status:b.tipo === 'verificar' ? 'VERIFICAR CPF' : 'AVALIAÇÃO', aprovadoEm:'', ult:m.dia, final:false };
             else {
-              c.ult = m.dia; c.aba = aba;
+              // v293: a doc é de quem mandou primeiro (a SDR que pediu a análise não perde para o corretor que reenviou depois)
+              if (m.dia > (c.ult || '')) c.ult = m.dia; if (m.dia < c.data) { c.data = m.dia; c.aba = aba; }
               if (b.tipo === 'avaliacao') {
                 if (c.status === 'VERIFICAR CPF') c.status = 'AVALIAÇÃO';
                 if (!(c.status.startsWith('APROVADO') || ['CONDICIONADO','REPROVADO','REPROVADO/BACEN'].includes(c.status))) c.final = false;
@@ -10165,7 +10183,7 @@ const PC = (() => {
     }
     return Object.values(clientes).map(c => {
       const nome = c.nome || (c.cpf ? 'CLIENTE CPF ' + c.cpf.slice(0, 3) + '***' : 'CLIENTE TEL ' + dig(c.telefone).slice(-4));
-      return { id:c.cpf ? 'w' + c.cpf : 'wt' + dig(c.telefone).slice(-11), aba:c.aba, data:c.data, nome, cpf:c.cpf, telefone:c.telefone, renda:c.renda, status:c.status, aprovadoEm:c.aprovadoEm, ...(c.restr ? { restricoes:c.restr, restricoesEm:c.restrEm || '' } : {}) };
+      return { id:c.cpf ? 'w' + c.cpf : 'wt' + dig(c.telefone).slice(-11), aba:c.aba, envios:[...(envios[c.k] || [])].sort().slice(-60), data:c.data, nome, cpf:c.cpf, telefone:c.telefone, renda:c.renda, status:c.status, aprovadoEm:c.aprovadoEm, ...(c.restr ? { restricoes:c.restr, restricoesEm:c.restrEm || '' } : {}) };
     }).sort((a, b) => (a.data + a.aba).localeCompare(b.data + b.aba));
   }
   return { converter, abaDoNome };
@@ -10198,7 +10216,7 @@ window.lerZipsWhats = async input => {
     const lista = PC.converter(grupos);
     // v256: mostra de quem é cada conversa (a doc conta para essa pessoa)
     const pessoaDaAba = aba => { const ma = (integ && integ.mapaAbas) || {}; const u = ma[aba] || ma[String(aba).trim()]; const ps = pessoasRk(); if (u) return ps.find(p => p.uid === u) || null;
-      const tk = nomeSimples(aba).split(' ').filter(w => w.length > 1 && w !== 'sdr'); const c = ps.filter(p => { const t = nomeSimples(p.nome).split(' '); return tk.length && tk.every(w => t.includes(w)); }); return c.length === 1 ? c[0] : null; };
+      return pessoaPorApelido(aba, ps); };
     window._icwDonos = [...new Set(lista.map(a => a.aba))].map(aba => [aba, pessoaDaAba(aba), lista.filter(a => a.aba === aba).length]);
     const porAba = {}; lista.forEach(a => porAba[a.aba] = (porAba[a.aba] || 0) + 1);
     prepararImpWhats(lista, `${grupos.length} conversa${grupos.length !== 1 ? 's' : ''} lida${grupos.length !== 1 ? 's' : ''} (${Object.entries(porAba).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}: ${n}`).join(' · ')})${ignorados.length ? ` · ${ignorados.length} sem ser de crédito ficaram de fora` : ''}${semTexto.length ? ` · ${semTexto.length} .zip sem a conversa dentro` : ''}. `);
@@ -10225,16 +10243,20 @@ function prepararImpWhats(lista, antes){
     { const plan = avaliacoesTodas.filter(a => a.origem !== 'whatsapp'), porC = new Map(), porT = new Map();
       plan.forEach(a => { if (a.cpfNorm) (porC.get(a.cpfNorm) || porC.set(a.cpfNorm, []).get(a.cpfNorm)).push(a); const t = a.telNorm || chaveTel(a.telefone); if (t) (porT.get(t) || porT.set(t, []).get(t)).push(a); });
       const itens = new Map();
-      impWhats.filter(a => a.restricoes && jaTem.has(ck(a))).forEach(a => { const c = soDig(a.cpf), alvo = (c.length === 11 && porC.get(c)) || porT.get(chaveTel(a.telefone)) || [];
-        alvo.forEach(x => { if (x.restricoes === a.restricoes) return; const ant = itens.get(x.id); if (!ant || (a.restricoesEm || '') > (ant.restricoesEm || '')) itens.set(x.id, { id:x.id, restricoes:a.restricoes, restricoesEm:a.restricoesEm || '' }); }); });
+      impWhats.filter(a => (a.restricoes || (a.envios || []).length) && jaTem.has(ck(a))).forEach(a => { const c = soDig(a.cpf), alvo = (c.length === 11 && porC.get(c)) || porT.get(chaveTel(a.telefone)) || [];
+        alvo.forEach(x => { const it = itens.get(x.id) || { id:x.id };
+          if (a.restricoes && x.restricoes !== a.restricoes && (!it.restricoes || (a.restricoesEm || '') > (it.restricoesEm || ''))) { it.restricoes = a.restricoes; it.restricoesEm = a.restricoesEm || ''; }
+          // v294: cada ficha mandada na conversa também vira doc do cliente que já está na planilha
+          const env = [...new Set([...(it.envios || []), ...(a.envios || [])])].sort(); if (env.join() !== (x.envios || []).slice().sort().join()) it.envios = env.slice(-60);
+          if (it.restricoes || it.envios) itens.set(x.id, it); }); });
       window._impRestrPlan = [...itens.values()]; }
     const ap = novos.filter(a => infoStatus(a.status).g === 'aprovado').length;
     const porMes = {}; novos.forEach(a => { const m = (a.data || '').slice(0, 7); porMes[m] = (porMes[m] || 0) + 1; });
     $(IW.info).innerHTML = `${impWhats.length} clientes no arquivo · <b>${novos.length}</b> ainda não estão na planilha (${Object.entries(porMes).sort().map(([m,n]) => `${nomeMes(m)}: ${n}`).join(' · ')}) · <b>${ap}</b> aprovados.${impWhats.length > novos.length ? ` ${impWhats.length - novos.length} já foram lançados na planilha e ficam de fora.` : ''}`;
     impWhats = novos;
     const nR = (window._impRestrPlan || []).length;
-    $(IW.bt).classList.toggle('hide', !novos.length && !nR); $(IW.bt).textContent = novos.length ? `Importar ${novos.length} docs${nR ? ` e ${nR} restrições` : ''}` : `Colocar ${nR} restrições nos clientes da planilha`;
-    if (nR) $(IW.info).innerHTML += ` <b>${nR}</b> clientes da planilha vão ganhar o resumo das restrições que a Prime respondeu.`;
+    $(IW.bt).classList.toggle('hide', !novos.length && !nR); $(IW.bt).textContent = novos.length ? `Importar ${novos.length} clientes${nR ? ` e atualizar ${nR} da planilha` : ''}` : `Atualizar ${nR} clientes da planilha`;
+    if (nR) $(IW.info).innerHTML += ` <b>${nR}</b> clientes que já estão na planilha recebem as fichas mandadas na conversa (cada ficha conta como doc no dia em que foi mandada) e o resumo das restrições da Prime.`;
     if (antes) $(IW.info).innerHTML = esc(antes) + $(IW.info).innerHTML;
     if (donos) $(IW.info).innerHTML += donos;
   }
@@ -10273,7 +10295,7 @@ window.importarDocsWhats = async () => {
     let tot = 0, totR = 0;
     for (let i = 0; i < restr.length; i += 200) {
       const r = await chamarCarteiro({ tipo:'importar_restricoes', itens:restr.slice(i, i + 200) });
-      if (!r?.ok) { if (i === 0) toast('As restrições não entraram: cole o carteiro novo (v260) no Cloudflare'); break; }
+      if (!r?.ok) { if (i === 0) toast('Os clientes da planilha não foram atualizados: cole o carteiro novo (v262) no Cloudflare'); break; }
       totR += r.recebidas || 0;
     }
     window._impRestrPlan = [];
@@ -16695,7 +16717,7 @@ function mdValores(dias){
   });
   // docs: tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada), sem contar o mesmo cliente duas vezes no dia
   const vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); add(u, 'docs'); };
-  try { avaliacoesUnificadas().forEach(a => doc(uidDaAv(a), diaDocAv(a), a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id)); } catch(e) {}
+  try { avaliacoesUnificadas().forEach(a => docsDaAv(a).forEach(x => doc(x.uid, x.dia, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id))); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
   try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) add(x.uid, 'docs', Number(x.docs) || 0); })); } catch(e) {}
@@ -16720,7 +16742,7 @@ function mdBateramOntem(){
 // v257: tocar em "Docs" mostra quais documentações contaram hoje e de onde vieram (e, para a gerência, as que chegaram sem dono)
 function docsDoDiaLista(d, u){
   const out = [], vistos = new Set(), add = (uu, ch, fonte, nome, quando) => { if (uu !== u) return; const k = ch; if (vistos.has(k)) return; vistos.add(k); out.push({ fonte, nome, quando }); };
-  try { avaliacoesUnificadas().forEach(a => { if (diaDocAv(a) !== d) return; add(uidDaAv(a), a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id, a.origem === 'whatsapp' ? 'Conversa do WhatsApp' : 'Planilha de avaliações · aba ' + (a.aba || ''), a.nome || 'Cliente', a.criadoEm); }); } catch(e) {}
+  try { avaliacoesUnificadas().forEach(a => docsDaAv(a).forEach(x => { if (x.dia !== d) return; add(x.uid, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id, a.origem === 'whatsapp' ? 'Conversa do WhatsApp' : 'Planilha de avaliações · aba ' + (a.aba || ''), a.nome || 'Cliente', a.criadoEm); })); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm || iso(new Date(a.enviadaEm)) !== d) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); add(a.corretorUid, cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id, 'Pasta enviada pelo app', c.nome || 'Cliente', a.enviadaEm); });
   try { rankingSdr(d, d).forEach(x => { if (x.uid === u && x.docs) out.push({ fonte:'Resumo do dia (SDR)', nome:`${x.docs} documentaç${x.docs === 1 ? 'ão' : 'ões'} no resumo`, quando:0 }); }); } catch(e) {}
   return out; }
