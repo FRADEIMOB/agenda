@@ -7572,7 +7572,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 292;
+const APP_VERSAO = 293;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8902,8 +8902,14 @@ window.af = (k, v) => { aFil[k] = v; render(); };
 // conta no dia em que ela apareceu na planilha. E a aba que ainda não está ligada a ninguém é ligada pelo nome da pessoa.
 function diaDocAv(a){ const d = a.data || '', c = a.criadoEm ? iso(new Date(a.criadoEm)) : '';
   if ((a.dataEstimada || !d) && c && c > d) return c; return d; }
-function uidDaAv(a){ if (a.corretorUid) return a.corretorUid; const n = norm(a.corretorNome || a.aba || ''); if (n.length < 3) return '';
-  const l = (typeof pessoasRk === 'function' ? pessoasRk() : []).filter(p => { const pn = norm(p.nome || ''); return pn === n || pn.startsWith(n + ' ') || n.startsWith(pn + ' ') || pn.split(' ')[0] === n; });
+// v293: nome escrito diferente (Camila/Camilla, Matheus/Mateus) também liga; e o "Quem é quem" das Integrações vale para as docs
+const nomeSimples = s => norm(s || '').replace(/[^a-z ]/g, ' ').replace(/th/g, 't').replace(/y/g, 'i').replace(/([a-z])\1+/g, '$1').replace(/\s+/g, ' ').trim();
+function uidDaAv(a){ if (a.corretorUid) return a.corretorUid; const bruto = a.corretorNome || a.aba || '';
+  const ma = (typeof integ !== 'undefined' && integ && integ.mapaAbas) || {}, mu = ma[bruto] || ma[String(bruto).trim()] || ma[String(a.aba || '').trim()]; if (mu) return mu;
+  const n = norm(bruto); if (n.length < 3) return '';
+  const ps = typeof pessoasRk === 'function' ? pessoasRk() : [];
+  let l = ps.filter(p => { const pn = norm(p.nome || ''); return pn === n || pn.startsWith(n + ' ') || n.startsWith(pn + ' ') || pn.split(' ')[0] === n; });
+  if (l.length !== 1) { const ns = nomeSimples(bruto).split(' ').filter(w => w.length > 1 && w !== 'sdr'); if (ns.length) { const l2 = ps.filter(p => { const t = nomeSimples(p.nome).split(' '); return ns.every(w => t.includes(w)); }); if (l2.length === 1) l = l2; } }
   return l.length === 1 ? l[0].uid : ''; }
 window.diaDocAv = diaDocAv;
 function avaliacoesUnificadas(){
@@ -10038,6 +10044,16 @@ const PC = (() => {
       out.push({ tipo, nome:nome.slice(0, 80), cpf:cpf.length === 11 ? cpf : '', tel:tel.slice(0, 30), renda:renda.slice(0, 30),
         restr:g(/ver se tem restri[cç][aã]o\s*:?[ \t]*([^\n]*)/i), parc:g(/parcela e prazo[^:\n]*:[ \t]*([^\n]*)/i), occa:g(/est[aá] em outro cca\??\s*:?[ \t]*([^\n]*)/i), corpo:norm(p) });
     }
+    // v293: CPF mandado sozinho (ou só nome + CPF, "Bom dia" + CPF) também é pedido de análise = documentação
+    if (solto && !out.length) {
+      const linhas = t.split('\n').map(l => l.trim()).filter(Boolean);
+      if (linhas.length <= 6 && !/omitid|\.pdf|r\$|encaminhad|telefone\s*:|extrato/i.test(t)) {
+        const okCpf = c => { if (!/^\d{11}$/.test(c) || /^(\d)\1{10}$/.test(c)) return false; const dv = n => { let sm = 0; for (let i = 0; i < n; i++) sm += +c[i] * (n + 1 - i); const r = sm * 10 % 11; return r === 10 ? 0 : r; }; return dv(9) === +c[9] && dv(10) === +c[10]; };
+        const cpfs = [...new Set([...t.matchAll(/(?<![\d+])(\d{3}\.?\d{3}\.?\d{3}-?\d{2})(?!\d)/g)].map(m => dig(m[1])).filter(okCpf))].slice(0, 3);
+        const nm = linhas.map(l => l.replace(/[*_~]/g, '').trim()).find(l => /^[a-zà-ú][a-zà-ú .']{5,}$/i.test(l) && l.trim().split(/\s+/).length >= 2 && !/^(bom dia|boa tarde|boa noite|ol[aá]|oi|verificar|consultar?|segue|por favor)/i.test(l)) || '';
+        cpfs.forEach(cpf => out.push({ tipo:'verificar', nome:cpfs.length === 1 ? nm.slice(0, 80) : '', cpf, tel:'', renda:'', restr:'', parc:'', occa:'', corpo:norm(t) }));
+      }
+    }
     return out;
   }
   function veredito(txt){
@@ -10182,7 +10198,7 @@ window.lerZipsWhats = async input => {
     const lista = PC.converter(grupos);
     // v256: mostra de quem é cada conversa (a doc conta para essa pessoa)
     const pessoaDaAba = aba => { const ma = (integ && integ.mapaAbas) || {}; const u = ma[aba] || ma[String(aba).trim()]; const ps = pessoasRk(); if (u) return ps.find(p => p.uid === u) || null;
-      const n = norm(aba).replace(/[^a-z ]/g, ' ').trim(); const tk = n.split(/\s+/).filter(w => w.length > 1); const c = ps.filter(p => { const t = norm(p.nome || '').split(/\s+/); return tk.length && tk.every(w => t.includes(w)); }); return c.length === 1 ? c[0] : null; };
+      const tk = nomeSimples(aba).split(' ').filter(w => w.length > 1 && w !== 'sdr'); const c = ps.filter(p => { const t = nomeSimples(p.nome).split(' '); return tk.length && tk.every(w => t.includes(w)); }); return c.length === 1 ? c[0] : null; };
     window._icwDonos = [...new Set(lista.map(a => a.aba))].map(aba => [aba, pessoaDaAba(aba), lista.filter(a => a.aba === aba).length]);
     const porAba = {}; lista.forEach(a => porAba[a.aba] = (porAba[a.aba] || 0) + 1);
     prepararImpWhats(lista, `${grupos.length} conversa${grupos.length !== 1 ? 's' : ''} lida${grupos.length !== 1 ? 's' : ''} (${Object.entries(porAba).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}: ${n}`).join(' · ')})${ignorados.length ? ` · ${ignorados.length} sem ser de crédito ficaram de fora` : ''}${semTexto.length ? ` · ${semTexto.length} .zip sem a conversa dentro` : ''}. `);
