@@ -7572,7 +7572,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 295;
+const APP_VERSAO = 297;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8095,7 +8095,9 @@ function pontosDoMesBase(m, val, corte){
     const soma = mp => Object.values(mp || {}).reduce((a, v) => a + (Number(v) || 0), 0), bloco = Math.max(1, n('ligBloco') || 1);
     const pro = soma(r.pro), ind = soma(r.ind), doca = Object.keys(r.doca || {}).length;
     // v271: na SDR, as docs do resumo do dia já pontuam em "Documentações do resumo (SDR)"; aqui ficam só as outras (planilha, WhatsApp), sem contar duas vezes
-    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => a + Math.max(0, (Number(v) || 0) - (Number((r.sdoc || {})[d]) || 0)), 0) : soma(r.mddoc);
+    // v296: o número do dia (mddoc) já soma conversa + resumo. Na SDR vale o MAIOR dos dois no dia (o mesmo trabalho não conta duas vezes):
+    // o resumo já pontua na linha dele; aqui entra só o que a conversa tiver a mais que o resumo
+    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => { const res = Number((r.sdoc || {})[d]) || 0, conv = Math.max(0, (Number(v) || 0) - res); return a + Math.max(0, conv - res); }, 0) : soma(r.mddoc);
     x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
@@ -8306,9 +8308,11 @@ function linhasPontos(x, P){
     [`Ligações (${x.ligacoes || 0} = ${blocos} bloco${blocos === 1 ? '' : 's'} de ${bloco})`, blocos, n('ligacao'), blocos * n('ligacao')],
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
-    ['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')],
+    // v297: na SDR, resumo e conversa são a mesma coisa: uma linha só, com o maior número de cada dia
+    ...(x.uid && papelDe(x.uid) === 'sdr' ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdr || 0) * vS + (x.docGeral || 0) * n('docGeral');
+      return [['Documentações (resumo ou conversa do WhatsApp, vale o maior de cada dia)', q, vS === n('docGeral') ? vS : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
-    ['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))], ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
+    ...(x.uid && papelDe(x.uid) === 'sdr' ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
     ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
