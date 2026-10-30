@@ -4283,7 +4283,8 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
     <div class="sheet-head"><h2 id="rvTitulo">Reserva</h2><button class="icon-btn" onclick="fechar('resvModal')" data-ic="x"></button></div>
     <div class="sheet-body">
       <details class="rv-colar"><summary>📋 Colar o texto da reserva (do WhatsApp)</summary><textarea id="rvColar" rows="6" placeholder="Cole aqui a mensagem NOVA RESERVA que você mandaria no grupo"></textarea><button class="btn btn-ghost" style="margin-top:6px" onclick="lerTextoReserva()">Preencher os campos</button></details>
-      <div class="row2 fg"><div><label>Data da reserva</label><input type="date" id="rvDia"></div><div><label>Corretor(es)</label><input id="rvCor" list="rvCorLista" placeholder="ex.: Priscilla / Luis"><datalist id="rvCorLista"></datalist></div></div>
+      <div class="row2 fg"><div><label>Data da reserva</label><input type="date" id="rvDia"></div><div><label>Corretor</label><input id="rvCor" list="rvCorLista" placeholder="Quem fez a venda"><datalist id="rvCorLista"></datalist></div></div>
+      <div class="fg"><label>Parceria (outro corretor que dividiu a venda)</label><input id="rvParc" list="rvCorLista" placeholder="Deixe em branco se não teve parceria"><div class="hint" style="margin-top:4px">Com parceria, a venda e a comissão do corretor são divididas entre os dois.</div></div>
       <div class="fg"><label>Cliente</label><input id="rvCli"></div>
       <div class="row2 fg"><div><label>CPF</label><input id="rvCpf" inputmode="numeric"></div><div><label>Telefone</label><input id="rvTel" inputmode="tel"></div></div>
       <div class="row2 fg"><div><label>Empreendimento</label><input id="rvEmp"></div><div><label>Construtora</label><input id="rvConst"></div></div>
@@ -6925,7 +6926,11 @@ window.mascaraCpf = el => {
   av.innerHTML = dup ? `<span class="late">⚠ Já existe uma carta para esse CPF (${esc(dup.cliente)} · ${esc(dup.corretorNome||'')}).</span>` : '<span style="color:var(--ok)">✓ CPF válido</span>';
 };
 const brl = n => (Number(n)||0).toLocaleString('pt-BR', { style:'currency', currency:'BRL', maximumFractionDigits:0 });
-const lerValor = s => { const t = String(s||'').replace(/[^\d,]/g,'').replace(',','.'); return t ? Math.round(parseFloat(t)) : 0; };
+// v303: "205710.00" (ponto como vírgula, vindo de planilha) era lido como 20.571.000. Agora: ponto seguido de 1 ou 2 dígitos no fim, sem vírgula, é centavo
+const lerValor = s => { let t = String(s||'').trim(); if (!t.includes(',') && /\.\d{1,2}$/.test(t.replace(/[^\d.]/g, ''))) { t = t.replace(/[^\d.]/g, ''); const i = t.lastIndexOf('.'); t = t.slice(0, i).replace(/\./g, '') + ',' + t.slice(i + 1); }
+  t = t.replace(/[^\d,]/g,'').replace(',','.'); return t ? Math.round(parseFloat(t)) : 0; };
+// valor de imóvel do MCMV acima de R$ 3 milhões é erro de digitação/leitura (centavos lidos como reais): usa o valor dividido por 100
+const valorImovel = r => { const v = Number(r && r.valor) || 0; return v > 3000000 && v / 100 >= 50000 && v / 100 <= 1500000 ? Math.round(v / 100) : v; };
 const fmtValorInput = n => n ? (Number(n)).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '';
 // v279: campos em reais com máscara automática (igual ao site da Caixa): digitar 2500000 vira 25.000,00; colar "2.500" vira 2.500,00
 const fmtReaisIn = n => (Number(n) || 0) ? Number(n).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '';
@@ -7572,7 +7577,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 302;
+const APP_VERSAO = 304;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13600,7 +13605,7 @@ function acharConstrutora(r){
 }
 function vendaFin(r){
   const f = finVendas[r.id] || {}, consAuto = !(f.construtora || r.construtora), cons = consNome(f.construtora || r.construtora || '') || acharConstrutora(r), rg = regraConst(cons);
-  const tipo = f.tipo || rg.tipo, vgv = Number(r.valor) || 0;
+  const tipo = f.tipo || rg.tipo, vgv = valorImovel(r);
   // o "percentual" da reserva: até 10 é % sobre o imóvel; acima disso (ou 0,5 / 0,6) é a parte do corretor
   // v282: o "%" da planilha (0,4 / 0,5 / 0,7 / 40%) é a parte da IMOBILIÁRIA; o corretor fica com o resto (40% imobiliária = 60% corretor). Até 10 continua sendo % sobre o imóvel
   // v300: na RESERVA do app, o "Percentual" é a parte do CORRETOR (60% = corretor fica com 60%). Na planilha importada continua sendo a parte da imobiliária
@@ -13827,6 +13832,7 @@ function atencaoVenda(v, h){
   const a = [], f = v.f, pl = f.plan || {};
   parcelasCobrar(f, h).forEach(p => a.push(`Cobrar ${p.ato ? 'o ato' : 'a parcela ' + p.i} da entrada (${brl2(p.valor)}) · ${p.data === h ? 'vence hoje' : 'venceu ' + dataBR(p.data)}`));
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
+  if ((Number(v.r.valor) || 0) > 3000000) a.push(`Valor do imóvel parece errado (${brl(Number(v.r.valor))}); o app está usando ${brl(v.vgv)}. Corrija na reserva`);
   if (!v.total) a.push('Sem valor de comissão');
   if (v.ok.assinatura && !f.faturada && f.assinaturaEm && diffDias(f.assinaturaEm) <= -7) a.push(`Assinou há ${-diffDias(f.assinaturaEm)} dias e a nota não foi emitida`);
   if (v.ok.assinatura && !v.ok.recebida && !v.prevR && !(v.tipo === 'adiantamento' && !f.recAdiant && v.prevA)) a.push('Assinou e está sem data para receber');
@@ -15941,7 +15947,8 @@ window.editarReserva = id => {
   setTimeout(rvDocsVis, 0); window._histRef = rvId; $('rvHist')?.classList.toggle('hide', !(opTudo() && r));
   $('rvTitulo').textContent = r ? (opTudo() ? 'Editar reserva' : 'Sua reserva') : 'Nova reserva';
   const v = (k, x) => { $(k).value = x ?? ''; };
-  v('rvDia', r?.dia || hojeISO()); v('rvCor', r?.corretorTexto); v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
+  v('rvDia', r?.dia || hojeISO());
+  { const ps = String(r?.corretorTexto || '').split(/\s*(?:\/|\+|,)\s*/).map(x => x.trim()).filter(Boolean); v('rvCor', ps[0] || ''); v('rvParc', ps.slice(1).join(' / ')); } // v304: corretor e parceria em campos separados v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
   v('rvEmp', r?.empreendimento); v('rvConst', r?.construtora); v('rvValor', r?.valor ? fmtValorInput(r.valor) : ''); v('rvEntrada', r?.entrada); v('rvCom', r?.comissao); v('rvPerc', r?.percentual);
   // v300: comissão e percentual são um campo só com o financeiro: abre mostrando o que está valendo lá
   if (r && souGerente()) { const fv = (typeof finVendas !== 'undefined' ? finVendas : {})[r.id] || {};
@@ -15954,6 +15961,10 @@ window.editarReserva = id => {
   $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu || !opTudo());
   abrir('resvModal');
 };
+// v304: "Corretor" + "Parceria" viram o mesmo texto de sempre ("Edivan / Matheus"), sem repetir nome
+function corTextoForm(){ const a = ($('rvCor')?.value || '').trim(), b = ($('rvParc')?.value || '').trim();
+  const l = []; [a, b].forEach(x => String(x).split(/\s*(?:\/|\+|,)\s*/).map(y => y.trim()).filter(Boolean).forEach(y => { if (!l.some(z => norm(z) === norm(y))) l.push(y); }));
+  return l.join(' / '); }
 window.salvarReserva = async () => {
   if (!opTudo() && rvId) {
     const r = reservasTodas.find(x => x.id === rvId); if (!r) return;
@@ -15961,7 +15972,7 @@ window.salvarReserva = async () => {
     // v183: dados da reserva que o próprio corretor pode corrigir
     const cpf2 = soDig($('rvCpf').value), tel2 = $('rvTel').value.trim(), dia2 = $('rvDia').value, cli2 = $('rvCli').value.trim();
     if (!cli2 || !dia2) { toast('Preencha a data e o cliente'); btn.disabled = false; return; }
-    let ct = $('rvCor').value.trim(); if (!norm(ct).includes(norm(perfil.nome)) && !corretoresDaReserva(ct).some(c => c.uid === uidAtual)) ct = perfil.nome + (ct ? ' / ' + ct : '');
+    let ct = corTextoForm(); if (!norm(ct).includes(norm(perfil.nome)) && !corretoresDaReserva(ct).some(c => c.uid === uidAtual)) ct = perfil.nome + (ct ? ' / ' + ct : '');
     const dd = { dia:dia2, cliente:cli2, cpf:cpf2.length === 11 ? cpf2 : '', cpfNorm:cpf2.length === 11 ? cpf2 : '', telefone:tel2, telNorm:chaveTel(tel2), corretorTexto:ct,
       empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(),
       statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(), criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
@@ -15982,7 +15993,7 @@ window.salvarReserva = async () => {
   const cli = $('rvCli').value.trim(), dia = $('rvDia').value;
   if (!cli || !dia) { toast('Preencha a data e o cliente'); return; }
   const cpf = soDig($('rvCpf').value), tel = $('rvTel').value.trim();
-  const d = { dia, cliente:cli, cpf:cpf.length === 11 ? cpf : '', cpfNorm:cpf.length === 11 ? cpf : '', telefone:tel, telNorm:chaveTel(tel), corretorTexto:$('rvCor').value.trim(),
+  const d = { dia, cliente:cli, cpf:cpf.length === 11 ? cpf : '', cpfNorm:cpf.length === 11 ? cpf : '', telefone:tel, telNorm:chaveTel(tel), corretorTexto:corTextoForm(),
     empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), comissao:$('rvCom').value.trim(),
     percentual:$('rvPerc').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(), statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(),
     criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
