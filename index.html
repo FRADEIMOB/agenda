@@ -7577,7 +7577,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 305;
+const APP_VERSAO = 306;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15952,7 +15952,8 @@ window.editarReserva = id => {
   $('rvTitulo').textContent = r ? (opTudo() ? 'Editar reserva' : 'Sua reserva') : 'Nova reserva';
   const v = (k, x) => { $(k).value = x ?? ''; };
   v('rvDia', r?.dia || hojeISO());
-  { const ps = String(r?.corretorTexto || '').split(/\s*(?:\/|\+|,)\s*/).map(x => x.trim()).filter(Boolean); v('rvCor', ps[0] || ''); v('rvParc', ps.slice(1).join(' / ')); } // v304: corretor e parceria em campos separados v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
+  { const ps = String(r?.corretorTexto || '').split(/\s*(?:\/|\+|,)\s*/).map(x => x.trim()).filter(Boolean); v('rvCor', ps[0] || ''); v('rvParc', ps.slice(1).join(' / ')); } /* v304: corretor e parceria em campos separados */
+  v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
   v('rvEmp', r?.empreendimento); v('rvConst', r?.construtora); v('rvValor', r?.valor ? fmtValorInput(r.valor) : ''); v('rvEntrada', r?.entrada); v('rvCom', r?.comissao); v('rvPerc', r?.percentual);
   // v300: comissão e percentual são um campo só com o financeiro: abre mostrando o que está valendo lá
   if (r && souGerente()) { const fv = (typeof finVendas !== 'undefined' ? finVendas : {})[r.id] || {};
@@ -16050,7 +16051,7 @@ window.excluirReserva = async () => {
   if (!rvId || !(souGerente() && !souCeo() || souAdm())) return;
   const r = reservasTodas.find(x => x.id === rvId) || {};
   if (!confirm(`Excluir de vez a venda de ${nomeBonito(r.cliente || 'cliente')}? Ela some das vendas, do ranking e dos pontos, e o corretor pode lançar de novo. Isso não tem volta.`)) return;
-  try { const b = writeBatch(db); b.delete(doc(db,'reservas',rvId)); b.delete(doc(db,'ranking_vendas',rvId)); if (souGerente()) b.delete(doc(db,'extrato',rvId)); // v305: some também do Minhas comissões (o ADM não mexe no extrato; a gerência limpa depois) await gravar(b.commit());
+  try { const b = writeBatch(db); b.delete(doc(db,'reservas',rvId)); b.delete(doc(db,'ranking_vendas',rvId)); if (souGerente()) b.delete(doc(db,'extrato',rvId)); /* v305: some também do Minhas comissões (o ADM não mexe no extrato; a gerência limpa depois) */ await gravar(b.commit());
     try { setDoc(doc(collection(db,'edicoes')), { col:'reservas', refId:rvId, titulo:String(r.cliente || '').slice(0, 80), campos:[{ campo:'Venda', de:'existia', para:'excluída' }], por:perfil.nome, porUid:uidAtual, papel:perfil.papel, equipe:perfil.equipe || '', em:Date.now() }); } catch(e) {}
     fechar('resvModal'); toast('Venda excluída'); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Sem permissão para excluir: publique as regras novas do Firebase (v183).' : 'Erro: ' + e.message); }
@@ -16091,7 +16092,8 @@ function corretoresDaReserva(txt){
   const partes = String(txt || '').split(/\s*(?:\/|\+|,|\be\b)\s*/i).map(limpaNomeCor).filter(Boolean);
   const ativos = perfisLista.filter(p => p.status === 'ativo');
   return partes.map(n => {
-    const p = ativos.find(x => limpaNomeCor(x.nome) === n) || (() => { const pr = n.split(' ')[0], c = ativos.filter(x => limpaNomeCor(x.nome).split(' ')[0] === pr); return c.length === 1 ? c[0] : null; })();
+    const p = ativos.find(x => limpaNomeCor(x.nome) === n) || (() => { const pr = n.split(' ')[0], c = ativos.filter(x => limpaNomeCor(x.nome).split(' ')[0] === pr); return c.length === 1 ? c[0] : null; })()
+      || pessoaPorApelido(n, ativos); // v306: "Matheus Nascimento" acha o Matheus Felismino do Nascimento (todas as palavras no nome)
     return p ? { uid:p.uid, nome:p.nome, equipe:p.equipe || '' } : { uid:'', nome:nomeBonito(n), equipe:'' };
   });
 }
