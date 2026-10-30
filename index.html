@@ -7572,7 +7572,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 297;
+const APP_VERSAO = 298;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7969,6 +7969,11 @@ function somaPontos(a, b){ const o = { ...a };
 // v258: regras que mudam numa data (degraus): até a véspera vale o valor antigo, da data em diante o novo
 // 26/10/2026: visita só pontua se for realizada (para todos); SDR sem pontos de ligação, doc 10 e visita realizada 70
 const DEGRAUS_GERAL = { vPendente:[['2000-01-01', 0]], vConfirmada:[['2000-01-01', 0]], vFalta:[['2000-01-01', 0]] }; // v265: visita só pontua se for realizada, para todo mundo e sempre
+// v298: regra nova das documentações (cada ficha mandada conta no dia; na SDR resumo e conversa são um só, vale o maior do dia)
+// GUARDADA para a atualização do próximo mês, a pedido do Allan (a pontuação das SDRs caiu demais). Vazio = desligada, vale a regra antiga.
+// Para ligar: coloque a data de início, ex.: '2026-11-01' (precisa do carteiro v262).
+const DOCS_NOVA_DESDE = '';
+const docsNova = d => !!DOCS_NOVA_DESDE && String(d || '') >= DOCS_NOVA_DESDE;
 const DEGRAUS_SDR = { ligacao:[['2026-10-27', 0], ['2026-11-01', null]], docSdr:[['2026-10-27', 10], ['2026-11-01', null]], docGeral:[['2026-10-27', 10], ['2026-11-01', null]] }; // v271: só na semana 27 a 31/10 (Allan ainda decide novembro); null = volta ao valor da tela de Pontuação // v271: toda doc da SDR (resumo, planilha, WhatsApp) vale 10 a partir de 27/10 // v262: começa em 27/10 (pedido do Allan)
 // v266: visita da SDR: vale 70 se for realizada, mas só as visitas MARCADAS a partir de 27/10 (as marcadas antes ficam com a pontuação antiga)
 const SDR_VISITA_NOVA = { desde:'2026-10-27', ate:'2026-10-31', realizada:70 }; // v271: visitas MARCADAS de 27 a 31/10
@@ -8097,7 +8102,7 @@ function pontosDoMesBase(m, val, corte){
     // v271: na SDR, as docs do resumo do dia já pontuam em "Documentações do resumo (SDR)"; aqui ficam só as outras (planilha, WhatsApp), sem contar duas vezes
     // v296: o número do dia (mddoc) já soma conversa + resumo. Na SDR vale o MAIOR dos dois no dia (o mesmo trabalho não conta duas vezes):
     // o resumo já pontua na linha dele; aqui entra só o que a conversa tiver a mais que o resumo
-    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => { const res = Number((r.sdoc || {})[d]) || 0, conv = Math.max(0, (Number(v) || 0) - res); return a + Math.max(0, conv - res); }, 0) : soma(r.mddoc);
+    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => { const res = Number((r.sdoc || {})[d]) || 0, conv = Math.max(0, (Number(v) || 0) - res); return a + (docsNova(d) ? Math.max(0, conv - res) : conv); }, 0) : soma(r.mddoc);
     x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
@@ -8309,10 +8314,10 @@ function linhasPontos(x, P){
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     // v297: na SDR, resumo e conversa são a mesma coisa: uma linha só, com o maior número de cada dia
-    ...(x.uid && papelDe(x.uid) === 'sdr' ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdr || 0) * vS + (x.docGeral || 0) * n('docGeral');
+    ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdr || 0) * vS + (x.docGeral || 0) * n('docGeral');
       return [['Documentações (resumo ou conversa do WhatsApp, vale o maior de cada dia)', q, vS === n('docGeral') ? vS : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
-    ...(x.uid && papelDe(x.uid) === 'sdr' ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
+    ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
     ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
@@ -8908,7 +8913,8 @@ window.af = (k, v) => { aFil[k] = v; render(); };
 // Sem a lista de envios (planilha ou importação antiga): uma doc, no dia do cliente.
 function docsDaAv(a){
   const base = { dia:diaDocAv(a), uid:uidDaAv(a) };
-  if (Array.isArray(a.envios) && a.envios.length) { const l = a.envios.map(e => { const [dia, aba] = String(e).split('|'); return { dia, uid:!aba || aba.trim() === String(a.aba || '').trim() ? uidDaAv(a) : uidDaAv({ aba }) }; }).filter(x => x.dia);
+  if (DOCS_NOVA_DESDE && Array.isArray(a.envios) && a.envios.length) { const l = a.envios.map(e => { const [dia, aba] = String(e).split('|'); return { dia, uid:!aba || aba.trim() === String(a.aba || '').trim() ? uidDaAv(a) : uidDaAv({ aba }) }; }).filter(x => x.dia && docsNova(x.dia));
+    if (!docsNova(base.dia) && a.origem === 'whatsapp') l.unshift(base);
     return a.origem === 'whatsapp' ? l : [base, ...l]; } // cliente da planilha: a linha da planilha + cada ficha mandada na conversa
   return [base];
 }
@@ -10140,7 +10146,8 @@ const PC = (() => {
             if (!c) c = clientes[k] = { k, aba, data:m.dia, nome:b.nome, cpf:b.cpf, telefone:b.tel, renda:b.renda, status:b.tipo === 'verificar' ? 'VERIFICAR CPF' : 'AVALIAÇÃO', aprovadoEm:'', ult:m.dia, final:false };
             else {
               // v293: a doc é de quem mandou primeiro (a SDR que pediu a análise não perde para o corretor que reenviou depois)
-              if (m.dia > (c.ult || '')) c.ult = m.dia; if (m.dia < c.data) { c.data = m.dia; c.aba = aba; }
+              if (DOCS_NOVA_DESDE) { if (m.dia > (c.ult || '')) c.ult = m.dia; if (m.dia < c.data) { c.data = m.dia; c.aba = aba; } }
+              else { c.ult = m.dia; c.aba = aba; } // regra antiga (até ligar a nova)
               if (b.tipo === 'avaliacao') {
                 if (c.status === 'VERIFICAR CPF') c.status = 'AVALIAÇÃO';
                 if (!(c.status.startsWith('APROVADO') || ['CONDICIONADO','REPROVADO','REPROVADO/BACEN'].includes(c.status))) c.final = false;
@@ -10251,7 +10258,7 @@ function prepararImpWhats(lista, antes){
         alvo.forEach(x => { const it = itens.get(x.id) || { id:x.id };
           if (a.restricoes && x.restricoes !== a.restricoes && (!it.restricoes || (a.restricoesEm || '') > (it.restricoesEm || ''))) { it.restricoes = a.restricoes; it.restricoesEm = a.restricoesEm || ''; }
           // v294: cada ficha mandada na conversa também vira doc do cliente que já está na planilha
-          const env = [...new Set([...(it.envios || []), ...(a.envios || [])])].sort(); if (env.join() !== (x.envios || []).slice().sort().join()) it.envios = env.slice(-60);
+          if (DOCS_NOVA_DESDE) { const env = [...new Set([...(it.envios || []), ...(a.envios || [])])].sort(); if (env.join() !== (x.envios || []).slice().sort().join()) it.envios = env.slice(-60); }
           if (it.restricoes || it.envios) itens.set(x.id, it); }); });
       window._impRestrPlan = [...itens.values()]; }
     const ap = novos.filter(a => infoStatus(a.status).g === 'aprovado').length;
