@@ -5337,7 +5337,7 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'assistente' && !podeIA()) v = 'hoje';
   if (v === 'assistente') { iaAbrir(); return; } // o assistente agora é a abinha da direita
   if (v === 'resumo' && perfil?.papel !== 'sdr' && !abaLiberada('resumo')) v = 'hoje';
-  if (v === 'comissoes' && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('comissoes')) v = souGerente() ? 'financeiro' : 'hoje';
+  if (v === 'comissoes' && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('comissoes') && !(souGerente() && !souCeo())) v = souGerente() ? 'financeiro' : 'hoje';
   if (v === 'sorteio' && !podeGerir() && !abaLiberada('sorteio')) v = 'hoje';
   if (v === 'recepcao' && !podeGerir() && !abaLiberada('recepcao')) v = 'hoje';
   if (v !== 'recepcao') pararRecepcao();
@@ -6319,7 +6319,7 @@ function renderPapel(){
   document.querySelectorAll('.dono-only').forEach(e => e.classList.toggle('hide', !souDono()));
   document.querySelectorAll('.nao-sdr').forEach(e => { const v = e.dataset.view || ((e.getAttribute('onclick') || '').match(/'(\w+)'/) || [])[1]; e.classList.toggle('hide', perfil?.papel === 'sdr' && !abaLiberada(v)); });
   document.querySelectorAll('.so-sdr').forEach(e => e.classList.toggle('hide', perfil?.papel !== 'sdr' && !abaLiberada('resumo')));
-  document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && (['corretor','coordenador','anjo'].includes(perfil?.papel) || abaLiberada('comissoes')))));
+  document.querySelectorAll('.cor-only').forEach(e => e.classList.toggle('hide', !(souAtivo() && (['corretor','coordenador','anjo'].includes(perfil?.papel) || abaLiberada('comissoes') || (souGerente() && !souCeo()))))); // v300: gestor e gerentes também têm "Minhas comissões"
   document.querySelectorAll('.zap-nav').forEach(e => e.classList.toggle('hide', !podeZap() && !abaLiberada('whatsapp')));
   document.querySelectorAll('.funil-nav').forEach(e => e.classList.toggle('hide', !podeFunil()));
   document.querySelectorAll('.acomp-nav').forEach(e => e.classList.toggle('hide', !podeAcomp()));
@@ -7572,7 +7572,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 298;
+const APP_VERSAO = 302;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11160,7 +11160,7 @@ function sincExtrato(){
     const b = writeBatch(db); let n = 0;
     [...reservasTodas, ...vendasFin().filter(r => r.manual)].forEach(r => {
       const v = vendaFin(r), uids = (r.corretorUids || (r.manual ? corretoresDaReserva(r.corretorTexto).map(c => c.uid) : [])).filter(Boolean); if (!uids.length) return;
-      const excl = !!(r.caiu || finVendas[r.id]?.excluida), qtd = Math.max(1, v.cor.length || uids.length);
+      const excl = !vendaAtivaFin(r), qtd = Math.max(1, v.cor.length || uids.length);
       const d = { corretorUids:uids, cliente:r.cliente || '', dia:r.dia || '', empreendimento:r.empreendimento || '', construtora:v.cons || '', corretores:v.cor.map(c => c.nome).join(' + ') || r.corretorTexto || '',
         valorTotalCor:Math.round(v.valCor * 100) / 100, valorCada:Math.round(v.valCorBruto / qtd * 100) / 100,
         descontos:uids.reduce((o, u) => { const t = v.descontos.reduce((a, x) => a + (x.uid ? (x.uid === u ? Number(x.valor) : 0) : Number(x.valor) / qtd), 0); if (t) o[u] = Math.round(t * 100) / 100; return o; }, {}),
@@ -11173,7 +11173,8 @@ function sincExtrato(){
   }, 2500);
 }
 function htmlExtrato(){
-  const l = extratoMeu.filter(x => !x.caiu).sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
+  const base = souGerente() ? Object.values(extratoTodos).filter(x => (x.corretorUids || []).includes(uidAtual)) : extratoMeu;
+  const l = base.filter(x => !x.caiu).sort((a,b) => (b.dia || '').localeCompare(a.dia || ''));
   if (!l.length) return vazio('Nenhuma venda sua ainda', 'Quando você tiver uma reserva, ela aparece aqui com a comissão e a etapa em que está.');
   const minha = x => Math.round(((Number(x.valorCada) || 0) - (Number(x.descontos?.[uidAtual]) || 0)) * 100) / 100;
   const aRec = l.filter(x => !x.corPago), pagos = l.filter(x => x.corPago), soma = a => a.reduce((t,x) => t + minha(x), 0);
@@ -13472,7 +13473,7 @@ function htmlFinGeral(l){
     <div class="bg-sec"><b>A pagar</b>${aPag.length ? aPag.map(x => item('🧾', x.data && x.data < h ? 'atr' : 'down', brl2(x.valor), esc(x.descricao || x.categoria), (x.data ? (x.data < h ? 'venceu ' : 'vence ') + dataBR(x.data).slice(0,5) : ''), `editarFin('${x.id}')`)).join('') : '<div class="bg-vazio">Tudo pago. 🎉</div>'}
       ${saidas.filter(x => !x.pago).length > 5 ? `<button class="link bg-mais" onclick="finAba='lanc';finTipo='aberto';render()">ver todas as ${saidas.filter(x => !x.pago).length} contas em aberto</button>` : ''}</div></div>`;
   // 4. comissões por etapa
-  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin), and = vs.filter(v => v.aReceber > 0);
+  const vs = vendasFin().filter(r => vendaAtivaFin(r)).map(vendaFin), and = vs.filter(v => v.aReceber > 0);
   const porEt = ETAPAS_FIN.map(([k, n], i) => [n, vs.filter(v => v.etapa === i).length]), mxE = Math.max(1, ...porEt.map(x => x[1]));
   const com = `<button class="bg-card bg-com" onclick="finAba='comissoes';render()"><div class="bg-h"><b>Comissões</b><span class="bg-ver">abrir funil ›</span></div>
     <b class="bg-mid">${brl(and.reduce((a,v) => a + v.aReceber, 0))}</b><small class="bg-nota">a receber de ${and.length} venda${and.length === 1 ? '' : 's'}</small>
@@ -13505,7 +13506,7 @@ function htmlFinCats(l){
 }
 function htmlFinComissoes(){
   const de = finMes + '-01', ate = fimDoMes(finMes);
-  const vs = vendasFin().filter(r => r.dia >= de && r.dia <= ate).sort((a,b) => (a.dia || '').localeCompare(b.dia || ''));
+  const vs = vendasFin().filter(r => vendaAtivaFin(r) && r.dia >= de && r.dia <= ate).sort((a,b) => (a.dia || '').localeCompare(b.dia || ''));
   const pi = Number(finCfg.pctImob) || 0, pc = Number(finCfg.pctCor) || 0;
   const cfg = `<div class="card fin-cfg"><div><b>Percentuais padrão</b><div class="muted" style="font-size:13px">Usados para calcular a comissão quando você lança uma venda. Dá para ajustar cada lançamento depois.</div></div>
     <label>Imobiliária recebe (%)<input id="finPctImob" type="number" step="0.01" value="${pi}" ${souCeo() ? 'disabled' : ''}></label>
@@ -13546,6 +13547,10 @@ window.finNotas = [];
 document.addEventListener('click', () => document.querySelectorAll('.fin-mais.ab').forEach(m => m.classList.remove('ab')));
 const somaDiasISO = (d, n) => d ? somaDias(d, Number(n) || 0) : '';
 // vendas do financeiro = reservas do app + vendas antigas trazidas da planilha (ficam só no financeiro, não contam no ranking)
+// v300: reserva que caiu não conta mais como comissão (nem a receber, nem previsão, nem nota a emitir, nem corretor a pagar)
+// caiu = marcada como caída/arquivada, etapa CAIU RESERVA, ou a planilha diz que caiu
+function caiuFin(r){ const f = finVendas[r.id] || {}; return !!(r.caiu || r.arquivado || r.etapa === 'CAIU RESERVA' || (f.plan && f.plan.caiu) || f.caiu); }
+const vendaAtivaFin = r => !finVendas[r.id]?.excluida && !caiuFin(r);
 function vendasFin(){
   const man = Object.entries(finVendas).filter(([, f]) => f.manual && f.r).map(([id, f]) => ({ id, ...f.r, manual:true }));
   return semRepetir(man.length ? [...reservas, ...man] : reservas);
@@ -13598,7 +13603,9 @@ function vendaFin(r){
   const tipo = f.tipo || rg.tipo, vgv = Number(r.valor) || 0;
   // o "percentual" da reserva: até 10 é % sobre o imóvel; acima disso (ou 0,5 / 0,6) é a parte do corretor
   // v282: o "%" da planilha (0,4 / 0,5 / 0,7 / 40%) é a parte da IMOBILIÁRIA; o corretor fica com o resto (40% imobiliária = 60% corretor). Até 10 continua sendo % sobre o imóvel
-  const pr = lerDec(r.percentual), prCor = pr > 0 && pr <= 1 ? 100 - pr * 100 : pr > 10 && pr <= 100 ? 100 - pr : 0, prImo = pr > 1 && pr <= 10 ? pr : 0;
+  // v300: na RESERVA do app, o "Percentual" é a parte do CORRETOR (60% = corretor fica com 60%). Na planilha importada continua sendo a parte da imobiliária
+  const pr = lerDec(r.percentual), daPlan = r.manual && (r.origem === 'planilha' || /^pl_/.test(r.id || '')),
+    prCor = pr > 0 && pr <= 1 ? (daPlan ? 100 - pr * 100 : pr * 100) : pr > 10 && pr <= 100 ? (daPlan ? 100 - pr : pr) : 0, prImo = pr > 1 && pr <= 10 ? pr : 0;
   const pctImob = Number(f.pctImob ?? (prImo || finCfg.pctImob || 5)) || 0;
   // comissão escrita na reserva: vale o maior valor plausível (1% a 15% do imóvel); textos como "5%" ou "entre 10k e 11.250" caem no cálculo
   const brutaRes = (() => { const t = String(r.comissao || ''); if (!t || /%/.test(t)) return 0;
@@ -13624,13 +13631,13 @@ function previsaoMes(m){
   const lM = finDoMes(m), auto = id => /^cv_/.test(id);
   let entrou = 0, vaiEntrar = 0, semData = 0; const fontes = [];
   lM.filter(x => x.tipo === 'entrada').forEach(x => { if (x.pago) entrou += Number(x.valor) || 0; else if (!auto(x.id)) vaiEntrar += Number(x.valor) || 0; });
-  vendasFin().forEach(r => { if (finVendas[r.id]?.excluida || planPend(r.id)) return; const v = vendaFin(r);
+  vendasFin().forEach(r => { if (!vendaAtivaFin(r) || planPend(r.id)) return; const v = vendaFin(r);
     // v286: cada mês mostra só o que é dele (atrasado de outro mês fica em Comissões › Precisa de atenção daquele mês)
     if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant && noM(v.prevA)) { vaiEntrar += v.adiant; fontes.push(v); }
     if (!v.f.recRestante && v.rest) { if (!v.prevR) { if (noM(v.r.dia)) semData += v.rest; } else if (noM(v.prevR)) { vaiEntrar += v.rest; if (!fontes.includes(v)) fontes.push(v); } } });
   const sai = lM.filter(x => x.tipo === 'saida'), pago = sai.filter(x => x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0), aPagar = sai.filter(x => !x.pago).reduce((a,x) => a + (Number(x.valor) || 0), 0);
   // pagamento dos corretores previsto (vendas recebidas e corretor ainda não pago)
-  const corPrev = vendasFin().filter(r => !finVendas[r.id]?.excluida && !planPend(r.id)).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && noM(v.prevR || v.prevA || v.r.dia) && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0); // v284: o que veio da planilha não entra na previsão até você conferir
+  const corPrev = vendasFin().filter(r => vendaAtivaFin(r) && !planPend(r.id)).map(vendaFin).filter(v => v.ok.recebida && !v.f.corPago && noM(v.prevR || v.prevA || v.r.dia) && !lM.some(x => x.id === 'cv_' + v.r.id + '_cor')).reduce((a,v) => a + v.valCor, 0); // v284: o que veio da planilha não entra na previsão até você conferir
   return { entrou, vaiEntrar, semData, pago, aPagar: aPagar + corPrev, saldo: entrou + vaiEntrar - pago - aPagar - corPrev, fontes };
 }
 // despesas fixas: viram lançamentos do mês sozinhas
@@ -13651,7 +13658,7 @@ async function gerarFixasDoMes(m){
 }
 function htmlGolpe(m, mm){
   const p = previsaoMes(m), cor = p.saldo >= 0 ? 'var(--ok)' : 'var(--danger)';
-  const andamento = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
+  const andamento = vendasFin().filter(r => vendaAtivaFin(r)).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
   const ass = andamento.filter(v => !v.ok.assinatura), somaAss = ass.reduce((a,v) => a + v.rest, 0);
   const aviso = p.saldo < 0 && ass.length ? `<div class="fin-dica">💡 ${ass.length} venda${ass.length > 1 ? 's' : ''} esperando assinatura somam ${brl(somaAss)} em comissão. Assinar logo faz o dinheiro entrar.</div>` : '';
   return `<div class="fin-resumo">
@@ -13663,7 +13670,7 @@ function htmlGolpe(m, mm){
 // resumo do financeiro no Painel executivo (gerência e CEO)
 function htmlFinPainel(m){
   const p = previsaoMes(m), hoje = hojeISO();
-  const andamento = vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
+  const andamento = vendasFin().filter(r => vendaAtivaFin(r)).map(vendaFin).filter(v => v.aReceber > 0), totAnd = andamento.reduce((a,v) => a + v.aReceber, 0);
   if (!finLanc.length && !andamento.length) return '';
   const lM = finDoMes(m), venc = lM.filter(x => x.tipo === 'saida' && !x.pago && x.data && x.data < hoje);
   const prox = [];
@@ -13681,7 +13688,7 @@ function htmlFinPainel(m){
 // ---------- notas fiscais ----------
 window.nfFiltro = '';
 function vendasSemNota(){
-  return vendasFin().filter(r => !finVendas[r.id]?.excluida).map(vendaFin).filter(v => v.f.nota !== 'sem' && !v.ok.recebida && !v.f.faturada
+  return vendasFin().filter(r => vendaAtivaFin(r)).map(vendaFin).filter(v => v.f.nota !== 'sem' && !v.ok.recebida && !v.f.faturada
     && (v.ok.assinatura || (v.tipo === 'adiantamento' && !v.f.recAdiant))
     && !finNotas.some(n => n.vendaId === v.r.id && n.status !== 'cancelada'));
 }
@@ -13843,7 +13850,7 @@ function htmlComissoes(){
   const h = hojeISO(), tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
   // v283: segue o mês escolhido lá em cima (vendas pela data da reserva); dá para ver todos os meses
   const mesSel = finMes || mesAtual(), todosM = !!window.finComTodos, noMes = r => todosM ? (r.dia || '').slice(0, 7) >= FIN_DESDE : (r.dia || '').slice(0, 7) === mesSel;
-  const vsMes = vendasFin().filter(r => !finVendas[r.id]?.excluida && !(r.caiu || r.arquivado) && noMes(r)).map(vendaFin).map(v => ({ ...v, at:atencaoVenda(v, h) }));
+  const vsMes = vendasFin().filter(r => vendaAtivaFin(r) && noMes(r)).map(vendaFin).map(v => ({ ...v, at:atencaoVenda(v, h) }));
   // v286: comissão de cada corretor no mês (a parte do corretor é dividida igual quando a venda tem mais de um)
   const ckey = c => c.uid || 'n:' + norm(c.nome || ''), corsDe = v => v.cor.length ? v.cor : [{ uid:'', nome:nomeBonito(v.r.corretorTexto || 'Sem corretor') }], porCor = new Map();
   vsMes.forEach(v => { const cs = corsDe(v), parte = (v.valCor || 0) / cs.length;
@@ -13998,17 +14005,17 @@ window.lerImpComissoes = async input => {
     _icPlano = { muda, novas, caiu };
     const nAba = [...new Set(todas.map(x => x.aba))];
     $('icRes').innerHTML = `<div class="ic-res"><div><b>${todas.length}</b><span>linhas lidas (${nAba.map(esc).join(', ')})</span></div><div><b>${muda.length}</b><span>vendas do app atualizadas</span></div><div><b>${novas.length}</b><span>vendas novas no financeiro</span></div><div><b>${iguais.length}</b><span>já estavam certas</span></div></div>
-      ${caiu.length ? `<div class="fin-alerta fin-alerta-s" style="margin-top:10px">⚠ ${caiu.length} venda${caiu.length > 1 ? 's' : ''} que a planilha marca como CAIU RESERVA ainda ${caiu.length > 1 ? 'estão' : 'está'} no app: ${caiu.slice(0, 6).map(c => esc(nomeBonito(c.r.cliente))).join(', ')}. Confira em Vendas.</div>` : ''}
+      ${caiu.length ? `<label class="ic-chk"><input type="checkbox" id="icCaiu" checked><span><b>${caiu.length} venda${caiu.length > 1 ? 's' : ''} que a planilha marca como CAIU:</b> ${caiu.slice(0, 8).map(c => esc(nomeBonito(c.r.cliente))).join(', ')}${caiu.length > 8 ? ' e mais ' + (caiu.length - 8) : ''}. Saem da comissão (não contam a receber, na previsão nem no corretor a pagar). Desmarque se alguma não caiu.</span></label>` : ''}
       ${nAntigo ? `<label class="ic-chk"><input type="checkbox" id="icCorPago" checked><span><b>${nAntigo} venda${nAntigo > 1 ? 's' : ''} PAGO de meses anteriores:</b> o corretor também já recebeu. Ficam como concluídas e saem da lista "a conferir". Desmarque se ainda falta pagar algum corretor.</span></label>` : ''}
       ${semAcho.length ? `<details class="ic-sem"><summary>${semAcho.length} da aba de recebidas que não achei no app</summary>${semAcho.map(x => `<div>${esc(nomeBonito(x.cliente))} <small>${[x.corretor, x.emp, x.status.toUpperCase()].filter(Boolean).map(esc).join(' · ')}</small></div>`).join('')}</details>` : ''}
       <div class="ic-lista">${muda.slice(0, 80).map(({ x, r, up }) => `<div class="ic-l"><b>${esc(nomeBonito(r.cliente))}</b><small>${[up.comissao ? 'comissão ' + brl2(up.comissao) : '', up.pctCor != null ? 'corretor ' + up.pctCor + '%' : '', up.assinaturaEm ? 'assinou ' + dataBR(up.assinaturaEm) : up.assinaturaEm === '' ? 'tira a data de assinatura errada' : '', up.nfPlan ? up.nfPlan : up.faturada ? 'nota emitida' : '', up.recRestante ? 'recebido' : up.recAdiant ? 'parte recebida' : '', up.prevRestante ? 'receber em ' + dataBR(up.prevRestante).slice(3) : '', up.construtora ? up.construtora : '', up.processo && !up.assinaturaEm ? up.processo.toLowerCase() : ''].filter(Boolean).join(' · ')}</small></div>`).join('')}
         ${novas.slice(0, 40).map(({ x }) => `<div class="ic-l nova"><b>${esc(nomeBonito(x.cliente))} <em>nova</em></b><small>${[dataBR(x.dia), x.corretor, x.emp, x.comissao ? 'comissão ' + brl2(x.comissao) : ''].filter(Boolean).map(esc).join(' · ')}</small></div>`).join('')}</div>`;
-    $('icOk').classList.toggle('hide', !(muda.length + novas.length)); $('icOk').textContent = `Gravar ${muda.length + novas.length} vendas`;
+    $('icOk').classList.toggle('hide', !(muda.length + novas.length + caiu.length)); $('icOk').textContent = `Gravar ${muda.length + novas.length + caiu.length} vendas`;
   } catch(e) { $('icRes').innerHTML = `<div class="fin-alerta fin-alerta-s">Não consegui ler: ${esc(e.message)}</div>`; }
 };
 window.gravarImpComissoes = async () => {
   const p = _icPlano; if (!p) return; const bt = $('icOk'); bt.disabled = true; bt.textContent = 'Gravando…';
-  try { const corOk = !!$('icCorPago')?.checked, ops = [...p.muda.map(({ r, up, antigo }) => [r.id, { ...up, ...(antigo && corOk ? { corPago:true, planOk:true } : {}), plan:{ em:Date.now() }, atualizadoEm:Date.now() }]),
+  try { const corOk = !!$('icCorPago')?.checked, caiuOk = !!$('icCaiu')?.checked, ops = [...(caiuOk ? (p.caiu || []).map(({ r }) => [r.id, { plan:{ caiu:true, em:Date.now() }, atualizadoEm:Date.now() }]) : []),...p.muda.map(({ r, up, antigo }) => [r.id, { ...up, ...(antigo && corOk ? { corPago:true, planOk:true } : {}), plan:{ em:Date.now() }, atualizadoEm:Date.now() }]),
       ...p.novas.map(({ x, up }) => { const id = 'pl_' + icHash((x.cpf || '') + '|' + norm(x.cliente)); return [id, { manual:true, r:{ dia:x.dia, cliente:nomeBonito(x.cliente), corretorTexto:x.corretor, empreendimento:x.emp, construtora:'', comissao:x.comissao ? String(x.comissao) : '', percentual:x.pct ? String(x.pct) : '', valor:x.valor || 0, origem:'planilha' },
         reservaId:id, plan:{ em:Date.now() }, cliente:nomeBonito(x.cliente), ...(x.comissao ? { comissao:Math.round(x.comissao * 100) / 100 } : {}), ...up, sinalPago:true, geraEntrada:'nao', importadoEm:Date.now(), importadoPor:perfil.nome, atualizadoEm:Date.now() }]; })];
     for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i + 400).forEach(([id, d]) => b.set(doc(db,'fin_vendas',id), d, { merge:true })); await gravar(b.commit()); }
@@ -14019,7 +14026,7 @@ window.gravarImpComissoes = async () => {
 };
 function htmlFunil(){
   const tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
-  const vs = vendasFin().filter(r => !finVendas[r.id]?.excluida).sort((a,b) => (b.dia || '').localeCompare(a.dia || '')).map(vendaFin);
+  const vs = vendasFin().filter(r => vendaAtivaFin(r)).sort((a,b) => (b.dia || '').localeCompare(a.dia || '')).map(vendaFin);
   const t = norm(finBusca), filtradas = vs.filter(v => !t || norm([v.r.cliente, v.r.corretorTexto, v.cons, v.r.empreendimento].join(' ')).includes(t));
   const cols = [...ETAPAS_FIN, ['fim','Concluídas']];
   const cards = i => filtradas.filter(v => v.etapa === i);
@@ -14307,6 +14314,9 @@ window.salvarVendaFin = async () => {
     if (n.imposto) lancImp(d, n, r, b);
     lanc('cor', d.corPago, { tipo:'saida', categoria:'Comissão de corretor', descricao:`Comissão do corretor · ${r.cliente || ''} (${n.cor.map(c => primeiro(c.nome)).join(' + ') || r.corretorTexto || ''})`, valor:n.valCor, data:hoje });
     if (n.etapa !== v0.etapa) { b.set(doc(db,'fin_vendas',r.id), { etapa:n.etapa, etapaDesde:hojeISO() }, { merge:true }); }
+    // v300: um campo só: a comissão e o % do corretor do financeiro aparecem iguais na reserva (Reservas e Vendas)
+    if (!r.manual && reservasTodas.some(x => x.id === r.id)) { const rr = reservasTodas.find(x => x.id === r.id), com = d.comissao !== '' && d.comissao != null ? fmtReaisIn(Number(d.comissao)) : (rr.comissao || ''), pct = d.pctCor ? String(d.pctCor).replace('.', ',') + '%' : (rr.percentual || '');
+      if (String(rr.comissao || '') !== com || String(rr.percentual || '') !== pct) b.set(doc(db,'reservas',r.id), { comissao:com, percentual:pct }, { merge:true }); }
     await gravar(b.commit()); fechar('fvModal'); toast('Venda atualizada ✓');
     if (!v0.ok.recebida && n.ok.recebida) avisarCarteiro('comissao', r.id, false, { evento:'recebida' });
     if (!v0.f.corPago && d.corPago) avisarCarteiro('comissao', r.id, false, { evento:'paga' });
@@ -15933,6 +15943,10 @@ window.editarReserva = id => {
   const v = (k, x) => { $(k).value = x ?? ''; };
   v('rvDia', r?.dia || hojeISO()); v('rvCor', r?.corretorTexto); v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
   v('rvEmp', r?.empreendimento); v('rvConst', r?.construtora); v('rvValor', r?.valor ? fmtValorInput(r.valor) : ''); v('rvEntrada', r?.entrada); v('rvCom', r?.comissao); v('rvPerc', r?.percentual);
+  // v300: comissão e percentual são um campo só com o financeiro: abre mostrando o que está valendo lá
+  if (r && souGerente()) { const fv = (typeof finVendas !== 'undefined' ? finVendas : {})[r.id] || {};
+    if (fv.comissao != null && fv.comissao !== '' && Number(fv.comissao) > 0) v('rvCom', fmtReaisIn(Number(fv.comissao)));
+    if (fv.pctCor != null && fv.pctCor !== '' && Number(fv.pctCor) > 0) v('rvPerc', String(Math.round(Number(fv.pctCor) * 100) / 100).replace('.', ',') + '%'); }
   v('rvOrig', r?.origem); v('rvPrev', r?.previsao); try { pintarRvSdr(r || null); } catch(e) {} v('rvStImo', r?.statusImovel); v('rvObs', r?.obs);
   v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', r?.notaCnpj); v('rvColar', '');
   if (!r && !opTudo()) v('rvCor', perfil.nome);
@@ -15996,9 +16010,20 @@ window.salvarReserva = async () => {
   try { await gravar(setDoc(doc(db,'reservas',id), rvId ? d : { ...d, fonte:'app', criadoEm:Date.now(), caiu:false }, { merge:true })); fechar('resvModal'); toast('Reserva salva ✓'); vincularVendaVisita(id);
     if (d.docs) pontuarDocsReserva(id, d.docs, rAntes?.corretorUids || corretoresDaReserva(d.corretorTexto).map(c => c.uid).filter(Boolean), rAntes?.docsPontos);
     if (rAntes) logEdicao('reservas', id, d.cliente, rAntes, d, ROT_R);
+    try { await comissaoDaReservaNoFin(id, d); } catch(e) { console.warn('comissão no financeiro', e.message); }
     const rx = reservasTodas.find(x => x.id === id); if (rvId && rx && rx.fonte === 'corretor' && !rx.avisadoOk) avisarCarteiro('reserva_ok', id); }
   catch(e) { toast('Erro: ' + e.message); }
 };
+// v300: comissão e percentual são um campo só: o que a gerência põe na reserva vale também no financeiro (e vice-versa)
+// Comissão em texto ("A definir", "5%") = o financeiro calcula sozinho. Percentual = parte do corretor.
+async function comissaoDaReservaNoFin(id, d){
+  if (!souGerente() || souCeo()) return;
+  const t = String(d.comissao || '').trim(), num = !t || /%|definir|a ver|\?/i.test(t) ? 0 : lerDec(t.replace(/\s*(k|mil)\s*$/i, '')) * (/(k|mil)\s*$/i.test(t) ? 1000 : 1);
+  const pr = lerDec(d.percentual), pc = pr > 0 && pr <= 1 ? pr * 100 : pr > 10 && pr <= 100 ? pr : null;
+  const f = finVendas[id] || {}, novo = { comissao:num > 0 ? Math.round(num * 100) / 100 : '', pctCor:pc != null ? Math.round(pc * 100) / 100 : null };
+  if (String(f.comissao ?? '') === String(novo.comissao) && String(f.pctCor ?? '') === String(novo.pctCor ?? '')) return;
+  await gravar(setDoc(doc(db,'fin_vendas',id), { reservaId:id, ...novo, atualizadoEm:Date.now(), atualizadoPor:perfil.nome }, { merge:true }));
+}
 window.vendaCaiu = async () => {
   if (!rvId) return;
   const motivo = prompt('A venda caiu. Qual o motivo? (opcional)'); if (motivo === null) return;
