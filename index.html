@@ -4284,7 +4284,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
     <div class="sheet-body">
       <details class="rv-colar"><summary>📋 Colar o texto da reserva (do WhatsApp)</summary><textarea id="rvColar" rows="6" placeholder="Cole aqui a mensagem NOVA RESERVA que você mandaria no grupo"></textarea><button class="btn btn-ghost" style="margin-top:6px" onclick="lerTextoReserva()">Preencher os campos</button></details>
       <div class="row2 fg"><div><label>Data da reserva</label><input type="date" id="rvDia"></div><div><label>Corretor</label><input id="rvCor" list="rvCorLista" placeholder="Quem fez a venda"><datalist id="rvCorLista"></datalist></div></div>
-      <div class="fg"><label>Parceria (outro corretor que dividiu a venda)</label><input id="rvParc" list="rvCorLista" placeholder="Deixe em branco se não teve parceria"><div class="hint" style="margin-top:4px">Com parceria, a venda e a comissão do corretor são divididas entre os dois.</div></div>
+      <div class="fg"><label>Parceria (outro corretor que dividiu a venda)</label><select id="rvParc"><option value="">Sem parceria</option></select><div class="hint" style="margin-top:4px">Com parceria, a venda e a comissão do corretor são divididas entre os dois.</div></div>
       <div class="fg"><label>Cliente</label><input id="rvCli"></div>
       <div class="row2 fg"><div><label>CPF</label><input id="rvCpf" inputmode="numeric"></div><div><label>Telefone</label><input id="rvTel" inputmode="tel"></div></div>
       <div class="row2 fg"><div><label>Empreendimento</label><input id="rvEmp"></div><div><label>Construtora</label><input id="rvConst"></div></div>
@@ -7577,7 +7577,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 306;
+const APP_VERSAO = 308;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15523,7 +15523,8 @@ function renderVendas(){
   preencherSel('vendPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="todas">Todas</option>', vendFil.periodo);
   const comCor = reservasTodas.map(r => ({ ...r, cor:corretoresDaReserva(r.corretorTexto) }));
   // v172: abas por equipe (com quantas vendas e o valor de cada uma no período)
-  const ehDaEq = (r, e) => e === '_sem' ? !r.cor.some(c => listaEquipes().some(x => x.id === c.equipe)) : r.cor.some(c => c.equipe === e);
+  // v308: a venda é da equipe do corretor PRINCIPAL (o primeiro); parceria de outra equipe não duplica a venda nas duas
+  const ehDaEq = (r, e) => e === '_sem' ? !listaEquipes().some(x => x.id === eqPrincipal(r.cor)) : eqPrincipal(r.cor) === e;
   const doP = comCor.filter(r => r.dia >= de && r.dia <= ate);
   if (opTudo()) { const conta = e => doP.filter(r => !r.caiu && !r.arquivado && (!e || ehDaEq(r, e)));
     const abas = [['', 'Todas'], ...listaEquipes().map(e => [e.id, eqNome(e.id)])]; if (conta('_sem').length) abas.push(['_sem', 'Sem equipe']);
@@ -15570,7 +15571,7 @@ function renderReservasAdm(){
   const [de, ate] = resFil.periodo === 'mes' ? faixa('mes') : resFil.periodo === 'passado' ? faixaMesRel(1) : ['0000-01-01', '9999-12-31'];
   preencherSel('resEquipe', `<option value="">Todas as equipes</option>${listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('')}`, eqF);
   const base = reservasTodas.filter(r => !r.arquivado && (r.dia || '') >= de && (r.dia || '') <= ate).map(r => ({ ...r, cor:corretoresDaReserva(r.corretorTexto), et:etapaDe(r) }))
-    .filter(r => !eqF || r.cor.some(c => c.equipe === eqF))
+    .filter(r => !eqF || eqPrincipal(r.cor) === eqF)
     .filter(r => !t || norm([r.cliente, r.corretorTexto, r.empreendimento, r.construtora, r.cor.map(c => c.nome).join(' ')].join(' ')).includes(t) || (dig.length >= 3 && (soDig(r.cpf).includes(dig) || soDig(r.telefone).includes(dig))));
   const conta = e => base.filter(r => e === '_sem' ? !r.et : r.et === e).length;
   const ativas = base.filter(r => r.et !== 'CAIU RESERVA');
@@ -15952,7 +15953,7 @@ window.editarReserva = id => {
   $('rvTitulo').textContent = r ? (opTudo() ? 'Editar reserva' : 'Sua reserva') : 'Nova reserva';
   const v = (k, x) => { $(k).value = x ?? ''; };
   v('rvDia', r?.dia || hojeISO());
-  { const ps = String(r?.corretorTexto || '').split(/\s*(?:\/|\+|,)\s*/).map(x => x.trim()).filter(Boolean); v('rvCor', ps[0] || ''); v('rvParc', ps.slice(1).join(' / ')); } /* v304: corretor e parceria em campos separados */
+  { const ps = String(r?.corretorTexto || '').split(/\s*(?:\/|\+|,)\s*/).map(x => x.trim()).filter(Boolean); v('rvCor', ps[0] || ''); pintarParc(ps.slice(1).join(' / ')); } /* v304: corretor e parceria em campos separados · v307: parceria é escolhida na lista */
   v('rvCli', r?.cliente); v('rvCpf', r?.cpf ? fmtCpf(r.cpf) : ''); v('rvTel', r?.telefone);
   v('rvEmp', r?.empreendimento); v('rvConst', r?.construtora); v('rvValor', r?.valor ? fmtValorInput(r.valor) : ''); v('rvEntrada', r?.entrada); v('rvCom', r?.comissao); v('rvPerc', r?.percentual);
   // v300: comissão e percentual são um campo só com o financeiro: abre mostrando o que está valendo lá
@@ -15966,6 +15967,12 @@ window.editarReserva = id => {
   $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu || !opTudo());
   abrir('resvModal');
 };
+// v307: lista de corretores ativos para tocar e escolher a parceria (sem digitar)
+function pintarParc(atual){ const el = $('rvParc'); if (!el) return;
+  const nomes = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)).map(p => nomeBonito(p.nome)).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const cur = String(atual || '').trim(), achado = cur ? (corretoresDaReserva(cur)[0] || {}) : {}, val = achado.uid ? nomeBonito(achado.nome) : cur;
+  const ops = [...new Set([...(val && !nomes.includes(val) ? [val] : []), ...nomes])];
+  el.innerHTML = `<option value="">Sem parceria</option>` + ops.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join(''); el.value = val || ''; }
 // v304: "Corretor" + "Parceria" viram o mesmo texto de sempre ("Edivan / Matheus"), sem repetir nome
 function corTextoForm(){ const a = ($('rvCor')?.value || '').trim(), b = ($('rvParc')?.value || '').trim();
   const l = []; [a, b].forEach(x => String(x).split(/\s*(?:\/|\+|,)\s*/).map(y => y.trim()).filter(Boolean).forEach(y => { if (!l.some(z => norm(z) === norm(y))) l.push(y); }));
@@ -16098,11 +16105,13 @@ function corretoresDaReserva(txt){
   });
 }
 window.corretoresDaReserva = corretoresDaReserva;
+// v308: equipe da venda = equipe do corretor principal (o primeiro da reserva); se ele não for reconhecido, a do parceiro
+const eqPrincipal = cor => ((cor || [])[0] || {}).equipe || ((cor || []).find(c => c.equipe) || {}).equipe || '';
 function vendasUnificadas(de, ate){
   const m = new Map(), ck = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
   reservas.filter(r => r.dia >= de && r.dia <= ate).forEach(r => {
     const cor = corretoresDaReserva(r.corretorTexto);
-    m.set(ck(r.cpf, chaveTel(r.telefone), r.id), { dia:r.dia, cliente:r.cliente, valor:Number(r.valor) || 0, corretores:cor, equipe:cor[0]?.equipe || '', fonte:'reserva' });
+    m.set(ck(r.cpf, chaveTel(r.telefone), r.id), { dia:r.dia, cliente:r.cliente, valor:Number(r.valor) || 0, corretores:cor, equipe:eqPrincipal(cor), fonte:'reserva' });
   });
   cartas.filter(c => c.status === 'Venda fechada' && (c.vendaEm || c.data) >= de && (c.vendaEm || c.data) <= ate).forEach(c => {
     const k = ck(c.cpf, c.telNorm || chaveTel(c.telefone), c.id);
@@ -16344,7 +16353,7 @@ function renderDesempenho(){
   const tot = somaL([...todas.values()].filter(r => !eqFiltro || r.equipe === eqFiltro)), totTab = somaL(lista);
   const outros = { leads:tot.leads - totTab.leads, docs:tot.docs - totTab.docs, aprov:tot.aprov - totTab.aprov, cond:tot.cond - totTab.cond, reprov:tot.reprov - totTab.reprov };
   const temOutros = !t && (outros.leads || outros.docs || outros.aprov);
-  tot.vendas = eqFiltro ? vendasP.filter(v => v.corretores.some(c => c.equipe === eqFiltro)).length : vendasP.length;
+  tot.vendas = eqFiltro ? vendasP.filter(v => eqPrincipal(v.corretores) === eqFiltro).length : vendasP.length;
   const th = (k, n, cls='') => `<th class="${cls}" style="cursor:pointer" onclick="desSet('ordem','${k}')">${n}${desOrdem===k?' ▾':''}</th>`;
   const fmtM = r => { const x = media(r); return x === null ? (r.leads ? 'sem doc' : '–') : x.toLocaleString('pt-BR'); };
   const semLiga = lista.filter(r => !r.ligado && (r.leads || r.docs || r.aprov)).length;
