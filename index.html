@@ -5341,7 +5341,7 @@ window.senhaProvisoria = async uid => {
   try { const r = await chamarCarteiro({ tipo:'senha', uid, senha:s }); if (!r?.ok) throw new Error(r?.erro || 'não foi possível'); toast(`Senha de ${primeiro(p.nome)} definida: ${s}`); }
   catch(e) { toast('Erro: ' + e.message); }
 };
-window.sair = async () => { if (!confirm('Deseja sair desta conta?')) return; fecharModal();
+window.sair = async () => { if (!confirm('Deseja sair desta conta?')) return; fecharModal(); try { sessionStorage.removeItem('fradeView'); } catch(e) {}
   try { const t = localStorage.getItem('notifToken'); if (t) { await deleteDoc(doc(db,'tokens',t)); localStorage.removeItem('notifToken'); localStorage.removeItem('notifAtiva'); } } catch(e){}
   signOut(auth); };
 
@@ -5376,6 +5376,7 @@ function toast(texto, acao, fn){
 }
 
 // ================= Navegação =================
+const VIEW_SALVA = (() => { try { return sessionStorage.getItem('fradeView') || ''; } catch(e) { return ''; } })();
 const TITULOS = {acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
@@ -5408,7 +5409,7 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'resumo' && view !== 'resumo') setTimeout(abrirFormResumo, 0);
   if ((v === 'cartas' || v === 'avaliacoes') && perfil?.papel === 'sdr' && !abaLiberada(v)) v = 'hoje';
   if (v !== 'hoje' && v !== 'config' && abaOculta(v)) v = 'hoje';
-  view = v; document.documentElement.dataset.view = v;
+  view = v; document.documentElement.dataset.view = v; try { sessionStorage.setItem('fradeView', v); } catch(e) {}
   document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'v-'+v));
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   document.title = TITULOS[v] + ' · Minha Agenda';
@@ -5617,6 +5618,9 @@ function render(){
   if (!window._hashRep && perfil && souAtivo() && location.hash === '#reportar') { window._hashRep = true; window._hashGen = true; history.replaceState(null, '', location.pathname); setTimeout(() => abrirReporte(), 300); }
   if (perfil && souAtivo() && location.hash === '#saida') { history.replaceState(null, '', location.pathname); setTimeout(() => saidaConferir(true), 1500); }
   if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo','#saida'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
+  /* v316: ao atualizar a página, volta para a aba em que a pessoa estava */
+  if (!window._viewRest && perfil && souAtivo() && !location.hash) { window._viewRest = true; const v0 = VIEW_SALVA;
+    if (v0 && v0 !== view && !souTreino() && (TITULOS[v0] || document.querySelector(`[data-view="${v0}"]`))) setTimeout(() => setView(v0), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
   if (souSdr()) { const ontem = somaDias(hojeISO(), -1); $('cResumo').classList.toggle('hide', sdrResumos.some(x => x.sdrUid === uidAtual && x.dia === ontem)); }
@@ -7651,7 +7655,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 315;
+const APP_VERSAO = 316;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
