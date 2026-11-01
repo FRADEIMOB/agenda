@@ -5267,8 +5267,7 @@ window.entrar = async () => {
   if (modoCriar) {
     nomeCadastro = $('nome').value.trim().replace(/\s+/g,' ');
     if (!nomeCadastro) { msg('Digite o seu nome.'); $('nome').focus(); return; }
-    equipeCadastro = $('equipeCad').value; foneCadastro = $('foneCad').value.trim();
-    if (equipesPublicas.length && !equipeCadastro) { msg('Escolha a sua equipe.'); $('equipeCad').focus(); return; }
+    equipeCadastro = ''; foneCadastro = $('foneCad').value.trim(); /* v317: a gerência define a equipe */
   }
   msg(''); $('btnEntrar').disabled = true; $('btnEntrar').textContent = 'Aguarde...';
   try {
@@ -5286,7 +5285,7 @@ window.alternarModo = () => {
   $('switchBtn').textContent = modoCriar ? 'Entrar' : 'Criar minha conta';
   $('rowEsqueci').classList.toggle('hide', modoCriar);
   $('campoNome').classList.toggle('hide', !modoCriar); $('campoFone').classList.toggle('hide', !modoCriar);
-  if (modoCriar) carregarEquipesCadastro(); else $('campoEquipe').classList.add('hide');
+  $('campoEquipe').classList.add('hide'); /* v317: novato não escolhe equipe */
   $('senha').autocomplete = modoCriar ? 'new-password' : 'current-password';
   msg('');
 };
@@ -6240,10 +6239,10 @@ async function perfilNaoExiste(){
 }
 function pedirCadastro(){
   if (!state || !perfilOk || !instOk || perfil) return;
-  if (instalacao && contaRecemCriada && nomeCadastro && equipeCadastro && !autoCadFeito) {
+  if (instalacao && contaRecemCriada && nomeCadastro && !autoCadFeito) {
     autoCadFeito = true; fechar('cadModal');
-    perfilNaoExiste().then(ok => ok && setDoc(doc(db,'perfis',uidAtual), { nome:nomeCadastro, email:emailAtual, telefone:foneCadastro, papel:'corretor', status:'pendente', equipe:equipeCadastro, criadoEm:Date.now() })
-).then(r => { if (r !== false) { toast('Cadastro enviado! Aguarde a aprovação do gerente.'); setTimeout(() => avisarCarteiro('cadastro', uidAtual), 1500); } })
+    perfilNaoExiste().then(ok => ok && setDoc(doc(db,'perfis',uidAtual), { nome:nomeCadastro, email:emailAtual, telefone:foneCadastro, papel:'corretor', status:'pendente', equipe:'', criadoEm:Date.now() })
+).then(r => { if (r !== false) { toast('Cadastro enviado! Assim que a gerência aprovar, você começa pelas aulas.'); setTimeout(() => avisarCarteiro('cadastro', uidAtual), 1500); } })
       .catch(e => { autoCadFeito = false; equipeCadastro = ''; toast('Não foi possível enviar o cadastro: ' + e.message); pedirCadastro(); });
     return;
   }
@@ -7655,7 +7654,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 316;
+const APP_VERSAO = 317;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
