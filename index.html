@@ -1330,6 +1330,24 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
 .fv-tiradas{margin-top:14px;display:grid;gap:8px}.fv-tiradas>.btn{justify-self:start}
 .btn-excluir{font-size:16px;opacity:.7}.btn-excluir:hover{opacity:1;background:color-mix(in srgb,var(--danger) 12%,transparent)}
 
+.au-papeis{display:flex;flex-wrap:wrap;gap:6px 14px}
+.au-num{position:absolute;right:10px;bottom:10px;z-index:3;font-style:normal;min-width:26px;height:26px;padding:0 6px;border-radius:9px;background:rgba(255,255,255,.95);color:#0b1d33;font-weight:800;font-size:13px;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.au-capa-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.au-capa.com-v .au-play{z-index:2}
+.au-pub{display:inline-block;justify-self:start;font-size:11.5px;font-weight:700;color:#7c3aed;background:#7c3aed14;border-radius:99px;padding:2px 9px;margin-top:2px}
+@media(max-width:760px){
+  .au-grade{grid-template-columns:1fr;gap:10px}
+  .au-card{flex-direction:row;border-radius:14px;min-height:92px}
+  .au-card .au-capa{width:132px;flex:none;aspect-ratio:auto;min-height:92px}
+  .au-card .au-cvt,.au-card .au-cvm,.au-card .au-mk,.au-card .au-dur{display:none}
+  .au-card .au-capa em.au-ok,.au-card .au-capa em.au-meio,.au-card .au-capa em.au-nova{font-size:10px;padding:2px 7px;left:6px;top:6px}
+  .au-card .au-txt{padding:10px 12px;align-content:center}.au-card .au-txt b{font-size:14px}
+  .au-num{right:auto;left:6px;top:6px;bottom:auto;min-width:22px;height:22px;font-size:12px}
+  .au-card .au-capa .au-mk{display:none!important}
+  .au-card .au-capa em.au-ok,.au-card .au-capa em.au-meio,.au-card .au-capa em.au-nova{top:auto!important;bottom:6px;left:6px!important;right:auto!important}
+  .au-card .au-capa .au-play{width:40px;height:40px}.au-card .au-capa .au-play::after{left:16px;top:12px;border-left-width:12px;border-top-width:8px;border-bottom-width:8px}
+  .au-trilha h3{font-size:16px}
+}
+.au-mov{display:flex;gap:6px;margin-top:8px}.au-mov span{border:1px solid var(--border);border-radius:8px;padding:2px 10px;font-size:12px;cursor:pointer;background:var(--card)}.au-mov span:hover{background:var(--bg)}
 /* v309: corretor em treinamento vê só Aulas (e Configurações para sair) */
 .so-treino{display:none!important}
 html.modo-treino .so-treino{display:flex!important}
@@ -1912,7 +1930,14 @@ html[data-theme="dark"] .an-alerta{background:#2a1a0c;border-color:#7c2d12;color
 @media(max-width:820px){.rc{grid-template-columns:1fr;padding:18px}}
 /* ===== aulas (v79) ===== */
 .au-topo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
-.au-prog{flex:1;min-width:220px;display:grid;gap:6px}.au-prog b{font-size:17px}.au-prog small{color:var(--muted)}
+.inst-sheet{width:min(430px,100%);overflow:auto}
+.inst-vid{background:#0f2a44;display:flex;justify-content:center;padding:16px 0;border-radius:22px 22px 0 0}
+.inst-vid video{height:min(50vh,470px);aspect-ratio:9/16;border-radius:14px;display:block;background:#0f2a44}
+.inst-txt{padding:16px 22px 22px}.inst-txt h2{font-size:19px;margin-bottom:8px}
+.inst-txt ol{margin:0 0 14px 20px;line-height:1.55;font-size:15px}
+.inst-aviso{background:var(--warn-soft,#fff4e5);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
+.au-prog{flex:1;min-width:220px;display:grid;gap:6px}
+@media(max-width:760px){.au-topo{gap:8px}.au-topo .au-prog{flex-basis:100%}.au-topo #auImpBt,.au-topo #auNovaBt{flex:1 1 0;min-width:0;padding:10px 8px;font-size:13.5px;white-space:nowrap}}.au-prog b{font-size:17px}.au-prog small{color:var(--muted)}
 .au-barra{height:8px;background:var(--border);border-radius:9px;overflow:hidden;max-width:380px}.au-barra i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .5s}
 .au-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}.au-tabs:empty{display:none}
 .au-tabs button{border:1px solid var(--border);background:var(--card);border-radius:99px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--text2);cursor:pointer}
@@ -3454,7 +3479,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       </section>
 
       <section class="view" id="v-aulas">
-        <div class="au-topo"><div class="au-prog" id="auProg"></div><button class="btn btn-ghost hide" id="auImpBt" onclick="document.getElementById('auImpArq').click()">📥 Importar material de estudo</button><input type="file" id="auImpArq" class="hide" accept=".json,application/json" onchange="importarMaterial(this)"><button class="btn btn-primary hide" id="auNovaBt" onclick="novaAula()">+ Nova aula</button></div>
+        <div class="au-topo"><div class="au-prog" id="auProg"></div><button class="btn btn-ghost hide" id="auImpBt" onclick="document.getElementById('auImpArq').click()">📥 Importar material</button><input type="file" id="auImpArq" class="hide" accept=".json,application/json" onchange="importarMaterial(this)"><button class="btn btn-primary hide" id="auNovaBt" onclick="novaAula()">+ Nova aula</button></div>
         <div class="au-tabs" id="auTabs"></div>
         <div id="auLista"></div>
       </section>
@@ -3986,6 +4011,18 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 </div>
 
 <!-- ================= MODAL DE CADASTRO ================= -->
+<div class="modal" id="instModal">
+  <div class="sheet inst-sheet">
+    <div class="inst-vid"><video id="instVid" muted playsinline loop preload="none"></video></div>
+    <div class="inst-txt">
+      <h2>Instale o app da Frade</h2>
+      <ol id="instPassos"></ol>
+      <div class="inst-aviso hide" id="instInterno">Abra este link no <b id="instNav">Chrome</b>. Por dentro do WhatsApp ou do Instagram não dá para instalar.</div>
+      <button class="btn btn-primary btn-block hide" id="instAgora" onclick="instalarAgora()">Instalar agora</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="fecharInst()">Agora não</button>
+    </div>
+  </div>
+</div>
 <div class="modal" id="cadModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-body" style="padding:28px 26px 10px">
@@ -4820,9 +4857,11 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <div class="row2"><div class="fg"><label>Duração (opcional)</label><input id="auDur" maxlength="20" placeholder="Ex.: 18 min"></div>
         <div class="fg"><label>Ordem na lista</label><input id="auOrdem" type="number" min="1" placeholder="1"></div></div>
       <div class="fg"><label>Sobre a aula (opcional)</label><textarea id="auDesc" rows="3" maxlength="1500" placeholder="O que o corretor vai aprender, materiais de apoio…"></textarea></div>
+      <div class="fg"><label>Quem vê esta aula</label><div id="auPapeis" class="au-papeis"></div></div>
+      <label class="fv-chk"><input type="checkbox" id="auCapaV"> Usar o começo do vídeo como capa (YouTube ou Google Drive)</label>
       <label class="fv-chk"><input type="checkbox" id="auObrig" checked> Todos precisam assistir (aparece no Hoje de quem ainda não viu)</label>
       <label class="fv-chk"><input type="checkbox" id="auAvisar" checked> Avisar a equipe no celular</label>
-      <div class="hint" style="margin-top:10px">Para vídeos do YouTube, envie como <b>Não listado</b>: só quem tem o link (o app) consegue ver. No Google Drive, deixe o compartilhamento em <b>qualquer pessoa com o link</b>.</div>
+      <div class="hint" style="margin-top:10px">YouTube: <b>Não listado</b>. Drive: <b>qualquer pessoa com o link</b>.</div>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost hide" style="color:var(--danger)" id="auExcluir" onclick="excluirAula()">Excluir</button><span style="flex:1"></span><button class="btn btn-ghost" onclick="fechar('auEdModal')">Cancelar</button><button class="btn btn-primary" id="auSalvarBt" onclick="salvarAula()">Publicar aula</button></div>
   </div>
@@ -5188,10 +5227,12 @@ onAuthStateChanged(auth, user => {
     ['app','mobilebar','fab'].forEach(id => $(id).classList.add('hide'));
     $('login').classList.remove('hide');
     aplicarTema();
+    setTimeout(() => window.tutInstalar?.(false), 700);
     return;
   }
   $('login').classList.add('hide');
   ['app','mobilebar','fab'].forEach(id => $(id).classList.remove('hide'));
+  if (contaRecemCriada) setTimeout(() => window.tutInstalar?.(true), 1500);
   emailAtual = user.email;
   docRef = doc(db, 'usuarios', user.uid);
   pararEscuta = onSnapshot(docRef, snap => {
@@ -7605,12 +7646,12 @@ const navInterno = /FBAN|FBAV|Instagram|WhatsApp|Line\/|; wv\)/i.test(navigator.
 const iosVersao = (() => { const m = navigator.userAgent.match(/OS (\d+)_(\d+)/); return m ? Number(m[1]) + Number(m[2]) / 100 : 99; })();
 function mostrarInstalar(sim){ document.querySelectorAll('.instalar').forEach(b => b.classList.toggle('hide', !sim)); }
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); pedidoInstalar = e; mostrarInstalar(true); });
-addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicativo instalado ✓'); });
+addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharInst?.(); toast('Aplicativo instalado ✓'); });
 // Mostra o botão em qualquer celular que ainda não instalou (se o Chrome não liberar a instalação direta, o botão ensina o caminho)
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 310;
+const APP_VERSAO = 315;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7628,10 +7669,26 @@ const APP_VERSAO = 310;
   setTimeout(conferir, 8000); setInterval(conferir, 10 * 60 * 1000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') conferir(); });
 })();
+const ehMovelInst = ehIOS || /android/i.test(navigator.userAgent);
+/* v315: tutorial de instalação (vídeo) na primeira vez que abre o link e logo depois do cadastro */
+window.tutInstalar = (forcar) => {
+  if (jaInstalado || (!ehMovelInst && !forcar)) return;
+  if (!forcar) { try { if (localStorage.getItem('fradeTutInst')) return; localStorage.setItem('fradeTutInst', '1'); } catch(e) {} }
+  if ($('instModal').classList.contains('open')) return;
+  $('instPassos').innerHTML = (ehIOS
+    ? ['Abra o link no <b>Safari</b>', 'Toque em <b>Compartilhar</b> (no iOS 26, toque antes em •••)', 'Toque em <b>Adicionar à Tela de Início</b> e depois em <b>Adicionar</b>']
+    : ['Abra o link no <b>Chrome</b>', 'Toque nos <b>3 pontinhos</b> no canto de cima', 'Toque em <b>Instalar app</b> e confirme']).map(x => `<li>${x}</li>`).join('');
+  $('instNav').textContent = ehIOS ? 'Safari' : 'Chrome';
+  $('instInterno').classList.toggle('hide', !navInterno);
+  $('instAgora').classList.toggle('hide', !pedidoInstalar);
+  const v = $('instVid'); v.src = ehIOS ? 'instalar-iphone.mp4' : 'instalar-android.mp4'; v.load(); v.play().catch(() => {});
+  abrir('instModal');
+};
+window.fecharInst = () => { $('instVid').pause(); fechar('instModal'); };
+window.instalarAgora = async () => { if (!pedidoInstalar) return; pedidoInstalar.prompt(); const r = await pedidoInstalar.userChoice; if (r.outcome === 'accepted') { mostrarInstalar(false); fecharInst(); } pedidoInstalar = null; $('instAgora').classList.add('hide'); };
 window.instalarApp = async () => {
   if (pedidoInstalar) { pedidoInstalar.prompt(); const r = await pedidoInstalar.userChoice; if (r.outcome === 'accepted') mostrarInstalar(false); pedidoInstalar = null; return; }
-  if (ehIOS) { alert('Para instalar no iPhone:\n\n1. Toque no botão Compartilhar (quadrado com a seta para cima)\n2. Escolha "Adicionar à Tela de Início"\n3. Toque em "Adicionar"'); return; }
-  alert('Para instalar no Android:\n\n1. Toque nos três pontinhos (⋮) no canto de cima do Chrome\n2. Toque em "Instalar app" ou "Adicionar à tela inicial"\n3. Confirme em "Instalar"\n\nSe não aparecer, recarregue a página uma vez e tente de novo.');
+  tutInstalar(true);
 };
 
 // comemoração quando alguém faz algo que dá ponto no ranking: "+X pontos" subindo e confete
@@ -12470,6 +12527,9 @@ window.salvarTestadores = async () => {
 // =====================================================================
 let aulas = [], aulasVistas = [], auTema = 'todas', auAberta = null;
 // v310: assunto livre: além dos fixos, qualquer assunto que a gerência escrever vira uma seção nova
+function pintarAuPapeis(sel){ const el = $('auPapeis'); if (!el) return; const l = sel && sel.length ? sel : AU_PAPEIS.map(x => x[0]);
+  el.innerHTML = AU_PAPEIS.map(([k, n]) => `<label class="fv-chk"><input type="checkbox" data-papel="${k}" ${l.includes(k) ? 'checked' : ''}> ${n}</label>`).join(''); }
+function lerAuPapeis(){ const l = [...document.querySelectorAll('#auPapeis input[data-papel]:checked')].map(i => i.dataset.papel); return l.length === AU_PAPEIS.length ? [] : l; }
 function pintarAuTemas(){ const el = $('auTemasL'); if (!el) return; const nomes = [...new Set([...Object.values(AU_TEMAS).map(t => t.nome), ...(typeof aulas !== 'undefined' ? aulas : []).map(a => auTemaInfo(a.tema).nome)])];
   el.innerHTML = nomes.map(n => `<option value="${esc(n)}">`).join(''); }
 function auTemaInfo(t){ const k = String(t || 'geral'); if (AU_TEMAS[k]) return AU_TEMAS[k];
@@ -12480,7 +12540,7 @@ function auTemaChave(txt){ const t = String(txt || '').trim().slice(0, 40); if (
 const AU_TEMAS = { estudo:{ nome:'Material de estudo', ic:'📖', cor:'#b45309' }, crm:{ nome:'CRM', ic:'📇', cor:'#2563eb' }, financiamento:{ nome:'Financiamento', ic:'🏦', cor:'#0f9d76' }, geral:{ nome:'Outros assuntos', ic:'🎓', cor:'#7c3aed' } };
 function assinarAulas(){
   aulas = []; aulasVistas = []; if (!souAtivo()) return;
-  subsPapel.push(onSnapshot(collection(db,'aulas'), s => { aulas = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.tema || '').localeCompare(b.tema || '') || (a.ordem || 99) - (b.ordem || 99) || (a.criadoEm || 0) - (b.criadoEm || 0)); render(); }, e => console.warn('aulas', e.code || e.message)));
+  subsPapel.push(onSnapshot(collection(db,'aulas'), s => { aulas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(a => souGerente() || auParaMim(a)).sort((a,b) => (a.tema || '').localeCompare(b.tema || '') || (a.ordem || 99) - (b.ordem || 99) || (a.criadoEm || 0) - (b.criadoEm || 0)); render(); }, e => console.warn('aulas', e.code || e.message)));
   const q = podeGerir() ? collection(db,'aulas_vistas') : query(collection(db,'aulas_vistas'), where('uid','==',uidAtual));
   subsPapel.push(onSnapshot(q, s => { aulasVistas = s.docs.map(d => d.data()); render(); }, e => console.warn('aulas_vistas', e.code || e.message)));
 }
@@ -12488,7 +12548,7 @@ function assinarAulas(){
 function auVideo(url){
   const u = String(url || '').trim(); let m;
   if ((m = u.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/))) return { tipo:'youtube', id:m[1], src:`https://www.youtube-nocookie.com/embed/${m[1]}?rel=0&modestbranding=1&playsinline=1`, capa:`https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg` };
-  if ((m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:.*&)?id=)([A-Za-z0-9_-]{20,})/))) return { tipo:'drive', id:m[1], src:`https://drive.google.com/file/d/${m[1]}/preview` };
+  if ((m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:.*&)?id=)([A-Za-z0-9_-]{20,})/))) return { tipo:'drive', id:m[1], src:`https://drive.google.com/file/d/${m[1]}/preview`, capa:`https://drive.google.com/thumbnail?id=${m[1]}&sz=w800` };
   if ((m = u.match(/vimeo\.com\/(?:video\/)?(\d{6,})/))) return { tipo:'vimeo', id:m[1], src:`https://player.vimeo.com/video/${m[1]}` };
   if (/^https:\/\/\S+\.(mp4|webm|mov)(\?\S*)?$/i.test(u)) return { tipo:'arquivo', src:u };
   return null;
@@ -12496,6 +12556,13 @@ function auVideo(url){
 const auVista = (aId, uid = uidAtual) => aulasVistas.find(v => v.aulaId === aId && v.uid === uid);
 const auAssistiu = (aId, uid = uidAtual) => !!auVista(aId, uid)?.assistiu;
 const auPublico = () => perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel));
+// v311: aula por perfil. papeis vazio = todos. Aula antiga sem a escolha: "Aula N - Corretor/SDR/Coordenador e Anjo/Gerência" vale pelo título
+const AU_PAPEIS = [['corretor','Corretor'],['sdr','SDR'],['coordenador','Coordenador'],['anjo','Anjo'],['gerente','Gerência']];
+function auPapeis(a){ if (Array.isArray(a.papeis)) return a.papeis;
+  const m = String(a.titulo || '').match(/^\s*aula\s*\d+\s*[-–:]\s*(.+)$/i); if (!m) return []; const t = norm(m[1]);
+  if (/\bsdr\b/.test(t)) return ['sdr']; if (/coordenad|anjo/.test(t)) return ['coordenador','anjo']; if (/gerenc|gerent/.test(t)) return ['gerente']; if (/corretor/.test(t)) return ['corretor','coordenador','anjo']; return []; }
+const auParaMim = a => { const l = auPapeis(a); return !l.length || l.includes(perfil?.papel); };
+const auPublicoDe = a => { const l = auPapeis(a); return !l.length ? auPublico() : perfisLista.filter(p => p.status === 'ativo' && l.includes(p.papel)); };
 const auPendentes = () => ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && !auAssistiu(a.id)) : [];
 // v254: capa desenhada das aulas (sem emoji): fundo da marca, desenho do tema, título grande
 const AU_ART = {
@@ -12506,32 +12573,43 @@ const AU_ART = {
 function auCapaHtml(a, t, ler){ const k = AU_ART[a.tema] ? a.tema : 'geral', nm = (a.modulos || []).length;
   const meta = ler ? [nm ? `${nm} módulo${nm === 1 ? '' : 's'}` : '', a.duracao || '', 'com prova'].filter(Boolean).join(' · ') : ['Vídeo', a.duracao || ''].filter(Boolean).join(' · ');
   return `<span class="au-cv">${AU_ART[k]}<span class="au-mk"><img src="${MARCA_IMG}" alt="">FRADE</span><span class="au-cvt">${esc(a.titulo)}</span><span class="au-cvm">${esc(meta)}</span>${ler ? '' : '<span class="au-cvp"></span>'}</span>`; }
-function htmlAulaCard(a){
+function htmlAulaCard(a, idx){
   const v = auVideo(a.url), t = auTemaInfo(a.tema), viu = auAssistiu(a.id), abriu = !!auVista(a.id), ler = a.tipo === 'leitura';
+  const num = typeof idx === 'number' ? `<i class="au-num">${idx + 1}</i>` : '';
+  const capaV = !ler && a.capaVideo && v?.capa ? `<img class="au-capa-v" src="${v.capa}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('com-v');this.nextElementSibling?.remove();this.remove()">` : '';
+  const pub = souGerente() && auPapeis(a).length ? `<small class="au-pub">Para: ${auPapeis(a).map(k => (AU_PAPEIS.find(x => x[0] === k) || [k, k])[1]).join(', ')}</small>` : '';
   let rodape = '';
   if (ler) { const vv = auVista(a.id) || {}, nm = (a.modulos || []).length, nl = Object.keys(vv.lidos || {}).length;
-    if (podeGerir()) { const pub = auPublico(), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((t, p) => t + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
+    if (podeGerir()) { const pub = auPublicoDe(a), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((t, p) => t + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
       rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(fez.length / pub.length * 100) : 0}%"></i></div><small class="au-qt">${fez.length} de ${pub.length} fizeram a prova${fez.length ? ' · média ' + med.toFixed(1).replace('.', ',') : ''}</small>`; }
-    return `<button class="au-card" onclick="abrirAula('${a.id}')"><div class="au-capa" style="--c:${t.cor}">${auCapaHtml(a, t, true)}${vv.prova ? `<em class="au-ok">✓ Nota ${String(vv.prova.melhor).replace('.', ',')}</em>` : nl ? `<em class="au-meio">Lendo · ${nl} de ${nm}</em>` : a.obrigatoria ? '<em class="au-nova">Para estudar</em>' : ''}</div>
-      <div class="au-txt"><b>${esc(a.titulo)}</b><span>${esc(a.professor || '')}</span>${rodape}</div></button>`; }
-  if (podeGerir()) { const pub = auPublico(), n = pub.filter(p => auAssistiu(a.id, p.uid)).length; rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(n / pub.length * 100) : 0}%"></i></div><small class="au-qt">${n} de ${pub.length} da equipe assistiram</small>`; }
+    return `<button class="au-card" onclick="abrirAula('${a.id}')"><div class="au-capa" style="--c:${t.cor}">${num}${auCapaHtml(a, t, true)}${vv.prova ? `<em class="au-ok">✓ Nota ${String(vv.prova.melhor).replace('.', ',')}</em>` : nl ? `<em class="au-meio">Lendo · ${nl} de ${nm}</em>` : a.obrigatoria ? '<em class="au-nova">Para estudar</em>' : ''}</div>
+      <div class="au-txt"><b>${esc(a.titulo)}</b><span>${esc(a.professor || '')}</span>${pub}${rodape}${souGerente() ? `<span class="au-mov"><span role="button" title="Subir na sequência" onclick="event.stopPropagation();auMover('${a.id}',-1)">▲</span><span role="button" title="Descer na sequência" onclick="event.stopPropagation();auMover('${a.id}',1)">▼</span></span>` : ''}</div></button>`; }
+  if (podeGerir()) { const pub = auPublicoDe(a), n = pub.filter(p => auAssistiu(a.id, p.uid)).length; rodape = `<div class="au-quem"><i style="width:${pub.length ? Math.round(n / pub.length * 100) : 0}%"></i></div><small class="au-qt">${n} de ${pub.length} assistiram</small>`; }
   return `<button class="au-card" onclick="abrirAula('${a.id}')">
-    <div class="au-capa" style="--c:${t.cor}">${v?.capa ? `<img src="${v.capa}" alt="" loading="lazy" onerror="this.remove()"><span class="au-play"></span>` : ''}${auCapaHtml(a, t, false)}${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${viu ? '<em class="au-ok">✓ Assistida</em>' : abriu ? '<em class="au-meio">Começou</em>' : a.obrigatoria ? '<em class="au-nova">Para assistir</em>' : ''}</div>
-    <div class="au-txt"><b>${esc(a.titulo)}</b><span>com ${esc(a.professor || '—')}</span>${rodape}</div></button>`;
+    <div class="au-capa ${capaV ? 'com-v' : ''}" style="--c:${t.cor}">${num}${auCapaHtml(a, t, false)}${capaV}${capaV ? '<span class="au-play"></span>' : ''}${a.duracao ? `<em class="au-dur">${esc(a.duracao)}</em>` : ''}${viu ? '<em class="au-ok">✓ Assistida</em>' : abriu ? '<em class="au-meio">Começou</em>' : a.obrigatoria ? '<em class="au-nova">Para assistir</em>' : ''}</div>
+    <div class="au-txt"><b>${esc(a.titulo)}</b><span>com ${esc(a.professor || '—')}</span>${pub}${rodape}${souGerente() ? `<span class="au-mov"><span role="button" title="Subir na sequência" onclick="event.stopPropagation();auMover('${a.id}',-1)">▲</span><span role="button" title="Descer na sequência" onclick="event.stopPropagation();auMover('${a.id}',1)">▼</span></span>` : ''}</div></button>`;
 }
+// v312: a gerência escolhe a sequência das aulas (▲ ▼ no card); grava a ordem de todas as aulas daquele assunto
+window.auMover = async (id, passo) => {
+  const a = aulas.find(x => x.id === id); if (!a) return; const k = a.tema || 'geral';
+  const l = aulas.filter(x => (x.tema || 'geral') === k); const i = l.findIndex(x => x.id === id), j = i + passo; if (j < 0 || j >= l.length) return;
+  [l[i], l[j]] = [l[j], l[i]];
+  try { const b = writeBatch(db); l.forEach((x, n) => { if (Number(x.ordem) !== n + 1) b.set(doc(db,'aulas',x.id), { ordem:n + 1 }, { merge:true }); x.ordem = n + 1; }); await gravar(b.commit()); renderAulas(); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 function renderAulas(){
   if (view !== 'aulas' || !$('auLista')) return;
-  $('auNovaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('auImpBt').classList.toggle('hide', !(souGerente() && !souCeo()));
+  $('auNovaBt').classList.toggle('hide', !(souGerente())); $('auImpBt').classList.toggle('hide', !(souGerente()));
   const meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel), tot = aulas.length, vi = aulas.filter(a => auAssistiu(a.id)).length;
   { let av = $('auTreino'); if (!av && $('auProg')) { av = document.createElement('div'); av.id = 'auTreino'; av.className = 'treino-aviso'; $('auProg').parentNode.insertBefore(av, $('auProg')); }
     if (av) { av.classList.toggle('hide', !souTreino()); if (souTreino()) av.innerHTML = `<b>Bem-vindo à Frade!</b> Comece pelas aulas. Assista a cada uma e toque em <b>"Terminei de assistir"</b>. Quando você terminar, a gerência define a sua equipe e libera o app completo.${tot ? ` Você já assistiu <b>${vi} de ${tot}</b>.` : ''}`; } }
-  $('auProg').innerHTML = !tot ? '<b>Aulas da Frade</b><small>Treinamentos em vídeo para a equipe.</small>' : meus ? `<b>Você assistiu ${vi} de ${tot} aula${tot > 1 ? 's' : ''}</b><div class="au-barra"><i style="width:${Math.round(vi / tot * 100)}%"></i></div>` : `<b>${tot} aula${tot > 1 ? 's' : ''} publicada${tot > 1 ? 's' : ''}</b><small>Toque numa aula para ver quem já assistiu.</small>`;
+  $('auProg').innerHTML = !tot ? '<b>Aulas da Frade</b>' : meus ? `<b>Você assistiu ${vi} de ${tot} aula${tot > 1 ? 's' : ''}</b><div class="au-barra"><i style="width:${Math.round(vi / tot * 100)}%"></i></div>` : `<b>${tot} aula${tot > 1 ? 's' : ''} publicada${tot > 1 ? 's' : ''}</b>`;
   const fixos = Object.keys(AU_TEMAS), outros = [...new Set(aulas.map(a => a.tema || 'geral').filter(k => !fixos.includes(k)))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   const temas = [...fixos.filter(k => k !== 'geral'), ...outros, 'geral'].filter(k => aulas.some(a => (a.tema || 'geral') === k));
   $('auTabs').innerHTML = temas.length > 1 ? ['todas', ...temas].map(k => `<button class="${auTema === k ? 'on' : ''}" data-k="${esc(k)}" onclick="auFiltro(this.dataset.k)">${k === 'todas' ? 'Todas' : auTemaInfo(k).ic + ' ' + esc(auTemaInfo(k).nome)}</button>`).join('') : '';
-  if (!tot) { $('auLista').innerHTML = `<div class="au-vazio"><span>🎬</span><b>Nenhuma aula ainda</b><p>${souGerente() && !souCeo() ? 'Toque em <b>+ Nova aula</b> e cole o link do vídeo (YouTube não listado ou Google Drive).' : 'Quando a gerência publicar uma aula, ela aparece aqui e você recebe um aviso.'}</p></div>`; return; }
+  if (!tot) { $('auLista').innerHTML = `<div class="au-vazio"><span>🎬</span><b>Nenhuma aula ainda</b><p>${souGerente() ? 'Toque em <b>+ Nova aula</b> e cole o link do vídeo (YouTube não listado ou Google Drive).' : 'Quando a gerência publicar uma aula, ela aparece aqui e você recebe um aviso.'}</p></div>`; return; }
   $('auLista').innerHTML = (auTema === 'todas' ? temas : [auTema]).map(k => { const l = aulas.filter(a => (a.tema || 'geral') === k); if (!l.length) return ''; const t = auTemaInfo(k);
-    return `<section class="au-trilha"><h3><span style="--c:${t.cor}">${t.ic}</span>${t.nome}<small>${l.length} aula${l.length > 1 ? 's' : ''}${meus ? ` · ${l.filter(a => auAssistiu(a.id)).length} assistida${l.filter(a => auAssistiu(a.id)).length === 1 ? '' : 's'}` : ''}</small></h3><div class="au-grade">${l.map(htmlAulaCard).join('')}</div></section>`; }).join('');
+    return `<section class="au-trilha"><h3><span style="--c:${t.cor}">${t.ic}</span>${t.nome}<small>${l.length} aula${l.length > 1 ? 's' : ''}${meus ? ` · ${l.filter(a => auAssistiu(a.id)).length} assistida${l.filter(a => auAssistiu(a.id)).length === 1 ? '' : 's'}` : ''}</small></h3><div class="au-grade">${l.map((a, i) => htmlAulaCard(a, i)).join('')}</div></section>`; }).join('');
 }
 window.auFiltro = k => { auTema = k; renderAulas(); };
 function htmlAulasHoje(){
@@ -12556,12 +12634,12 @@ function pintarInfoAula(){
   const a = aulas.find(x => x.id === auAberta); if (!a || !$('auVerInfo')) return;
   const t = auTemaInfo(a.tema), viu = auAssistiu(a.id), meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
   let quem = '';
-  if (podeGerir()) { const pub = auPublico(), sim = pub.filter(p => auAssistiu(a.id, p.uid)), meio = pub.filter(p => !auAssistiu(a.id, p.uid) && auVista(a.id, p.uid)), nao = pub.filter(p => !auVista(a.id, p.uid));
+  if (podeGerir()) { const pub = auPublicoDe(a), sim = pub.filter(p => auAssistiu(a.id, p.uid)), meio = pub.filter(p => !auAssistiu(a.id, p.uid) && auVista(a.id, p.uid)), nao = pub.filter(p => !auVista(a.id, p.uid));
     const lista = (l, cls) => l.map(p => `<span class="au-p ${cls}">${esc(primeiro(p.nome))}</span>`).join('') || '<span class="muted">ninguém</span>';
     quem = `<div class="au-gest"><div><b>✓ Assistiram (${sim.length})</b><div>${lista(sim, 'ok')}</div></div><div><b>Começaram (${meio.length})</b><div>${lista(meio, 'meio')}</div></div><div><b>Ainda não abriram (${nao.length})</b><div>${lista(nao, 'nao')}</div></div></div>`; }
   $('auVerInfo').innerHTML = `<div class="au-meta"><span class="au-tag" style="--c:${t.cor}">${t.ic} ${t.nome}</span><span>com <b>${esc(a.professor || '—')}</b></span>${a.duracao ? `<span>${esc(a.duracao)}</span>` : ''}</div>
     ${a.descricao ? `<p class="au-desc">${esc(a.descricao).replace(/\n/g, '<br>')}</p>` : ''}
-    <div class="au-acoes">${meus ? (viu ? '<span class="au-feito">✓ Você já assistiu esta aula</span>' : `<button class="btn btn-primary" onclick="marcarAssistida('${a.id}')">✓ Terminei de assistir</button>`) : ''}${souGerente() && !souCeo() ? `<button class="btn btn-ghost" onclick="editarAula('${a.id}')">Editar</button>` : ''}</div>${quem}`;
+    <div class="au-acoes">${meus ? (viu ? '<span class="au-feito">✓ Você já assistiu esta aula</span>' : `<button class="btn btn-primary" onclick="marcarAssistida('${a.id}')">✓ Terminei de assistir</button>`) : ''}${souGerente() ? `<button class="btn btn-ghost" onclick="editarAula('${a.id}')">Editar</button>` : ''}</div>${quem}`;
 }
 // ---- material de estudo (leitura em módulos + prova no final) · v87 ----
 let alAula = null, alPos = 0, alResp = {}, alResultado = null;
@@ -12596,7 +12674,7 @@ let alRetomar = 0;
 function htmlCapaLeitura(a, mods, lidos, nl, vv){
   const t = auTemaInfo(a.tema), n = mods.length, k = AU_ART[a.tema] ? a.tema : 'geral', prova = vv.prova;
   const meta = [n ? `${n} módulo${n === 1 ? '' : 's'}` : '', a.duracao || '', (a.prova?.perguntas || []).length ? `prova com ${a.prova.perguntas.length} pergunta${a.prova.perguntas.length === 1 ? '' : 's'}` : ''].filter(Boolean);
-  let eq = ''; if (podeGerir()) { const pub = auPublico(), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((s, p) => s + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
+  let eq = ''; if (podeGerir()) { const pub = auPublicoDe(a), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((s, p) => s + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
     eq = `<div class="al-eq">Equipe: ${fez.length} de ${pub.length} fizeram a prova${fez.length ? ' · média ' + med.toFixed(1).replace('.', ',') : ''}. O resultado de cada um fica na prova, no fim.</div>`; }
   return `<div class="al-capa" style="--c:${t.cor}"><div class="al-hero">${AU_ART[k]}<div class="au-mk"><img src="${MARCA_IMG}" alt="">FRADE · ${esc(t.nome.toUpperCase())}</div><h2>${esc(a.titulo)}</h2>${a.descricao ? `<p>${esc(a.descricao)}</p>` : a.professor ? `<p>Com ${esc(a.professor)}</p>` : ''}
     <div class="al-hm">${meta.map(x => `<span>${esc(x)}</span>`).join('')}</div>
@@ -12632,7 +12710,7 @@ const alNivel = n => n >= 10 ? 'Especialista' : n >= 7 ? 'Profissional' : n >= 6
 function pintarProva(a, liberada){
   const q = a.prova?.perguntas || [], vv = auVista(a.id) || {}, mods = a.modulos || [];
   let topo = '';
-  if (podeGerir()) { const pub = auPublico().sort((x, y) => (auVista(a.id, y.uid)?.prova?.melhor ?? -1) - (auVista(a.id, x.uid)?.prova?.melhor ?? -1));
+  if (podeGerir()) { const pub = auPublicoDe(a).sort((x, y) => (auVista(a.id, y.uid)?.prova?.melhor ?? -1) - (auVista(a.id, x.uid)?.prova?.melhor ?? -1));
     topo = `<div class="al-res-eq"><h3>Resultado da equipe</h3><div class="tbl-wrap"><table class="rank"><thead><tr><th>Pessoa</th><th>Módulos lidos</th><th>Nota</th><th>Nível</th><th class="hide-m">Tentativas</th></tr></thead><tbody>${pub.map(p => { const x = auVista(a.id, p.uid) || {}, nl = Object.keys(x.lidos || {}).length;
       return `<tr><td><span class="nm">${esc(p.nome)}</span></td><td>${nl} de ${mods.length}</td><td><b>${x.prova ? String(x.prova.melhor).replace('.', ',') : '—'}</b></td><td>${x.prova ? alNivel(x.prova.melhor) : '<span class="muted">não fez</span>'}</td><td class="hide-m">${x.prova?.tentativas || 0}</td></tr>`; }).join('')}</tbody></table></div></div>`; }
   if (!liberada) { $('alCorpo').innerHTML = topo + `<div class="al-trava"><span>🔒</span><b>A prova libera quando você ler todos os módulos</b><p>Faltam ${mods.filter((_, i) => !(vv.lidos || {})[i]).length} módulo(s). Toque nos que ainda não têm ✓.</p></div>`; $('alPe').innerHTML = ''; return; }
@@ -12676,11 +12754,11 @@ window.marcarAssistida = async id => {
 let auEditando = null;
 function auPreencherProfs(){ const nomes = [...new Set([...aulas.map(a => a.professor).filter(Boolean), ...perfisLista.filter(p => p.papel === 'gerente' && p.status === 'ativo').map(p => p.nome)])]; $('auProfs').innerHTML = nomes.map(n => `<option value="${esc(n)}">`).join(''); }
 window.novaAula = () => { auEditando = null; $('auUrl').closest('.fg').classList.remove('hide'); $('auEdTit').textContent = 'Nova aula'; $('auSalvarBt').textContent = 'Publicar aula'; $('auExcluir').classList.add('hide');
-  ['auUrl','auTitulo','auDur','auDesc','auOrdem'].forEach(i => $(i).value = ''); pintarAuTemas(); $('auTema').value = auTema !== 'todas' ? auTemaInfo(auTema).nome : ''; $('auProf').value = ((aulas || []).slice().sort((x, y) => (y.criadoEm || 0) - (x.criadoEm || 0))[0] || {}).professor || perfil.nome || ''; /* v310: repete quem deu a última aula */ $('auObrig').checked = true; $('auAvisar').checked = true; $('auAvisar').closest('label').classList.remove('hide');
+  ['auUrl','auTitulo','auDur','auDesc','auOrdem'].forEach(i => $(i).value = ''); pintarAuTemas(); pintarAuPapeis([]); if ($('auCapaV')) $('auCapaV').checked = false; $('auTema').value = auTema !== 'todas' ? auTemaInfo(auTema).nome : ''; $('auProf').value = ((aulas || []).slice().sort((x, y) => (y.criadoEm || 0) - (x.criadoEm || 0))[0] || {}).professor || perfil.nome || ''; /* v310: repete quem deu a última aula */ $('auObrig').checked = true; $('auAvisar').checked = true; $('auAvisar').closest('label').classList.remove('hide');
   auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
 window.editarAula = id => { const a = aulas.find(x => x.id === id); if (!a) return; fecharAula(); auEditando = id;
   $('auEdTit').textContent = 'Editar aula'; $('auSalvarBt').textContent = 'Salvar'; $('auExcluir').classList.remove('hide'); $('auUrl').closest('.fg').classList.toggle('hide', a.tipo === 'leitura');
-  $('auUrl').value = a.url || ''; $('auTitulo').value = a.titulo || ''; pintarAuTemas(); $('auTema').value = auTemaInfo(a.tema).nome; $('auProf').value = a.professor || ''; $('auDur').value = a.duracao || ''; $('auOrdem').value = a.ordem || ''; $('auDesc').value = a.descricao || ''; $('auObrig').checked = !!a.obrigatoria; $('auAvisar').checked = false; $('auAvisar').closest('label').classList.add('hide');
+  $('auUrl').value = a.url || ''; $('auTitulo').value = a.titulo || ''; pintarAuTemas(); pintarAuPapeis(auPapeis(a)); if ($('auCapaV')) $('auCapaV').checked = !!a.capaVideo; $('auTema').value = auTemaInfo(a.tema).nome; $('auProf').value = a.professor || ''; $('auDur').value = a.duracao || ''; $('auOrdem').value = a.ordem || ''; $('auDesc').value = a.descricao || ''; $('auObrig').checked = !!a.obrigatoria; $('auAvisar').checked = false; $('auAvisar').closest('label').classList.add('hide');
   auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
 window.auPrevia = () => { const v = auVideo($('auUrl').value); const u = $('auUrl').value.trim();
   $('auPrevia').innerHTML = !u ? '' : !v ? '<span class="au-pv erro">Não reconheci este link. Use um link do YouTube, Google Drive ou Vimeo.</span>' : v.capa ? `<img src="${v.capa}" alt=""><span class="au-pv">✓ Vídeo do YouTube reconhecido</span>` : `<span class="au-pv">✓ Vídeo do ${v.tipo === 'drive' ? 'Google Drive' : v.tipo === 'vimeo' ? 'Vimeo' : 'arquivo'} reconhecido</span>`; };
@@ -12688,7 +12766,7 @@ window.salvarAula = async () => {
   const url = $('auUrl').value.trim(), titulo = $('auTitulo').value.trim(), ehLer = auEditando && aulas.find(x => x.id === auEditando)?.tipo === 'leitura';
   if (!ehLer && !auVideo(url)) { toast('Cole um link de vídeo válido (YouTube, Google Drive ou Vimeo)'); return; }
   if (!titulo) { toast('Dê um título para a aula'); return; }
-  const d = { ...(ehLer ? {} : { url }), titulo, tema:auTemaChave($('auTema').value), professor:$('auProf').value.trim(), duracao:$('auDur').value.trim(), ordem:Number($('auOrdem').value) || 99, descricao:$('auDesc').value.trim(), obrigatoria:$('auObrig').checked, atualizadoEm:Date.now() };
+  const d = { ...(ehLer ? {} : { url }), titulo, tema:auTemaChave($('auTema').value), papeis:lerAuPapeis(), capaVideo:!!$('auCapaV')?.checked, professor:$('auProf').value.trim(), duracao:$('auDur').value.trim(), ordem:Number($('auOrdem').value) || 99, descricao:$('auDesc').value.trim(), obrigatoria:$('auObrig').checked, atualizadoEm:Date.now() };
   $('auSalvarBt').disabled = true;
   try {
     if (auEditando) { await updateDoc(doc(db,'aulas', auEditando), d); toast('Aula salva ✓'); }
