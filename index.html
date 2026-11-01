@@ -1330,6 +1330,14 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
 .fv-tiradas{margin-top:14px;display:grid;gap:8px}.fv-tiradas>.btn{justify-self:start}
 .btn-excluir{font-size:16px;opacity:.7}.btn-excluir:hover{opacity:1;background:color-mix(in srgb,var(--danger) 12%,transparent)}
 
+/* v309: corretor em treinamento vê só Aulas (e Configurações para sair) */
+.so-treino{display:none!important}
+html.modo-treino .so-treino{display:flex!important}
+html.modo-treino .nav>button[data-view]:not([data-view="aulas"]):not([data-view="config"]),html.modo-treino .nav-title,
+html.modo-treino .mobilebar>button:not(.so-treino),html.modo-treino #fab,html.modo-treino #btnTopo,html.modo-treino .disc-fab,html.modo-treino #zapFab,
+html.modo-treino #menuModal .menu-list>button[onclick*="setView"]:not([onclick*="'aulas'"]):not([onclick*="'config'"]){display:none!important}
+html.modo-treino .nav>button[data-view="aulas"].hide{display:flex!important}
+.treino-aviso{background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:14px}
 /* ---------- perfil CEO: direto, números e resultados ---------- */
 .so-ceo{display:none!important}
 html.modo-ceo .so-ceo{display:flex!important}
@@ -3605,6 +3613,11 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div class="card-head"><h2>Aguardando aprovação</h2><span class="muted" id="pendQt"></span></div>
           <div id="pendLista"></div>
         </div>
+        <div class="card hide" id="cardTreino" style="margin-bottom:20px">
+          <div class="card-head"><h2>Em treinamento (só aulas)</h2><span class="muted" id="treinoQt"></span></div>
+          <div class="hint" style="margin:0 0 10px">Escolha a equipe e toque em Liberar o app quando a pessoa terminar as aulas.</div>
+          <div id="treinoLista"></div>
+        </div>
         <div class="card gerente-only hide" style="margin-bottom:20px" id="cardPerm">
           <div class="card-head"><h2>Permissões de acesso</h2><span class="muted">As mudanças valem na hora</span></div>
           <div class="leg">
@@ -3916,6 +3929,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 <button class="zap-fab hide" id="zapFab" onclick="setView('whatsapp')" title="WhatsApp" aria-label="Abrir o WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3a.5.5 0 0 0 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="zap-fab-n hide" id="zapFabN">0</span></button>
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
 <nav class="mobilebar hide" id="mobilebar">
+  <button data-view="aulas" class="so-treino" onclick="setView('aulas')"><i data-ic="play"></i>Aulas</button>
   <button data-view="hoje" class="nao-ceo" onclick="setView('hoje')"><i data-ic="tbHoje"></i>Hoje</button>
   <button data-view="visitas" class="nao-ceo" onclick="setView('visitas')"><i data-ic="tbVis"></i>Visitas</button>
   <button data-view="painel" class="so-ceo" onclick="setView('painel')"><i data-ic="painel"></i>Painel</button>
@@ -3982,7 +3996,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       </div>
       <div class="fg"><label>Seu nome completo</label><input id="cadNome" placeholder="Ex.: Ana Flávia Souza"></div>
       <div class="fg" id="cadFoneWrap"><label>Seu WhatsApp</label><input id="cadFone" type="tel" inputmode="tel" placeholder="(83) 99999-9999"></div>
-      <div class="fg" id="cadEqWrap"><label>Sua equipe</label><select id="cadEquipe"></select></div>
+      <div class="fg hide" id="cadEqWrap"><label>Sua equipe</label><select id="cadEquipe"></select></div>
       <button class="btn btn-primary btn-block" onclick="enviarCadastro()" style="padding:13px">Enviar para aprovação</button>
       <div id="cadGerente" class="hide" style="margin-top:18px;padding:14px;border:1px dashed var(--border);border-radius:14px;background:var(--card2)">
         <b style="font-size:14px">Primeiro acesso ao sistema?</b>
@@ -4801,7 +4815,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
     <div class="sheet-body">
       <div class="fg"><label>Link do vídeo</label><input id="auUrl" placeholder="Cole o link do YouTube, Google Drive ou Vimeo" oninput="auPrevia()"><div class="au-previa" id="auPrevia"></div></div>
       <div class="fg"><label>Título</label><input id="auTitulo" maxlength="100" placeholder="Ex.: Como cadastrar e acompanhar um lead no CRM"></div>
-      <div class="row2"><div class="fg"><label>Assunto</label><select id="auTema"><option value="crm">CRM</option><option value="financiamento">Financiamento</option><option value="estudo">Material de estudo</option><option value="geral">Outros assuntos</option></select></div>
+      <div class="row2"><div class="fg"><label>Assunto</label><input id="auTema" list="auTemasL" maxlength="40" placeholder="Escolha ou escreva um assunto novo"><datalist id="auTemasL"></datalist></div>
         <div class="fg"><label>Quem dá a aula</label><input id="auProf" maxlength="60" list="auProfs"><datalist id="auProfs"></datalist></div></div>
       <div class="row2"><div class="fg"><label>Duração (opcional)</label><input id="auDur" maxlength="20" placeholder="Ex.: 18 min"></div>
         <div class="fg"><label>Ordem na lista</label><input id="auOrdem" type="number" min="1" placeholder="1"></div></div>
@@ -5344,6 +5358,7 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v !== 'recepcao') pararRecepcao();
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
   if (souCeo() && !viewsCeo().includes(v)) v = viewsCeo()[0];
+  if (souTreino() && !['aulas','config'].includes(v)) v = 'aulas';
   if (souCorresp() && !['analises','config'].includes(v)) v = 'analises';
   if (souAdm() && !viewsDoCargo('adm').includes(v)) v = viewsDoCargo('adm').find(x => x !== 'config') || 'config';
   if (souMkt() && !viewsDoCargo('marketing').includes(v)) v = viewsDoCargo('marketing').find(x => x !== 'config') || 'config';
@@ -6042,6 +6057,9 @@ let corEquipeFiltro = '', vEditId = null, vOrig = null;
 
 const norm = x => String(x||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
 const souAtivo = () => perfil?.status === 'ativo';
+// v309: corretor novato aprovado começa só com a aba Aulas; a gerência escolhe a equipe e libera o app depois
+const souTreino = () => souAtivo() && !!perfil?.soAulas;
+const PAPEIS_TREINO = ['corretor','sdr','anjo'];
 const souGerente = () => souAtivo() && perfil.papel === 'gerente';
 // o dono do app: quem instalou o sistema ou a conta do Allan (reconhecida pelo e-mail)
 const EMAIL_DONO = 'allanvgron@gmail.com';
@@ -6130,12 +6148,13 @@ function avisoJanela(precisa){
   return `Mostrando dados a partir de ${desde}. <button class="link" onclick="carregarHistorico()">Carregar histórico completo</button>`;
 }
 function configurarAcesso(){
-  const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto + '|' + inicioJanela() : 'sem';
+  const chave = souAtivo() ? perfil.papel + '|' + (perfil.equipe||'') + '|' + historicoCompleto + '|' + inicioJanela() + '|' + (souTreino() ? 'treino' : '') : 'sem';
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; perfisTodos = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
   visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; rankingVendas = []; window._rvOk = false; empreendimentos = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
   if (!souAtivo()) return;
+  if (souTreino()) { assinarAulas(); try { assinarNotifs(); } catch(e) {} return; } // v309: em treinamento só carrega as aulas
   if (perfil.papel === 'correspondente') { assinarEtapa1(() => {}); assinarNotifs(); assinarAnalises(); return; }
   const erro = e => { console.error(e); toast(e.code === 'failed-precondition' ? 'O Firebase pediu um índice. Abra o console (F12) e clique no link do erro.' : 'Sem permissão para carregar os dados. Confira as regras do Firestore.'); };
   let qv;
@@ -6195,7 +6214,7 @@ function preencherCadEquipes(){
   const eqs = listaEquipes(), atual = $('cadEquipe').value;
   $('cadEquipe').innerHTML = '<option value="">Selecione a sua equipe</option>' + eqs.map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('');
   if (atual) $('cadEquipe').value = atual;
-  $('cadEqWrap').classList.toggle('hide', !eqs.length);
+  $('cadEqWrap').classList.add('hide'); // v309: o novato não escolhe a equipe; a gerência define
   $('cadGerente').classList.toggle('hide', !!instalacao);
 }
 window.fecharCadastro = () => { cadDispensado = true; fechar('cadModal'); };
@@ -6203,13 +6222,13 @@ window.enviarCadastro = async () => {
   const nome = $('cadNome').value.trim().replace(/\s+/g,' ');
   const equipe = $('cadEquipe').value;
   if (!nome) { toast('Digite o seu nome'); $('cadNome').focus(); return; }
-  if (listaEquipes().length && !equipe) { toast('Escolha a sua equipe'); return; }
+  // v309: equipe é a gerência que define depois
   try {
     if (!(await perfilNaoExiste())) { fechar('cadModal'); toast('Seu cadastro já existe.'); return; }
     await setDoc(doc(db,'perfis',uidAtual), { nome, email:emailAtual, telefone:$('cadFone').value.trim(), papel:'corretor', status:'pendente', equipe, criadoEm:Date.now() });
     setTimeout(() => avisarCarteiro('cadastro', uidAtual), 1500);
     state.profile.name = nome; state.profile.nameSet = true; salvar();
-    fechar('cadModal'); toast('Cadastro enviado! Aguarde a aprovação do gerente.');
+    fechar('cadModal'); toast('Cadastro enviado! Assim que a gerência aprovar, você começa pelas aulas.');
   } catch(e) { toast('Não foi possível enviar: ' + e.message); }
 };
 window.configurarGerente = async () => {
@@ -6309,6 +6328,8 @@ function renderPapel(){
   document.querySelectorAll('.gerente-only').forEach(e => e.classList.toggle('hide', !souGerente()));
   document.querySelectorAll('.direcao-only').forEach(e => e.classList.toggle('hide', !souDirecao()));
   document.documentElement.classList.toggle('modo-ceo', souCeo());
+  document.documentElement.classList.toggle('modo-treino', souTreino());
+  if (souTreino() && !['aulas','config'].includes(view)) setTimeout(() => setView('aulas'), 0);
   if (souCeo() && !viewsCeo().includes(view)) setTimeout(() => setView(viewsCeo()[0]), 0);
   document.documentElement.classList.toggle('modo-corresp', souCorresp());
   if (souCorresp() && !['analises','config'].includes(view)) setTimeout(() => setView('analises'), 0);
@@ -6666,8 +6687,14 @@ function renderCorretores(){
   $('cardPend').classList.toggle('hide', !souGerente() || !pend.length);
   $('pendQt').textContent = pend.length + (pend.length > 1 ? ' pessoas' : ' pessoa');
   const opEq = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
+  // v309: quem está em treinamento: quantas aulas viu e botão para liberar o app
+  { const tr = perfisTodos.filter(p => p.status === 'ativo' && p.soAulas), tot = (typeof aulas !== 'undefined' ? aulas : []).length;
+    $('cardTreino').classList.toggle('hide', !(souGerente() && !souCeo()) || !tr.length); $('treinoQt').textContent = tr.length + (tr.length > 1 ? ' pessoas' : ' pessoa');
+    $('treinoLista').innerHTML = tr.map(p => { const vi = (aulas || []).filter(a => auAssistiu(a.id, p.uid)).length;
+      return `<div class="pend"><div><b>${esc(p.nome)}</b><span>${esc(PAPEIS[p.papel] || p.papel)} · assistiu <b>${vi} de ${tot}</b> aula${tot === 1 ? '' : 's'}${tot && vi >= tot ? ' ✓' : ''}</span></div>
+        <select id="te_${p.uid}">${opEq(p.equipe)}</select><button class="btn btn-primary" onclick="liberarApp('${p.uid}')">Liberar o app</button></div>`; }).join(''); }
   $('pendLista').innerHTML = pend.map(p => `<div class="pend">
-      <div><b>${esc(p.nome)}</b><span>${esc(p.email||'')} · pediu: ${esc(eqNome(p.equipe))}</span></div>
+      <div><b>${esc(p.nome)}</b><span>${esc(p.email||'')} · ao aprovar, começa só pelas aulas</span></div>
       <select id="pp_${p.uid}">${opcoesPapel({ papel:'corretor' }, souDono())}</select>
       <select id="pe_${p.uid}">${opEq(p.equipe)}</select>
       <button class="btn btn-primary" onclick="aprovar('${p.uid}')">Aprovar</button>
@@ -6747,12 +6774,18 @@ window.mudarCargo = async (uid, v, el) => {
 };
 window.setCorEq = k => { corEquipeFiltro = k; render(); };
 
+window.liberarApp = async uid => {
+  const p = perfisTodos.find(x => x.uid === uid); if (!p) return; const equipe = $('te_' + uid)?.value || '';
+  if (!SEM_EQUIPE.includes(p.papel) && !equipe) { toast('Escolha a equipe antes de liberar'); return; }
+  try { await gravar(setDoc(doc(db,'perfis',uid), { soAulas:false, equipe, liberadoPor:uidAtual, liberadoEm:Date.now() }, { merge:true })); toast(`${primeiro(p.nome)} liberado no app ✓`); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 window.aprovar = async uid => {
   const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
   const escolha = $('pp_' + uid).value, papel = escolha === 'ceo' ? 'gerente' : papelDaEscolha(escolha).papel, equipe = papel === 'correspondente' ? '' : $('pe_' + uid).value;
-  if (!SEM_EQUIPE.includes(papel) && !equipe) { toast('Escolha a equipe antes de aprovar'); return; }
+  // v309: aprovar não precisa de equipe; corretor/SDR/anjo novo entra em treinamento (só Aulas) até a gerência liberar
   try {
-    await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now(), ...(papel === 'gerente' ? { cargo: escolha === 'ceo' ? 'dono' : '' } : {}), ...(papel === 'correspondente' ? { liderCorresp:escolha === 'corresp_lider' } : {}) }, { merge:true });
+    await setDoc(doc(db,'perfis',uid), { status:'ativo', papel, equipe, aprovadoPor:uidAtual, aprovadoEm:Date.now(), soAulas:PAPEIS_TREINO.includes(papel), ...(papel === 'gerente' ? { cargo: escolha === 'ceo' ? 'dono' : '' } : {}), ...(papel === 'correspondente' ? { liderCorresp:escolha === 'corresp_lider' } : {}) }, { merge:true });
     // vincula visitas antigas que estão só com o nome desta pessoa
     const soltas = visitas.filter(v => !v.corretorUid && norm(v.corretorNome) === norm(p.nome));
     for (let i = 0; i < soltas.length; i += 200) {
@@ -7577,7 +7610,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); toast('Aplicati
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 308;
+const APP_VERSAO = 310;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12436,6 +12469,14 @@ window.salvarTestadores = async () => {
 // ============ AULAS (vídeos de treinamento) · v79 ============
 // =====================================================================
 let aulas = [], aulasVistas = [], auTema = 'todas', auAberta = null;
+// v310: assunto livre: além dos fixos, qualquer assunto que a gerência escrever vira uma seção nova
+function pintarAuTemas(){ const el = $('auTemasL'); if (!el) return; const nomes = [...new Set([...Object.values(AU_TEMAS).map(t => t.nome), ...(typeof aulas !== 'undefined' ? aulas : []).map(a => auTemaInfo(a.tema).nome)])];
+  el.innerHTML = nomes.map(n => `<option value="${esc(n)}">`).join(''); }
+function auTemaInfo(t){ const k = String(t || 'geral'); if (AU_TEMAS[k]) return AU_TEMAS[k];
+  let h = 0; for (const ch of k) h = (h * 31 + ch.charCodeAt(0)) >>> 0; const cores = ['#0e7490','#9333ea','#c2410c','#15803d','#be185d','#4338ca','#a16207','#0f766e'];
+  return { nome:k, ic:'🎓', cor:cores[h % cores.length] }; }
+function auTemaChave(txt){ const t = String(txt || '').trim().slice(0, 40); if (!t) return 'geral'; const n = norm(t);
+  const k = Object.keys(AU_TEMAS).find(x => x === n || norm(AU_TEMAS[x].nome) === n); return k || t; }
 const AU_TEMAS = { estudo:{ nome:'Material de estudo', ic:'📖', cor:'#b45309' }, crm:{ nome:'CRM', ic:'📇', cor:'#2563eb' }, financiamento:{ nome:'Financiamento', ic:'🏦', cor:'#0f9d76' }, geral:{ nome:'Outros assuntos', ic:'🎓', cor:'#7c3aed' } };
 function assinarAulas(){
   aulas = []; aulasVistas = []; if (!souAtivo()) return;
@@ -12466,7 +12507,7 @@ function auCapaHtml(a, t, ler){ const k = AU_ART[a.tema] ? a.tema : 'geral', nm 
   const meta = ler ? [nm ? `${nm} módulo${nm === 1 ? '' : 's'}` : '', a.duracao || '', 'com prova'].filter(Boolean).join(' · ') : ['Vídeo', a.duracao || ''].filter(Boolean).join(' · ');
   return `<span class="au-cv">${AU_ART[k]}<span class="au-mk"><img src="${MARCA_IMG}" alt="">FRADE</span><span class="au-cvt">${esc(a.titulo)}</span><span class="au-cvm">${esc(meta)}</span>${ler ? '' : '<span class="au-cvp"></span>'}</span>`; }
 function htmlAulaCard(a){
-  const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), abriu = !!auVista(a.id), ler = a.tipo === 'leitura';
+  const v = auVideo(a.url), t = auTemaInfo(a.tema), viu = auAssistiu(a.id), abriu = !!auVista(a.id), ler = a.tipo === 'leitura';
   let rodape = '';
   if (ler) { const vv = auVista(a.id) || {}, nm = (a.modulos || []).length, nl = Object.keys(vv.lidos || {}).length;
     if (podeGerir()) { const pub = auPublico(), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((t, p) => t + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
@@ -12482,11 +12523,14 @@ function renderAulas(){
   if (view !== 'aulas' || !$('auLista')) return;
   $('auNovaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('auImpBt').classList.toggle('hide', !(souGerente() && !souCeo()));
   const meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel), tot = aulas.length, vi = aulas.filter(a => auAssistiu(a.id)).length;
+  { let av = $('auTreino'); if (!av && $('auProg')) { av = document.createElement('div'); av.id = 'auTreino'; av.className = 'treino-aviso'; $('auProg').parentNode.insertBefore(av, $('auProg')); }
+    if (av) { av.classList.toggle('hide', !souTreino()); if (souTreino()) av.innerHTML = `<b>Bem-vindo à Frade!</b> Comece pelas aulas. Assista a cada uma e toque em <b>"Terminei de assistir"</b>. Quando você terminar, a gerência define a sua equipe e libera o app completo.${tot ? ` Você já assistiu <b>${vi} de ${tot}</b>.` : ''}`; } }
   $('auProg').innerHTML = !tot ? '<b>Aulas da Frade</b><small>Treinamentos em vídeo para a equipe.</small>' : meus ? `<b>Você assistiu ${vi} de ${tot} aula${tot > 1 ? 's' : ''}</b><div class="au-barra"><i style="width:${Math.round(vi / tot * 100)}%"></i></div>` : `<b>${tot} aula${tot > 1 ? 's' : ''} publicada${tot > 1 ? 's' : ''}</b><small>Toque numa aula para ver quem já assistiu.</small>`;
-  const temas = Object.keys(AU_TEMAS).filter(k => aulas.some(a => (a.tema || 'geral') === k));
-  $('auTabs').innerHTML = temas.length > 1 ? ['todas', ...temas].map(k => `<button class="${auTema === k ? 'on' : ''}" onclick="auFiltro('${k}')">${k === 'todas' ? 'Todas' : AU_TEMAS[k].ic + ' ' + AU_TEMAS[k].nome}</button>`).join('') : '';
+  const fixos = Object.keys(AU_TEMAS), outros = [...new Set(aulas.map(a => a.tema || 'geral').filter(k => !fixos.includes(k)))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const temas = [...fixos.filter(k => k !== 'geral'), ...outros, 'geral'].filter(k => aulas.some(a => (a.tema || 'geral') === k));
+  $('auTabs').innerHTML = temas.length > 1 ? ['todas', ...temas].map(k => `<button class="${auTema === k ? 'on' : ''}" data-k="${esc(k)}" onclick="auFiltro(this.dataset.k)">${k === 'todas' ? 'Todas' : auTemaInfo(k).ic + ' ' + esc(auTemaInfo(k).nome)}</button>`).join('') : '';
   if (!tot) { $('auLista').innerHTML = `<div class="au-vazio"><span>🎬</span><b>Nenhuma aula ainda</b><p>${souGerente() && !souCeo() ? 'Toque em <b>+ Nova aula</b> e cole o link do vídeo (YouTube não listado ou Google Drive).' : 'Quando a gerência publicar uma aula, ela aparece aqui e você recebe um aviso.'}</p></div>`; return; }
-  $('auLista').innerHTML = (auTema === 'todas' ? temas : [auTema]).map(k => { const l = aulas.filter(a => (a.tema || 'geral') === k); if (!l.length) return ''; const t = AU_TEMAS[k];
+  $('auLista').innerHTML = (auTema === 'todas' ? temas : [auTema]).map(k => { const l = aulas.filter(a => (a.tema || 'geral') === k); if (!l.length) return ''; const t = auTemaInfo(k);
     return `<section class="au-trilha"><h3><span style="--c:${t.cor}">${t.ic}</span>${t.nome}<small>${l.length} aula${l.length > 1 ? 's' : ''}${meus ? ` · ${l.filter(a => auAssistiu(a.id)).length} assistida${l.filter(a => auAssistiu(a.id)).length === 1 ? '' : 's'}` : ''}</small></h3><div class="au-grade">${l.map(htmlAulaCard).join('')}</div></section>`; }).join('');
 }
 window.auFiltro = k => { auTema = k; renderAulas(); };
@@ -12499,7 +12543,7 @@ window.abrirAula = async id => {
   const a = aulas.find(x => x.id === id); if (!a) return;
   if (a.tipo === 'leitura') return abrirLeitura(id);
   auAberta = id;
-  const v = auVideo(a.url), t = AU_TEMAS[a.tema] || AU_TEMAS.geral;
+  const v = auVideo(a.url), t = auTemaInfo(a.tema);
   $('auVerTit').textContent = a.titulo;
   $('auVideo').innerHTML = !v ? `<div class="au-semv">Não deu para abrir este vídeo aqui. <a href="${esc(a.url)}" target="_blank" rel="noopener">Abrir o vídeo</a></div>`
     : v.tipo === 'arquivo' ? `<video src="${esc(v.src)}" controls playsinline preload="metadata"></video>`
@@ -12510,7 +12554,7 @@ window.abrirAula = async id => {
 };
 function pintarInfoAula(){
   const a = aulas.find(x => x.id === auAberta); if (!a || !$('auVerInfo')) return;
-  const t = AU_TEMAS[a.tema] || AU_TEMAS.geral, viu = auAssistiu(a.id), meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
+  const t = auTemaInfo(a.tema), viu = auAssistiu(a.id), meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel);
   let quem = '';
   if (podeGerir()) { const pub = auPublico(), sim = pub.filter(p => auAssistiu(a.id, p.uid)), meio = pub.filter(p => !auAssistiu(a.id, p.uid) && auVista(a.id, p.uid)), nao = pub.filter(p => !auVista(a.id, p.uid));
     const lista = (l, cls) => l.map(p => `<span class="au-p ${cls}">${esc(primeiro(p.nome))}</span>`).join('') || '<span class="muted">ninguém</span>';
@@ -12550,7 +12594,7 @@ window.abrirLeitura = async id => {
 window.fecharLeitura = () => { fechar('auLerModal'); alAula = null; };
 let alRetomar = 0;
 function htmlCapaLeitura(a, mods, lidos, nl, vv){
-  const t = AU_TEMAS[a.tema] || AU_TEMAS.geral, n = mods.length, k = AU_ART[a.tema] ? a.tema : 'geral', prova = vv.prova;
+  const t = auTemaInfo(a.tema), n = mods.length, k = AU_ART[a.tema] ? a.tema : 'geral', prova = vv.prova;
   const meta = [n ? `${n} módulo${n === 1 ? '' : 's'}` : '', a.duracao || '', (a.prova?.perguntas || []).length ? `prova com ${a.prova.perguntas.length} pergunta${a.prova.perguntas.length === 1 ? '' : 's'}` : ''].filter(Boolean);
   let eq = ''; if (podeGerir()) { const pub = auPublico(), fez = pub.filter(p => auVista(a.id, p.uid)?.prova), med = fez.length ? fez.reduce((s, p) => s + (auVista(a.id, p.uid).prova.melhor || 0), 0) / fez.length : 0;
     eq = `<div class="al-eq">Equipe: ${fez.length} de ${pub.length} fizeram a prova${fez.length ? ' · média ' + med.toFixed(1).replace('.', ',') : ''}. O resultado de cada um fica na prova, no fim.</div>`; }
@@ -12632,11 +12676,11 @@ window.marcarAssistida = async id => {
 let auEditando = null;
 function auPreencherProfs(){ const nomes = [...new Set([...aulas.map(a => a.professor).filter(Boolean), ...perfisLista.filter(p => p.papel === 'gerente' && p.status === 'ativo').map(p => p.nome)])]; $('auProfs').innerHTML = nomes.map(n => `<option value="${esc(n)}">`).join(''); }
 window.novaAula = () => { auEditando = null; $('auUrl').closest('.fg').classList.remove('hide'); $('auEdTit').textContent = 'Nova aula'; $('auSalvarBt').textContent = 'Publicar aula'; $('auExcluir').classList.add('hide');
-  ['auUrl','auTitulo','auDur','auDesc','auOrdem'].forEach(i => $(i).value = ''); $('auTema').value = auTema !== 'todas' ? auTema : 'crm'; $('auProf').value = perfil.nome || ''; $('auObrig').checked = true; $('auAvisar').checked = true; $('auAvisar').closest('label').classList.remove('hide');
+  ['auUrl','auTitulo','auDur','auDesc','auOrdem'].forEach(i => $(i).value = ''); pintarAuTemas(); $('auTema').value = auTema !== 'todas' ? auTemaInfo(auTema).nome : ''; $('auProf').value = ((aulas || []).slice().sort((x, y) => (y.criadoEm || 0) - (x.criadoEm || 0))[0] || {}).professor || perfil.nome || ''; /* v310: repete quem deu a última aula */ $('auObrig').checked = true; $('auAvisar').checked = true; $('auAvisar').closest('label').classList.remove('hide');
   auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
 window.editarAula = id => { const a = aulas.find(x => x.id === id); if (!a) return; fecharAula(); auEditando = id;
   $('auEdTit').textContent = 'Editar aula'; $('auSalvarBt').textContent = 'Salvar'; $('auExcluir').classList.remove('hide'); $('auUrl').closest('.fg').classList.toggle('hide', a.tipo === 'leitura');
-  $('auUrl').value = a.url || ''; $('auTitulo').value = a.titulo || ''; $('auTema').value = a.tema || 'geral'; $('auProf').value = a.professor || ''; $('auDur').value = a.duracao || ''; $('auOrdem').value = a.ordem || ''; $('auDesc').value = a.descricao || ''; $('auObrig').checked = !!a.obrigatoria; $('auAvisar').checked = false; $('auAvisar').closest('label').classList.add('hide');
+  $('auUrl').value = a.url || ''; $('auTitulo').value = a.titulo || ''; pintarAuTemas(); $('auTema').value = auTemaInfo(a.tema).nome; $('auProf').value = a.professor || ''; $('auDur').value = a.duracao || ''; $('auOrdem').value = a.ordem || ''; $('auDesc').value = a.descricao || ''; $('auObrig').checked = !!a.obrigatoria; $('auAvisar').checked = false; $('auAvisar').closest('label').classList.add('hide');
   auPreencherProfs(); auPrevia(); abrir('auEdModal'); };
 window.auPrevia = () => { const v = auVideo($('auUrl').value); const u = $('auUrl').value.trim();
   $('auPrevia').innerHTML = !u ? '' : !v ? '<span class="au-pv erro">Não reconheci este link. Use um link do YouTube, Google Drive ou Vimeo.</span>' : v.capa ? `<img src="${v.capa}" alt=""><span class="au-pv">✓ Vídeo do YouTube reconhecido</span>` : `<span class="au-pv">✓ Vídeo do ${v.tipo === 'drive' ? 'Google Drive' : v.tipo === 'vimeo' ? 'Vimeo' : 'arquivo'} reconhecido</span>`; };
@@ -12644,7 +12688,7 @@ window.salvarAula = async () => {
   const url = $('auUrl').value.trim(), titulo = $('auTitulo').value.trim(), ehLer = auEditando && aulas.find(x => x.id === auEditando)?.tipo === 'leitura';
   if (!ehLer && !auVideo(url)) { toast('Cole um link de vídeo válido (YouTube, Google Drive ou Vimeo)'); return; }
   if (!titulo) { toast('Dê um título para a aula'); return; }
-  const d = { ...(ehLer ? {} : { url }), titulo, tema:$('auTema').value, professor:$('auProf').value.trim(), duracao:$('auDur').value.trim(), ordem:Number($('auOrdem').value) || 99, descricao:$('auDesc').value.trim(), obrigatoria:$('auObrig').checked, atualizadoEm:Date.now() };
+  const d = { ...(ehLer ? {} : { url }), titulo, tema:auTemaChave($('auTema').value), professor:$('auProf').value.trim(), duracao:$('auDur').value.trim(), ordem:Number($('auOrdem').value) || 99, descricao:$('auDesc').value.trim(), obrigatoria:$('auObrig').checked, atualizadoEm:Date.now() };
   $('auSalvarBt').disabled = true;
   try {
     if (auEditando) { await updateDoc(doc(db,'aulas', auEditando), d); toast('Aula salva ✓'); }
