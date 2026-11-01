@@ -1336,17 +1336,18 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
 .au-pub{display:inline-block;justify-self:start;font-size:11.5px;font-weight:700;color:#7c3aed;background:#7c3aed14;border-radius:99px;padding:2px 9px;margin-top:2px}
 @media(max-width:760px){
   .au-grade{grid-template-columns:1fr;gap:10px}
-  .au-card{flex-direction:row;border-radius:14px;min-height:92px}
-  .au-card .au-capa{width:132px;flex:none;aspect-ratio:auto;min-height:92px}
+  .au-grade .au-card{display:grid;grid-template-columns:128px minmax(0,1fr);align-items:center;border-radius:14px}
+  .au-grade .au-card .au-capa{width:128px;aspect-ratio:16/9;min-height:0;margin:8px 0 8px 8px;border-radius:10px}
   .au-card .au-cvt,.au-card .au-cvm,.au-card .au-mk,.au-card .au-dur{display:none}
   .au-card .au-capa em.au-ok,.au-card .au-capa em.au-meio,.au-card .au-capa em.au-nova{font-size:10px;padding:2px 7px;left:6px;top:6px}
-  .au-card .au-txt{padding:10px 12px;align-content:center}.au-card .au-txt b{font-size:14px}
+  .au-grade .au-card .au-txt{padding:8px 12px;gap:2px}.au-card .au-txt b{font-size:14px;line-height:1.25}.au-grade .au-card .au-cvp{display:none}
   .au-num{right:auto;left:6px;top:6px;bottom:auto;min-width:22px;height:22px;font-size:12px}
   .au-card .au-capa .au-mk{display:none!important}
   .au-card .au-capa em.au-ok,.au-card .au-capa em.au-meio,.au-card .au-capa em.au-nova{top:auto!important;bottom:6px;left:6px!important;right:auto!important}
   .au-card .au-capa .au-play{width:40px;height:40px}.au-card .au-capa .au-play::after{left:16px;top:12px;border-left-width:12px;border-top-width:8px;border-bottom-width:8px}
   .au-trilha h3{font-size:16px}
 }
+.au-fora{display:block;text-align:center;margin:0 0 10px;padding:10px;border:1px solid var(--border);border-radius:12px;font-weight:700;font-size:14px;color:var(--accent);text-decoration:none;background:var(--card)}
 .au-mov{display:flex;gap:6px;margin-top:8px}.au-mov span{border:1px solid var(--border);border-radius:8px;padding:2px 10px;font-size:12px;cursor:pointer;background:var(--card)}.au-mov span:hover{background:var(--bg)}
 /* v309: corretor em treinamento vê só Aulas (e Configurações para sair) */
 .so-treino{display:none!important}
@@ -3462,7 +3463,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 
       <!-- VENDAS (RESERVAS) -->
       <section class="view" id="v-bolsao">
-        <div class="an-topo"><div><h1>Bolsão de clientes</h1><p class="an-sub">Leads sem dono e clientes perdidos para tentar de novo. Pegue um, ligue e conte o que aconteceu.</p></div>
+        <div class="an-topo"><div><h1>Bolsão de clientes</h1><p class="an-sub">Leads sem dono para pegar e ligar.</p></div>
           <div class="an-topo-bts"><button class="btn btn-ghost hide" id="bzExpBt" onclick="exportarBolsao()">Exportar planilha</button><button class="btn btn-ghost hide" id="bzDispBt" onclick="abrirDisparo()">Configurar disparo</button><button class="btn btn-primary hide" id="bzDisparaBt" onclick="dispararBolsao()">Disparar</button><button class="btn btn-ghost hide" id="bzPerdBt" onclick="abrirPerdidos()">Trazer clientes perdidos</button><button class="btn btn-primary hide" id="bzNovoBt" onclick="abrirBolsaoNovo()">+ Adicionar</button></div></div>
         <div id="bzMl"></div>
         <div class="an-tabs" id="bzTabs" style="margin-bottom:10px"></div>
@@ -3644,7 +3645,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div id="treinoLista"></div>
         </div>
         <div class="card gerente-only hide" style="margin-bottom:20px" id="cardPerm">
-          <div class="card-head"><h2>Permissões de acesso</h2><span class="muted">As mudanças valem na hora</span></div>
+          <div class="card-head"><h2>Permissões de acesso</h2></div>
           <div class="leg">
             <div><b>🏢 CEO</b>Vê tudo, como o gerente, e é quem vê o Painel executivo (junto com o gestor). Só o gestor altera o perfil do CEO.</div>
             <div><b>👑 Gestor</b>Tudo, e é o único que altera gerentes e as configurações do app.</div>
@@ -3656,7 +3657,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div style="overflow-x:auto"><table class="perm" id="permLista"></table></div>
         </div>
         <div class="card" style="margin-bottom:20px">
-          <div class="card-head"><h2>Equipe</h2><span class="muted">Clique em um corretor para ver o relatório completo</span></div>
+          <div class="card-head"><h2>Equipe</h2></div>
           <div class="chips" id="corEquipes" style="margin-bottom:10px"></div>
           <div class="people" id="corLista"></div>
         </div>
@@ -3955,6 +3956,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 <button class="disc-fab hide" id="discFab" onclick="abrirDiscador()" title="Ligar" aria-label="Abrir o discador"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
 <nav class="mobilebar hide" id="mobilebar">
   <button data-view="aulas" class="so-treino" onclick="setView('aulas')"><i data-ic="play"></i>Aulas</button>
+  <button data-view="config" class="so-treino" onclick="setView('config')"><i data-ic="gear"></i>Conta</button>
   <button data-view="hoje" class="nao-ceo" onclick="setView('hoje')"><i data-ic="tbHoje"></i>Hoje</button>
   <button data-view="visitas" class="nao-ceo" onclick="setView('visitas')"><i data-ic="tbVis"></i>Visitas</button>
   <button data-view="painel" class="so-ceo" onclick="setView('painel')"><i data-ic="painel"></i>Painel</button>
@@ -5184,11 +5186,7 @@ function estadoInicial(user){
   const h = hojeISO(), id = Date.now();
   return {
     profile:{ name: nome.charAt(0).toUpperCase()+nome.slice(1), nameSet: !!nomeCadastro, color:'#E65100', theme:'auto', notif:false, notifMin:15 },
-    tasks:[
-      {id:id+1,title:'Organizar prioridades do dia',date:h,time:'08:00',done:false,priority:'alta',cat:'pessoal',repeat:'uteis',notes:'',phone:'',subtasks:[]},
-      {id:id+2,title:'Responder mensagens importantes',date:h,time:'10:00',done:false,priority:'media',cat:'cliente',repeat:'',notes:'',phone:'',subtasks:[]},
-      {id:id+3,title:'Revisar compromissos de amanhã',date:h,time:'17:30',done:false,priority:'baixa',cat:'outros',repeat:'',notes:'',phone:'',subtasks:[{t:'Conferir calendário',d:false},{t:'Confirmar horários',d:false}]}
-    ]
+    tasks:[]  /* v318: sem tarefas de exemplo */
   };
 }
 function normalizar(t){
@@ -5243,6 +5241,9 @@ onAuthStateChanged(auth, user => {
     }
     const d = snap.data();
     state = { profile: Object.assign({ color:'#E65100', theme:'auto', notif:false, notifMin:15 }, d.profile||{}), tasks:(d.tasks||[]).map(normalizar), repescagem:d.repescagem || {}, indPed:d.indPed || {}, bzPeguei:d.bzPeguei || {}, notasCli:d.notasCli || {}, ...(Array.isArray(d.zapTags) ? { zapTags:d.zapTags } : {}), ...(Array.isArray(d.correspPessoas) ? { correspPessoas:d.correspPessoas } : {}) };
+    /* v318: tira as tarefas de exemplo antigas (as 3 que o app criava sozinho na conta nova) */
+    { const EX = ['Organizar prioridades do dia','Responder mensagens importantes','Revisar compromissos de amanhã'];
+      const ok = state.tasks.filter(t => !(EX.includes(t.title) && !t.notes && !t.phone)); if (ok.length !== state.tasks.length) { state.tasks = ok; salvar(); } }
     render();
     pedirCadastro();
   }, err => toast('Erro ao carregar: ' + err.message));
@@ -5376,7 +5377,7 @@ function toast(texto, acao, fn){
 
 // ================= Navegação =================
 const VIEW_SALVA = (() => { try { return sessionStorage.getItem('fradeView') || ''; } catch(e) { return ''; } })();
-const TITULOS = {acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -7654,7 +7655,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 317;
+const APP_VERSAO = 321;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -7816,7 +7817,7 @@ function renderNotif(){
   }
   let dispensado = false; try { dispensado = localStorage.getItem('conviteNotif') === '1'; } catch(e){}
   const mostrar = souAtivo() && !dispensado && ['desligado','ios-instalar','bloqueado','nav-interno','ios-antigo','sem-suporte'].includes(st);
-  const txtConv = { 'ios-instalar':'Instale o app na Tela de Início (Compartilhar → Adicionar à Tela de Início) e abra por lá para receber os avisos.', 'desligado':'Ative as notificações para receber avisos, visitas marcadas e lembretes na hora, mesmo com o app fechado.' }[st] || txt;
+  const txtConv = { 'ios-instalar':'Instale o app na Tela de Início (Compartilhar → Adicionar à Tela de Início) e abra por lá para receber os avisos.', 'desligado':'Ative as notificações para receber avisos e lembretes na hora.', 'bloqueado':'Notificações bloqueadas neste aparelho. Toque em Ativar para ver como liberar.', 'nav-interno':'Abra o link no Chrome ou no Safari para receber notificações.', 'sem-suporte':'Para receber avisos, instale o app na tela inicial.' }[st] || txt; /* v321: textos curtos no Hoje */
   $('conviteNotif').innerHTML = mostrar ? `<div class="banner" style="background:var(--accent-soft);color:var(--text);border-color:color-mix(in srgb,var(--accent) 30%,transparent)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;color:var(--accent)"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span style="flex:1">${esc(txtConv)}</span>${st === 'desligado' || st === 'bloqueado' ? '<button class="btn btn-primary" onclick="ativarNotificacoes()">Ativar</button>' : ''}<button class="icon-btn" onclick="dispensarConvite()" title="Agora não">${IC.x}</button></div>` : '';
 }
 window.dispensarConvite = () => { try { localStorage.setItem('conviteNotif','1'); } catch(e){} renderNotif(); };
@@ -9276,7 +9277,7 @@ let relDia = null, _relDiaUnsub = null, _relDiaChave = '';
 // v165: Meus corretores (anjo, coordenador e gerência): o dia, a agenda, as pastas e os alertas de cada um, ao vivo
 // =====================================================================
 const podeAcomp = () => souAtivo() && (souAnjo() || souCoord() || souGerente());
-window.acEq = 'todas';
+window.acEq = 'todas'; window.renderAcomp = (...a) => renderAcomp(...a); /* v321: filtro de equipe em Meus corretores */
 let _acSubs = [], _acChave = '', _acLeads = [], _acVis = [], _acPastas = [], _acChk = [], _acLD = [], _acTick = null;
 function acParar(){ _acSubs.forEach(u => { try { u(); } catch(e) {} }); _acSubs = []; _acChave = ''; clearInterval(_acTick); _acTick = null; }
 const acNome = n => { const w = String(n || '').trim().toLowerCase().split(/\s+/).filter(Boolean); const ok = w.length > 1 ? [w[0], w[w.length - 1]] : w; return ok.map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(' ') || 'Corretor'; };
@@ -12605,7 +12606,7 @@ function renderAulas(){
   $('auNovaBt').classList.toggle('hide', !(souGerente())); $('auImpBt').classList.toggle('hide', !(souGerente()));
   const meus = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel), tot = aulas.length, vi = aulas.filter(a => auAssistiu(a.id)).length;
   { let av = $('auTreino'); if (!av && $('auProg')) { av = document.createElement('div'); av.id = 'auTreino'; av.className = 'treino-aviso'; $('auProg').parentNode.insertBefore(av, $('auProg')); }
-    if (av) { av.classList.toggle('hide', !souTreino()); if (souTreino()) av.innerHTML = `<b>Bem-vindo à Frade!</b> Comece pelas aulas. Assista a cada uma e toque em <b>"Terminei de assistir"</b>. Quando você terminar, a gerência define a sua equipe e libera o app completo.${tot ? ` Você já assistiu <b>${vi} de ${tot}</b>.` : ''}`; } }
+    if (av) { av.classList.toggle('hide', !souTreino()); if (souTreino()) av.innerHTML = `<b>Bem-vindo à Frade!</b> Assista às aulas e toque em <b>Terminei de assistir</b> no fim de cada uma.`; } }
   $('auProg').innerHTML = !tot ? '<b>Aulas da Frade</b>' : meus ? `<b>Você assistiu ${vi} de ${tot} aula${tot > 1 ? 's' : ''}</b><div class="au-barra"><i style="width:${Math.round(vi / tot * 100)}%"></i></div>` : `<b>${tot} aula${tot > 1 ? 's' : ''} publicada${tot > 1 ? 's' : ''}</b>`;
   const fixos = Object.keys(AU_TEMAS), outros = [...new Set(aulas.map(a => a.tema || 'geral').filter(k => !fixos.includes(k)))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   const temas = [...fixos.filter(k => k !== 'geral'), ...outros, 'geral'].filter(k => aulas.some(a => (a.tema || 'geral') === k));
@@ -12640,7 +12641,10 @@ function pintarInfoAula(){
   if (podeGerir()) { const pub = auPublicoDe(a), sim = pub.filter(p => auAssistiu(a.id, p.uid)), meio = pub.filter(p => !auAssistiu(a.id, p.uid) && auVista(a.id, p.uid)), nao = pub.filter(p => !auVista(a.id, p.uid));
     const lista = (l, cls) => l.map(p => `<span class="au-p ${cls}">${esc(primeiro(p.nome))}</span>`).join('') || '<span class="muted">ninguém</span>';
     quem = `<div class="au-gest"><div><b>✓ Assistiram (${sim.length})</b><div>${lista(sim, 'ok')}</div></div><div><b>Começaram (${meio.length})</b><div>${lista(meio, 'meio')}</div></div><div><b>Ainda não abriram (${nao.length})</b><div>${lista(nao, 'nao')}</div></div></div>`; }
-  $('auVerInfo').innerHTML = `<div class="au-meta"><span class="au-tag" style="--c:${t.cor}">${t.ic} ${t.nome}</span><span>com <b>${esc(a.professor || '—')}</b></span>${a.duracao ? `<span>${esc(a.duracao)}</span>` : ''}</div>
+  /* v319: Drive/YouTube embutido pode pedir cookies; botão para abrir o vídeo direto no app do Drive/YouTube */
+  const vv = auVideo(a.url), fora = !vv || vv.tipo === 'arquivo' ? '' : vv.tipo === 'drive' ? `https://drive.google.com/file/d/${vv.id}/view` : vv.tipo === 'youtube' ? `https://youtu.be/${vv.id}` : a.url;
+  const linkFora = fora ? `<a class="au-fora" href="${esc(fora)}" target="_blank" rel="noopener">Vídeo não carregou? Abrir no ${vv.tipo === 'drive' ? 'Google Drive' : vv.tipo === 'youtube' ? 'YouTube' : 'navegador'}</a>` : '';
+  $('auVerInfo').innerHTML = linkFora + `<div class="au-meta"><span class="au-tag" style="--c:${t.cor}">${t.ic} ${t.nome}</span><span>com <b>${esc(a.professor || '—')}</b></span>${a.duracao ? `<span>${esc(a.duracao)}</span>` : ''}</div>
     ${a.descricao ? `<p class="au-desc">${esc(a.descricao).replace(/\n/g, '<br>')}</p>` : ''}
     <div class="au-acoes">${meus ? (viu ? '<span class="au-feito">✓ Você já assistiu esta aula</span>' : `<button class="btn btn-primary" onclick="marcarAssistida('${a.id}')">✓ Terminei de assistir</button>`) : ''}${souGerente() ? `<button class="btn btn-ghost" onclick="editarAula('${a.id}')">Editar</button>` : ''}</div>${quem}`;
 }
@@ -13535,7 +13539,7 @@ function renderFinanceiro(){
   const venc = finLanc.filter(x => !x.pago && x.data && x.data < h);
   gerarFixasDoMes(finMes);
   $('finKpis').innerHTML = htmlGolpe(finMes, { rec, pag, aRec, aPag });
-  $('finAviso').innerHTML = venc.length ? `<div class="fin-alerta fin-alerta-s">⚠️ ${venc.length} conta${venc.length > 1 ? 's' : ''} vencida${venc.length > 1 ? 's' : ''} sem pagar (${brl(venc.reduce((a,x) => a + (Number(x.valor) || 0), 0))}) <button class="link" onclick="finAba='lanc';finTipo='vencidos';render()">ver quais</button></div>` : '';
+  $('finAviso').innerHTML = venc.length && finAba !== 'geral' ? `<div class="fin-alerta fin-alerta-s">⚠️ ${venc.length} conta${venc.length > 1 ? 's' : ''} vencida${venc.length > 1 ? 's' : ''} sem pagar (${brl(venc.reduce((a,x) => a + (Number(x.valor) || 0), 0))}) <button class="link" onclick="finAba='lanc';finTipo='vencidos';render()">ver quais</button></div>` : '';
   document.querySelectorAll('#finAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === finAba));
   const ativo = document.activeElement;
   if (finAba === 'salarios' && ativo && /^(INPUT|TEXTAREA|SELECT)$/.test(ativo.tagName) && ativo.closest('#finCorpo')) return; // não apaga o que está sendo digitado
@@ -13556,7 +13560,7 @@ function htmlFinLanc(l){
     .sort((a,b) => (a.data || '').localeCompare(b.data || '') || (a.criadoEm || 0) - (b.criadoEm || 0));
   const filtros = [['','Tudo'],['entrada','Entradas'],['saida','Saídas'],['aberto','Em aberto'],['vencidos','Vencidos']];
   const cab = `<div class="fin-filtros"><div class="seg">${filtros.map(([k,n]) => `<button class="${finTipo === k ? 'on' : ''}" onclick="finTipo='${k}';render()">${n}</button>`).join('')}</div>
-    <input id="finBuscaI" placeholder="Buscar descrição, categoria ou corretor..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=$('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"></div>`;
+    <input id="finBuscaI" placeholder="Buscar descrição, categoria ou corretor..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)})"></div>`;
   if (!lista.length) return cab + vazio(finTipo === 'vencidos' ? 'Nada vencido' : 'Nenhum lançamento neste mês', 'Toque em “+ Lançamento”. As comissões recebidas no funil e as despesas fixas entram aqui sozinhas.');
   const tE = lista.filter(x => x.tipo === 'entrada').reduce((a,x) => a + (Number(x.valor) || 0), 0), tS = lista.filter(x => x.tipo === 'saida').reduce((a,x) => a + (Number(x.valor) || 0), 0);
   const MESES_C = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
@@ -17847,6 +17851,7 @@ window.simDocAcao = async (d, acao) => {
   else { baixar(); toast('PDF baixado'); }
   setTimeout(() => URL.revokeObjectURL(url), 120000);
 };
+window.renderSimHist = () => renderSimHist(); /* v321: usado pela busca de simulações salvas */
 function renderSimHist(){
   const el = $('simHist'); if (!el) return;
   const q = norm($('simHistBusca')?.value || ''), dq = soDig($('simHistBusca')?.value || '');
