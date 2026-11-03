@@ -7660,7 +7660,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 323;
+const APP_VERSAO = 324;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8245,6 +8245,8 @@ window.pontosDoMes = pontosDoMes;
 const rkNovos = () => Array.isArray(appCfg.rankingsNovos) ? appCfg.rankingsNovos : [];
 /* v323: ranking do mês automático (igual à Arrancada: pontos, visitas, aprovações, vendas, ligações, presenças) e os rankings de meses passados ficam guardados como encerrados */
 const rkAutoMes = () => { const m = mesAtual(); return { id:'auto' + m.replace('-', ''), nome:'RANKING DE ' + nomeMes(m).split(' de ')[0].toUpperCase(), inicio:m + '-01', fim:fimDoMes(m), auto:true }; };
+/* v324: o ranking automático do mês usa exatamente os pontos do mês (os mesmos da aba Pontos; mês fechado = resultado guardado) */
+const rkLinhas = r => r.auto ? linhasDoMes(r.inicio.slice(0, 7)) : pontosEntre(r.inicio, r.fim || hojeISO(), r.inicio);
 const rkMesesPassados = () => { const l = []; for (let m = '2026-10'; m < mesAtual(); m = (() => { const [a, b] = m.split('-').map(Number); return b === 12 ? `${a + 1}-01` : `${a}-${String(b + 1).padStart(2, '0')}`; })())
   l.push({ id:'auto' + m.replace('-', ''), nome:'RANKING DE ' + nomeMes(m).split(' de ')[0].toUpperCase() + ' (MÊS COMPLETO)', inicio:m + '-01', fim:fimDoMes(m), auto:true, encerrado:true }); return l; };
 const rkTodos = () => { const m0 = mesAtual() + '-01';
@@ -8276,7 +8278,7 @@ function renderRankingNovo(id){
   const r = rkTodos().find(x => x.id === id);
   if (!r || (r.encerrado && !souGerente())) { rankTipo = 'pontos'; render(); return; }
   const h = hojeISO(), fim = r.fim && r.fim < h ? r.fim : h, emCurso = !r.encerrado && (!r.fim || r.fim >= h) && r.inicio <= h;
-  const todos = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h, r.inicio);
+  const todos = r.inicio > h ? [] : rkLinhas(r);
   const eqs = listaEquipes().map(e => ({ e, n:todos.filter(x => x.equipe === e.id).reduce((a, x) => a + x.pontos, 0) })), max = Math.max(0, ...eqs.map(x => x.n));
   $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n === max ? 'lead' : ''}"><div class="ti">${esc(x.e.icone || '')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n === max ? ' · liderando' : ''}</span></div>`).join('');
   const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
@@ -8457,6 +8459,7 @@ window.verPontosDe = i => {
 };
 // v135: a gerência ajusta presença / ausência de cada dia já passado (ex.: dias antes de começarem a marcar presença)
 function htmlDiasPres(x){
+  if (['_pres','_chk','_abo'].some(k => x[k] && typeof x[k].has !== 'function')) return ''; /* v324: linha de mês fechado (guardada) não tem os dias */
   const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = String(P.ausenciaDesde || '2026-10-07');
   const p = pessoasRk().find(y => y.uid === x.uid) || {}, ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
   const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && iso(d) >= ini && !feriados(d.getFullYear()).has(iso(d))) L.push(iso(d)); } /* v322: feriado fora da lista */
@@ -9564,7 +9567,7 @@ function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate
 // v200: ranking novo na TV (mesmas colunas, contando só a partir da data de início)
 function dadosTvRkNovo(id){
   const r = rkTodos().find(x => x.id === id); if (!r) return null;
-  const h = hojeISO(), l = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h, r.inicio);
+  const h = hojeISO(), l = r.inicio > h ? [] : rkLinhas(r);
   const col = (k, t, sub, c, f) => ({ k, t, s:sub, c, l:l.map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:f(x) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v) });
   const cols = [col('pts', 'Pontos', 'desde ' + dataBR(r.inicio).slice(0, 5), '#f28c38', x => x.pontos),
     col('vis', 'Visitas', 'realizadas', '#38bdf8', x => x.realizadas || 0), col('apr', 'Aprovações', 'cartas aprovadas', '#a78bfa', x => x.cartas || 0),
