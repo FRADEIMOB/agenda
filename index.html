@@ -7655,7 +7655,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 321;
+const APP_VERSAO = 322;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8071,7 +8071,7 @@ const DEGRAUS_GERAL = { vPendente:[['2000-01-01', 0]], vConfirmada:[['2000-01-01
 // v298: regra nova das documentações (cada ficha mandada conta no dia; na SDR resumo e conversa são um só, vale o maior do dia)
 // GUARDADA para a atualização do próximo mês, a pedido do Allan (a pontuação das SDRs caiu demais). Vazio = desligada, vale a regra antiga.
 // Para ligar: coloque a data de início, ex.: '2026-11-01' (precisa do carteiro v262).
-const DOCS_NOVA_DESDE = '';
+const DOCS_NOVA_DESDE = '2026-11-01'; /* v322: regra nova de documentações valendo a partir de novembro */
 const docsNova = d => !!DOCS_NOVA_DESDE && String(d || '') >= DOCS_NOVA_DESDE;
 const DEGRAUS_SDR = { ligacao:[['2026-10-27', 0], ['2026-11-01', null]], docSdr:[['2026-10-27', 10], ['2026-11-01', null]], docGeral:[['2026-10-27', 10], ['2026-11-01', null]] }; // v271: só na semana 27 a 31/10 (Allan ainda decide novembro); null = volta ao valor da tela de Pontuação // v271: toda doc da SDR (resumo, planilha, WhatsApp) vale 10 a partir de 27/10 // v262: começa em 27/10 (pedido do Allan)
 // v266: visita da SDR: vale 70 se for realizada, mas só as visitas MARCADAS a partir de 27/10 (as marcadas antes ficam com a pontuação antiga)
@@ -8212,7 +8212,7 @@ function pontosDoMesBase(m, val, corte){
   // ausência: dia de trabalho (já passado) sem presença no escritório nem externa
   if (n('ausencia')) {
     const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO(); // v198: ausência segue só a data dela (as antigas continuam valendo)
-    const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay())) uteis.push(k); }
+    const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay()) && !feriados(d.getFullYear()).has(k)) uteis.push(k); } /* v322: feriado não conta ausência */
     const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
       const ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
@@ -8448,7 +8448,7 @@ window.verPontosDe = i => {
 function htmlDiasPres(x){
   const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = String(P.ausenciaDesde || '2026-10-07');
   const p = pessoasRk().find(y => y.uid === x.uid) || {}, ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
-  const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && iso(d) >= ini) L.push(iso(d)); }
+  const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && iso(d) >= ini && !feriados(d.getFullYear()).has(iso(d))) L.push(iso(d)); } /* v322: feriado fora da lista */
   if (!L.length) return '';
   const pv = Number(P.presenca) || 0, av = Number(P.ausencia) || 0, sn = v => (v > 0 ? '+' : '') + v;
   const st = d => { const mk = presencas[d]?.marcados?.[x.uid]?.status || '';
