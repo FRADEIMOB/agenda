@@ -1347,6 +1347,7 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
   .au-card .au-capa .au-play{width:40px;height:40px}.au-card .au-capa .au-play::after{left:16px;top:12px;border-left-width:12px;border-top-width:8px;border-bottom-width:8px}
   .au-trilha h3{font-size:16px}
 }
+.rkn-ant{border:1px solid var(--border);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600;background:var(--card);color:var(--text);max-width:260px}
 .au-fora{display:block;text-align:center;margin:0 0 10px;padding:10px;border:1px solid var(--border);border-radius:12px;font-weight:700;font-size:14px;color:var(--accent);text-decoration:none;background:var(--card)}
 .au-mov{display:flex;gap:6px;margin-top:8px}.au-mov span{border:1px solid var(--border);border-radius:8px;padding:2px 10px;font-size:12px;cursor:pointer;background:var(--card)}.au-mov span:hover{background:var(--bg)}
 /* v309: corretor em treinamento vê só Aulas (e Configurações para sair) */
@@ -6504,11 +6505,15 @@ function agrupaRanking(rows){
   return [...g.values()].sort((a,b) => b.total-a.total || b.real-a.real || b.conf-a.conf || a.nome.localeCompare(b.nome,'pt-BR'));
 }
 function renderRanking(){
-  preencherSel('rPeriodo', '<option value="mes">Este mês</option><option value="passado">Mês passado</option><option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option><option value="todas">Todo o período</option>', rankPeriodo);
+  if (!souGerente() && (['passado','todas'].includes(rankPeriodo) || String(rankPeriodo).startsWith('m:'))) rankPeriodo = 'mes'; /* v323: meses anteriores só para a gerência */
+  preencherSel('rPeriodo', '<option value="mes">Este mês</option>' + (souGerente() ? '<option value="passado">Mês passado</option>' : '') + '<option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option>' + (souGerente() ? '<option value="todas">Todo o período</option>' : ''), rankPeriodo);
+  if (!souGerente()) { [...$('rPeriodo').options].filter(o => o.value.startsWith('m:')).forEach(o => o.remove()); if (String(rankPeriodo).startsWith('m:')) { rankPeriodo = 'mes'; $('rPeriodo').value = 'mes'; } }
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-  const _rkN = rkNovos().filter(x => !x.encerrado || rankTipo === 'rk:' + x.id).map(x => ['rk:' + x.id, x.nome]);
+  const _rkN = rkTodos().filter(x => !x.encerrado || (souGerente() && rankTipo === 'rk:' + x.id)).map(x => ['rk:' + x.id, x.nome]);
+  const _rkAnt = souGerente() ? rkTodos().filter(x => x.encerrado).sort((a, b) => String(b.fim || b.inicio).localeCompare(String(a.fim || a.inicio)) || (a.auto ? -1 : 1)) : []; /* v323: rankings anteriores, só gerência */
   $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'], ..._rkN, ['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}${k.startsWith('rk:') ? ' rkn-tab' : ''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   if (souDono()) $('segRank').insertAdjacentHTML('beforeend', `<button class="rkn-novo" onclick="abrirRkNovo()">+ Novo ranking</button>`);
+  if (_rkAnt.length) $('segRank').insertAdjacentHTML('beforeend', `<select class="rkn-ant" aria-label="Rankings anteriores" onchange="if(this.value){rankTipo=this.value;render()}"><option value="">Rankings anteriores</option>${_rkAnt.map(x => `<option value="rk:${x.id}" ${rankTipo === 'rk:' + x.id ? 'selected' : ''}>${esc(x.nome)}</option>`).join('')}</select>`);
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
   $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos' || rankTipo.startsWith('rk:')); if ($('podio')) $('podio').innerHTML = '';
   document.getElementById('paneRanking')?.classList.toggle('rk-hoje', rankTipo === 'hoje');
@@ -7655,7 +7660,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 322;
+const APP_VERSAO = 323;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8238,6 +8243,12 @@ window.pontosDoMes = pontosDoMes;
 // e o ranking do mês continua somando tudo, como sempre
 // =====================================================================
 const rkNovos = () => Array.isArray(appCfg.rankingsNovos) ? appCfg.rankingsNovos : [];
+/* v323: ranking do mês automático (igual à Arrancada: pontos, visitas, aprovações, vendas, ligações, presenças) e os rankings de meses passados ficam guardados como encerrados */
+const rkAutoMes = () => { const m = mesAtual(); return { id:'auto' + m.replace('-', ''), nome:'RANKING DE ' + nomeMes(m).split(' de ')[0].toUpperCase(), inicio:m + '-01', fim:fimDoMes(m), auto:true }; };
+const rkMesesPassados = () => { const l = []; for (let m = '2026-10'; m < mesAtual(); m = (() => { const [a, b] = m.split('-').map(Number); return b === 12 ? `${a + 1}-01` : `${a}-${String(b + 1).padStart(2, '0')}`; })())
+  l.push({ id:'auto' + m.replace('-', ''), nome:'RANKING DE ' + nomeMes(m).split(' de ')[0].toUpperCase() + ' (MÊS COMPLETO)', inicio:m + '-01', fim:fimDoMes(m), auto:true, encerrado:true }); return l; };
+const rkTodos = () => { const m0 = mesAtual() + '-01';
+  return [rkAutoMes(), ...rkMesesPassados(), ...rkNovos().map(r => { if (r.encerrado || !r.inicio) return r; const f = r.fim || fimDoMes(String(r.inicio).slice(0, 7)); return f < m0 ? { ...r, fim:f, encerrado:true } : r; })]; };
 // v230: gerente com equipe entra no ranking (só os pontos que ele faz, como as ligações); o gestor e o CEO ficam de fora
 function gerenteDeEquipeUid(uid){ if (!uid) return false; const p = (perfisTodos || []).find(x => x.uid === uid) || (pessoasRk() || []).find(x => x.uid === uid);
   const gestor = (!!instalacao && instalacao.gerenteUid === uid) || String(p?.email || '').toLowerCase() === EMAIL_DONO;
@@ -8262,8 +8273,8 @@ function pontosEntre0(de, ate){
 }
 window.pontosEntre = pontosEntre;
 function renderRankingNovo(id){
-  const r = rkNovos().find(x => x.id === id);
-  if (!r) { rankTipo = 'pontos'; render(); return; }
+  const r = rkTodos().find(x => x.id === id);
+  if (!r || (r.encerrado && !souGerente())) { rankTipo = 'pontos'; render(); return; }
   const h = hojeISO(), fim = r.fim && r.fim < h ? r.fim : h, emCurso = !r.encerrado && (!r.fim || r.fim >= h) && r.inicio <= h;
   const todos = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h, r.inicio);
   const eqs = listaEquipes().map(e => ({ e, n:todos.filter(x => x.equipe === e.id).reduce((a, x) => a + x.pontos, 0) })), max = Math.max(0, ...eqs.map(x => x.n));
@@ -8271,7 +8282,7 @@ function renderRankingNovo(id){
   const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
   $('rankTit').textContent = r.nome;
   const quando = `${dataBR(r.inicio).slice(0, 5)} até ${r.fim ? dataBR(r.fim).slice(0, 5) : 'hoje'}`;
-  $('janelaRank').innerHTML = `<div class="rkn-info"><div><b>${esc(r.nome)}</b><small>${r.inicio > h ? `Começa em ${dataBR(r.inicio)}. Até lá, todo mundo está zerado.` : `Conta os pontos de ${quando}${emCurso ? ', em andamento' : r.encerrado ? ', encerrado' : ''}. Todo mundo começou zerado; o ranking do mês continua somando tudo.`}</small></div><div class="rkn-bts">${podeGerir() ? `<button class="btn btn-sm btn-primary" onclick="tvModo='ap:${r.id}';setView('tvrank')">Apresentar na TV</button>` : ''}${souDono() ? `<button class="btn btn-sm btn-ghost" onclick="abrirApelidos()">Nomes na TV</button><button class="btn btn-sm btn-ghost" onclick="abrirRkNovo('${r.id}')">Editar</button>${!r.encerrado ? `<button class="btn btn-sm btn-ghost" onclick="encerrarRkNovo('${r.id}')">Encerrar</button>` : ''}` : ''}</div></div>`;
+  $('janelaRank').innerHTML = `<div class="rkn-info"><div><b>${esc(r.nome)}</b><small>${r.inicio > h ? `Começa em ${dataBR(r.inicio)}. Até lá, todo mundo está zerado.` : `Conta os pontos de ${quando}${emCurso ? ', em andamento' : r.encerrado ? ', encerrado' : ''}. Todo mundo começou zerado; o ranking do mês continua somando tudo.`}</small></div><div class="rkn-bts">${podeGerir() ? `<button class="btn btn-sm btn-primary" onclick="tvModo='ap:${r.id}';setView('tvrank')">Apresentar na TV</button>` : ''}${souDono() ? `<button class="btn btn-sm btn-ghost" onclick="abrirApelidos()">Nomes na TV</button>${r.auto ? '' : `<button class="btn btn-sm btn-ghost" onclick="abrirRkNovo('${r.id}')">Editar</button>`}${!r.encerrado && !r.auto ? `<button class="btn btn-sm btn-ghost" onclick="encerrarRkNovo('${r.id}')">Encerrar</button>` : ''}` : ''}</div></div>`;
   $('rankNota').textContent = 'Os pontos valem o mesmo do ranking do mês. Toque no nome para ver de onde vêm os pontos.';
   if (!lista.length) { $('podio').innerHTML = ''; $('rankLista').innerHTML = vazio(r.inicio > h ? 'Ainda não começou' : 'Ninguém pontuou ainda', r.inicio > h ? `O ranking começa em ${dataBR(r.inicio)}.` : 'Os pontos aparecem aqui assim que alguém pontuar a partir da data de início.'); return; }
   const pos = posicoes(lista), top = lista.slice(0, 3);
@@ -8285,7 +8296,7 @@ window.abrirRkNovo = id => {
   if (!souDono()) return; const r = id ? rkNovos().find(x => x.id === id) : null; rkNovoId = r ? r.id : null;
   $('rknTit').textContent = r ? 'Editar ranking' : 'Novo ranking';
   $('rknNome').value = r ? r.nome : ''; $('rknIni').value = r ? r.inicio : hojeISO(); $('rknFim').value = r ? (r.fim || '') : '';
-  const enc = rkNovos().filter(x => x.encerrado);
+  const enc = rkTodos().filter(x => x.encerrado && !x.auto);
   $('rknEnc').innerHTML = enc.length ? `<h4 class="cart-h" style="margin-top:16px">Rankings encerrados</h4>${enc.slice().reverse().map(x => `<div class="et-h"><span><b>${esc(x.nome)}</b><small style="display:block">${dataBR(x.inicio).slice(0, 5)} a ${dataBR(x.fim || x.encerradoEm || x.inicio).slice(0, 5)}${x.vencedor ? ' · 1º ' + esc(x.vencedor) : ''}</small></span><button class="btn btn-sm btn-ghost" onclick="fechar('rkNovoModal');rankTipo='rk:${x.id}';render()">Ver</button></div>`).join('')}` : '';
   abrir('rkNovoModal'); setTimeout(() => $('rknNome').focus(), 80);
 };
@@ -8547,7 +8558,7 @@ function renderRelGestao(){
   if (!podeGerir()) { $('relSub').textContent = 'Como anda a sua produtividade.'; return; }
   $('relSub').textContent = 'Pontos, origem dos clientes, motivos da perda e a sua agenda pessoal.';
   // pontos
-  const meses = [...new Set([mesAtual(), ...Object.keys(pontosMeses)])].sort().reverse();
+  const meses = souGerente() ? [...new Set([mesAtual(), ...Object.keys(pontosMeses)])].sort().reverse() : [mesAtual()]; /* v323: meses anteriores só para a gerência */
   if (!ptMesSel || !meses.includes(ptMesSel)) window.ptMesSel = mesAtual();
   $('ptMes').innerHTML = meses.map(m => `<option value="${m}" ${m===ptMesSel?'selected':''}>${nomeMes(m)}${m===mesAtual()?' · em andamento':''}</option>`).join('');
   let linhas = linhasDoMes(ptMesSel).filter(x => relSoCorretor(x.uid, x.nome));
@@ -9552,7 +9563,7 @@ window.salvarEquipeAnjo = async () => {
 function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate(d.getDate() + (dow === 0 ? -1 : 6 - dow)); return iso(d); }
 // v200: ranking novo na TV (mesmas colunas, contando só a partir da data de início)
 function dadosTvRkNovo(id){
-  const r = rkNovos().find(x => x.id === id); if (!r) return null;
+  const r = rkTodos().find(x => x.id === id); if (!r) return null;
   const h = hojeISO(), l = r.inicio > h ? [] : pontosEntre(r.inicio, r.fim || h, r.inicio);
   const col = (k, t, sub, c, f) => ({ k, t, s:sub, c, l:l.map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:f(x) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v) });
   const cols = [col('pts', 'Pontos', 'desde ' + dataBR(r.inicio).slice(0, 5), '#f28c38', x => x.pontos),
@@ -9746,8 +9757,8 @@ function mostrarEventoTv(){
 function renderTvRank(){
   const el = $('tvRank'); if (!el) return;
   let d = dadosTvRank(), agora = new Date();
-  if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'mes';
-  const rkTv = rkNovos().filter(x => !x.encerrado), modoRk = String(window.tvModo).match(/^(rk|ap|on):(.+)$/), rkSel = modoRk ? dadosTvRkNovo(modoRk[2]) : null, ap = !!(modoRk && /^(ap|on)$/.test(modoRk[1]));
+  if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'rk:' + rkAutoMes().id; /* v323 */
+  const rkTv = rkTodos().filter(x => !x.encerrado), modoRk = String(window.tvModo).match(/^(rk|ap|on):(.+)$/), rkSel = modoRk ? dadosTvRkNovo(modoRk[2]) : null, ap = !!(modoRk && /^(ap|on)$/.test(modoRk[1]));
   if (modoRk && !rkSel) window.tvModo = 'mes';
   if (rkSel) d = { ...d, eqs:rkSel.eqs };
   const fe = window.tvModo === 'feirao', mt = window.tvModo === 'metas', cols = rkSel ? rkSel.cols : fe ? d.feirao : d.cols;
