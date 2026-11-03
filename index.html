@@ -5896,6 +5896,30 @@ function nomeBonito(n){ const t = String(n || '').replace(/\s+/g, ' ').trim(); i
   return t.toLocaleLowerCase('pt-BR').split(' ').map((w, i) => i > 0 && PART_NOME.has(w) ? w : w.split('-').map(x => x.charAt(0).toLocaleUpperCase('pt-BR') + x.slice(1)).join('-')).join(' '); }
 window.nomeBonito = nomeBonito;
 let _nomesCorrigidos = false;
+/* v325: corretor bloqueado (ou inativo) sai sozinho da equipe de todos os anjos e das visitas que os anjos acompanham.
+   Anjo bloqueado também fica sem ninguém na equipe. Roda na gerência sempre que a lista de perfis muda. */
+let _limpAnjoRodando = false;
+async function limparAnjosBloqueados(){
+  if (_limpAnjoRodando || !souGerente() || souCeo() || !perfisTodos.length) return;
+  const fora = p => !!p && ['bloqueado','inativo'].includes(p.status);
+  const porUid = new Map(perfisTodos.map(p => [p.uid, p]));
+  const anjos = perfisTodos.filter(p => p.papel === 'anjo' && Array.isArray(p.membros) && p.membros.length);
+  const mudar = anjos.map(a => { const manter = fora(a) ? [] : a.membros.filter(u => !fora(porUid.get(u)));
+    return manter.length === a.membros.length ? null : { a, manter }; }).filter(Boolean);
+  const bloq = new Set(perfisTodos.filter(fora).map(p => p.uid)), hj = hojeISO();
+  const vis = (typeof visitas !== 'undefined' ? visitas : []).filter(v => v.anjoUid && (bloq.has(v.corretorUid) || bloq.has(v.anjoUid)) && String(v.date || '') >= hj);
+  if (!mudar.length && !vis.length) return;
+  _limpAnjoRodando = true;
+  try {
+    const b = writeBatch(db);
+    mudar.forEach(({ a, manter }) => b.set(doc(db,'perfis',a.uid), { membros:manter, membrosNomes:manter.map(u => porUid.get(u)?._nomeOrig || porUid.get(u)?.nome || '') }, { merge:true }));
+    vis.slice(0, 300).forEach(v => b.set(doc(db,'visitas',v.id), { anjoUid:'', anjoNome:'' }, { merge:true }));
+    await b.commit();
+    const nomes = [...bloq].map(u => primeiro(porUid.get(u)?.nome || '')).filter(Boolean);
+    if (mudar.length) toast(`Bloqueado sai da equipe do anjo: ${nomes.slice(0, 4).join(', ')}${nomes.length > 4 ? '…' : ''}`);
+  } catch(e) { console.warn('limpar anjos', e.message); }
+  finally { _limpAnjoRodando = false; }
+}
 async function corrigirNomesNoBanco(){
   // a gerência grava os nomes já padronizados no cadastro (uma vez por sessão); quem não pode, só vê padronizado
   if (_nomesCorrigidos || !souGerente() || souCeo()) return; _nomesCorrigidos = true;
@@ -6228,7 +6252,7 @@ function configurarAcesso(){
   // v276: o anjo lê o telefone dos corretores que ele acompanha (para a mensagem pronta no Acompanhamento)
   window._telAnjo = {};
   if (souAnjo()) membrosAnjo().slice(0, 30).forEach(u => subsPapel.push(onSnapshot(doc(db,'perfis',u), s => { if (s.exists()) { window._telAnjo[u] = s.data().telefone || ''; render(); } }, () => {})));
-  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => { const x = d.data(); return { uid:d.id, ...x, nome:nomeBonito(x.nome), _nomeOrig:x.nome || '' }; }); setTimeout(corrigirNomesNoBanco, 3000); perfisLista = perfisTodos.filter(p => !['correspondente','adm','marketing'].includes(p.papel)); render(); sincVendasRanking(); sincPresencaRanking(); sincPessoasRanking(); }, erro));
+  if (qp) subsPapel.push(onSnapshot(qp, s => { perfisTodos = s.docs.map(d => { const x = d.data(); return { uid:d.id, ...x, nome:nomeBonito(x.nome), _nomeOrig:x.nome || '' }; }); setTimeout(corrigirNomesNoBanco, 3000); setTimeout(limparAnjosBloqueados, 2500); perfisLista = perfisTodos.filter(p => !['correspondente','adm','marketing'].includes(p.papel)); render(); sincVendasRanking(); sincPresencaRanking(); sincPessoasRanking(); }, erro));
   rkPessoas = []; subsPapel.push(onSnapshot(collection(db,'ranking_pessoas'), s => { rkPessoas = s.docs.map(d => { const x = d.data(); return { uid:d.id, ...x, nome:nomeBonito(x.nome), _nomeRaw:x.nome || '' }; }); window._rkpOk = true;
     if (souAdm() || souMkt()) { perfisTodos = rkPessoas.map(x => ({ ...x })); perfisLista = perfisTodos.filter(p => ['corretor','coordenador','sdr','anjo','gerente'].includes(p.papel)); } render(); sincPessoasRanking(); }, e => console.warn('ranking_pessoas', e.code || e.message)));
 }
@@ -7660,7 +7684,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 324;
+const APP_VERSAO = 326;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9629,7 +9653,7 @@ function htmlTvApresenta(D, modo){
   const coluna = (cls, tit, sub, l, dia, extra) => `<section class="tvm-col ${cls}"><header><h2>${tit}</h2>${extra || ''}<span class="tva-sub">${sub}</span></header><div class="tva-topo">${podio(l)}${equipes(l)}</div>${tabela(l, dia)}</section>`;
   const nomeDia = ehOntem ? (new Date(ont + 'T12:00:00').getDay() === 6 && ont !== iso(new Date(Date.parse(h + 'T12:00:00') - 864e5)) ? 'Sábado' : 'Ontem') : 'Hoje';
   if (ehOntem) return `<div class="tvm tva-ap tvm-max tvm-so">${coluna('', nomeDia, `Pontos de ${dataLonga(ont)} na ${esc(r.nome)}`, lh, ont)}</div>`;
-  return `<div class="tvm tva-ap">${coluna('', nomeDia, 'Pontos de hoje na ' + esc(r.nome), lh, true)}${coluna('sem', 'Semana', `de ${dataBR(deSem).slice(0, 5)} até hoje · ${esc(r.nome)}${dias !== null ? ` · ${dias === 0 ? 'termina hoje' : 'faltam ' + dias + ' dia' + (dias === 1 ? '' : 's')}` : ''}`, lt, false)}</div>`;
+  return `<div class="tvm tva-ap">${coluna('', nomeDia, 'Pontos de hoje · ' + esc(r.nome), lh, true)}${coluna('sem', 'Semana', `de ${dataBR(deSem).slice(0, 5)} até hoje · ${esc(r.nome)}${dias !== null ? ` · ${dias === 0 ? 'termina hoje' : 'faltam ' + dias + ' dia' + (dias === 1 ? '' : 's')}` : ''}`, lt, false)}</div>`;
 }
 function dadosTvRank(){
   const m = mesAtual(), de = m + '-01', ate = hojeISO(), noM = d => !!d && d >= de && d <= ate;
