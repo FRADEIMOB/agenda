@@ -7706,7 +7706,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 328;
+const APP_VERSAO = 331;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10422,7 +10422,7 @@ function prepararImpWhats(lista, antes){
         alvo.forEach(x => { const it = itens.get(x.id) || { id:x.id };
           if (a.restricoes && x.restricoes !== a.restricoes && (!it.restricoes || (a.restricoesEm || '') > (it.restricoesEm || ''))) { it.restricoes = a.restricoes; it.restricoesEm = a.restricoesEm || ''; }
           // v294: cada ficha mandada na conversa também vira doc do cliente que já está na planilha
-          if (DOCS_NOVA_DESDE) { const env = [...new Set([...(it.envios || []), ...(a.envios || [])])].sort(); if (env.join() !== (x.envios || []).slice().sort().join()) it.envios = env.slice(-60); }
+          if (DOCS_NOVA_DESDE) { const env = [...new Set([...(it.envios || x.envios || []), ...(a.envios || [])])].sort(); /* v330: soma às fichas que o cliente já tinha */ if (env.join() !== (x.envios || []).slice().sort().join()) it.envios = env.slice(-60); }
           if (it.restricoes || it.envios) itens.set(x.id, it); }); });
       window._impRestrPlan = [...itens.values()]; }
     const ap = novos.filter(a => infoStatus(a.status).g === 'aprovado').length;
@@ -10461,10 +10461,10 @@ window.importarReservas = async () => {
   } catch(e) { toast('Erro: ' + e.message + ' (publicou as regras novas do Firebase?)'); }
   btn.disabled = false;
 };
-window.importarDocsWhats = async () => {
+window.importarDocsWhats = async (auto) => {
   const restr = window._impRestrPlan || [];
   if (!impWhats.length && !restr.length) return;
-  if (impWhats.length && !confirm(`Colocar ${impWhats.length} docs do WhatsApp no app? Eles passam a contar nas avaliações, no Desempenho, no Painel e nos relatórios.`)) return;
+  if (auto !== true && impWhats.length && !confirm(`Colocar ${impWhats.length} docs do WhatsApp no app? Eles passam a contar nas avaliações, no Desempenho, no Painel e nos relatórios.`)) return;
   const btn = $(IW.bt); btn.disabled = true; btn.textContent = 'Importando…';
   try {
     let tot = 0, totR = 0;
@@ -10479,7 +10479,7 @@ window.importarDocsWhats = async () => {
       if (!r?.ok) throw new Error(r?.erro || 'sem resposta');
       tot += r.recebidas || 0;
     }
-    toast(`Pronto ✓ ${tot} docs do WhatsApp no app${totR ? ` e ${totR} restrições` : ''}`); $(IW.info).textContent = `✓ ${tot} docs importados${totR ? ` · ${totR} clientes da planilha com o resumo das restrições` : ''}. Os pontos de documentação entram no ranking em seguida.`; btn.classList.add('hide'); impWhats = [];
+    if (auto === true) { if (tot || totR) toast(`Grupos de crédito: ${tot + totR} cliente${tot + totR === 1 ? '' : 's'} atualizado${tot + totR === 1 ? '' : 's'} ✓`); } else toast(`Pronto ✓ ${tot} docs do WhatsApp no app${totR ? ` e ${totR} restrições` : ''}`); $(IW.info).textContent = `✓ ${tot} docs importados${totR ? ` · ${totR} clientes da planilha com o resumo das restrições` : ''}. Os pontos de documentação entram no ranking em seguida.`; btn.classList.add('hide'); impWhats = [];
     [8e3, 30e3].forEach(ms => setTimeout(() => { try { sincMetasDia(true); } catch(e) {} }, ms));
   } catch(e) { toast('Erro: ' + e.message); }
   btn.disabled = false;
@@ -11311,8 +11311,63 @@ window.prefNotif = async (k, ligado) => {
 // ============ EXTRATO DO CORRETOR · v76 ============
 // =====================================================================
 let extratoMeu = [], extratoTodos = {};
+/* v330: grupos de crédito em tempo real. O robô do chip de teste lê os grupos com "crédito" no nome e guarda as mensagens em zap_credito;
+   o app do gestor (aberto) monta a conversa igual à exportada e passa pela mesma leitura do "Importar conversa do WhatsApp", sozinho. */
+let zapCred = [], _zcT = null;
+/* v330: resumo para o assistente do WhatsApp do gestor (ranking e números do mês), gravado pelo app do gestor a cada 10 minutos */
+async function gravarResumoRobo(){
+  if (!souDono() || souCeo() || !perfil) return;
+  try {
+    const m = mesAtual(), lst = pontosDoMes(m), h = hojeISO(), N = numerosPeriodo(m + '-01', h);
+    const eqs = listaEquipes().map(e => ({ equipe:e.nome, pontos:lst.filter(x => x.equipe === e.id).reduce((a, x) => a + (x.pontos || 0), 0) }));
+    await setDoc(doc(db,'robo_resumo','atual'), { em:Date.now(), mes:m,
+      ranking_pontos_do_mes:lst.slice(0, 25).map((x, i) => ({ posicao:i + 1, nome:x.nome, equipe:eqNome(x.equipe), pontos:x.pontos || 0, visitas_realizadas:x.realizadas || 0, cartas:x.cartas || 0, vendas:x.vendas || 0, docs:(x.docs || 0) + (x.docsSdr || 0), ligacoes:x.ligacoes || 0 })),
+      pontos_por_equipe:eqs,
+      painel_do_mes:{ leads:N.leads, documentacoes:N.docs, aprovacoes:N.unif.length, vendas:N.vendas, valor_vendido:N.valorVendido, visitas:N.visitas, visitas_realizadas:N.realizadas } });
+  } catch(e) { console.warn('resumo robô', e.message); }
+}
+function assinarZapCredito(){
+  zapCred = []; if (!souDono() || souCeo()) return;
+  if (!window._resRoboT) { window._resRoboT = setInterval(gravarResumoRobo, 10 * 60e3); setTimeout(gravarResumoRobo, 60e3); }
+  subsPapel.push(onSnapshot(query(collection(db,'zap_credito'), where('em','>=', Date.parse((DOCS_NOVA_DESDE || '2026-11-01') + 'T00:00:00'))), s => {
+    zapCred = s.docs.map(d => ({ id:d.id, ...d.data() })); clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 20000);
+  }, e => console.warn('zap_credito', e.code || e.message)));
+}
+async function processarZapCredito(){
+  if (!souDono() || souCeo() || !zapCred.length || window._zcRodando) return;
+  if (!avaliacoesTodas.length) { clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 20000); return; }
+  window._zcRodando = true;
+  try {
+    const p2 = n => String(n).padStart(2, '0'), porG = new Map();
+    // quem já mandou um "RETORNO DA ANÁLISE" é da Prime: todas as mensagens desse número contam como resposta da Prime (não como ficha)
+    const numsPrime = new Set(zapCred.filter(m => m.numero && /retorno da an[aá]lise/i.test(m.texto || '')).map(m => m.numero));
+    zapCred.slice().sort((a, b) => (a.em || 0) - (b.em || 0)).forEach(m => {
+      const g = porG.get(m.grupo) || porG.set(m.grupo, { nome:m.nome || '', linhas:[] }).get(m.grupo); if (m.nome) g.nome = m.nome;
+      const d = new Date(m.em || Date.now()), prime = /prime|david soares/i.test(m.autor || '') || /retorno da an[aá]lise/i.test(m.texto || '') || (m.numero && numsPrime.has(m.numero));
+      const autor = ((prime ? 'PRIME ' : '') + String(m.autor || m.numero || 'Contato')).replace(/[:\n]/g, ' ').slice(0, 55);
+      g.linhas.push(`${p2(d.getDate())}/${p2(d.getMonth() + 1)}/${d.getFullYear()} ${p2(d.getHours())}:${p2(d.getMinutes())} - ${autor}: ${String(m.texto || '').replace(/\r/g, '')}`);
+    });
+    const grupos = [...porG.values()].map(g => ({ nome:g.nome, texto:g.linhas.join('\n') })).filter(g => g.nome && !['SDR','RESERVAS','APRESENTACAO','FRADE','WHATSAPP'].includes(PC.abaDoNome(g.nome)));
+    if (!grupos.length) return;
+    // junta com o que o cliente já tinha (fichas de outros meses, status final, primeira data): o robô só vê de novembro em diante
+    const porId = new Map(avaliacoesTodas.filter(a => a.origem === 'whatsapp').map(a => [a.id, a])), fraco = st => ['', 'AVALIAÇÃO', 'VERIFICAR CPF'].includes(String(st || ''));
+    const lista = PC.converter(grupos).map(n => { const o = porId.get(n.id); if (!o) return n;
+      const velho = !!o.data && o.data <= (n.data || '9999');
+      return { ...n, envios:[...new Set([...(o.envios || []), ...(n.envios || [])])].sort().slice(-60), data:velho ? o.data : n.data, aba:velho ? (o.aba || n.aba) : n.aba,
+        status:fraco(n.status) ? (o.status || n.status) : n.status, aprovadoEm:o.aprovadoEm || n.aprovadoEm || '', nome:o.nome || n.nome, cpf:o.cpf || n.cpf, telefone:o.telefone || n.telefone, renda:o.renda || n.renda,
+        restricoes:n.restricoes || o.restricoes || '', restricoesEm:n.restricoes ? (n.restricoesEm || '') : (o.restricoesEm || '') }; })
+      .filter(n => { const o = porId.get(n.id); if (!o) return true; const k = x => JSON.stringify([x.data, x.aba, x.status, x.aprovadoEm, (x.envios || []).slice().sort(), x.restricoes || '']); return k(n) !== k(o); });
+    const assin = JSON.stringify(lista.map(x => [x.id, x.status, (x.envios || []).length, x.restricoes ? 1 : 0]));
+    if (!lista.length || assin === window._zcUlt) return;
+    window._zcUlt = assin; window._icwDonos = [];
+    IW.info = 'impWhatsInfo'; IW.bt = 'btnImpWhats';
+    prepararImpWhats(lista, '');
+    await importarDocsWhats(true);
+  } catch(e) { console.warn('grupos de crédito', e.message); }
+  finally { window._zcRodando = false; }
+}
 function assinarExtrato(){
-  extratoMeu = []; extratoTodos = {};
+  extratoMeu = []; extratoTodos = {}; try { assinarZapCredito(); } catch(e) {}
   if (souGerente()) subsPapel.push(onSnapshot(collection(db,'extrato'), s => { extratoTodos = {}; s.docs.forEach(d => extratoTodos[d.id] = d.data()); sincExtrato(); }, e => console.warn('extrato', e.code || e.message)));
   else if (['corretor','coordenador','anjo'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'extrato'), where('corretorUids','array-contains',uidAtual)), s => { extratoMeu = s.docs.map(d => ({ id:d.id, ...d.data() })); if (view === 'comissoes') render(); }, e => console.warn('extrato', e.code || e.message)));
 }
@@ -11323,7 +11378,9 @@ function sincExtrato(){
   clearTimeout(_extT); _extT = setTimeout(async () => {
     const b = writeBatch(db); let n = 0;
     [...reservasTodas, ...vendasFin().filter(r => r.manual)].forEach(r => {
-      const v = vendaFin(r), uids = (r.corretorUids || (r.manual ? corretoresDaReserva(r.corretorTexto).map(c => c.uid) : [])).filter(Boolean); if (!uids.length) return;
+      /* v329: o extrato (Minhas comissões) vai só para os corretores da venda; quem só cadastrou a reserva (anjo, SDR, outro corretor) não vê a comissão */
+      const v = vendaFin(r), uids = [...new Set(v.cor.map(c => c.uid).filter(Boolean))];
+      if (!uids.length) { if (extratoTodos[r.id] && (extratoTodos[r.id].corretorUids || []).length && n < 400) { b.set(doc(db,'extrato',r.id), { corretorUids:[], atualizadoEm:Date.now() }, { merge:true }); n++; } return; }
       const excl = !vendaAtivaFin(r), qtd = Math.max(1, v.cor.length || uids.length);
       const d = { corretorUids:uids, cliente:r.cliente || '', dia:r.dia || '', empreendimento:r.empreendimento || '', construtora:v.cons || '', corretores:v.cor.map(c => c.nome).join(' + ') || r.corretorTexto || '',
         valorTotalCor:Math.round(v.valCor * 100) / 100, valorCada:Math.round(v.valCorBruto / qtd * 100) / 100,
@@ -16292,9 +16349,17 @@ function sincVendasRanking(){
 function corretoresDaReserva(txt){
   const partes = String(txt || '').split(/\s*(?:\/|\+|,|\be\b)\s*/i).map(limpaNomeCor).filter(Boolean);
   const ativos = perfisLista.filter(p => p.status === 'ativo');
+  /* v329: nome parecido não pode cair em outra pessoa. "Ana" (Ana Luiza / Anna Karolliny), "Mateus" (Mateus / Matheus) e "Maria" ficam sem corretor
+     até escolher o certo; "Luiz" não vira "Ana Luiza". Só liga quando sobra uma pessoa só. */
+  const fon = s => nomeSimples(limpaNomeCor(s)).replace(/z/g, 's'), pals = s => fon(s).split(' ').filter(w => w.length > 1);
+  const unico = l => l.length === 1 ? l[0] : null;
   return partes.map(n => {
-    const p = ativos.find(x => limpaNomeCor(x.nome) === n) || (() => { const pr = n.split(' ')[0], c = ativos.filter(x => limpaNomeCor(x.nome).split(' ')[0] === pr); return c.length === 1 ? c[0] : null; })()
-      || pessoaPorApelido(n, ativos); // v306: "Matheus Nascimento" acha o Matheus Felismino do Nascimento (todas as palavras no nome)
+    const q = pals(n);
+    const p = ativos.find(x => limpaNomeCor(x.nome) === n) || (!q.length ? null : q.length === 1
+      ? (() => { const c = ativos.filter(x => pals(x.nome)[0] === q[0]); if (c.length) return unico(c); return unico(ativos.filter(x => pals(x.nome).includes(q[0]))); })()
+      : (() => { const c = ativos.filter(x => { const t = pals(x.nome); return t[0] === q[0] && q.every(w => t.includes(w)); }); if (c.length) return unico(c);
+          const c2 = ativos.filter(x => { const t = pals(x.nome); return q.every(w => t.includes(w)); }); if (c2.length) return unico(c2);
+          return unico(ativos.filter(x => { const t = pals(x.nome); return t[0].startsWith(q[0]) && q.slice(1).every(w => w.length >= 3 && t.some(y => y.startsWith(w))); })); })());
     return p ? { uid:p.uid, nome:p.nome, equipe:p.equipe || '' } : { uid:'', nome:nomeBonito(n), equipe:'' };
   });
 }
