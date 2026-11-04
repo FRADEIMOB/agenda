@@ -7706,7 +7706,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 331;
+const APP_VERSAO = 332;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8214,7 +8214,8 @@ function pontosDoMesBase(m, val, corte){
   const caiuV = v => { const r = _resCaiu.get(v.id); return !!(v.caiu || (r && (r.caiu || r.arquivado))); };
   const caiuEmV = v => { const r = _resCaiu.get(v.id), em = (r && r.caiuEm) ? iso(new Date(r.caiuEm)) : (v.caiuEm || ''); return em; };
   // venda de um mês anterior (que já tinha dado ponto) e caiu neste mês: desconta os pontos dela no mês em que caiu
-  if (usaReservas) rankingVendas.filter(v => caiuV(v) && v.dia && v.dia.slice(0, 7) < m && noMes(caiuEmV(v))).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
+  /* v332: venda de mês anterior que caiu NÃO desconta mais pontos (Allan não quer ponto negativo por venda que caiu) */
+  if (false && usaReservas) rankingVendas.filter(v => caiuV(v) && v.dia && v.dia.slice(0, 7) < m && noMes(caiuEmV(v))).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
     const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
     const menos = ptVenda(!!v.ind) + (v.ass && v.ass.slice(0, 7) < m ? n('vendaAssinada') : 0);
     x.vendasCaidas = (x.vendasCaidas || 0) + 1; x.ptsCaidas = (x.ptsCaidas || 0) + menos; x.pontos -= menos; }));
@@ -8226,7 +8227,7 @@ function pontosDoMesBase(m, val, corte){
   if (usaReservas) rankingVendas.filter(v => !caiuV(v) && noMes(v.dia) && sdrDeV(v)).forEach(v => { const s = sdrDeV(v), ps = RK().find(p => p.uid === s.uid) || {};
     const x = pega({ corretorUid:s.uid, corretorNome:ps.nome || s.nome || 'SDR', equipe:ps.equipe || '' }), pt = ptSdrVenda(v.dia);
     if (pt === SDR_VENDA.depois) x.vendaSdrNova = (x.vendaSdrNova || 0) + 1; else x.vendaSdrAntes = (x.vendaSdrAntes || 0) + 1; x.pontos += pt; });
-  if (usaReservas) rankingVendas.filter(v => caiuV(v) && v.dia && v.dia.slice(0, 7) < m && noMes(caiuEmV(v)) && sdrDeV(v)).forEach(v => { const s = sdrDeV(v), ps = RK().find(p => p.uid === s.uid) || {};
+  if (false && usaReservas) rankingVendas.filter(v => caiuV(v) && v.dia && v.dia.slice(0, 7) < m && noMes(caiuEmV(v)) && sdrDeV(v)).forEach(v => { const s = sdrDeV(v), ps = RK().find(p => p.uid === s.uid) || {};
     const x = pega({ corretorUid:s.uid, corretorNome:ps.nome || s.nome || 'SDR', equipe:ps.equipe || '' }), pt = ptSdrVenda(v.dia);
     x.vendasCaidas = (x.vendasCaidas || 0) + 1; x.ptsCaidas = (x.ptsCaidas || 0) + pt; x.pontos -= pt; });
   // v196: venda assinada (a reserva chegou na etapa Assinou, pela data da etapa) e recrutamentos registrados pelo dono
