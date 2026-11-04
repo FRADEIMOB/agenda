@@ -7820,7 +7820,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 340;
+const APP_VERSAO = 341;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10863,7 +10863,7 @@ function salvarEmpWaAuto(x, origem){
       await gravar(setDoc(ref, dados, { merge:true }));
       const fotos = (x.fotos || []).filter(f => typeof f === 'string' && f.startsWith('data:image/') && f.length < 900000).slice(0, 15);
       if (fotos.length) { const exist = ex ? (await getDocs(query(collection(db,'emp_fotos'), where('empId','==',ref.id)))).docs.map(d => ({ id:d.id, ...d.data() })) : [];
-        if (fotos.length > exist.length) await gravarFotosEmp(ref.id, fotos, exist.map(f => f.id), []); }
+        if (fotos.length > exist.length || (x.trocarFotos && fotos.length)) await gravarFotosEmp(ref.id, fotos, exist.map(f => f.id), []); } /* v341: trocarFotos = fotos em boa qualidade (abertas no visualizador do WhatsApp) substituem as miniaturas */
       ok = 1; _ewAutoN++; toast(`Imóveis do WhatsApp: ${_ewAutoN} salvo${_ewAutoN === 1 ? '' : 's'} (${x.nome})`);
     } catch(e) { toast('Erro em ' + x.nome + ': ' + e.message); }
     try { origem.postMessage({ tipo:'frade-emp-ok', nome:x.nome, ok }, 'https://web.whatsapp.com'); } catch(e) {}
