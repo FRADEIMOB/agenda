@@ -2410,6 +2410,17 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
   .esc-dg{grid-template-columns:repeat(2,minmax(0,1fr))}.esc-ed{grid-template-columns:76px minmax(0,1fr) 34px}
 }
 .et-assin{display:grid;gap:3px;padding:12px 14px;border-radius:12px;margin-bottom:12px;background:color-mix(in srgb,var(--ok) 9%,var(--card));border:1px solid color-mix(in srgb,var(--ok) 35%,var(--border));font-size:13px}.et-assin b{font-size:14px}.et-assin-bt{display:flex;gap:16px;flex-wrap:wrap;margin-top:4px}
+/* v337: empreendimentos com informações, mapa e visualizações */
+.emp-sub{font-size:12.5px;color:var(--text2)}
+.emp-views{display:flex;align-items:center;gap:6px;padding:0 16px 14px;font-size:12.5px;color:var(--text2);margin-top:auto}.emp-views svg{width:16px;height:16px}
+.ev-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 16px;margin-top:14px}
+.ev-info div{display:grid;gap:1px}.ev-info span{font-size:12px;color:var(--text2)}.ev-info b{font-size:14px;font-weight:600}
+.ev-info-bts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ev-unid{white-space:pre-wrap;font-size:13.5px;line-height:1.55;background:color-mix(in srgb,var(--text) 4%,transparent);border-radius:12px;padding:10px 12px}
+.ev-views{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;color:var(--text2)}.ev-views svg{width:17px;height:17px}.ev-views b{color:var(--text)}
+.ew-l{display:grid;grid-template-columns:22px 64px minmax(0,1fr);gap:10px;align-items:center;padding:8px 4px;border-bottom:1px solid var(--border);cursor:pointer}
+.ew-f{width:64px;height:48px;border-radius:8px;overflow:hidden;background:color-mix(in srgb,var(--text) 8%,transparent)}.ew-f img{width:100%;height:100%;object-fit:cover}
+.ew-t{display:grid;gap:1px;min-width:0}.ew-t b{font-size:14px}.ew-t small{font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* v160: premiações por vendas */
 .pr-fx{display:flex;flex-direction:column;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed color-mix(in srgb,var(--accent) 30%,var(--border))}
 .pr-i{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center;opacity:.6}.pr-i.ok,.pr-i.prox{opacity:1}
@@ -4485,6 +4496,11 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
         <div><label>Banheiros</label><input id="empBanhos" maxlength="8" placeholder="1"></div>
       </div>
       <div class="fg"><label>Resumo <span class="muted">(opcional)</span></label><textarea id="empDesc" rows="2" maxlength="300" placeholder="Ex.: 2 quartos, a partir de R$ 180 mil, entrega em 2027"></textarea></div>
+      <div class="row2"><div class="fg"><label>Construtora</label><input id="empConst" maxlength="60" placeholder="Ex.: Almeida e Viana"></div><div class="fg"><label>Contato da construtora</label><input id="empContato" maxlength="30" inputmode="tel" placeholder="83 9 9999-9999"></div></div>
+      <div class="row2"><div class="fg"><label>Entrega / status</label><input id="empEntrega" maxlength="60" placeholder="Pronto, Entrega dezembro…"></div><div class="fg"><label>Avaliação</label><input id="empAval" maxlength="60" placeholder="R$ 522 mil"></div></div>
+      <div class="fg"><label>Endereço</label><input id="empEnd" maxlength="160" placeholder="Rua, número, bairro"></div>
+      <div class="fg"><label>Link do mapa <span class="muted">(opcional)</span></label><input id="empMapa" maxlength="300" inputmode="url" placeholder="https://maps.google.com/…"></div>
+      <div class="fg"><label>Unidades e condições <span class="muted">(opcional)</span></label><textarea id="empUnid" rows="4" maxlength="1500" placeholder="Apto 101 · R$ 237.000&#10;Fluxo: 10% de sinal…"></textarea></div>
       <div class="rep-sec">Fotos</div>
       <div id="empFotosEd" class="ef-grid"></div>
       <div class="int-linha" style="margin:8px 0 4px"><button class="btn btn-ghost" onclick="document.getElementById('empFotoArq').click()">+ Adicionar fotos</button><input type="file" id="empFotoArq" class="hide" accept="image/*" multiple onchange="empAddFotos(this)"></div>
@@ -4494,6 +4510,13 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <button class="btn btn-ghost" onclick="empAddMat()">+ Adicionar material</button>
     </div>
     <div class="sheet-foot"><button class="btn btn-ghost emp-arq hide" id="empArqBtn" onclick="excluirEmp()" style="color:var(--danger)">Excluir</button><button class="btn btn-ghost" onclick="fechar('empModal')">Cancelar</button><button class="btn btn-primary" id="empSalvar" onclick="salvarEmp()">Salvar</button></div>
+  </div>
+</div>
+<div class="modal" id="ewModal">
+  <div class="sheet" style="width:min(640px,100%)">
+    <div class="sheet-head"><h2>Imóveis do WhatsApp</h2><button class="icon-btn" onclick="fechar('ewModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="ewCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('ewModal')">Cancelar</button><button class="btn btn-primary" id="ewSalvar" onclick="salvarEmpWa()">Salvar no app</button></div>
   </div>
 </div>
 <div class="modal" id="empVerModal">
@@ -7764,7 +7787,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 336;
+const APP_VERSAO = 337;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10577,14 +10600,15 @@ window.renderEmp = () => renderEmp();
 function renderEmp(){
   if (view !== 'empreendimentos') return;
   const t = norm(window.empFiltro || '');
-  const l = empreendimentos.filter(e => !e.arquivado && (!t || norm([e.nome, e.local, e.desc].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
+  const l = empreendimentos.filter(e => !e.arquivado && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
   $('empLista').innerHTML = l.length ? l.map(e => { const c = capaDe(e), n = (e.nFotos || 0);
     return `<div class="emp-capa-card" role="button" tabindex="0" onclick="verEmp('${e.id}')" onkeydown="if(event.key==='Enter')verEmp('${e.id}')">
       <div class="emp-capa" id="cap_${e.id}">${c ? `<img src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.remove()">` : ''}<span class="emp-sem" data-ic="predio"></span>
         ${n > 1 ? `<button class="emp-car esq" onclick="event.stopPropagation();cardFoto('${e.id}',-1)" aria-label="Foto anterior">‹</button><button class="emp-car dir" onclick="event.stopPropagation();cardFoto('${e.id}',1)" aria-label="Próxima foto">›</button><i class="emp-n">${n} fotos</i>` : ''}</div>
-      <div class="emp-info">${e.local ? `<span class="emp-loc">${esc(e.local)}</span>` : ''}<b>${esc(e.nome)}</b>${e.desc ? `<em>${esc(e.desc)}</em>` : ''}
+      <div class="emp-info">${e.local ? `<span class="emp-loc">${esc(e.local)}</span>` : ''}<b>${esc(e.nome)}</b>${e.desc ? `<em>${esc(e.desc)}</em>` : ''}${e.construtora || e.entrega ? `<span class="emp-sub">${esc([e.construtora, e.entrega].filter(Boolean).join(' · '))}</span>` : ''}
         <div class="emp-preco">${e.preco ? `<strong>${esc(/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco)}</strong><small>a partir de</small>` : `<small>${(e.materiais || []).length === 1 ? '1 material' : (e.materiais || []).length + ' materiais'} · ver tudo</small>`}</div></div>
       ${fichaEmp(e)}
+      <div class="emp-views">${ICF.olho}<span>${Number(e.views) || 0} visualizaç${Number(e.views) === 1 ? 'ão' : 'ões'}</span></div>
     </div>`; }).join('')
     : `<div class="card" style="grid-column:1/-1">${vazio(t ? 'Nada encontrado' : 'Nenhum empreendimento ainda', t ? 'Tente outro nome.' : (souCeo() ? 'A equipe ainda não cadastrou empreendimentos.' : 'Toque em "Novo empreendimento" ou importe do grupo do WhatsApp.'))}</div>`;
   pintarIcones($('empLista'));
@@ -10594,6 +10618,7 @@ const ICF = {
   area:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/></svg>',
   quartos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 21v-3M21 21v-3"/><path d="M6 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M12 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>',
   vagas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M6 17v2M18 17v2M4 13l2-5a2 2 0 0 1 2-1h8a2 2 0 0 1 2 1l2 5v4H4z"/><circle cx="8" cy="14" r="1"/><circle cx="16" cy="14" r="1"/></svg>',
+  olho:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
   banheiros:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V5a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg>' };
 function fichaEmp(e){
   const it = [['area', e.area ? String(e.area).replace(/\s*m²?$/i, '') + ' m²' : '', 'área'], ['quartos', e.quartos, /^1$/.test(e.quartos) ? 'quarto' : 'quartos'], ['vagas', e.vagas, /^1$/.test(e.vagas) ? 'vaga' : 'vagas'], ['banheiros', e.banheiros, /^1$/.test(e.banheiros) ? 'banheiro' : 'banheiros']].filter(x => x[1]);
@@ -10617,7 +10642,7 @@ window.verEmp = async id => {
   $('evNome').textContent = e.nome; $('evLocal').textContent = e.local || '';
   $('evEditar').classList.toggle('hide', souCeo());
   $('evCorpo').innerHTML = htmlEmpDetalhe(e, true);
-  abrir('empVerModal');
+  abrir('empVerModal'); contarVisualEmp(id);
   try {
     const sn = await getDocs(query(collection(db,'emp_fotos'), where('empId','==',id)));
     empFotos = sn.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.ordem || 0) - (b.ordem || 0));
@@ -10635,11 +10660,28 @@ function htmlEmpDetalhe(e, carregando){
     ${e.preco ? `<div class="emp-preco" style="margin-top:14px"><strong>${esc(/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco)}</strong><small>a partir de</small></div>` : ''}
     ${fichaEmp(e).replace('emp-ficha', 'emp-ficha ev')}
     ${e.desc ? `<p class="emp-desc" style="margin-top:14px">${esc(e.desc)}</p>` : ''}
+    ${htmlEmpInfo(e)}
     <div class="rep-sec">Material de venda</div>
     <div class="emp-mats">${(e.materiais || []).length ? e.materiais.map((m, i) => `<div class="emp-mat"><div style="min-width:0"><b>${esc(tituloMat(m))}</b>${m.titulo ? `<span>${esc(empTipoNome(m.tipo))}</span>` : ''}</div>
       <div class="emp-acoes"><a class="snooze" href="${esc(m.link)}" target="_blank" rel="noopener">Abrir</a><button class="snooze" onclick="empCopiar('${e.id}',${i})">Copiar</button><button class="snooze wa" onclick="empWhats('${e.id}',${i})">${IC.wa}Enviar</button></div></div>`).join('')
       : '<div class="muted" style="font-size:13.5px">Nenhum link ainda.</div>'}</div>
     ${e.atualizadoPorNome ? `<small class="muted" style="display:block;margin-top:12px">Atualizado por ${esc(primeiro(e.atualizadoPorNome))}${e.atualizadoEm ? ' em ' + new Date(e.atualizadoEm).toLocaleDateString('pt-BR') : ''}</small>` : ''}`;
+}
+// v337: construtora, entrega, avaliação, endereço com mapa, unidades e quem viu
+const mapaDe = e => e.mapa || (e.endereco ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent([e.endereco, e.local, 'João Pessoa - PB'].filter(Boolean).join(', ')) : '');
+function htmlEmpInfo(e){
+  const tel = soDig(e.contato || ''), linhas = [['Construtora', e.construtora], ['Entrega', e.entrega], ['Avaliação', e.avaliacao], ['Endereço', e.endereco]].filter(x => x[1]);
+  const mp = mapaDe(e), quem = souGerente() ? Object.entries(e.viewsU || {}).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([u, n]) => `${esc(primeiro(((pessoasRk() || []).find(p => p.uid === u) || {}).nome || 'Alguém'))} (${n})`) : [];
+  return `${linhas.length || tel || mp ? `<div class="ev-info">${linhas.map(([k, v]) => `<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>
+    <div class="ev-info-bts">${mp ? `<a class="snooze" href="${esc(mp)}" target="_blank" rel="noopener">Ver no mapa</a>` : ''}${tel.length >= 10 ? `<a class="snooze wa" href="https://wa.me/55${tel.replace(/^55/, '')}" target="_blank" rel="noopener">${IC.wa}Falar com a construtora</a>` : ''}</div>` : ''}
+    ${e.unidades ? `<div class="rep-sec">Unidades e condições</div><div class="ev-unid">${esc(e.unidades)}</div>` : ''}
+    <div class="ev-views">${ICF.olho}<b>${Number(e.views) || 0}</b> visualizaç${Number(e.views) === 1 ? 'ão' : 'ões'}${quem.length ? ` · quem mais viu: ${quem.join(', ')}` : ''}</div>`;
+}
+// conta a visualização (uma vez por pessoa a cada abertura do app)
+const _empVistos = new Set();
+function contarVisualEmp(id){
+  if (!souAtivo() || souCeo() || _empVistos.has(id)) return; _empVistos.add(id);
+  updateDoc(doc(db,'empreendimentos',id), { views:increment(1), ['viewsU.' + uidAtual]:increment(1), vistoEm:Date.now() }).catch(e => console.warn('visualização', e.code || e.message));
 }
 window.empFotoNav = d => { const n = empFotos.length || 1; empFotoIdx = (empFotoIdx + d + n) % n; const e = empreendimentos.find(x => x.id === empVerId); if (e) $('evCorpo').innerHTML = htmlEmpDetalhe(e, false); };
 window.empFotoIr = i => { empFotoIdx = i; empFotoNav(0); };
@@ -10689,7 +10731,7 @@ window.editarEmp = id => {
   const e = id ? empreendimentos.find(x => x.id === id) : null; empEdit = e ? e.id : null;
   $('empTit').textContent = e ? 'Editar empreendimento' : 'Novo empreendimento';
   $('empNome').value = e?.nome || ''; $('empLocal').value = e?.local || ''; $('empDesc').value = e?.desc || '';
-  [['empPreco','preco'],['empArea','area'],['empQuartos','quartos'],['empVagas','vagas'],['empBanhos','banheiros']].forEach(([i,k]) => $(i).value = e?.[k] || '');
+  [['empPreco','preco'],['empArea','area'],['empQuartos','quartos'],['empVagas','vagas'],['empBanhos','banheiros'],['empConst','construtora'],['empContato','contato'],['empEntrega','entrega'],['empAval','avaliacao'],['empEnd','endereco'],['empMapa','mapa'],['empUnid','unidades']].forEach(([i,k]) => { if ($(i)) $(i).value = e?.[k] || ''; });
   $('empMats').innerHTML = (e?.materiais?.length ? e.materiais : [{ tipo:'fotos' }, { tipo:'tabela' }, { tipo:'book' }]).map(empLinhaMat).join('');
   $('empArqBtn').classList.toggle('hide', !e);
   empNovasFotos = []; empFotosExist = []; empFotosTirar = []; renderFotosEdit();
@@ -10713,6 +10755,8 @@ window.salvarEmp = async () => {
   const ruim = mats.find(m => !linkOk(m.link)); if (ruim) { toast('Link inválido: ' + ruim.link.slice(0, 40) + ' (precisa começar com https://)'); return; }
   const dados = { nome:nome.slice(0, 80), local:$('empLocal').value.trim().slice(0, 80), desc:$('empDesc').value.trim().slice(0, 300), materiais:mats.slice(0, 30),
     preco:$('empPreco').value.trim().slice(0, 20), area:$('empArea').value.trim().slice(0, 12), quartos:$('empQuartos').value.trim().slice(0, 8), vagas:$('empVagas').value.trim().slice(0, 8), banheiros:$('empBanhos').value.trim().slice(0, 8),
+    construtora:$('empConst').value.trim().slice(0, 60), contato:$('empContato').value.trim().slice(0, 30), entrega:$('empEntrega').value.trim().slice(0, 60), avaliacao:$('empAval').value.trim().slice(0, 60),
+    endereco:$('empEnd').value.trim().slice(0, 160), mapa:linkOk($('empMapa').value.trim()) ? $('empMapa').value.trim().slice(0, 300) : '', unidades:$('empUnid').value.trim().slice(0, 1500),
     atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
   if (!empEdit) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false });
   try {
@@ -10729,6 +10773,60 @@ window.excluirEmp = async () => {
     if (sn) for (const d of sn.docs) await gravar(deleteDoc(doc(db,'emp_fotos',d.id)));
     await gravar(deleteDoc(doc(db,'empreendimentos',e.id))); fechar('empModal'); toast('Empreendimento excluído'); }
   catch(err) { toast('Erro: ' + (err.code === 'permission-denied' ? 'publique as regras novas do Firebase' : err.message)); }
+};
+// =====================================================================
+// v337: imóveis lidos do grupo do WhatsApp Web (aba do WhatsApp abre o app e manda os dados com as fotos)
+// =====================================================================
+let empWa = [], _empWaOrig = null;
+// cartões quebrados de importações antigas (sem nome de verdade)
+const empQuebrado = e => /^\W*\[?Encaminhad|^\W*Localiza|\.pdf$|^Sem nome|^Torre \d+$|^APARTAMENTOS$|^Condom[ií]nio R$/i.test(String(e.nome || '').trim());
+window.addEventListener('message', ev => {
+  if (ev.origin !== 'https://web.whatsapp.com') return; const d = ev.data || {};
+  if (d.tipo === 'frade-emp-item' && d.item && typeof d.item.nome === 'string') {
+    _empWaOrig = ev.source; const it = d.item;
+    const i = empWa.findIndex(x => norm(x.nome) === norm(it.nome)); if (i >= 0) empWa[i] = it; else empWa.push(it);
+    try { ev.source.postMessage({ tipo:'frade-emp-ok', nome:it.nome, n:empWa.length }, 'https://web.whatsapp.com'); } catch(e) {}
+    clearTimeout(window._empWaT); window._empWaT = setTimeout(abrirEmpWa, 900);
+  }
+});
+// a aba do WhatsApp avisa quando o app terminou de abrir
+setInterval(() => { try { if (window.opener && souAtivo() && !window._empWaAvisou) { window.opener.postMessage({ tipo:'frade-pronto' }, 'https://web.whatsapp.com'); window._empWaAvisou = true; } } catch(e) {} }, 1500);
+function abrirEmpWa(){
+  if (!empWa.length) return; if (souCeo()) { toast('Perfil CEO: só visualização'); return; }
+  if (view !== 'empreendimentos') setView('empreendimentos');
+  $('ewCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Lidos do grupo do WhatsApp. Confira e toque em Salvar. Se o imóvel já existe no app (mesmo nome), os dados são atualizados e as fotos entram junto.</div>`
+    + empWa.map((x, i) => { const ex = empreendimentos.find(e => norm(e.nome) === norm(x.nome));
+      return `<label class="ew-l"><input type="checkbox" data-i="${i}" checked><span class="ew-f">${x.fotos && x.fotos[0] ? `<img src="${esc(x.fotos[0])}" alt="">` : ''}</span><span class="ew-t"><b>${esc(x.nome)}</b><small>${esc([x.local, x.preco, x.construtora].filter(Boolean).join(' · '))}</small><small>${(x.fotos || []).length} foto${(x.fotos || []).length === 1 ? '' : 's'}${x.mapa || x.endereco ? ' · com localização' : ''}${ex ? ' · já existe: atualiza' : ' · novo'}</small></span></label>`; }).join('');
+  const qb = empreendimentos.filter(empQuebrado);
+  if (qb.length) $('ewCorpo').insertAdjacentHTML('beforeend', `<label class="ew-l ew-qb"><input type="checkbox" id="ewQb" checked><span class="ew-f"></span><span class="ew-t"><b>Apagar ${qb.length} cartões quebrados</b><small>Da importação antiga, sem nome de verdade (ex.: ${esc(String(qb[0].nome).slice(0, 40))})</small></span></label>`);
+  abrir('ewModal');
+}
+window.salvarEmpWa = async () => {
+  const sel = [...document.querySelectorAll('#ewCorpo input[data-i]:checked')].map(i => empWa[Number(i.dataset.i)]).filter(Boolean);
+  if (!sel.length) { toast('Marque pelo menos um'); return; }
+  const bt = $('ewSalvar'); bt.disabled = true; let n = 0;
+  for (const x of sel) {
+    try { bt.textContent = `Salvando ${n + 1} de ${sel.length}…`;
+      const ex = empreendimentos.find(e => norm(e.nome) === norm(x.nome)), ref = ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos'));
+      const tx = (v, m) => String(v || '').trim().slice(0, m);
+      const dados = { nome:tx(x.nome, 80), local:tx(x.local, 80), desc:tx(x.desc, 300), preco:tx(x.preco, 20), area:tx(x.area, 12), quartos:tx(x.quartos, 8), vagas:tx(x.vagas, 8), banheiros:tx(x.banheiros, 8),
+        construtora:tx(x.construtora, 60), contato:tx(x.contato, 30), entrega:tx(x.entrega, 60), avaliacao:tx(x.avaliacao, 60), endereco:tx(x.endereco, 160), mapa:linkOk(x.mapa || '') ? tx(x.mapa, 300) : '', unidades:tx(x.unidades, 1500),
+        fonte:'whatsapp', fonteGrupo:tx(x.grupo, 60), atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+      Object.keys(dados).forEach(k => { if (dados[k] === '' && ex && ex[k]) delete dados[k]; });
+      if (!ex) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false, materiais:[], views:0 });
+      await gravar(setDoc(ref, dados, { merge:true }));
+      const fotos = (x.fotos || []).filter(f => typeof f === 'string' && f.startsWith('data:image/') && f.length < 900000).slice(0, 20);
+      if (fotos.length) { const exist = ex ? (await getDocs(query(collection(db,'emp_fotos'), where('empId','==',ref.id)))).docs.map(d => ({ id:d.id, ...d.data() })).sort((a, b) => (a.ordem || 0) - (b.ordem || 0)) : [];
+        await gravarFotosEmp(ref.id, exist.length ? [] : fotos, [], exist); }
+      n++;
+    } catch(e) { toast('Erro em ' + x.nome + ': ' + e.message); }
+  }
+  if ($('ewQb') && $('ewQb').checked) { let q = 0; for (const e of empreendimentos.filter(empQuebrado)) { try { bt.textContent = 'Limpando cartões quebrados…';
+      const sn = await getDocs(query(collection(db,'emp_fotos'), where('empId','==',e.id))).catch(() => null); if (sn) for (const d of sn.docs) await gravar(deleteDoc(doc(db,'emp_fotos',d.id)));
+      await gravar(deleteDoc(doc(db,'empreendimentos',e.id))); q++; } catch(err) {} } if (q) toast(q + ' cartões quebrados apagados'); }
+  bt.disabled = false; bt.textContent = 'Salvar no app'; fechar('ewModal'); toast(`${n} imóve${n === 1 ? 'l salvo' : 'is salvos'} em Empreendimentos`);
+  try { _empWaOrig && _empWaOrig.postMessage({ tipo:'frade-emp-salvo', n }, 'https://web.whatsapp.com'); } catch(e) {}
+  empWa = [];
 };
 // ---------- importar empreendimentos de uma conversa exportada do WhatsApp ----------
 let empImp = [], empImpZip = null;
