@@ -2371,6 +2371,45 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ac-lado{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ac-lado span{font-size:13px}
 @media(max-width:700px){.ac-res{grid-template-columns:repeat(3,minmax(0,1fr))}.ac-grade{grid-template-columns:1fr}}
 
+/* v334: meta do escritório, checklist dos anjos, ranking dos anjos, contrato assinado */
+.esc-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 18px;margin-bottom:16px;display:grid;gap:16px}
+.esc-card.esc-vazio{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;color:var(--text2)}
+.esc-meta{display:grid;gap:10px}.esc-meta+.esc-meta{padding-top:14px;border-top:1px dashed var(--border)}
+.esc-l1{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.esc-l1 span{font-weight:700;font-size:14px}.esc-l1 b{font-size:22px;font-variant-numeric:tabular-nums}.esc-l1 small{font-size:12px;color:var(--text2);font-weight:600}
+.esc-trilho{position:relative;height:12px;border-radius:99px;background:color-mix(in srgb,var(--text) 9%,transparent);margin:2px 6px}
+.esc-trilho i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--accent),#f97316);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.esc-meta.tudo .esc-trilho i{background:var(--ok)}
+.esc-trilho em{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--card);border:3px solid color-mix(in srgb,var(--text) 22%,transparent)}.esc-trilho em.ok{border-color:var(--ok);background:var(--ok)}
+.esc-dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.esc-p{display:grid;gap:2px;padding:9px 11px;border-radius:12px;border:1px solid var(--border);opacity:.6}.esc-p.ok,.esc-p.prox{opacity:1}
+.esc-p.ok{border-color:color-mix(in srgb,var(--ok) 45%,var(--border));background:color-mix(in srgb,var(--ok) 9%,var(--card))}.esc-p.prox{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}
+.esc-p b{font-size:18px;font-variant-numeric:tabular-nums}.esc-p span{font-size:13px;font-weight:600;line-height:1.3}.esc-p small{font-size:11.5px;color:var(--text2)}.esc-p.ok small{color:var(--ok);font-weight:700}
+.esc-pe{display:flex;justify-content:flex-end}
+.esc-ed{display:grid;grid-template-columns:96px minmax(0,1fr) 36px;gap:8px;align-items:center;margin-bottom:8px}
+.ach-card{background:var(--card);border:1px solid color-mix(in srgb,var(--accent) 25%,var(--border));border-radius:18px;padding:14px 18px;margin-bottom:16px;display:grid;gap:10px}
+.ach-card.feito{border-color:color-mix(in srgb,var(--ok) 40%,var(--border))}.ach-card.feito .meta-bar i{background:var(--ok)}
+.ach-cab{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.ach-cab b{font-size:15px}.ach-cab span{font-size:13px;color:var(--text2);font-weight:600}
+.ach-l{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.ach-l li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 8px;border-radius:12px;font-size:14px}
+.ach-l li.vez{background:color-mix(in srgb,var(--accent) 9%,transparent)}.ach-l li.bloq{opacity:.5}
+.ach-l li span{display:grid;gap:1px}.ach-l li small{font-size:11.5px;color:var(--text2)}.ach-l li.ok span{color:var(--text2)}.ach-l li em{font-style:normal;font-size:12px;font-weight:700;color:var(--text2)}
+.ach-bt{width:28px;height:28px;border-radius:9px;border:2px solid color-mix(in srgb,var(--text) 25%,transparent);background:var(--card);color:#fff;font-weight:800;font-size:15px;cursor:pointer;display:grid;place-items:center;padding:0}
+.ach-l li.vez .ach-bt{border-color:var(--accent)}.ach-l li.ok .ach-bt{background:var(--ok);border-color:var(--ok)}.ach-bt:disabled{cursor:default}
+.ach-fim{font-size:13px;color:var(--ok);font-weight:700}
+.ach-ed{display:grid;grid-template-columns:minmax(0,1fr) 80px 36px;gap:8px;align-items:center;margin-bottom:8px}.ach-ed-cab{margin-bottom:4px}.ach-ed-cab small{font-size:12px;color:var(--text2);font-weight:600}
+.rka{display:grid;gap:8px}
+.rka-l{display:grid;grid-template-columns:40px minmax(0,1fr) repeat(4,minmax(64px,auto));gap:10px;align-items:center;padding:10px 14px;border:1px solid var(--border);border-radius:14px;background:var(--card)}
+.rka-l.me{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}
+.rka-pos{font-weight:800;font-size:16px;color:var(--text2)}.rka-l:first-child .rka-pos{color:var(--accent)}
+.rka-n{display:grid;min-width:0}.rka-n b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rka-n small{font-size:12px;color:var(--text2)}
+.rka-c{display:grid;text-align:center}.rka-c b{font-size:16px;font-variant-numeric:tabular-nums}.rka-c small{font-size:11px;color:var(--text2)}
+.as-bt{color:var(--accent)!important;border-color:color-mix(in srgb,var(--accent) 40%,var(--border))!important}.as-ok{color:var(--ok)!important}
+.as-tem{display:grid;gap:2px;margin-bottom:8px;font-size:13px}.as-tem small{color:var(--text2)}.obrig{font-size:11px;color:var(--danger);font-weight:700;margin-left:6px}
+@media(max-width:760px){
+  .rka-l{grid-template-columns:32px minmax(0,1fr) repeat(2,minmax(56px,auto));padding:10px 12px}.rka-l .rka-c:nth-of-type(4),.rka-l .rka-c:nth-of-type(5){display:none}
+  .esc-dg{grid-template-columns:repeat(2,minmax(0,1fr))}.esc-ed{grid-template-columns:76px minmax(0,1fr) 34px}
+}
+.et-assin{display:grid;gap:3px;padding:12px 14px;border-radius:12px;margin-bottom:12px;background:color-mix(in srgb,var(--ok) 9%,var(--card));border:1px solid color-mix(in srgb,var(--ok) 35%,var(--border));font-size:13px}.et-assin b{font-size:14px}.et-assin-bt{display:flex;gap:16px;flex-wrap:wrap;margin-top:4px}
 /* v160: premiações por vendas */
 .pr-fx{display:flex;flex-direction:column;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed color-mix(in srgb,var(--accent) 30%,var(--border))}
 .pr-i{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center;opacity:.6}.pr-i.ok,.pr-i.prox{opacity:1}
@@ -3244,6 +3283,8 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div id="aulasHoje"></div>
           <div id="indPedHoje"></div>
         </div>
+        <div id="anjoCheckHoje"></div>
+        <div id="metaEscHoje"></div>
         <div id="metaHoje"></div>
         <div class="stats hide" id="statsPapel"></div>
         <div id="ligHoje"></div>
@@ -4268,6 +4309,22 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
   </div>
 </div>
 <!-- v155: metas do dia -->
+<!-- v334: contrato assinado -->
+<div class="modal" id="asModal">
+  <div class="sheet" style="width:min(560px,100%)">
+    <div class="sheet-head"><div><h2>Contrato assinado</h2><div class="muted" id="asCli" style="font-size:13px;margin-top:3px"></div></div><button class="icon-btn" onclick="fechar('asModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="asCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('asModal')">Cancelar</button><button class="btn btn-primary" id="asSalvar" onclick="salvarAssinatura()">Salvar assinatura</button></div>
+  </div>
+</div>
+<!-- v334: atividades do checklist dos anjos e coordenadores -->
+<div class="modal" id="achModal">
+  <div class="sheet" style="width:min(600px,100%)">
+    <div class="sheet-head"><div><h2>Atribuições dos anjos e coordenadores</h2></div><button class="icon-btn" onclick="fechar('achModal')" data-ic="x"></button></div>
+    <div class="sheet-body" id="achCorpo"></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('achModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarAnjoCheckCfg()">Salvar atividades</button></div>
+  </div>
+</div>
 <div class="modal" id="mdModal">
   <div class="sheet" style="width:min(640px,100%)">
     <div class="sheet-head"><div><h2>Metas do dia e de vendas</h2><div class="muted" style="font-size:13px;margin-top:3px">Aparecem na tela de cada um, no ranking e na TV.</div></div><button class="icon-btn" onclick="fechar('mdModal')" data-ic="x"></button></div>
@@ -4531,7 +4588,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 <div class="modal" id="etapaModal">
   <div class="sheet" style="width:min(460px,100%)">
     <div class="sheet-head"><div><h2>Etapa da reserva</h2><div class="sub" id="etCli"></div></div><button class="icon-btn" onclick="fechar('etapaModal')" data-ic="x"></button></div>
-    <div class="sheet-body"><div class="et-opcoes" id="etOpcoes"></div><div id="etHist"></div></div>
+    <div class="sheet-body"><div id="etAssin"></div><div class="et-opcoes" id="etOpcoes"></div><div id="etHist"></div></div>
   </div>
 </div>
 <div class="modal" id="icModal">
@@ -6553,14 +6610,15 @@ function renderRanking(){
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   const _rkN = rkTodos().filter(x => !x.encerrado || (souGerente() && rankTipo === 'rk:' + x.id)).map(x => ['rk:' + x.id, x.nome]);
   const _rkAnt = souGerente() ? rkTodos().filter(x => x.encerrado).sort((a, b) => String(b.fim || b.inicio).localeCompare(String(a.fim || a.inicio)) || (a.auto ? -1 : 1)) : []; /* v323: rankings anteriores, só gerência */
-  $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'], ..._rkN, ['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}${k.startsWith('rk:') ? ' rkn-tab' : ''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'], ..._rkN, ['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV'], ['anjos','Anjos']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}${k.startsWith('rk:') ? ' rkn-tab' : ''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   if (souDono()) $('segRank').insertAdjacentHTML('beforeend', `<button class="rkn-novo" onclick="abrirRkNovo()">+ Novo ranking</button>`);
   if (_rkAnt.length) $('segRank').insertAdjacentHTML('beforeend', `<select class="rkn-ant" aria-label="Rankings anteriores" onchange="if(this.value){rankTipo=this.value;render()}"><option value="">Rankings anteriores</option>${_rkAnt.map(x => `<option value="rk:${x.id}" ${rankTipo === 'rk:' + x.id ? 'selected' : ''}>${esc(x.nome)}</option>`).join('')}</select>`);
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
   $('rMesPts')?.classList.add('hide');
   $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos' || rankTipo.startsWith('rk:')); if ($('podio')) $('podio').innerHTML = '';
   document.getElementById('paneRanking')?.classList.toggle('rk-hoje', rankTipo === 'hoje');
-  if (rankTipo === 'hoje') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirMetasDia()">Metas do dia e de vendas</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Metas de hoje'; $('rankNota').textContent = 'Cada número mostra quanto falta para bater a meta de hoje.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankHoje(); return; }
+  if (rankTipo === 'hoje') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirMetasDia()">Metas do dia</button><button class="btn btn-ghost" onclick="abrirMetas()">Metas de reservas</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Metas de hoje'; $('rankNota').textContent = 'Cada número mostra quanto falta para bater a meta de hoje.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankHoje(); return; }
+  if (rankTipo === 'anjos') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirAnjoCheckCfg()">Editar atividades e pontos</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Ranking dos anjos · ' + nomeMes(mesAtual()).split(' de ')[0].toLowerCase(); $('rankNota').textContent = 'Pontos do checklist de atribuições do dia. Zera todo dia 1º.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankAnjos(); return; }
   if (rankTipo.startsWith('rk:')) { renderRankingNovo(rankTipo.slice(3)); return; }
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
@@ -7706,7 +7764,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 333;
+const APP_VERSAO = 336;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13504,17 +13562,174 @@ function htmlPremiosPessoa(feito){
   const pr = premiosMes(); if (!pr.length) return '';
   const prox = pr.find(x => feito < x.vendas);
   return `<div class="pr-fx">${pr.map(x => { const ok = feito >= x.vendas, pct = Math.min(100, Math.round(feito / x.vendas * 100));
-    return `<div class="pr-i ${ok ? 'ok' : ''} ${x === prox ? 'prox' : ''}"><div class="pr-n"><b>${x.vendas}</b><small>venda${x.vendas > 1 ? 's' : ''}</small></div><div class="pr-t"><span>${esc(x.premio)}</span><div class="meta-bar"><i style="width:${pct}%"></i></div><small>${ok ? 'Destravado' : x === prox ? `Falta${x.vendas - feito > 1 ? 'm' : ''} ${fmtVendas(x.vendas - feito)} venda${x.vendas - feito > 1 ? 's' : ''}` : 'Bloqueado'}</small></div></div>`; }).join('')}</div>`;
+    return `<div class="pr-i ${ok ? 'ok' : ''} ${x === prox ? 'prox' : ''}"><div class="pr-n"><b>${x.vendas}</b><small>reserva${x.vendas > 1 ? 's' : ''}</small></div><div class="pr-t"><span>${esc(x.premio)}</span><div class="meta-bar"><i style="width:${pct}%"></i></div><small>${ok ? 'Destravado' : x === prox ? `Falta${x.vendas - feito > 1 ? 'm' : ''} ${fmtVendas(x.vendas - feito)} reserva${x.vendas - feito > 1 ? 's' : ''}` : 'Bloqueado'}</small></div></div>`; }).join('')}</div>`;
 }
 function htmlMetaHoje(){
   if (!['corretor','coordenador','anjo'].includes(perfil?.papel)) return '';
   const meta = metaDe(uidAtual);
-  if (!meta) { const pr = htmlPremiosPessoa(vendasNoMes(uidAtual)); return pr ? `<div class="meta-card"><div class="meta-l1"><span>Premiações de ${nomeMes(mesAtual()).split(' de ')[0].toLowerCase()}</span><b>${fmtVendas(vendasNoMes(uidAtual))} <small>vendas no mês</small></b></div>${pr}</div>` : ''; }
+  if (!meta) { const pr = htmlPremiosPessoa(vendasNoMes(uidAtual)); return pr ? `<div class="meta-card"><div class="meta-l1"><span>Premiações de ${nomeMes(mesAtual()).split(' de ')[0].toLowerCase()}</span><b>${fmtVendas(vendasNoMes(uidAtual))} <small>reservas no mês</small></b></div>${pr}</div>` : ''; }
   const feito = vendasNoMes(uidAtual), pct = Math.min(100, Math.round(feito / meta * 100)), falta = Math.max(0, meta - feito), bateu = feito >= meta;
   const mesN = nomeMes(mesAtual()).split(' de ')[0].toLowerCase();
-  return `<div class="meta-card ${bateu ? 'bateu' : ''}"><div class="meta-l1"><span>🎯 Sua meta de ${mesN}</span><b>${fmtVendas(feito)} <small>de ${meta} venda${meta > 1 ? 's' : ''}</small></b></div>
+  return `<div class="meta-card ${bateu ? 'bateu' : ''}"><div class="meta-l1"><span>Sua meta de reservas em ${mesN}</span><b>${fmtVendas(feito)} <small>de ${meta} reserva${meta > 1 ? 's' : ''}</small></b></div>
     <div class="meta-bar"><i style="width:${pct}%"></i></div>
-    <small>${bateu ? '🏆 Meta batida! Cada venda a mais conta no ranking.' : `Faltam ${fmtVendas(falta)} venda${falta > 1 ? 's' : ''} · ${diasUteisRestantes()} dias de trabalho até o fim do mês`}</small>${htmlPremiosPessoa(feito)}</div>`;
+    <small>${bateu ? 'Meta batida! Cada reserva a mais conta no ranking.' : `Falta${falta > 1 ? 'm' : ''} ${fmtVendas(falta)} reserva${falta > 1 ? 's' : ''} · ${diasUteisRestantes()} dias de trabalho até o fim do mês`}</small>${htmlPremiosPessoa(feito)}</div>`;
+}
+// =====================================================================
+// v334: meta do escritório (reservas do mês e da quinzena) com premiações em degraus
+// =====================================================================
+const escDegraus = k => { const e = (metasMes && metasMes.escritorio) || {}; return (Array.isArray(e[k]) ? e[k] : []).filter(x => x && Number(x.qtd) > 0).sort((a, b) => a.qtd - b.qtd); };
+const reservasEsc = (de, ate) => (rankingVendas || []).filter(v => !v.caiu && v.dia && v.dia >= de && v.dia <= ate).length;
+function quinzenaAtual(){ const h = hojeISO(), m = h.slice(0, 7); return Number(h.slice(8, 10)) <= 15 ? { n:1, de:m + '-01', ate:m + '-15' } : { n:2, de:m + '-16', ate:fimDoMes(m) }; }
+window.htmlEscLinha = x => `<div class="esc-ed"><input type="number" min="1" step="1" inputmode="numeric" class="esc-q" value="${x.qtd ?? ''}" placeholder="Reservas" aria-label="Reservas para liberar"><input class="esc-pr" maxlength="80" value="${esc(x.premio || '')}" placeholder="Premiação (ex.: churrasco da equipe)" aria-label="Premiação"><button class="icon-btn" onclick="this.parentElement.remove()" aria-label="Tirar degrau" data-ic="x"></button></div>`;
+function lerEscLinhas(id){ return [...document.querySelectorAll('#' + id + ' .esc-ed')].map(r => ({ qtd:Math.max(0, Math.min(999, Math.round(Number(r.querySelector('.esc-q').value) || 0))), premio:r.querySelector('.esc-pr').value.trim().slice(0, 80) })).filter(x => x.qtd && x.premio).sort((a, b) => a.qtd - b.qtd); }
+function htmlDegrausEsc(tit, feito, dg){
+  if (!dg.length) return '';
+  const prox = dg.find(x => feito < x.qtd), topo = dg[dg.length - 1].qtd, pct = Math.min(100, Math.round(feito / topo * 100));
+  return `<div class="esc-meta ${!prox ? 'tudo' : ''}"><div class="esc-l1"><span>${tit}</span><b>${feito} <small>reserva${feito === 1 ? '' : 's'}</small></b></div>
+    <div class="esc-trilho"><i style="width:${pct}%"></i>${dg.map(x => `<em class="${feito >= x.qtd ? 'ok' : ''}" style="left:${Math.min(100, x.qtd / topo * 100)}%"></em>`).join('')}</div>
+    <div class="esc-dg">${dg.map(x => `<div class="esc-p ${feito >= x.qtd ? 'ok' : ''} ${x === prox ? 'prox' : ''}"><b>${x.qtd}</b><span>${esc(x.premio)}</span><small>${feito >= x.qtd ? 'Liberado' : x === prox ? `Falta${x.qtd - feito > 1 ? 'm' : ''} ${x.qtd - feito}` : 'Bloqueado'}</small></div>`).join('')}</div></div>`;
+}
+function htmlMetaEscritorio(){
+  if (!souAtivo()) return '';
+  const m = mesAtual(), q = quinzenaAtual(), mesN = nomeMes(m).split(' de ')[0].toLowerCase();
+  const a = htmlDegrausEsc(`Meta do escritório em ${mesN}`, reservasEsc(m + '-01', fimDoMes(m)), escDegraus('mes'));
+  const b = htmlDegrausEsc(`Meta da ${q.n}ª quinzena (${q.de.slice(8)} a ${q.ate.slice(8)}/${m.slice(5)})`, reservasEsc(q.de, q.ate), escDegraus('quinzena'));
+  const ed = souGerente() && !souCeo() ? `<button class="link" onclick="abrirMetas()">Editar metas</button>` : '';
+  if (!a && !b) return ed ? `<div class="esc-card esc-vazio"><span>Meta de reservas do escritório ainda não definida.</span>${ed}</div>` : '';
+  return `<div class="esc-card">${a}${b}${ed ? `<div class="esc-pe">${ed}</div>` : ''}</div>`;
+}
+
+// =====================================================================
+// v334: atribuições dos anjos e coordenadores: checklist do dia, um item libera o próximo
+// =====================================================================
+const ANJO_CHECK_PADRAO = [['c1','Conferir o check-in da manhã do time'], ['c2','Mandar a meta do dia no grupo do time'], ['c3','Cobrar o primeiro bloco de ligações'], ['c4','Revisar com cada corretor as visitas de hoje e de amanhã'], ['c5','Acompanhar as documentações e análises de crédito do time'], ['c6','Conferir o funil de cada corretor'], ['c7','Cobrar o bloco de ligações da tarde'], ['c8','Fechamento do dia com o time: resultado e pendências']];
+const anjoItens = () => { const l = (appCfg.anjoCheck || {}).itens; return Array.isArray(l) && l.length ? l : ANJO_CHECK_PADRAO.map(([id, t]) => ({ id, t, pts:0 })); };
+const ehAnjoCoord = p => !!p && (p.papel === 'anjo' || p.papel === 'coordenador');
+const achDe = (uid, dia) => ((rankingAtiv.find(r => r.id === dia.slice(0, 7) + '_' + uid) || {}).ach || {})[dia] || {};
+const horaCurta = t => new Date(t).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+function htmlAnjoCheckHoje(){
+  if (!ehAnjoCoord(perfil) || souCeo()) return '';
+  const h = hojeISO(), f = achDe(uidAtual, h), it = anjoItens(), n = it.filter(x => f[x.id]).length, prox = it.find(x => !f[x.id]);
+  const ult = [...it].reverse().find(x => f[x.id]), pts = it.reduce((a, x) => a + (f[x.id] ? Number(x.pts) || 0 : 0), 0);
+  return `<div class="ach-card ${!prox ? 'feito' : ''}"><div class="ach-cab"><b>Suas atribuições de hoje</b><span>${n} de ${it.length}${pts ? ' · ' + pts + ' pontos' : ''}</span></div><div class="meta-bar"><i style="width:${Math.round(n / Math.max(1, it.length) * 100)}%"></i></div>
+    <ol class="ach-l">${it.map(x => { const t = f[x.id], ok = !!t, vez = x === prox;
+      return `<li class="${ok ? 'ok' : vez ? 'vez' : 'bloq'}"><button class="ach-bt" ${vez ? `onclick="marcarAch('${x.id}')" aria-label="Marcar como feito"` : ok && x === ult ? `onclick="desfazerAch('${x.id}')" aria-label="Desfazer"` : 'disabled aria-label="Ainda não liberado"'}>${ok ? '✓' : ''}</button><span>${esc(x.t)}${ok ? `<small>feito às ${horaCurta(t)}</small>` : vez ? '<small>próxima atividade</small>' : ''}</span>${Number(x.pts) ? `<em>${Number(x.pts)} pts</em>` : ''}</li>`; }).join('')}</ol>${!prox ? '<div class="ach-fim">Todas as atribuições de hoje feitas.</div>' : ''}</div>`;
+}
+window.marcarAch = async id => {
+  const it = anjoItens(), h = hojeISO(), f = achDe(uidAtual, h), prox = it.find(x => !f[x.id]); if (!prox || prox.id !== id) return; const m = h.slice(0, 7);
+  try { await gravar(setDoc(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', ach:{ [h]:{ [id]:Date.now() } }, atualizadoEm:Date.now() }, { merge:true })); }
+  catch(e) { toast('Não foi possível marcar: ' + e.message); }
+};
+window.desfazerAch = async id => {
+  if (!confirm('Desmarcar essa atividade?')) return; const h = hojeISO(), m = h.slice(0, 7);
+  try { await gravar(setDoc(doc(db,'ranking_ativ', m + '_' + uidAtual), { ach:{ [h]:{ [id]:deleteField() } }, atualizadoEm:Date.now() }, { merge:true })); } catch(e) { toast('Erro: ' + e.message); }
+};
+// ranking dos anjos: pelos pontos do checklist no mês
+function linhasRankAnjos(m){
+  const it = anjoItens(), h = hojeISO(), base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk());
+  return base.filter(p => ehAnjoCoord(p) && p.status !== 'inativo').map(p => { const ach = (rankingAtiv.find(x => x.id === m + '_' + p.uid) || {}).ach || {}; let pts = 0, itens = 0, completos = 0;
+    Object.entries(ach).forEach(([d, o]) => { if (d.slice(0, 7) !== m || !o) return; const k = it.filter(x => o[x.id]); itens += k.length; pts += k.reduce((a, x) => a + (Number(x.pts) || 0), 0); if (k.length && k.length === it.length) completos++; });
+    return { p, pts, itens, completos, hoje:it.filter(x => (ach[h] || {})[x.id]).length };
+  }).sort((a, b) => b.pts - a.pts || b.itens - a.itens || b.completos - a.completos || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
+}
+function htmlRankAnjos(){
+  const m = mesAtual(), it = anjoItens(), l = linhasRankAnjos(m), semPts = !it.some(x => Number(x.pts));
+  if (!l.length) return vazio('Nenhum anjo ou coordenador cadastrado', 'Quando houver, o ranking aparece aqui.');
+  return `<div class="rka">${l.map((x, i) => `<div class="rka-l ${x.p.uid === uidAtual ? 'me' : ''}"><span class="rka-pos">${i + 1}º</span><span class="rka-n"><b>${esc(x.p.nome)}</b><small>${esc(PAPEIS[x.p.papel] || '')}${x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></span>
+    <span class="rka-c"><b>${x.pts}</b><small>pontos</small></span><span class="rka-c"><b>${x.itens}</b><small>atividades</small></span><span class="rka-c"><b>${x.completos}</b><small>dias completos</small></span><span class="rka-c rka-hj"><b>${x.hoje}/${it.length}</b><small>hoje</small></span></div>`).join('')}</div>
+    ${semPts ? '<div class="hint" style="margin-top:10px">Os pontos de cada atividade ainda não foram definidos: por enquanto a ordem é pelo número de atividades feitas.</div>' : ''}`;
+}
+window.abrirAnjoCheckCfg = () => {
+  if (!souGerente() || souCeo()) return;
+  $('achCorpo').innerHTML = `<div class="hint" style="margin:0 0 10px">Na ordem em que devem ser feitas. O anjo ou coordenador só libera a próxima depois de marcar a anterior. Os pontos contam no ranking dos anjos.</div>
+    <div class="ach-ed ach-ed-cab"><small>Atividade</small><small>Pontos</small><span></span></div><div id="achLista">${anjoItens().map(htmlAchLinha).join('')}</div>
+    <button class="link" onclick="document.getElementById('achLista').insertAdjacentHTML('beforeend', htmlAchLinha({}))">+ Adicionar atividade</button>`;
+  abrir('achModal');
+};
+window.htmlAchLinha = x => `<div class="ach-ed" data-id="${esc(x.id || '')}"><input class="ach-t" maxlength="120" value="${esc(x.t || '')}" placeholder="Atividade" aria-label="Atividade"><input class="ach-p" type="number" step="1" inputmode="numeric" value="${x.pts ?? 0}" aria-label="Pontos"><button class="icon-btn" onclick="this.parentElement.remove()" aria-label="Tirar atividade" data-ic="x"></button></div>`;
+window.salvarAnjoCheckCfg = async () => {
+  const itens = [...document.querySelectorAll('#achLista .ach-ed')].map((r, i) => ({ id:r.dataset.id || 'a' + Date.now().toString(36) + i, t:r.querySelector('.ach-t').value.trim().slice(0, 120), pts:Math.round(Number(r.querySelector('.ach-p').value) || 0) })).filter(x => x.t);
+  if (!itens.length) { toast('Coloque pelo menos uma atividade'); return; }
+  try { await gravar(setDoc(doc(db,'config','app'), { anjoCheck:{ itens, atualizadoEm:Date.now(), atualizadoPor:perfil.nome } }, { merge:true })); appCfg.anjoCheck = { itens }; fechar('achModal'); toast('Atividades salvas'); render(); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+
+// =====================================================================
+// v334: contrato assinado: o corretor anexa a foto e informa entrada, parcelamento e sinal
+// =====================================================================
+let asId = null;
+const podeAssinar = r => !!r && !r.caiu && !r.arquivado && !souCeo() && (opTudo() || (r.corretorUids || []).includes(uidAtual));
+window.abrirAssinatura = id => {
+  const r = reservasTodas.find(x => x.id === id); if (!podeAssinar(r)) return; asId = id; const a = r.assinCor || {}, iv = x => x ? fmtReaisIn(x) : '', vl = (k, d) => esc(a[k] !== undefined ? a[k] : (d || ''));
+  const tem = (r.docs || []).filter(d => d.tipo === 'contrato'), nf = a.nf || (/^s/i.test(r.notaCnpj || '') ? 'corretor' : /^n/i.test(r.notaCnpj || '') ? 'imobiliaria' : '');
+  $('asCli').textContent = `${nomeBonito(r.cliente) || 'Cliente'}${r.empreendimento ? ' · ' + r.empreendimento : ''}`;
+  $('asCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Já vem preenchido com o que está na reserva: confira e corrija. Ao salvar, o texto do Financeiro Frade é copiado para você colar no grupo. A etapa "Assinou" continua sendo marcada pela ADM em Reservas.</div>
+    <div class="fg"><label>Foto do contrato assinado ${tem.length ? '' : '<span class="obrig">obrigatória</span>'}</label>
+      ${tem.length ? `<div class="as-tem">${tem.map(d => `<span>Contrato anexado em ${new Date(d.em).toLocaleDateString('pt-BR')}</span>`).join('')}<small>Se mandar outra foto, ela entra junto.</small></div>` : ''}
+      <input id="asFoto" type="file" accept="image/*,application/pdf"></div>
+    <div class="row2"><div class="fg"><label>Data em que assinou</label><input id="asData" type="date" value="${a.data || hojeISO()}" max="${hojeISO()}"></div>
+      <div class="fg"><label>Unidade (apartamento e bloco)</label><input id="asUnid" maxlength="60" value="${vl('unidade')}" placeholder="Ex.: Apartamento 305 Bloco J"></div></div>
+    <div class="row2"><div class="fg"><label>1. Valor de venda (R$)</label><input id="asVenda" data-reais="1" inputmode="numeric" value="${iv(a.valorVenda ?? r.valor)}" placeholder="0,00"></div>
+      <div class="fg"><label>3. Valor da comissão (R$)</label><input id="asCom" data-reais="1" inputmode="numeric" value="${iv(a.comissao ?? lerDec(r.comissao))}" placeholder="0,00"></div></div>
+    <div class="rep-sec" style="margin:6px 0 6px">2. Entrada e forma de pagamento</div>
+    <div class="row2"><div class="fg"><label>Teve entrada?</label><select id="asEnt" onchange="asMostra()"><option value="">Escolha</option><option value="sim" ${a.entrada === true ? 'selected' : ''}>Sim</option><option value="nao" ${a.entrada === false ? 'selected' : ''}>Não</option></select></div>
+      <div class="fg as-ent"><label>Valor total da entrada (R$)</label><input id="asEntV" data-reais="1" inputmode="numeric" value="${iv(a.entradaValor || lerDec(r.entrada))}" placeholder="0,00" oninput="asConta()"></div></div>
+    <div class="row2 as-ent"><div class="fg"><label>Negociado da comissão (R$)</label><input id="asNeg" data-reais="1" inputmode="numeric" value="${iv(a.negociado)}" placeholder="0,00 se não teve" oninput="asConta()"></div>
+      <div class="fg"><label>Pago no boleto para a imobiliária em</label><select id="asNegN">${[1,2,3,4,5,6,8,10,12].map(k => `<option value="${k}" ${(a.negociadoParcelas || 1) === k ? 'selected' : ''}>${k === 1 ? 'À vista (1x)' : k + 'x'}</option>`).join('')}</select></div></div>
+    <div class="row2 as-ent"><div class="fg"><label>Cliente pagou (R$)</label><input id="asPagou" data-reais="1" inputmode="numeric" value="${iv(a.clientePagou)}" placeholder="0,00"></div><div class="fg" style="align-self:end"><small class="muted" id="asContaTxt"></small></div></div>
+    <div class="row2"><div class="fg"><label>4. Previsão de assinatura</label><input id="asPrev" maxlength="40" value="${vl('previsao', r.previsao)}" placeholder="Ex.: 22/07/26"></div>
+      <div class="fg"><label>6. Emissão de NF</label><select id="asNF"><option value="">Escolha</option><option value="corretor" ${nf === 'corretor' ? 'selected' : ''}>Corretor</option><option value="imobiliaria" ${nf === 'imobiliaria' ? 'selected' : ''}>Imobiliária</option></select></div></div>
+    <div class="row2"><div class="fg"><label>5. Construtora</label><input id="asConst" maxlength="60" value="${vl('construtora', r.construtora)}"></div>
+      <div class="fg"><label>Telefone da construtora</label><input id="asConstTel" maxlength="30" inputmode="tel" value="${vl('construtoraTel', r.numConstrutora)}"></div></div>
+    <div class="fg"><label>Observação</label><input id="asObs" maxlength="200" value="${vl('obs', r.origem ? (/lead/i.test(r.origem) ? r.origem : 'Lead: ' + r.origem) : '')}" placeholder="Ex.: Lead do corretor"></div>`;
+  asMostra(); asConta(); abrir('asModal');
+};
+window.asMostra = () => { const ent = $('asEnt')?.value === 'sim'; document.querySelectorAll('#asCorpo .as-ent').forEach(e => e.classList.toggle('hide', !ent)); };
+window.asConta = () => { const t = lerDec($('asEntV')?.value), ng = lerDec($('asNeg')?.value), el = $('asContaTxt'); if (!el) return;
+  el.textContent = t && ng ? `Entrada ${brl2(t)} − negociado ${brl2(ng)} = ${brl2(Math.max(0, t - ng))} pago pelo cliente` : '';
+  if (t && ng && !$('asPagou').value && document.activeElement !== $('asPagou')) $('asPagou').placeholder = fmtReaisIn(Math.max(0, t - ng)); };
+// o texto que a equipe já mandava no grupo quando o contrato era assinado
+function textoFinanceiroFrade(r, a){
+  const cor = (corretoresDaReserva(r.corretorTexto) || []).map(c => primeiro(c.nome)).join(' / ') || r.corretorTexto || '', b = x => brl2(x).replace(/^R\$\s?/, '');
+  const ent = !a.entrada ? 'Não teve entrada' : [`R$ ${b(a.entradaValor)}`, a.negociado ? `Negociado da comissão: R$ ${b(a.negociado)}${a.negociadoParcelas > 1 ? ` (será pago no boleto em ${a.negociadoParcelas}x para a imobiliária)` : ' (será pago no boleto à vista para a imobiliária)'}` : '', a.clientePagou ? `Cliente pagou: R$ ${b(a.clientePagou)}` : ''].filter(Boolean).join('\n');
+  return `Cliente: ${nomeBonito(r.cliente) || ''}\nCorretor: ${cor}\nDados empreendimento: ${[r.empreendimento, a.unidade].filter(Boolean).join(' - ')}\n\n*FINANCEIRO FRADE*\nA respeito dos clientes que serão mencionados abaixo, por gentileza informar:\n \n1- Valor de venda: ${b(a.valorVenda)}\n\n2- Valor da entrada e forma de pagamento: ${ent}\n \n3- Valor da comissão: R$ ${b(a.comissao)}\n\n4- Previsão de assinatura: ${a.previsao || ''}\n\n5- Construtora (c/ telefone): ${a.construtora || ''}${a.construtoraTel ? '\n' + a.construtoraTel : ''}\n\n6- Emissão de NF: (CORRETOR OU IMOBILIARIA) ${a.nf === 'corretor' ? 'Corretor' : a.nf === 'imobiliaria' ? 'Imobiliária' : ''}${a.obs ? '\n\nObservação: ' + a.obs : ''}`;
+}
+window.copiarFinFrade = async id => { const r = reservasTodas.find(x => x.id === id); if (!r || !r.assinCor) return;
+  try { await navigator.clipboard.writeText(textoFinanceiroFrade(r, r.assinCor)); toast('Texto do Financeiro Frade copiado'); } catch(e) { toast('Não foi possível copiar'); } };
+window.salvarAssinatura = async () => {
+  const r = reservasTodas.find(x => x.id === asId); if (!podeAssinar(r)) return;
+  const f = $('asFoto').files[0], tem = (r.docs || []).some(d => d.tipo === 'contrato'), ent = $('asEnt').value;
+  if (!f && !tem) { toast('Anexe a foto do contrato assinado'); return; }
+  if (!ent) { toast('Diga se teve entrada'); $('asEnt').focus(); return; }
+  if (!$('asNF').value) { toast('Escolha quem emite a nota fiscal'); $('asNF').focus(); return; }
+  const tot = ent === 'sim' ? lerDec($('asEntV').value) : 0, neg = ent === 'sim' ? lerDec($('asNeg').value) : 0, pagou = ent === 'sim' ? (lerDec($('asPagou').value) || Math.max(0, tot - neg)) : 0;
+  const a = { data:$('asData').value || hojeISO(), unidade:$('asUnid').value.trim().slice(0, 60), valorVenda:lerDec($('asVenda').value), comissao:lerDec($('asCom').value),
+    entrada:ent === 'sim', entradaValor:tot, negociado:neg, negociadoParcelas:neg ? Number($('asNegN').value) || 1 : 0, clientePagou:pagou,
+    previsao:$('asPrev').value.trim().slice(0, 40), construtora:$('asConst').value.trim().slice(0, 60), construtoraTel:$('asConstTel').value.trim().slice(0, 30), nf:$('asNF').value,
+    obs:$('asObs').value.trim().slice(0, 200), em:Date.now(), por:perfil.nome || '', porUid:uidAtual };
+  if (a.entrada && !a.entradaValor) { toast('Coloque o valor da entrada'); $('asEntV').focus(); return; }
+  const bt = $('asSalvar'); bt.disabled = true;
+  try { let docs = r.docs || [];
+    if (f) { toast('Enviando o contrato…'); docs = [...docs, await rvSubirArq(f, 'contrato', r.id, r.corretorUids || [])]; }
+    await gravar(updateDoc(doc(db,'reservas', r.id), { assinCor:a, docs, docsEm:Date.now() })); /* a etapa ASSINOU continua sendo marcada pela ADM em Reservas */
+    fechar('asModal');
+    try { await navigator.clipboard.writeText(textoFinanceiroFrade(r, a)); toast('Salvo. Texto do Financeiro Frade copiado: cole no grupo.'); } catch(e) { toast('Contrato e valores salvos'); }
+    if (!r.assinCor) setTimeout(() => festejar('Contrato assinado!'), 300);
+  } catch(e) { toast('Não foi possível salvar: ' + e.message); }
+  bt.disabled = false;
+};
+// a gerência leva os dados da assinatura para o Financeiro (só preenche o que ainda está vazio lá)
+let _asSincT = null;
+function sincAssinaturasFin(){
+  if (!souGerente() || souCeo() || !window._fvOk) return;
+  clearTimeout(_asSincT); _asSincT = setTimeout(async () => { const b = writeBatch(db); let n = 0;
+    (reservasTodas || []).filter(r => r.assinCor && !r.caiu && !planPend(r.id)).forEach(r => { const a = r.assinCor, f = finVendas[r.id] || {}, up = {};
+      if (!f.geraEntrada) up.geraEntrada = a.entrada ? 'sim' : 'nao';
+      if (a.entrada && !Number(f.entradaValor) && Number(a.entradaValor)) { up.entradaValor = Number(a.entradaValor); if (Number(a.negociadoParcelas) > 1) up.entradaParcelas = Number(a.negociadoParcelas); if (Number(a.clientePagou) && Number(a.negociado)) up.entradaAto = Number(a.clientePagou); }
+      if (!f.nota && a.nf) up.nota = 'com'; if (!f.emissor && a.nf === 'corretor') up.emissor = 'CNPJ do corretor';
+      if (Object.keys(up).length && n < 300) { b.set(doc(db,'fin_vendas', r.id), { ...up, atualizadoEm:Date.now(), atualizadoPor:'Assinatura (' + (a.por || 'corretor') + ')' }, { merge:true }); n++; } });
+    if (n) try { await b.commit(); } catch(e) { console.warn('Assinaturas no financeiro:', e.message); }
+  }, 2500);
 }
 function htmlMetasResumo(){
   if (!souGerente() || !metasMes) return '';
@@ -13529,16 +13744,25 @@ window.abrirMetas = () => {
   const m = mesAtual(), pessoas = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel)).sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
   const por = (metasMes && metasMes.porUid) || {};
   $('metasTit').textContent = 'Metas de ' + nomeMes(m).split(' de ')[0].toLowerCase();
-  $('metasCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Quantas vendas cada um deve fazer no mês. Coloque a meta de todos e mude só quem for diferente. Venda em parceria conta meio para cada um. Quando alguém bater a meta, chega um aviso para ele e para a gerência.</div>
-    <div class="fg"><label>Meta de todos (vendas no mês)</label><input id="metaPadrao" type="number" min="0" step="1" value="${metasMes?.padrao ?? ''}" placeholder="Ex.: 3"></div>
+  $('metasCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Quantas reservas cada um vai entregar no mês. Cada um vê a própria meta na tela inicial. Reserva em parceria conta meio para cada um.</div>
+    <div class="fg"><label>Meta de todos (reservas no mês)</label><input id="metaPadrao" type="number" min="0" step="1" value="${metasMes?.padrao ?? ''}" placeholder="Ex.: 3"></div>
     <div class="rep-sec" style="margin:14px 0 6px">Mudar para alguém (deixe vazio para usar a de todos; 0 = sem meta)</div>
-    ${pessoas.map(p => `<div class="mt-ed"><span>${esc(p.nome)}<small>${fmtVendas(vendasNoMes(p.uid))} venda${vendasNoMes(p.uid) === 1 ? '' : 's'} até agora</small></span><input type="number" min="0" step="1" data-uid="${p.uid}" value="${por[p.uid] ?? ''}" placeholder="—"></div>`).join('')}`;
+    ${pessoas.map(p => `<div class="mt-ed"><span>${esc(p.nome)}<small>${fmtVendas(vendasNoMes(p.uid))} reserva${vendasNoMes(p.uid) === 1 ? '' : 's'} até agora</small></span><input type="number" min="0" step="1" data-uid="${p.uid}" value="${por[p.uid] ?? ''}" placeholder="—"></div>`).join('')}
+    <div class="rep-sec" style="margin:20px 0 6px">Meta do escritório no mês (reservas)</div>
+    <div class="hint" style="margin:0 0 8px">Cada degrau libera uma premiação. Ex.: 30 reservas, 40 reservas, 50 reservas.</div>
+    <div id="escMesL">${(escDegraus('mes').length ? escDegraus('mes') : [{}]).map(htmlEscLinha).join('')}</div>
+    <button class="link" onclick="document.getElementById('escMesL').insertAdjacentHTML('beforeend', htmlEscLinha({}))">+ Adicionar degrau</button>
+    <div class="rep-sec" style="margin:20px 0 6px">Meta do escritório na quinzena (reservas)</div>
+    <div class="hint" style="margin:0 0 8px">Vale para a 1ª quinzena (1 a 15) e para a 2ª (16 até o fim do mês), cada uma contando do zero.</div>
+    <div id="escQzL">${(escDegraus('quinzena').length ? escDegraus('quinzena') : [{}]).map(htmlEscLinha).join('')}</div>
+    <button class="link" onclick="document.getElementById('escQzL').insertAdjacentHTML('beforeend', htmlEscLinha({}))">+ Adicionar degrau</button>`;
   abrir('metasModal');
 };
 window.salvarMetas = async () => {
   const padrao = $('metaPadrao').value === '' ? 0 : Math.max(0, Number($('metaPadrao').value) || 0), porUid = {};
   document.querySelectorAll('#metasCorpo .mt-ed input').forEach(i => { if (i.value !== '') porUid[i.dataset.uid] = Math.max(0, Number(i.value) || 0); });
-  try { await gravar(setDoc(doc(db,'metas', mesAtual()), { mes:mesAtual(), padrao, porUid, premios:premiosMes(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome })); fechar('metasModal'); toast('Metas salvas ✓'); } catch(e) { toast('Erro: ' + e.message); }
+  const escritorio = { mes:lerEscLinhas('escMesL'), quinzena:lerEscLinhas('escQzL') };
+  try { await gravar(setDoc(doc(db,'metas', mesAtual()), { mes:mesAtual(), padrao, porUid, premios:premiosMes(), escritorio, atualizadoEm:Date.now(), atualizadoPor:perfil.nome })); fechar('metasModal'); toast('Metas salvas'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // quem bateu a meta: o app da gerência pede o aviso ao carteiro (ele manda uma vez só)
 function conferirMetasBatidas(){
@@ -13650,6 +13874,8 @@ function renderExtrato(){ renderPrefNotif();
   if (view === 'sorteio' && $('sxPalco') && !sxGirando && !$('sxPalco').contains(document.activeElement) && !document.querySelector('.sx-cfg')?.contains(document.activeElement)) { sxPinta(); sxPintaHist(); }
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
+  if ($('metaEscHoje')) { const h = view === 'hoje' ? htmlMetaEscritorio() : ''; if ($('metaEscHoje')._h !== h) { $('metaEscHoje').innerHTML = h; $('metaEscHoje')._h = h; } }
+  if ($('anjoCheckHoje')) { const h = view === 'hoje' ? htmlAnjoCheckHoje() : ''; if ($('anjoCheckHoje')._h !== h) { $('anjoCheckHoje').innerHTML = h; $('anjoCheckHoje')._h = h; } }
   if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlBonusMeu() + htmlExtrato(); }
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
@@ -13802,7 +14028,7 @@ function assinarFin2(){
   finVendas = {}; finFixas = []; _fixasFeitas = '';
   if (!souGerente()) return;
   const silencio = e => console.warn('Financeiro 2:', e.code || e.message);
-  subsPapel.push(onSnapshot(collection(db,'fin_vendas'), s => { finVendas = {}; s.docs.forEach(d => finVendas[d.id] = d.data()); render(); sincExtrato(); try { sincVendasRanking(); } catch(e) {} }, silencio));
+  subsPapel.push(onSnapshot(collection(db,'fin_vendas'), s => { finVendas = {}; s.docs.forEach(d => finVendas[d.id] = d.data()); window._fvOk = true; render(); sincExtrato(); try { sincAssinaturasFin(); } catch(e) {} try { sincVendasRanking(); } catch(e) {} }, silencio));
   subsPapel.push(onSnapshot(collection(db,'fin_fixas'), s => { finFixas = s.docs.map(d => ({ id:d.id, ...d.data() })); _fixasFeitas = ''; render(); }, silencio));
   subsPapel.push(onSnapshot(collection(db,'fin_notas'), s => { window.finNotas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
 }
@@ -14696,6 +14922,8 @@ function numerosDoMesSal(m){
   const rs = reservas.filter(r => r.dia >= de && r.dia <= ate), crm = rs.filter(r => /crm/i.test(r.origem || '')).length;
   return { contratos, reservas:rs.length, pctCRM: rs.length ? Math.round(crm / rs.length * 100) : 0 };
 }
+// v334: anjo recebe R$ 200 por fechamento (reserva de outubro assinada) dos corretores dele. Só vale na folha de outubro; novembro terá outra regra
+const ANJO_FECH = { mes:'2026-10', valor:200 };
 function calcSalario(rg, n){
   rg = rg || {}; const v = k => Number(rg[k]) || 0, q = k => Number(n[k]) || 0;
   const partes = [];
@@ -14715,6 +14943,8 @@ function calcSalario(rg, n){
   if (v('porSemana') && q('semanas')) partes.push([`${q('semanas')} semanas sem roxo × ${brl(v('porSemana'))}`, v('porSemana') * q('semanas')]);
   if (v('metaTodos') && q('contratos') >= v('metaTodos') && v('valorTodos')) partes.push([`Bateu ${v('metaTodos')}: ${q('contratos')} × ${brl(v('valorTodos'))}`, v('valorTodos') * q('contratos')]);
   else if (v('excLimite') && v('excValor') && q('contratos') > v('excLimite')) partes.push([`${q('contratos') - v('excLimite')} acima de ${v('excLimite')} × ${brl(v('excValor'))}`, v('excValor') * (q('contratos') - v('excLimite'))]);
+  if (q('fechAnjo')) { const va = rg.porFechAnjo === undefined || rg.porFechAnjo === '' || rg.porFechAnjo === null ? ANJO_FECH.valor : v('porFechAnjo');
+    if (va) partes.push([`${q('fechAnjo')} fechamento${q('fechAnjo') === 1 ? '' : 's'} dos corretores do anjo (reservas de outubro assinadas) × ${brl(va)}${(n.fechAnjoLista || []).length ? ' · ' + n.fechAnjoLista.join(', ') : ''}`, va * q('fechAnjo')]); }
   if (q('bonus')) partes.push(['Bônus', q('bonus')]);
   const calc = Math.round(partes.reduce((a, p) => a + p[1], 0) * 100) / 100;
   if (n.final) return { total:Number(n.final), partes:[...partes, [`Valor final escolhido por você (o calculado era ${brl2(calc)})`, Number(n.final) - calc]] };
@@ -14730,6 +14960,12 @@ function salNumsDe(x){
   // v258: contratos assinados no mês de vendas que começaram por essa SDR
   if (sdr) { const de = salMes + '-01', ate = fimDoMes(salMes), l = (typeof reservasTodas !== 'undefined' ? reservasTodas : []).filter(r => !r.caiu && !r.arquivado).filter(r => { const sd = sdrDaReserva(r); if (!sd) return false; return sdr.uid ? sd.uid === sdr.uid : norm(sd.nome).split(' ')[0] === nm; }).filter(r => { const a = assinaturaDaReserva(r); return a && a >= de && a <= ate; });
     n.ehSdr = true; n.assinSdr = l.length; n.assinSdrLista = l.map(r => nomeCurto(nomeBonito(r.cliente || ''))); }
+  /* v334: anjo: R$ 200 por reserva de outubro dos corretores dele que já assinou (só na folha de outubro/2026) */
+  if (salMes === ANJO_FECH.mes) { const anjos = (perfisTodos || []).filter(p => p.papel === 'anjo'), cheio = norm(nomeDaFixa(x.descricao));
+    let c = anjos.filter(p => norm(p.nome) === cheio); if (!c.length) c = anjos.filter(p => norm(p.nome).split(' ')[0] === nm);
+    if (c.length === 1) { const mb = new Set(Array.isArray(c[0].membros) ? c[0].membros : []);
+      const l = (rankingVendas || []).filter(v => !v.caiu && (v.dia || '').slice(0, 7) === ANJO_FECH.mes && v.ass && (v.corretores || []).some(k => k.uid && mb.has(k.uid)));
+      n.ehAnjo = true; n.fechAnjo = l.length; n.fechAnjoLista = l.map(v => nomeCurto((v.corretores.find(k => mb.has(k.uid)) || {}).nome || '') + ' ' + v.dia.slice(8, 10) + '/' + v.dia.slice(5, 7)); } }
   if (sdr) { const dm = diasNaMedia(sdr.dias, x.regra?.diaMediaMax);
     Object.assign(n, { docs:sdr.docs, media: sdr.docs ? Math.round(sdr.leads / sdr.docs * 100) / 100 : 0, visitas:sdr.realizadas, recontatos:sdr.recup, diasMedia:dm.length, diasMediaLista:dm.map(d => d.dia.slice(8,10) + '/' + d.dia.slice(5,7)) }); }
   return (salNums[x.id] = n);
@@ -15799,7 +16035,7 @@ function renderVendas(){
         <div class="v-meta">${r.valor ? `<span style="color:var(--text);font-weight:700">💰 ${brl(r.valor)}</span>` : ''}<span>👤 ${esc(r.cor.map(c => c.nome).join(' / ') || r.corretorTexto || '—')}</span>${r.empreendimento ? `<span>🏠 ${esc(r.empreendimento)}</span>` : ''}${r.construtora ? `<span>🏗️ ${esc(r.construtora)}</span>` : ''}${r.previsao ? `<span>✍️ ${esc(r.previsao)}</span>` : ''}${r.cpf ? `<span>🪪 ${cpfOculto(r.cpf)}</span>` : ''}</div>
         ${r.caiu && r.motivoCaiu ? `<div class="v-obs">✖ ${esc(r.motivoCaiu)}</div>` : r.obs ? `<div class="v-obs">📝 ${esc(r.obs)}</div>` : ''}
       </div>
-      <div class="v-actions">${r.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(r.telefone)}')">${IC.wa}WhatsApp</button>` : ''}${g ? (r.caiu ? `<button class="snooze" onclick="restaurarReserva('${r.id}')">↩ Voltar a contar</button>` : `<button class="snooze" onclick="editarReserva('${r.id}')">Editar</button>`) : ''}</div>
+      <div class="v-actions">${podeAssinar(r) ? (r.assinCor ? `<button class="snooze as-ok" onclick="abrirAssinatura('${r.id}')">✓ Contrato anexado</button>` : `<button class="snooze as-bt" onclick="abrirAssinatura('${r.id}')">Anexar contrato assinado</button>`) : ''}${r.telefone ? `<button class="snooze wa" onclick="abrirWhats('${esc(r.telefone)}')">${IC.wa}WhatsApp</button>` : ''}${g ? (r.caiu ? `<button class="snooze" onclick="restaurarReserva('${r.id}')">↩ Voltar a contar</button>` : `<button class="snooze" onclick="editarReserva('${r.id}')">Editar</button>`) : ''}</div>
     </div>`).join('') : vazio(vendFil.caidas ? 'Nenhuma venda caiu nesse período' : 'Nenhuma venda nesse período', 'Mude o período ou cadastre pelo botão "Nova reserva".'));
 }
 
@@ -16084,6 +16320,8 @@ let etId = null;
 window.abrirEtapa = id => {
   const r = reservasTodas.find(x => x.id === id); if (!r) return; etId = id; const atual = etapaDe(r);
   $('etCli').textContent = `${nomeBonito(r.cliente) || 'Cliente'}${r.empreendimento ? ' · ' + r.empreendimento : ''}`;
+  /* v334: o que o corretor mandou do contrato aparece aqui para a ADM conferir antes de marcar Assinou */
+  { const a = r.assinCor, el = $('etAssin'); if (el) el.innerHTML = a ? `<div class="et-assin"><b>Corretor anexou o contrato assinado</b><span>Assinou em ${dataBR(a.data)} · enviado por ${esc(primeiro(a.por || ''))}${a.unidade ? ' · ' + esc(a.unidade) : ''}</span><span>Venda ${brl2(a.valorVenda)} · Comissão ${brl2(a.comissao)} · NF: ${a.nf === 'corretor' ? 'corretor' : a.nf === 'imobiliaria' ? 'imobiliária' : '—'}</span><span>Entrada: ${a.entrada ? brl2(a.entradaValor) + (a.negociado ? ` · negociado da comissão ${brl2(a.negociado)} em ${a.negociadoParcelas}x no boleto` : '') + (a.clientePagou ? ` · cliente pagou ${brl2(a.clientePagou)}` : '') : 'não teve'}</span>${a.obs ? `<span>${esc(a.obs)}</span>` : ''}<span class="et-assin-bt"><button class="link" onclick="fechar('etapaModal');editarReserva('${r.id}')">Ver a foto do contrato</button><button class="link" onclick="copiarFinFrade('${r.id}')">Copiar texto do Financeiro</button></span></div>` : ''; }
   $('etOpcoes').innerHTML = ETAPAS_RES.map(([e]) => `<button class="et-op ${e === atual ? 'on' : ''}" onclick="mudarEtapaRes('${e}')">${pillEtapa(e)}${e === atual ? '<span class="et-atual">etapa atual</span>' : ''}</button>`).join('');
   const h = (r.etapaHist || []).slice().sort((a, b) => (b.em || 0) - (a.em || 0));
   $('etHist').innerHTML = h.length ? `<h4 class="cart-h" style="margin-top:16px">Histórico</h4>${h.slice(0, 20).map(x => `<div class="et-h"><span>${pillEtapa(x.etapa)}</span><small>${new Date(x.em).toLocaleDateString('pt-BR')} às ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })} · ${esc(primeiro(x.por || ''))}</small></div>`).join('')}` : '';
@@ -16129,7 +16367,7 @@ window.lerTextoReserva = () => {
   toast(n ? `${n} campos preenchidos. Confira e salve.` : 'Não reconheci o texto. Ele precisa ter "CLIENTE:", "CPF:" etc.');
 };
 // ---------- documentação do cliente na reserva ----------
-const DOCS_RES = [['identidade','RG ou CNH'],['cpf','CPF'],['estado_civil','Certidão de nascimento ou casamento'],['residencia','Comprovante de residência'],['renda','Comprovante de renda'],['ctps','Carteira de trabalho'],['ir','Declaração de Imposto de Renda'],['fgts','Extrato do FGTS'],['conjuge','Documentos do cônjuge'],['outros','Outros documentos']];
+const DOCS_RES = [['identidade','RG ou CNH'],['cpf','CPF'],['estado_civil','Certidão de nascimento ou casamento'],['residencia','Comprovante de residência'],['renda','Comprovante de renda'],['ctps','Carteira de trabalho'],['ir','Declaração de Imposto de Renda'],['fgts','Extrato do FGTS'],['conjuge','Documentos do cônjuge'],['contrato','Contrato assinado'],['outros','Outros documentos']];
 const rvDocNome = t => (DOCS_RES.find(([k]) => k === t) || [, 'Documento'])[1];
 let rvDocsAtuais = [], rvNovos = [], rvTirar = [], rvTipoAlvo = '';
 const rvTiposFeitos = r => new Set((r?.docs || []).map(d => d.tipo)).size;
@@ -16356,13 +16594,16 @@ function corretoresDaReserva(txt){
      até escolher o certo; "Luiz" não vira "Ana Luiza". Só liga quando sobra uma pessoa só. */
   const fon = s => nomeSimples(limpaNomeCor(s)).replace(/z/g, 's'), pals = s => fon(s).split(' ').filter(w => w.length > 1);
   const unico = l => l.length === 1 ? l[0] : null;
-  return partes.map(n => {
-    const q = pals(n);
-    const p = ativos.find(x => limpaNomeCor(x.nome) === n) || (!q.length ? null : q.length === 1
-      ? (() => { const c = ativos.filter(x => pals(x.nome)[0] === q[0]); if (c.length) return unico(c); return unico(ativos.filter(x => pals(x.nome).includes(q[0]))); })()
+  /* v335: apelido que é o começo de um nome ("Karol" = Anna Karolliny) e quem está bloqueado também é reconhecido (a venda dele conta no geral) */
+  const acha = (ativos, n, q) => ativos.find(x => limpaNomeCor(x.nome) === n) || (!q.length ? null : q.length === 1
+      ? (() => { const c = ativos.filter(x => pals(x.nome)[0] === q[0]); if (c.length) return unico(c); const c2 = ativos.filter(x => pals(x.nome).includes(q[0])); if (c2.length) return unico(c2);
+          return q[0].length >= 4 ? unico(ativos.filter(x => pals(x.nome).some(y => y.length >= q[0].length + 3 && y.startsWith(q[0])))) : null; })()
       : (() => { const c = ativos.filter(x => { const t = pals(x.nome); return t[0] === q[0] && q.every(w => t.includes(w)); }); if (c.length) return unico(c);
           const c2 = ativos.filter(x => { const t = pals(x.nome); return q.every(w => t.includes(w)); }); if (c2.length) return unico(c2);
           return unico(ativos.filter(x => { const t = pals(x.nome); return t[0].startsWith(q[0]) && q.slice(1).every(w => w.length >= 3 && t.some(y => y.startsWith(w))); })); })());
+  const todos = perfisLista.filter(p => p.status !== 'inativo' && p.status !== 'pendente' && p.status !== 'recusado');
+  return partes.map(n => {
+    const q = pals(n), p = acha(ativos, n, q) || acha(todos, n, q);
     return p ? { uid:p.uid, nome:p.nome, equipe:p.equipe || '' } : { uid:'', nome:nomeBonito(n), equipe:'' };
   });
 }
@@ -16572,6 +16813,9 @@ function calcDesempenho(de, ate){
   const pega = (uid, nome, equipe) => {
     nome = consertaTexto(nome);
     if (!uid && nome) { const pf = perfisTodos.find(p => p.status === 'ativo' && chaveNomeLead(p.nome) === chaveNomeLead(nome)); if (pf) uid = pf.uid; }
+    /* v336: nome do CRM/planilha escrito diferente, ou de corretor bloqueado, também liga à pessoa (antes aparecia repetido como "sem ligação") */
+    if (!uid && nome) { const pf = perfisTodos.find(p => p.status !== 'inativo' && chaveNomeLead(p.nome) === chaveNomeLead(nome)); if (pf) uid = pf.uid; }
+    if (!uid && nome && nome.length >= 3) { try { uid = uidDaAv({ corretorNome:nome }) || ((corretoresDaReserva(nome) || [])[0] || {}).uid || ''; } catch(e) {} }
     const k = chaveDe(uid, nome);
     if (!linhas.has(k)) { const pf = uid ? perfisTodos.find(p => p.uid === uid) : null;
       linhas.set(k, { uid:uid || '', nome:pf?.nome || nomeBonito(nome) || '?', equipe:pf?.equipe || equipe || '', ligado:!!uid, leads:0, docs:0, aprov:0, cond:0, reprov:0, vendas:0 }); }
@@ -17200,7 +17444,7 @@ window.abrirMetasDia = () => {
     + (id === 'sdr' || id.endsWith(':s') ? '<span></span>' : id === 'padrao' ? venda('data-vp="1"', vPad, 0) : venda(`data-vu="${id.slice(2)}"`, vPor[id.slice(2)], vPad || 0));
   const gente = pessoasRk().filter(p => MD_PAPEIS.includes(p.papel) && p.status !== 'inativo').sort((a, b) => (a.papel === 'sdr') - (b.papel === 'sdr') || a.nome.localeCompare(b.nome, 'pt-BR'));
   $('mdCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Ligações, docs e visitas são metas por dia; vendas é a meta do mês (venda em parceria conta meio para cada um). Ligações contam números diferentes ligados no dia. Docs contam tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada; para a SDR, o resumo do dia).</div>
-    <div class="md-ed md-cab"><span></span>${MD_ITENS.map(([, n]) => `<small>${n}</small>`).join('')}<small>Vendas no mês</small></div>
+    <div class="md-ed md-cab"><span></span>${MD_ITENS.map(([, n]) => `<small>${n}</small>`).join('')}<small>Reservas no mês</small></div>
     <div class="md-ed"><span><b>Corretores e coordenadores</b><small>meta de todos</small></span>${linha('padrao', pad)}</div>
     <div class="md-ed"><span><b>SDRs</b><small>meta de todas</small></span>${linha('sdr', sdr)}</div>
     <div class="rep-sec" style="margin:16px 0 6px">Mudar para alguém (vazio usa a meta de todos; 0 tira a meta)</div>
@@ -17223,7 +17467,7 @@ window.salvarMetasDia = async () => {
   const padraoV = vp && vp.value !== '' ? Math.max(0, Math.min(999, Math.round(Number(vp.value) || 0))) : 0;
   const premios = [...document.querySelectorAll('#mdCorpo .pr-ed')].map(r => ({ vendas:Math.max(0, Math.min(99, Math.round(Number(r.querySelector('.pr-v').value) || 0))), premio:r.querySelector('.pr-p').value.trim().slice(0, 60) })).filter(x => x.vendas && x.premio).sort((a, b) => a.vendas - b.vendas);
   const mudouV = !metasMes ? (padraoV || Object.keys(porUid).length || premios.length) : (padraoV !== (metasMes.padrao || 0) || JSON.stringify(porUid) !== JSON.stringify(metasMes.porUid || {}) || JSON.stringify(premios) !== JSON.stringify(premiosMes().map(x => ({ vendas:x.vendas, premio:x.premio }))));
-  if (mudouV) try { await gravar(setDoc(doc(db,'metas', mesAtual()), { mes:mesAtual(), padrao:padraoV, porUid, premios, atualizadoEm:Date.now(), atualizadoPor:perfil.nome })); } catch(e) { toast('Erro nas metas de vendas: ' + e.message); return; }
+  if (mudouV) try { await gravar(setDoc(doc(db,'metas', mesAtual()), { mes:mesAtual(), padrao:padraoV, porUid, premios, escritorio:(metasMes && metasMes.escritorio) || {}, atualizadoEm:Date.now(), atualizadoPor:perfil.nome })); } catch(e) { toast('Erro nas metas de vendas: ' + e.message); return; }
   const metasDia = { padrao:ler('padrao'), sdr:ler('sdr'), pessoas, atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
   // updateDoc troca o campo inteiro (assim quem voltou para a meta de todos perde a meta antiga)
   try { await gravar(updateDoc(doc(db,'config','app'), { metasDia })); }
