@@ -2450,6 +2450,10 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .emp-v2 .emp-capa img.emp-fundo{object-fit:cover;filter:blur(18px) brightness(.8) saturate(1.1);transform:scale(1.15)}
 .emp-v2 .emp-capa img.emp-foto{object-fit:contain;z-index:1}.emp-v2:hover .emp-capa img.emp-foto{transform:scale(1.02)}.emp-v2:hover .emp-capa img.emp-fundo{transform:scale(1.15)}
 .ev-galeria .ev-fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(22px) brightness(.7);transform:scale(1.15)}.ev-galeria .ev-foto{position:relative;z-index:1}.ev-galeria .ev-seta,.ev-galeria .ev-cont{z-index:2}
+.emp-filtros{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:10px;margin-bottom:16px}
+.emp-filtros input{margin:0}
+.emp-filtros select{margin:0;font-weight:600;border-radius:12px}.emp-filtros select.on{border-color:var(--accent);color:var(--accent);background-color:color-mix(in srgb,var(--accent) 7%,var(--card))}
+@media(max-width:760px){.emp-filtros{grid-template-columns:1fr}}
 /* v160: premiações por vendas */
 .pr-fx{display:flex;flex-direction:column;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed color-mix(in srgb,var(--accent) 30%,var(--border))}
 .pr-i{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center;opacity:.6}.pr-i.ok,.pr-i.prox{opacity:1}
@@ -3519,8 +3523,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <section class="view" id="v-empreendimentos">
         <div class="page-head emp-head"><div><h1>Imóveis</h1><div class="sub" id="empSub">Fotos, valores, localização e material de venda para mandar ao cliente.</div></div>
           </div>
-        <input id="empBusca" placeholder="Buscar empreendimento, bairro ou construtora..." oninput="empFiltro=this.value;renderEmp()" style="margin-bottom:10px">
-        <div class="emp-bairros" id="empBairros" role="tablist" aria-label="Filtrar por bairro"></div>
+        <div class="emp-filtros"><input id="empBusca" placeholder="Buscar imóvel ou construtora..." oninput="empFiltro=this.value;renderEmp()"><select id="empBairros" aria-label="Filtrar por bairro" onchange="empBairro=this.value;renderEmp()"></select></div>
         <div id="empLista" class="emp-grid"></div>
       </section>
 
@@ -7817,7 +7820,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 339;
+const APP_VERSAO = 340;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10638,7 +10641,9 @@ function renderEmp(){
   { const g = new Map(); ativos.forEach(e => { const b = bairroEmp(e); if (!b) return; const k = chaveBairro(b), x = g.get(k) || { nome:b, n:0 }; x.n++; if (/[à-ú]/i.test(b) && !/[à-ú]/i.test(x.nome)) x.nome = b; g.set(k, x); });
     const bs = [...g.entries()].sort((a, b) => b[1].n - a[1].n || a[1].nome.localeCompare(b[1].nome, 'pt-BR'));
     if (empBairro && !g.has(empBairro)) empBairro = '';
-    $('empBairros').innerHTML = bs.length ? [`<button class="${!empBairro ? 'on' : ''}" onclick="empBairro='';renderEmp()">Todos<i>${ativos.length}</i></button>`, ...bs.map(([k, x]) => `<button class="${empBairro === k ? 'on' : ''}" onclick="empBairro='${esc(k)}';renderEmp()">${esc(x.nome)}<i>${x.n}</i></button>`)].join('') : ''; }
+    const alfa = bs.slice().sort((a, b) => a[1].nome.localeCompare(b[1].nome, 'pt-BR'));
+    $('empBairros').innerHTML = `<option value="">Todos os bairros (${ativos.length})</option>` + alfa.map(([k, x]) => `<option value="${esc(k)}" ${empBairro === k ? 'selected' : ''}>${esc(x.nome)} (${x.n})</option>`).join('');
+    $('empBairros').classList.toggle('on', !!empBairro); }
   const l = ativos.filter(e => (!empBairro || chaveBairro(bairroEmp(e)) === empBairro) && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
   { const nb = new Set(ativos.map(e => chaveBairro(bairroEmp(e))).filter(Boolean)).size; if ($('empSub')) $('empSub').textContent = `${ativos.length} imóve${ativos.length === 1 ? 'l' : 'is'}${nb ? ' em ' + nb + ' bairro' + (nb === 1 ? '' : 's') : ''} · fotos, valores, localização e material para mandar ao cliente`; }
   const nomeCartao = e => String(e.nome || '').split(' · ')[0], consCartao = e => e.construtora || (String(e.nome || '').split(' · ')[1] || '');
@@ -10825,6 +10830,7 @@ let empWa = [], _empWaOrig = null;
 const empQuebrado = e => /^\W*\[?Encaminhad|^\W*Localiza|\.pdf$|^Sem nome|^Torre \d+$|^APARTAMENTOS$|^Condom[ií]nio R$/i.test(String(e.nome || '').trim());
 window.addEventListener('message', ev => {
   if (ev.origin !== 'https://web.whatsapp.com') return; const d = ev.data || {};
+  if (d.tipo === 'frade-emp-auto' && d.item && typeof d.item.nome === 'string') { _empWaOrig = ev.source; salvarEmpWaAuto(d.item, ev.source); return; }
   if (d.tipo === 'frade-emp-item' && d.item && typeof d.item.nome === 'string') {
     _empWaOrig = ev.source; const it = d.item;
     const i = empWa.findIndex(x => norm(x.nome) === norm(it.nome)); if (i >= 0) empWa[i] = it; else empWa.push(it);
@@ -10843,6 +10849,25 @@ function abrirEmpWa(){
   const qb = empreendimentos.filter(empQuebrado);
   if (qb.length) $('ewCorpo').insertAdjacentHTML('beforeend', `<label class="ew-l ew-qb"><input type="checkbox" id="ewQb" checked><span class="ew-f"></span><span class="ew-t"><b>Apagar ${qb.length} cartões quebrados</b><small>Da importação antiga, sem nome de verdade (ex.: ${esc(String(qb[0].nome).slice(0, 40))})</small></span></label>`);
   abrir('ewModal');
+}
+// v340: o Allan pediu todos os imóveis do grupo com todas as fotos: cada um é gravado na hora (mesmo nome = atualiza; fotos trocadas quando vierem mais)
+let _ewAutoN = 0, _ewFila = Promise.resolve();
+function salvarEmpWaAuto(x, origem){
+  _ewFila = _ewFila.then(async () => { let ok = 0;
+    try { if (!souAtivo() || souCeo()) throw new Error('sem permissão');
+      const ex = empreendimentos.find(e => norm(e.nome) === norm(x.nome)), ref = ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), tx = (v, m) => String(v || '').trim().slice(0, m);
+      const dados = { nome:tx(x.nome, 80), local:tx(x.local, 80), desc:tx(x.desc, 300), preco:tx(x.preco, 20), area:tx(x.area, 12), quartos:tx(x.quartos, 8), construtora:tx(x.construtora, 60), contato:tx(x.contato, 30), entrega:tx(x.entrega, 60), avaliacao:tx(x.avaliacao, 60),
+        endereco:tx(x.endereco, 160), mapa:linkOk(x.mapa || '') ? tx(x.mapa, 300) : '', unidades:tx(x.unidades, 1500), fonte:'whatsapp', fonteGrupo:tx(x.grupo, 60), atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+      Object.keys(dados).forEach(k => { if (dados[k] === '' && ex && ex[k]) delete dados[k]; if (ex && x.soFotos && !['atualizadoEm','atualizadoPor','atualizadoPorNome'].includes(k) && ex[k]) delete dados[k]; });
+      if (!ex) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false, materiais:[], views:0 });
+      await gravar(setDoc(ref, dados, { merge:true }));
+      const fotos = (x.fotos || []).filter(f => typeof f === 'string' && f.startsWith('data:image/') && f.length < 900000).slice(0, 15);
+      if (fotos.length) { const exist = ex ? (await getDocs(query(collection(db,'emp_fotos'), where('empId','==',ref.id)))).docs.map(d => ({ id:d.id, ...d.data() })) : [];
+        if (fotos.length > exist.length) await gravarFotosEmp(ref.id, fotos, exist.map(f => f.id), []); }
+      ok = 1; _ewAutoN++; toast(`Imóveis do WhatsApp: ${_ewAutoN} salvo${_ewAutoN === 1 ? '' : 's'} (${x.nome})`);
+    } catch(e) { toast('Erro em ' + x.nome + ': ' + e.message); }
+    try { origem.postMessage({ tipo:'frade-emp-ok', nome:x.nome, ok }, 'https://web.whatsapp.com'); } catch(e) {}
+  });
 }
 window.salvarEmpWa = async () => {
   const sel = [...document.querySelectorAll('#ewCorpo input[data-i]:checked')].map(i => empWa[Number(i.dataset.i)]).filter(Boolean);
