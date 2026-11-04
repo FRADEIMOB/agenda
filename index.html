@@ -2421,6 +2421,35 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ew-l{display:grid;grid-template-columns:22px 64px minmax(0,1fr);gap:10px;align-items:center;padding:8px 4px;border-bottom:1px solid var(--border);cursor:pointer}
 .ew-f{width:64px;height:48px;border-radius:8px;overflow:hidden;background:color-mix(in srgb,var(--text) 8%,transparent)}.ew-f img{width:100%;height:100%;object-fit:cover}
 .ew-t{display:grid;gap:1px;min-width:0}.ew-t b{font-size:14px}.ew-t small{font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.emp-bairros{display:flex;gap:6px;overflow-x:auto;padding:2px 0 12px;margin-bottom:6px;scrollbar-width:thin}
+.emp-bairros button{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.emp-bairros button i{font-style:normal;font-size:11.5px;color:var(--text2);font-weight:700}
+.emp-bairros button.on{background:var(--accent);border-color:var(--accent);color:#fff}.emp-bairros button.on i{color:#fff;opacity:.85}
+/* v339: tela de imóveis mais limpa */
+.emp-grid .emp-v2{border:0;border-radius:20px;box-shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.07);background:var(--card)}
+.emp-grid .emp-v2:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(15,23,42,.06),0 18px 40px rgba(15,23,42,.14)}
+.emp-v2 .emp-capa{aspect-ratio:4/3;background:linear-gradient(150deg,#1C5F8E 0%,#123F63 60%,#0c2c47 100%)}
+.emp-v2 .emp-capa::after{content:"";position:absolute;inset:auto 0 0 0;height:55%;background:linear-gradient(to top,rgba(6,20,34,.78),rgba(6,20,34,0));z-index:1;pointer-events:none}
+.emp-v2 .emp-capa img{transition:transform .5s cubic-bezier(.2,.8,.2,1)}.emp-v2:hover .emp-capa img{transform:scale(1.04)}
+.emp-mono{font-size:44px;font-weight:800;letter-spacing:.04em;color:rgba(255,255,255,.22)}
+.emp-tag{position:absolute;left:12px;top:12px;z-index:2;font-size:12px;font-weight:700;color:#0b2a44;background:rgba(255,255,255,.92);padding:5px 11px;border-radius:99px;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.emp-preco-f{position:absolute;left:14px;bottom:12px;z-index:2;display:grid;color:#fff;font-size:21px;font-weight:800;letter-spacing:-.01em;line-height:1.1;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.emp-preco-f small{font-size:11px;font-weight:600;opacity:.85;letter-spacing:.02em;text-shadow:none}
+.emp-v2 .emp-n{top:12px;bottom:auto;right:12px}
+.emp-v2 .emp-info{padding:14px 16px 4px;gap:4px}.emp-v2 .emp-info b{font-size:17px;line-height:1.25}
+.emp-v2 .emp-sub{font-size:13px;color:var(--text2)}
+.emp-v2 .emp-info em{font-size:13px;color:var(--muted)}
+.emp-v2 .emp-ficha{display:flex;flex-wrap:wrap;gap:6px;padding:8px 16px 0;border:0;margin-top:0}
+.emp-v2 .emp-ficha div{flex-direction:row;gap:5px;padding:5px 10px;border:0;border-radius:99px;background:color-mix(in srgb,var(--text) 5%,transparent)}
+.emp-v2 .emp-ficha div+div{border-left:0}.emp-v2 .emp-ficha svg{width:15px;height:15px}.emp-v2 .emp-ficha b{font-size:12.5px}.emp-v2 .emp-ficha span{font-size:12px}
+.emp-pe{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 14px;margin-top:auto}
+.emp-pe .emp-views{display:inline-flex;align-items:center;gap:5px;padding:0;font-size:12.5px;color:var(--text2);margin:0}.emp-pe .emp-views svg{width:16px;height:16px}
+.emp-ver{font-size:13px;font-weight:700;color:var(--accent)}
+.emp-head h1{letter-spacing:-.02em}
+@media(max-width:760px){.emp-grid{grid-template-columns:1fr;gap:14px}.emp-preco-f{font-size:20px}}
+.emp-v2 .emp-capa img.emp-fundo{object-fit:cover;filter:blur(18px) brightness(.8) saturate(1.1);transform:scale(1.15)}
+.emp-v2 .emp-capa img.emp-foto{object-fit:contain;z-index:1}.emp-v2:hover .emp-capa img.emp-foto{transform:scale(1.02)}.emp-v2:hover .emp-capa img.emp-fundo{transform:scale(1.15)}
+.ev-galeria .ev-fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(22px) brightness(.7);transform:scale(1.15)}.ev-galeria .ev-foto{position:relative;z-index:1}.ev-galeria .ev-seta,.ev-galeria .ev-cont{z-index:2}
 /* v160: premiações por vendas */
 .pr-fx{display:flex;flex-direction:column;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed color-mix(in srgb,var(--accent) 30%,var(--border))}
 .pr-i{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center;opacity:.6}.pr-i.ok,.pr-i.prox{opacity:1}
@@ -3239,7 +3268,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <button data-view="analises" class="an-nav hide" onclick="setView('analises')"><i data-ic="pasta"></i>Correspondente <small class="zap-teste">teste</small><span class="count red hide" id="cAnalises">0</span></button>
       <div class="nav-title" style="margin-top:14px">Ferramentas</div>
       <button data-view="simulador" onclick="setView('simulador')"><i data-ic="calc"></i>Simulador Caixa</button>
-      <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
+      <button data-view="empreendimentos" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Imóveis</button>
       <button data-view="apresentacao" class="gerente-only hide" onclick="setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button data-view="tvrank" class="gest hide" onclick="setView('tvrank')"><i data-ic="tela"></i>Rankings na TV</button>
       <button data-view="acomp" class="acomp-nav hide" onclick="setView('acomp')"><i data-ic="eye"></i>Meus corretores</button>
@@ -3488,9 +3517,10 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 
       <!-- EMPREENDIMENTOS (material de venda) -->
       <section class="view" id="v-empreendimentos">
-        <div class="page-head"><div><h1>Empreendimentos</h1><div class="sub">Material de venda de cada empreendimento: fotos, tabela, book e vídeos para mandar ao cliente.</div></div>
-          <div class="ph-acoes"><button class="btn btn-ghost nao-ceo" onclick="abrirImpEmp()">Importar do WhatsApp</button><button class="btn btn-primary so-cel nao-ceo" onclick="editarEmp()">+ Novo empreendimento</button></div></div>
-        <input id="empBusca" placeholder="Buscar empreendimento ou bairro..." oninput="empFiltro=this.value;renderEmp()" style="margin-bottom:16px">
+        <div class="page-head emp-head"><div><h1>Imóveis</h1><div class="sub" id="empSub">Fotos, valores, localização e material de venda para mandar ao cliente.</div></div>
+          </div>
+        <input id="empBusca" placeholder="Buscar empreendimento, bairro ou construtora..." oninput="empFiltro=this.value;renderEmp()" style="margin-bottom:10px">
+        <div class="emp-bairros" id="empBairros" role="tablist" aria-label="Filtrar por bairro"></div>
         <div id="empLista" class="emp-grid"></div>
       </section>
 
@@ -5476,7 +5506,7 @@ function toast(texto, acao, fn){
 
 // ================= Navegação =================
 const VIEW_SALVA = (() => { try { return sessionStorage.getItem('fradeView') || ''; } catch(e) { return ''; } })();
-const TITULOS = {reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Empreendimentos', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -6532,7 +6562,7 @@ function renderVisitasTudo(){
   $('cPend').textContent = pendentes.length; $('cPend').classList.toggle('hide', !pendentes.length);
   $('btnNovoTxt').textContent = view === 'visitas' ? 'Nova visita' : view === 'cartas' ? 'Nova carta' : view === 'vendas' ? 'Nova reserva' : view === 'empreendimentos' ? 'Novo empreendimento' : 'Nova tarefa';
   // um botão principal por tela: na tela Hoje a agenda já tem o campo de adicionar
-  $('btnTopo').classList.toggle('hide', view === 'hoje' || (view === 'cartas' && perfil?.papel === 'sdr'));
+  $('btnTopo').classList.toggle('hide', view === 'hoje' || view === 'empreendimentos' || (view === 'cartas' && perfil?.papel === 'sdr'));
   $('cCartas').textContent = cartas.filter(c => c.data && c.data >= faixa('mes')[0] && c.data <= faixa('mes')[1]).length;
   if (view === 'cartas') renderCartas();
   const ban = bannerAcesso();
@@ -7787,7 +7817,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 337;
+const APP_VERSAO = 339;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10597,20 +10627,33 @@ const linkOk = u => /^https?:\/\/\S+$/i.test(String(u || '').trim());
 const driveId = u => (String(u || '').match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]{20,})/) || [])[1] || '';
 const capaDe = e => e.capa || (() => { const m = (e.materiais || []).find(x => x.tipo === 'fotos' && driveId(x.link)); return m ? `https://drive.google.com/thumbnail?id=${driveId(m.link)}&sz=w800` : ''; })();
 window.renderEmp = () => renderEmp();
+// v338: bairro do imóvel (o que vem antes da vírgula em "Bairro / cidade"), sem acento para juntar Bancarios/Bancários
+const bairroEmp = e => { const b = String(e.local || '').split(',')[0].trim(); return b && !/^jo[aã]o pessoa$/i.test(b) ? b : ''; };
+const chaveBairro = b => norm(b).replace(/\s+/g, ' ');
+window.empBairro = '';
 function renderEmp(){
   if (view !== 'empreendimentos') return;
   const t = norm(window.empFiltro || '');
-  const l = empreendimentos.filter(e => !e.arquivado && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
-  $('empLista').innerHTML = l.length ? l.map(e => { const c = capaDe(e), n = (e.nFotos || 0);
-    return `<div class="emp-capa-card" role="button" tabindex="0" onclick="verEmp('${e.id}')" onkeydown="if(event.key==='Enter')verEmp('${e.id}')">
-      <div class="emp-capa" id="cap_${e.id}">${c ? `<img src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.remove()">` : ''}<span class="emp-sem" data-ic="predio"></span>
+  const ativos = empreendimentos.filter(e => !e.arquivado);
+  { const g = new Map(); ativos.forEach(e => { const b = bairroEmp(e); if (!b) return; const k = chaveBairro(b), x = g.get(k) || { nome:b, n:0 }; x.n++; if (/[à-ú]/i.test(b) && !/[à-ú]/i.test(x.nome)) x.nome = b; g.set(k, x); });
+    const bs = [...g.entries()].sort((a, b) => b[1].n - a[1].n || a[1].nome.localeCompare(b[1].nome, 'pt-BR'));
+    if (empBairro && !g.has(empBairro)) empBairro = '';
+    $('empBairros').innerHTML = bs.length ? [`<button class="${!empBairro ? 'on' : ''}" onclick="empBairro='';renderEmp()">Todos<i>${ativos.length}</i></button>`, ...bs.map(([k, x]) => `<button class="${empBairro === k ? 'on' : ''}" onclick="empBairro='${esc(k)}';renderEmp()">${esc(x.nome)}<i>${x.n}</i></button>`)].join('') : ''; }
+  const l = ativos.filter(e => (!empBairro || chaveBairro(bairroEmp(e)) === empBairro) && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
+  { const nb = new Set(ativos.map(e => chaveBairro(bairroEmp(e))).filter(Boolean)).size; if ($('empSub')) $('empSub').textContent = `${ativos.length} imóve${ativos.length === 1 ? 'l' : 'is'}${nb ? ' em ' + nb + ' bairro' + (nb === 1 ? '' : 's') : ''} · fotos, valores, localização e material para mandar ao cliente`; }
+  const nomeCartao = e => String(e.nome || '').split(' · ')[0], consCartao = e => e.construtora || (String(e.nome || '').split(' · ')[1] || '');
+  const monograma = e => nomeCartao(e).replace(/^(Residencial|Res\.|Edif[ií]cio|Ed\.|Casa)\s+/i, '').split(/\s+/).filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'F';
+  const precoTxt = e => e.preco ? (/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco) : '';
+  $('empLista').innerHTML = l.length ? l.map(e => { const c = capaDe(e), n = (e.nFotos || 0), b = bairroEmp(e);
+    return `<div class="emp-capa-card emp-v2" role="button" tabindex="0" onclick="verEmp('${e.id}')" onkeydown="if(event.key==='Enter')verEmp('${e.id}')">
+      <div class="emp-capa" id="cap_${e.id}">${c ? `<img class="emp-fundo" src="${esc(c)}" alt="" aria-hidden="true" loading="lazy"><img class="emp-foto" src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.previousElementSibling.remove();this.remove()">` : `<span class="emp-mono">${esc(monograma(e))}</span>`}
+        ${b ? `<span class="emp-tag">${esc(b)}</span>` : ''}${precoTxt(e) ? `<span class="emp-preco-f"><small>a partir de</small>${esc(precoTxt(e))}</span>` : ''}
         ${n > 1 ? `<button class="emp-car esq" onclick="event.stopPropagation();cardFoto('${e.id}',-1)" aria-label="Foto anterior">‹</button><button class="emp-car dir" onclick="event.stopPropagation();cardFoto('${e.id}',1)" aria-label="Próxima foto">›</button><i class="emp-n">${n} fotos</i>` : ''}</div>
-      <div class="emp-info">${e.local ? `<span class="emp-loc">${esc(e.local)}</span>` : ''}<b>${esc(e.nome)}</b>${e.desc ? `<em>${esc(e.desc)}</em>` : ''}${e.construtora || e.entrega ? `<span class="emp-sub">${esc([e.construtora, e.entrega].filter(Boolean).join(' · '))}</span>` : ''}
-        <div class="emp-preco">${e.preco ? `<strong>${esc(/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco)}</strong><small>a partir de</small>` : `<small>${(e.materiais || []).length === 1 ? '1 material' : (e.materiais || []).length + ' materiais'} · ver tudo</small>`}</div></div>
+      <div class="emp-info"><b>${esc(nomeCartao(e))}</b>${consCartao(e) || e.entrega ? `<span class="emp-sub">${esc([consCartao(e), e.entrega].filter(Boolean).join(' · '))}</span>` : ''}${e.desc ? `<em>${esc(e.desc)}</em>` : ''}</div>
       ${fichaEmp(e)}
-      <div class="emp-views">${ICF.olho}<span>${Number(e.views) || 0} visualizaç${Number(e.views) === 1 ? 'ão' : 'ões'}</span></div>
+      <div class="emp-pe"><span class="emp-views">${ICF.olho}${Number(e.views) || 0}</span><span class="emp-ver">Ver imóvel</span></div>
     </div>`; }).join('')
-    : `<div class="card" style="grid-column:1/-1">${vazio(t ? 'Nada encontrado' : 'Nenhum empreendimento ainda', t ? 'Tente outro nome.' : (souCeo() ? 'A equipe ainda não cadastrou empreendimentos.' : 'Toque em "Novo empreendimento" ou importe do grupo do WhatsApp.'))}</div>`;
+    : `<div class="card" style="grid-column:1/-1">${vazio(t || empBairro ? 'Nada encontrado' : 'Nenhum imóvel ainda', t || empBairro ? 'Tente outro nome ou outro bairro.' : 'Os imóveis do grupo do WhatsApp aparecem aqui.')}</div>`;
   pintarIcones($('empLista'));
 }
 // linha de ícones: área, quartos, vagas, banheiros (só o que estiver preenchido)
@@ -10630,9 +10673,9 @@ window.cardFoto = async (id, d) => {
   if (!fotosCache[id]) { try { fotosCache[id] = { i:0, l:(await getDocs(query(collection(db,'emp_fotos'), where('empId','==',id)))).docs.map(x => x.data()).sort((a,b) => (a.ordem || 0) - (b.ordem || 0)) }; } catch(e) { return; } }
   const c = fotosCache[id]; if (!c.l.length) return;
   c.i = (c.i + d + c.l.length) % c.l.length;
-  const box = $('cap_' + id); if (!box) return; let im = box.querySelector('img');
-  if (!im) { im = document.createElement('img'); im.alt = ''; box.prepend(im); }
-  im.src = c.l[c.i].dados;
+  const box = $('cap_' + id); if (!box) return; let im = box.querySelector('img.emp-foto') || box.querySelector('img');
+  if (!im) { im = document.createElement('img'); im.alt = ''; im.className = 'emp-foto'; box.prepend(im); }
+  im.src = c.l[c.i].dados; const fu = box.querySelector('img.emp-fundo'); if (fu) fu.src = c.l[c.i].dados;
 };
 // ---------- material completo de um empreendimento (todas as fotos + links) ----------
 let empVerId = null, empFotos = [], empFotoIdx = 0;
@@ -10652,7 +10695,7 @@ window.verEmp = async id => {
 function htmlEmpDetalhe(e, carregando){
   const drive = capaDe(e) && !e.capa ? [{ dados:capaDe(e) }] : [];
   const fotos = empFotos.length ? empFotos : drive, f = fotos[empFotoIdx] || fotos[0];
-  return `${f ? `<div class="ev-galeria"><img src="${esc(f.dados)}" alt="${esc(e.nome)} – foto ${empFotoIdx + 1}">
+  return `${f ? `<div class="ev-galeria"><img class="ev-fundo" src="${esc(f.dados)}" alt="" aria-hidden="true"><img class="ev-foto" src="${esc(f.dados)}" alt="${esc(e.nome)} – foto ${empFotoIdx + 1}">
       ${fotos.length > 1 ? `<button class="ev-seta esq" onclick="empFotoNav(-1)" aria-label="Foto anterior">‹</button><button class="ev-seta dir" onclick="empFotoNav(1)" aria-label="Próxima foto">›</button><i class="ev-cont">${empFotoIdx + 1} / ${fotos.length}</i>` : ''}</div>
       ${fotos.length > 1 ? `<div class="ev-minis">${fotos.map((x, i) => `<button class="${i === empFotoIdx ? 'on' : ''}" onclick="empFotoIr(${i})"><img src="${esc(x.dados)}" alt="Foto ${i + 1}"></button>`).join('')}</div>` : ''}
       ${empFotos.length ? `<div class="ev-foto-acoes"><button class="snooze" onclick="empFotoBaixar()">Baixar foto</button><button class="snooze wa" onclick="empFotoCompartilhar()">${IC.wa}Mandar fotos</button></div>` : ''}`
