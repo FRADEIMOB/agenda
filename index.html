@@ -7706,7 +7706,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 332;
+const APP_VERSAO = 333;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8191,7 +8191,9 @@ function pontosDoMesBase(m, val, corte){
   // v131: documentações do resumo do dia da SDR (ficam no resumo do ranking para todos verem o mesmo número)
   const docPts = val.docSdr !== undefined && val.docSdr !== '' ? n('docSdr') : n('docs');
   ATV.filter(r => r.mes === m && r.uid && r.sdoc).forEach(r => { const q = Object.values(r.sdoc).reduce((a, v) => a + (Number(v) || 0), 0); if (!q) return;
-    const ps = RK().find(p => p.uid === r.uid) || {}, x = pega({ corretorUid:r.uid, corretorNome:ps.nome || r.nome, equipe:ps.equipe || r.equipe || '' }); x.docsSdr = (x.docsSdr || 0) + q; x.docs += q; x.pontos += q * docPts; });
+    const ps = RK().find(p => p.uid === r.uid) || {}, x = pega({ corretorUid:r.uid, corretorNome:ps.nome || r.nome, equipe:ps.equipe || r.equipe || '' }); x.docsSdr = (x.docsSdr || 0) + q; x.docs += q;
+    /* v333: na regra nova (novembro em diante) a doc do resumo da SDR vale o mesmo que a doc da conversa do WhatsApp (resumo e conversa são uma coisa só) */
+    const pq = Object.entries(r.sdoc).reduce((a, [d, v]) => a + (Number(v) || 0) * (docsNova(d) ? n('docGeral') : docPts), 0); x.docsSdrPts = (x.docsSdrPts || 0) + pq; x.pontos += pq; });
   rankingDocs.filter(r => noMes(r.date) && !r.semPontos && !visitaDeSdr(r) && r.status !== 'Cancelada').forEach(r => {
     const x = pega(r); x.visitas++;
     if (r.status === 'Confirmada') { x.confirmadas++; x.pontos += n('vConfirmada'); }
@@ -8473,8 +8475,8 @@ function linhasPontos(x, P){
     ['Visitas marcadas', pend, n('vPendente'), pend * n('vPendente')], ['Visitas confirmadas', x.confirmadas, n('vConfirmada'), (x.confirmadas || 0) * n('vConfirmada')],
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     // v297: na SDR, resumo e conversa são a mesma coisa: uma linha só, com o maior número de cada dia
-    ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdr || 0) * vS + (x.docGeral || 0) * n('docGeral');
-      return [['Documentações (resumo ou conversa do WhatsApp, vale o maior de cada dia)', q, vS === n('docGeral') ? vS : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
+    ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdrPts ?? (x.docsSdr || 0) * vS) + (x.docGeral || 0) * n('docGeral');
+      return [['Documentações (resumo ou conversa do WhatsApp, vale o maior de cada dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
