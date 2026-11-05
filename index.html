@@ -2311,6 +2311,12 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .tvr-bts>button.tvr-som{padding:0 12px}
 .tvm-col header{align-items:center!important}
 .tvm-col header>:not(h2):not(.tvm-maxbt):not(.tva-qr):not(.tva-topo){flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sm-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.sm-card{padding:16px}.sm-topo{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}.sm-topo b{font-size:16px}
+.sm-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.sm-nums div{background:rgba(127,127,127,.08);border-radius:10px;padding:8px 10px}
+.sm-nums b{display:block;font-size:20px}.sm-nums span{font-size:11.5px;opacity:.7}
+.sm-tab td,.sm-tab th{padding:6px 8px;font-size:13px}.sm-tab tr.sm-ok td{background:rgba(22,163,74,.09)}.sm-tab tr.sm-ok .sm-mot{color:#15803d;font-weight:600}.sm-mot{opacity:.75;font-size:12px;white-space:nowrap}
+@media (max-width:600px){.sm-nums{grid-template-columns:repeat(2,1fr)}}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -3263,6 +3269,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <button data-view="marketing" class="mk-nav hide" onclick="setView('marketing')"><i data-ic="cal"></i>Marketing</button>
       <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
+      <button data-view="sdrs" class="gerente-only hide" onclick="setView('sdrs')"><i data-ic="trend"></i>SDRs na média</button>
       <button data-view="vendas" class="nao-sdr" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
       <button data-view="reservas" class="gerente-only hide res-nav" onclick="setView('reservas')"><i data-ic="list"></i>Reservas</button>
       <button data-view="comissoes" class="cor-only hide" onclick="setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
@@ -3691,6 +3698,13 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div class="ph-acoes"><button class="btn btn-ghost gerente-only hide" onclick="abrirMetas()">🎯 Metas do mês</button><div class="seg" id="desSeg"></div></div></div>
         <div id="metasResumo"></div>
         <div id="desConteudo"></div>
+      </section>
+
+      <!-- v346: SDRs na média (dias que contam no salário) -->
+      <section class="view" id="v-sdrs">
+        <div class="page-head"><div><h1>SDRs na média</h1><div class="sub" id="smSub"></div></div>
+          <div class="ph-acoes"><select class="sel-mes on" id="smMes" onchange="smEscolher(this.value)"></select></div></div>
+        <div id="smConteudo"></div>
       </section>
 
       <!-- AVALIAÇÕES DE CRÉDITO -->
@@ -5156,6 +5170,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('sdrs')"><i data-ic="trend"></i>SDRs na média</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('recepcao')"><i data-ic="tela"></i>Tela da recepção (check-in)</button>
@@ -5509,11 +5524,12 @@ function toast(texto, acao, fn){
 
 // ================= Navegação =================
 const VIEW_SALVA = (() => { try { return sessionStorage.getItem('fradeView') || ''; } catch(e) { return ''; } })();
-const TITULOS = {reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {sdrs:'SDRs na média', reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
   if (v === 'desempenho' && !podeGerir() && !abaLiberada('desempenho')) v = 'hoje';
+  if (v === 'sdrs' && (!souGerente() || souCeo())) v = 'hoje';
   if (v === 'funil' && !podeFunil()) v = 'hoje';
   if (v === 'acomp' && !podeAcomp()) v = 'hoje';
   if (v === 'tvrank' && !podeGerir() && !abaLiberada('tvrank')) v = 'hoje';
@@ -7820,7 +7836,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 345;
+const APP_VERSAO = 346;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9202,6 +9218,14 @@ function docsDaAv(a){
     return a.origem === 'whatsapp' ? l : [base, ...l]; } // cliente da planilha: a linha da planilha + cada ficha mandada na conversa
   return [base];
 }
+/* v346: docs de um período do jeito do ranking: cada ficha conta no dia e para quem mandou, o mesmo cliente uma vez por pessoa e por dia.
+   Desempenho, Painel e Meu dia usam isto (antes contavam uma doc por cliente, pela 1ª data, e não batiam com os pontos). */
+function docsNoPeriodo(lista, de, ate){
+  const vistos = new Set(), out = [];
+  (lista || []).forEach(a => { const ch = a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id;
+    docsDaAv(a).forEach(x => { if (!x.dia || x.dia < de || x.dia > ate) return; const u = x.uid || ''; const k = (u || 'n:' + (a.corretorNome || a.aba || '')) + '|' + x.dia + '|' + ch; if (vistos.has(k)) return; vistos.add(k); out.push({ a, uid:u, dia:x.dia }); }); });
+  return out;
+}
 function diaDocAv(a){ const d = a.data || '', c = a.criadoEm ? iso(new Date(a.criadoEm)) : '';
   if ((a.dataEstimada || !d) && c && c > d) return c; return d; }
 // v293: nome escrito diferente (Camila/Camilla, Matheus/Mateus) também liga; e o "Quem é quem" das Integrações vale para as docs
@@ -9600,7 +9624,7 @@ function acTotais(){
   const grupo = (l, f) => { const m = {}; l.forEach(x => { const [uid, nome] = f(x), p = quem(uid, nome), k = p ? p.uid : 'n:' + norm(nome || '');
     const tipo = !p ? 'Sem cadastro no app' : p.papel === 'sdr' ? 'SDR' : uids.has(p.uid) ? 'Corretor' : (PAPEIS[p.papel] || 'Outro');
     (m[k] = m[k] || { nome:nomeBonito(p ? p.nome : nome || 'Sem nome'), tipo, n:0, r:0, s:0 }).n++; if (x.status === 'Realizada') m[k].r++; if (x.date && visitaDeSdr(x)) m[k].s++; }); return Object.values(m).sort((a, b) => b.n - a.n); };
-  const avs = N.avs.filter(a => ok(a.corretorUid, a.corretorNome || a.aba, a.equipe));
+  const avs = (N.docsP || []).filter(x => ok(x.uid || x.a.corretorUid, x.a.corretorNome || x.a.aba, x.a.equipe)).map(x => ({ ...x.a, corretorUid:x.uid || x.a.corretorUid })); // v346: uma linha por ficha do período
   const un = N.unif.filter(x => ok(x.uid, '', x.equipe));
   // visitas no mês: o mês inteiro, inclusive as agendadas para os próximos dias (mesma conta do Ranking > Visitas > Este mês)
   const [vde, vate] = acPer === 'mes' ? faixa('mes') : [dias[0], dias[dias.length - 1]];
@@ -16096,7 +16120,7 @@ window.mdNav = k => { let d = somaDias($('mdDia').value || mdOntem(), k); if (d 
 window.pintarMeuDia = async d => {
   if (!d) return; $('mdDia').value = d; const u = uidAtual, r = mdResumoDia(d), h = hojeISO();
   const meta = metaDiaDe(u), temMeta = MD_ITENS.some(([k]) => meta[k]), feito = { lig:r.num, docs:r.docs, vm:r.vm, vr:r.vr };
-  const avs = (avaliacoes || []).filter(a => a.corretorUid === u && diaDocAv(a) === d), pastas = (analises || []).filter(a => a.corretorUid === u && a.enviadaEm && iso(new Date(a.enviadaEm)) === d);
+  const avs = [...new Set(docsNoPeriodo(avaliacoes, d, d).filter(x => (x.uid || uidDaAv(x.a)) === u).map(x => x.a))], pastas = (analises || []).filter(a => a.corretorUid === u && a.enviadaEm && iso(new Date(a.enviadaEm)) === d);
   const cs = cartas.filter(c => c.corretorUid === u && c.data === d && !c.arquivado), vds = rankingVendas.filter(v => !v.caiu && v.dia === d && (v.corretores || []).some(c => c.uid === u));
   const bloco = (tit, val, corpo) => `<div class="mdia-b"><div class="mdia-bh"><b>${tit}</b><span>${val}</span></div>${corpo || ''}</div>`;
   const li = (a, b) => `<div class="mdia-li"><span>${a}</span><small>${b ?? ''}</small></div>`;
@@ -16840,12 +16864,12 @@ function numerosPeriodo(de, ate){
   const diasComLead = new Set([...leadsDias.map(x => x.dia), ...Object.keys(leadsAjustes), h].filter(noP));
   for (let d = de; d <= (ate > h ? h : ate); d = somaDias(d, 1)) diasComLead.add(d);
   diasComLead.forEach(d => leadsDoDia(d).forEach(x => leadsLinhas.push({ uid:x.uid, nome:x.nome, equipe:x.equipe, leads:x.n })));
-  const avs = avaliacoes.filter(a => noP(diaDocAv(a))); /* v328: mesmo dia da doc do Desempenho e do ranking */
+  const docsP = docsNoPeriodo(avaliacoes, de, ate), avs = [...new Set(docsP.map(x => x.a))]; /* v346: docs = fichas do período (igual ao ranking e ao Desempenho) */
   const cs = cartas.filter(c => noP(c.data)), vds = cartas.filter(c => c.status === 'Venda fechada' && noP(c.vendaEm || c.data));
   const vs = rankingDocs.filter(r => noP(r.date) && r.status !== 'Cancelada');
   const presD = Object.keys(presencas).filter(noP);
   const presTot = presD.reduce((a,d) => a + Object.values(presencas[d].marcados || {}).filter(x => x.status === 'presente').length, 0);
-  return { leads:leadsLinhas.reduce((a,l) => a + (Number(l.leads) || 0), 0), leadsLinhas, docs:avs.length, avs,
+  return { leads:leadsLinhas.reduce((a,l) => a + (Number(l.leads) || 0), 0), leadsLinhas, docs:docsP.length, docsP, avs,
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
     semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
@@ -16877,7 +16901,7 @@ function renderPainel(){
   const eqIds = new Set(listaEquipes().map(e => e.id)), eqOk = e => eqIds.has(e) ? e : '';
   const fil = (X, eq) => { if (eq === undefined || eq === null || eq === 'todas') return X; const ok = (uid, nome, e) => eqOk(eqDe(uid, nome, e)) === eq;
     const vs = X.vs.filter(r => ok(r.corretorUid, r.corretorNome, r.equipe)), vl = X.vendasL.filter(v => ok(v.corretores?.[0]?.uid, v.corretores?.[0]?.nome, v.equipe));
-    return { ...X, leads:X.leadsLinhas.filter(l => ok(l.uid, l.nome, l.equipe)).reduce((a, l) => a + (Number(l.leads) || 0), 0), docs:X.avs.filter(a => ok(a.corretorUid, a.corretorNome || a.aba, a.equipe)).length,
+    return { ...X, leads:X.leadsLinhas.filter(l => ok(l.uid, l.nome, l.equipe)).reduce((a, l) => a + (Number(l.leads) || 0), 0), docs:(X.docsP || []).filter(x => ok(x.uid || x.a.corretorUid, x.a.corretorNome || x.a.aba, x.a.equipe)).length,
       unif:X.unif.filter(x => ok(x.uid, '', x.equipe)), visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, vendas:vl.length, vendasL:vl, valorVendido:vl.reduce((a, v) => a + v.valor, 0) }; };
   const pEq = window.painelEq === undefined ? 'todas' : window.painelEq, FA = fil(A, pEq), FB = fil(B, pEq);
   const media = (l, d) => d ? Math.round(l / d * 100) / 100 : null;
@@ -16923,7 +16947,7 @@ function renderPainel(){
     </div></div>`;
   // ritmo do mês: documentações por dia (barras) e dias com venda (ponto laranja)
   const dias = []; for (let d = de; d <= ate; d = somaDias(d, 1)) dias.push(d);
-  const docsDia = d => A.avs.filter(a => a.data === d).length, aprDia = d => A.unif.filter(a => a.data === d).length, vendDia = d => A.vendasL.filter(v => v.dia === d).length;
+  const docsDia = d => (A.docsP || []).filter(x => x.dia === d).length, aprDia = d => A.unif.filter(a => a.data === d).length, vendDia = d => A.vendasL.filter(v => v.dia === d).length;
   const mx = Math.max(1, ...dias.map(docsDia));
   const W = 640, H = 150, bw = W / Math.max(dias.length, 1);
   const ritmo = `<div class="card ritmo"><div class="card-head"><h2>Ritmo do mês</h2><span class="muted"><i class="lg-bar"></i>documentações <i class="lg-apr"></i>aprovações <i class="lg-vnd"></i>venda</span></div>
@@ -17037,8 +17061,10 @@ function calcDesempenho(de, ate){
   // leads: o que ficou com o corretor no fim de cada dia (hoje: ao vivo)
   for (let d = de; d <= ate; d = somaDias(d, 1)) leadsDoDia(d).forEach(x => { pega(x.uid, x.nome, x.equipe).leads += Number(x.n) || 0; });
   // docs: cada linha da planilha de avaliações, pela data
-  const avs = avaliacoes.filter(a => { const d = diaDocAv(a); return d && d >= de && d <= ate; });
-  avs.forEach(a => { const r = pega(uidDaAv(a), a.corretorNome || a.aba, a.equipe); r.docs++; const g = infoStatus(a.status).g; if (g === 'condicionado') r.cond++; if (g === 'reprovado') r.reprov++; });
+  // v346: cada ficha no dia em que foi mandada (igual ao ranking); condicionado/reprovado uma vez por cliente
+  const stVisto = new Set();
+  docsNoPeriodo(avaliacoes, de, ate).forEach(({ a, uid }) => { const r = pega(uid || uidDaAv(a), a.corretorNome || a.aba, a.equipe); r.docs++;
+    const ks = (r.uid || r.nome) + '|' + a.id; if (stVisto.has(ks)) return; stVisto.add(ks); const g = infoStatus(a.status).g; if (g === 'condicionado') r.cond++; if (g === 'reprovado') r.reprov++; });
   // aprovações: planilha + cartas do app, sem repetir cliente
   const m = new Map(), chaveCli = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
   // v172: igual ao relatório do mês: toda linha aprovada da planilha com data no período conta, o mesmo cliente uma vez só
@@ -17875,6 +17901,7 @@ function renderEtapa3(){
   try { mdLetreiroPulso(); } catch(e) { console.warn('letreiro', e.message); }
   try { renderMarketing(); renderMkHoje(); } catch(e) { console.warn('mkt render', e.message); }
   if (view === 'desempenho') renderDesempenho();
+  if (view === 'sdrs') renderSdrsMedia();
   renderVendas(); renderReservasAdm(); renderApEscolha(); renderAssistente();
   if ($('cVendas')) { const [mi, mf] = faixa('mes'); const n = reservas.filter(r => r.dia >= mi && r.dia <= mf).length; $('cVendas').textContent = n || ''; }
   if (view === 'painel') renderPainel();
@@ -17890,7 +17917,7 @@ window.souSdr = souSdr;
 let sdrResumos = [], sdrResumosBrutos = [];
 // v123: resumo importado com nome do WhatsApp ("wa-...") é ligado à SDR certa do app; se a SDR já preencheu aquele dia no app, vale o do app
 // (uma base só: Relatórios, Ranking das SDRs e TV usam esta mesma lista)
-const ehWa = u => String(u || '').startsWith('wa-');
+const ehWa = u => !u || String(u).startsWith('wa-'); // v346: resumo sem SDR ligada (ex.: "AM] Ana Luiza - SDR" importado no começo de outubro) também é ligado pelo nome
 function uidSdrDoResumo(x){
   if (!ehWa(x.sdrUid)) return x.sdrUid;
   const ap = appCfg.apelidosSdr || {}, m = ap[x.sdrNome] || ap[x.autor];
@@ -17902,7 +17929,7 @@ function montarResumosSdr(){
   sdrResumosBrutos.forEach(x => {
     if (!ehWa(x.sdrUid)) { out.push(x); return; }
     const uid = uidSdrDoResumo(x); if (uid === '__ignorar') return;
-    if (ehWa(uid)) { if (ja.has(x.dia + '_' + uid)) return; ja.add(x.dia + '_' + uid); out.push(x); return; }
+    if (ehWa(uid)) { const kk = x.dia + '_' + (uid || 'n:' + (x.sdrNome || x.autor || '')); if (ja.has(kk)) return; ja.add(kk); out.push(x); return; }
     if (ja.has(x.dia + '_' + uid)) return; ja.add(x.dia + '_' + uid);
     const p = perfisLista.find(y => y.uid === uid) || {}; out.push({ ...x, sdrUid:uid, sdrNome:p.nome || x.sdrNome, equipe:p.equipe || x.equipe || '', doWhats:x.sdrNome });
   });
@@ -17994,6 +18021,33 @@ function diasNaMedia(dias, max){ const lim = Number(max) || SDR_MEDIA_PADRAO, po
   (dias || []).forEach(d => { const o = por[d.dia] || (por[d.dia] = { dia:d.dia, leads:0, docs:0 }); o.leads += d.leads; o.docs += d.docs; });
   return Object.values(por).filter(d => d.leads >= SDR_MIN_LEADS && d.docs > 0 && d.leads / d.docs <= lim).sort((a,b) => a.dia.localeCompare(b.dia)); }
 window.diasNaMedia = diasNaMedia;
+/* v346: aba "SDRs na média": dia a dia de cada SDR no mês. O dia conta quando ela pegou 10+ leads novos (CRM + Instagram)
+   e a média leads novos ÷ docs (DOC + CPF, novos e recuperados) ficou em até 3. Os números vêm dos resumos do dia. */
+let smMes = '';
+window.smEscolher = m => { smMes = m; try { garantirHistorico(m); } catch(e) {} renderSdrsMedia(); };
+function renderSdrsMedia(){
+  const el = $('smConteudo'); if (!el) return; if (!souGerente()) { el.innerHTML = ''; return; }
+  const atual = mesAtual(); if (!smMes) smMes = atual;
+  const meses = []; for (let m = atual, i = 0; m >= MES_INICIO && i < 24; i++) { meses.push(m); const [a, b] = m.split('-').map(Number); m = iso(new Date(a, b - 2, 1)).slice(0, 7); }
+  $('smMes').innerHTML = meses.map(m => `<option value="${m}" ${m === smMes ? 'selected' : ''}>${nomeMes(m)}</option>`).join('');
+  const de = smMes + '-01', ate0 = fimDoMes(smMes), h = hojeISO(), ate = ate0 > h ? h : ate0, lim = SDR_MEDIA_PADRAO;
+  $('smSub').textContent = `${nomeMes(smMes)} · o dia conta com ${SDR_MIN_LEADS} ou mais leads novos e média de até ${lim} leads por doc (DOC + CPF, novos e recuperados)`;
+  const l = rankingSdr(de, ate).filter(x => x.dias.length);
+  if (!l.length) { el.innerHTML = `<div class="card"><p class="muted" style="margin:0">Nenhum resumo de SDR em ${nomeMes(smMes)}.</p></div>`; return; }
+  const fmt = n => n.toLocaleString('pt-BR', { maximumFractionDigits:2 });
+  el.innerHTML = `<div class="sm-grade">${l.map(x => {
+    const por = {}; x.dias.forEach(d => { const o = por[d.dia] || (por[d.dia] = { dia:d.dia, leads:0, docs:0 }); o.leads += d.leads; o.docs += d.docs; });
+    const dias = Object.values(por).sort((a, b) => a.dia.localeCompare(b.dia)), ok = d => d.leads >= SDR_MIN_LEADS && d.docs > 0 && d.leads / d.docs <= lim;
+    const na = dias.filter(ok), docsNa = na.reduce((a, d) => a + d.docs, 0);
+    const motivo = d => ok(d) ? 'Na média' : d.leads < SDR_MIN_LEADS ? `Menos de ${SDR_MIN_LEADS} leads` : !d.docs ? 'Sem doc' : 'Média acima de ' + lim;
+    return `<div class="card sm-card"><div class="sm-topo"><b>${esc(nomeBonito(x.nome))}</b><span class="muted">${dias.length} dia${dias.length === 1 ? '' : 's'} com resumo</span></div>
+      <div class="sm-nums"><div><b>${na.length}</b><span>dias na média</span></div><div><b>${docsNa}</b><span>docs nesses dias</span></div><div><b>${x.leads}</b><span>leads novos no mês</span></div><div><b>${x.docs}</b><span>docs no mês</span></div></div>
+      <div class="tbl-wrap"><table class="rank sm-tab"><thead><tr><th>Dia</th><th style="text-align:right">Leads novos</th><th style="text-align:right">Docs</th><th style="text-align:right">Média</th><th></th></tr></thead><tbody>${
+        dias.map(d => `<tr class="${ok(d) ? 'sm-ok' : ''}"><td>${d.dia.slice(8, 10)}/${d.dia.slice(5, 7)}</td><td style="text-align:right">${d.leads}</td><td style="text-align:right">${d.docs}</td><td style="text-align:right">${d.docs ? fmt(d.leads / d.docs) : '–'}</td><td class="sm-mot">${motivo(d)}</td></tr>`).join('')
+      }</tbody></table></div></div>`; }).join('')}</div>`;
+}
+window.renderSdrsMedia = renderSdrsMedia;
+
 // v262: arrancada das SDRs. O ranking delas recomeça do zero nesta data (só o delas); a pontuação nova também vale daqui
 const sdrArrancada = () => appCfg.sdrArrancada || ''; // v264: o Allan zerou pelo "+ Novo ranking"; aqui não zera nada
 const sdrIni = (de, ate) => { const a = sdrArrancada(); return a > de && a <= ate ? [a, ate] : [de, ate]; };
