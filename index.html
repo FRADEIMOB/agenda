@@ -3269,7 +3269,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <button data-view="marketing" class="mk-nav hide" onclick="setView('marketing')"><i data-ic="cal"></i>Marketing</button>
       <button data-view="ranking" onclick="setView('ranking')"><i data-ic="trofeu"></i>Ranking</button>
       <button data-view="desempenho" class="gest hide" onclick="setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
-      <button data-view="sdrs" class="gerente-only hide" onclick="setView('sdrs')"><i data-ic="trend"></i>SDRs na média</button>
+      <button data-view="sdrs" class="gerente-only hide" onclick="setView('sdrs')"><i data-ic="trend"></i>SDR</button>
       <button data-view="vendas" class="nao-sdr" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas<span class="count" id="cVendas"></span></button>
       <button data-view="reservas" class="gerente-only hide res-nav" onclick="setView('reservas')"><i data-ic="list"></i>Reservas</button>
       <button data-view="comissoes" class="cor-only hide" onclick="setView('comissoes')"><i data-ic="dinheiro"></i>Minhas comissões</button>
@@ -3702,7 +3702,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 
       <!-- v346: SDRs na média (dias que contam no salário) -->
       <section class="view" id="v-sdrs">
-        <div class="page-head"><div><h1>SDRs na média</h1><div class="sub" id="smSub"></div></div>
+        <div class="page-head"><div><h1>SDR</h1><div class="sub" id="smSub"></div></div>
           <div class="ph-acoes"><select class="sel-mes on" id="smMes" onchange="smEscolher(this.value)"></select></div></div>
         <div id="smConteudo"></div>
       </section>
@@ -5170,7 +5170,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
       <button class="gerente-only hide" onclick="fechar('menuModal');setView('apresentacao')"><i data-ic="tela"></i>Apresentação</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('desempenho')"><i data-ic="trend"></i>Desempenho</button>
-      <button class="gerente-only hide" onclick="fechar('menuModal');setView('sdrs')"><i data-ic="trend"></i>SDRs na média</button>
+      <button class="gerente-only hide" onclick="fechar('menuModal');setView('sdrs')"><i data-ic="trend"></i>SDR</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('corretores')"><i data-ic="users"></i>Corretores</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('sorteio')"><i data-ic="trofeu"></i>Sorteio</button>
       <button class="gest hide" onclick="fechar('menuModal');setView('recepcao')"><i data-ic="tela"></i>Tela da recepção (check-in)</button>
@@ -5524,7 +5524,7 @@ function toast(texto, acao, fn){
 
 // ================= Navegação =================
 const VIEW_SALVA = (() => { try { return sessionStorage.getItem('fradeView') || ''; } catch(e) { return ''; } })();
-const TITULOS = {sdrs:'SDRs na média', reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {sdrs:'SDR', reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -7836,7 +7836,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 346;
+const APP_VERSAO = 347;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
