@@ -7820,7 +7820,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 344;
+const APP_VERSAO = 345;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10319,7 +10319,7 @@ const PC = (() => {
   const ABA_ESP = { 'arthur abrantes':'ARTHUR ABRANTES', 'mateus silva':'MATEUS S.', 'guilherme m.':'GUILHERME M.', 'anna rafaella':'ANNA RAFAELLA', 'ana flavia':'ANA FLAVIA', 'eustaquio':'EUSTAQUIO', 'robson barreto':'ROBSON', 'luis':'LUIS EDUARDO', 'ewerton':'EWERTON' };
   function abaDoNome(arq){
     let n = String(arq || '').replace(/\.(zip|txt)$/i, '').replace(/^[0-9a-f]{8}-/i, '').replace(/^(whatsapp chat( with| -)?|conversa do whatsapp com)\s*/i, '');
-    n = norm(n.replace(/_/g, ' ')).split(/\s+cr\s?e?dito\b/)[0].replace('fl via', 'flavia').replace('eust quio', 'eustaquio').replace(/\s+/g, ' ').trim();
+    n = norm(n.replace(/_/g, ' ')).replace(/^cr\s?e?dito\s+/, '').split(/\s+cr\s?e?dito\b|\s+-\s+/)[0].replace('fl via', 'flavia').replace('eust quio', 'eustaquio').replace(/\s+/g, ' ').trim();
     return ABA_ESP[n] || (n.split(' ')[0] || 'WHATSAPP').toUpperCase();
   }
   function msgsDe(txt){
