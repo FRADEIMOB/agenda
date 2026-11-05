@@ -5138,7 +5138,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('cartas')"><i data-ic="card"></i>Cartas aprovadas</button>
       <button class="so-ceo" onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
-      <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Empreendimentos</button>
+      <button onclick="fechar('menuModal');setView('empreendimentos')"><i data-ic="predio"></i>Imóveis</button>
       <button onclick="fechar('menuModal');setView('bolsao')"><i data-ic="users"></i>Bolsão de clientes</button>
       <button onclick="fechar('menuModal');setView('aulas')"><i data-ic="play"></i>Aulas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('vendas')"><i data-ic="chave"></i>Vendas</button>
@@ -6273,7 +6273,7 @@ const souCeo = () => souGerente() && perfil?.cargo === 'dono' && !souDono();
 window.souCeo = souCeo;
 const VIEWS_CEO = ['bolsao','analises','painel','desempenho','vendas','reservas','financeiro','ranking','cartas','apresentacao','empreendimentos','tarefas','calendario','config'];
 // v290: o gestor escolhe em Configurações o que o CEO vê (padrão: Painel executivo e Financeiro)
-const CEO_ABAS = [['painel','Painel executivo'],['financeiro','Financeiro'],['desempenho','Desempenho da equipe'],['vendas','Vendas'],['reservas','Reservas'],['ranking','Ranking'],['cartas','Cartas aprovadas'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['bolsao','Bolsão'],['apresentacao','Apresentação'],['tarefas','Tarefas'],['calendario','Calendário / Agenda']];
+const CEO_ABAS = [['painel','Painel executivo'],['financeiro','Financeiro'],['desempenho','Desempenho da equipe'],['vendas','Vendas'],['reservas','Reservas'],['ranking','Ranking'],['cartas','Cartas aprovadas'],['analises','Correspondente'],['empreendimentos','Imóveis'],['bolsao','Bolsão'],['apresentacao','Apresentação'],['tarefas','Tarefas'],['calendario','Calendário / Agenda']];
 const CEO_PADRAO = ['painel','financeiro'];
 const viewsCeo = () => { const l = Array.isArray(appCfg?.ceoViews) ? appCfg.ceoViews.filter(v => VIEWS_CEO.includes(v)) : CEO_PADRAO; return [...(l.length ? l : CEO_PADRAO), 'config']; };
 const souCoord = () => souAtivo() && perfil.papel === 'coordenador';
@@ -7820,7 +7820,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 342;
+const APP_VERSAO = 343;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8129,22 +8129,25 @@ function filtrarAvaliacoes(){
   avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba)) && !(a.origem === 'whatsapp' && ((a.cpfNorm && naPlan.has('c' + a.cpfNorm)) || (a.telNorm && naPlan.has('t' + a.telNorm)))));
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
-const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao','empreendimentos'], anjo:['whatsapp','analises','bolsao','empreendimentos'], coordenador:['whatsapp'], sdr:[], adm:[], marketing:[] };
-const ABAS_CARGO = [['assistente','Assistente (IA)'],['simulador','Simulador Caixa'],['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['reservas','Reservas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Empreendimentos'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores'],['marketing','Agenda do marketing']];
+const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao'], anjo:['whatsapp','analises','bolsao'], coordenador:['whatsapp'], sdr:[], adm:[], marketing:[] };
+const ABAS_CARGO = [['assistente','Assistente (IA)'],['simulador','Simulador Caixa'],['tvrank','Rankings na TV'],['funil','Funil de ligações'],['whatsapp','WhatsApp'],['discador','Discador (botão de ligar)'],['tarefas','Tarefas'],['calendario','Calendário / Agenda'],['visitas','Visitas'],['bolsao','Bolsão'],['ranking','Ranking'],['desempenho','Desempenho'],['vendas','Vendas'],['reservas','Reservas'],['comissoes','Minhas comissões'],['cartas','Cartas aprovadas'],['avaliacoes','Avaliações'],['analises','Correspondente'],['empreendimentos','Imóveis'],['relatorios','Relatórios'],['aulas','Aulas'],['resumo','Resumo do dia'],['sorteio','Sorteio'],['recepcao','Tela da recepção'],['corretores','Corretores'],['marketing','Agenda do marketing']];
 const ABAS_DO_CARGO = { corretor:['simulador','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
   coordenador:['simulador','tvrank','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','desempenho','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas','sorteio','recepcao','corretores'],
   sdr:['simulador','discador','tarefas','calendario','visitas','bolsao','ranking','empreendimentos','relatorios','aulas','resumo'],
   anjo:['simulador','funil','whatsapp','discador','tarefas','calendario','visitas','bolsao','ranking','vendas','comissoes','cartas','avaliacoes','analises','empreendimentos','relatorios','aulas'],
   // v190: ADM e Marketing também entram nas abas por cargo (o padrão é o que eles já tinham)
-  adm:['analises','reservas','vendas','cartas','avaliacoes','empreendimentos'],
-  marketing:['marketing','ranking','empreendimentos'] };
+  adm:['analises','reservas','vendas','cartas','avaliacoes','empreendimentos','aulas'],
+  marketing:['marketing','ranking','empreendimentos','aulas'] };
 // telas que o cargo pode abrir: o padrão do cargo, menos as ocultas, mais as liberadas (Configurações sempre)
 function viewsDoCargo(pap){ const oc = cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO, pap) || [], lib = cfgCargo(appCfg?.abasLiberadas || {}, pap) || [];
   return [...new Set([...(ABAS_DO_CARGO[pap] || []).filter(v => !oc.includes(v)), ...lib, 'config'])]; }
 window.viewsDoCargo = viewsDoCargo; // v113: anjo tem tudo do corretor + funil da equipe dele
 const podeZap = () => souAtivo() && ((souGerente() && !souCeo()) || ['corretor','coordenador','anjo'].includes(perfil?.papel));
 window.podeZap = podeZap;
-const cfgCargo = (m, pap) => m ? (m[pap] !== undefined ? m[pap] : (pap === 'anjo' ? m.corretor : undefined)) : undefined; // v113: anjo sem config própria segue o corretor
+const cfgCargo0 = (m, pap) => m ? (m[pap] !== undefined ? m[pap] : (pap === 'anjo' ? m.corretor : undefined)) : undefined; // v113: anjo sem config própria segue o corretor
+// v343: as abas Imóveis e Aulas são sempre visíveis para todos os cargos, mesmo que a configuração antiga tenha escondido
+const ABAS_SEMPRE = ['empreendimentos','aulas']; // v343: Imóveis e Aulas sempre abertas para todos
+const cfgCargo = (m, pap) => { const l = cfgCargo0(m, pap); return Array.isArray(l) && (m === appCfg?.abasOcultas || m === ABAS_OCULTAS_PADRAO) ? l.filter(v => !ABAS_SEMPRE.includes(v)) : l; };
 const abaLiberada = v => { const l = cfgCargo(appCfg?.abasLiberadas || {}, perfil?.papel); return Array.isArray(l) && l.includes(v); };
 window.abaLiberada = abaLiberada;
 const abaOculta = v => { const l = cfgCargo(appCfg?.abasOcultas || ABAS_OCULTAS_PADRAO, perfil?.papel); return Array.isArray(l) && l.includes(v); };
@@ -8951,7 +8954,7 @@ function renderAbasAdm(){
   const oc = appCfg.abasOcultas || ABAS_OCULTAS_PADRAO, lib = appCfg.abasLiberadas || {}, cargos = [['corretor','Corretor'],['anjo','Anjo'],['coordenador','Coordenador'],['sdr','SDR'],['marketing','Marketing'],['adm','ADM']];
   const marcada = (c, k) => ABAS_DO_CARGO[c].includes(k) ? !(cfgCargo(oc, c) || []).includes(k) : (cfgCargo(lib, c) || []).includes(k);
   el.innerHTML = `<div class="tbl-wrap"><table class="rank ab-tab"><thead><tr><th>Aba</th>${cargos.map(([,n]) => `<th style="text-align:center">${n}</th>`).join('')}</tr></thead><tbody>${
-    ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center"><input type="checkbox" data-c="${c}" data-a="${k}" ${marcada(c, k) ? 'checked' : ''} title="${ABAS_DO_CARGO[c].includes(k) ? '' : 'Fora do padrão deste cargo: a tela mostra só o que esse cargo tem permissão de ver'}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    ABAS_CARGO.map(([k, n]) => `<tr><td>${n}</td>${cargos.map(([c]) => `<td style="text-align:center"><input type="checkbox" data-c="${c}" data-a="${k}" ${marcada(c, k) || ABAS_SEMPRE.includes(k) ? 'checked' : ''} ${ABAS_SEMPRE.includes(k) ? 'disabled' : ''} title="${ABAS_SEMPRE.includes(k) ? 'Sempre aberta para todos' : ABAS_DO_CARGO[c].includes(k) ? '' : 'Fora do padrão deste cargo: a tela mostra só o que esse cargo tem permissão de ver'}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 function renderCeoAbas(){
   const el = $('admCeoAbas'); if (!el || el.contains(document.activeElement)) return; const ok = viewsCeo();
@@ -10688,7 +10691,7 @@ window.verEmp = async id => {
   const e = empreendimentos.find(x => x.id === id); if (!e) return;
   empVerId = id; empFotos = []; empFotoIdx = 0;
   $('evNome').textContent = e.nome; $('evLocal').textContent = e.local || '';
-  $('evEditar').classList.toggle('hide', souCeo());
+  $('evEditar').classList.toggle('hide', souCeo() || !(souGerente() || souCoord() || ['adm','marketing'].includes(perfil?.papel))); // v343: corretor, anjo e SDR só veem
   $('evCorpo').innerHTML = htmlEmpDetalhe(e, true);
   abrir('empVerModal'); contarVisualEmp(id);
   try {
@@ -12893,7 +12896,7 @@ function auTemaChave(txt){ const t = String(txt || '').trim().slice(0, 40); if (
 const AU_TEMAS = { estudo:{ nome:'Material de estudo', ic:'📖', cor:'#b45309' }, crm:{ nome:'CRM', ic:'📇', cor:'#2563eb' }, financiamento:{ nome:'Financiamento', ic:'🏦', cor:'#0f9d76' }, geral:{ nome:'Outros assuntos', ic:'🎓', cor:'#7c3aed' } };
 function assinarAulas(){
   aulas = []; aulasVistas = []; if (!souAtivo()) return;
-  subsPapel.push(onSnapshot(collection(db,'aulas'), s => { aulas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(a => souGerente() || auParaMim(a)).sort((a,b) => (a.tema || '').localeCompare(b.tema || '') || (a.ordem || 99) - (b.ordem || 99) || (a.criadoEm || 0) - (b.criadoEm || 0)); render(); }, e => console.warn('aulas', e.code || e.message)));
+  subsPapel.push(onSnapshot(collection(db,'aulas'), s => { aulas = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (a.tema || '').localeCompare(b.tema || '') || (a.ordem || 99) - (b.ordem || 99) || (a.criadoEm || 0) - (b.criadoEm || 0)); render(); }, e => console.warn('aulas', e.code || e.message)));
   const q = podeGerir() ? collection(db,'aulas_vistas') : query(collection(db,'aulas_vistas'), where('uid','==',uidAtual));
   subsPapel.push(onSnapshot(q, s => { aulasVistas = s.docs.map(d => d.data()); render(); }, e => console.warn('aulas_vistas', e.code || e.message)));
 }
@@ -12916,7 +12919,7 @@ function auPapeis(a){ if (Array.isArray(a.papeis)) return a.papeis;
   if (/\bsdr\b/.test(t)) return ['sdr']; if (/coordenad|anjo/.test(t)) return ['coordenador','anjo']; if (/gerenc|gerent/.test(t)) return ['gerente']; if (/corretor/.test(t)) return ['corretor','coordenador','anjo']; return []; }
 const auParaMim = a => { const l = auPapeis(a); return !l.length || l.includes(perfil?.papel); };
 const auPublicoDe = a => { const l = auPapeis(a); return !l.length ? auPublico() : perfisLista.filter(p => p.status === 'ativo' && l.includes(p.papel)); };
-const auPendentes = () => ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && !auAssistiu(a.id)) : [];
+const auPendentes = () => ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) ? aulas.filter(a => a.obrigatoria && auParaMim(a) && !auAssistiu(a.id)) : []; // v343: todos veem todas as aulas; a obrigatória cobra só de quem ela é
 // v254: capa desenhada das aulas (sem emoji): fundo da marca, desenho do tema, título grande
 const AU_ART = {
   estudo:'<svg class="au-art" viewBox="0 0 200 140" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M20 120V70l40-30 40 30v50z"/><path d="M48 120V92h24v28"/><path d="M100 120V50l35-26 35 26v70z"/><path d="M122 120V96h26v24"/><path d="M110 64h14v14h-14zM146 64h14v14h-14zM30 78h12v12H30zM78 78h12v12H78z"/><path d="M8 120h184"/></svg>',
