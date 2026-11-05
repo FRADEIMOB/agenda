@@ -3522,7 +3522,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <!-- EMPREENDIMENTOS (material de venda) -->
       <section class="view" id="v-empreendimentos">
         <div class="page-head emp-head"><div><h1>Imóveis</h1><div class="sub" id="empSub">Fotos, valores, localização e material de venda para mandar ao cliente.</div></div>
-          </div>
+          <button class="btn btn-ghost hide" id="btnEmpGrupo" onclick="abrirWaLeitura('imoveis')">Ler grupo de imóveis</button></div>
         <div class="emp-filtros"><input id="empBusca" placeholder="Buscar imóvel ou construtora..." oninput="empFiltro=this.value;renderEmp()"><select id="empBairros" aria-label="Filtrar por bairro" onchange="empBairro=this.value;renderEmp()"></select></div>
         <div id="empLista" class="emp-grid"></div>
       </section>
@@ -3696,7 +3696,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <!-- AVALIAÇÕES DE CRÉDITO -->
       <section class="view" id="v-avaliacoes">
         <div class="page-head"><div><h1>Avaliações de crédito</h1><div class="sub" id="avalSub"></div></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost hide" id="btnAvalConv" onclick="abrirImpConversa()">Importar conversa do WhatsApp</button><button class="btn btn-ghost hide" id="btnAvalSync" onclick="lerPlanilhaAgora()">Ler a planilha agora</button></div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="muted" id="waLeitInfo" style="font-size:12.5px"></span><button class="btn btn-primary hide" id="btnAvalGrupos" onclick="abrirWaLeitura('credito')">Ler grupos de crédito</button><button class="btn btn-ghost hide" id="btnAvalConv" onclick="abrirImpConversa()">Importar conversa do WhatsApp</button><button class="btn btn-ghost hide" id="btnAvalSync" onclick="lerPlanilhaAgora()">Ler a planilha agora</button></div></div>
         <div id="bannerAval"></div>
         <div id="avalConteudo">
           <div class="stats aval-stats">
@@ -7820,7 +7820,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 343;
+const APP_VERSAO = 344;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9243,7 +9243,7 @@ function renderAvaliacoes(){
   $('avalConteudo').classList.toggle('hide', !ativo);
   if (!ativo) return;
   $('avalSub').textContent = opTudo() ? 'Avaliações de crédito de todas as equipes, vindas da planilha da administração.' : souCoord() ? 'Avaliações da ' + eqNome(perfil.equipe) + '.' : 'As avaliações de crédito dos seus clientes. Atualiza sozinho a cada 15 minutos.';
-  $('btnAvalSync').classList.toggle('hide', !opTudo()); $('btnAvalConv').classList.toggle('hide', !souDono());
+  $('btnAvalSync').classList.toggle('hide', !opTudo()); $('btnAvalConv').classList.toggle('hide', !souDono()); $('btnAvalGrupos').classList.toggle('hide', !souDono() || souCeo()); if ($('waLeitInfo')) $('waLeitInfo').innerHTML = htmlWaLeitInfo('credito');
   $('aGrupo').innerHTML = '<option value="">Todos os grupos</option>' + Object.entries(GRUPOS_V).filter(([k]) => k).map(([k,g]) => `<option value="${k}" ${aFil.grupo===k?'selected':''}>${g.n}</option>`).join('');
   // v274: o anjo vê as avaliações dele separadas das dos corretores que ele acompanha (começa nas dele)
   const anjoSep = souAnjo() && membrosAnjo().length > 0 && !opGerir();
@@ -10638,6 +10638,7 @@ const bairroEmp = e => { const b = String(e.local || '').split(',')[0].trim(); r
 const chaveBairro = b => norm(b).replace(/\s+/g, ' ');
 window.empBairro = '';
 function renderEmp(){
+  if ($('btnEmpGrupo')) { $('btnEmpGrupo').classList.toggle('hide', !souGerente() || souCeo()); $('btnEmpGrupo').title = htmlWaLeitInfo('imoveis').replace(/<[^>]+>/g, ''); }
   if (view !== 'empreendimentos') return;
   const t = norm(window.empFiltro || '');
   const ativos = empreendimentos.filter(e => !e.arquivado);
@@ -10840,6 +10841,47 @@ window.addEventListener('message', ev => {
     try { ev.source.postMessage({ tipo:'frade-emp-ok', nome:it.nome, n:empWa.length }, 'https://web.whatsapp.com'); } catch(e) {}
     clearTimeout(window._empWaT); window._empWaT = setTimeout(abrirEmpWa, 900);
   }
+});
+/* v344: botões "Ler grupos de crédito" (Avaliações) e "Ler grupo de imóveis" (Imóveis).
+   O app abre o WhatsApp Web numa aba ligada a ele; a leitura dos grupos é feita nessa aba (pelo Claude, a pedido do Allan)
+   e as mensagens voltam para cá. As de crédito entram em zap_credito, igual às do robô, e contam como docs no dia em que foram mandadas. */
+let _waLeit = null;
+const waLeitUlt = k => { try { return JSON.parse(localStorage.getItem('waLeit_' + k) || 'null'); } catch(e) { return null; } };
+function htmlWaLeitInfo(k){ const u = waLeitUlt(k); if (!u) return ''; const d = new Date(u.em);
+  return `Última leitura: ${d.toLocaleDateString('pt-BR')} às ${d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}${k === 'credito' ? ` · ${u.grupos || 0} grupos, ${u.msgs || 0} mensagens` : ` · ${u.itens || 0} imóveis`}`; }
+window.abrirWaLeitura = k => {
+  try { if (_waLeit && !_waLeit.closed) { _waLeit.focus(); } else _waLeit = window.open('https://web.whatsapp.com/', 'fradeWhatsApp'); } catch(e) {}
+  if (!_waLeit) return toast('O navegador bloqueou a janela. Libere pop-ups para este site e toque de novo.');
+  window._waLeitTipo = k;
+  const ont = new Date(); ont.setDate(ont.getDate() - 1); ont.setHours(0, 0, 0, 0); // v344: só grupos com mensagem de hoje ou de ontem, lidos desde ontem 00:00
+  const desde = k === 'credito' ? ont.getTime() : (waLeitUlt(k)?.em || 0);
+  window._waLeitPedido = { tipo:'frade-ler', alvo:k, desde };
+  const avisa = () => { try { _waLeit.postMessage(window._waLeitPedido, 'https://web.whatsapp.com'); } catch(e) {} };
+  setTimeout(avisa, 4000); setTimeout(avisa, 12000);
+  toast(k === 'credito' ? 'WhatsApp aberto. Peça ao Claude: "ler grupos de crédito".' : 'WhatsApp aberto. Peça ao Claude: "ler grupo de imóveis".');
+};
+const _hashTxt = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) >>> 0; return h.toString(36); };
+async function receberCredWa(msgs, src){
+  const ok = msgs.filter(m => m && typeof m.grupo === 'string' && typeof m.texto === 'string' && m.em > 0 && /cr[eé]dito/i.test(m.grupo)).slice(0, 800);
+  let gravadas = 0, local = 0;
+  for (const m of ok) {
+    const x = { grupo:'wa:' + norm(m.grupo).slice(0, 80), nome:m.grupo.slice(0, 120), autor:String(m.autor || '').slice(0, 80), numero:'', texto:m.texto.slice(0, 6000), em:m.em, fonte:'whatsapp-web' };
+    const id = 'w' + _hashTxt(x.grupo + '|' + x.em + '|' + x.autor + '|' + x.texto.slice(0, 200));
+    if (zapCred.some(z => z.id === id)) continue;
+    try { await setDoc(doc(db,'zap_credito',id), x); gravadas++; }
+    catch(e) { zapCred.push({ id, ...x }); local++; } // sem as regras novas: processa só nesta tela
+  }
+  if (local) { clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 3000); }
+  try { src.postMessage({ tipo:'frade-cred-ok', recebidas:ok.length, gravadas, local }, 'https://web.whatsapp.com'); } catch(e) {}
+  return { gravadas, local };
+}
+window.addEventListener('message', ev => {
+  if (ev.origin !== 'https://web.whatsapp.com') return; const d = ev.data || {};
+  if (d.tipo === 'frade-cred-lote' && Array.isArray(d.msgs)) receberCredWa(d.msgs, ev.source);
+  if (d.tipo === 'frade-cred-fim') { try { localStorage.setItem('waLeit_credito', JSON.stringify({ em:d.em || Date.now(), grupos:d.grupos || 0, msgs:d.msgs || 0 })); } catch(e) {}
+    if ($('waLeitInfo')) $('waLeitInfo').innerHTML = htmlWaLeitInfo('credito'); toast(`Grupos de crédito lidos: ${d.grupos || 0} grupos, ${d.msgs || 0} mensagens. Os pontos atualizam em instantes.`); clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 4000); }
+  if (d.tipo === 'frade-emp-fim') { try { localStorage.setItem('waLeit_imoveis', JSON.stringify({ em:d.em || Date.now(), itens:d.itens || 0 })); } catch(e) {} toast(`Grupo de imóveis lido: ${d.itens || 0} imóveis novos ou atualizados.`); }
+  if (d.tipo === 'frade-pedido' && window._waLeitPedido) { try { ev.source.postMessage(window._waLeitPedido, 'https://web.whatsapp.com'); } catch(e) {} }
 });
 // a aba do WhatsApp avisa quando o app terminou de abrir
 setInterval(() => { try { if (window.opener && souAtivo() && !window._empWaAvisou) { window.opener.postMessage({ tipo:'frade-pronto' }, 'https://web.whatsapp.com'); window._empWaAvisou = true; } } catch(e) {} }, 1500);
