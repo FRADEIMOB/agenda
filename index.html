@@ -2319,6 +2319,7 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .tvr-bts>button.tvr-som{padding:0 12px}
 .tvm-col header{align-items:center!important}
 .tvm-col header>:not(h2):not(.tvm-maxbt):not(.tva-qr):not(.tva-topo){flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sal-q{display:block;font-size:10.5px;font-weight:600;color:#7c3aed}.sal-q-parc{margin-top:8px;border-top:1px dashed var(--border);padding-top:6px}.sal-q-parc div{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:2px 0}.sal-q-chk{display:flex;gap:8px;align-items:center;margin:10px 0 2px;font-size:13.5px}
 .sm-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .sm-card{padding:16px}.sm-topo{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}.sm-topo b{font-size:16px}
 .sm-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.sm-nums div{background:rgba(127,127,127,.08);border-radius:10px;padding:8px 10px}
@@ -6397,7 +6398,7 @@ function configurarAcesso(){
   if (chave === chaveSubs) return;
   chaveSubs = chave;
   subsPapel.forEach(u => u()); subsPapel = []; perfisTodos = []; visitas = []; rankingDocs = []; perfisLista = []; cartas = []; rankingCartas = []; avisos = [];
-  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; rankingVendas = []; window._rvOk = false; empreendimentos = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
+  visitasBrutas = []; cartasBrutas = []; repetidos = []; pontosMeses = {}; carregado = {}; avaliacoes = []; avaliacoesTodas = []; integ = {}; leadsDias = []; relatoriosLista = null; window._srPedido = false; presencas = {}; leadsHoje = []; pesquisas = []; alertas = []; rankingVendas = []; window._rvOk = false; empreendimentos = []; sdrResumos = []; leadsAjustes = {}; reservas = []; reservasTodas = [];
   if (!souAtivo()) return;
   if (souTreino()) { assinarAulas(); try { assinarNotifs(); } catch(e) {} return; } // v309: em treinamento só carrega as aulas
   if (perfil.papel === 'correspondente') { assinarEtapa1(() => {}); assinarNotifs(); assinarAnalises(); return; }
@@ -7874,7 +7875,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 353;
+const APP_VERSAO = 356;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15270,9 +15271,22 @@ function calcSalario(rg, n){
   return { total:calc, partes };
 }
 window.salModo = 'folha';
+/* v354: semanas sem roxo do mês (regra do Allan, 06/11): a semana só conta se NENHUM corretor do escritório ficou roxo nela,
+   olhando um por um na tabela de desempenho mensal. Roxo = mais de 10 leads por doc na semana, ou lead sem nenhuma doc. */
+function semanasSemRoxo(mes){
+  if (!relatoriosLista) { if (!window._srPedido && souGerente()) { window._srPedido = true; carregarRelatorios().then(() => { salNums = {}; render(); }); } return null; }
+  const r = relatoriosLista.find(x => x.tipo === 'mes' && x.id === 'mes_' + mes + '-01') || relatoriosLista.find(x => x.tipo === 'mes' && x.id === 'mes_' + mes + '-01_parcial');
+  if (!r) return null;
+  try { const d = dadosPlanilhaMes(r); let ok = 0;
+    const roxo = s => !!s && (s.lead || s.doc) && (!s.doc || s.lead / s.doc > 10), roxos = [];
+    d.semanas.forEach((w, i) => { const r2 = d.linhas.filter(l => roxo(l.sem[i])).map(l => nomeBonito(l.nome).split(' ')[0]); roxos.push(r2); if (!r2.length) ok++; });
+    return { ok, total:d.semanas.length, parcial:!!r.parcial, roxos };
+    return { ok, total:d.semanas.length, parcial:!!r.parcial };
+  } catch(e) { return null; }
+}
 function salNumsDe(x){
   if (salNums[x.id]) return salNums[x.id];
-  const base = numerosDoMesSal(salMes), n = { ...base, docs:0, media:0, visitas:0, recontatos:0, semanas:0, bonus:0 };
+  const base = numerosDoMesSal(salMes), n = { ...base, docs:0, media:0, visitas:0, recontatos:0, semanas:0, bonus:0 }; // v355: semanas sem roxo voltam a ser digitadas à mão (a regra não segue nos próximos meses)
   // SDR: puxa docs, média, visitas realizadas e recontatos do resumo do dia
   const nm = norm(nomeDaFixa(x.descricao)).split(' ')[0];
   const sdr = rankingSdr(salMes + '-01', fimDoMes(salMes)).find(s => norm(s.nome).split(' ')[0] === nm);
@@ -15368,14 +15382,24 @@ function colunasSal(x){
   c.partes.forEach(([r, v]) => { if (/^Fixo/.test(r)) fixo += v; else if (/^(VT|Vale)/.test(r)) vt += v; else if (/^(Bônus|Valor final)/.test(r)) bonus += v; else com += v; });
   return { c, fixo, vt, com, bonus, total:c.total };
 }
+/* v356: pagamento quinzenal (por mês, marcado na pessoa). 1ª quinzena = metade do fixo, paga no dia 15;
+   2ª quinzena = o resto (fixo restante + VT + comissões + bônus), no dia de pagamento de sempre. */
+const ehQuinzenal = x => (x.quinzenalMeses || []).includes(salMes);
+const parcelasQuinz = (x, k) => { const p1 = Math.round((k.fixo / 2) * 100) / 100; return [p1, Math.round((k.total - p1) * 100) / 100]; };
+window.salQuinzenal = async (id, on) => {
+  const x = finFixas.find(f => f.id === id); if (!x) return; const l = new Set(x.quinzenalMeses || []); on ? l.add(salMes) : l.delete(salMes);
+  try { await gravar(setDoc(doc(db,'fin_fixas',id), { quinzenalMeses:[...l] }, { merge:true })); x.quinzenalMeses = [...l]; redesenharLinhaSal(id); toast(on ? `Pagamento quinzenal em ${nomeMes(salMes).split(' de ')[0]} ✓` : 'Pagamento volta a ser mensal'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 function htmlLinhaSal(x, k){
   const rg = x.regra || {}, n = salNumsDe(x), usa = q => Number(rg[q]) > 0, ab = window._salAb === x.id;
   const campo = (q, rot, show) => show ? `<label>${rot}<input inputmode="decimal" value="${n[q] ? String(n[q]).replace('.', ',') : ''}" placeholder="0" oninput="salSet('${x.id}','${q}',this.value)"></label>` : '';
   const v = val => val ? brl2(val) : '<span class="sal-zero">—</span>';
-  return `<tr class="sal-lin ${ab ? 'ab' : ''}" id="sal_${x.id}" onclick="window._salAb=window._salAb==='${x.id}'?'':'${x.id}';redesenharLinhaSal('${x.id}')"><td><b>${esc(x.descricao)}</b></td><td>${v(k.fixo)}</td><td>${v(k.vt)}</td><td>${v(k.com)}</td><td>${v(k.bonus)}</td><td class="sal-tot">${brl2(k.total)}</td><td class="sal-seta">${ab ? '▴' : '▾'}</td></tr>
+  return `<tr class="sal-lin ${ab ? 'ab' : ''}" id="sal_${x.id}" onclick="window._salAb=window._salAb==='${x.id}'?'':'${x.id}';redesenharLinhaSal('${x.id}')"><td><b>${esc(x.descricao)}</b></td><td>${v(k.fixo)}</td><td>${v(k.vt)}</td><td>${v(k.com)}</td><td>${v(k.bonus)}</td><td class="sal-tot">${brl2(k.total)}${ehQuinzenal(x) ? '<small class="sal-q">quinzenal</small>' : ''}</td><td class="sal-seta">${ab ? '▴' : '▾'}</td></tr>
     ${ab ? `<tr class="sal-det" id="sald_${x.id}"><td colspan="7"><div class="sal-det-in">
-      <div class="sal-conta">${k.c.partes.map(p => `<div><span>${esc(p[0])}</span><b>${brl2(p[1])}</b></div>`).join('') || '<div><span>Sem salário definido</span><b>—</b></div>'}<div class="sal-conta-tot"><span>Total</span><b>${brl2(k.total)}</b></div></div>
+      <div class="sal-conta">${k.c.partes.map(p => `<div><span>${esc(p[0])}</span><b>${brl2(p[1])}</b></div>`).join('') || '<div><span>Sem salário definido</span><b>—</b></div>'}<div class="sal-conta-tot"><span>Total</span><b>${brl2(k.total)}</b></div>${ehQuinzenal(x) ? (() => { const [p1, p2] = parcelasQuinz(x, k), dia = String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2, '0'); return `<div class="sal-q-parc"><div><span>1ª quinzena · dia 15 (metade do fixo)</span><b>${brl2(p1)}</b></div><div><span>2ª quinzena · dia ${dia} (o resto)</span><b>${brl2(p2)}</b></div></div>`; })() : ''}</div>
       <div class="sal-ajus"><h4>Ajustar os números deste mês</h4><div class="sal-nums">${n.ehSdr ? campo('assinSdr','Contratos assinados', true) : campo('contratos','Contratos assinados', true)}${campo('reservas','Reservas', usa('porReserva') || usa('porReservaCRM'))}${campo('pctCRM','% do CRM', usa('porReservaCRM'))}${campo('docs','Documentações', usa('porDoc'))}${campo('visitas','Visitas', usa('porVisita'))}${campo('recontatos','Recontatos', usa('porRecontato'))}${campo('semanas','Semanas sem roxo', usa('porSemana'))}${campo('bonus','Bônus (R$)', true)}${campo('final','Valor final (R$), se quiser trocar o total', true)}</div>
+      <label class="fv-chk sal-q-chk" onclick="event.stopPropagation()"><input type="checkbox" ${ehQuinzenal(x) ? 'checked' : ''} onchange="salQuinzenal('${x.id}', this.checked)"> Pagar quinzenal em ${nomeMes(salMes).split(' de ')[0].toLowerCase()}</label>
       <div class="sal-det-pe"><button class="link" onclick="salModo='regras';render();editarRegraSal('${x.id}')">Mudar o salário dessa pessoa</button><button class="link" style="color:var(--danger)" onclick="excluirDaFolha('${x.id}')">Tirar da folha</button></div></div></div></td></tr>` : ''}`;
 }
 function redesenharLinhaSal(id){
@@ -15421,8 +15445,12 @@ window.lancarSalarios = async () => {
   if (!folha.length) return;
   if (!confirm(`Lançar os salários calculados na folha de ${nomeMes(salMes)}? Os valores dessas pessoas nos lançamentos do mês serão trocados pelos calculados.`)) return;
   const b = writeBatch(db);
-  folha.forEach(x => { const c = calcSalario(x.regra || { fixo:Number(x.valor) || 0 }, salNumsDe(x)), id = 'fx_' + x.id + '_' + salMes, tem = finLanc.find(l => l.id === id);
-    b.set(doc(db,'fin_lanc',id), { tipo:'saida', categoria:x.categoria || 'Folha de pagamento', descricao:x.descricao, valor:c.total, data:tem?.data || salMes + '-' + String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2,'0'), pago:tem?.pago || false, fixa:x.id, varia:false,
+  folha.forEach(x => { const c = calcSalario(x.regra || { fixo:Number(x.valor) || 0 }, salNumsDe(x)), id = 'fx_' + x.id + '_' + salMes, tem = finLanc.find(l => l.id === id), idQ = id + '_q1', temQ = finLanc.find(l => l.id === idQ);
+    const quinz = ehQuinzenal(x), [p1, p2] = quinz ? parcelasQuinz(x, colunasSal(x)) : [0, c.total];
+    if (quinz) b.set(doc(db,'fin_lanc',idQ), { tipo:'saida', categoria:x.categoria || 'Folha de pagamento', descricao:x.descricao + ' · 1ª quinzena', valor:p1, data:temQ?.data || salMes + '-15', pago:temQ?.pago || false, fixa:x.id, varia:false,
+      calculo:'1ª quinzena: metade do fixo', criadoEm:temQ?.criadoEm || Date.now(), criadoPor:temQ?.criadoPor || 'Calculadora de salários', atualizadoEm:Date.now() }, { merge:true });
+    else if (temQ) b.delete(doc(db,'fin_lanc',idQ));
+    b.set(doc(db,'fin_lanc',id), { tipo:'saida', categoria:x.categoria || 'Folha de pagamento', descricao:x.descricao + (quinz ? ' · 2ª quinzena' : ''), valor:p2, data:tem?.data || salMes + '-' + String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2,'0'), pago:tem?.pago || false, fixa:x.id, varia:false,
       calculo:c.partes.map(p => p[0] + ': ' + p[1]).join(' | '), criadoEm:tem?.criadoEm || Date.now(), criadoPor:tem?.criadoPor || 'Calculadora de salários', atualizadoEm:Date.now() }, { merge:true }); });
   try { await gravar(b.commit()); toast('Salários lançados na folha ✓ Veja em Entradas e saídas.'); } catch(e) { toast('Erro: ' + e.message); }
 };
