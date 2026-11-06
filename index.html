@@ -7891,7 +7891,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 361;
+const APP_VERSAO = 364;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -14143,7 +14143,7 @@ function assinarFinanceiro(){
   finLanc = [];
   if (!souGerente()) return;
   const silencio = e => console.warn('Financeiro:', e.code || e.message);
-  subsPapel.push(onSnapshot(collection(db,'fin_lanc'), s => { finLanc = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
+  subsPapel.push(onSnapshot(collection(db,'fin_lanc'), s => { finLanc = s.docs.map(d => ({ id:d.id, ...d.data() })); window._finLancOk = true; render(); }, silencio));
   subsPapel.push(onSnapshot(doc(db,'fin_config','geral'), s => { if (s.exists()) finCfg = { ...finCfg, ...s.data() }; render(); setTimeout(corrigirImposto157, 3000); }, silencio));
 }
 const finDoMes = m => finLanc.filter(x => (x.data || '').slice(0,7) === m);
@@ -14319,7 +14319,7 @@ function assinarFin2(){
   if (!souGerente()) return;
   const silencio = e => console.warn('Financeiro 2:', e.code || e.message);
   subsPapel.push(onSnapshot(collection(db,'fin_vendas'), s => { finVendas = {}; s.docs.forEach(d => finVendas[d.id] = d.data()); window._fvOk = true; render(); sincExtrato(); try { sincAssinaturasFin(); } catch(e) {} try { sincVendasRanking(); } catch(e) {} }, silencio));
-  subsPapel.push(onSnapshot(collection(db,'fin_fixas'), s => { finFixas = s.docs.map(d => ({ id:d.id, ...d.data() })); _fixasFeitas = ''; render(); }, silencio));
+  subsPapel.push(onSnapshot(collection(db,'fin_fixas'), s => { const t = s.docs.map(d => ({ id:d.id, ...d.data() })); window._fixasExcl = new Set(t.filter(x => x.excluida).map(x => x.id)); finFixas = t.filter(x => !x.excluida); window._fixasOk = true; _fixasFeitas = ''; render(); }, silencio));
   subsPapel.push(onSnapshot(collection(db,'fin_notas'), s => { window.finNotas = s.docs.map(d => ({ id:d.id, ...d.data() })); render(); }, silencio));
 }
 window.finNotas = [];
@@ -14426,13 +14426,26 @@ function parcelaNoMes(x, m){
   const [a1, m1] = x.inicio.split('-').map(Number), [a2, m2] = m.split('-').map(Number), k = (a2 - a1) * 12 + (m2 - m1) + 1;
   return k < 1 || k > Number(x.parcelas) ? -1 : k;
 }
+/* v362: só gera depois que lançamentos e fixas chegaram (antes podia regravar um lançamento já pago como "a pagar").
+   Toda conta fixa do mês anterior que não tinha cadastro de despesa fixa vira despesa fixa (todo mês, valor muda),
+   e o valor do mês novo parte do valor do mês anterior. Folha/salários ficam de fora (são da Folha do mês). */
 async function gerarFixasDoMes(m){
-  if (!souGerente() || _fixasFeitas === m || m < mesAtual()) return;
+  if (!souGerente() || _fixasFeitas === m || m < mesAtual() || !window._finLancOk || !window._fixasOk) return;
   _fixasFeitas = m;
   const b = writeBatch(db); let n = 0;
-  finFixas.filter(x => x.ativo !== false && Number(x.valor) > 0).forEach(x => { const id = 'fx_' + x.id + '_' + m; if (finLanc.some(l => l.id === id)) return;
+  const [ya, ma] = m.split('-').map(Number), ant = iso(new Date(ya, ma - 2, 1)).slice(0, 7), excl = window._fixasExcl || new Set();
+  const ehFolhaL = l => /folha|pró-labore|salár/i.test(l.categoria || '') || l.calculo || l.criadoPor === 'Calculadora de salários';
+  const novas = [];
+  finLanc.filter(l => l.tipo === 'saida' && l.fixa && (l.data || '').startsWith(ant) && !ehFolhaL(l)).forEach(l => {
+    const fid = typeof l.fixa === 'string' ? l.fixa : ''; if (fid && (finFixas.some(f => f.id === fid) || excl.has(fid))) return;
+    const desc = String(l.descricao || '').replace(/\s*\(parcela \d+ de \d+\)$/, '').trim(); if (!desc || novas.some(x => norm(x.descricao) === norm(desc)) || finFixas.some(f => norm(f.descricao) === norm(desc))) return;
+    const x = { id:fid || doc(collection(db,'fin_fixas')).id, descricao:desc, categoria:l.categoria || 'Despesa operacional', valor:Number(l.valor) || 0, dia:Number((l.data || '').slice(8, 10)) || 5, varia:true, ativo:true, criadoEm:Date.now(), criadoPor:'Conta fixa do mês anterior' };
+    const { id, ...dados } = x; b.set(doc(db,'fin_fixas',id), dados); novas.push(x); n++;
+  });
+  [...finFixas, ...novas].filter(x => x.ativo !== false && Number(x.valor) > 0).forEach(x => { const id = 'fx_' + x.id + '_' + m; if (finLanc.some(l => l.id === id || (l.fixa === x.id && (l.data || '').startsWith(m)))) return;
     const k = parcelaNoMes(x, m); if (k === -1) return;
-    b.set(doc(db,'fin_lanc',id), { tipo:'saida', categoria:x.categoria || 'Despesa operacional', descricao:x.descricao + (k ? ` (parcela ${k} de ${x.parcelas})` : ''), valor:Number(x.valor) || 0, varia:!!x.varia, data:m + '-' + String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2,'0'), pago:false, fixa:x.id, criadoEm:Date.now(), criadoPor:'Despesa fixa' }); n++; });
+    const antL = finLanc.find(l => l.fixa === x.id && (l.data || '').startsWith(ant)), valor = x.varia && antL ? Number(antL.valor) || Number(x.valor) || 0 : Number(x.valor) || 0;
+    b.set(doc(db,'fin_lanc',id), { tipo:'saida', categoria:x.categoria || 'Despesa operacional', descricao:x.descricao + (k ? ` (parcela ${k} de ${x.parcelas})` : ''), valor, varia:!!x.varia, data:m + '-' + String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2,'0'), pago:false, fixa:x.id, criadoEm:Date.now(), criadoPor:'Despesa fixa' }); n++; });
   if (n) try { await b.commit(); } catch(e) { _fixasFeitas = ''; console.warn('fixas', e.message); }
 }
 function htmlGolpe(m, mm){
@@ -15232,7 +15245,7 @@ window.renomearFixa = async (id, nome) => {
 };
 window.excluirFixa = async id => {
   if (!confirm('Parar de lançar essa despesa todo mês? (os lançamentos já feitos continuam)')) return;
-  try { await gravar(deleteDoc(doc(db,'fin_fixas',id))); setTimeout(desenharFixas, 300); } catch(e) { toast('Erro: ' + e.message); }
+  try { await gravar(setDoc(doc(db,'fin_fixas',id), { ativo:false, excluida:true, excluidaEm:Date.now() }, { merge:true })); setTimeout(desenharFixas, 300); } catch(e) { toast('Erro: ' + e.message); } // v362: fica marcada como excluída, para não voltar sozinha pelo mês anterior
 };
 
 // ---------- calculadora dos salários (fixo + variáveis do mês) ----------
@@ -15432,10 +15445,10 @@ function colunasSal(x){
   c.partes.forEach(([r, v]) => { if (/^Fixo/.test(r)) fixo += v; else if (/^(VT|Vale)/.test(r)) vt += v; else if (/^(Bônus|Valor final)/.test(r)) bonus += v; else com += v; });
   return { c, fixo, vt, com, bonus, total:c.total };
 }
-/* v356: pagamento quinzenal (por mês, marcado na pessoa). 1ª quinzena = metade do fixo, paga no dia 15;
+/* v356: pagamento quinzenal (por mês, marcado na pessoa). (v363: metade do total no dia 15 e a outra metade no dia de sempre)
    2ª quinzena = o resto (fixo restante + VT + comissões + bônus), no dia de pagamento de sempre. */
 const ehQuinzenal = x => (x.quinzenalMeses || []).includes(salMes);
-const parcelasQuinz = (x, k) => { const p1 = Math.round((k.fixo / 2) * 100) / 100; return [p1, Math.round((k.total - p1) * 100) / 100]; };
+const parcelasQuinz = (x, k) => { const p1 = Math.round((k.total / 2) * 100) / 100; return [p1, Math.round((k.total - p1) * 100) / 100]; }; // v363: metade e metade do total
 window.salQuinzenal = async (id, on) => {
   const x = finFixas.find(f => f.id === id); if (!x) return; const l = new Set(x.quinzenalMeses || []); on ? l.add(salMes) : l.delete(salMes);
   try { await gravar(setDoc(doc(db,'fin_fixas',id), { quinzenalMeses:[...l] }, { merge:true })); x.quinzenalMeses = [...l]; redesenharLinhaSal(id); toast(on ? `Pagamento quinzenal em ${nomeMes(salMes).split(' de ')[0]} ✓` : 'Pagamento volta a ser mensal'); }
@@ -15447,7 +15460,7 @@ function htmlLinhaSal(x, k){
   const v = val => val ? brl2(val) : '<span class="sal-zero">—</span>';
   return `<tr class="sal-lin ${ab ? 'ab' : ''}" id="sal_${x.id}" onclick="window._salAb=window._salAb==='${x.id}'?'':'${x.id}';redesenharLinhaSal('${x.id}')"><td><b>${esc(x.descricao)}</b></td><td>${v(k.fixo)}</td><td>${v(k.vt)}</td><td>${v(k.com)}</td><td>${v(k.bonus)}</td><td class="sal-tot">${brl2(k.total)}${ehQuinzenal(x) ? '<small class="sal-q">quinzenal</small>' : ''}</td><td class="sal-seta">${ab ? '▴' : '▾'}</td></tr>
     ${ab ? `<tr class="sal-det" id="sald_${x.id}"><td colspan="7"><div class="sal-det-in">
-      <div class="sal-conta">${k.c.partes.map(p => `<div><span>${esc(p[0])}</span><b>${brl2(p[1])}</b></div>`).join('') || '<div><span>Sem salário definido</span><b>—</b></div>'}<div class="sal-conta-tot"><span>Total</span><b>${brl2(k.total)}</b></div>${ehQuinzenal(x) ? (() => { const [p1, p2] = parcelasQuinz(x, k), dia = String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2, '0'); return `<div class="sal-q-parc"><div><span>1ª quinzena · dia 15 (metade do fixo)</span><b>${brl2(p1)}</b></div><div><span>2ª quinzena · dia ${dia} (o resto)</span><b>${brl2(p2)}</b></div></div>`; })() : ''}</div>
+      <div class="sal-conta">${k.c.partes.map(p => `<div><span>${esc(p[0])}</span><b>${brl2(p[1])}</b></div>`).join('') || '<div><span>Sem salário definido</span><b>—</b></div>'}<div class="sal-conta-tot"><span>Total</span><b>${brl2(k.total)}</b></div>${ehQuinzenal(x) ? (() => { const [p1, p2] = parcelasQuinz(x, k), dia = String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2, '0'); return `<div class="sal-q-parc"><div><span>1ª quinzena · dia 15 (metade)</span><b>${brl2(p1)}</b></div><div><span>2ª quinzena · dia ${dia} (outra metade)</span><b>${brl2(p2)}</b></div></div>`; })() : ''}</div>
       <div class="sal-ajus"><h4>Ajustar os números deste mês</h4><div class="sal-nums">${n.ehSdr ? campo('assinSdr','Contratos assinados', true) : campo('contratos','Contratos assinados', true)}${campo('reservas','Reservas', usa('porReserva') || usa('porReservaCRM'))}${campo('pctCRM','% do CRM', usa('porReservaCRM'))}${campo('docs','Documentações', usa('porDoc'))}${campo('visitas','Visitas', usa('porVisita'))}${campo('recontatos','Recontatos', usa('porRecontato'))}${campo('semanas','Semanas sem roxo', usa('porSemana'))}${campo('bonus','Bônus (R$)', true)}${campo('final','Valor final (R$), se quiser trocar o total', true)}</div>
       <label class="fv-chk sal-q-chk" onclick="event.stopPropagation()"><input type="checkbox" ${ehQuinzenal(x) ? 'checked' : ''} onchange="salQuinzenal('${x.id}', this.checked)"> Pagar quinzenal em ${nomeMes(salMes).split(' de ')[0].toLowerCase()}</label>
       <div class="sal-det-pe"><button class="link" onclick="salModo='regras';render();editarRegraSal('${x.id}')">Mudar o salário dessa pessoa</button><button class="link" style="color:var(--danger)" onclick="excluirDaFolha('${x.id}')">Tirar da folha</button></div></div></div></td></tr>` : ''}`;
@@ -15498,7 +15511,7 @@ window.lancarSalarios = async () => {
   folha.forEach(x => { const c = calcSalario(x.regra || { fixo:Number(x.valor) || 0 }, salNumsDe(x)), id = 'fx_' + x.id + '_' + salMes, tem = finLanc.find(l => l.id === id), idQ = id + '_q1', temQ = finLanc.find(l => l.id === idQ);
     const quinz = ehQuinzenal(x), [p1, p2] = quinz ? parcelasQuinz(x, colunasSal(x)) : [0, c.total];
     if (quinz) b.set(doc(db,'fin_lanc',idQ), { tipo:'saida', categoria:x.categoria || 'Folha de pagamento', descricao:x.descricao + ' · 1ª quinzena', valor:p1, data:temQ?.data || salMes + '-15', pago:temQ?.pago || false, fixa:x.id, varia:false,
-      calculo:'1ª quinzena: metade do fixo', criadoEm:temQ?.criadoEm || Date.now(), criadoPor:temQ?.criadoPor || 'Calculadora de salários', atualizadoEm:Date.now() }, { merge:true });
+      calculo:'1ª quinzena: metade do salário', criadoEm:temQ?.criadoEm || Date.now(), criadoPor:temQ?.criadoPor || 'Calculadora de salários', atualizadoEm:Date.now() }, { merge:true });
     else if (temQ) b.delete(doc(db,'fin_lanc',idQ));
     b.set(doc(db,'fin_lanc',id), { tipo:'saida', categoria:x.categoria || 'Folha de pagamento', descricao:x.descricao + (quinz ? ' · 2ª quinzena' : ''), valor:p2, data:tem?.data || salMes + '-' + String(Math.min(28, Math.max(1, Number(x.dia) || 5))).padStart(2,'0'), pago:tem?.pago || false, fixa:x.id, varia:false,
       calculo:c.partes.map(p => p[0] + ': ' + p[1]).join(' | '), criadoEm:tem?.criadoEm || Date.now(), criadoPor:tem?.criadoPor || 'Calculadora de salários', atualizadoEm:Date.now() }, { merge:true }); });
@@ -15528,7 +15541,7 @@ window.editarFin = id => {
   $('finValor').value = x ? String(x.valor).replace('.', ',') : ''; $('finData').value = x?.data || hojeISO();
   $('finPago').checked = !!x?.pago; $('finObs').value = x?.obs || ''; $('finConta').value = x?.conta || '';
   $('finRecBt').classList.toggle('hide', !x || x.tipo !== 'saida');
-  { const q = salarioDoLanc(id); $('finQuinzW').classList.toggle('hide', !q); if (q) { $('finQuinz').checked = !!q.q1; $('finQuinzTxt').textContent = `Pagar quinzenal em ${nomeMes(q.mes).split(' de ')[0].toLowerCase()} (metade do fixo, ${brl2(q.p1)}, no dia 15 e o resto no vencimento)`; } }
+  { const q = salarioDoLanc(id); $('finQuinzW').classList.toggle('hide', !q); if (q) { $('finQuinz').checked = !!q.q1; $('finQuinzTxt').textContent = `Pagar quinzenal em ${nomeMes(q.mes).split(' de ')[0].toLowerCase()} (metade no dia 15 e a outra metade no vencimento)`; } }
   $('finCor').innerHTML = '<option value="">Nenhum</option>' + perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'gerente').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${x?.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('');
   abrir('finModal'); setTimeout(() => $('finDesc').focus(), 50);
 };
@@ -15538,15 +15551,14 @@ window.finCatsOpc = () => { const t = $('finTipoSel').value; $('finCats').innerH
 function salarioDoLanc(id){
   const m = /^fx_(.+)_(\d{4}-\d{2})$/.exec(id || ''); if (!m) return null;
   const fx = finFixas.find(f => f.id === m[1]); if (!fx || !(/folha|pró-labore/i.test(fx.categoria || '') || fx.regra)) return null;
-  const fixo = Number((fx.regra || {}).fixo) || Number(fx.valor) || 0; if (!fixo) return null;
-  return { fx, mes:m[2], idQ:id + '_q1', q1:finLanc.find(l => l.id === id + '_q1'), p1:Math.round(fixo / 2 * 100) / 100 };
+  return { fx, mes:m[2], idQ:id + '_q1', q1:finLanc.find(l => l.id === id + '_q1') };
 }
 async function aplicarQuinzLanc(d){
   const q = salarioDoLanc(finEdit); if (!q) return; const quer = $('finQuinz').checked; if (quer === !!q.q1) return;
   const b = writeBatch(db), base = String(d.descricao).replace(/\s·\s[12]ª quinzena$/, ''), meses = new Set(q.fx.quinzenalMeses || []);
   if (quer) {
-    if (d.valor <= q.p1) throw new Error('o valor do salário é menor que a metade do fixo');
-    b.set(doc(db,'fin_lanc',q.idQ), { tipo:'saida', categoria:d.categoria || 'Folha de pagamento', descricao:base + ' · 1ª quinzena', valor:q.p1, data:q.mes + '-15', pago:false, fixa:q.fx.id, varia:false, calculo:'1ª quinzena: metade do fixo', criadoEm:Date.now(), criadoPor:'Calculadora de salários', atualizadoEm:Date.now() });
+    q.p1 = Math.round(d.valor / 2 * 100) / 100;
+    b.set(doc(db,'fin_lanc',q.idQ), { tipo:'saida', categoria:d.categoria || 'Folha de pagamento', descricao:base + ' · 1ª quinzena', valor:q.p1, data:q.mes + '-15', pago:false, fixa:q.fx.id, varia:false, calculo:'1ª quinzena: metade do salário', criadoEm:Date.now(), criadoPor:'Calculadora de salários', atualizadoEm:Date.now() });
     d.valor = Math.round((d.valor - q.p1) * 100) / 100; d.descricao = base + ' · 2ª quinzena'; meses.add(q.mes);
   } else {
     b.delete(doc(db,'fin_lanc',q.idQ)); d.valor = Math.round((d.valor + (Number(q.q1.valor) || 0)) * 100) / 100; d.descricao = base; meses.delete(q.mes);
@@ -15576,7 +15588,11 @@ window.desenharFolhaImg = () => {
   const it = q === 'todos' ? ls : q === 'abertos' ? ls.filter(x => !x.pago) : ls.filter(x => x.id === q), um = q !== 'todos' && q !== 'abertos';
   const W = 1080, P = 64, cv = document.createElement('canvas'), g = cv.getContext('2d'), F = 'Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   const COR = '#c2561f', TX = '#1f2937', MU = '#6b7280', LI = '#ece6dc';
-  const partes = x => String(x.calculo || '').split(' | ').filter(Boolean).map(p => { const i = p.lastIndexOf(': '), v = Number(p.slice(i + 2)); return i > 0 && !isNaN(v) ? [p.slice(0, i), v] : [p, null]; });
+  const partes0 = x => String(x.calculo || '').split(' | ').filter(Boolean).map(p => { const i = p.lastIndexOf(': '), v = Number(p.slice(i + 2)); return i > 0 && !isNaN(v) ? [p.slice(0, i), v] : [p, null]; });
+  // v364: quinzenal é metade e metade de tudo: cada quinzena mostra a metade de cada item do cálculo do mês
+  const partes = x => { const q1 = /_q1$/.test(x.id) ? x : finLanc.find(l => l.id === x.id + '_q1'), pr = q1 && finLanc.find(l => l.id === q1.id.replace(/_q1$/, ''));
+    if (!q1 || !pr) return partes0(x);
+    return [...partes0(pr).map(([r, v]) => [r + ' (metade)', v === null ? null : Math.round(v / 2 * 100) / 100]), [x === q1 ? '1ª de 2 quinzenas' : '2ª de 2 quinzenas', null]]; };
   const altura = x => 130 + Math.max(partes(x).length, 1) * 40 + 30;
   const H = 300 + it.reduce((a, x) => a + altura(x), 0) + 210;
   cv.width = W; cv.height = H;
