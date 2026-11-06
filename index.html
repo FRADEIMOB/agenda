@@ -2326,6 +2326,10 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .sm-nums b{display:block;font-size:20px}.sm-nums span{font-size:11.5px;opacity:.7}
 .sm-tab td,.sm-tab th{padding:6px 8px;font-size:13px}.sm-tab tr.sm-ok td{background:rgba(22,163,74,.09)}.sm-tab tr.sm-ok .sm-mot{color:#15803d;font-weight:600}.sm-mot{opacity:.75;font-size:12px;white-space:nowrap}
 @media (max-width:600px){.sm-nums{grid-template-columns:repeat(2,1fr)}}
+.fx-rec{font-size:12px;margin-left:6px;font-weight:500}
+.fl-acoes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fi-prev{background:#f3efe8;border-radius:12px;padding:10px;margin:6px 0 10px;max-height:58vh;overflow:auto;text-align:center}
+.fi-prev img{width:100%;max-width:420px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -4716,6 +4720,17 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <div class="fx-imp"><button class="link" onclick="document.getElementById('fxArq').click()">📥 Trazer da planilha (despesas-fixas.json)</button><input type="file" id="fxArq" class="hide" accept=".json,application/json" onchange="importarFixas(this)"></div></div>
   </div>
 </div>
+<div class="modal" id="folhaImgModal">
+  <div class="sheet" style="width:min(620px,100%)">
+    <div class="sheet-head"><h2 id="fiTit">Imagem dos pagamentos</h2><button class="icon-btn" onclick="fechar('folhaImgModal')" data-ic="x"></button></div>
+    <div class="sheet-body">
+      <div class="fg"><label>O que vai na imagem</label><select id="fiQual" onchange="desenharFolhaImg()"></select></div>
+      <div class="fi-prev"><img id="fiImg" alt="Prévia da imagem"></div>
+      <div class="hint">Mande no grupo do financeiro. Quem pagar responde “ok” e você marca como pago aqui no app.</div>
+    </div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="folhaImgAcao('baixar')">Baixar</button><button class="btn btn-ghost" id="fiCompart" onclick="folhaImgAcao('compartilhar')">Compartilhar</button><button class="btn btn-primary" style="flex:1" onclick="folhaImgAcao('copiar')">Copiar imagem</button></div>
+  </div>
+</div>
 <div class="modal" id="finModal">
   <div class="sheet" style="width:min(520px,100%)">
     <div class="sheet-head"><h2 id="finTit">Novo lançamento</h2><button class="icon-btn" onclick="fechar('finModal')" data-ic="x"></button></div>
@@ -4728,9 +4743,10 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
         <div class="fg"><label>Data (vencimento)</label><input id="finData" type="date"></div></div>
       <div class="row2"><div class="fg"><label>Conta</label><select id="finConta"><option value="">—</option><option>PJ Principal (66)</option><option>PB Frade (69)</option><option>Pessoa Física</option></select></div><div class="fg"><label>Corretor (opcional)</label><select id="finCor"></select></div></div>
       <label class="fin-pago-chk"><input type="checkbox" id="finPago"> Já foi pago / recebido</label>
+      <label class="fin-pago-chk hide" id="finQuinzW"><input type="checkbox" id="finQuinz"> <span id="finQuinzTxt">Pagar quinzenal neste mês</span></label>
       <div class="fg"><label>Observação</label><textarea id="finObs" rows="2" maxlength="400"></textarea></div>
     </div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('finModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarFin()">Salvar</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('finModal')">Cancelar</button><button class="btn btn-ghost hide" id="finRecBt" onclick="abrirReciboLanc()">Recibo</button><button class="btn btn-primary" onclick="salvarFin()">Salvar</button></div>
   </div>
 </div>
 <input type="file" id="vaArq" class="hide" accept=".json,application/json" onchange="lerVendasAntigas(this)">
@@ -7875,7 +7891,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 359;
+const APP_VERSAO = 361;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15156,12 +15172,12 @@ function htmlGastosFixos(){
   const ehFolha = x => folhaIds.has(x.fixa) || /folha|pró-labore/i.test(x.categoria || '') || x.calculo;
   const l = finLanc.filter(x => x.tipo === 'saida' && x.fixa && (x.data || '').startsWith(finMes) && !ehFolha(x)).sort((a, b) => (a.data || '').localeCompare(b.data || '') || (a.descricao || '').localeCompare(b.descricao || '', 'pt-BR'));
   const tot = l.reduce((a, x) => a + (Number(x.valor) || 0), 0), pago = l.filter(x => x.pago).reduce((a, x) => a + (Number(x.valor) || 0), 0), hj = hojeISO();
-  const grupos = {}; l.forEach(x => (grupos[x.categoria || 'Outras'] = grupos[x.categoria || 'Outras'] || []).push(x));
-  return `<div class="sal-resumo"><div><span>Gastos fixos de ${nomeMes(finMes)}</span><b>${brl2(tot)}</b><small>${l.length} conta${l.length === 1 ? '' : 's'} · ${brl2(pago)} pago · ${brl2(tot - pago)} em aberto</small></div><button class="btn btn-ghost" onclick="abrirFixas()">Editar gastos fixos</button></div>
+  const grupos = {}; l.forEach(x => (grupos[x.categoria || 'Outras'] = grupos[x.categoria || 'Outras'] || []).push(x)); window._fixosImgItens = l.map(x => x.id);
+  return `<div class="sal-resumo"><div><span>Gastos fixos de ${nomeMes(finMes)}</span><b>${brl2(tot)}</b><small>${l.length} conta${l.length === 1 ? '' : 's'} · ${brl2(pago)} pago · ${brl2(tot - pago)} em aberto</small></div><div class="fl-acoes"><button class="btn btn-ghost" onclick="abrirFixas()">Editar gastos fixos</button>${l.length ? '<button class="btn btn-primary" onclick="abrirFixosImg(\'\')">Imagem para o grupo</button>' : ''}</div></div>
     ${l.length ? Object.keys(grupos).sort((a, b) => a.localeCompare(b, 'pt-BR')).map(g => `<div class="sal-tab-w" style="margin-bottom:12px"><table class="sal-tab"><thead><tr><th>${esc(g)}</th><th>Vencimento</th><th>Situação</th><th>${brl2(grupos[g].reduce((a, x) => a + (Number(x.valor) || 0), 0))}</th></tr></thead><tbody>${
-      grupos[g].map(x => `<tr class="sal-lin" onclick="editarFin('${x.id}')"><td><b>${esc(x.descricao || '')}</b></td><td>${x.data ? dataBR(x.data) : '–'}</td><td>${x.pago ? '<span style="color:#15803d;font-weight:600">Pago</span>' : x.data && x.data < hj ? '<span style="color:var(--danger);font-weight:600">Vencida</span>' : '<span class="muted">Em aberto</span>'}</td><td class="sal-tot">${brl2(Number(x.valor) || 0)}</td></tr>`).join('')}</tbody></table></div>`).join('')
+      grupos[g].map(x => `<tr class="sal-lin" onclick="editarFin('${x.id}')"><td><b>${esc(x.descricao || '')}</b> <button class="link fx-rec" onclick="event.stopPropagation();abrirFixosImg('${x.id}')">recibo</button></td><td>${x.data ? dataBR(x.data) : '–'}</td><td>${x.pago ? '<span style="color:#15803d;font-weight:600">Pago</span>' : x.data && x.data < hj ? '<span style="color:var(--danger);font-weight:600">Vencida</span>' : '<span class="muted">Em aberto</span>'}</td><td class="sal-tot">${brl2(Number(x.valor) || 0)}</td></tr>`).join('')}</tbody></table></div>`).join('')
       : vazio('Nenhum gasto fixo neste mês', 'Toque em “Editar gastos fixos” para cadastrar aluguel, internet, energia e as outras contas que se repetem todo mês.')}
-    <div class="hint" style="margin-top:6px">Toque numa conta para marcar como paga ou mudar o valor deste mês. Para mudar a conta de todos os meses, use “Editar gastos fixos”.</div>`;
+    <div class="hint" style="margin-top:6px">“Imagem para o grupo” gera a imagem das contas para mandar no grupo do financeiro; “recibo” ao lado de cada conta gera só a dela. Toque numa conta para marcar como paga ou mudar o valor deste mês. Para mudar a conta de todos os meses, use “Editar gastos fixos”.</div>`;
 }
 window.abrirFixas = () => { desenharFixas(); abrir('fixasModal'); };
 function desenharFixas(){
@@ -15399,14 +15415,14 @@ function htmlFolhasLancadas(){
   if (!meses.includes(folhaLMes)) folhaLMes = meses.includes(finMes) ? finMes : meses[0];
   const l = it.filter(x => mesDe(x) === folhaLMes).sort((a, b) => (a.descricao || '').localeCompare(b.descricao || '', 'pt-BR') || (a.data || '').localeCompare(b.data || ''));
   const tot = l.reduce((a, x) => a + (Number(x.valor) || 0), 0), pago = l.filter(x => x.pago).reduce((a, x) => a + (Number(x.valor) || 0), 0), ab = window._flAb;
-  const quando = Math.max(...l.map(x => x.atualizadoEm || x.criadoEm || 0));
+  const quando = Math.max(...l.map(x => x.atualizadoEm || x.criadoEm || 0)); window._folhaImgItens = l.map(x => x.id);
   return `<div class="sal-resumo"><div><span>Folha lançada de ${nomeMes(folhaLMes)}</span><b>${brl2(tot)}</b><small>${l.length} pagamento${l.length === 1 ? '' : 's'} · ${brl2(pago)} já pago${quando ? ' · lançada em ' + new Date(quando).toLocaleDateString('pt-BR') : ''}</small></div>
-      <select class="sel-mes on" onchange="folhaLMes=this.value;render()">${meses.map(m => `<option value="${m}" ${m === folhaLMes ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</select></div>
+      <div class="fl-acoes"><select class="sel-mes on" onchange="folhaLMes=this.value;render()">${meses.map(m => `<option value="${m}" ${m === folhaLMes ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</select><button class="btn btn-primary" onclick="abrirFolhaImg('')">Imagem para o grupo</button></div></div>
     <div class="sal-tab-w"><table class="sal-tab"><thead><tr><th>Pessoa</th><th>Vencimento</th><th>Situação</th><th>Valor</th><th></th></tr></thead><tbody>${l.map(x => {
       const a = ab === x.id, partes = String(x.calculo || '').split(' | ').filter(Boolean).map(p => { const i = p.lastIndexOf(': '); return [p.slice(0, i), Number(p.slice(i + 2)) || 0]; });
       return `<tr class="sal-lin ${a ? 'ab' : ''}" onclick="window._flAb=window._flAb==='${x.id}'?'':'${x.id}';render()"><td><b>${esc(x.descricao || '')}</b></td><td>${x.data ? dataBR(x.data) : '–'}</td><td>${x.pago ? '<span style="color:#15803d;font-weight:600">Pago</span>' : '<span class="muted">A pagar</span>'}</td><td class="sal-tot">${brl2(Number(x.valor) || 0)}</td><td class="sal-seta">${a ? '▴' : '▾'}</td></tr>
         ${a ? `<tr class="sal-det"><td colspan="5"><div class="sal-det-in"><div class="sal-conta">${partes.length ? partes.map(p => `<div><span>${esc(p[0])}</span><b>${p[1] ? brl2(p[1]) : ''}</b></div>`).join('') : '<div><span>Lançamento sem a conta detalhada</span><b></b></div>'}<div class="sal-conta-tot"><span>Total</span><b>${brl2(Number(x.valor) || 0)}</b></div></div>
-          <div class="sal-det-pe"><button class="link" onclick="event.stopPropagation();editarFin('${x.id}')">Abrir o lançamento (marcar pago, mudar valor ou data)</button></div></div></td></tr>` : ''}`; }).join('')}</tbody>
+          <div class="sal-det-pe"><button class="link" onclick="event.stopPropagation();editarFin('${x.id}')">Abrir o lançamento (marcar pago, mudar valor ou data)</button><button class="link" onclick="event.stopPropagation();abrirFolhaImg('${x.id}')">Imagem do recibo</button></div></div></td></tr>` : ''}`; }).join('')}</tbody>
     <tfoot><tr><td>Total · ${l.length}</td><td></td><td>${brl2(pago)} pago</td><td>${brl2(tot)}</td><td></td></tr></tfoot></table></div>
     <div class="hint" style="margin-top:10px">Essa é a folha como foi lançada. Se você mudar algo na Folha do mês e lançar de novo, os valores daqui são trocados pelos novos.</div>`;
 }
@@ -15511,11 +15527,93 @@ window.editarFin = id => {
   $('finDesc').value = x?.descricao || ''; $('finCat').value = x?.categoria || '';
   $('finValor').value = x ? String(x.valor).replace('.', ',') : ''; $('finData').value = x?.data || hojeISO();
   $('finPago').checked = !!x?.pago; $('finObs').value = x?.obs || ''; $('finConta').value = x?.conta || '';
+  $('finRecBt').classList.toggle('hide', !x || x.tipo !== 'saida');
+  { const q = salarioDoLanc(id); $('finQuinzW').classList.toggle('hide', !q); if (q) { $('finQuinz').checked = !!q.q1; $('finQuinzTxt').textContent = `Pagar quinzenal em ${nomeMes(q.mes).split(' de ')[0].toLowerCase()} (metade do fixo, ${brl2(q.p1)}, no dia 15 e o resto no vencimento)`; } }
   $('finCor').innerHTML = '<option value="">Nenhum</option>' + perfisLista.filter(p => p.status === 'ativo' && p.papel !== 'gerente').sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR')).map(p => `<option value="${p.uid}" ${x?.corretorUid === p.uid ? 'selected' : ''}>${esc(p.nome)}</option>`).join('');
   abrir('finModal'); setTimeout(() => $('finDesc').focus(), 50);
 };
 window.$fin = id => document.getElementById(id);
 window.finCatsOpc = () => { const t = $('finTipoSel').value; $('finCats').innerHTML = FIN_CATS[t].map(c => `<option value="${c}">`).join(''); document.querySelectorAll('.fin-tipo button').forEach(b => b.classList.toggle('on', b.dataset.t === t)); };
+/* v360: no lançamento do salário dá para marcar quinzenal ali mesmo: cria a 1ª quinzena (metade do fixo, dia 15) e tira esse valor deste lançamento */
+function salarioDoLanc(id){
+  const m = /^fx_(.+)_(\d{4}-\d{2})$/.exec(id || ''); if (!m) return null;
+  const fx = finFixas.find(f => f.id === m[1]); if (!fx || !(/folha|pró-labore/i.test(fx.categoria || '') || fx.regra)) return null;
+  const fixo = Number((fx.regra || {}).fixo) || Number(fx.valor) || 0; if (!fixo) return null;
+  return { fx, mes:m[2], idQ:id + '_q1', q1:finLanc.find(l => l.id === id + '_q1'), p1:Math.round(fixo / 2 * 100) / 100 };
+}
+async function aplicarQuinzLanc(d){
+  const q = salarioDoLanc(finEdit); if (!q) return; const quer = $('finQuinz').checked; if (quer === !!q.q1) return;
+  const b = writeBatch(db), base = String(d.descricao).replace(/\s·\s[12]ª quinzena$/, ''), meses = new Set(q.fx.quinzenalMeses || []);
+  if (quer) {
+    if (d.valor <= q.p1) throw new Error('o valor do salário é menor que a metade do fixo');
+    b.set(doc(db,'fin_lanc',q.idQ), { tipo:'saida', categoria:d.categoria || 'Folha de pagamento', descricao:base + ' · 1ª quinzena', valor:q.p1, data:q.mes + '-15', pago:false, fixa:q.fx.id, varia:false, calculo:'1ª quinzena: metade do fixo', criadoEm:Date.now(), criadoPor:'Calculadora de salários', atualizadoEm:Date.now() });
+    d.valor = Math.round((d.valor - q.p1) * 100) / 100; d.descricao = base + ' · 2ª quinzena'; meses.add(q.mes);
+  } else {
+    b.delete(doc(db,'fin_lanc',q.idQ)); d.valor = Math.round((d.valor + (Number(q.q1.valor) || 0)) * 100) / 100; d.descricao = base; meses.delete(q.mes);
+  }
+  b.set(doc(db,'fin_fixas',q.fx.id), { quinzenalMeses:[...meses] }, { merge:true });
+  await gravar(b.commit()); q.fx.quinzenalMeses = [...meses];
+}
+/* v360: imagem (PNG) da folha lançada para mandar no grupo do financeiro: a folha inteira, só o que falta pagar, ou o recibo de uma pessoa */
+/* v361: o mesmo recibo serve para qualquer pagamento: folha, gastos fixos ou um lançamento solto */
+window.abrirFolhaImg = (id) => abrirImgPag(window._folhaImgItens, id, { titulo:'Folha de pagamento', tituloUm:'Recibo de salário', mes:folhaLMes });
+window.abrirFixosImg = (id) => abrirImgPag(window._fixosImgItens, id, { titulo:'Gastos fixos', tituloUm:'Recibo de pagamento', mes:finMes });
+window.abrirReciboLanc = () => { const x = finLanc.find(l => l.id === finEdit); if (!x) return;
+  abrirImgPag([x.id], x.id, { titulo:'Recibo de pagamento', tituloUm:/folha|pró-labore|salár/i.test(x.categoria || '') ? 'Recibo de salário' : 'Recibo de pagamento', mes:(x.data || hojeISO()).slice(0, 7), so:true }); };
+window.abrirImgPag = (ids, id, cfg) => {
+  window._fiCtx = { ids:ids || [], ...cfg };
+  const ls = window._fiCtx.ids.map(i => finLanc.find(l => l.id === i)).filter(Boolean); if (!ls.length) { toast('Nada para mostrar'); return; }
+  const nAb = ls.filter(x => !x.pago).length;
+  $('fiQual').innerHTML = `<option value="todos">Folha inteira (${ls.length})</option>${nAb && nAb < ls.length ? `<option value="abertos">Só o que falta pagar (${nAb})</option>` : ''}<optgroup label="Recibo de uma pessoa">${ls.map(x => `<option value="${x.id}">${esc(x.descricao || '')} · ${brl2(Number(x.valor) || 0)}</option>`).join('')}</optgroup>`;
+  $('fiQual').value = id || 'todos'; $('fiQual').closest('.fg').classList.toggle('hide', !!cfg.so); $('fiCompart').classList.toggle('hide', !navigator.canShare);
+  $('fiTit').textContent = cfg.so ? 'Recibo do pagamento' : 'Imagem dos pagamentos';
+  { const md = $('folhaImgModal'); md.parentNode.appendChild(md); } // fica por cima do lançamento aberto
+  abrir('folhaImgModal'); desenharFolhaImg();
+};
+window.desenharFolhaImg = () => {
+  const cx = window._fiCtx || { ids:[], titulo:'Folha de pagamento', tituloUm:'Recibo de salário', mes:folhaLMes };
+  const ls = cx.ids.map(i => finLanc.find(l => l.id === i)).filter(Boolean), q = $('fiQual').value;
+  const it = q === 'todos' ? ls : q === 'abertos' ? ls.filter(x => !x.pago) : ls.filter(x => x.id === q), um = q !== 'todos' && q !== 'abertos';
+  const W = 1080, P = 64, cv = document.createElement('canvas'), g = cv.getContext('2d'), F = 'Segoe UI, Roboto, Helvetica, Arial, sans-serif';
+  const COR = '#c2561f', TX = '#1f2937', MU = '#6b7280', LI = '#ece6dc';
+  const partes = x => String(x.calculo || '').split(' | ').filter(Boolean).map(p => { const i = p.lastIndexOf(': '), v = Number(p.slice(i + 2)); return i > 0 && !isNaN(v) ? [p.slice(0, i), v] : [p, null]; });
+  const altura = x => 130 + Math.max(partes(x).length, 1) * 40 + 30;
+  const H = 300 + it.reduce((a, x) => a + altura(x), 0) + 210;
+  cv.width = W; cv.height = H;
+  const txt = (t, x, y, tam, cor, peso, al) => { g.font = `${peso || 400} ${tam}px ${F}`; g.fillStyle = cor; g.textAlign = al || 'left'; g.fillText(t, x, y); };
+  const corta = (t, max, tam, peso) => { g.font = `${peso || 400} ${tam}px ${F}`; if (g.measureText(t).width <= max) return t; while (t.length > 3 && g.measureText(t + '…').width > max) t = t.slice(0, -1); return t + '…'; };
+  g.fillStyle = '#fbf8f3'; g.fillRect(0, 0, W, H);
+  g.fillStyle = COR; g.fillRect(0, 0, W, 220);
+  txt('Frade Imóveis', P, 78, 30, 'rgba(255,255,255,.85)', 600);
+  txt(um ? cx.tituloUm : cx.titulo, P, 140, 54, '#fff', 700);
+  txt(nomeMes(cx.mes) + (q === 'abertos' ? ' · falta pagar' : ''), P, 192, 30, 'rgba(255,255,255,.9)', 500);
+  let y = 280;
+  it.forEach(x => {
+    txt(corta(x.descricao || '', W - 2 * P - 300, 38, 700), P, y + 40, 38, TX, 700);
+    txt(brl2(Number(x.valor) || 0), W - P, y + 40, 38, TX, 700, 'right');
+    txt(`Vence ${x.data ? dataBR(x.data) : '–'}`, P, y + 86, 26, MU, 500);
+    txt(x.pago ? (x.pagoEm ? 'Pago em ' + new Date(x.pagoEm).toLocaleDateString('pt-BR') : 'Pago') : 'A pagar', W - P, y + 86, 26, x.pago ? '#15803d' : COR, 700, 'right');
+    let yy = y + 130;
+    if (!partes(x).length) { txt(corta([x.categoria, x.corretorNome, x.obs].filter(Boolean).join(' · ') || 'Pagamento', W - 2 * P - 40, 26), P + 24, yy, 26, '#4b5563', 400); }
+    partes(x).forEach(([r, v]) => { txt(corta(r, W - 2 * P - 260, 26), P + 24, yy, 26, '#4b5563', 400); if (v) txt(brl2(v), W - P, yy, 26, '#4b5563', 500, 'right'); yy += 40; });
+    y += altura(x); g.fillStyle = LI; g.fillRect(P, y - 22, W - 2 * P, 2);
+  });
+  const tot = it.reduce((a, x) => a + (Number(x.valor) || 0), 0);
+  g.fillStyle = '#fff'; g.fillRect(P, y, W - 2 * P, 110); g.strokeStyle = LI; g.lineWidth = 2; g.strokeRect(P, y, W - 2 * P, 110);
+  txt(`Total · ${it.length} pagamento${it.length === 1 ? '' : 's'}`, P + 32, y + 68, 32, TX, 600);
+  txt(brl2(tot), W - P - 32, y + 68, 40, COR, 700, 'right');
+  txt(`Gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })} ${it.every(x => x.pago) ? '' : ' · Responda “ok” quando pagar'}`, W / 2, H - 40, 24, MU, 400, 'center');
+  window._fiCanvas = cv; window._fiNome = (um && it[0] ? 'recibo-' + norm(it[0].descricao || '').replace(/[^a-z0-9]+/g, '-') : norm(cx.titulo).replace(/[^a-z0-9]+/g, '-')) + '-' + cx.mes + '.png';
+  $('fiImg').src = cv.toDataURL('image/png');
+};
+window.folhaImgAcao = async (a) => {
+  const cv = window._fiCanvas; if (!cv) return; const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  try {
+    if (a === 'copiar') { await navigator.clipboard.write([new ClipboardItem({ 'image/png':blob })]); toast('Imagem copiada. Cole no grupo do WhatsApp (Ctrl+V).'); return; }
+    if (a === 'compartilhar') { const f = new File([blob], window._fiNome, { type:'image/png' }); if (navigator.canShare && navigator.canShare({ files:[f] })) { await navigator.share({ files:[f] }); return; } }
+  } catch(e) { if (e.name === 'AbortError') return; if (a === 'copiar') toast('Não deu para copiar aqui. Baixando a imagem…'); }
+  const u = URL.createObjectURL(blob), el = document.createElement('a'); el.href = u; el.download = window._fiNome; document.body.appendChild(el); el.click(); el.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+};
 window.salvarFin = async () => {
   const valor = Number(String($('finValor').value).replace(/\./g, '').replace(',', '.')) || 0;
   const descricao = $('finDesc').value.trim(), categoria = $('finCat').value.trim(), data = $('finData').value;
@@ -15526,7 +15624,7 @@ window.salvarFin = async () => {
   const d = { tipo:$('finTipoSel').value, descricao, categoria, valor, data, pago:$('finPago').checked, obs:$('finObs').value.trim(), conta:$('finConta').value, corretorUid:uidC || '', corretorNome:pc ? pc.nome : '', atualizadoEm:Date.now(), atualizadoPor:perfil.nome };
   if ($('finPago').checked) d.pagoEm = finLanc.find(x => x.id === finEdit)?.pagoEm || Date.now();
   try {
-    if (finEdit) await gravar(setDoc(doc(db,'fin_lanc',finEdit), d, { merge:true }));
+    if (finEdit) { await aplicarQuinzLanc(d); await gravar(setDoc(doc(db,'fin_lanc',finEdit), d, { merge:true })); }
     else await gravar(setDoc(doc(collection(db,'fin_lanc')), { ...d, criadoEm:Date.now(), criadoPor:perfil.nome }));
     fechar('finModal'); toast('Lançamento salvo'); if (data.slice(0,7) !== finMes) { window.finMes = data.slice(0,7); render(); }
   } catch(e) { toast('Erro: ' + e.message); }
