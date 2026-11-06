@@ -430,10 +430,18 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
 .perm td b{display:block}.perm td span{font-size:12.5px;color:var(--muted)}
 .perm select{padding:8px 10px;font-size:13.5px}
 .perm tr.bloq td{opacity:.6}
+/* v353: tela de permissões mais limpa */
+.perm-topo{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:4px 0 8px}.perm-topo input[type=search]{flex:1 1 240px;max-width:360px}
+.perm-info{flex:1 1 100%}.perm-info summary{cursor:pointer;color:var(--muted);font-size:13px;width:max-content}
+.perm td{padding:8px 8px}.perm tr.perm-gr td{padding:18px 8px 6px;border-bottom:0;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}.perm tr.perm-gr td span{font-weight:600;opacity:.7;margin-left:4px}
+.perm tr.perm-sep td{padding:18px 8px 8px;border-bottom:0}
+.perm td select{background-color:transparent;border:1px solid transparent;box-shadow:none;padding:7px 28px 7px 8px;font-weight:500}.perm tr:hover td select,.perm td select:focus{border-color:var(--border);background-color:var(--card,#fff)}
+.perm .btn-excluir{opacity:0;transition:opacity .15s}.perm tr:hover .btn-excluir,.perm .btn-excluir:focus{opacity:.6}
+@media(hover:none){.perm .btn-excluir{opacity:.45}.perm td select{border-color:var(--border)}}
 .leg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
 .leg div{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:12.5px;color:var(--muted);line-height:1.5}
 .leg b{display:block;color:var(--text);font-size:13.5px;margin-bottom:3px}
-@media(max-width:820px){.leg{grid-template-columns:1fr}.perm thead{display:none}.perm tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--border)}.perm td{border:0;padding:0}.perm td:first-child{grid-column:1/-1}.perm td:last-child{grid-column:1/-1}}
+@media(max-width:820px){.leg{grid-template-columns:1fr}.perm thead{display:none}.perm tr{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;padding:10px 0;border-bottom:1px solid var(--border);position:relative}.perm td{border:0;padding:0}.perm td:first-child{grid-column:1/-1;padding-right:40px}.perm td:last-child:not(:first-child){position:absolute;top:8px;right:0}.perm tr.perm-gr,.perm tr.perm-sep{display:block;border:0;padding:0}.perm tr.perm-gr td,.perm tr.perm-sep td{padding:16px 0 4px}.perm td select{width:100%;border-color:var(--border);font-size:14px;padding:8px 26px 8px 10px}}
 
 .cst-aprovada{background:color-mix(in srgb,#10b981 16%,transparent);color:#047857}
 .cst-em-negociacao{background:color-mix(in srgb,#3b82f6 16%,transparent);color:#1d4ed8}
@@ -2932,6 +2940,8 @@ body:has(#app:not(.hide)) .p1 .pd-col{background:var(--vn-or-s)!important}
 html[data-theme="dark"] body:has(#app:not(.hide)) .pd-col{background:rgba(255,255,255,.05)!important}
 /* filtros e buscas das telas em pílula clara (os formulários das janelas continuam como estão) */
 body:has(#app:not(.hide)) .view select{-webkit-appearance:none;appearance:none;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7783' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center/14px;border:0!important;border-radius:22px!important;padding:10px 34px 10px 15px!important;font-weight:600;box-shadow:var(--vn-sombra)}
+body:has(#app:not(.hide)) .view .perm td select{background-color:transparent;box-shadow:none;padding:7px 30px 7px 8px!important;font-weight:500}body:has(#app:not(.hide)) .view .perm tr:hover td select,body:has(#app:not(.hide)) .view .perm td select:focus{background-color:var(--card);box-shadow:var(--vn-sombra)}
+@media(hover:none){body:has(#app:not(.hide)) .view .perm td select{background-color:var(--card);box-shadow:var(--vn-sombra);padding:8px 30px 8px 12px!important}}
 body:has(#app:not(.hide)) .view input[type="search"],body:has(#app:not(.hide)) .view .busca input,body:has(#app:not(.hide)) .view input[placeholder^="Buscar"]{background:#ECEEF1!important;border:0!important;border-radius:14px!important}
 html[data-theme="dark"] body:has(#app:not(.hide)) .view input[placeholder^="Buscar"]{background:rgba(255,255,255,.06)!important}
 body:has(#app:not(.hide)) .snooze{display:inline-flex;align-items:center;gap:5px}body:has(#app:not(.hide)) .snooze svg{width:14px;height:14px;flex:none}
@@ -3764,7 +3774,9 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
         </div>
         <div class="card gerente-only hide" style="margin-bottom:20px" id="cardPerm">
           <div class="card-head"><h2>Permissões de acesso</h2></div>
-          <div class="leg">
+          <div class="perm-topo"><input type="search" id="permBusca" placeholder="Buscar pessoa ou e-mail" oninput="permFiltrar(this.value)" autocomplete="off">
+            <details class="perm-info"><summary>O que cada perfil vê</summary>
+          <div class="leg" style="margin-top:10px">
             <div><b>🏢 CEO</b>Vê tudo, como o gerente, e é quem vê o Painel executivo (junto com o gestor). Só o gestor altera o perfil do CEO.</div>
             <div><b>👑 Gestor</b>Tudo, e é o único que altera gerentes e as configurações do app.</div>
             <div><b>⭐ Gerente</b>Vê e edita tudo: todas as equipes, coordenadores e corretores. Aprova cadastros e define permissões.</div>
@@ -3772,6 +3784,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
             <div><b>🏠 Corretor</b>Cadastra e vê só as próprias visitas. Tem a agenda pessoal e vê o ranking.</div>
             <div><b>📞 SDR</b>Marca visitas para os corretores da equipe dela e vê só as visitas que marcou. Não vê cartas nem avaliações. Manda o resumo do dia.</div>
           </div>
+            </details></div>
           <div style="overflow-x:auto"><table class="perm" id="permLista"></table></div>
         </div>
         <div class="card" style="margin-bottom:20px">
@@ -6962,7 +6975,7 @@ function renderCorretores(){
   if (souGerente()) {
     const todos = perfisTodos.filter(p => p.status !== 'pendente').sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
     const opEqs = sel => '<option value="">Sem equipe</option>' + listaEquipes().map(e => `<option value="${e.id}" ${sel===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
-    $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th><th></th></tr></thead><tbody>' + todos.map(p => {
+    const linhaPerm = p => {
       const bx = `<td><button class="icon-btn btn-excluir" title="Excluir cadastro" aria-label="Excluir cadastro de ${esc(p.nome)}" onclick="excluirCadastro('${p.uid}')">🗑️</button></td>`;
       const ehDono = (instalacao && p.uid === instalacao.gerenteUid) || String(p.email || '').toLowerCase() === EMAIL_DONO;
       if (p.papel === 'gerente' && souDono() && !ehDono && p.uid !== uidAtual) return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
@@ -6974,13 +6987,23 @@ function renderCorretores(){
         <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${opcoesPapel(p, souDono())}</select>${p.papel === 'anjo' ? `<button class="link" style="display:block;margin-top:4px" onclick="abrirEquipeAnjo('${p.uid}')">Equipe do anjo (${(p.membros || []).length})</button>` : ''}</td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td>${bx}</tr>`;
-    }).join('') + '</tbody>';
+    };
+    // v353: bloqueados saem da lista principal e ficam numa lista própria no fim (fechada; toque para abrir)
+    const ativosP = todos.filter(p => p.status !== 'bloqueado'), bloqP = todos.filter(p => p.status === 'bloqueado'), abertoB = !!window._permBloqAberto;
+    const GR = [['Gestão', p => ['gerente','coordenador','anjo'].includes(p.papel)], ['Corretores', p => p.papel === 'corretor'], ['SDRs', p => p.papel === 'sdr'], ['Administração, marketing e correspondente', p => !['gerente','coordenador','anjo','corretor','sdr'].includes(p.papel)]];
+    const comQ = (p, h) => h.replace('<tr', `<tr data-q="${esc(norm((p.nome || '') + ' ' + (p.email || '')))}"`);
+    $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th><th></th></tr></thead>'
+      + GR.map(([t, f]) => { const l = ativosP.filter(f); return l.length ? `<tbody><tr class="perm-gr"><td colspan="5">${t} <span>${l.length}</span></td></tr>${l.map(p => comQ(p, linhaPerm(p))).join('')}</tbody>` : ''; }).join('')
+      + (bloqP.length ? `<tbody><tr class="perm-sep"><td colspan="5"><button class="link" style="font-weight:600" onclick="window._permBloqAberto=!window._permBloqAberto;render()">🔒 Bloqueados (${bloqP.length}) ${abertoB ? '▴ esconder' : '▾ ver lista'}</button></td></tr></tbody>` + (abertoB ? '<tbody class="perm-bloq">' + bloqP.map(p => comQ(p, linhaPerm(p))).join('') + '</tbody>' : '') : '');
+    if ($('permBusca')?.value) permFiltrar($('permBusca').value);
     $('equipesLista').innerHTML = listaEquipes().map(e => `<div class="team-row"><input class="emo" value="${esc(e.icone||'')}" onchange="editarEquipe('${e.id}','icone',this.value)"><input value="${esc(e.nome)}" onchange="editarEquipe('${e.id}','nome',this.value)"><button class="icon-btn del" onclick="excluirEquipe('${e.id}')" title="Excluir equipe">${IC.trash}</button></div>`).join('') || '<div class="muted" style="font-size:13.5px">Nenhuma equipe cadastrada.</div>';
     const atual = $('impEquipe').value;
     $('impEquipe').innerHTML = listaEquipes().map(e => `<option value="${e.id}">${esc(eqNome(e.id))}</option>`).join('');
     if (atual) $('impEquipe').value = atual;
   }
 }
+window.permFiltrar = q => { const t = norm(q || '').trim(); document.querySelectorAll('#permLista tr[data-q]').forEach(tr => tr.style.display = !t || tr.dataset.q.includes(t) ? '' : 'none');
+  document.querySelectorAll('#permLista tbody').forEach(tb => { const g = tb.querySelector('.perm-gr'); if (g) g.style.display = !t || [...tb.querySelectorAll('tr[data-q]')].some(tr => tr.style.display !== 'none') ? '' : 'none'; }); };
 window.mudarPermissao = async (uid, campo, valor, el) => {
   const p = perfisTodos.find(x => x.uid === uid); if (!p) return;
   if (campo === 'papel' && valor === 'ceo') {
@@ -7851,7 +7874,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 351;
+const APP_VERSAO = 353;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8487,8 +8510,8 @@ function renderRankingNovo(id){
   const pos = posicoes(lista), top = lista.slice(0, 3);
   $('podio').innerHTML = top.length >= 2 ? `<div class="podio">${[1, 0, 2].filter(i => top[i]).map(i => `<div class="pd-deg p${i + 1} ${top[i].uid === uidAtual ? 'eu' : ''}"><div class="pd-av">${esc((top[i].nome || '?').trim()[0])}</div><b>${esc(primeiro(top[i].nome))}</b><span>${top[i].pontos} pts</span><div class="pd-base">${i + 1}º</div></div>`).join('')}</div>` : '';
   window._rkLista = lista;
-  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th title="check-ins da manhã e da tarde">Check-in</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
-    lista.map((x, i) => `<tr class="${x.uid && x.uid === uidAtual ? 'me' : ''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas || 0}</td><td>${x.cartas || 0}</td><td>${x.vendas || 0}</td><td class="rk-ck">${(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0)}${ptsCheckin(x) ? `<small>+${ptsCheckin(x)} pts</small>` : ''}</td><td class="hide-m">${x.ligacoes || 0}</td></tr>`).join('')}</tbody></table>`;
+  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th title="fichas de Análise de Crédito e Verificar CPF (e docs do resumo, nas SDRs)">Docs</th><th>Vendas</th><th title="check-ins da manhã e da tarde">Check-in</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
+    lista.map((x, i) => `<tr class="${x.uid && x.uid === uidAtual ? 'me' : ''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas || 0}</td><td>${(x.docGeral || 0) + (x.docsSdr || 0)}</td><td>${x.vendas || 0}</td><td class="rk-ck">${(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0)}${ptsCheckin(x) ? `<small>+${ptsCheckin(x)} pts</small>` : ''}</td><td class="hide-m">${x.ligacoes || 0}</td></tr>`).join('')}</tbody></table>`;
 }
 let rkNovoId = null;
 window.abrirRkNovo = id => {
@@ -8742,8 +8765,8 @@ function renderRankingPontos(){
   $('podio').innerHTML = top.length >= 2 ? `<div class="podio">${[1, 0, 2].filter(i => top[i]).map(i => `<div class="pd-deg p${i + 1} ${top[i].uid === uidAtual ? 'eu' : ''}"><div class="pd-av">${esc((top[i].nome || '?').trim()[0])}</div><b>${esc(primeiro(top[i].nome))}</b><span>${top[i].pontos} pts</span><div class="pd-col"><i>${MEDALHA(pos[i])}</i></div></div>`).join('')}</div>` : '';
   if (m === mesAtual()) avisarSubiuRanking(lista, pos);
   window._rkLista = lista;
-  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th>Cartas</th><th>Vendas</th><th title="check-ins da manhã e da tarde">Check-in</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
-    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${x.cartas}</td><td>${x.vendas}</td><td class="rk-ck">${(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0)}${ptsCheckin(x) ? `<small>+${ptsCheckin(x)} pts</small>` : ''}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
+  $('rankLista').innerHTML = `<table class="rank rk-pts"><thead><tr><th>#</th><th>Nome</th><th>Pontos</th><th>Visitas</th><th title="fichas de Análise de Crédito e Verificar CPF (e docs do resumo, nas SDRs)">Docs</th><th>Vendas</th><th title="check-ins da manhã e da tarde">Check-in</th><th class="hide-m">Ligações</th></tr></thead><tbody>${
+    lista.map((x,i) => `<tr class="${x.uid && x.uid===uidAtual?'me':''} rk-toca" onclick="verPontosDe(${i})" title="Ver de onde vêm os pontos"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span><span class="eq">${esc(eqNome(x.equipe))}</span></td><td class="tot pts">${x.pontos}</td><td>${x.visitas}</td><td>${(x.docGeral || 0) + (x.docsSdr || 0)}</td><td>${x.vendas}</td><td class="rk-ck">${(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0)}${ptsCheckin(x) ? `<small>+${ptsCheckin(x)} pts</small>` : ''}</td><td class="hide-m" title="ligações + recontatos">${(x.ligacoes || 0) + (x.recontatos || 0)}</td></tr>`).join('')
   }</tbody><tfoot></tfoot></table>
   ${htmlSdrRankings()}
   <details class="info-tog" style="margin-top:10px"><summary>ⓘ Quanto vale cada ação</summary><div class="hint pt-vale" style="margin-top:6px">${PONTOS_ITENS.filter(([k]) => Number(appCfg.pontos[k])).map(([k]) => `<div><b>${esc(nomePonto(k))}</b> <span class="pt-vv">${Number(appCfg.pontos[k]) > 0 ? '+' : ''}${appCfg.pontos[k]}</span>${descPonto(k) ? `<small>${esc(descPonto(k))}</small>` : ''}</div>`).join('') || 'Nenhuma ação vale pontos ainda.'}${ligLimite() ? `<div class="muted" style="margin-top:6px">Até ${ligLimite()} ligações e ${ligLimite()} recontatos pontuam por dia (cada número conta uma vez por dia).</div>` : ''}</div></details>`;
