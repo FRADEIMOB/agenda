@@ -6309,8 +6309,23 @@ const eqNome = id => equipes[id] ? `${equipes[id].icone||''} ${equipes[id].nome}
 const listaEquipes = () => Object.values(equipes).sort((a,b) => (a.ordem||99)-(b.ordem||99) || a.nome.localeCompare(b.nome,'pt-BR'));
 const primeiro = n => String(n||'').trim().split(' ')[0];
 window.render = render;
-window.abrir = id => { $(id).classList.add('open'); pintarIcones(); };
-window.fechar = id => $(id).classList.remove('open');
+window.abrir = id => { try { voltarAoModalPai(); } catch(e) {} $(id).classList.add('open'); pintarIcones(); };
+/* v350: voltar para onde estava. Quando um quadro (modal) é fechado para abrir outro a partir dele (ex.: relatório → reserva,
+   visita → editar), ao fechar o segundo o app reabre o primeiro na mesma posição, em vez de voltar ao início. */
+const MODAIS_SEM_VOLTA = /^(menuModal|maisModal|gpsAjudaModal)$/;
+let _ultFechado = null;
+const _corpoModal = id => { const m = $(id); if (!m) return null; const l = [m.querySelector('.sheet-body'), m.querySelector('.sheet'), m].filter(Boolean); return l.find(e => e.scrollHeight > e.clientHeight + 4 && /(auto|scroll)/.test(getComputedStyle(e).overflowY)) || l[0]; };
+window.fechar = id => { const m = $(id); if (!m) return; const ab = m.classList.contains('open'); m.classList.remove('open');
+  if (ab && !MODAIS_SEM_VOLTA.test(id)) _ultFechado = { id, t:Date.now(), top:_corpoModal(id)?.scrollTop || 0 }; };
+function voltarAoModalPai(){
+  document.querySelectorAll('.modal').forEach(m => { if (m._volta) return; m._volta = true; let aberto = m.classList.contains('open');
+    new MutationObserver(() => { const ag = m.classList.contains('open');
+      if (!aberto && ag) { m._pai = (_ultFechado && Date.now() - _ultFechado.t < 600 && _ultFechado.id !== m.id) ? _ultFechado : null; }
+      if (aberto && !ag && m._pai) { const p = m._pai; m._pai = null;
+        setTimeout(() => { if (document.querySelector('.modal.open')) return; const pm = $(p.id); if (!pm) return;
+          try { window['aoReabrir_' + p.id]?.(); } catch(e) {} pm.classList.add('open'); requestAnimationFrame(() => { const c = _corpoModal(p.id); if (c) c.scrollTop = p.top; }); }, 150); }
+      aberto = ag; }).observe(m, { attributes:true, attributeFilter:['class'] }); }); }
+setTimeout(voltarAoModalPai, 0);
 
 // ---------- Conexão ----------
 function pararTudoVisitas(){
@@ -7836,7 +7851,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 349;
+const APP_VERSAO = 350;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -16402,6 +16417,8 @@ function rrGrupo(r){ if (ehVendaIndicacao(r) || ehVendaIndicacao({ origem:rrOrig
 function rrAtalho(k){ const h = hojeISO(); if (k === 'mes') return [mesAtual() + '-01', h]; if (k === 'mesPas') { const m = mesAnterior(1); return [m + '-01', fimDoMes(m)]; }
   if (k === 'ano') return [h.slice(0, 4) + '-01-01', h]; if (k === 'semana') return rvAtalhoDatas('semana'); return ['2000-01-01', h]; }
 window.rrAt = k => { const [a, b] = rrAtalho(k); $('rrDe').value = a; $('rrAte').value = b; window._rrK = k; pintarRelRes(); };
+window.rrIrReserva = id => { fechar('relResModal'); editarReserva(id); }; // v350: ao fechar a reserva volta para o relatório (ver voltarAoModalPai)
+window.aoReabrir_relResModal = () => { window._rrRolar = false; pintarRelRes(); };
 window.rrFil = k => { window._rrFil = window._rrFil === k ? '' : k; window._rrRolar = !!window._rrFil; pintarRelRes(); };
 window.abrirRelRes = () => { if (!opTudo()) return; window._rrFil = ''; rrCarregarInd(); bzCarregarHist && bzCarregarHist();
   $('rrAtalhos').innerHTML = [['mes','Este mês'],['mesPas','Mês passado'],['semana','Esta semana'],['ano','Este ano'],['tudo','Tudo']].map(([k, n]) => `<button data-k="${k}" onclick="rrAt('${k}')">${n}</button>`).join('');
@@ -16438,7 +16455,7 @@ window.pintarRelRes = () => {
     <div class="hint" style="margin:6px 0 12px">${D.caidas.length ? `${D.caidas.length} reserva${D.caidas.length === 1 ? '' : 's'} desse período caiu (${D.caidas.filter(r => rrGrupo(r) === 'ind').length} de indicação, ${D.caidas.filter(r => rrGrupo(r) === 'crm').length} do CRM). ` : ''}Indicação: a origem da reserva fala em indicação. CRM: veio de lead (CRM, Meta, Instagram, site, WhatsApp, bolsão). Toque num quadro para ver as reservas dele.${D.g.sem.length ? ` <b>${D.g.sem.length} sem origem</b> e o app não achou de onde veio: abra e preencha "Origem do lead".` : ''}</div>${(() => { const n = [...D.ativas, ...D.caidas].filter(r => rrSemOrigem(r) && origemDetectada(r)).length; return n ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px"><span>O app descobriu a origem de <b>${n}</b> reserva${n === 1 ? '' : 's'} que estava${n === 1 ? '' : 'm'} sem, cruzando com indicações, visitas, bolsão e WhatsApp. Elas já entram no grupo certo aqui.</span><button class="btn btn-primary" onclick="gravarOrigensDetectadas()">Gravar nas reservas</button></div>` : ''; })()}`;
   const tab = D.pessoas.length ? `<details class="rvr-l" open><summary><b>Por corretor</b></summary><div class="tbl-wrap"><table class="rank"><thead><tr><th>Corretor</th>${RR_GR.map(([, n]) => `<th style="text-align:center">${n}</th>`).join('')}<th style="text-align:center">Total</th><th style="text-align:right">VGV</th></tr></thead><tbody>${D.pessoas.map(p => `<tr><td><span class="nm">${esc(p.nome)}</span>${p.equipe ? `<span class="eq">${esc(eqNome(p.equipe))}</span>` : ''}</td>${RR_GR.map(([k]) => `<td style="text-align:center">${p.c[k] || '<span class="muted">0</span>'}</td>`).join('')}<td style="text-align:center"><b>${p.t}</b></td><td style="text-align:right">${brl(p.v)}</td></tr>`).join('')}</tbody></table></div><div class="hint">Venda em parceria conta para cada corretor da reserva e uma vez só no total.</div></details>` : '<div class="muted" style="margin:10px 0">Nenhuma reserva nesse período.</div>';
   const blocos = (fil ? RR_GR.filter(g => g[0] === fil) : RR_GR).map(([k, n, c]) => { const l = D.g[k].slice().sort((a, b) => (b.dia || '').localeCompare(a.dia || ''));
-    return `<div class="rvr-bl" style="--c:${c}"><h4>${n} <span>${l.length}</span></h4>${l.length ? `<div class="rvr-vs">${l.map(r => `<div class="rvr-v" style="cursor:pointer" onclick="fechar('relResModal');editarReserva('${r.id}')"><div class="rvr-q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="rvr-m"><div class="rvr-n"><b>${esc(nomeBonito(r.cliente || 'Cliente'))}</b>${r.telefone ? `<span class="muted" style="font-size:13px">${esc(fmtFone(r.telefone))}</span>` : ''}</div><div class="rvr-s">${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="rvr-x">${rrDetHtml(r)}${rrCrvHtml(r)}${r.etapa ? ' · ' + esc(r.etapa) : ''}${sdrDaReserva(r) ? ' · <b style="color:#7c3aed">Venda SDR: ' + esc(nomeCurto(sdrDaReserva(r).nome)) + '</b>' : ''}</div></div><span class="rvr-st" style="--c:${c}">${esc(n)}</span></div>`).join('')}</div>` : '<div class="muted" style="font-size:13px">Nenhuma.</div>'}</div>`; }).join('');
+    return `<div class="rvr-bl" style="--c:${c}"><h4>${n} <span>${l.length}</span></h4>${l.length ? `<div class="rvr-vs">${l.map(r => `<div class="rvr-v" style="cursor:pointer" onclick="rrIrReserva('${r.id}')"><div class="rvr-q"><b>${esc(dataBR(r.dia).slice(0, 5))}</b><span>${esc(r.dia.slice(0, 4))}</span></div><div class="rvr-m"><div class="rvr-n"><b>${esc(nomeBonito(r.cliente || 'Cliente'))}</b>${r.telefone ? `<span class="muted" style="font-size:13px">${esc(fmtFone(r.telefone))}</span>` : ''}</div><div class="rvr-s">${esc([r.corretorTexto, r.empreendimento, r.valor ? brl(r.valor) : ''].filter(Boolean).join(' · '))}</div><div class="rvr-x">${rrDetHtml(r)}${rrCrvHtml(r)}${r.etapa ? ' · ' + esc(r.etapa) : ''}${sdrDaReserva(r) ? ' · <b style="color:#7c3aed">Venda SDR: ' + esc(nomeCurto(sdrDaReserva(r).nome)) + '</b>' : ''}</div></div><span class="rvr-st" style="--c:${c}">${esc(n)}</span></div>`).join('')}</div>` : '<div class="muted" style="font-size:13px">Nenhuma.</div>'}</div>`; }).join('');
   const comC = D.criativos.filter(x => x.nome !== 'Sem criativo'), semC = D.criativos.find(x => x.nome === 'Sem criativo');
   const tabC = `<details class="rvr-l" open><summary><b>Por criativo</b> <span class="muted" style="font-size:12.5px">o anúncio ou a campanha de onde veio o cliente</span></summary>${comC.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>Criativo</th><th style="text-align:center">Reservas</th><th style="text-align:center">% do total</th><th style="text-align:right">VGV</th></tr></thead><tbody>${comC.map(x => `<tr><td><span class="nm" style="white-space:normal${x.ind_ ? ';color:#7c3aed' : ''}">${esc(x.nome)}</span>${x.ind_ ? '<span class="eq">indicação não tem anúncio; é o mesmo número do quadro Indicação</span>' : ''}</td><td style="text-align:center"><b>${x.l.length}</b></td><td style="text-align:center">${rrPct(x.l.length, tot)}</td><td style="text-align:right">${brl(x.v)}</td></tr>`).join('')}${semC ? `<tr><td class="muted">Sem criativo</td><td style="text-align:center" class="muted">${semC.l.length}</td><td style="text-align:center" class="muted">${rrPct(semC.l.length, tot)}</td><td style="text-align:right" class="muted">${brl(semC.v)}</td></tr>` : ''}</tbody></table></div>` : '<div class="muted" style="font-size:13px;margin-top:6px">Nenhuma reserva com criativo nesse período.</div>'}<div class="hint">O criativo vem do campo "Criativo" da reserva ou, se estiver vazio, do lead desse cliente que chegou pelo CRM no bolsão. Toda reserva de indicação fica na linha "Indicação (todas)", tenha ou não algo escrito no criativo.</div></details>`;
   // v348: com um quadro escolhido, a lista dele vem logo embaixo dos quadros (antes ficava no fim e parecia que nada mudava)
