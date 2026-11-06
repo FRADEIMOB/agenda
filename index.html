@@ -3580,7 +3580,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
             <div class="fin-mais"><button class="btn btn-ghost" onclick="this.parentElement.classList.toggle('ab');event.stopPropagation()" aria-label="Mais opções">⋯</button><div class="fin-menu" onclick="this.parentElement.classList.remove('ab')"><button onclick="abrirFixas()">📌 Despesas fixas e parcelamentos</button><button onclick="abrirConstrutoras()">🏗️ Construtoras e prazos</button><button onclick="abrirBonus()">🎯 Bônus e Carteira Frade</button><button onclick="exportarFin()">⬇ Exportar planilha</button><button onclick="abrirHistoricoFin()">🕘 Histórico de mudanças</button><button onclick="document.getElementById('vaArq').click()">📥 Trazer vendas antigas da planilha</button><button onclick="abrirBackups()">🛟 Cópias de segurança</button></div></div></div></div>
         <div id="finKpis"></div>
         <div id="finAviso"></div>
-        <div class="seg pn-abas" id="finAbas"><button data-a="geral" onclick="finAba='geral';render()">Visão geral</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões</button><button data-a="salarios" onclick="finAba='salarios';render()">Salários</button></div>
+        <div class="seg pn-abas" id="finAbas"><button data-a="geral" onclick="finAba='geral';render()">Visão geral</button><button data-a="comissoes" onclick="finAba='comissoes';render()">Comissões</button><button data-a="salarios" onclick="finAba='salarios';render()">Salários</button><button data-a="folha" onclick="finAba='folha';folhaLMes=finMes;render()">Folha lançada</button><button data-a="fixos" onclick="finAba='fixos';render()">Gastos fixos</button></div>
         <div id="finCorpo"></div>
       </section>
 
@@ -7875,7 +7875,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 356;
+const APP_VERSAO = 359;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -14175,7 +14175,7 @@ function renderFinanceiro(){
   if (finAba === 'lanc') { window.finAba = 'geral'; window._finVerLanc = true; }
   document.querySelectorAll('#finAbas button').forEach(b => b.classList.toggle('on', b.dataset.a === finAba));
   $('finCorpo').innerHTML = finAba === 'geral' ? htmlFinGeral(l) + `<div class="fin-lanc-sec" id="finLancSec"><div class="fin-sec-h"><b>Entradas e saídas de ${nomeMes(finMes).split(' de ')[0].toLowerCase()}</b></div>${htmlFinLanc(l)}</div>`
-    : finAba === 'comissoes' ? htmlComissoes() : finAba === 'salarios' ? htmlSalarios() : htmlFinGeral(l);
+    : finAba === 'comissoes' ? htmlComissoes() : finAba === 'salarios' ? htmlSalarios() : finAba === 'folha' ? htmlFolhasLancadas() : finAba === 'fixos' ? htmlGastosFixos() : htmlFinGeral(l);
   if (window._finVerLanc) { window._finVerLanc = false; setTimeout(() => $('finLancSec')?.scrollIntoView({ behavior:'smooth', block:'start' }), 80); }
 }
 function htmlFinLanc(l){
@@ -15150,6 +15150,19 @@ window.salvarConstrutoras = async () => {
   try { await gravar(setDoc(doc(db,'fin_config','geral'), { construtoras:l, atualizadoEm:Date.now() }, { merge:true })); fechar('consModal'); toast('Construtoras salvas'); } catch(e) { toast('Erro: ' + e.message); }
 };
 // ---------- despesas fixas ----------
+/* v359: aba "Gastos fixos" do escritório no Financeiro: as despesas fixas do mês escolhido (sem salários), pagas e em aberto */
+function htmlGastosFixos(){
+  const folhaIds = new Set(finFixas.filter(x => /folha|pró-labore/i.test(x.categoria || '') || x.regra).map(x => x.id));
+  const ehFolha = x => folhaIds.has(x.fixa) || /folha|pró-labore/i.test(x.categoria || '') || x.calculo;
+  const l = finLanc.filter(x => x.tipo === 'saida' && x.fixa && (x.data || '').startsWith(finMes) && !ehFolha(x)).sort((a, b) => (a.data || '').localeCompare(b.data || '') || (a.descricao || '').localeCompare(b.descricao || '', 'pt-BR'));
+  const tot = l.reduce((a, x) => a + (Number(x.valor) || 0), 0), pago = l.filter(x => x.pago).reduce((a, x) => a + (Number(x.valor) || 0), 0), hj = hojeISO();
+  const grupos = {}; l.forEach(x => (grupos[x.categoria || 'Outras'] = grupos[x.categoria || 'Outras'] || []).push(x));
+  return `<div class="sal-resumo"><div><span>Gastos fixos de ${nomeMes(finMes)}</span><b>${brl2(tot)}</b><small>${l.length} conta${l.length === 1 ? '' : 's'} · ${brl2(pago)} pago · ${brl2(tot - pago)} em aberto</small></div><button class="btn btn-ghost" onclick="abrirFixas()">Editar gastos fixos</button></div>
+    ${l.length ? Object.keys(grupos).sort((a, b) => a.localeCompare(b, 'pt-BR')).map(g => `<div class="sal-tab-w" style="margin-bottom:12px"><table class="sal-tab"><thead><tr><th>${esc(g)}</th><th>Vencimento</th><th>Situação</th><th>${brl2(grupos[g].reduce((a, x) => a + (Number(x.valor) || 0), 0))}</th></tr></thead><tbody>${
+      grupos[g].map(x => `<tr class="sal-lin" onclick="editarFin('${x.id}')"><td><b>${esc(x.descricao || '')}</b></td><td>${x.data ? dataBR(x.data) : '–'}</td><td>${x.pago ? '<span style="color:#15803d;font-weight:600">Pago</span>' : x.data && x.data < hj ? '<span style="color:var(--danger);font-weight:600">Vencida</span>' : '<span class="muted">Em aberto</span>'}</td><td class="sal-tot">${brl2(Number(x.valor) || 0)}</td></tr>`).join('')}</tbody></table></div>`).join('')
+      : vazio('Nenhum gasto fixo neste mês', 'Toque em “Editar gastos fixos” para cadastrar aluguel, internet, energia e as outras contas que se repetem todo mês.')}
+    <div class="hint" style="margin-top:6px">Toque numa conta para marcar como paga ou mudar o valor deste mês. Para mudar a conta de todos os meses, use “Editar gastos fixos”.</div>`;
+}
 window.abrirFixas = () => { desenharFixas(); abrir('fixasModal'); };
 function desenharFixas(){
   const ehFolha = x => /folha|pró-labore/i.test(x.categoria || '') || x.regra;
@@ -15375,6 +15388,27 @@ function htmlSalarios(){
     <div class="sal-tab-w"><table class="sal-tab"><thead><tr><th>Pessoa</th><th>Fixo</th><th>VT</th><th>Comissões</th><th>Bônus</th><th>Total</th><th></th></tr></thead><tbody>${linhas}</tbody>
     <tfoot><tr><td>Total · ${folha.length} pessoas</td><td>${brl2(tF)}</td><td>${brl2(tV)}</td><td>${brl2(tC)}</td><td>${brl2(tB)}</td><td id="salTotal2">${brl2(tot)}</td><td></td></tr></tfoot></table></div>
     <div class="hint" style="margin-top:10px">Toque em uma pessoa para ver a conta e ajustar contratos, bônus ou o valor final. Números do app neste mês: ${base.contratos} contratos assinados · ${base.reservas} reservas · ${base.pctCRM}% do CRM.</div>`;
+}
+/* v357: folhas já lançadas (o que foi gravado em Entradas e saídas pelo botão "Lançar na folha"), por mês, com a conta de cada pessoa */
+window.folhaLMes = '';
+function htmlFolhasLancadas(){
+  const it = finLanc.filter(l => l.tipo === 'saida' && /^fx_.+_\d{4}-\d{2}(_q1)?$/.test(l.id) && (l.criadoPor === 'Calculadora de salários' || l.calculo));
+  const mesDe = l => (l.id.match(/_(\d{4}-\d{2})(_q1)?$/) || [])[1];
+  const meses = [...new Set(it.map(mesDe))].filter(Boolean).sort().reverse();
+  if (!meses.length) return vazio('Nenhuma folha lançada ainda', 'Quando você tocar em “Lançar na folha” na Folha do mês, ela aparece aqui guardada.');
+  if (!meses.includes(folhaLMes)) folhaLMes = meses.includes(finMes) ? finMes : meses[0];
+  const l = it.filter(x => mesDe(x) === folhaLMes).sort((a, b) => (a.descricao || '').localeCompare(b.descricao || '', 'pt-BR') || (a.data || '').localeCompare(b.data || ''));
+  const tot = l.reduce((a, x) => a + (Number(x.valor) || 0), 0), pago = l.filter(x => x.pago).reduce((a, x) => a + (Number(x.valor) || 0), 0), ab = window._flAb;
+  const quando = Math.max(...l.map(x => x.atualizadoEm || x.criadoEm || 0));
+  return `<div class="sal-resumo"><div><span>Folha lançada de ${nomeMes(folhaLMes)}</span><b>${brl2(tot)}</b><small>${l.length} pagamento${l.length === 1 ? '' : 's'} · ${brl2(pago)} já pago${quando ? ' · lançada em ' + new Date(quando).toLocaleDateString('pt-BR') : ''}</small></div>
+      <select class="sel-mes on" onchange="folhaLMes=this.value;render()">${meses.map(m => `<option value="${m}" ${m === folhaLMes ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</select></div>
+    <div class="sal-tab-w"><table class="sal-tab"><thead><tr><th>Pessoa</th><th>Vencimento</th><th>Situação</th><th>Valor</th><th></th></tr></thead><tbody>${l.map(x => {
+      const a = ab === x.id, partes = String(x.calculo || '').split(' | ').filter(Boolean).map(p => { const i = p.lastIndexOf(': '); return [p.slice(0, i), Number(p.slice(i + 2)) || 0]; });
+      return `<tr class="sal-lin ${a ? 'ab' : ''}" onclick="window._flAb=window._flAb==='${x.id}'?'':'${x.id}';render()"><td><b>${esc(x.descricao || '')}</b></td><td>${x.data ? dataBR(x.data) : '–'}</td><td>${x.pago ? '<span style="color:#15803d;font-weight:600">Pago</span>' : '<span class="muted">A pagar</span>'}</td><td class="sal-tot">${brl2(Number(x.valor) || 0)}</td><td class="sal-seta">${a ? '▴' : '▾'}</td></tr>
+        ${a ? `<tr class="sal-det"><td colspan="5"><div class="sal-det-in"><div class="sal-conta">${partes.length ? partes.map(p => `<div><span>${esc(p[0])}</span><b>${p[1] ? brl2(p[1]) : ''}</b></div>`).join('') : '<div><span>Lançamento sem a conta detalhada</span><b></b></div>'}<div class="sal-conta-tot"><span>Total</span><b>${brl2(Number(x.valor) || 0)}</b></div></div>
+          <div class="sal-det-pe"><button class="link" onclick="event.stopPropagation();editarFin('${x.id}')">Abrir o lançamento (marcar pago, mudar valor ou data)</button></div></div></td></tr>` : ''}`; }).join('')}</tbody>
+    <tfoot><tr><td>Total · ${l.length}</td><td></td><td>${brl2(pago)} pago</td><td>${brl2(tot)}</td><td></td></tr></tfoot></table></div>
+    <div class="hint" style="margin-top:10px">Essa é a folha como foi lançada. Se você mudar algo na Folha do mês e lançar de novo, os valores daqui são trocados pelos novos.</div>`;
 }
 // separa o cálculo em colunas: fixo, VT, comissões, bônus
 function colunasSal(x){
