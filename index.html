@@ -6352,10 +6352,10 @@ window.fechar = id => { const m = $(id); if (!m) return; const ab = m.classList.
 function voltarAoModalPai(){
   document.querySelectorAll('.modal').forEach(m => { if (m._volta) return; m._volta = true; let aberto = m.classList.contains('open');
     new MutationObserver(() => { const ag = m.classList.contains('open');
-      if (!aberto && ag) { m._pai = (_ultFechado && Date.now() - _ultFechado.t < 600 && _ultFechado.id !== m.id) ? _ultFechado : null; }
+      if (!aberto && ag) { m._pai = (!m._reaberto && _ultFechado && Date.now() - _ultFechado.t < 600 && _ultFechado.id !== m.id) ? _ultFechado : null; m._reaberto = false; } // v367: modal reaberto pela volta não ganha "pai" (evitava o vai e volta sem fim)
       if (aberto && !ag && m._pai) { const p = m._pai; m._pai = null;
         setTimeout(() => { if (document.querySelector('.modal.open')) return; const pm = $(p.id); if (!pm) return;
-          try { window['aoReabrir_' + p.id]?.(); } catch(e) {} pm.classList.add('open'); requestAnimationFrame(() => { const c = _corpoModal(p.id); if (c) c.scrollTop = p.top; }); }, 150); }
+          _ultFechado = null; pm._reaberto = true; try { window['aoReabrir_' + p.id]?.(); } catch(e) {} pm.classList.add('open'); requestAnimationFrame(() => { const c = _corpoModal(p.id); if (c) c.scrollTop = p.top; }); }, 150); }
       aberto = ag; }).observe(m, { attributes:true, attributeFilter:['class'] }); }); }
 setTimeout(voltarAoModalPai, 0);
 
@@ -7893,7 +7893,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 366;
+const APP_VERSAO = 367;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
