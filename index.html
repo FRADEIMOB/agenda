@@ -7893,7 +7893,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 365;
+const APP_VERSAO = 366;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10718,6 +10718,7 @@ window.renderEmp = () => renderEmp();
 const bairroEmp = e => { const b = String(e.local || '').split(',')[0].trim(); return b && !/^jo[aã]o pessoa$/i.test(b) ? b : ''; };
 const chaveBairro = b => norm(b).replace(/\s+/g, ' ');
 window.empBairro = '';
+const quandoEmp = e => Number(e.postadoEm) || Number(e.criadoEm) || 0;
 function renderEmp(){
   if ($('btnEmpGrupo')) { $('btnEmpGrupo').classList.toggle('hide', !souGerente() || souCeo()); $('btnEmpGrupo').title = htmlWaLeitInfo('imoveis').replace(/<[^>]+>/g, ''); }
   if (view !== 'empreendimentos') return;
@@ -10729,7 +10730,7 @@ function renderEmp(){
     const alfa = bs.slice().sort((a, b) => a[1].nome.localeCompare(b[1].nome, 'pt-BR'));
     $('empBairros').innerHTML = `<option value="">Todos os bairros (${ativos.length})</option>` + alfa.map(([k, x]) => `<option value="${esc(k)}" ${empBairro === k ? 'selected' : ''}>${esc(x.nome)} (${x.n})</option>`).join('');
     $('empBairros').classList.toggle('on', !!empBairro); }
-  const l = ativos.filter(e => (!empBairro || chaveBairro(bairroEmp(e)) === empBairro) && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco].join(' ')).includes(t))).sort((a,b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
+  const l = ativos.filter(e => (!empBairro || chaveBairro(bairroEmp(e)) === empBairro) && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco].join(' ')).includes(t))).sort((a,b) => quandoEmp(b) - quandoEmp(a) || (a.nome || '').localeCompare(b.nome || '', 'pt-BR')); // v366: os postados por último no grupo aparecem primeiro
   { const nb = new Set(ativos.map(e => chaveBairro(bairroEmp(e))).filter(Boolean)).size; if ($('empSub')) $('empSub').textContent = `${ativos.length} imóve${ativos.length === 1 ? 'l' : 'is'}${nb ? ' em ' + nb + ' bairro' + (nb === 1 ? '' : 's') : ''} · fotos, valores, localização e material para mandar ao cliente`; }
   const nomeCartao = e => String(e.nome || '').split(' · ')[0], consCartao = e => e.construtora || (String(e.nome || '').split(' · ')[1] || '');
   const monograma = e => nomeCartao(e).replace(/^(Residencial|Res\.|Edif[ií]cio|Ed\.|Casa)\s+/i, '').split(/\s+/).filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'F';
@@ -10984,6 +10985,7 @@ function salvarEmpWaAuto(x, origem){
       const ex = empreendimentos.find(e => norm(e.nome) === norm(x.nome)), ref = ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), tx = (v, m) => String(v || '').trim().slice(0, m);
       const dados = { nome:tx(x.nome, 80), local:tx(x.local, 80), desc:tx(x.desc, 300), preco:tx(x.preco, 20), area:tx(x.area, 12), quartos:tx(x.quartos, 8), construtora:tx(x.construtora, 60), contato:tx(x.contato, 30), entrega:tx(x.entrega, 60), avaliacao:tx(x.avaliacao, 60),
         endereco:tx(x.endereco, 160), mapa:linkOk(x.mapa || '') ? tx(x.mapa, 300) : '', unidades:tx(x.unidades, 1500), fonte:'whatsapp', fonteGrupo:tx(x.grupo, 60), atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+      { const em = Number(x.em) || (ex ? 0 : Date.now()); if (em && em > (Number(ex?.postadoEm) || 0)) dados.postadoEm = em; } // v366: quando foi postado no grupo (ordem da aba Imóveis)
       Object.keys(dados).forEach(k => { if (dados[k] === '' && ex && ex[k]) delete dados[k]; if (ex && x.soFotos && !['atualizadoEm','atualizadoPor','atualizadoPorNome'].includes(k) && ex[k]) delete dados[k]; });
       if (!ex) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false, materiais:[], views:0 });
       await gravar(setDoc(ref, dados, { merge:true }));
