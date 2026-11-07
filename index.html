@@ -2327,6 +2327,7 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .sm-tab td,.sm-tab th{padding:6px 8px;font-size:13px}.sm-tab tr.sm-ok td{background:rgba(22,163,74,.09)}.sm-tab tr.sm-ok .sm-mot{color:#15803d;font-weight:600}.sm-mot{opacity:.75;font-size:12px;white-space:nowrap}
 @media (max-width:600px){.sm-nums{grid-template-columns:repeat(2,1fr)}}
 .fx-rec{font-size:12px;margin-left:6px;font-weight:500}
+.fi-txt{margin:0 0 10px}.fi-txt summary{cursor:pointer;font-size:13.5px;color:var(--muted);margin-bottom:6px}.fi-txt textarea{width:100%;font-size:13px;line-height:1.45}
 .fl-acoes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .fi-prev{background:#f3efe8;border-radius:12px;padding:10px;margin:6px 0 10px;max-height:58vh;overflow:auto;text-align:center}
 .fi-prev img{width:100%;max-width:420px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
@@ -4726,9 +4727,10 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
     <div class="sheet-body">
       <div class="fg"><label>O que vai na imagem</label><select id="fiQual" onchange="desenharFolhaImg()"></select></div>
       <div class="fi-prev"><img id="fiImg" alt="Prévia da imagem"></div>
+      <details class="fi-txt" id="fiTxtBox"><summary>Ver o texto</summary><textarea id="fiTxt" rows="10" readonly></textarea></details>
       <div class="hint">Mande no grupo do financeiro. Quem pagar responde “ok” e você marca como pago aqui no app.</div>
     </div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="folhaImgAcao('baixar')">Baixar</button><button class="btn btn-ghost" id="fiCompart" onclick="folhaImgAcao('compartilhar')">Compartilhar</button><button class="btn btn-primary" style="flex:1" onclick="folhaImgAcao('copiar')">Copiar imagem</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="folhaImgAcao('baixar')">Baixar</button><button class="btn btn-ghost" onclick="folhaImgAcao('texto')">Copiar texto</button><button class="btn btn-ghost" id="fiCompart" onclick="folhaImgAcao('compartilhar')">Compartilhar</button><button class="btn btn-primary" style="flex:1" onclick="folhaImgAcao('copiar')">Copiar imagem</button></div>
   </div>
 </div>
 <div class="modal" id="finModal">
@@ -7891,7 +7893,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 364;
+const APP_VERSAO = 365;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15619,15 +15621,23 @@ window.desenharFolhaImg = () => {
   txt(`Total · ${it.length} pagamento${it.length === 1 ? '' : 's'}`, P + 32, y + 68, 32, TX, 600);
   txt(brl2(tot), W - P - 32, y + 68, 40, COR, 700, 'right');
   txt(`Gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })} ${it.every(x => x.pago) ? '' : ' · Responda “ok” quando pagar'}`, W / 2, H - 40, 24, MU, 400, 'center');
+  // v365: o mesmo conteúdo em texto, já no formato do WhatsApp
+  const tit = um ? cx.tituloUm : cx.titulo;
+  window._fiTexto = [`*Frade Imóveis · ${tit}*`, nomeMes(cx.mes) + (q === 'abertos' ? ' · falta pagar' : ''), '',
+    ...it.flatMap(x => { const ps = partes(x); return [`*${x.descricao || ''}*: ${brl2(Number(x.valor) || 0)}`, `Vence ${x.data ? dataBR(x.data) : '–'} · ${x.pago ? (x.pagoEm ? 'pago em ' + new Date(x.pagoEm).toLocaleDateString('pt-BR') : 'pago') : 'a pagar'}`,
+      ...(ps.length ? ps.map(([r, v]) => `• ${r}${v ? ': ' + brl2(v) : ''}`) : [`• ${[x.categoria, x.corretorNome, x.obs].filter(Boolean).join(' · ') || 'Pagamento'}`]), '']; }),
+    `*Total: ${brl2(tot)}*${it.length > 1 ? ` (${it.length} pagamentos)` : ''}`, ...(it.every(x => x.pago) ? [] : ['', 'Responda "ok" quando pagar.'])].join('\n');
+  $('fiTxt').value = window._fiTexto;
   window._fiCanvas = cv; window._fiNome = (um && it[0] ? 'recibo-' + norm(it[0].descricao || '').replace(/[^a-z0-9]+/g, '-') : norm(cx.titulo).replace(/[^a-z0-9]+/g, '-')) + '-' + cx.mes + '.png';
   $('fiImg').src = cv.toDataURL('image/png');
 };
 window.folhaImgAcao = async (a) => {
   const cv = window._fiCanvas; if (!cv) return; const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
   try {
+    if (a === 'texto') { await navigator.clipboard.writeText(window._fiTexto || ''); toast('Texto copiado. Cole no grupo do WhatsApp.'); return; }
     if (a === 'copiar') { await navigator.clipboard.write([new ClipboardItem({ 'image/png':blob })]); toast('Imagem copiada. Cole no grupo do WhatsApp (Ctrl+V).'); return; }
     if (a === 'compartilhar') { const f = new File([blob], window._fiNome, { type:'image/png' }); if (navigator.canShare && navigator.canShare({ files:[f] })) { await navigator.share({ files:[f] }); return; } }
-  } catch(e) { if (e.name === 'AbortError') return; if (a === 'copiar') toast('Não deu para copiar aqui. Baixando a imagem…'); }
+  } catch(e) { if (e.name === 'AbortError') return; if (a === 'texto') { $('fiTxtBox').open = true; $('fiTxt').focus(); $('fiTxt').select(); toast('Selecionei o texto: copie e cole no grupo.'); return; } if (a === 'copiar') toast('Não deu para copiar aqui. Baixando a imagem…'); }
   const u = URL.createObjectURL(blob), el = document.createElement('a'); el.href = u; el.download = window._fiNome; document.body.appendChild(el); el.click(); el.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
 };
 window.salvarFin = async () => {
