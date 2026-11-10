@@ -7908,7 +7908,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 389;
+const APP_VERSAO = 390;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12296,10 +12296,20 @@ window.bzMover = async (id, d) => {
     await gravar(b.commit());
   } catch(e) { toast('Erro: ' + e.message); }
 };
+// v390: se o carteiro não soltar (fora do ar ou sem ler o Firestore), a própria tela da gerência solta a leva
+async function bzSoltarLocal(){
+  const c = bzDisp(), fila = bzOrdenar(bolsao.filter(x => x.status === 'fila')), livres = bolsao.filter(x => x.status === 'livre').length;
+  if (!fila.length) return { n:0, motivo:'fila vazia', naFila:0 };
+  const espaco = Math.max(0, (Number(c.max) || 15) - livres); if (!espaco) return { n:0, motivo:'já há ' + livres + ' livres no bolsão', naFila:fila.length };
+  const sai = fila.slice(0, Math.min(espaco, Math.max(1, Number(c.qtd) || 3))), agora = Date.now(), b = writeBatch(db);
+  sai.forEach(x => b.update(doc(db,'bolsao', x.id), { status:'livre', liberadoEm:agora, historico:bzHist(x, 'solto pela tela da gerência') }));
+  await gravar(b.commit()); try { avisarCarteiro('bolsao', '', true, { n:sai.length }); } catch(e) {}
+  return { n:sai.length, avisados:0, naFila:fila.length - sai.length, local:true };
+}
 async function bzSoltarUmaVez(){
   try {
-    const r = await chamarCarteiro({ tipo:'bolsao_soltar' });
-    if (!(r && typeof r === 'object' && r.versao)) { pararDisparo(); toast('O Carteiro no Cloudflare ainda é o antigo. Cole o carteiro-worker-v98 e implante.'); return; }
+    let r = null; try { r = await chamarCarteiro({ tipo:'bolsao_soltar' }); } catch(e) {}
+    if (!(r && typeof r === 'object' && r.versao)) r = await bzSoltarLocal();
     if (r.n) toast(`${r.n} lead${r.n > 1 ? 's soltos' : ' solto'} · ${r.avisados || 0} avisado${r.avisados === 1 ? '' : 's'} · ${r.naFila} na fila`);
     else if (r.motivo === 'fila vazia') { pararDisparo(); toast('Fila vazia: disparo encerrado.'); }
     else toast('Pausado: ' + (r.motivo || '') + '. Volta quando os corretores pegarem.');
@@ -12328,8 +12338,9 @@ window.voltarParaFila = async () => {
 window.soltarAgora = async () => {
   const bt = $('bdSoltar'); bt.disabled = true;
   try {
-    const r = await chamarCarteiro({ tipo:'bolsao_soltar' });
-    if (r && typeof r === 'object' && r.versao) toast(r.n ? `${r.n} lead${r.n > 1 ? 's soltos' : ' solto'} · ${r.avisados || 0} corretor${r.avisados === 1 ? '' : 'es'} avisado${r.avisados === 1 ? '' : 's'} · ${r.naFila} na fila` : 'Nada saiu: ' + (r.motivo || 'fila vazia'));
+    let r0 = null; try { r0 = await chamarCarteiro({ tipo:'bolsao_soltar' }); } catch(e) {}
+    const r = r0 && typeof r0 === 'object' && r0.versao ? r0 : await bzSoltarLocal();
+    if (r) toast(r.n ? `${r.n} lead${r.n > 1 ? 's soltos' : ' solto'} · ${r.avisados || 0} corretor${r.avisados === 1 ? '' : 'es'} avisado${r.avisados === 1 ? '' : 's'} · ${r.naFila} na fila` : 'Nada saiu: ' + (r.motivo || 'fila vazia'));
     else toast('O Carteiro no Cloudflare ainda é o antigo. Cole o carteiro-worker-v98 e implante; sem ele a fila não sai.');
   } catch(e) { toast('Não deu para falar com o Carteiro: ' + e.message); }
   bt.disabled = false;
