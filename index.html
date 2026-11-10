@@ -2425,7 +2425,7 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .rv summary{list-style:none;cursor:pointer}.rv summary::-webkit-details-marker{display:none}.rv-b{border:1px solid var(--border);border-radius:14px;padding:10px 12px;display:grid;gap:6px}.rv-b.ctrl{border-style:dashed}
 .rv-cab{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.rv-cab small{color:var(--text2);font-size:12px}.rv-v{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--card2)}.rv-v.bom{color:var(--ok)}.rv-v.ruim{color:var(--danger)}
 .rv-t{width:100%;border-collapse:collapse;font-size:13px}.rv-t th{font-size:11.5px;color:var(--text2);font-weight:600;text-align:right;padding:2px 6px}.rv-t td{padding:3px 6px;text-align:right;border-top:1px solid var(--border)}.rv-t td:first-child{text-align:left}.rv-t td.bom{color:var(--ok);font-weight:700}.rv-t td.ruim{color:var(--danger);font-weight:700}
-.fd-lb{display:grid;gap:4px;font-size:12px;font-weight:600;color:var(--text2)}.vl-eq{display:grid;gap:2px}.vl-eqn{font-size:12px;font-weight:700;color:var(--text2);margin-top:6px}.vl-a{border-top:1px solid var(--border);padding-top:4px}.fd-feito{display:flex;gap:8px;align-items:baseline;font-size:13px;color:var(--text2)}.fd-feito>span:first-child{color:var(--ok);font-weight:800}.fd-feito .link{margin-left:auto;font-size:12px}.fd-min{display:flex;gap:10px;align-items:center;padding:8px 12px}.fd-min .fd-ck{color:var(--ok);font-weight:800}.fd-min>span:nth-child(2){display:grid;gap:1px}.fd-min small{color:var(--text2);font-size:12px}.fd-min .link{margin-left:auto;font-size:12px}.ac-gv{border-top:1px solid var(--border);padding-top:6px}.gv-cta{color:var(--danger);font-weight:800}.fd-trava{font-size:12.5px;color:var(--text2);background:var(--card2);border-radius:10px;padding:8px 10px}.fd-div{font-size:12.5px}.fd-esp2 small{color:var(--text2);font-size:12px}.fd-q b{color:var(--accent)}.fd-p1 .fd-sn button{font-size:12.5px;padding:6px 10px}
+.fd-lb{display:grid;gap:4px;font-size:12px;font-weight:600;color:var(--text2)}.vl-eq{display:grid;gap:2px}.vl-eqn{font-size:12px;font-weight:700;color:var(--text2);margin-top:6px}.vl-a{border-top:1px solid var(--border);padding-top:4px}.fd-feito{display:flex;gap:8px;align-items:baseline;font-size:13px;color:var(--text2)}.fd-feito>span:first-child{color:var(--ok);font-weight:800}.fd-feito .link{margin-left:auto;font-size:12px}.fd-min{display:flex;gap:10px;align-items:center;padding:8px 12px}.fd-min .fd-ck{color:var(--ok);font-weight:800}.fd-min>span:nth-child(2){display:grid;gap:1px}.fd-min small{color:var(--text2);font-size:12px}.fd-min .link{margin-left:auto;font-size:12px}.ac-gv{border-top:1px solid var(--border);padding-top:6px}.ger-eq{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px}.ger-eq>span{font-size:12.5px;font-weight:700;color:var(--text2)}.gv-cta{color:var(--danger);font-weight:800}.fd-trava{font-size:12.5px;color:var(--text2);background:var(--card2);border-radius:10px;padding:8px 10px}.fd-div{font-size:12.5px}.fd-esp2 small{color:var(--text2);font-size:12px}.fd-q b{color:var(--accent)}.fd-p1 .fd-sn button{font-size:12.5px;padding:6px 10px}
 .ach-fim{font-size:13px;color:var(--ok);font-weight:700}
 .ach-ed{display:grid;grid-template-columns:minmax(0,1fr) 80px 36px;gap:8px;align-items:center;margin-bottom:8px}.ach-ed-cab{margin-bottom:4px}.ach-ed-cab small{font-size:12px;color:var(--text2);font-weight:600}
 .rka{display:grid;gap:8px}
@@ -7905,7 +7905,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 384;
+const APP_VERSAO = 386;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13937,7 +13937,16 @@ window.desfazerAch = async id => {
 // A gerência valida e o coordenador acompanha. Clientes parados (até ontem) para anjo, corretor, coordenação e gerência.
 // Tudo fica em ranking_ativ.ach (campo que cada um já pode gravar no próprio documento): não precisa mudar regras.
 // =====================================================================
-const FD_LIG = 10, FD_DOCS = 3, FD_HORA = 16;
+const FD_LIG = 10, FD_DOCS = 3, FD_HORA = 16, FD_INICIO = '2026-11-10'; // v386: o checklist dos anjos começa em 10/11
+// v386: na tela inicial da gerência, cada gerente vê a própria equipe e pode trocar pelo filtro
+window.gerEq = (() => { try { return localStorage.getItem('gerEq') || ''; } catch(e) { return ''; } })();
+const gerEqAtual = () => window.gerEq || perfil?.equipe || 'todas';
+window.setGerEq = e => { window.gerEq = e; try { localStorage.setItem('gerEq', e); } catch(x) {} render(); };
+function htmlGerEqFiltro(){
+  const at = gerEqAtual(), bt = (k, t) => `<button class="${at === k ? 'on' : ''}" onclick="setGerEq('${k}')">${t}</button>`;
+  return `<div class="ger-eq"><span>Equipe</span><div class="fd-sn">${listaEquipes().map(e => bt(e.id, esc(eqNome(e.id)))).join('')}${bt('todas', 'Todas')}</div></div>`;
+}
+const naEquipeGer = eq => { const at = gerEqAtual(); return at === 'todas' || eq === at; };
 // v377: a largada só vale ponto se o corretor confirmou e depois fechou pelo menos 1 bloco de ligações (10) no dia
 const fdLigDia = (u, d) => rankingAtiv.filter(r => r.uid === u).reduce((a, r) => a + (Number((r.ligu || {})[d]) || 0), 0);
 const fdLargVale = (u, d) => (fdAch(u, d).larg || {}).r === 's' && fdLigDia(u, d) >= FD_LIG;
@@ -13972,12 +13981,14 @@ function fdNums(uid, dia, md){
 function gvItens(uid){
   const h = hojeISO(), ont = mdOntem(), l30 = somaDias(h, -30), l14 = somaDias(h, -14), vis = fdVisTodas().filter(v => v.corretorUid === uid), ativa = v => v.status !== 'Cancelada';
   const aprov = [];
-  (avaliacoes || []).filter(a => a.corretorUid === uid && infoStatus(a.status).g === 'aprovado').forEach(a => { const d = a.aprovadoEm || a.data || ''; if (d >= l30 && d <= ont) aprov.push({ nome:a.nome || 'Cliente', d, ref:a }); });
+  (avaliacoes || []).filter(a => a.corretorUid === uid && infoStatus(a.status).g === 'aprovado').forEach(a => { const d = a.aprovadoEm || a.data || ''; if (d >= l30 && d <= ont && !aprov.some(x => fdMesmo(a, x.ref))) aprov.push({ nome:a.nome || 'Cliente', d, ref:a }); }); // v385: o mesmo cliente uma vez só (planilha com várias linhas)
   (cartas || []).filter(c => c.corretorUid === uid && !c.arquivado && ['Aprovada','Em negociação'].includes(c.status) && (c.data || '') >= l30 && (c.data || '') <= ont).forEach(c => { if (!aprov.some(x => fdMesmo(c, x.ref))) aprov.push({ nome:c.cliente || 'Cliente', d:c.data, ref:c }); });
   const semVis = aprov.filter(x => !vis.some(v => ativa(v) && fdMesmo(v, x.ref)) && !resAll().some(r => fdMesmo(x.ref, r)));
+  const umPorCli = l => l.sort((a, b) => (b.date || '').localeCompare(a.date || '')).filter((v, i, arr) => arr.findIndex(o => fdMesmo(o, v)) === i);
   const faltou = vis.filter(v => v.status === 'Não compareceu' && (v.date || '') >= l14 && v.date <= ont && !vis.some(o => o.id !== v.id && ativa(o) && o.status !== 'Não compareceu' && fdMesmo(o, v) && ((o.date || '') > v.date || (o.criadoEm || 0) > vrQuando(v))));
   const semResp = vis.filter(v => v.status === 'Realizada' && (v.date || '') >= l14 && v.date <= ont && !v.resultado && !v.posVisita && !resAll().some(r => fdMesmo(v, r)));
-  return { semVis, faltou, semResp, n:semVis.length + faltou.length + semResp.length };
+  const f2 = umPorCli(faltou), s2 = umPorCli(semResp);
+  return { semVis, faltou:f2, semResp:s2, n:semVis.length + f2.length + s2.length };
 }
 function htmlGv(g, curto, eu){
   const linha = (tit, l, f) => l.length ? `<div class="gv-g"><b>${tit} <em>${l.length}</em></b>${curto ? '' : `<ul>${l.slice(0, 8).map(x => `<li>${f(x)}</li>`).join('')}${l.length > 8 ? `<li class="muted">e mais ${l.length - 8}</li>` : ''}</ul>`}</div>` : '';
@@ -14066,9 +14077,10 @@ function htmlDetFech(p, d){
 }
 function htmlValidarOntem(){
   if (!souGerente() || souCeo()) return '';
-  const d = mdOntem(), base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo' && (p.membros || []).length);
-  if (!base.length) return '';
+  const d = mdOntem(); if (d < FD_INICIO) return '';
   const eqDe = p => p.equipe || [...anjoEqs(p)][0] || '', grupos = {};
+  const base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo' && (p.membros || []).length && naEquipeGer(eqDe(p)));
+  if (!base.length) return '';
   base.forEach(p => { const e = eqDe(p); (grupos[e] = grupos[e] || []).push(p); });
   const pend = base.filter(p => !fdAch(p.uid, d).val).length;
   const ordem = Object.keys(grupos).sort((a, b) => (a === perfil.equipe ? -1 : b === perfil.equipe ? 1 : eqNome(a).localeCompare(eqNome(b), 'pt-BR')));
@@ -14080,6 +14092,7 @@ function htmlValidarOntem(){
 function htmlAnjoCheckHoje(){
   if (!souAtivo() || souCeo()) return '';
   if (souAnjo()) return htmlFechAnjo();
+  if (souGerente()) { const us = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && p.papel === 'corretor' && !acTeste(p) && naEquipeGer(p.equipe)).map(p => p.uid); return htmlGerEqFiltro() + htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
   if (podeGerir()) { const us = acPessoas0().filter(p => p.papel === 'corretor' && !acTeste(p)).map(p => p.uid); return htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
   if (perfil.papel === 'corretor') return htmlLargCorretor() + htmlGvCard([uidAtual], 'Seus clientes parados');
   return '';
@@ -14111,7 +14124,7 @@ function anjoPtsDia(p, d){
 function linhasRankAnjos(m){
   return anjosVisiveis().map(p => { const ach = fdRa(p.uid, m).ach || {}, us = p.membros || []; let fech = 0, val = 0, larg = 0, poss = 0;
     let pts = 0, aval = 0;
-    Object.entries(ach).forEach(([d, o]) => { if (d.slice(0, 7) !== m || !o) return; const t = anjoPtsDia(p, d).total; if (o.val) pts += t; else aval += t; if (!o.fech) return; fech++; if (o.val) val++; us.forEach(u => { poss++; if (fdLargVale(u, d)) larg++; }); });
+    Object.entries(ach).forEach(([d, o]) => { if (d.slice(0, 7) !== m || !o || d < FD_INICIO) return; const t = anjoPtsDia(p, d).total; if (o.val) pts += t; else aval += t; if (!o.fech) return; fech++; if (o.val) val++; us.forEach(u => { poss++; if (fdLargVale(u, d)) larg++; }); });
     return { p, pts, aval, fech, val, larg, poss, hoje:!!(ach[hojeISO()] || {}).fech };
   }).sort((a, b) => b.pts - a.pts || b.fech - a.fech || b.larg - a.larg || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
 }
