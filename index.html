@@ -3965,6 +3965,9 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div class="fg"><label>Mensagem para a equipe</label><input id="manutMsg" maxlength="160" placeholder="Estamos ajustando o app. Volte em alguns minutos."></div>
           <button class="btn btn-primary" id="manutBt" onclick="alternarManutencao()">Entrar em manutenção</button></div>
         <div class="card gerente-only hide" style="margin-bottom:20px"><div class="card-head"><h2>🏢 Presença no escritório</h2></div><div class="hint" style="margin:0 0 10px">O corretor marca a presença pelo botão <b>Cheguei no escritório</b> (o app confere se ele está perto do escritório), pelo código da tela da recepção ou como <b>atendimento externo</b>. Quem chegar depois do horário entra como atrasado, e quem ainda não marcou recebe um aviso 10 minutos depois.</div><div id="ciCfgBox"></div></div>
+        <div class="card gerente-only hide" style="margin-bottom:20px"><div class="card-head"><h2>Checklist dos anjos</h2></div><div class="hint" style="margin:0 0 10px">Ligado, o anjo passa a ver o checklist do dia na tela inicial, o corretor recebe a pergunta da ligação de largada e a gerência valida no dia seguinte. Pontos e ranking dos anjos contam a partir da data escolhida.</div>
+          <div class="set-row"><div><b>Liberar o checklist</b><span id="cfgAnjoTxt"></span></div><label class="toggle"><input type="checkbox" id="cfgAnjoOn" onchange="salvarAnjoCk()"><span></span></label></div>
+          <div class="fg"><label>Vale a partir de</label><input type="date" id="cfgAnjoDesde" onchange="salvarAnjoCk()"></div></div>
         <div class="card" id="cfgNotif" style="margin-bottom:20px"><div class="card-head"><h2>🔔 Quais avisos você quer receber</h2></div><div class="hint" style="margin:0 0 10px">Tudo aparece no sino 🔔 lá em cima. Os que estiverem ligados também chegam no celular, se as notificações estiverem ativadas no aparelho.</div><div id="prefNotif"></div></div>
         <div class="set-grid">
           <div class="card">
@@ -7905,7 +7908,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 386;
+const APP_VERSAO = 388;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13937,7 +13940,16 @@ window.desfazerAch = async id => {
 // A gerência valida e o coordenador acompanha. Clientes parados (até ontem) para anjo, corretor, coordenação e gerência.
 // Tudo fica em ranking_ativ.ach (campo que cada um já pode gravar no próprio documento): não precisa mudar regras.
 // =====================================================================
-const FD_LIG = 10, FD_DOCS = 3, FD_HORA = 16, FD_INICIO = '2026-11-10'; // v386: o checklist dos anjos começa em 10/11
+const FD_LIG = 10, FD_DOCS = 3, FD_HORA = 16, FD_INICIO = '2026-11-11';
+// v388: a gerência libera o checklist dos anjos em Configurações (liga e escolhe a partir de que dia vale)
+const fdInicio = () => { const c = appCfg.anjoCk || {}; return c.ativo && c.desde ? c.desde : '9999-12-31'; };
+window.salvarAnjoCk = async () => {
+  if (!souGerente() || souCeo()) return; const ativo = !!$('cfgAnjoOn')?.checked, desde = $('cfgAnjoDesde')?.value || hojeISO();
+  try { await gravar(setDoc(doc(db,'config','app'), { anjoCk:{ ativo, desde, em:Date.now(), por:perfil.nome } }, { merge:true })); appCfg.anjoCk = { ativo, desde }; toast(ativo ? 'Checklist dos anjos liberado a partir de ' + dataBR(desde) : 'Checklist dos anjos desligado'); render(); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+function pintarCfgAnjo(){ const on = $('cfgAnjoOn'); if (!on || document.activeElement === $('cfgAnjoDesde')) return; const c = appCfg.anjoCk || {}; on.checked = !!c.ativo; $('cfgAnjoDesde').value = c.desde || FD_INICIO;
+  $('cfgAnjoTxt').textContent = c.ativo ? (c.desde > hojeISO() ? 'Liberado: começa em ' + dataBR(c.desde) : 'Valendo desde ' + dataBR(c.desde)) : 'Desligado: anjos e corretores ainda não veem'; }
 // v386: na tela inicial da gerência, cada gerente vê a própria equipe e pode trocar pelo filtro
 window.gerEq = (() => { try { return localStorage.getItem('gerEq') || ''; } catch(e) { return ''; } })();
 const gerEqAtual = () => window.gerEq || perfil?.equipe || 'todas';
@@ -14077,7 +14089,7 @@ function htmlDetFech(p, d){
 }
 function htmlValidarOntem(){
   if (!souGerente() || souCeo()) return '';
-  const d = mdOntem(); if (d < FD_INICIO) return '';
+  const d = mdOntem(); if (d < fdInicio()) return '';
   const eqDe = p => p.equipe || [...anjoEqs(p)][0] || '', grupos = {};
   const base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo' && (p.membros || []).length && naEquipeGer(eqDe(p)));
   if (!base.length) return '';
@@ -14091,10 +14103,10 @@ function htmlValidarOntem(){
 }
 function htmlAnjoCheckHoje(){
   if (!souAtivo() || souCeo()) return '';
-  if (souAnjo()) return htmlFechAnjo();
+  if (souAnjo()) return hojeISO() < fdInicio() ? '' : htmlFechAnjo();
   if (souGerente()) { const us = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && p.papel === 'corretor' && !acTeste(p) && naEquipeGer(p.equipe)).map(p => p.uid); return htmlGerEqFiltro() + htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
   if (podeGerir()) { const us = acPessoas0().filter(p => p.papel === 'corretor' && !acTeste(p)).map(p => p.uid); return htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
-  if (perfil.papel === 'corretor') return htmlLargCorretor() + htmlGvCard([uidAtual], 'Seus clientes parados');
+  if (perfil.papel === 'corretor') return (hojeISO() < fdInicio() ? '' : htmlLargCorretor()) + htmlGvCard([uidAtual], 'Seus clientes parados');
   return '';
 }
 // ---------- ranking dos anjos e validação da gerência ----------
@@ -14124,7 +14136,7 @@ function anjoPtsDia(p, d){
 function linhasRankAnjos(m){
   return anjosVisiveis().map(p => { const ach = fdRa(p.uid, m).ach || {}, us = p.membros || []; let fech = 0, val = 0, larg = 0, poss = 0;
     let pts = 0, aval = 0;
-    Object.entries(ach).forEach(([d, o]) => { if (d.slice(0, 7) !== m || !o || d < FD_INICIO) return; const t = anjoPtsDia(p, d).total; if (o.val) pts += t; else aval += t; if (!o.fech) return; fech++; if (o.val) val++; us.forEach(u => { poss++; if (fdLargVale(u, d)) larg++; }); });
+    Object.entries(ach).forEach(([d, o]) => { if (d.slice(0, 7) !== m || !o || d < fdInicio()) return; const t = anjoPtsDia(p, d).total; if (o.val) pts += t; else aval += t; if (!o.fech) return; fech++; if (o.val) val++; us.forEach(u => { poss++; if (fdLargVale(u, d)) larg++; }); });
     return { p, pts, aval, fech, val, larg, poss, hoje:!!(ach[hojeISO()] || {}).fech };
   }).sort((a, b) => b.pts - a.pts || b.fech - a.fech || b.larg - a.larg || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
 }
@@ -14431,7 +14443,7 @@ function renderExtrato(){ renderPrefNotif();
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
   if ($('metaEscHoje')) { const h = view === 'hoje' ? htmlMetaEscritorio() : ''; if ($('metaEscHoje')._h !== h) { $('metaEscHoje').innerHTML = h; $('metaEscHoje')._h = h; } }
-  if ($('anjoCheckHoje') && !(document.activeElement?.matches?.('input,textarea') && $('anjoCheckHoje').contains(document.activeElement))) { const h = view === 'hoje' ? htmlAnjoCheckHoje() : ''; if ($('anjoCheckHoje')._h !== h) { $('anjoCheckHoje').innerHTML = h; $('anjoCheckHoje')._h = h; } }
+  pintarCfgAnjo(); if ($('anjoCheckHoje') && !(document.activeElement?.matches?.('input,textarea') && $('anjoCheckHoje').contains(document.activeElement))) { const h = view === 'hoje' ? htmlAnjoCheckHoje() : ''; if ($('anjoCheckHoje')._h !== h) { $('anjoCheckHoje').innerHTML = h; $('anjoCheckHoje')._h = h; } }
   if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlBonusMeu() + htmlExtrato(); }
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
