@@ -7908,7 +7908,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 388;
+const APP_VERSAO = 389;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10688,7 +10688,7 @@ window.importarDocsWhats = async (auto) => {
     let tot = 0, totR = 0;
     for (let i = 0; i < restr.length; i += 200) {
       const r = await chamarCarteiro({ tipo:'importar_restricoes', itens:restr.slice(i, i + 200) });
-      if (!r?.ok) { if (i === 0) toast('Os clientes da planilha não foram atualizados: cole o carteiro novo (v262) no Cloudflare'); break; }
+      if (!r?.ok) { if (i === 0 && auto !== true) toast('Os clientes da planilha não foram atualizados: ' + (r?.erro || 'o carteiro não respondeu')); else console.warn('restrições', r?.erro); break; } // v389: na leitura automática não fica aparecendo aviso na tela
       totR += r.recebidas || 0;
     }
     window._impRestrPlan = [];
@@ -10699,7 +10699,7 @@ window.importarDocsWhats = async (auto) => {
     }
     if (auto === true) { if (tot || totR) toast(`Grupos de crédito: ${tot + totR} cliente${tot + totR === 1 ? '' : 's'} atualizado${tot + totR === 1 ? '' : 's'} ✓`); } else toast(`Pronto ✓ ${tot} docs do WhatsApp no app${totR ? ` e ${totR} restrições` : ''}`); $(IW.info).textContent = `✓ ${tot} docs importados${totR ? ` · ${totR} clientes da planilha com o resumo das restrições` : ''}. Os pontos de documentação entram no ranking em seguida.`; btn.classList.add('hide'); impWhats = [];
     [8e3, 30e3].forEach(ms => setTimeout(() => { try { sincMetasDia(true); } catch(e) {} }, ms));
-  } catch(e) { toast('Erro: ' + e.message); }
+  } catch(e) { if (auto === true) console.warn('docs do WhatsApp', e.message); else toast('Erro: ' + e.message); }
   btn.disabled = false;
 };
 window.importarLeadsAgora = async () => {
