@@ -2028,7 +2028,7 @@ html[data-theme="dark"] .an-alerta{background:#2a1a0c;border-color:#7c2d12;color
 .sx-pe{display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:relative;z-index:1}.sx-pe span{font-size:13.5px;color:rgba(255,255,255,.75)}
 .sx-bt{background:#f97316;border:0;color:#fff;font-size:18px;padding:16px 26px;border-radius:16px;box-shadow:0 10px 30px rgba(249,115,22,.45)}.sx-bt[disabled]{opacity:.5}
 .sx-cfg{display:grid;gap:4px}.sx-part{margin-top:8px}.sx-part-t{font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:6px}
-.sx-chips{display:flex;flex-wrap:wrap;gap:5px;max-height:180px;overflow-y:auto}.sx-chips span{font-size:12px;background:var(--card2);border-radius:99px;padding:3px 9px}.sx-chips span.off{opacity:.4;text-decoration:line-through}
+.sx-chips{display:flex;flex-wrap:wrap;gap:5px;max-height:180px;overflow-y:auto}.sx-chips span{font-size:12px;background:var(--card2);border-radius:99px;padding:3px 9px}.sx-chips span.off{opacity:.4;text-decoration:line-through}.sx-chips button{font:inherit;font-size:12px;background:var(--card2);color:var(--text);border:1px solid transparent;border-radius:99px;padding:3px 9px;cursor:pointer}.sx-chips button.off{opacity:.55}.sx-chips button.fora{opacity:.4;text-decoration:line-through;border-style:dashed;border-color:var(--border)}.sx-chips button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}.sx-part-t small{font-weight:500}
 .sx-h{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.sx-h:last-child{border:0}.sx-hq{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}.sx-h b{display:block}.sx-h small{font-size:12.5px;color:var(--muted)}
 .sx-palco:fullscreen{border-radius:0;padding:40px 56px}.sx-palco:fullscreen .sx-nome{font-size:clamp(56px,9vw,150px)}
 @media(max-width:900px){.sx-grid{grid-template-columns:1fr}.sx-palco{min-height:360px;padding:20px}.sx-bt{width:100%}}
@@ -2415,6 +2415,17 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ach-l li span{display:grid;gap:1px}.ach-l li small{font-size:11.5px;color:var(--text2)}.ach-l li.ok span{color:var(--text2)}.ach-l li em{font-style:normal;font-size:12px;font-weight:700;color:var(--text2)}
 .ach-bt{width:28px;height:28px;border-radius:9px;border:2px solid color-mix(in srgb,var(--text) 25%,transparent);background:var(--card);color:#fff;font-weight:800;font-size:15px;cursor:pointer;display:grid;place-items:center;padding:0}
 .ach-l li.vez .ach-bt{border-color:var(--accent)}.ach-l li.ok .ach-bt{background:var(--ok);border-color:var(--ok)}.ach-bt:disabled{cursor:default}
+.fd-lista{display:grid;gap:10px}.fd-l{border:1px solid var(--border);border-radius:14px;padding:10px 12px;display:grid;gap:8px}.fd-l.ok{border-color:color-mix(in srgb,var(--ok) 45%,var(--border))}
+.fd-top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.fd-top b{font-size:15px}.fd-sis{margin-left:auto;font-size:12px;color:var(--text2)}.fd-tag{font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;background:var(--accent-soft);color:var(--accent)}
+.fd-num{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px}.fd-num small{color:var(--text2)}.fd-num .bom b{color:var(--ok)}.fd-num .ruim b{color:var(--danger)}
+.fd-q{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px}.fd-ok{color:var(--ok);font-weight:700;font-size:12.5px}.fd-mal{color:var(--danger);font-weight:700;font-size:12.5px}.fd-esp{color:var(--text2);font-size:12.5px}
+.fd-sn{display:flex;gap:6px}.fd-sn button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.fd-sn button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.fd-in{width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:8px 10px;font:inherit;font-size:13.5px;background:var(--card);color:var(--text)}
+.gv summary{cursor:pointer;font-size:13px;color:var(--text2);padding:4px 0}.gv ul{margin:4px 0 6px;padding-left:18px;font-size:13px;display:grid;gap:3px}.gv small{color:var(--text2)}.gv-g{margin:6px 0}.gv-g>b{font-size:13px}.gv-g em{font-style:normal;color:var(--danger)}
+.rv summary{list-style:none;cursor:pointer}.rv summary::-webkit-details-marker{display:none}.rv-b{border:1px solid var(--border);border-radius:14px;padding:10px 12px;display:grid;gap:6px}.rv-b.ctrl{border-style:dashed}
+.rv-cab{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.rv-cab small{color:var(--text2);font-size:12px}.rv-v{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--card2)}.rv-v.bom{color:var(--ok)}.rv-v.ruim{color:var(--danger)}
+.rv-t{width:100%;border-collapse:collapse;font-size:13px}.rv-t th{font-size:11.5px;color:var(--text2);font-weight:600;text-align:right;padding:2px 6px}.rv-t td{padding:3px 6px;text-align:right;border-top:1px solid var(--border)}.rv-t td:first-child{text-align:left}.rv-t td.bom{color:var(--ok);font-weight:700}.rv-t td.ruim{color:var(--danger);font-weight:700}
+.fd-lb{display:grid;gap:4px;font-size:12px;font-weight:600;color:var(--text2)}.vl-eq{display:grid;gap:2px}.vl-eqn{font-size:12px;font-weight:700;color:var(--text2);margin-top:6px}.vl-a{border-top:1px solid var(--border);padding-top:4px}.fd-feito{display:flex;gap:8px;align-items:baseline;font-size:13px;color:var(--text2)}.fd-feito>span:first-child{color:var(--ok);font-weight:800}.fd-feito .link{margin-left:auto;font-size:12px}.fd-min{display:flex;gap:10px;align-items:center;padding:8px 12px}.fd-min .fd-ck{color:var(--ok);font-weight:800}.fd-min>span:nth-child(2){display:grid;gap:1px}.fd-min small{color:var(--text2);font-size:12px}.fd-min .link{margin-left:auto;font-size:12px}.ac-gv{border-top:1px solid var(--border);padding-top:6px}.gv-cta{color:var(--danger);font-weight:800}.fd-trava{font-size:12.5px;color:var(--text2);background:var(--card2);border-radius:10px;padding:8px 10px}.fd-div{font-size:12.5px}.fd-esp2 small{color:var(--text2);font-size:12px}.fd-q b{color:var(--accent)}.fd-p1 .fd-sn button{font-size:12.5px;padding:6px 10px}
 .ach-fim{font-size:13px;color:var(--ok);font-weight:700}
 .ach-ed{display:grid;grid-template-columns:minmax(0,1fr) 80px 36px;gap:8px;align-items:center;margin-bottom:8px}.ach-ed-cab{margin-bottom:4px}.ach-ed-cab small{font-size:12px;color:var(--text2);font-weight:600}
 .rka{display:grid;gap:8px}
@@ -3639,7 +3650,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
             <div class="fg"><label>Prêmio (opcional)</label><input id="sxPremio" maxlength="80" placeholder="Ex.: Kit churrasco" oninput="sxPinta()"></div>
             <label class="fv-chk"><input type="checkbox" id="sxAvisar" checked> Avisar a equipe no celular quem ganhou</label>
             <div class="fg"><label>Quem participa</label><select id="sxFonte" onchange="sxPinta()"><option value="cor">Corretores ativos</option><option value="pres">Quem está no escritório hoje</option><option value="cli">Clientes com reserva no mês</option><option value="lista">Lista que eu colar</option></select></div>
-            <div class="fg hide" id="sxListaBox"><label>Um nome por linha</label><textarea id="sxLista" rows="6" oninput="sxPinta()"></textarea></div>
+            <div class="fg hide" id="sxListaBox"><label>Um nome por linha</label><textarea id="sxLista" rows="10" oninput="sxPinta()"></textarea></div>
             <div class="row2"><div class="fg"><label>Ganhadores</label><input id="sxQtd" type="number" min="1" max="30" value="1" oninput="sxPinta()"></div><div class="fg"><label>Suspense</label><select id="sxTempo"><option value="2500">Rápido</option><option value="4500" selected>Normal</option><option value="7000">Longo</option></select></div></div>
             <label class="fv-chk"><input type="checkbox" id="sxSemRep" checked onchange="sxPinta()"> Quem já ganhou hoje não entra de novo</label>
             <div class="sx-part" id="sxPart"></div>
@@ -4397,9 +4408,9 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 <!-- v334: atividades do checklist dos anjos e coordenadores -->
 <div class="modal" id="achModal">
   <div class="sheet" style="width:min(600px,100%)">
-    <div class="sheet-head"><div><h2>Atribuições dos anjos e coordenadores</h2></div><button class="icon-btn" onclick="fechar('achModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><div><h2>Pontos do checklist dos anjos</h2></div><button class="icon-btn" onclick="fechar('achModal')" data-ic="x"></button></div>
     <div class="sheet-body" id="achCorpo"></div>
-    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('achModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarAnjoCheckCfg()">Salvar atividades</button></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('achModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarAnjoCheckCfg()">Salvar pontos</button></div>
   </div>
 </div>
 <div class="modal" id="mdModal">
@@ -6723,13 +6734,14 @@ function agrupaRanking(rows){
   return [...g.values()].sort((a,b) => b.total-a.total || b.real-a.real || b.conf-a.conf || a.nome.localeCompare(b.nome,'pt-BR'));
 }
 function renderRanking(){
+  if (rankTipo === 'anjos' && !podeVerRankAnjos()) rankTipo = 'hoje'; /* v372: ranking dos anjos só para anjos, coordenadores dos anjos e gerência */
   if (!souGerente() && (['passado','todas'].includes(rankPeriodo) || String(rankPeriodo).startsWith('m:'))) rankPeriodo = 'mes'; /* v323: meses anteriores só para a gerência */
   preencherSel('rPeriodo', '<option value="mes">Este mês</option>' + (souGerente() ? '<option value="passado">Mês passado</option>' : '') + '<option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option>' + (souGerente() ? '<option value="todas">Todo o período</option>' : ''), rankPeriodo);
   if (!souGerente()) { [...$('rPeriodo').options].filter(o => o.value.startsWith('m:')).forEach(o => o.remove()); if (String(rankPeriodo).startsWith('m:')) { rankPeriodo = 'mes'; $('rPeriodo').value = 'mes'; } }
   $('rEquipe').innerHTML = '<option value="">Todas as equipes</option>' + listaEquipes().map(e => `<option value="${e.id}" ${rankEquipe===e.id?'selected':''}>${esc(eqNome(e.id))}</option>`).join('');
   const _rkN = rkTodos().filter(x => !x.encerrado || (souGerente() && rankTipo === 'rk:' + x.id)).map(x => ['rk:' + x.id, x.nome]);
   const _rkAnt = souGerente() ? rkTodos().filter(x => x.encerrado).sort((a, b) => String(b.fim || b.inicio).localeCompare(String(a.fim || a.inicio)) || (a.auto ? -1 : 1)) : []; /* v323: rankings anteriores, só gerência */
-  $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'], ..._rkN, ['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV'], ['anjos','Anjos']].map(([k,n]) => `<button class="${rankTipo===k?'on':''}${k.startsWith('rk:') ? ' rkn-tab' : ''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
+  $('segRank').innerHTML = [['hoje','Hoje'],['pontos','Pontos'], ..._rkN, ['visitas','Visitas'],['cartas','Cartas aprovadas'], ['vgv','VGV'], ...(podeVerRankAnjos() ? [['anjos','Anjos']] : [])].map(([k,n]) => `<button class="${rankTipo===k?'on':''}${k.startsWith('rk:') ? ' rkn-tab' : ''}" onclick="rankTipo='${k}';render()">${n}</button>`).join('');
   if (souDono()) $('segRank').insertAdjacentHTML('beforeend', `<button class="rkn-novo" onclick="abrirRkNovo()">+ Novo ranking</button>`);
   if (_rkAnt.length) $('segRank').insertAdjacentHTML('beforeend', `<select class="rkn-ant" aria-label="Rankings anteriores" onchange="if(this.value){rankTipo=this.value;render()}"><option value="">Rankings anteriores</option>${_rkAnt.map(x => `<option value="rk:${x.id}" ${rankTipo === 'rk:' + x.id ? 'selected' : ''}>${esc(x.nome)}</option>`).join('')}</select>`);
   $('rankNota').textContent = rankTipo === 'cartas' ? 'Conta as cartas pela data da aprovação.' : 'Conta as visitas marcadas pela data da visita. Canceladas não entram.';
@@ -6737,7 +6749,7 @@ function renderRanking(){
   $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos' || rankTipo.startsWith('rk:')); if ($('podio')) $('podio').innerHTML = '';
   document.getElementById('paneRanking')?.classList.toggle('rk-hoje', rankTipo === 'hoje');
   if (rankTipo === 'hoje') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirMetasDia()">Metas do dia</button><button class="btn btn-ghost" onclick="abrirMetas()">Metas de reservas</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Metas de hoje'; $('rankNota').textContent = 'Cada número mostra quanto falta para bater a meta de hoje.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankHoje(); return; }
-  if (rankTipo === 'anjos') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirAnjoCheckCfg()">Editar atividades e pontos</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Ranking dos anjos · ' + nomeMes(mesAtual()).split(' de ')[0].toLowerCase(); $('rankNota').textContent = 'Pontos do checklist de atribuições do dia. Zera todo dia 1º.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankAnjos(); return; }
+  if (rankTipo === 'anjos') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirAnjoCheckCfg()">Pontos do checklist</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Ranking dos anjos · ' + nomeMes(mesAtual()).split(' de ')[0].toLowerCase(); $('rankNota').textContent = 'Ranking só dos anjos, separado do ranking geral (não soma pontos lá). Pontos por corretor: presença cobrada cedo, largada que valeu (confirmada e com 1 bloco de ligações) e fim do dia batendo com o check-in; mais o dia fechado. Só contam depois que a gerência valida. Zera todo dia 1º.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankAnjos(); return; }
   if (rankTipo.startsWith('rk:')) { renderRankingNovo(rankTipo.slice(3)); return; }
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
@@ -7893,7 +7905,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 367;
+const APP_VERSAO = 384;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9749,6 +9761,8 @@ function renderAcomp(soDados){
       <div class="ac-nums">${[['leads', x.leads], ['ligações', x.lig], ['números', x.num], ['docs', x.docs], ['marcou', x.vm], ['visitou', x.vr]].map(([r, v], i) => `<div class="${v ? '' : 'zz'}" ${i === 0 && v ? `role="button" onclick="acVerLeads('${x.p.uid}')"` : ''}><b>${v}</b><span>${r}</span></div>`).join('')}</div>
       ${metaPrin(x)}
       ${x.al.length ? `<div class="ac-als">${alHtml(x)}</div>` : ''}
+      ${x.p.papel === 'sdr' ? '' : (() => { const g = gvItens(x.p.uid); if (!g.n) return ''; const q = (n, t) => n ? `<span class="gv-cta">${t} ${n}</span>` : ''; /* v382: clientes parados de cada corretor em Meus corretores */
+        return `<details class="gv ac-gv"><summary><b>${g.n} cliente${g.n > 1 ? 's' : ''} parado${g.n > 1 ? 's' : ''}</b> · ${[q(g.semVis.length, 'AGENDE'), q(g.faltou.length, 'REMARQUE'), q(g.semResp.length, 'PEÇA AJUDA')].filter(Boolean).join(' · ')}</summary>${htmlGv(g)}</details>`; })()}
       ${x.agenda.length ? `<div class="ac-sec"><h4>Próximas visitas</h4>${x.agenda.map(v => `<div class="ac-vis" role="button" tabindex="0" onclick="editarVisita('${v.id}')" title="Abrir a visita"><span class="ac-d">${dia(v.date)} ${esc(v.time || '')}</span><span class="ac-c">${esc(v.cliente || '')}</span><span class="ac-st st-${stCls(v.status)}">${esc(v.status)}</span></div>`).join('')}</div>` : ''}
       ${x.anal.length || x.pend.length ? `<div class="ac-prime">Na Prime: ${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''}</div>` : ''}
       <footer class="ac-pe3">${(() => { const pr = x.per === 'hoje' ? 'de hoje' : x.per === 'ontem' ? 'de ontem' : 'do mês'; return `<button class="ac-pb" ${x.leads ? '' : 'disabled'} onclick="acVer('leads','${x.p.uid}')"><b>${x.leads}</b><span>Ver leads ${pr}</span></button><button class="ac-pb" ${x.visL.length ? '' : 'disabled'} onclick="acVer('visitas','${x.p.uid}')"><b>${x.visL.length}</b><span>Ver visitas ${pr}</span></button><button class="ac-pb" ${x.aprov ? '' : 'disabled'} onclick="acVer('cartas','${x.p.uid}')"><b>${x.aprov}</b><span>Cartas aprovadas</span></button>`; })()}</footer>
@@ -11604,6 +11618,7 @@ const NOTIF_CATS = [
   ['analises', '🏦 Correspondente (pasta enviada, pendência, resultado, mensagens)', p => true],
   ['aulas', '🎓 Aula nova publicada', p => p !== 'correspondente'],
   ['checkin', '🏢 Presença no escritório (lembrete, atrasos, atendimento externo)', p => true],
+  ['parados', 'Clientes parados (aprovado sem visita, não veio, visitou e não fechou), todo dia às 9h', p => ['corretor','coordenador','anjo'].includes(p)],
   ['leads', '📞 Lead novo para você', p => ['corretor','coordenador','anjo'].includes(p)],
   ['visitas', '🏠 Visitas (marcada para você, lembrete 1 hora antes, confirmar as de amanhã)', p => p !== 'gerente' || true],
   ['cartas', '📄 Cartas e avaliações (mudou de status, aprovada, perto de vencer)', p => p !== 'sdr'],
@@ -13777,7 +13792,12 @@ function assinarSorteios(){
   subsPapel.push(onSnapshot(collection(db,'sorteios'), s => { sxHistorico = s.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b) => (b.em || 0) - (a.em || 0)).slice(0, 30); if (view === 'sorteio') sxPintaHist(); render(); }, e => console.warn('sorteios', e.code || e.message)));
 }
 const sxRand = n => { const max = Math.floor(0x100000000 / n) * n, a = new Uint32Array(1); let x; do { crypto.getRandomValues(a); x = a[0]; } while (x >= max); return x % n; };
-function sxParticipantes(){
+// v371: dá para tirar e voltar nomes tocando neles, ou editar a lista inteira
+const sxFora = new Set();
+function sxParticipantes(){ return sxBase().filter(n => !sxFora.has(norm(n))); }
+window.sxToggle = i => { const n = sxBase()[i]; if (n === undefined) return; const k = norm(n); sxFora.has(k) ? sxFora.delete(k) : sxFora.add(k); sxPinta(); };
+window.sxEditar = () => { $('sxLista').value = sxParticipantes().join('\n'); $('sxFonte').value = 'lista'; sxFora.clear(); sxPinta(); setTimeout(() => $('sxLista').focus(), 50); };
+function sxBase(){
   const f = $('sxFonte')?.value || 'cor';
   if (f === 'cor') return perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo'].includes(p.papel) && (souGerente() || p.equipe === perfil.equipe)).map(p => p.nome);
   if (f === 'pres') { const m = presencas[hojeISO()]?.marcados || {}; return perfisLista.filter(p => m[p.uid]?.status === 'presente').map(p => p.nome); }
@@ -13794,7 +13814,8 @@ window.sxPinta = () => {
   const t = sxParticipantes(), d = sxDisponiveis(), q = Math.max(1, Math.min(30, Number($('sxQtd').value) || 1));
   $('sxInfo').textContent = d.length ? `${d.length} na disputa${t.length !== d.length ? ` · ${t.length - d.length} já ganharam` : ''}` : 'Ninguém na disputa';
   $('sxBt').disabled = !d.length || sxGirando; $('sxBt').textContent = q > 1 ? `🎲 Sortear ${q}` : '🎲 Sortear';
-  $('sxPart').innerHTML = t.length ? `<div class="sx-part-t">${t.length} participante${t.length > 1 ? 's' : ''}</div><div class="sx-chips">${t.slice(0, 80).map(n => `<span class="${d.includes(n) ? '' : 'off'}">${esc(n)}</span>`).join('')}${t.length > 80 ? `<span>+${t.length - 80}</span>` : ''}</div>` : '<div class="muted" style="font-size:13px">Ninguém nessa lista ainda.</div>';
+  const bs = sxBase(), fora = bs.length - t.length;
+  $('sxPart').innerHTML = bs.length ? `<div class="sx-part-t">${t.length} participante${t.length === 1 ? '' : 's'}${fora ? ` · ${fora} fora` : ''} <small>(toque no nome para tirar ou voltar)</small></div><div class="sx-chips">${bs.slice(0, 120).map((n, i) => { const out = sxFora.has(norm(n)); return `<button type="button" class="${out ? 'fora' : d.includes(n) ? '' : 'off'}" onclick="sxToggle(${i})" aria-pressed="${!out}" title="${out ? 'Voltar para o sorteio' : 'Tirar do sorteio'}">${esc(n)}</button>`; }).join('')}${bs.length > 120 ? `<span>+${bs.length - 120}</span>` : ''}</div><button class="link" style="margin-top:8px" onclick="sxEditar()">Editar os nomes em lista</button>` : '<div class="muted" style="font-size:13px">Ninguém nessa lista ainda.</div>';
 };
 // ganhadores dos sorteios, para todo mundo ver (aba Ranking)
 function htmlSorteiosPub(){
@@ -13898,17 +13919,9 @@ function htmlMetaEscritorio(){
 // =====================================================================
 const ANJO_CHECK_PADRAO = [['c1','Conferir o check-in da manhã do time'], ['c2','Mandar a meta do dia no grupo do time'], ['c3','Cobrar o primeiro bloco de ligações'], ['c4','Revisar com cada corretor as visitas de hoje e de amanhã'], ['c5','Acompanhar as documentações e análises de crédito do time'], ['c6','Conferir o funil de cada corretor'], ['c7','Cobrar o bloco de ligações da tarde'], ['c8','Fechamento do dia com o time: resultado e pendências']];
 const anjoItens = () => { const l = (appCfg.anjoCheck || {}).itens; return Array.isArray(l) && l.length ? l : ANJO_CHECK_PADRAO.map(([id, t]) => ({ id, t, pts:0 })); };
-const ehAnjoCoord = p => !!p && (p.papel === 'anjo' || p.papel === 'coordenador');
+const ehAnjoCoord = p => !!p && p.papel === 'anjo'; // v368: só anjos (coordenador não exerce as funções do anjo)
 const achDe = (uid, dia) => ((rankingAtiv.find(r => r.id === dia.slice(0, 7) + '_' + uid) || {}).ach || {})[dia] || {};
 const horaCurta = t => new Date(t).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
-function htmlAnjoCheckHoje(){
-  if (!ehAnjoCoord(perfil) || souCeo()) return '';
-  const h = hojeISO(), f = achDe(uidAtual, h), it = anjoItens(), n = it.filter(x => f[x.id]).length, prox = it.find(x => !f[x.id]);
-  const ult = [...it].reverse().find(x => f[x.id]), pts = it.reduce((a, x) => a + (f[x.id] ? Number(x.pts) || 0 : 0), 0);
-  return `<div class="ach-card ${!prox ? 'feito' : ''}"><div class="ach-cab"><b>Suas atribuições de hoje</b><span>${n} de ${it.length}${pts ? ' · ' + pts + ' pontos' : ''}</span></div><div class="meta-bar"><i style="width:${Math.round(n / Math.max(1, it.length) * 100)}%"></i></div>
-    <ol class="ach-l">${it.map(x => { const t = f[x.id], ok = !!t, vez = x === prox;
-      return `<li class="${ok ? 'ok' : vez ? 'vez' : 'bloq'}"><button class="ach-bt" ${vez ? `onclick="marcarAch('${x.id}')" aria-label="Marcar como feito"` : ok && x === ult ? `onclick="desfazerAch('${x.id}')" aria-label="Desfazer"` : 'disabled aria-label="Ainda não liberado"'}>${ok ? '✓' : ''}</button><span>${esc(x.t)}${ok ? `<small>feito às ${horaCurta(t)}</small>` : vez ? '<small>próxima atividade</small>' : ''}</span>${Number(x.pts) ? `<em>${Number(x.pts)} pts</em>` : ''}</li>`; }).join('')}</ol>${!prox ? '<div class="ach-fim">Todas as atribuições de hoje feitas.</div>' : ''}</div>`;
-}
 window.marcarAch = async id => {
   const it = anjoItens(), h = hojeISO(), f = achDe(uidAtual, h), prox = it.find(x => !f[x.id]); if (!prox || prox.id !== id) return; const m = h.slice(0, 7);
   try { await gravar(setDoc(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', ach:{ [h]:{ [id]:Date.now() } }, atualizadoEm:Date.now() }, { merge:true })); }
@@ -13918,33 +13931,269 @@ window.desfazerAch = async id => {
   if (!confirm('Desmarcar essa atividade?')) return; const h = hojeISO(), m = h.slice(0, 7);
   try { await gravar(setDoc(doc(db,'ranking_ativ', m + '_' + uidAtual), { ach:{ [h]:{ [id]:deleteField() } }, atualizadoEm:Date.now() }, { merge:true })); } catch(e) { toast('Erro: ' + e.message); }
 };
-// ranking dos anjos: pelos pontos do checklist no mês
-function linhasRankAnjos(m){
-  const it = anjoItens(), h = hojeISO(), base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk());
-  return base.filter(p => ehAnjoCoord(p) && p.status !== 'inativo').map(p => { const ach = (rankingAtiv.find(x => x.id === m + '_' + p.uid) || {}).ach || {}; let pts = 0, itens = 0, completos = 0;
-    Object.entries(ach).forEach(([d, o]) => { if (d.slice(0, 7) !== m || !o) return; const k = it.filter(x => o[x.id]); itens += k.length; pts += k.reduce((a, x) => a + (Number(x.pts) || 0), 0); if (k.length && k.length === it.length) completos++; });
-    return { p, pts, itens, completos, hoje:it.filter(x => (ach[h] || {})[x.id]).length };
-  }).sort((a, b) => b.pts - a.pts || b.itens - a.itens || b.completos - a.completos || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
+// =====================================================================
+// v369: fechamento do dia do anjo (decisões do grupo ADM em 09/11): por corretor, presença, ligação de largada
+// confirmada pelo próprio corretor, ligações e docs que o sistema traz, e cobrança escrita quando não bateu.
+// A gerência valida e o coordenador acompanha. Clientes parados (até ontem) para anjo, corretor, coordenação e gerência.
+// Tudo fica em ranking_ativ.ach (campo que cada um já pode gravar no próprio documento): não precisa mudar regras.
+// =====================================================================
+const FD_LIG = 10, FD_DOCS = 3, FD_HORA = 16;
+// v377: a largada só vale ponto se o corretor confirmou e depois fechou pelo menos 1 bloco de ligações (10) no dia
+const fdLigDia = (u, d) => rankingAtiv.filter(r => r.uid === u).reduce((a, r) => a + (Number((r.ligu || {})[d]) || 0), 0);
+const fdLargVale = (u, d) => (fdAch(u, d).larg || {}).r === 's' && fdLigDia(u, d) >= FD_LIG;
+const fdNorm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+const fdMesmo = (a, b) => { try { if (mesmoCli(a, b) || mesmoCli(b, a)) return true; } catch(e) {} const na = fdNorm(a.cliente || a.nome || a.cliente?.nome), nb = fdNorm(b.cliente || b.nome || b.cliente?.nome); return na.length > 5 && na === nb; };
+let _fdSubs = [], _fdChave = '', _fdVis = [], _fdPastas = [];
+function fdAssinar(){
+  const uids = souAnjo() ? membrosAnjo().slice(0, 30) : [], ch = uids.length ? uidAtual + '|' + uids.join(',') : '';
+  if (ch === _fdChave) return; _fdSubs.forEach(u => { try { u(); } catch(e) {} }); _fdSubs = []; _fdVis = []; _fdPastas = []; _fdChave = ch; if (!ch) return;
+  const ouve = (q, f) => _fdSubs.push(onSnapshot(q, s => { f(s.docs.map(d => ({ id:d.id, ...d.data() }))); if (view === 'hoje') render(); }, e => console.warn('fechamento', e.code || e.message)));
+  ouve(query(collection(db,'visitas'), where('corretorUid','in',uids)), l => _fdVis = l);
+  ouve(query(collection(db,'analises'), where('corretorUid','in',uids)), l => _fdPastas = l);
 }
+const fdVisTodas = () => [...new Map([..._fdVis, ...(typeof _acVis !== 'undefined' ? _acVis : []), ...(visitas || [])].map(v => [v.id, v])).values()].filter(v => !v.arquivado);
+const fdRa = (uid, m) => rankingAtiv.find(r => r.id === m + '_' + uid) || {};
+const fdAch = (uid, dia) => ((fdRa(uid, dia.slice(0, 7)).ach || {})[dia]) || {};
+const fdNome = uid => acNome(((pessoasRk() || []).find(p => p.uid === uid) || perfisTodos.find(p => p.uid === uid) || {}).nome || (perfil?.membrosNomes || [])[membrosAnjo().indexOf(uid)] || 'Corretor');
+function anjoUidDe(uid){ const a = (pessoasRk() || []).find(p => p.papel === 'anjo' && p.status === 'ativo' && (p.membros || []).includes(uid)); return a ? a.uid : ''; }
+// números do dia de um corretor: presença, ligações (números diferentes) e documentações
+function fdNums(uid, dia, md){
+  const ra = rankingAtiv.filter(r => r.uid === uid), st = presencas[dia]?.marcados?.[uid]?.status || '';
+  const chk = ra.map(r => (r.chk || {})[dia] || (r.pres || {})[dia]).find(Boolean);
+  const pres = !!chk || ['presente','externo'].includes(st), folga = ['folga','ferias','atestado'].includes(st);
+  const lig = ra.reduce((a, r) => a + (Number((r.ligu || {})[dia]) || 0), 0);
+  const pastas = [..._fdPastas, ...(analises || [])].filter(a => a.corretorUid === uid && a.enviadaEm && iso(new Date(a.enviadaEm)) === dia);
+  const vivo = new Set([...(avaliacoes || []).filter(a => a.corretorUid === uid && a.data === dia).map(a => 'a' + (a.cpfNorm || a.telNorm || a.id)), ...pastas.map(a => 'p' + (soDig(a.cliente?.cpf || '') || a.id))]).size;
+  const docs = Math.max(vivo, ((md || new Map()).get(uid) || {}).docs || 0);
+  const metaDocs = metaDiaDe(uid).docs || FD_DOCS;
+  return { pres, folga, chk:typeof chk === 'number' ? chk : 0, lig, docs, metaDocs };
+}
+// clientes parados: o que ficou para trás até ontem
+function gvItens(uid){
+  const h = hojeISO(), ont = mdOntem(), l30 = somaDias(h, -30), l14 = somaDias(h, -14), vis = fdVisTodas().filter(v => v.corretorUid === uid), ativa = v => v.status !== 'Cancelada';
+  const aprov = [];
+  (avaliacoes || []).filter(a => a.corretorUid === uid && infoStatus(a.status).g === 'aprovado').forEach(a => { const d = a.aprovadoEm || a.data || ''; if (d >= l30 && d <= ont) aprov.push({ nome:a.nome || 'Cliente', d, ref:a }); });
+  (cartas || []).filter(c => c.corretorUid === uid && !c.arquivado && ['Aprovada','Em negociação'].includes(c.status) && (c.data || '') >= l30 && (c.data || '') <= ont).forEach(c => { if (!aprov.some(x => fdMesmo(c, x.ref))) aprov.push({ nome:c.cliente || 'Cliente', d:c.data, ref:c }); });
+  const semVis = aprov.filter(x => !vis.some(v => ativa(v) && fdMesmo(v, x.ref)) && !resAll().some(r => fdMesmo(x.ref, r)));
+  const faltou = vis.filter(v => v.status === 'Não compareceu' && (v.date || '') >= l14 && v.date <= ont && !vis.some(o => o.id !== v.id && ativa(o) && o.status !== 'Não compareceu' && fdMesmo(o, v) && ((o.date || '') > v.date || (o.criadoEm || 0) > vrQuando(v))));
+  const semResp = vis.filter(v => v.status === 'Realizada' && (v.date || '') >= l14 && v.date <= ont && !v.resultado && !v.posVisita && !resAll().some(r => fdMesmo(v, r)));
+  return { semVis, faltou, semResp, n:semVis.length + faltou.length + semResp.length };
+}
+function htmlGv(g, curto, eu){
+  const linha = (tit, l, f) => l.length ? `<div class="gv-g"><b>${tit} <em>${l.length}</em></b>${curto ? '' : `<ul>${l.slice(0, 8).map(x => `<li>${f(x)}</li>`).join('')}${l.length > 8 ? `<li class="muted">e mais ${l.length - 8}</li>` : ''}</ul>`}</div>` : '';
+  return linha(eu ? 'Seu cliente aprovado não foi agendado para visita: <span class="gv-cta">AGENDE</span>' : 'Aprovado sem visita marcada', g.semVis, x => `${esc(nomeBonito(x.nome))} <small>aprovado em ${dataBR(x.d)}</small>`)
+    + linha(eu ? 'Seu cliente agendou mas não veio: <span class="gv-cta">REMARQUE</span>' : 'Agendou, não veio e não foi remarcado', g.faltou, v => `${esc(nomeBonito(v.cliente || ''))} <small>visita de ${dataBR(v.date)}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}</small>`)
+    + linha(eu ? 'Seu cliente visitou mas não fechou: <span class="gv-cta">PEÇA AJUDA!</span>' : 'Visitou e ficou sem resposta (sem reserva nem retorno)', g.semResp, v => `${esc(nomeBonito(v.cliente || ''))} <small>visitou em ${dataBR(v.date)}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}</small>`);
+}
+// grava no próprio documento do mês: ach[dia][chave]
+async function fdGrava(dia, obj){
+  const m = dia.slice(0, 7);
+  await gravar(setDoc(doc(db,'ranking_ativ', m + '_' + uidAtual), { mes:m, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', ach:{ [dia]:obj }, atualizadoEm:Date.now() }, { merge:true }));
+}
+// ---------- tela do anjo ----------
+// v379: o que já foi respondido vira uma linha curta (com "alterar"), para a tela ir limpando
+const fdAbre = new Set();
+window.fdAlt = (u, k) => { fdAbre.add(u + '|' + k); render(); };
+const fdFeito = (t, u, k, trava) => `<div class="fd-feito"><span>✓</span><span>${t}</span>${trava ? '' : `<button class="link" onclick="fdAlt('${u}','${k}')">alterar</button>`}</div>`;
+function htmlFechAnjo(){
+  fdAssinar();
+  const h = hojeISO(), f = fdAch(uidAtual, h), us = membrosAnjo(), md = mdValores([h]), agora = new Date(), sab = agora.getDay() === 6, hora = agora.getHours() >= (sab ? 12 : FD_HORA);
+  if (!us.length) return `<div class="ach-card"><div class="ach-cab"><b>Fechamento do dia</b></div><div class="hint" style="margin:0">A gerência ainda não ligou nenhum corretor a você.</div></div>`;
+  let prontos = 0, larg = 0, manha = 0;
+  // v374: 1º passo (manhã) é cobrar a presença: confirmou que vem ou avisou a ausência com justificativa. Só depois liberam as outras atividades.
+  // No fechamento o anjo diz se o corretor foi mesmo, e isso é conferido com o check-in.
+  const linhas = us.map(u => {
+    const n = fdNums(u, h, md), r = f['f_' + u] || {}, c = fdAch(u, h).larg || {}, eu = f['l_' + u], g = gvItens(u);
+    const pm = n.folga ? 's' : r.pm || '', pmOk = n.folga || pm === 's' || (pm === 'n' && (r.jm || '').trim().length >= 5);
+    if (pmOk) manha++;
+    const largOk = c.r === 's', largVale = largOk && n.lig >= FD_LIG; if (largVale) larg++;
+    const p = n.folga ? '' : r.p || '', diverge = !n.folga && ((p === 's' && !n.pres) || (p === 'n' && n.pres));
+    const abaixo = p === 's' && (n.lig < FD_LIG || n.docs < n.metaDocs);
+    const fimOk = n.folga || (p && (!diverge || (r.j || '').trim().length >= 5) && (p !== 'n' || pm === 'n' || (r.j || '').trim().length >= 5) && (!abaixo || (r.c || '').trim().length >= 5));
+    const ok = pmOk && fimOk; if (ok) prontos++;
+    const sn = (k, v, t) => `<button class="${(k === 'pm' ? pm : p) === v ? 'on' : ''}" onclick="fdResp('${u}','${k}','${v}')">${t}</button>`;
+    const fech = !!f.fech, abre = k => !fech && fdAbre.has(u + '|' + k);
+    if (ok && hora && !abre('tudo')) return `<div class="fd-l ok fd-min"><span class="fd-ck">✓</span><span><b>${esc(fdNome(u))}</b><small>${n.folga ? 'folga' : (p === 's' ? 'veio' : 'não veio') + ` · ${n.lig} lig. · ${n.docs}/${n.metaDocs} docs` + (largVale ? ' · largada valeu' : '')}${r.c ? ' · feedback dado' : ''}</small></span>${fech ? '' : `<button class="link" onclick="fdAlt('${u}','tudo')">ver</button>`}</div>`;
+    const passo1 = n.folga ? '' : pmOk && !abre('pm') ? fdFeito(pm === 's' ? 'Presença: confirmou que vem' : 'Presença: avisou ausência · ' + esc(r.jm || ''), u, 'pm', fech) : `<div class="fd-q fd-p1"><span><b>1.</b> Presença de hoje</span><div class="fd-sn">${sn('pm', 's', 'Confirmou que vem')}${sn('pm', 'n', 'Avisou ausência')}</div></div>
+      ${pm === 'n' ? `<input class="fd-in" maxlength="200" placeholder="Qual a justificativa da ausência?" aria-label="Justificativa da ausência" value="${esc(r.jm || '')}" onchange="fdTxt('${u}','jm',this.value)">` : ''}`;
+    const largTxt = largVale ? `<span class="fd-ok">confirmada e com 1 bloco: vale ponto</span>` : largOk ? `<span class="fd-esp">confirmada${c.em ? ' às ' + horaCurta(c.em) : ''}: vale ponto quando ele fechar 1 bloco (${n.lig}/${FD_LIG})</span>` : c.r === 'n' ? '<span class="fd-mal">o corretor respondeu que não</span>' : eu ? '<span class="fd-esp">esperando o corretor confirmar</span>' : `<button class="btn btn-sm btn-ghost" onclick="fdLarg('${u}')">Fizemos a ligação</button>`;
+    const resto = !pmOk ? '<div class="fd-trava">Responda a presença para liberar as outras atividades.</div>' : pm === 'n' && !n.folga ? '' : `
+      <div class="fd-num"><span class="${n.lig >= FD_LIG ? 'bom' : 'ruim'}"><b>${n.lig}</b> ligaç${n.lig === 1 ? 'ão' : 'ões'} <small>esperado ${FD_LIG}</small></span><span class="${n.docs >= n.metaDocs ? 'bom' : 'ruim'}"><b>${n.docs}</b> doc${n.docs === 1 ? '' : 's'} <small>meta ${n.metaDocs}</small></span></div>
+      ${largVale ? fdFeito('Largada: confirmada e com 1 bloco, valeu ponto', u, 'larg', true) : `<div class="fd-q"><span><b>2.</b> Ligação de largada</span>${largTxt}</div>`}`;
+    const fim = !pmOk || n.folga ? '' : hora && fimOk && !abre('fim') ? fdFeito('Fim do dia: ' + (p === 's' ? 'veio' : 'não veio') + (r.j ? ' · ' + esc(r.j) : '') + (r.c ? ' · feedback: ' + esc(r.c) : ''), u, 'fim', fech) : !hora ? `<div class="fd-q fd-esp2"><span><b>3.</b> Fechamento: se ele foi mesmo</span><small>libera às ${sab ? 12 : FD_HORA}h</small></div>` : `
+      <div class="fd-q"><span><b>3.</b> Ele veio mesmo hoje?</span><div class="fd-sn">${sn('p', 's', 'Veio')}${sn('p', 'n', 'Não veio')}</div></div>
+      ${diverge ? `<div class="fd-mal fd-div">Não bate com o check-in: ${n.pres ? 'o sistema tem check-in dele hoje' : 'o sistema não tem check-in dele hoje'}.</div>` : ''}
+      ${(p === 'n' && pm === 's') || diverge ? `<input class="fd-in" maxlength="200" placeholder="${diverge ? 'Explique a diferença com o check-in' : 'Confirmou e não veio: o que aconteceu?'}" aria-label="Explicação" value="${esc(r.j || '')}" onchange="fdTxt('${u}','j',this.value)">` : ''}
+      ${abaixo ? `<label class="fd-lb">Feedback<input class="fd-in" maxlength="300" aria-label="Feedback do dia" value="${esc(r.c || '')}" onchange="fdTxt('${u}','c',this.value)"></label>` : ''}`;
+    return `<div class="fd-l ${ok ? 'ok' : ''}"><div class="fd-top"><b>${esc(fdNome(u))}</b>${n.folga ? '<span class="fd-tag">folga</span>' : ''}<span class="fd-sis">${n.pres ? 'check-in feito' + (n.chk ? ' às ' + horaCurta(n.chk) : '') : 'sem check-in'}</span></div>
+      ${passo1}${resto}${fim}
+      ${g.n ? `<details class="gv"><summary>Clientes parados: ${g.n} até ontem</summary>${htmlGv(g)}</details>` : ''}</div>`;
+  }).join('');
+  const podeFechar = prontos === us.length && hora;
+  const cab = f.fech ? `fechado às ${horaCurta(f.fech)}${f.val ? ' · validado por ' + esc(f.val.por || 'gerência') : ''}` : !hora ? `presença: ${manha} de ${us.length} · ${larg} largada${larg === 1 ? '' : 's'}` : `${prontos} de ${us.length} prontos · ${larg} largada${larg === 1 ? '' : 's'}`;
+  const pct = hora ? prontos / us.length : manha / us.length, ptsH = anjoPtsDia({ uid:uidAtual, membros:us }, h).total;
+  return `<div class="ach-card ${f.fech ? 'feito' : ''}"><div class="ach-cab"><b>Checklist do dia dos seus corretores</b><span>${cab} · ${ptsH} pts${f.val ? '' : ' (contam quando a gerência validar)'}</span></div><div class="meta-bar"><i style="width:${Math.round(pct * 100)}%"></i></div>
+    ${manha || f.fech ? '' : `<div class="hint" style="margin:0">1º cobre a presença de cada um logo cedo: só depois liberam as outras atividades. Ligação de largada: anjo e corretor fazem juntos uma ligação para um cliente; o anjo marca, o corretor confirma no app dele, e só vale ponto se ele fechar pelo menos 1 bloco de ligações. No fim do dia diga se ele veio mesmo: o app confere com o check-in.</div>`}
+    <div class="fd-lista">${linhas}</div>
+    ${f.fech ? '' : `<button class="btn ${podeFechar ? '' : 'btn-ghost'}" ${podeFechar ? 'onclick="fdFechar()"' : 'disabled'}>Fechar o dia</button><small class="muted">${!hora ? `O fechamento libera a partir das ${sab ? 12 : FD_HORA}h.` : prontos < us.length ? 'Responda todos os passos de cada corretor.' : ''}</small>`}</div>`;
+}
+window.fdLarg = async u => { try { await fdGrava(hojeISO(), { ['l_' + u]:Date.now() }); toast('Anotado. Agora o corretor confirma no app dele.'); } catch(e) { toast('Erro: ' + e.message); } };
+window.fdResp = async (u, k, v) => { fdAbre.delete(u + '|' + (k === 'pm' ? 'pm' : 'fim')); fdAbre.delete(u + '|tudo'); try { await fdGrava(hojeISO(), { ['f_' + u]:{ [k]:v, [k + 'Em']:Date.now() } }); } catch(e) { toast('Erro: ' + e.message); } };
+window.fdPres = (u, p) => fdResp(u, 'p', p);
+window.fdTxt = async (u, k, v) => { fdAbre.delete(u + '|' + (k === 'jm' ? 'pm' : 'fim')); fdAbre.delete(u + '|tudo'); try { await fdGrava(hojeISO(), { ['f_' + u]:{ [k]:String(v || '').trim().slice(0, 200), em:Date.now() } }); } catch(e) { toast('Erro: ' + e.message); } };
+window.fdFechar = async () => {
+  const h = hojeISO(), md = mdValores([h]), o = { fech:Date.now() };
+  membrosAnjo().forEach(u => { const n = fdNums(u, h, md), c = fdAch(u, h).larg || {}; const r = (fdAch(uidAtual, h)['f_' + u]) || {}; o['f_' + u] = { lig:n.lig, docs:n.docs, meta:n.metaDocs, chk:n.pres, folga:n.folga, larg:c.r || '', div:!n.folga && ((r.p === 's' && !n.pres) || (r.p === 'n' && n.pres)) }; if (n.folga) o['f_' + u].p = 's'; });
+  try { await fdGrava(h, o); toast('Dia fechado. A gerência vai validar.'); } catch(e) { toast('Erro: ' + e.message); }
+};
+// ---------- tela do corretor ----------
+function htmlLargCorretor(){
+  const a = anjoUidDe(uidAtual); if (!a) return '';
+  const h = hojeISO(), c = fdAch(uidAtual, h).larg; if (c) return '';
+  return `<div class="ach-card"><div class="ach-cab"><b>Você fez hoje a ligação de largada junto com o seu anjo (${esc(anjoDe(uidAtual))})?</b></div><div class="fd-sn"><button onclick="fdConfLarg('s')">Sim, fizemos</button><button onclick="fdConfLarg('n')">Não fizemos</button></div></div>`;
+}
+window.fdConfLarg = async r => { try { await fdGrava(hojeISO(), { larg:{ r, em:Date.now(), anjo:anjoUidDe(uidAtual) } }); toast('Obrigado, anotado'); } catch(e) { toast('Erro: ' + e.message); } };
+function htmlGvCard(uids, titulo){
+  const l = uids.map(u => ({ u, g:gvItens(u) })).filter(x => x.g.n).sort((a, b) => b.g.n - a.g.n); if (!l.length) return '';
+  const tot = l.reduce((a, x) => a + x.g.n, 0);
+  if (uids.length === 1) return `<div class="ach-card gv-card"><div class="ach-cab"><b>${titulo}</b><span>${tot} pendência${tot > 1 ? 's' : ''}</span></div>${htmlGv(l[0].g, false, l[0].u === uidAtual)}</div>`;
+  return `<div class="ach-card gv-card"><div class="ach-cab"><b>${titulo}</b><span>${tot} pendência${tot > 1 ? 's' : ''} em ${l.length} corretor${l.length > 1 ? 'es' : ''}</span></div>${l.map(x => `<details class="gv"><summary><b>${esc(fdNome(x.u))}</b> · ${x.g.semVis.length} sem visita · ${x.g.faltou.length} não veio · ${x.g.semResp.length} sem resposta</summary>${htmlGv(x.g)}</details>`).join('')}</div>`;
+}
+// v375: na tela inicial da gerência, no dia seguinte: validar o fechamento de ontem de cada anjo, separado por equipe
+function htmlDetFech(p, d){
+  const f = fdAch(p.uid, d), us = p.membros || [];
+  return us.map(u => { const r = f['f_' + u] || {}, c = fdAch(u, d).larg || {}; return `<li><b>${esc(fdNome(u))}</b> · ${r.folga ? 'folga' : `manhã: ${r.pm === 's' ? 'confirmou' : r.pm === 'n' ? 'avisou ausência (' + esc(r.jm || 'sem justificativa') + ')' : 'sem resposta'} · fim do dia: ${r.p === 'n' ? 'não veio' : r.p === 's' ? 'veio' : 'sem resposta'}${r.j ? ' (' + esc(r.j) + ')' : ''}`}${r.div ? ' <b class="fd-mal">não bate com o check-in</b>' : ''}${r.lig !== undefined ? ` · ${r.lig} lig. · ${r.docs}/${r.meta} docs` : ''} · largada ${c.r === 's' ? (fdLigDia(u, d) >= FD_LIG ? 'confirmada, valeu ponto' : 'confirmada, sem 1 bloco (não vale ponto)') : c.r === 'n' ? 'negada pelo corretor' : f['l_' + u] ? 'sem confirmação' : 'não feita'}${r.c ? `<br><small>Feedback: ${esc(r.c)}</small>` : ''}</li>`; }).join('') || '<li class="muted">Sem corretores ligados.</li>';
+}
+function htmlValidarOntem(){
+  if (!souGerente() || souCeo()) return '';
+  const d = mdOntem(), base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo' && (p.membros || []).length);
+  if (!base.length) return '';
+  const eqDe = p => p.equipe || [...anjoEqs(p)][0] || '', grupos = {};
+  base.forEach(p => { const e = eqDe(p); (grupos[e] = grupos[e] || []).push(p); });
+  const pend = base.filter(p => !fdAch(p.uid, d).val).length;
+  const ordem = Object.keys(grupos).sort((a, b) => (a === perfil.equipe ? -1 : b === perfil.equipe ? 1 : eqNome(a).localeCompare(eqNome(b), 'pt-BR')));
+  return `<div class="ach-card ${pend ? '' : 'feito'}"><div class="ach-cab"><b>Validar o checklist dos anjos de ontem</b><span>${dataBR(d)} · ${pend ? pend + ' para validar' : 'tudo validado'}</span></div>
+    ${ordem.map(e => `<div class="vl-eq"><div class="vl-eqn">${esc(e ? eqNome(e) : 'Sem equipe')}</div>${grupos[e].map(p => { const f = fdAch(p.uid, d);
+      return `<details class="gv vl-a"><summary><b>${esc(p.nome)}</b> · ${anjoPtsDia(p, d).total} pts · ${f.fech ? 'fechou às ' + horaCurta(f.fech) : '<span class="fd-mal">não fechou o dia</span>'}${f.val ? ` · <span class="fd-ok">validado por ${esc(f.val.por || 'gerência')}</span>` : ''}</summary><ul>${htmlDetFech(p, d)}</ul>
+        ${!f.val ? `<button class="btn btn-sm" onclick="fdValidar('${p.uid}','${d}')">${f.fech ? 'Validar' : 'Validar mesmo sem fechamento'}</button>` : ''}</details>`; }).join('')}</div>`).join('')}</div>`;
+}
+function htmlAnjoCheckHoje(){
+  if (!souAtivo() || souCeo()) return '';
+  if (souAnjo()) return htmlFechAnjo();
+  if (podeGerir()) { const us = acPessoas0().filter(p => p.papel === 'corretor' && !acTeste(p)).map(p => p.uid); return htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
+  if (perfil.papel === 'corretor') return htmlLargCorretor() + htmlGvCard([uidAtual], 'Seus clientes parados');
+  return '';
+}
+// ---------- ranking dos anjos e validação da gerência ----------
+// v372: quem vê o ranking dos anjos: os anjos, o coordenador da equipe dos anjos (equipe do anjo ou dos corretores dele) e a gerência (todas, ou a equipe do filtro)
+const podeVerRankAnjos = () => souAtivo() && !souCeo() && (souAnjo() || souCoord() || souGerente());
+const anjoEqs = p => new Set([p.equipe, ...(p.membros || []).map(u => ((pessoasRk() || []).find(x => x.uid === u) || {}).equipe)].filter(Boolean));
+function anjosVisiveis(){
+  const base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo');
+  if (souGerente()) return rankEquipe ? base.filter(p => anjoEqs(p).has(rankEquipe)) : base;
+  if (souCoord()) return base.filter(p => anjoEqs(p).has(perfil.equipe || '-'));
+  if (souAnjo()) return base;
+  return [];
+}
+// v380: pontos do checklist dos anjos (ranking só deles). Por corretor: presença cobrada cedo, largada que valeu e fim do dia batendo
+// com o check-in; mais o dia fechado. Só contam depois que a gerência valida o dia. A gerência ajusta os valores.
+const ANJO_PTS_PADRAO = { pres:2, larg:3, fim:2, fech:3, horaPres:10 }; // v384: valores aumentados a pedido do Allan
+const anjoPts = () => ({ ...ANJO_PTS_PADRAO, ...(appCfg.anjoPts || {}) });
+function anjoPtsDia(p, d){
+  const P = anjoPts(), f = fdAch(p.uid, d), us = p.membros || [], o = { pres:0, larg:0, fim:0, fech:0, total:0 };
+  us.forEach(u => { const r = f['f_' + u] || {};
+    if (r.folga || ((r.pm === 's' || (r.pm === 'n' && (r.jm || '').trim().length >= 5)) && r.pmEm && new Date(r.pmEm).getHours() < P.horaPres)) o.pres += P.pres;
+    if (fdLargVale(u, d)) o.larg += P.larg;
+    if (f.fech && (r.folga || (r.p && !r.div))) o.fim += P.fim; });
+  if (f.fech) o.fech = P.fech;
+  o.total = o.pres + o.larg + o.fim + o.fech; return o;
+}
+function linhasRankAnjos(m){
+  return anjosVisiveis().map(p => { const ach = fdRa(p.uid, m).ach || {}, us = p.membros || []; let fech = 0, val = 0, larg = 0, poss = 0;
+    let pts = 0, aval = 0;
+    Object.entries(ach).forEach(([d, o]) => { if (d.slice(0, 7) !== m || !o) return; const t = anjoPtsDia(p, d).total; if (o.val) pts += t; else aval += t; if (!o.fech) return; fech++; if (o.val) val++; us.forEach(u => { poss++; if (fdLargVale(u, d)) larg++; }); });
+    return { p, pts, aval, fech, val, larg, poss, hoje:!!(ach[hojeISO()] || {}).fech };
+  }).sort((a, b) => b.pts - a.pts || b.fech - a.fech || b.larg - a.larg || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
+}
+window.fdDiaRank = 'hoje';
+function htmlFechGerencia(){
+  if (!(souGerente() || souCoord()) || souCeo()) return '';
+  const d = fdDiaRank === 'ontem' ? mdOntem() : hojeISO(), base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk());
+  const anjos = anjosVisiveis();
+  const bt = (k, t) => `<button class="${fdDiaRank === k ? 'on' : ''}" onclick="fdDiaRank='${k}';render()">${t}</button>`;
+  return `<div class="ach-card"><div class="ach-cab"><b>Fechamentos dos anjos</b><div class="fd-sn">${bt('hoje','Hoje')}${bt('ontem','Ontem')}</div></div>${anjos.map(p => { const f = fdAch(p.uid, d), us = p.membros || [];
+    const det = htmlDetFech(p, d);
+    return `<details class="gv"><summary><b>${esc(p.nome)}</b> · ${f.fech ? 'fechou às ' + horaCurta(f.fech) : 'não fechou'}${f.val ? ' · validado' : ''}</summary><ul>${det}</ul>
+      ${souGerente() && f.fech && !f.val ? `<button class="btn btn-sm" onclick="fdValidar('${p.uid}','${d}')">Validar</button>` : ''}</details>`; }).join('') || '<div class="muted">Nenhum anjo cadastrado.</div>'}</div>`;
+}
+window.fdValidar = async (uid, d) => { const m = d.slice(0, 7);
+  try { await gravar(setDoc(doc(db,'ranking_ativ', m + '_' + uid), { ach:{ [d]:{ val:{ em:Date.now(), por:perfil.nome } } }, atualizadoEm:Date.now() }, { merge:true })); toast('Validado'); } catch(e) { toast('Erro: ' + e.message); } };
+// v373: relatório de validação do trabalho dos anjos: os números dos corretores de cada anjo neste mês x mesmo período do mês anterior
+// (no fim do mês vira o mês inteiro). Corretores sem anjo entram como comparação. Só gerência e coordenação.
+const RV_ITENS = [['pres','Dias com check-in'],['lig','Ligações'],['docs','Docs'],['vm','Visitas marcadas'],['vr','Visitas realizadas']];
+function rvPeriodos(){
+  const h = hojeISO(), dia = Number(h.slice(8, 10)), mAt = h.slice(0, 7), mAn = mesAnterior(1), [a, m] = mAn.split('-').map(Number), ult = new Date(a, m, 0).getDate();
+  const fimMes = somaDias(h, 1).slice(0, 7) !== mAt, ate = fimMes ? ult : Math.min(dia, ult), lista = (mm, n) => Array.from({ length:n }, (_, i) => mm + '-' + String(i + 1).padStart(2, '0'));
+  return { mAt, mAn, at:lista(mAt, dia), an:lista(mAn, ate), dia, ate, fimMes };
+}
+function rvSoma(uids, dias, md){
+  const ds = new Set(dias), o = { pres:0, lig:0, docs:0, vm:0, vr:0 };
+  uids.forEach(u => { const ra = rankingAtiv.filter(r => r.uid === u), pres = new Set();
+    ra.forEach(r => { [r.chk || {}, r.pres || {}].forEach(x => Object.keys(x).forEach(d => { if (ds.has(d) && x[d]) pres.add(d); })); Object.entries(r.ligu || {}).forEach(([d, n]) => { if (ds.has(d)) o.lig += Number(n) || 0; }); });
+    o.pres += pres.size; const v = md.get(u) || {}; o.docs += v.docs || 0; o.vm += v.vm || 0; o.vr += v.vr || 0; });
+  return o;
+}
+// v376: novato (menos de 5 dias de check-in no mês anterior) fica fora da comparação, para não inflar o avanço
+const RV_DESDE = '2026-12', RV_MIN_DIAS = 5;
+const rvVeterano = (u, P) => rvSoma([u], P.an, new Map()).pres >= RV_MIN_DIAS;
+const rvVar = (a, b) => !a && !b ? '' : !a ? 'novo' : Math.round((b - a) / a * 100);
+function rvDados(){
+  const P = rvPeriodos(), mdAn = mdValores(P.an), mdAt = mdValores(P.at), base = pessoasRk() || [];
+  const anjos = anjosVisiveis().map(p => { const todos = (p.membros || []).filter(u => (base.find(x => x.uid === u) || {}).status !== 'inativo'), us = todos.filter(u => rvVeterano(u, P));
+    return { nome:p.nome, n:us.length, nov:todos.length - us.length, an:rvSoma(us, P.an, mdAn), at:rvSoma(us, P.at, mdAt) }; }).filter(x => x.n);
+  const comAnjo = new Set(anjosVisiveis().flatMap(p => p.membros || []));
+  const sem = base.filter(p => p.status === 'ativo' && p.papel === 'corretor' && !comAnjo.has(p.uid) && !/\bteste?\b/i.test(p.nome || '') && (souGerente() ? (!rankEquipe || p.equipe === rankEquipe) : p.equipe === perfil.equipe)).map(p => p.uid).filter(u => rvVeterano(u, P));
+  const ctrl = sem.length ? { nome:'Corretores sem anjo (comparação)', n:sem.length, an:rvSoma(sem, P.an, mdAn), at:rvSoma(sem, P.at, mdAt), ctrl:true } : null;
+  return { P, anjos, ctrl };
+}
+function rvVeredito(x){ const sub = RV_ITENS.filter(([k]) => x.at[k] > x.an[k]).length, caiu = RV_ITENS.filter(([k]) => x.at[k] < x.an[k]).length;
+  return sub >= 4 ? ['Avançou', 'bom'] : caiu >= 4 ? ['Caiu', 'ruim'] : sub > caiu ? ['Avançou em parte', 'bom'] : caiu > sub ? ['Caiu em parte', 'ruim'] : ['Estável', '']; }
+// v376: só a gerência e só no último dia do mês (a partir de dezembro: novembro foi o mês de implantação)
+function htmlRelAnjos(){
+  if (!souGerente() || souCeo()) return '';
+  const P0 = rvPeriodos(); if (!P0.fimMes || P0.mAt < RV_DESDE) return '';
+  const { P, anjos, ctrl } = rvDados(), mA = nomeMes(P.mAn).split(' de ')[0].toLowerCase(), mB = nomeMes(P.mAt).split(' de ')[0].toLowerCase();
+  const per = P.fimMes ? `${mB} inteiro x ${mA} inteiro` : `1 a ${P.dia} de ${mB} x 1 a ${P.ate} de ${mA}`;
+  const bloco = x => { const [v, c] = rvVeredito(x); return `<div class="rv-b ${x.ctrl ? 'ctrl' : ''}"><div class="rv-cab"><b>${esc(x.nome)}</b><small>${x.n} corretor${x.n > 1 ? 'es' : ''}${x.nov ? ` · ${x.nov} novato${x.nov > 1 ? 's' : ''} fora da conta` : ''}</small>${x.ctrl ? '' : `<span class="rv-v ${c}">${v}</span>`}</div>
+    <table class="rv-t"><tr><th></th><th>${esc(mA)}</th><th>${esc(mB)}</th><th></th></tr>${RV_ITENS.map(([k, n]) => { const d = rvVar(x.an[k], x.at[k]); return `<tr><td>${n}</td><td>${x.an[k]}</td><td><b>${x.at[k]}</b></td><td class="${d === 'novo' || d > 0 ? 'bom' : d < 0 ? 'ruim' : ''}">${d === '' ? '' : d === 'novo' ? 'novo' : (d > 0 ? '+' : '') + d + '%'}</td></tr>`; }).join('')}</table></div>`; };
+  return `<details class="ach-card rv" ${P.fimMes ? 'open' : ''}><summary class="ach-cab"><b>Relatório de validação dos anjos</b><span>${per}</span></summary>
+    <div class="hint" style="margin:0">Mês fechado, só para a gerência. Soma dos corretores de cada anjo nos dois meses; novatos (menos de ${RV_MIN_DIAS} dias de check-in no mês anterior) ficam fora para não distorcer. Os corretores sem anjo servem de comparação: se os do anjo sobem e esses não, o avanço é do trabalho do anjo.</div>
+    ${anjos.length ? anjos.map(bloco).join('') + (ctrl ? bloco(ctrl) : '') : '<div class="muted">Nenhum anjo com corretores ligados.</div>'}
+    ${anjos.length ? '<button class="btn btn-ghost btn-sm" onclick="rvCopiar()">Copiar para o WhatsApp</button>' : ''}</details>`;
+}
+window.rvCopiar = async () => {
+  const { P, anjos, ctrl } = rvDados(), mA = nomeMes(P.mAn).split(' de ')[0], mB = nomeMes(P.mAt).split(' de ')[0];
+  const l = [`*Relatório dos anjos: ${mB} x ${mA}*`, P.fimMes ? 'Mês inteiro' : `Parcial: 1 a ${P.dia} de ${mB.toLowerCase()} x 1 a ${P.ate} de ${mA.toLowerCase()}`, ''];
+  [...anjos, ...(ctrl ? [ctrl] : [])].forEach(x => { l.push(`*${x.nome}* (${x.n} corretor${x.n > 1 ? 'es' : ''})${x.ctrl ? '' : ': ' + rvVeredito(x)[0]}`);
+    RV_ITENS.forEach(([k, n]) => { const d = rvVar(x.an[k], x.at[k]); l.push(`${n}: ${x.an[k]} → ${x.at[k]}${d === '' ? '' : d === 'novo' ? ' (novo)' : ` (${d > 0 ? '+' : ''}${d}%)`}`); }); l.push(''); });
+  const t = l.join('\n').trim(); try { await navigator.clipboard.writeText(t); toast('Relatório copiado'); } catch(e) { prompt('Copie o texto:', t); }
+};
 function htmlRankAnjos(){
-  const m = mesAtual(), it = anjoItens(), l = linhasRankAnjos(m), semPts = !it.some(x => Number(x.pts));
-  if (!l.length) return vazio('Nenhum anjo ou coordenador cadastrado', 'Quando houver, o ranking aparece aqui.');
-  return `<div class="rka">${l.map((x, i) => `<div class="rka-l ${x.p.uid === uidAtual ? 'me' : ''}"><span class="rka-pos">${i + 1}º</span><span class="rka-n"><b>${esc(x.p.nome)}</b><small>${esc(PAPEIS[x.p.papel] || '')}${x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></span>
-    <span class="rka-c"><b>${x.pts}</b><small>pontos</small></span><span class="rka-c"><b>${x.itens}</b><small>atividades</small></span><span class="rka-c"><b>${x.completos}</b><small>dias completos</small></span><span class="rka-c rka-hj"><b>${x.hoje}/${it.length}</b><small>hoje</small></span></div>`).join('')}</div>
-    ${semPts ? '<div class="hint" style="margin-top:10px">Os pontos de cada atividade ainda não foram definidos: por enquanto a ordem é pelo número de atividades feitas.</div>' : ''}`;
+  const m = mesAtual(), l = linhasRankAnjos(m);
+  if (!l.length) return htmlFechGerencia() + vazio('Nenhum anjo cadastrado', 'Quando houver, o ranking aparece aqui.');
+  return htmlFechGerencia() + htmlRelAnjos() + `<div class="rka">${l.map((x, i) => `<div class="rka-l ${x.p.uid === uidAtual ? 'me' : ''}"><span class="rka-pos">${i + 1}º</span><span class="rka-n"><b>${esc(x.p.nome)}</b><small>${esc(PAPEIS[x.p.papel] || '')}${x.p.equipe ? ' · ' + esc(eqNome(x.p.equipe)) : ''}</small></span>
+    <span class="rka-c"><b>${x.pts}</b><small>pontos${x.aval ? ` · +${x.aval} a validar` : ''}</small></span><span class="rka-c"><b>${x.fech}</b><small>dias fechados</small></span><span class="rka-c"><b>${x.larg}</b><small>largadas que valeram</small></span><span class="rka-c"><b>${x.val}</b><small>validados</small></span><span class="rka-c rka-hj"><b>${x.hoje ? 'sim' : 'não'}</b><small>fechou hoje</small></span></div>`).join('')}</div>`;
 }
 window.abrirAnjoCheckCfg = () => {
-  if (!souGerente() || souCeo()) return;
-  $('achCorpo').innerHTML = `<div class="hint" style="margin:0 0 10px">Na ordem em que devem ser feitas. O anjo ou coordenador só libera a próxima depois de marcar a anterior. Os pontos contam no ranking dos anjos.</div>
-    <div class="ach-ed ach-ed-cab"><small>Atividade</small><small>Pontos</small><span></span></div><div id="achLista">${anjoItens().map(htmlAchLinha).join('')}</div>
-    <button class="link" onclick="document.getElementById('achLista').insertAdjacentHTML('beforeend', htmlAchLinha({}))">+ Adicionar atividade</button>`;
+  if (!souGerente() || souCeo()) return; const P = anjoPts(), c = (k, t, d) => `<div class="ach-ed"><span>${t}<br><small class="muted">${d}</small></span><input class="ach-p" id="apt_${k}" type="number" step="1" min="0" inputmode="numeric" value="${P[k]}" aria-label="${t}"><span></span></div>`;
+  $('achCorpo').innerHTML = `<div class="hint" style="margin:0 0 10px">Pontos do ranking dos anjos (separado do ranking geral). Só contam depois que a gerência valida o dia.</div>
+    ${c('pres', 'Presença cobrada cedo', 'por corretor, respondida até o horário abaixo')}${c('horaPres', 'Horário limite da presença', 'hora cheia, ex.: 10 = até 9h59')}${c('larg', 'Ligação de largada que valeu', 'por corretor: confirmada e com 1 bloco de ligações')}${c('fim', 'Fim do dia batendo com o check-in', 'por corretor')}${c('fech', 'Dia fechado', 'uma vez por dia')}`;
   abrir('achModal');
 };
 window.htmlAchLinha = x => `<div class="ach-ed" data-id="${esc(x.id || '')}"><input class="ach-t" maxlength="120" value="${esc(x.t || '')}" placeholder="Atividade" aria-label="Atividade"><input class="ach-p" type="number" step="1" inputmode="numeric" value="${x.pts ?? 0}" aria-label="Pontos"><button class="icon-btn" onclick="this.parentElement.remove()" aria-label="Tirar atividade" data-ic="x"></button></div>`;
 window.salvarAnjoCheckCfg = async () => {
-  const itens = [...document.querySelectorAll('#achLista .ach-ed')].map((r, i) => ({ id:r.dataset.id || 'a' + Date.now().toString(36) + i, t:r.querySelector('.ach-t').value.trim().slice(0, 120), pts:Math.round(Number(r.querySelector('.ach-p').value) || 0) })).filter(x => x.t);
-  if (!itens.length) { toast('Coloque pelo menos uma atividade'); return; }
-  try { await gravar(setDoc(doc(db,'config','app'), { anjoCheck:{ itens, atualizadoEm:Date.now(), atualizadoPor:perfil.nome } }, { merge:true })); appCfg.anjoCheck = { itens }; fechar('achModal'); toast('Atividades salvas'); render(); }
+  const o = {}; Object.keys(ANJO_PTS_PADRAO).forEach(k => { o[k] = Math.max(0, Math.round(Number($('apt_' + k)?.value) || 0)); }); if (!o.horaPres) o.horaPres = ANJO_PTS_PADRAO.horaPres;
+  try { await gravar(setDoc(doc(db,'config','app'), { anjoPts:{ ...o, atualizadoEm:Date.now(), atualizadoPor:perfil.nome } }, { merge:true })); appCfg.anjoPts = o; fechar('achModal'); toast('Pontos salvos'); render(); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 
@@ -14169,7 +14418,7 @@ function renderExtrato(){ renderPrefNotif();
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
   if ($('metaEscHoje')) { const h = view === 'hoje' ? htmlMetaEscritorio() : ''; if ($('metaEscHoje')._h !== h) { $('metaEscHoje').innerHTML = h; $('metaEscHoje')._h = h; } }
-  if ($('anjoCheckHoje')) { const h = view === 'hoje' ? htmlAnjoCheckHoje() : ''; if ($('anjoCheckHoje')._h !== h) { $('anjoCheckHoje').innerHTML = h; $('anjoCheckHoje')._h = h; } }
+  if ($('anjoCheckHoje') && !(document.activeElement?.matches?.('input,textarea') && $('anjoCheckHoje').contains(document.activeElement))) { const h = view === 'hoje' ? htmlAnjoCheckHoje() : ''; if ($('anjoCheckHoje')._h !== h) { $('anjoCheckHoje').innerHTML = h; $('anjoCheckHoje')._h = h; } }
   if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlBonusMeu() + htmlExtrato(); }
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
