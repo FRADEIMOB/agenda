@@ -7908,7 +7908,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 393;
+const APP_VERSAO = 395;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9314,10 +9314,13 @@ const nomeSimples = s => nomeBase(String(s || '')).replace(/th/g, 't').replace(/
 function uidDaAv(a){ if (a.corretorUid) return a.corretorUid; const bruto = a.corretorNome || a.aba || '';
   const ma = (typeof integ !== 'undefined' && integ && integ.mapaAbas) || {}, mu = ma[bruto] || ma[String(bruto).trim()] || ma[String(a.aba || '').trim()]; if (mu) return mu;
   const n = norm(bruto); if (n.length < 3) return '';
-  const ps = typeof pessoasRk === 'function' ? pessoasRk() : [];
-  let l = ps.filter(p => { const pn = norm(p.nome || ''); return pn === n || pn.startsWith(n + ' ') || n.startsWith(pn + ' ') || pn.split(' ')[0] === n; });
-  if (l.length !== 1) { const p2 = pessoaPorApelido(bruto, ps); if (p2) l = [p2]; }
-  return l.length === 1 ? l[0].uid : ''; }
+  const todos = typeof pessoasRk === 'function' ? pessoasRk() : [];
+  // v394: primeiro só quem está ativo (um Rodrigo ou uma Karol que já saiu não rouba a doc); se não achar, todo mundo
+  for (const ps of [todos.filter(p => p.status === 'ativo'), todos]) {
+    let l = ps.filter(p => { const pn = norm(p.nome || ''); return pn === n || pn.startsWith(n + ' ') || n.startsWith(pn + ' ') || pn.split(' ')[0] === n; });
+    if (l.length !== 1) { const p2 = pessoaPorApelido(bruto, ps); if (p2) l = [p2]; }
+    if (l.length === 1) return l[0].uid; }
+  return ''; }
 // nome da conversa → pessoa: todas as palavras no nome dela; se não achar, apelido no começo do nome (Dani → Danielle, Karol → Karolliny)
 function pessoaPorApelido(bruto, ps){
   const tenta = (f, prefixo) => { const ns = f(bruto).split(' ').filter(w => w.length > 1 && w !== 'sdr'); if (!ns.length) return [];
@@ -10976,8 +10979,10 @@ async function receberCredWa(msgs, src){
     const x = { grupo:'wa:' + norm(m.grupo).slice(0, 80), nome:m.grupo.slice(0, 120), autor:String(m.autor || '').slice(0, 80), numero:'', texto:m.texto.slice(0, 6000), em:m.em, fonte:'whatsapp-web' };
     const id = 'w' + _hashTxt(x.grupo + '|' + x.em + '|' + x.autor + '|' + x.texto.slice(0, 200));
     if (zapCred.some(z => z.id === id)) continue;
-    try { await setDoc(doc(db,'zap_credito',id), x); gravadas++; }
-    catch(e) { zapCred.push({ id, ...x }); local++; } // sem as regras novas: processa só nesta tela
+    // v395: não espera a nuvem confirmar (com a cota do Firebase esgotada a gravação fica presa e a leitura travava).
+    // A mensagem já entra nesta tela; a gravação segue sozinha quando o Firebase liberar
+    zapCred.push({ id, ...x }); local++; gravadas++;
+    setDoc(doc(db,'zap_credito',id), x).catch(e => console.warn('zap_credito', e.code || e.message));
   }
   if (local) { clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 3000); }
   try { src.postMessage({ tipo:'frade-cred-ok', recebidas:ok.length, gravadas, local }, 'https://web.whatsapp.com'); } catch(e) {}
