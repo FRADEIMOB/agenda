@@ -7908,7 +7908,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 395;
+const APP_VERSAO = 397;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8210,6 +8210,8 @@ const ABAS_IGNORADAS_PADRAO = ['HEYTOR','LETICIA','MARCELIA','WALISSON','VINICIU
 const chaveAba = n => norm(String(n || '')).toUpperCase().replace(/\s+/g, ' ').trim();
 const abasIgnoradas = () => new Set((appCfg.abasIgnoradas || ABAS_IGNORADAS_PADRAO).map(chaveAba));
 let avaliacoesTodas = [];
+// v397: dono de cada grupo de crédito pelo nome de quem mais escreve nele (guardado no aparelho)
+const abaAutor = (() => { try { return JSON.parse(localStorage.getItem('abaAutor') || '{}') || {}; } catch(e) { return {}; } })();
 // v393: docs dos grupos de crédito que o carteiro ainda não conseguiu gravar (ficam neste aparelho até ele conseguir)
 const avLocal = new Map();
 try { const g = JSON.parse(localStorage.getItem('avLocal') || '{}'); if (g.mes === new Date().toISOString().slice(0, 7)) (g.l || []).forEach(x => avLocal.set(x.id, x)); } catch(e) {}
@@ -9320,12 +9322,15 @@ function uidDaAv(a){ if (a.corretorUid) return a.corretorUid; const bruto = a.co
     let l = ps.filter(p => { const pn = norm(p.nome || ''); return pn === n || pn.startsWith(n + ' ') || n.startsWith(pn + ' ') || pn.split(' ')[0] === n; });
     if (l.length !== 1) { const p2 = pessoaPorApelido(bruto, ps); if (p2) l = [p2]; }
     if (l.length === 1) return l[0].uid; }
+  // v397: nome da aba não bateu com ninguém (ou bateu com dois): tenta pelo nome de quem mais escreve no grupo
+  const au = abaAutor[String(a.aba || bruto).trim().toUpperCase()];
+  if (au && !a._porAutor) { const ativos = todos.filter(p => p.status === 'ativo'); const p = pessoaPorApelido(au, ativos) || pessoaPorApelido(au, todos); if (p) return p.uid; }
   return ''; }
 // nome da conversa → pessoa: todas as palavras no nome dela; se não achar, apelido no começo do nome (Dani → Danielle, Karol → Karolliny)
 function pessoaPorApelido(bruto, ps){
   const tenta = (f, prefixo) => { const ns = f(bruto).split(' ').filter(w => w.length > 1 && w !== 'sdr'); if (!ns.length) return [];
     return ps.filter(p => { const t = f(p.nome).split(' '); return ns.every(w => prefixo ? w.length >= 4 && t.some(x => x.startsWith(w)) : t.includes(w)); }); };
-  for (const [f, pre] of [[nomeBase, false], [nomeSimples, false], [nomeBase, true]]) { const c = tenta(f, pre); if (c.length === 1) return c[0]; if (c.length > 1) return null; }
+  for (const [f, pre] of [[nomeBase, false], [nomeSimples, false], [nomeBase, true], [nomeSimples, true]]) { /* v397: Dany -> Danielle */ const c = tenta(f, pre); if (c.length === 1) return c[0]; if (c.length > 1) return null; }
   return null;
 }
 window.diaDocAv = diaDocAv;
@@ -10973,7 +10978,7 @@ window.abrirWaLeitura = k => {
 };
 const _hashTxt = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) >>> 0; return h.toString(36); };
 async function receberCredWa(msgs, src){
-  const ok = msgs.filter(m => m && typeof m.grupo === 'string' && typeof m.texto === 'string' && m.em > 0 && /cr[eé]dito/i.test(m.grupo)).slice(0, 800);
+  const ok = msgs.filter(m => m && typeof m.grupo === 'string' && typeof m.texto === 'string' && m.em > 0 && /cr[eé]dito|prime\s*[\/|-]\s*frade|frade\s*[\/|-]\s*prime/i.test(m.grupo)).slice(0, 800); // v396: grupo novo sem a palavra "crédito" (ex.: "Alberto - PRIME/FRADE") também conta
   let gravadas = 0, local = 0;
   for (const m of ok) {
     const x = { grupo:'wa:' + norm(m.grupo).slice(0, 80), nome:m.grupo.slice(0, 120), autor:String(m.autor || '').slice(0, 80), numero:'', texto:m.texto.slice(0, 6000), em:m.em, fonte:'whatsapp-web' };
@@ -11732,8 +11737,12 @@ async function processarZapCredito(){
       const g = porG.get(m.grupo) || porG.set(m.grupo, { nome:m.nome || '', linhas:[] }).get(m.grupo); if (m.nome) g.nome = m.nome;
       const d = new Date(m.em || Date.now()), prime = /prime|david soares/i.test(m.autor || '') || /retorno da an[aá]lise/i.test(m.texto || '') || (m.numero && numsPrime.has(m.numero));
       const autor = ((prime ? 'PRIME ' : '') + String(m.autor || m.numero || 'Contato')).replace(/[:\n]/g, ' ').slice(0, 55);
+      if (!prime && m.autor && !/gerente|stefanne|allan/i.test(m.autor)) { g.autores = g.autores || {}; g.autores[m.autor] = (g.autores[m.autor] || 0) + 1; }
       g.linhas.push(`${p2(d.getDate())}/${p2(d.getMonth() + 1)}/${d.getFullYear()} ${p2(d.getHours())}:${p2(d.getMinutes())} - ${autor}: ${String(m.texto || '').replace(/\r/g, '')}`);
     });
+    // v397: quem mais escreve no grupo (fora a Prime e a gerência) é o dono dele. Resolve nome curto ou repetido (Matheus, Dany, Susy)
+    porG.forEach(g => { const top = Object.entries(g.autores || {}).sort((x, y) => y[1] - x[1])[0]; if (top && g.nome) abaAutor[String(PC.abaDoNome(g.nome)).trim().toUpperCase()] = top[0]; });
+    try { localStorage.setItem('abaAutor', JSON.stringify(abaAutor)); } catch(e) {}
     const grupos = [...porG.values()].map(g => ({ nome:g.nome, texto:g.linhas.join('\n') })).filter(g => g.nome && !['SDR','RESERVAS','APRESENTACAO','FRADE','WHATSAPP'].includes(PC.abaDoNome(g.nome)));
     if (!grupos.length) return;
     // junta com o que o cliente já tinha (fichas de outros meses, status final, primeira data): o robô só vê de novembro em diante
@@ -11749,10 +11758,14 @@ async function processarZapCredito(){
     window._icwDonos = [];
     IW.info = 'impWhatsInfo'; IW.bt = 'btnImpWhats';
     prepararImpWhats(lista, '');
+    const restrAntes = (window._impRestrPlan || []).slice(); // v396: fichas de clientes que já estão na planilha (o importar apaga a lista)
     // v392: só marca como feito se o carteiro gravou; se falhou (ex.: cota do Firebase), tenta de novo em 5 minutos
     if (await importarDocsWhats(true)) { window._zcUlt = assin; avLocalLimpa(); }
     else { // v393: o carteiro não gravou (ex.: cota do Firebase). As docs entram direto nesta tela e vão para o ranking e para a meta do dia
       lista.forEach(n => avLocal.set(n.id, { ...(porId.get(n.id) || {}), ...n, origem:'whatsapp', cpfNorm:soDig(n.cpf).length === 11 ? soDig(n.cpf) : '', telNorm:chaveTel(n.telefone || ''), _local:true, atualizadoEm:Date.now() }));
+      // v396: cliente que já está na planilha também ganha a ficha mandada na conversa (conta doc no dia, para quem mandou)
+      restrAntes.forEach(it => { const o = avaliacoesTodas.find(x => x.id === it.id && x.origem !== 'whatsapp'); if (!o) return;
+        avLocal.set(it.id, { ...o, ...(it.envios ? { envios:it.envios } : {}), ...(it.restricoes ? { restricoes:it.restricoes, restricoesEm:it.restricoesEm || '' } : {}), _local:true }); });
       avLocalGuarda(); filtrarAvaliacoes(); render(); setTimeout(() => { try { sincMetasDia(true); } catch(e) {} }, 1500);
       clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 5 * 60e3); }
   } catch(e) { console.warn('grupos de crédito', e.message); }
