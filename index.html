@@ -7908,7 +7908,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 392;
+const APP_VERSAO = 393;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8210,7 +8210,15 @@ const ABAS_IGNORADAS_PADRAO = ['HEYTOR','LETICIA','MARCELIA','WALISSON','VINICIU
 const chaveAba = n => norm(String(n || '')).toUpperCase().replace(/\s+/g, ' ').trim();
 const abasIgnoradas = () => new Set((appCfg.abasIgnoradas || ABAS_IGNORADAS_PADRAO).map(chaveAba));
 let avaliacoesTodas = [];
+// v393: docs dos grupos de crédito que o carteiro ainda não conseguiu gravar (ficam neste aparelho até ele conseguir)
+const avLocal = new Map();
+try { const g = JSON.parse(localStorage.getItem('avLocal') || '{}'); if (g.mes === new Date().toISOString().slice(0, 7)) (g.l || []).forEach(x => avLocal.set(x.id, x)); } catch(e) {}
+function avLocalGuarda(){ try { localStorage.setItem('avLocal', JSON.stringify({ mes:new Date().toISOString().slice(0, 7), l:[...avLocal.values()] })); } catch(e) {} }
+function avLocalLimpa(){ if (!avLocal.size) return; avLocal.clear(); try { localStorage.removeItem('avLocal'); } catch(e) {} }
 function filtrarAvaliacoes(){
+  if (avLocal.size && souDono()) { const m = new Map(avaliacoesTodas.map(a => [a.id, a]));
+    avLocal.forEach((v, id) => { const o = m.get(id); if (!o || (v.envios || []).length > (o.envios || []).length || (o.status || '') !== (v.status || '') && !['', 'AVALIAÇÃO', 'VERIFICAR CPF'].includes(v.status || '')) m.set(id, { ...(o || {}), ...v }); });
+    avaliacoesTodas = [...m.values()]; }
   const ig = abasIgnoradas(), naPlan = new Set();
   // doc que veio do WhatsApp some sozinho quando a administração lança o mesmo cliente na planilha (não conta duas vezes)
   avaliacoesTodas.forEach(a => { if (a.origem !== 'whatsapp') { if (a.cpfNorm) naPlan.add('c' + a.cpfNorm); if (a.telNorm) naPlan.add('t' + a.telNorm); } });
@@ -11737,7 +11745,11 @@ async function processarZapCredito(){
     IW.info = 'impWhatsInfo'; IW.bt = 'btnImpWhats';
     prepararImpWhats(lista, '');
     // v392: só marca como feito se o carteiro gravou; se falhou (ex.: cota do Firebase), tenta de novo em 5 minutos
-    if (await importarDocsWhats(true)) window._zcUlt = assin; else { clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 5 * 60e3); }
+    if (await importarDocsWhats(true)) { window._zcUlt = assin; avLocalLimpa(); }
+    else { // v393: o carteiro não gravou (ex.: cota do Firebase). As docs entram direto nesta tela e vão para o ranking e para a meta do dia
+      lista.forEach(n => avLocal.set(n.id, { ...(porId.get(n.id) || {}), ...n, origem:'whatsapp', cpfNorm:soDig(n.cpf).length === 11 ? soDig(n.cpf) : '', telNorm:chaveTel(n.telefone || ''), _local:true, atualizadoEm:Date.now() }));
+      avLocalGuarda(); filtrarAvaliacoes(); render(); setTimeout(() => { try { sincMetasDia(true); } catch(e) {} }, 1500);
+      clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 5 * 60e3); }
   } catch(e) { console.warn('grupos de crédito', e.message); }
   finally { window._zcRodando = false; }
 }
@@ -18217,7 +18229,7 @@ async function sincMetasDia(forcar){
       const meses = {}; dias.forEach(d => { (meses[d.slice(0, 7)] = meses[d.slice(0, 7)] || []).push(d); });
       Object.entries(meses).forEach(([m, ds]) => {
         const id = m + '_' + p.uid, ra = rankingAtiv.find(r => r.id === id) || {}, up = {};
-        [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => ds.filter(d => k === 'docs' || curtos.has(d)).forEach(d => { const val = ((porUid.get(p.uid) || {})[d] || {})[k] || 0, ant = (ra[c] || {})[d] || 0; if (val !== ant) { up[c] = up[c] || {}; up[c][d] = val; } }));
+        [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => ds.filter(d => k === 'docs' || curtos.has(d)).forEach(d => { const val = ((porUid.get(p.uid) || {})[d] || {})[k] || 0, ant = (ra[c] || {})[d] || 0; if (val !== ant && !(k === 'docs' && val < ant && !souDono())) { /* v393: só o gestor (que tem as docs dos grupos) pode baixar o número de docs */ up[c] = up[c] || {}; up[c][d] = val; } }));
         if (Object.keys(up).length && n < 400) { b.set(doc(db,'ranking_ativ', id), { mes:m, uid:p.uid, nome:p.nome || '', equipe:p.equipe || '', ...up, atualizadoEm:Date.now() }, { merge:true }); n++; }
       });
     });
