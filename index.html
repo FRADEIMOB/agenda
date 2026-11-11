@@ -1936,6 +1936,7 @@ html[data-theme="dark"] .an-alerta{background:#2a1a0c;border-color:#7c2d12;color
 .ci-card .ci-qr{flex-basis:100%;text-align:left;font-size:12.5px}
 .ci-leg{font-size:11.5px;color:var(--muted);margin-top:10px}
 .ci-locbox{display:grid;gap:8px;padding:12px;border:1px dashed var(--border);border-radius:12px;margin-bottom:12px;font-size:13.5px}.ci-ok{color:var(--ok);font-weight:600}
+.ci-tt{width:100%;font-size:13px;border-collapse:collapse}.ci-tt th{font-size:11.5px;color:var(--muted);font-weight:600}.ci-tt td,.ci-tt th{padding:6px 8px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--border)}.ci-tt td:first-child{white-space:normal}
 .ci-sairam,.ci-faltam{font-size:12.5px;color:var(--muted);margin-top:8px}.ci-faltam{color:var(--danger)}
 .ci-cfg{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px}.ci-cfg>label{display:grid;gap:4px;font-size:12.5px;color:var(--muted)}.ci-cfg input[type=time]{width:130px}
 .ci-dias{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}.ci-dias label{display:flex;align-items:center;gap:4px}.ci-dias input{width:auto}
@@ -7908,7 +7909,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 397;
+const APP_VERSAO = 398;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13431,7 +13432,25 @@ function htmlCiGestao(){
     ${ext.length ? `<div class="rep-sec" style="margin:10px 0 6px">Em atendimento externo</div>${ext.map(c => `<div class="ci-l"><span class="ci-pos">🚗</span><b>${esc(c.nome)}</b><span class="ci-h">desde ${hm(ciDesde(c))} · ${esc(ciOnde(c))}${mapa(c.externoAgora?.local || c.local)}</span></div>`).join('')}` : ''}
     ${sairam.length ? `<div class="ci-sairam">Já encerraram o dia: ${sairam.map(c => `${esc(primeiro(c.nome))} (${hm(c.saida)})`).join(', ')}</div>` : ''}
     ${faltam.length ? `<div class="ci-faltam">Ainda sem presença: ${faltam.map(p => esc(primeiro(p.nome))).join(', ')}</div>` : ''}
-    <div class="ci-leg">📷 código da recepção · 📍 localização confirmada · ✋ sem localização · 🚗 começou fora</div></div>`;
+    <div class="ci-leg">📷 código da recepção · 📍 localização confirmada · ✋ sem localização · 🚗 começou fora</div></div>${htmlCiTurnos()}`;
+}
+// v398: presença de hoje por equipe, com os turnos (manhã, tarde, externo e saída). Só a gerência; cada equipe numa aba
+window.ciEq = null;
+function htmlCiTurnos(){
+  if (!souGerente()) return '';
+  const eqs = listaEquipes(); if (window.ciEq === null) window.ciEq = perfil?.equipe && eqs.some(e => e.id === perfil.equipe) ? perfil.equipe : '';
+  const eqDe = c => c.equipe || perfisTodos.find(p => p.uid === c.uid)?.equipe || '';
+  const pe = window.ciEq, l = checkinsHoje.filter(c => !pe || eqDe(c) === pe).sort((a, b) => (ciChegada(a) || a.entrada || 0) - (ciChegada(b) || b.entrada || 0));
+  const marc = presencas[ciHoje()]?.marcados || {};
+  const sem = pessoasPresenca().filter(p => (!pe || p.equipe === pe) && p.uid !== uidAtual && !checkinsHoje.some(c => c.uid === p.uid));
+  const abas = [['', 'Todas'], ...eqs.map(e => [e.id, eqNome(e.id)])].map(([k, nm]) => { const n = checkinsHoje.filter(c => !k || eqDe(c) === k).length;
+    return `<button role="tab" aria-selected="${pe === k}" class="${pe === k ? 'on' : ''}" onclick="ciEq='${k}';render()">${esc(nm)}<i>${n}</i></button>`; }).join('');
+  const manha = c => { const h = ciChegada(c); return h ? hm(h) : (c.via === 'externo' ? 'externo' : '—'); };
+  const linha = c => `<tr><td><b>${esc(c.nome || '?')}</b></td><td>${manha(c)}${c.via === 'externo' ? ' 🚗' : ''}</td><td>${c.tarde ? hm(c.tarde) : '—'}</td><td>${(c.externos || []).length ? c.externos.length + 'x' : (ciFora(c) ? 'agora' : '—')}</td><td>${c.saida ? hm(c.saida) : '—'}</td></tr>`;
+  return `<div class="ci-g ci-turnos"><div class="rep-sec" style="margin:0 0 6px">Presença de hoje por equipe</div>
+    <div class="seg vend-eq" role="tablist" aria-label="Filtrar por equipe" style="margin-bottom:8px">${abas}</div>
+    ${l.length ? `<div class="tbl-wrap"><table class="ci-tt"><thead><tr><th>Nome</th><th>Manhã</th><th>Tarde</th><th>Externo</th><th>Saiu</th></tr></thead><tbody>${l.map(linha).join('')}</tbody></table></div>` : '<div class="muted" style="font-size:13px">Ninguém dessa equipe marcou presença hoje.</div>'}
+    ${sem.length ? `<div class="ci-faltam">Sem check-in hoje: ${sem.map(p => esc(primeiro(p.nome)) + (marc[p.uid]?.status === 'folga' ? ' (folga)' : marc[p.uid]?.status === 'falta' ? ' (faltou)' : '')).join(', ')}</div>` : ''}</div>`;
 }
 // ---- câmera (lê o código da recepção) ----
 let _ciStream = null, _ciLoop = 0;
