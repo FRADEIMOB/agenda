@@ -7908,7 +7908,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 391;
+const APP_VERSAO = 392;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10699,8 +10699,9 @@ window.importarDocsWhats = async (auto) => {
     }
     if (auto === true) { if (tot || totR) toast(`Grupos de crédito: ${tot + totR} cliente${tot + totR === 1 ? '' : 's'} atualizado${tot + totR === 1 ? '' : 's'} ✓`); } else toast(`Pronto ✓ ${tot} docs do WhatsApp no app${totR ? ` e ${totR} restrições` : ''}`); $(IW.info).textContent = `✓ ${tot} docs importados${totR ? ` · ${totR} clientes da planilha com o resumo das restrições` : ''}. Os pontos de documentação entram no ranking em seguida.`; btn.classList.add('hide'); impWhats = [];
     [8e3, 30e3].forEach(ms => setTimeout(() => { try { sincMetasDia(true); } catch(e) {} }, ms));
+    btn.disabled = false; return true;
   } catch(e) { if (auto === true) console.warn('docs do WhatsApp', e.message); else toast('Erro: ' + e.message); }
-  btn.disabled = false;
+  btn.disabled = false; return false;
 };
 window.importarLeadsAgora = async () => {
   const l = impLeads?.prontas || []; if (!l.length) return;
@@ -11732,10 +11733,11 @@ async function processarZapCredito(){
       .filter(n => { const o = porId.get(n.id); if (!o) return true; const k = x => JSON.stringify([x.data, x.aba, x.status, x.aprovadoEm, (x.envios || []).slice().sort(), x.restricoes || '']); return k(n) !== k(o); });
     const assin = JSON.stringify(lista.map(x => [x.id, x.status, (x.envios || []).length, x.restricoes ? 1 : 0]));
     if (!lista.length || assin === window._zcUlt) return;
-    window._zcUlt = assin; window._icwDonos = [];
+    window._icwDonos = [];
     IW.info = 'impWhatsInfo'; IW.bt = 'btnImpWhats';
     prepararImpWhats(lista, '');
-    await importarDocsWhats(true);
+    // v392: só marca como feito se o carteiro gravou; se falhou (ex.: cota do Firebase), tenta de novo em 5 minutos
+    if (await importarDocsWhats(true)) window._zcUlt = assin; else { clearTimeout(_zcT); _zcT = setTimeout(processarZapCredito, 5 * 60e3); }
   } catch(e) { console.warn('grupos de crédito', e.message); }
   finally { window._zcRodando = false; }
 }
