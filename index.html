@@ -2416,10 +2416,13 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ach-l li span{display:grid;gap:1px}.ach-l li small{font-size:11.5px;color:var(--text2)}.ach-l li.ok span{color:var(--text2)}.ach-l li em{font-style:normal;font-size:12px;font-weight:700;color:var(--text2)}
 .ach-bt{width:28px;height:28px;border-radius:9px;border:2px solid color-mix(in srgb,var(--text) 25%,transparent);background:var(--card);color:#fff;font-weight:800;font-size:15px;cursor:pointer;display:grid;place-items:center;padding:0}
 .ach-l li.vez .ach-bt{border-color:var(--accent)}.ach-l li.ok .ach-bt{background:var(--ok);border-color:var(--ok)}.ach-bt:disabled{cursor:default}
-.av-res{display:flex;flex-wrap:wrap;gap:8px}.av-res span{display:grid;justify-items:center;min-width:76px;padding:8px 10px;border-radius:12px;background:var(--bg2,var(--accent-soft));font-size:12px;color:var(--text2);font-weight:600}.av-res b{font-size:20px;color:var(--text)}.av-res .ok b{color:var(--ok)}.av-res .mal b{color:var(--danger)}.av-res .esp b{color:var(--warn)}
-.av-anjo{border-top:1px solid var(--border);padding-top:8px}.av-anjo summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}.av-anjo summary span{font-size:12.5px;color:var(--text2)}.av-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:8px}
-.av-l{border:1px solid var(--border);border-left:4px solid var(--border);border-radius:12px;padding:8px 10px;display:grid;gap:3px}.av-l.ok{border-left-color:var(--ok)}.av-l.mal{border-left-color:var(--danger)}.av-l.esp{border-left-color:var(--warn)}.av-l.alerta{background:color-mix(in srgb,var(--danger) 8%,transparent);border-left-color:var(--danger)}
-.av-t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.av-t b{font-size:14px}.av-ck{font-size:11px;font-weight:700;padding:1px 7px;border-radius:8px;white-space:nowrap}.av-ck.sim{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}.av-ck.nao{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}.av-st{font-size:13px;font-weight:600}.av-l.mal .av-st,.av-l.alerta .av-st{color:var(--danger)}.av-num{font-size:12px;color:var(--text2)}.av-num .bom{color:var(--ok);font-weight:700}
+details.ach-dobra>summary{cursor:pointer;list-style:none}details.ach-dobra>summary::-webkit-details-marker{display:none}details.ach-dobra>summary b::before{content:'▸';display:inline-block;margin-right:8px;color:var(--text2);transition:transform .15s}details.ach-dobra[open]>summary b::before{transform:rotate(90deg)}details.ach-dobra:not([open]){gap:0}
+.dobra-barra{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}.dia-sel{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--text2);font-weight:600}.dia-sel input{font:inherit;font-size:13px;padding:4px 8px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text)}
+.av-filtro{justify-self:start;font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid color-mix(in srgb,var(--danger) 35%,var(--border));background:transparent;color:var(--danger);cursor:pointer}.av-filtro.on{background:var(--accent-soft);border-color:var(--border);color:var(--text2)}
+.av-anjo{border-top:1px solid var(--border);padding-top:8px}.av-anjo summary{cursor:pointer;display:flex;gap:8px;align-items:center;list-style:none}.av-anjo summary::-webkit-details-marker{display:none}.av-anjo summary b{font-size:14.5px}.av-anjo summary small{margin-left:auto;font-size:12px;color:var(--text2)}
+.av-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap}.av-tag.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}.av-tag.mal{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
+.av-lista{list-style:none;margin:6px 0 0;padding:0;display:grid}.av-l{display:flex;gap:4px 10px;align-items:baseline;flex-wrap:wrap;padding:6px 0 6px 10px;border-left:3px solid var(--ok);font-size:13px}.av-l+.av-l{border-top:1px dashed var(--border)}.av-l b{font-weight:600;min-width:120px}.av-l span{color:var(--text2)}.av-l small{margin-left:auto;color:var(--text2);font-size:12px}
+.av-l.nao{border-left-color:var(--danger)}.av-l.nao span,.av-l.atn span{color:var(--danger);font-weight:600}.av-l.atn{border-left-color:var(--danger)}.av-l.sem{border-left-color:var(--warn)}.av-l.sem span{color:var(--warn);font-weight:600}
 .fd-lista{display:grid;gap:10px}.fd-l{border:1px solid var(--border);border-radius:14px;padding:10px 12px;display:grid;gap:8px}.fd-l.ok{border-color:color-mix(in srgb,var(--ok) 45%,var(--border))}
 .fd-top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.fd-top b{font-size:15px}.fd-sis{margin-left:auto;font-size:12px;color:var(--text2)}.fd-tag{font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;background:var(--accent-soft);color:var(--accent)}
 .fd-num{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px}.fd-num small{color:var(--text2)}.fd-num .bom b{color:var(--ok)}.fd-num .ruim b{color:var(--danger)}
@@ -14147,8 +14150,8 @@ window.fdConfLarg = async r => { try { await fdGrava(hojeISO(), { larg:{ r, em:D
 function htmlGvCard(uids, titulo){
   const l = uids.map(u => ({ u, g:gvItens(u) })).filter(x => x.g.n).sort((a, b) => b.g.n - a.g.n); if (!l.length) return '';
   const tot = l.reduce((a, x) => a + x.g.n, 0);
-  if (uids.length === 1) return `<div class="ach-card gv-card"><div class="ach-cab"><b>${titulo}</b><span>${tot} pendência${tot > 1 ? 's' : ''}</span></div>${htmlGv(l[0].g, false, l[0].u === uidAtual)}</div>`;
-  return `<div class="ach-card gv-card"><div class="ach-cab"><b>${titulo}</b><span>${tot} pendência${tot > 1 ? 's' : ''} em ${l.length} corretor${l.length > 1 ? 'es' : ''}</span></div>${l.map(x => `<details class="gv"><summary><b>${esc(fdNome(x.u))}</b> · ${x.g.semVis.length} sem visita · ${x.g.faltou.length} não veio · ${x.g.semResp.length} sem resposta</summary>${htmlGv(x.g)}</details>`).join('')}</div>`;
+  if (uids.length === 1) return `<div class="ach-card gv-card"><div class="ach-cab"><b>${titulo}</b><span>${tot} pendência${tot > 1 ? 's' : ''}</span></div>${htmlGv(l[0].g, false, l[0].u === uidAtual)}</div>`; // corretor: continua aberto
+  return cartaoDobra('parados', false, 'gv-card', titulo, `${tot} pendência${tot > 1 ? 's' : ''} em ${l.length} corretor${l.length > 1 ? 'es' : ''}`, l.map(x => `<details class="gv"><summary><b>${esc(fdNome(x.u))}</b> · ${x.g.semVis.length} sem visita · ${x.g.faltou.length} não veio · ${x.g.semResp.length} sem resposta</summary>${htmlGv(x.g)}</details>`).join('')); // v400: recolhe
 }
 // v375: na tela inicial da gerência, no dia seguinte: validar o fechamento de ontem de cada anjo, separado por equipe
 function htmlDetFech(p, d){
@@ -14157,17 +14160,17 @@ function htmlDetFech(p, d){
 }
 function htmlValidarOntem(){
   if (!souGerente() || souCeo()) return '';
-  const d = mdOntem(); if (d < fdInicio()) return '';
+  const ont = mdOntem(), d = window.vlDia && window.vlDia >= diaMinFd() && window.vlDia <= ont ? window.vlDia : ont; if (d < fdInicio()) return ''; // v400: dia escolhido no filtro
   const eqDe = p => p.equipe || [...anjoEqs(p)][0] || '', grupos = {};
   const base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo' && (p.membros || []).length && naEquipeGer(eqDe(p)));
   if (!base.length) return '';
   base.forEach(p => { const e = eqDe(p); (grupos[e] = grupos[e] || []).push(p); });
   const pend = base.filter(p => !fdAch(p.uid, d).val).length;
   const ordem = Object.keys(grupos).sort((a, b) => (a === perfil.equipe ? -1 : b === perfil.equipe ? 1 : eqNome(a).localeCompare(eqNome(b), 'pt-BR')));
-  return `<div class="ach-card ${pend ? '' : 'feito'}"><div class="ach-cab"><b>Validar o checklist dos anjos de ontem</b><span>${dataBR(d)} · ${pend ? pend + ' para validar' : 'tudo validado'}</span></div>
-    ${ordem.map(e => `<div class="vl-eq"><div class="vl-eqn">${esc(e ? eqNome(e) : 'Sem equipe')}</div>${grupos[e].map(p => { const f = fdAch(p.uid, d);
+  return cartaoDobra('validarAnjos', false, pend ? '' : 'feito', d === ont ? 'Validar o checklist dos anjos de ontem' : 'Validar o checklist dos anjos', `${dataBR(d)} · ${pend ? pend + ' para validar' : 'tudo validado'}`,
+    `<div class="dobra-barra">${seletorDia('vlDiaVer', d, ont)}</div>${ordem.map(e => `<div class="vl-eq"><div class="vl-eqn">${esc(e ? eqNome(e) : 'Sem equipe')}</div>${grupos[e].map(p => { const f = fdAch(p.uid, d);
       return `<details class="gv vl-a"><summary><b>${esc(p.nome)}</b> · ${anjoPtsDia(p, d).total} pts · ${f.fech ? 'fechou às ' + horaCurta(f.fech) : '<span class="fd-mal">não fechou o dia</span>'}${f.val ? ` · <span class="fd-ok">validado por ${esc(f.val.por || 'gerência')}</span>` : ''}</summary><ul>${htmlDetFech(p, d)}</ul>
-        ${!f.val ? `<button class="btn btn-sm" onclick="fdValidar('${p.uid}','${d}')">${f.fech ? 'Validar' : 'Validar mesmo sem fechamento'}</button>` : ''}</details>`; }).join('')}</div>`).join('')}</div>`;
+        ${!f.val ? `<button class="btn btn-sm" onclick="fdValidar('${p.uid}','${d}')">${f.fech ? 'Validar' : 'Validar mesmo sem fechamento'}</button>` : ''}</details>`; }).join('')}</div>`).join('')}`);
 }
 // v400: topo do Hoje. Anjo: o checklist dele. Coordenador e gerência: o checklist dos anjos ao vivo (quem vem, quem não vem, check-in)
 function htmlAnjoTopo(){
@@ -14176,35 +14179,49 @@ function htmlAnjoTopo(){
   if (souCoord() || souGerente()) return htmlAnjosAoVivo();
   return '';
 }
+// v400: cartões do Hoje que recolhem (o app lembra se ficou aberto) e escolha do dia
+window._dobra = window._dobra || {}; try { Object.assign(window._dobra, JSON.parse(localStorage.getItem('dobraHoje') || '{}')); } catch(e) {}
+window.dobraMarca = (k, v) => { if (window._dobra[k] === v) return; window._dobra[k] = v; try { localStorage.setItem('dobraHoje', JSON.stringify(window._dobra)); } catch(e) {} };
+const dobraAberta = (k, padrao) => k in window._dobra ? !!window._dobra[k] : padrao;
+function cartaoDobra(k, padrao, cls, titulo, resumo, corpo){
+  return `<details class="ach-card ach-dobra ${cls || ''}"${dobraAberta(k, padrao) ? ' open' : ''} ontoggle="dobraMarca('${k}',this.open)"><summary class="ach-cab"><b>${titulo}</b><span>${resumo}</span></summary>${corpo}</details>`;
+}
+const diaMinFd = () => { const a = fdInicio(), b = mesAnterior(1) + '-01'; return a > b ? a : b; };
+const seletorDia = (fn, d, max) => `<label class="dia-sel">Dia <input type="date" value="${d}" min="${diaMinFd()}" max="${max}" onchange="${fn}(this.value)"></label>`;
+window.avDiaVer = d => { window.avDia = d && d < hojeISO() ? d : ''; render(); };
+window.vlDiaVer = d => { window.vlDia = d || ''; render(); };
+// v400: enxuto. Quem precisa de atenção primeiro; anjo com tudo certo fica fechado. Um filtro só: "pedem atenção"
+const AV_ORD = ['atn','sem','nao','vem'];
+window.avFiltrar = () => { window.avFiltro = !window.avFiltro; render(); };
 function htmlAnjosAoVivo(){
   const anjos = anjosVisiveis().filter(a => a.status === 'ativo' && (a.membros || []).length);
   if (!anjos.length) return '';
-  const h = hojeISO(), md = mdValores([h]), agora = new Date(), sab = agora.getDay() === 6, hora = agora.getHours() >= (sab ? 12 : FD_HORA);
-  const ck = new Map((checkinsHoje || []).map(c => [c.uid, c])), tot = { vem:0, nao:0, sem:0, chk:0, n:0, alerta:0 };
-  const blocos = anjos.map(a => {
-    const f = fdAch(a.uid, h), us = a.membros; let vem = 0, nao = 0, sem = 0, chk = 0;
-    const linhas = us.map(u => {
-      const n = fdNums(u, h, md), r = f['f_' + u] || {}, c = ck.get(u), lg = fdAch(u, h).larg || {}, tem = n.pres || !!c, hc = (c && c.entrada) || n.chk;
-      if (tem) chk++;
-      let st, cl;
-      if (n.folga) { st = 'folga'; cl = 'ok'; vem++; }
-      else if (r.pm === 's') { st = 'confirmou que vem'; cl = tem ? 'ok' : 'esp'; vem++; }
-      else if (r.pm === 'n') { st = 'não vem' + (r.jm ? ' · ' + esc(r.jm) : ''); cl = 'mal'; nao++; }
-      else if (tem) { st = 'chegou, anjo não cobrou'; cl = 'esp'; sem++; }
-      else { st = 'anjo ainda não cobrou'; cl = 'mal'; sem++; }
-      const alerta = !n.folga && r.pm === 's' && !tem && agora.getHours() >= 10; if (alerta) tot.alerta++;
-      const ckTxt = n.folga ? '' : tem ? `<span class="av-ck sim">${c && ciFora(c) ? 'externo' : 'check-in'}${hc ? ' ' + horaCurta(hc) : ''}</span>` : '<span class="av-ck nao">sem check-in</span>';
-      const num = n.folga || r.pm === 'n' ? '' : `<small class="av-num"><span class="${n.lig >= FD_LIG ? 'bom' : ''}">${n.lig} lig.</span> · <span class="${n.docs >= n.metaDocs ? 'bom' : ''}">${n.docs}/${n.metaDocs} docs</span>${lg.r === 's' ? ' · largada ' + (n.lig >= FD_LIG ? 'valeu' : 'feita') : ''}${r.p ? ' · fim: ' + (r.p === 's' ? 'veio' : 'não veio') : ''}</small>`;
-      return `<div class="av-l ${cl}${alerta ? ' alerta' : ''}"><div class="av-t"><b>${esc(fdNome(u))}</b>${ckTxt}</div><div class="av-st">${alerta ? 'confirmou e ainda não chegou' : st}</div>${num}</div>`;
-    }).join('');
-    tot.vem += vem; tot.nao += nao; tot.sem += sem; tot.chk += chk; tot.n += us.length;
-    const cab = f.fech ? `fechou o dia às ${horaCurta(f.fech)}` : `cobrou ${vem + nao} de ${us.length}${hora ? ' · fechamento em aberto' : ''}`;
-    return `<details class="av-anjo" open><summary><b>${esc(acNome(a.nome))}</b><span>${cab} · check-in ${chk} de ${us.length}</span></summary><div class="av-lista">${linhas}</div></details>`;
+  const hj = hojeISO(), h = window.avDia && window.avDia >= diaMinFd() && window.avDia < hj ? window.avDia : hj, ehHoje = h === hj, md = mdValores([h]), agora = new Date(), so = !!window.avFiltro;
+  const ck = new Map(ehHoje ? (checkinsHoje || []).map(c => [c.uid, c]) : []), tot = { prob:0, nao:0, chk:0, n:0 };
+  const grupos = anjos.map(a => {
+    const f = fdAch(a.uid, h);
+    const itens = a.membros.map(u => {
+      const n = fdNums(u, h, md), r = f['f_' + u] || {}, c = ck.get(u), tem = n.pres || !!c, hc = (c && c.entrada) || n.chk;
+      let tipo, st;
+      if (n.folga) { tipo = 'vem'; st = 'folga'; }
+      else if (r.pm === 'n') { tipo = 'nao'; st = r.jm ? 'não vem · ' + esc(r.jm) : 'não vem'; }
+      else if (r.pm === 's') { tipo = !tem && (!ehHoje || agora.getHours() >= 10) ? 'atn' : 'vem'; st = tipo === 'atn' ? (ehHoje ? 'confirmou e não chegou' : 'confirmou e não veio') : tem ? (c && ciFora(c) ? 'externo' : 'chegou') + (hc ? ' ' + horaCurta(hc) : '') : 'confirmou que vem'; }
+      else { tipo = 'sem'; st = tem ? 'chegou · anjo não cobrou' : 'anjo não cobrou'; }
+      const num = tipo === 'vem' && tem && !n.folga ? `<small>${n.lig} lig. · ${n.docs}/${n.metaDocs} docs</small>` : '';
+      return { tipo, tem, html:`<li class="av-l ${tipo}"><b>${esc(fdNome(u))}</b><span>${st}</span>${num}</li>` };
+    });
+    itens.sort((x, y) => AV_ORD.indexOf(x.tipo) - AV_ORD.indexOf(y.tipo));
+    const prob = itens.filter(i => i.tipo !== 'vem').length, chk = itens.filter(i => i.tem).length;
+    tot.prob += prob; tot.nao += itens.filter(i => i.tipo === 'nao').length; tot.chk += chk; tot.n += itens.length;
+    return { a, itens, prob, chk };
+  }).sort((x, y) => y.prob - x.prob || acNome(x.a.nome).localeCompare(acNome(y.a.nome), 'pt-BR'));
+  const blocos = grupos.map(g => {
+    const l = so ? g.itens.filter(i => i.tipo !== 'vem') : g.itens; if (!l.length) return '';
+    return `<details class="av-anjo"${g.prob || so ? ' open' : ''}><summary><b>${esc(acNome(g.a.nome))}</b><span class="av-tag ${g.prob ? 'mal' : 'ok'}">${g.prob ? g.prob + ' pede' + (g.prob === 1 ? '' : 'm') + ' atenção' : 'tudo certo'}</span><small>chegaram ${g.chk}/${g.itens.length}</small></summary><ul class="av-lista">${l.map(i => i.html).join('')}</ul></details>`;
   }).join('');
-  const pct = tot.n ? Math.round(tot.chk / tot.n * 100) : 0;
-  return `<div class="ach-card av-card"><div class="ach-cab"><b>Anjos ao vivo</b><span>quem vem hoje, em tempo real</span></div>
-    <div class="av-res"><span class="ok"><b>${tot.vem}</b>vêm</span><span class="mal"><b>${tot.nao}</b>não vêm</span><span class="esp"><b>${tot.sem}</b>sem resposta</span><span><b>${tot.chk}/${tot.n}</b>check-in</span>${tot.alerta ? `<span class="mal"><b>${tot.alerta}</b>confirmou e não chegou</span>` : ''}</div>
-    <div class="meta-bar"><i style="width:${pct}%"></i></div>${blocos}</div>`;
+  return cartaoDobra('anjosVivo', true, 'av-card', ehHoje ? 'Anjos ao vivo' : 'Anjos em ' + dataBR(h), `chegaram ${tot.chk} de ${tot.n}${tot.prob ? ' · ' + tot.prob + ' pede' + (tot.prob === 1 ? '' : 'm') + ' atenção' : ''}`,
+    `<div class="dobra-barra">${seletorDia('avDiaVer', h, hj)}${ehHoje ? '' : '<button class="link" onclick="avDiaVer(\'\')">voltar para hoje</button>'}${tot.prob ? `<button class="av-filtro${so ? ' on' : ''}" onclick="avFiltrar()">${so ? 'Mostrar todos' : `Só os ${tot.prob} que pedem atenção`}</button>` : ''}</div>
+    ${blocos || '<div class="muted">Ninguém pedindo atenção.</div>'}`);
 }
 function htmlAnjoCheckHoje(){
   if (!souAtivo() || souCeo()) return '';
