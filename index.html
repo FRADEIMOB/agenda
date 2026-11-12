@@ -7909,7 +7909,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 398;
+const APP_VERSAO = 399;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8471,7 +8471,8 @@ function pontosDoMesBase(m, val, corte){
     // v271: na SDR, as docs do resumo do dia já pontuam em "Documentações do resumo (SDR)"; aqui ficam só as outras (planilha, WhatsApp), sem contar duas vezes
     // v296: o número do dia (mddoc) já soma conversa + resumo. Na SDR vale o MAIOR dos dois no dia (o mesmo trabalho não conta duas vezes):
     // o resumo já pontua na linha dele; aqui entra só o que a conversa tiver a mais que o resumo
-    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => { const res = Number((r.sdoc || {})[d]) || 0, conv = Math.max(0, (Number(v) || 0) - res); return a + (docsNova(d) ? Math.max(0, conv - res) : conv); }, 0) : soma(r.mddoc);
+    // v399: na SDR o grupo de crédito é o mesmo trabalho do resumo do dia (decisão do Allan, 12/11): a doc da SDR vem só do resumo; o grupo não soma nada
+    const dg = papelDe(r.uid) === 'sdr' ? 0 : soma(r.mddoc);
     x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
@@ -8692,7 +8693,7 @@ function linhasPontos(x, P){
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     // v297: na SDR, resumo e conversa são a mesma coisa: uma linha só, com o maior número de cada dia
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdrPts ?? (x.docsSdr || 0) * vS) + (x.docGeral || 0) * n('docGeral');
-      return [['Documentações (resumo ou conversa do WhatsApp, vale o maior de cada dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
+      return [['Documentações (do resumo do dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
