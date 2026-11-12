@@ -2416,6 +2416,10 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ach-l li span{display:grid;gap:1px}.ach-l li small{font-size:11.5px;color:var(--text2)}.ach-l li.ok span{color:var(--text2)}.ach-l li em{font-style:normal;font-size:12px;font-weight:700;color:var(--text2)}
 .ach-bt{width:28px;height:28px;border-radius:9px;border:2px solid color-mix(in srgb,var(--text) 25%,transparent);background:var(--card);color:#fff;font-weight:800;font-size:15px;cursor:pointer;display:grid;place-items:center;padding:0}
 .ach-l li.vez .ach-bt{border-color:var(--accent)}.ach-l li.ok .ach-bt{background:var(--ok);border-color:var(--ok)}.ach-bt:disabled{cursor:default}
+.av-res{display:flex;flex-wrap:wrap;gap:8px}.av-res span{display:grid;justify-items:center;min-width:76px;padding:8px 10px;border-radius:12px;background:var(--bg2,var(--accent-soft));font-size:12px;color:var(--text2);font-weight:600}.av-res b{font-size:20px;color:var(--text)}.av-res .ok b{color:var(--ok)}.av-res .mal b{color:var(--danger)}.av-res .esp b{color:var(--warn)}
+.av-anjo{border-top:1px solid var(--border);padding-top:8px}.av-anjo summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}.av-anjo summary span{font-size:12.5px;color:var(--text2)}.av-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:8px}
+.av-l{border:1px solid var(--border);border-left:4px solid var(--border);border-radius:12px;padding:8px 10px;display:grid;gap:3px}.av-l.ok{border-left-color:var(--ok)}.av-l.mal{border-left-color:var(--danger)}.av-l.esp{border-left-color:var(--warn)}.av-l.alerta{background:color-mix(in srgb,var(--danger) 8%,transparent);border-left-color:var(--danger)}
+.av-t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.av-t b{font-size:14px}.av-ck{font-size:11px;font-weight:700;padding:1px 7px;border-radius:8px;white-space:nowrap}.av-ck.sim{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}.av-ck.nao{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}.av-st{font-size:13px;font-weight:600}.av-l.mal .av-st,.av-l.alerta .av-st{color:var(--danger)}.av-num{font-size:12px;color:var(--text2)}.av-num .bom{color:var(--ok);font-weight:700}
 .fd-lista{display:grid;gap:10px}.fd-l{border:1px solid var(--border);border-radius:14px;padding:10px 12px;display:grid;gap:8px}.fd-l.ok{border-color:color-mix(in srgb,var(--ok) 45%,var(--border))}
 .fd-top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.fd-top b{font-size:15px}.fd-sis{margin-left:auto;font-size:12px;color:var(--text2)}.fd-tag{font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;background:var(--accent-soft);color:var(--accent)}
 .fd-num{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px}.fd-num small{color:var(--text2)}.fd-num .bom b{color:var(--ok)}.fd-num .ruim b{color:var(--danger)}
@@ -3350,6 +3354,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div id="poupHoje"></div>
           <div id="meuDiaHoje"></div>
         </div>
+        <div id="anjoTopoHoje"></div>
         <div class="hoje-avisos">
           <div id="bannerHoje"></div>
           <div id="alertasHoje"></div>
@@ -7909,7 +7914,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 399;
+const APP_VERSAO = 400;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -14164,9 +14169,46 @@ function htmlValidarOntem(){
       return `<details class="gv vl-a"><summary><b>${esc(p.nome)}</b> · ${anjoPtsDia(p, d).total} pts · ${f.fech ? 'fechou às ' + horaCurta(f.fech) : '<span class="fd-mal">não fechou o dia</span>'}${f.val ? ` · <span class="fd-ok">validado por ${esc(f.val.por || 'gerência')}</span>` : ''}</summary><ul>${htmlDetFech(p, d)}</ul>
         ${!f.val ? `<button class="btn btn-sm" onclick="fdValidar('${p.uid}','${d}')">${f.fech ? 'Validar' : 'Validar mesmo sem fechamento'}</button>` : ''}</details>`; }).join('')}</div>`).join('')}</div>`;
 }
+// v400: topo do Hoje. Anjo: o checklist dele. Coordenador e gerência: o checklist dos anjos ao vivo (quem vem, quem não vem, check-in)
+function htmlAnjoTopo(){
+  if (!souAtivo() || souCeo() || hojeISO() < fdInicio()) return '';
+  if (souAnjo()) return htmlFechAnjo();
+  if (souCoord() || souGerente()) return htmlAnjosAoVivo();
+  return '';
+}
+function htmlAnjosAoVivo(){
+  const anjos = anjosVisiveis().filter(a => a.status === 'ativo' && (a.membros || []).length);
+  if (!anjos.length) return '';
+  const h = hojeISO(), md = mdValores([h]), agora = new Date(), sab = agora.getDay() === 6, hora = agora.getHours() >= (sab ? 12 : FD_HORA);
+  const ck = new Map((checkinsHoje || []).map(c => [c.uid, c])), tot = { vem:0, nao:0, sem:0, chk:0, n:0, alerta:0 };
+  const blocos = anjos.map(a => {
+    const f = fdAch(a.uid, h), us = a.membros; let vem = 0, nao = 0, sem = 0, chk = 0;
+    const linhas = us.map(u => {
+      const n = fdNums(u, h, md), r = f['f_' + u] || {}, c = ck.get(u), lg = fdAch(u, h).larg || {}, tem = n.pres || !!c, hc = (c && c.entrada) || n.chk;
+      if (tem) chk++;
+      let st, cl;
+      if (n.folga) { st = 'folga'; cl = 'ok'; vem++; }
+      else if (r.pm === 's') { st = 'confirmou que vem'; cl = tem ? 'ok' : 'esp'; vem++; }
+      else if (r.pm === 'n') { st = 'não vem' + (r.jm ? ' · ' + esc(r.jm) : ''); cl = 'mal'; nao++; }
+      else if (tem) { st = 'chegou, anjo não cobrou'; cl = 'esp'; sem++; }
+      else { st = 'anjo ainda não cobrou'; cl = 'mal'; sem++; }
+      const alerta = !n.folga && r.pm === 's' && !tem && agora.getHours() >= 10; if (alerta) tot.alerta++;
+      const ckTxt = n.folga ? '' : tem ? `<span class="av-ck sim">${c && ciFora(c) ? 'externo' : 'check-in'}${hc ? ' ' + horaCurta(hc) : ''}</span>` : '<span class="av-ck nao">sem check-in</span>';
+      const num = n.folga || r.pm === 'n' ? '' : `<small class="av-num"><span class="${n.lig >= FD_LIG ? 'bom' : ''}">${n.lig} lig.</span> · <span class="${n.docs >= n.metaDocs ? 'bom' : ''}">${n.docs}/${n.metaDocs} docs</span>${lg.r === 's' ? ' · largada ' + (n.lig >= FD_LIG ? 'valeu' : 'feita') : ''}${r.p ? ' · fim: ' + (r.p === 's' ? 'veio' : 'não veio') : ''}</small>`;
+      return `<div class="av-l ${cl}${alerta ? ' alerta' : ''}"><div class="av-t"><b>${esc(fdNome(u))}</b>${ckTxt}</div><div class="av-st">${alerta ? 'confirmou e ainda não chegou' : st}</div>${num}</div>`;
+    }).join('');
+    tot.vem += vem; tot.nao += nao; tot.sem += sem; tot.chk += chk; tot.n += us.length;
+    const cab = f.fech ? `fechou o dia às ${horaCurta(f.fech)}` : `cobrou ${vem + nao} de ${us.length}${hora ? ' · fechamento em aberto' : ''}`;
+    return `<details class="av-anjo" open><summary><b>${esc(acNome(a.nome))}</b><span>${cab} · check-in ${chk} de ${us.length}</span></summary><div class="av-lista">${linhas}</div></details>`;
+  }).join('');
+  const pct = tot.n ? Math.round(tot.chk / tot.n * 100) : 0;
+  return `<div class="ach-card av-card"><div class="ach-cab"><b>Anjos ao vivo</b><span>quem vem hoje, em tempo real</span></div>
+    <div class="av-res"><span class="ok"><b>${tot.vem}</b>vêm</span><span class="mal"><b>${tot.nao}</b>não vêm</span><span class="esp"><b>${tot.sem}</b>sem resposta</span><span><b>${tot.chk}/${tot.n}</b>check-in</span>${tot.alerta ? `<span class="mal"><b>${tot.alerta}</b>confirmou e não chegou</span>` : ''}</div>
+    <div class="meta-bar"><i style="width:${pct}%"></i></div>${blocos}</div>`;
+}
 function htmlAnjoCheckHoje(){
   if (!souAtivo() || souCeo()) return '';
-  if (souAnjo()) return hojeISO() < fdInicio() ? '' : htmlFechAnjo();
+  if (souAnjo()) return ''; // v400: o checklist do anjo fica no topo do Hoje (anjoTopoHoje)
   if (souGerente()) { const us = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && p.papel === 'corretor' && !acTeste(p) && naEquipeGer(p.equipe)).map(p => p.uid); return htmlGerEqFiltro() + htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
   if (podeGerir()) { const us = acPessoas0().filter(p => p.papel === 'corretor' && !acTeste(p)).map(p => p.uid); return htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
   if (perfil.papel === 'corretor') return (hojeISO() < fdInicio() ? '' : htmlLargCorretor()) + htmlGvCard([uidAtual], 'Seus clientes parados');
@@ -14506,6 +14548,7 @@ function renderExtrato(){ renderPrefNotif();
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
   if ($('metaEscHoje')) { const h = view === 'hoje' ? htmlMetaEscritorio() : ''; if ($('metaEscHoje')._h !== h) { $('metaEscHoje').innerHTML = h; $('metaEscHoje')._h = h; } }
+  if ($('anjoTopoHoje') && !(document.activeElement?.matches?.('input,textarea') && $('anjoTopoHoje').contains(document.activeElement))) { const h = view === 'hoje' ? htmlAnjoTopo() : ''; if ($('anjoTopoHoje')._h !== h) { $('anjoTopoHoje').innerHTML = h; $('anjoTopoHoje')._h = h; } } // v400
   pintarCfgAnjo(); if ($('anjoCheckHoje') && !(document.activeElement?.matches?.('input,textarea') && $('anjoCheckHoje').contains(document.activeElement))) { const h = view === 'hoje' ? htmlAnjoCheckHoje() : ''; if ($('anjoCheckHoje')._h !== h) { $('anjoCheckHoje').innerHTML = h; $('anjoCheckHoje')._h = h; } }
   if ($('metasResumo')) { const h = view === 'desempenho' ? htmlMetasResumo() : ''; if ($('metasResumo')._h !== h) { $('metasResumo').innerHTML = h; $('metasResumo')._h = h; } } if (view === 'comissoes' && $('extratoCorpo')) $('extratoCorpo').innerHTML = htmlBonusMeu() + htmlExtrato(); }
 function renderFinanceiro(){
