@@ -2420,6 +2420,7 @@ details.ach-dobra>summary{cursor:pointer;list-style:none}details.ach-dobra>summa
 .dobra-barra{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}.dia-sel{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--text2);font-weight:600}.dia-sel input{font:inherit;font-size:13px;padding:4px 8px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text)}
 .av-filtro{justify-self:start;font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid color-mix(in srgb,var(--danger) 35%,var(--border));background:transparent;color:var(--danger);cursor:pointer}.av-filtro.on{background:var(--accent-soft);border-color:var(--border);color:var(--text2)}
 .av-anjo{border-top:1px solid var(--border);padding-top:8px}.av-anjo summary{cursor:pointer;display:flex;gap:8px;align-items:center;list-style:none}.av-anjo summary::-webkit-details-marker{display:none}.av-anjo summary b{font-size:14.5px}.av-anjo summary small{margin-left:auto;font-size:12px;color:var(--text2)}
+.av-val{padding:3px 10px;font-size:12px;min-height:0}.av-anjo summary small+.av-tag,.av-anjo summary small+.av-val{margin-left:0}
 .av-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap}.av-tag.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}.av-tag.mal{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
 .av-lista{list-style:none;margin:6px 0 0;padding:0;display:grid}.av-l{display:flex;gap:4px 10px;align-items:baseline;flex-wrap:wrap;padding:6px 0 6px 10px;border-left:3px solid var(--ok);font-size:13px}.av-l+.av-l{border-top:1px dashed var(--border)}.av-l b{font-weight:600;min-width:120px}.av-l span{color:var(--text2)}.av-l small{margin-left:auto;color:var(--text2);font-size:12px}
 .av-l.nao{border-left-color:var(--danger)}.av-l.nao span,.av-l.atn span{color:var(--danger);font-weight:600}.av-l.atn{border-left-color:var(--danger)}.av-l.sem{border-left-color:var(--warn)}.av-l.sem span{color:var(--warn);font-weight:600}
@@ -7921,7 +7922,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 401;
+const APP_VERSAO = 402;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12094,7 +12095,7 @@ function renderBolsao(){
   } else if (bzAba === 'livres') {
     const l = appCfg.bolsaoOrdem ? bzOrdenar(bzLivres()) : bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
     $('bzLista').innerHTML = (souGerente() && !souCeo() ? htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span></div>
-      <b class="an-cli">${esc(nomeCurto(String(x.nome || '').replace(/[\uFFFD\u200B-\u200F\u2060\uFE0F]/g, '').trim()))}</b><div class="an-c2">${x.motivo ? `<span>${esc(x.motivo)}</span>` : ''}${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
+      <b class="an-cli">${esc(bzNome(x))}</b><div class="an-c2">${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>${x.zapConversaId ? 'Pegar e conversar' : 'Pegar e ligar'}</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
   } else if (bzAba === 'meus') {
     $('bzLista').innerHTML = htmlBzFunil();
@@ -12111,6 +12112,17 @@ function bzVoltaScroll(sc){ const el = $('bzLista'); if (!sc || !el || sc.aba !=
   el.querySelectorAll('.bzf, .tbl-wrap').forEach((e, i) => { if (sc.x[i]) e.scrollLeft = sc.x[i]; });
   el.querySelectorAll('.bzf-lista').forEach((e, i) => { if (sc.y[i]) e.scrollTop = sc.y[i]; });
   const se = document.scrollingElement || document.documentElement; if (Math.abs(se.scrollTop - sc.pg) > 2) se.scrollTop = sc.pg; }
+// v402: nome do bolsão. Nome de perfil do WhatsApp que não é nome ("Cliente", "Obg", símbolos) vira "Lead sem nome · final 1234"; o motivo e o período não aparecem mais no cartão
+const BZ_GENERICOS = /^(cliente|clientes|lead|leads|contato|desconhecido|sem nome|obg|obrigad[oa]|ok|oi|ola|sim|nao|teste|user|usuario|whatsapp|bom dia|boa tarde|boa noite|nekrokulto)$/;
+function bzNome(x){
+  const bruto = String(x.nome || '').replace(/[�​-‏⁠️]/g, '').trim();
+  const limpo = bruto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const letras = (limpo.match(/[a-z]/g) || []).length, primeira = limpo.split(/\s+/)[0].replace(/[^a-z]/g, '');
+  const lixo = !bruto || letras < 3 || /[^\p{L}\s.'-]/u.test(bruto) || BZ_GENERICOS.test(limpo.replace(/[^a-z ]/g, '').trim()) || BZ_GENERICOS.test(primeira);
+  if (!lixo) return nomeCurto(nomeBonito(bruto));
+  const fim = soDig(x.telefone || '').slice(-4);
+  return 'Lead sem nome' + (fim ? ' · final ' + fim : '');
+}
 window.bzVerAba = k => { bzAba = k; renderBolsao(); };
 // v144: "Os que eu peguei" em colunas por etapa, com todos os clientes que a pessoa pegou (os encerrados também)
 const bzTodosMeus = () => bolsao.filter(x => x.pegoPor === uidAtual && (x.status === 'pego' || x.status === 'encerrado'));
@@ -14224,7 +14236,10 @@ function htmlAnjosAoVivo(){
   }).sort((x, y) => y.prob - x.prob || acNome(x.a.nome).localeCompare(acNome(y.a.nome), 'pt-BR'));
   const blocos = grupos.map(g => {
     const l = so ? g.itens.filter(i => i.tipo !== 'vem') : g.itens; if (!l.length) return '';
-    return `<details class="av-anjo"${g.prob || so ? ' open' : ''}><summary><b>${esc(acNome(g.a.nome))}</b><span class="av-tag ${g.prob ? 'mal' : 'ok'}">${g.prob ? g.prob + ' pede' + (g.prob === 1 ? '' : 'm') + ' atenção' : 'tudo certo'}</span><small>chegaram ${g.chk}/${g.itens.length}</small></summary><ul class="av-lista">${l.map(i => i.html).join('')}</ul></details>`;
+    // v401: a gerência valida o dia do anjo aqui mesmo (dias anteriores, ou hoje depois que o anjo fechou)
+    const fa = fdAch(g.a.uid, h), podeVal = souGerente() && !souCeo() && (!ehHoje || fa.fech);
+    const val = !souGerente() || souCeo() ? '' : fa.val ? `<span class="av-tag ok">validado${fa.val.por ? ' por ' + esc(String(fa.val.por).split(' ')[0]) : ''}</span>` : podeVal ? `<button class="btn btn-sm av-val" onclick="event.preventDefault();event.stopPropagation();fdValidar('${g.a.uid}','${h}')" title="${fa.fech ? 'Validar o dia do anjo' : 'O anjo não fechou o dia: validar assim mesmo'}">Validar</button>` : '';
+    return `<details class="av-anjo"${g.prob || so ? ' open' : ''}><summary><b>${esc(acNome(g.a.nome))}</b><span class="av-tag ${g.prob ? 'mal' : 'ok'}">${g.prob ? g.prob + ' pede' + (g.prob === 1 ? '' : 'm') + ' atenção' : 'tudo certo'}</span><small>chegaram ${g.chk}/${g.itens.length}</small>${val}</summary><ul class="av-lista">${l.map(i => i.html).join('')}</ul></details>`;
   }).join('');
   return cartaoDobra('anjosVivo', true, 'av-card', ehHoje ? 'Anjos ao vivo' : 'Anjos em ' + dataBR(h), `chegaram ${tot.chk} de ${tot.n}${tot.prob ? ' · ' + tot.prob + ' pede' + (tot.prob === 1 ? '' : 'm') + ' atenção' : ''}`,
     `<div class="dobra-barra">${seletorDia('avDiaVer', h, hj)}${ehHoje ? '' : '<button class="link" onclick="avDiaVer(\'\')">voltar para hoje</button>'}${tot.prob ? `<button class="av-filtro${so ? ' on' : ''}" onclick="avFiltrar()">${so ? 'Mostrar todos' : `Só os ${tot.prob} que pedem atenção`}</button>` : ''}</div>
@@ -18202,7 +18217,9 @@ function mdValores(dias){
     if (v.status === 'Realizada' && ds.has(v.date) && ok(v.corretorUid)) add(v.corretorUid, 'vr');
   });
   // docs: tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada), sem contar o mesmo cliente duas vezes no dia
-  const vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); add(u, 'docs'); };
+  // v401: SDR conta só o resumo do dia (o grupo do WhatsApp é a mesma coisa do resumo: não soma), igual ao ranking
+  const sdrs = new Set((pessoasRk() || []).filter(p => p.papel === 'sdr').map(p => p.uid));
+  const vistos = new Set(), doc = (u, d, ch) => { if (!u || sdrs.has(u) || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); add(u, 'docs'); };
   try { avaliacoesUnificadas().forEach(a => docsDaAv(a).forEach(x => doc(x.uid, x.dia, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id))); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
@@ -18273,9 +18290,9 @@ let _mdLetI = 0, _mdLetT = null, _mdLetSig = '';
 function ltBarra(){ const b = document.querySelector('#mdLetreiro .lt-bar i'); if (!b) return; b.style.animation = 'none'; void b.offsetWidth; b.style.animation = ''; }
 function mdLetEsconde(){ const el = $('mdLetreiro'); if (el) el.classList.remove('on'); document.documentElement.classList.remove('com-let'); clearInterval(_mdLetT); _mdLetT = null; _mdLetSig = ''; }
 let _mdLetPausa = false;
-function mdLetTroca(passo = 1, para){
+function mdLetTroca(passo = 1, para, manual){
   const el = $('mdLetreiro'); if (!el) return; const ms = el.querySelectorAll('.md-let-msg'), pts = el.querySelectorAll('.md-let-pts i'); if (ms.length < 2) return;
-  if (passo === 1 && para === undefined && _mdLetPausa) return; // mouse em cima: espera
+  if (!manual && _mdLetPausa) return; // mouse em cima: espera (só a troca automática; v401: as setas passam sempre)
   const a = _mdLetI; _mdLetI = para !== undefined ? para : (_mdLetI + passo + ms.length) % ms.length; if (a === _mdLetI) return;
   ms[a].classList.remove('on'); ms[a].classList.add('sai'); setTimeout(() => ms[a].classList.remove('sai'), 500);
   ms[_mdLetI].classList.add('on'); pts.forEach((p, i) => p.classList.toggle('on', i === _mdLetI)); ltBarra();
@@ -18314,7 +18331,7 @@ function mdLetreiroPulso(){
 setInterval(mdLetreiroPulso, 15000);
 window.verLetreiro = () => mdLetreiroPulso();
 // interação: setas, bolinhas e pausa com o mouse em cima
-window.mdLetVai = (passo, para) => { mdLetTroca(passo, para); clearInterval(_mdLetT); _mdLetT = setInterval(mdLetTroca, 7000); };
+window.mdLetVai = (passo, para) => { mdLetTroca(passo, para, true); clearInterval(_mdLetT); _mdLetT = setInterval(mdLetTroca, 7000); };
 window.mdLetPausa = v => { _mdLetPausa = v; };
 
 // ---------- gerência: guarda os números de cada um para o ranking de todos (corretor não lê os dados dos outros) ----------
