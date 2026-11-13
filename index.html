@@ -6110,6 +6110,9 @@ async function limparAnjosBloqueados(){
     return manter.length === a.membros.length ? null : { a, manter }; }).filter(Boolean);
   const bloq = new Set(perfisTodos.filter(fora).map(p => p.uid)), hj = hojeISO();
   const vis = (typeof visitas !== 'undefined' ? visitas : []).filter(v => v.anjoUid && (bloq.has(v.corretorUid) || bloq.has(v.anjoUid)) && String(v.date || '') > hj); /* só visitas futuras: o que já aconteceu continua contando */
+  // v401: guarda quando a pessoa foi bloqueada (sai do ranking a partir do mês seguinte) e limpa ao desbloquear
+  const carimbo = perfisTodos.filter(p => (p.status === 'bloqueado') !== !!p.bloqueadoEm);
+  if (carimbo.length) { try { const bc = writeBatch(db); carimbo.slice(0, 100).forEach(p => bc.set(doc(db,'perfis',p.uid), { bloqueadoEm:p.status === 'bloqueado' ? Date.now() : 0 }, { merge:true })); await bc.commit(); } catch(e) { console.warn('carimbo bloqueio', e.message); } }
   if (!mudar.length && !vis.length) return;
   _limpAnjoRodando = true;
   try {
@@ -6995,7 +6998,8 @@ function renderCorretores(){
       <button class="btn btn-danger" onclick="recusar('${p.uid}')">Recusar</button>
     </div>`).join('');
 
-  let membros = (souGerente() ? perfisTodos.filter(p => p.papel !== 'correspondente') : perfisLista).filter(p => p.status !== 'pendente');
+  let membros = (souGerente() ? perfisTodos.filter(p => p.papel !== 'correspondente') : perfisLista).filter(p => p.status !== 'pendente' && !foraTela(p)); // v401: bloqueado só aparece em Configurações > Permissões
+  const nBloq = (souGerente() ? perfisTodos : perfisLista).filter(p => p.status === 'bloqueado').length;
   if (souGerente() && perfil && !membros.some(p => p.uid === uidAtual)) membros.push({ ...perfil, uid:uidAtual });
   if (souGerente()) {
     const eqs = [['','Todos'], ...listaEquipes().map(e => [e.id, eqNome(e.id)]), ['_ger','⭐ Gerentes']];
@@ -7006,7 +7010,7 @@ function renderCorretores(){
   const ordemPapel = { gerente:0, coordenador:1, anjo:2, corretor:3, sdr:4, adm:5, marketing:6, correspondente:7 };
   membros.sort((a,b) => (ordemPapel[a.papel]-ordemPapel[b.papel]) || a.nome.localeCompare(b.nome,'pt-BR'));
   const totalPer = visitas.filter(v => v.date >= de && v.date <= ate && v.status !== 'Cancelada').length;
-  $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '');
+  $('corSub').textContent = `${membros.length} pessoa${membros.length!==1?'s':''} · ${totalPer} visita${totalPer!==1?'s':''} ${ROT_PERIODO[corPeriodo]}` + (souCoord() ? ' · ' + eqNome(perfil.equipe) : '') + (nBloq && souGerente() ? ` · ${nBloq} bloqueado${nBloq > 1 ? 's' : ''} em Configurações` : '');
   $('corLista').innerHTML = membros.length ? membros.map(p => {
     const st = statsVisitas(visitasDoPerfil(p, de, ate)), nCartas = cartasDoPerfil(p, de, ate).length;
     const info = [(p.papel === 'gerente' && p.cargo === 'dono' ? 'CEO' : PAPEIS[p.papel]), p.papel !== 'gerente' ? eqNome(p.equipe) : '', p.status === 'bloqueado' ? '🔒 bloqueado' : ''].filter(Boolean).join(' · ');
@@ -7193,7 +7197,7 @@ window.editarEquipe = async (id, campo, valor) => {
   try { await setDoc(doc(db,'equipes',id), { [campo]: valor }, { merge:true }); toast('Equipe atualizada'); } catch(e) { toast('Erro: ' + e.message); }
 };
 window.excluirEquipe = async id => {
-  const n = perfisLista.filter(p => p.equipe === id && p.status !== 'pendente').length;
+  const n = perfisLista.filter(p => p.equipe === id && p.status !== 'pendente' && !foraTela(p)).length;
   if (n) { toast(`A equipe tem ${n} pessoa(s). Mude todos de equipe antes de excluir.`); return; }
   if (!confirm(`Excluir a equipe ${eqNome(id)}?`)) return;
   try { await deleteDoc(doc(db,'equipes',id)); toast('Equipe excluída'); } catch(e) { toast('Erro: ' + e.message); }
@@ -7917,7 +7921,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 400;
+const APP_VERSAO = 401;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8385,8 +8389,11 @@ function pontosDoMes(m, val, corte){
   const geral = pontosSegmentado(m, val, corte);
   const sdr = new Map(pontosSegmentado(m, valDaSdr(val), corte).map(x => [x.uid || 'n:' + norm(x.nome), x]));
   const ehSdr = x => x.uid && papelDe(x.uid) === 'sdr';
-  return ord(geral.map(x => ehSdr(x) ? (sdr.get(x.uid) || x) : x));
+  return ord(geral.map(x => ehSdr(x) ? (sdr.get(x.uid) || x) : x)).filter(x => !foraRankMes(x.uid, m)); // v401
 }
+// v401: bloqueado continua no ranking do mês em que foi bloqueado e sai sozinho dos meses seguintes (sem data: ainda não carimbado, continua)
+const foraRankMes = (uid, m) => { if (!uid) return false; const p = (perfisTodos || []).find(x => x.uid === uid) || (rkPessoas || []).find(x => x.uid === uid); if (!p || p.status !== 'bloqueado' || !p.bloqueadoEm) return false; return iso(new Date(p.bloqueadoEm)).slice(0, 7) < m; };
+const foraTela = p => !!p && ['bloqueado','inativo'].includes(p.status); // v401: bloqueado e inativo saem das telas de corretores na hora
 function pontosDoMesBase(m, val, corte){
   // v193: corte = [de, até] para os rankings novos (só conta o que aconteceu entre essas datas)
   val = val || appCfg.pontos; const RK = pessoasRk;
@@ -11291,9 +11298,9 @@ function sincPessoasRanking(){
     const ja = new Map(rkPessoas.map(x => [x.uid, x])), b = writeBatch(db); let n = 0;
     const CARGOS = ['corretor','coordenador','sdr','anjo','gerente'];
     perfisTodos.filter(p => CARGOS.includes(p.papel)).forEach(p => {
-      const d = { nome:p.nome || '', equipe:p.equipe || '', papel:p.papel || '', status:p.status || '', criadoEm:p.criadoEm || 0, membros:p.papel === 'anjo' ? (p.membros || []) : [] };
+      const d = { nome:p.nome || '', equipe:p.equipe || '', papel:p.papel || '', status:p.status || '', criadoEm:p.criadoEm || 0, bloqueadoEm:p.status === 'bloqueado' ? (p.bloqueadoEm || 0) : 0, membros:p.papel === 'anjo' ? (p.membros || []) : [] };
       const v = ja.get(p.uid); ja.delete(p.uid);
-      if (v && (v._nomeRaw ?? v.nome) === d.nome && ['equipe','papel','status','criadoEm'].every(k => (v[k] ?? '') === d[k]) && JSON.stringify(v.membros || []) === JSON.stringify(d.membros)) return;
+      if (v && (v._nomeRaw ?? v.nome) === d.nome && ['equipe','papel','status','criadoEm','bloqueadoEm'].every(k => (v[k] ?? (k === 'bloqueadoEm' ? 0 : '')) === d[k]) && JSON.stringify(v.membros || []) === JSON.stringify(d.membros)) return;
       b.set(doc(db,'ranking_pessoas', p.uid), d); n++; });
     ja.forEach((v, uid) => { b.delete(doc(db,'ranking_pessoas', uid)); n++; });
     if (n) { try { await b.commit(); } catch(e) { console.warn('ranking_pessoas', e.message); } }
@@ -13531,7 +13538,7 @@ async function voltarEscritorio(via, gps, dist){
   if (c.saida) { upd.saida = deleteField(); upd.externos = [...(c.externos || []), { onde:'Saiu do escritório', desde:c.saida, voltou:agora }]; }
   if (c.externoAgora) { upd.externos = [...(c.externos || []), { ...c.externoAgora, voltou:agora }]; upd.externoAgora = deleteField(); }
   if (c.via === 'externo' && !c.chegouEscritorio) { upd.chegouEscritorio = agora; upd.chegouVia = via; }
-  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), upd); toast(`🏢 De volta ao escritório às ${hm(agora)}`); } catch(e) { toast('Erro: ' + e.message); }
+  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), upd); if (c.saida) avisarCarteiro('checkin', ciId(uidAtual)); toast(`🏢 De volta ao escritório às ${hm(agora)}`); } catch(e) { toast('Erro: ' + e.message); }
 }
 window.abrirExterno = () => { $('ciExtOnde').value = ''; $('ciExtBt').textContent = meuCheckin ? 'Sair para o atendimento' : 'Marcar presença externa'; abrir('ciExtModal'); setTimeout(() => $('ciExtOnde').focus(), 200); };
 window.checkinExterno = async () => {
@@ -13734,7 +13741,7 @@ window.fazerCheckout = async () => {
   if (!confirm('Encerrar o seu dia agora?')) return;
   const upd = { saida:Date.now() };
   if (meuCheckin.externoAgora) { upd.externos = [...(meuCheckin.externos || []), { ...meuCheckin.externoAgora, voltou:upd.saida }]; upd.externoAgora = deleteField(); }
-  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), upd); toast('👋 Dia encerrado. Até amanhã!'); } catch(e) { toast('Erro: ' + e.message); }
+  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), upd); avisarCarteiro('checkin', ciId(uidAtual)); toast('👋 Dia encerrado. Até amanhã!'); } /* v400: o carteiro desliga o fluxo no painel na hora */ catch(e) { toast('Erro: ' + e.message); }
 };
 // veio pelo link do código (câmera do celular)
 function conferirLinkCheckin(){
@@ -14162,7 +14169,7 @@ function htmlValidarOntem(){
   if (!souGerente() || souCeo()) return '';
   const ont = mdOntem(), d = window.vlDia && window.vlDia >= diaMinFd() && window.vlDia <= ont ? window.vlDia : ont; if (d < fdInicio()) return ''; // v400: dia escolhido no filtro
   const eqDe = p => p.equipe || [...anjoEqs(p)][0] || '', grupos = {};
-  const base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo' && (p.membros || []).length && naEquipeGer(eqDe(p)));
+  const base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && !foraTela(p) && (p.membros || []).length && naEquipeGer(eqDe(p)));
   if (!base.length) return '';
   base.forEach(p => { const e = eqDe(p); (grupos[e] = grupos[e] || []).push(p); });
   const pend = base.filter(p => !fdAch(p.uid, d).val).length;
@@ -17327,7 +17334,7 @@ function sdrAutoDaReserva(r){ const l = (visitasBrutas && visitasBrutas.length ?
 function sdrDaReserva(r){ if (!r) return null; if (r.sdrManual) return r.sdrUid ? { uid:r.sdrUid, nome:r.sdrNome || 'SDR', manual:true } : null;
   if (r.sdrUid) return { uid:r.sdrUid, nome:r.sdrNome || 'SDR' }; const a = sdrAutoDaReserva(r); return a ? { ...a, auto:true } : null; }
 window.sdrDaReserva = sdrDaReserva;
-const listaSdrs = () => (pessoasRk() || []).filter(p => p.papel === 'sdr' && p.status !== 'inativo').sort((a, b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
+const listaSdrs = () => (pessoasRk() || []).filter(p => p.papel === 'sdr' && !foraTela(p)).sort((a, b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
 function pintarRvSdr(r){ const el = $('rvSdr'); if (!el) return; const auto = r ? sdrAutoDaReserva(r) : null, sel = r?.sdrManual ? (r.sdrUid || '-') : '';
   el.innerHTML = `<option value="">Automático${auto ? ': ' + esc(nomeBonito(auto.nome)) : ' (nenhuma SDR encontrada)'}</option><option value="-" ${sel === '-' ? 'selected' : ''}>Não veio de SDR</option>${listaSdrs().map(p => `<option value="${esc(p.uid)}" ${sel === p.uid ? 'selected' : ''}>${esc(nomeBonito(p.nome))}</option>`).join('')}`;
   $('rvSdrDica').textContent = auto ? `O app achou a visita de ${dataBR(auto.visita).slice(0, 5)} agendada por ${nomeBonito(auto.nome)} e realizada.` : 'O app procura uma visita do cliente agendada por SDR e realizada (pelo telefone ou CPF).'; }
@@ -18353,7 +18360,7 @@ window.abrirMetasDia = () => {
   const venda = (attr, val, ph) => `<input type="number" min="0" step="1" inputmode="numeric" class="md-v" ${attr} value="${val ?? ''}" placeholder="${ph ?? 0}" aria-label="Vendas no mês">`;
   const linha = (id, o, ph) => MD_ITENS.map(([k, n]) => `<input type="number" min="0" step="1" inputmode="numeric" data-g="${id}" data-k="${k}" value="${o[k] ?? ''}" placeholder="${ph ? (ph[k] ?? 0) : 0}" aria-label="${n}">`).join('')
     + (id === 'sdr' || id.endsWith(':s') ? '<span></span>' : id === 'padrao' ? venda('data-vp="1"', vPad, 0) : venda(`data-vu="${id.slice(2)}"`, vPor[id.slice(2)], vPad || 0));
-  const gente = pessoasRk().filter(p => MD_PAPEIS.includes(p.papel) && p.status !== 'inativo').sort((a, b) => (a.papel === 'sdr') - (b.papel === 'sdr') || a.nome.localeCompare(b.nome, 'pt-BR'));
+  const gente = pessoasRk().filter(p => MD_PAPEIS.includes(p.papel) && !foraTela(p)).sort((a, b) => (a.papel === 'sdr') - (b.papel === 'sdr') || a.nome.localeCompare(b.nome, 'pt-BR'));
   $('mdCorpo').innerHTML = `<div class="hint" style="margin:0 0 12px">Ligações, docs e visitas são metas por dia; vendas é a meta do mês (venda em parceria conta meio para cada um). Ligações contam números diferentes ligados no dia. Docs contam tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada; para a SDR, o resumo do dia).</div>
     <div class="md-ed md-cab"><span></span>${MD_ITENS.map(([, n]) => `<small>${n}</small>`).join('')}<small>Reservas no mês</small></div>
     <div class="md-ed"><span><b>Corretores e coordenadores</b><small>meta de todos</small></span>${linha('padrao', pad)}</div>
