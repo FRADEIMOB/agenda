@@ -7922,7 +7922,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 402;
+const APP_VERSAO = 403;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12115,11 +12115,11 @@ function bzVoltaScroll(sc){ const el = $('bzLista'); if (!sc || !el || sc.aba !=
 // v402: nome do bolsão. Nome de perfil do WhatsApp que não é nome ("Cliente", "Obg", símbolos) vira "Lead sem nome · final 1234"; o motivo e o período não aparecem mais no cartão
 const BZ_GENERICOS = /^(cliente|clientes|lead|leads|contato|desconhecido|sem nome|obg|obrigad[oa]|ok|oi|ola|sim|nao|teste|user|usuario|whatsapp|bom dia|boa tarde|boa noite|nekrokulto)$/;
 function bzNome(x){
-  const bruto = String(x.nome || '').replace(/[�​-‏⁠️]/g, '').trim();
-  const limpo = bruto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-  const letras = (limpo.match(/[a-z]/g) || []).length, primeira = limpo.split(/\s+/)[0].replace(/[^a-z]/g, '');
-  const lixo = !bruto || letras < 3 || /[^\p{L}\s.'-]/u.test(bruto) || BZ_GENERICOS.test(limpo.replace(/[^a-z ]/g, '').trim()) || BZ_GENERICOS.test(primeira);
-  if (!lixo) return nomeCurto(nomeBonito(bruto));
+  // v403: emoji, número e símbolo saem do nome ("maria💋" vira "Maria"); só vira "Lead sem nome" o que não tem nome de verdade
+  const bruto = String(x.nome || '').replace(/[^\p{L}\s.'-]/gu, ' ').replace(/\s+/g, ' ').trim();
+  const limpo = bruto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const lixo = limpo.replace(/ /g, '').length < 3 || BZ_GENERICOS.test(limpo) || BZ_GENERICOS.test(limpo.split(' ')[0]);
+  if (!lixo) return nomeCurto(nomeBonito(bruto.replace(/(^|\s)[.'-]+(?=\s|$)/g, ' ').trim()));
   const fim = soDig(x.telefone || '').slice(-4);
   return 'Lead sem nome' + (fim ? ' · final ' + fim : '');
 }
