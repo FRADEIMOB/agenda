@@ -2342,7 +2342,7 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ac-prime{font-size:12.5px;color:var(--muted)}
 
 /* v167: agenda de visitas em Meus corretores */
-.ag-card{margin-bottom:16px;padding:16px}.ag-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}.ag-top h2{margin:0;font-size:17px}.ag-top span{font-size:12.5px;color:var(--muted)}
+.ag-card{margin-bottom:16px;padding:16px}.ac-agenda-fim{margin-top:18px}.ac-rel{margin-top:10px;font-weight:700}@media (max-width:640px){.ac-agenda-fim .ag-seg{display:grid;grid-template-columns:repeat(3,1fr);width:100%}.ac-agenda-fim .ag-seg button{white-space:normal;line-height:1.2;padding:7px 4px;font-size:12.5px}}.ac-data{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card,#fff);border:1px solid var(--line,#e5e7eb);border-radius:10px;padding:4px 8px}.ac-data.on{border-color:var(--accent,#E2622B);color:var(--accent,#E2622B)}.ac-data input{border:0;background:transparent;font:inherit;color:var(--text,inherit);padding:2px}.ag-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}.ag-top h2{margin:0;font-size:17px}.ag-top span{font-size:12.5px;color:var(--muted)}
 .ag-seg button i{font-style:normal;font-size:11px;font-weight:800;margin-left:6px;padding:1px 6px;border-radius:99px;background:var(--card2)}.ag-seg button.on i{background:color-mix(in srgb,var(--accent) 18%,var(--card));color:var(--accent)}
 .ag-lista{display:flex;flex-direction:column;gap:6px;max-height:430px;overflow:auto}
 .ag-dia{font-size:12px;font-weight:800;color:var(--muted);margin:8px 0 2px;text-transform:capitalize}
@@ -3841,7 +3841,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <section class="view" id="v-tvrank"></section>
       <section class="view" id="v-acomp">
         <div class="page-head"><div><h1>Meus corretores</h1><div class="sub" id="acSub">Tudo dos corretores que você acompanha, ao vivo.</div></div><div class="ph-acoes" id="acFiltros"></div></div>
-        <div id="acResumo"></div><div id="acAgenda"></div><div id="acCorpo"></div>
+        <div id="acResumo"></div><div id="acCorpo"></div><div id="acAgenda" class="ac-agenda-fim"></div>
       </section>
       <section class="view" id="v-funil">
         <div class="page-head"><div><h1>Funil de ligações</h1><div class="sub" id="flSub">Da ligação ao fechamento.</div></div><div class="ph-acoes" id="flFiltros"></div></div>
@@ -7922,7 +7922,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 403;
+const APP_VERSAO = 405;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9625,7 +9625,12 @@ function acAssinar(){
 }
 const AC_PEND = ['Pendente', 'Reagendada'];
 window.acPer = 'hoje';
-const acDias = per => { const h = hojeISO(); if (per === 'ontem') return [mdOntem()]; if (per === 'mes') { const out = []; for (let d = mesAtual() + '-01'; d <= h; d = somaDias(d, 1)) out.push(d); return out; } return [h]; };
+const acDias = per => { const h = hojeISO(); if (per === 'ontem') return [mdOntem()]; if (per === 'mes') { const out = []; for (let d = mesAtual() + '-01'; d <= h; d = somaDias(d, 1)) out.push(d); return out; } if (per === 'sete') { const out = []; for (let i = 6; i >= 0; i--) out.push(somaDias(h, -i)); return out; } if (per === 'dia') return [window.acDiaSel || h]; return [h]; };
+const acDm = d => String(d || '').slice(8) + '/' + String(d || '').slice(5, 7); /* v405: escolher a data */
+window.acDiaSel = '';
+window.acSetData = d => { if (!d) return; const h = hojeISO(); acDiaSel = d; acPer = d === h ? 'hoje' : d === mdOntem() ? 'ontem' : 'dia'; acSoAlerta = acPer === 'hoje' && acSoAlerta; renderAcomp(true); };
+const acRot = (per, de) => per === 'hoje' ? (de ? 'de hoje' : 'hoje') : per === 'ontem' ? (de ? 'de ontem' : 'ontem') : per === 'sete' ? (de ? 'dos últimos 7 dias' : 'em 7 dias') : per === 'dia' ? (de ? 'de ' : 'em ') + acDm(window.acDiaSel) : (de ? 'do mês' : 'no mês');
+const acVarios = per => per === 'mes' || per === 'sete'; /* v405: últimos 7 dias */
 function acDados(p){
   const per = window.acPer, dias = acDias(per), ds = new Set(dias), h = hojeISO(), am = somaDias(h, 1), agora = new Date(), ehHoje = per === 'hoje';
   const ra = rankingAtiv.filter(r => r.uid === p.uid), n = c => ra.reduce((a, r) => a + dias.reduce((b, d) => b + (Number((r[c] || {})[d]) || 0), 0), 0);
@@ -9640,7 +9645,10 @@ function acDados(p){
   const vis = (souAnjo() ? [...new Map([..._acVis, ...visitas].map(v => [v.id, v])).values()] : visitas).filter(v => (v.corretorUid === p.uid || (p.papel === 'sdr' && v.sdrUid === p.uid)) && v.status !== 'Cancelada');
   const pastas = (souAnjo() ? _acPastas : analises).filter(a => a.corretorUid === p.uid);
   const [vde, vate] = per === 'mes' ? faixa('mes') : [dias[0], dias[dias.length - 1]], visPer = vis.filter(v => v.date >= vde && v.date <= vate), marc = vis.filter(v => v.criadoEm && ds.has(iso(new Date(v.criadoEm))));
-  const docs = new Set([...avaliacoes.filter(a => a.corretorUid === p.uid && ds.has(a.data)).map(a => 'a' + (a.cpfNorm || a.id)), ...pastas.filter(a => a.enviadaEm && ds.has(iso(new Date(a.enviadaEm)))).map(a => 'a' + (soDig(a.cliente?.cpf || '') || a.id))]).size;
+  // v405: docs do corretor = fichas mandadas no período (a mesma regra do ranking, do Desempenho e do topo desta tela). SDR continua como antes.
+  const docsAv = p.papel === 'sdr' ? avaliacoes.filter(a => a.corretorUid === p.uid && ds.has(a.data)).map(a => 'a' + (a.cpfNorm || a.id))
+    : docsNoPeriodo(avaliacoes, dias[0], dias[dias.length - 1]).filter(x => (x.uid || uidDaAv(x.a)) === p.uid).map(x => 'a' + (x.a.cpfNorm || x.a.telNorm || x.a.id) + '|' + x.dia);
+  const docs = new Set([...docsAv, ...pastas.filter(a => a.enviadaEm && ds.has(iso(new Date(a.enviadaEm)))).map(a => 'a' + (soDig(a.cliente?.cpf || '') || a.id) + '|' + iso(new Date(a.enviadaEm)))]).size;
   // cartas aprovadas no período: as lançadas no app + as aprovações da planilha/WhatsApp (o mesmo cliente uma vez só)
   const cl = rankingCartas.filter(c => c.corretorUid === p.uid && ds.has(c.data) && !c.arquivado).map(c => { const full = cartas.find(x => x.id === c.id) || {}; return { id:c.id, data:c.data, cliente:full.cliente || '', valor:c.valor || full.valor || 0, fonte:'carta', k:soDig(full.cpf || '') || 'c' + c.id }; });
   const ks = new Set(cl.map(c => c.k));
@@ -9649,7 +9657,7 @@ function acDados(p){
   const pend = pastas.filter(a => a.status === 'pendencia'), anal = pastas.filter(a => ['enviada','em_analise'].includes(a.status));
   const vendas = rankingVendas.filter(v => !v.caiu && ds.has(v.dia) && (v.corretores || []).some(c => c.uid === p.uid)).reduce((a, v) => a + 1 / Math.max(1, (v.corretores || []).length), 0);
   const vr = visPer.filter(x => x.status === 'Realizada').length;
-  const v = { lig:n('ligu'), docs, vm:marc.length, vr }, meta0 = metaDiaDe(p.uid), meta = {}; MD_ITENS.forEach(([k]) => meta[k] = (meta0[k] || 0) * (per === 'mes' ? 0 : 1));
+  const v = { lig:n('ligu'), docs, vm:marc.length, vr }, meta0 = metaDiaDe(p.uid), meta = {}; MD_ITENS.forEach(([k]) => meta[k] = (meta0[k] || 0) * (acVarios(per) ? 0 : 1));
   const al = [];
   if (ehHoje) {
     if (agora.getDay() !== 0 && !pres && !folga && agora.getHours() >= 9) al.push(['Sem check-in', 'alto']);
@@ -9684,11 +9692,48 @@ function htmlAcAgenda(pessoas){
       <span class="ag-cli"><b>${esc(v.cliente || 'Cliente')}</b><small>${esc(nome(v.corretorUid))}${v.empreendimento ? ' · ' + esc(v.empreendimento) : ''}${v.origem ? ' · ' + esc(v.origem) : ''}</small></span>
       <span class="ag-st st-${stCls(v.status)}">${esc(v.status)}</span>
       <span class="ag-ac">${acao(v)}${v.telefone && v.status !== 'Realizada' ? `<button class="ag-ic" onclick="event.stopPropagation();whatsConfirmar('${v.id}')" title="Mandar confirmação pelo WhatsApp" aria-label="WhatsApp">💬</button>` : ''}</span></div>`; }).join('');
-  return `<section class="card ag-card"><header class="ag-top"><div><h2>Visitas marcadas</h2><span>${l.length ? `${l.length} visita${l.length > 1 ? 's' : ''} · ${conf} confirmada${conf === 1 ? '' : 's'} · ${real} realizada${real === 1 ? '' : 's'}${semConf ? ` · <b class="ac-nao">${semConf} sem confirmar</b>` : ''}` : 'Nenhuma visita nesse período'}</span></div>
-    <div class="seg ag-seg">${[['hoje', 'Hoje', conta(h, h)], ['amanha', 'Amanhã', conta(am, am)], ['semana', '7 dias', conta(h, fim)]].map(([k, r, n]) => `<button class="${acDia === k ? 'on' : ''}" onclick="acSetDia('${k}')">${r}<i>${n}</i></button>`).join('')}</div></header>
+  return `<section class="card ag-card"><header class="ag-top"><div><h2>Agenda de visitas</h2><span>${l.length ? `${l.length} visita${l.length > 1 ? 's' : ''} · ${conf} confirmada${conf === 1 ? '' : 's'} · ${real} realizada${real === 1 ? '' : 's'}${semConf ? ` · <b class="ac-nao">${semConf} sem confirmar</b>` : ''}` : 'Nenhuma visita nesse período'}</span></div>
+    <div class="seg ag-seg">${[['hoje', 'Visitas de hoje', conta(h, h)], ['amanha', 'De amanhã', conta(am, am)], ['semana', 'Próximos 7 dias', conta(h, fim)]].map(([k, r, n]) => `<button class="${acDia === k ? 'on' : ''}" onclick="acSetDia('${k}')">${r}<i>${n}</i></button>`).join('')}</div></header>
     ${l.length ? `<div class="ag-lista">${linhas}</div>` : `<div class="muted ag-vazio">${acDia === 'hoje' ? 'Nenhuma visita marcada para hoje.' : acDia === 'amanha' ? 'Nenhuma visita marcada para amanhã.' : 'Nenhuma visita nos próximos 7 dias.'}</div>`}</section>`;
 }
-window.acSetPer = k => { acPer = k; acSoAlerta = k === 'hoje' && acSoAlerta; renderAcomp(true); };
+// v405: relatório de um corretor para mandar no WhatsApp, só do período escolhido na tela.
+// Na ordem do alinhamento de segunda dos anjos: cartas aprovadas, visitas, documentações, presença e participação, reservas.
+window.acRelatorio = async uid => {
+  const x = (window._acLinhas || []).find(l => l.p.uid === uid); if (!x) { toast('Abra a tela de novo'); return; }
+  const dias = acDias(x.per), ds = new Set(dias), dbr = d => acDm(d), h = hojeISO(), de = dias[0], ate = dias[dias.length - 1];
+  const per = x.per === 'hoje' ? 'hoje, ' + dbr(h) : x.per === 'ontem' ? 'ontem, ' + dbr(de) : x.per === 'dia' ? dbr(de) : (x.per === 'sete' ? 'últimos 7 dias' : 'mês') + ` (${dbr(de)} a ${dbr(ate)})`;
+  const cli = n => nomeBonito(String(n || 'Cliente')).split(' ').slice(0, 2).join(' ');
+  const L = [`*Relatório · ${x.nome}*`, `Período: ${per}`];
+  // 1. cartas aprovadas
+  L.push('', `✅ *Cartas aprovadas: ${x.aprov}*`); x.cartasL.slice(0, 15).forEach(c => L.push(`• ${cli(c.cliente)}${c.valor ? ' · ' + brl(c.valor) : ''}`));
+  // 2. visitas realizadas e não realizadas
+  const passou = v => v.date < h || (v.date === h && v.time && v.time < new Date().toTimeString().slice(0, 5));
+  const real = x.visL.filter(v => v.status === 'Realizada'), nao = x.visL.filter(v => v.status !== 'Realizada' && (v.status === 'Não compareceu' || PERDA_V.includes(v.status) || passou(v)));
+  const futuras = x.visL.filter(v => !real.includes(v) && !nao.includes(v));
+  L.push('', `🏠 *Visitas: ${real.length} realizada${real.length === 1 ? '' : 's'} · ${nao.length} não realizada${nao.length === 1 ? '' : 's'}*`);
+  real.slice(0, 15).forEach(v => L.push(`• ✔ ${dbr(v.date)} · ${cli(v.cliente)}${v.empreendimento ? ' · ' + v.empreendimento : ''}`));
+  nao.slice(0, 15).forEach(v => L.push(`• ✖ ${dbr(v.date)} · ${cli(v.cliente)} (${v.status === 'Não compareceu' ? 'não veio' : String(v.status || '').toLowerCase()})`));
+  if (futuras.length) L.push(`• Ainda vão acontecer: ${futuras.length}`);
+  // 3. status das documentações
+  let avs = []; try { avs = [...new Map(docsNoPeriodo(avaliacoes, de, ate).filter(d => (d.uid || uidDaAv(d.a)) === x.p.uid).map(d => [d.a.cpfNorm || d.a.telNorm || d.a.id, d.a])).values()]; } catch(e) {}
+  const gr = {}; avs.forEach(a => { const g = infoStatus(a.status).g || ''; (gr[g] = gr[g] || []).push(a); });
+  L.push('', `📄 *Documentações: ${x.docs}*`);
+  ['aprovado', 'condicionado', 'analise', 'reprovado', 'outro', 'encerrado', 'troca', ''].filter(g => gr[g]).forEach(g => L.push(`• ${(GRUPOS_V[g] || GRUPOS_V['']).n}: ${gr[g].length}`));
+  if (x.anal.length || x.pend.length) L.push(`• Na Prime: ${x.anal.length} em análise${x.pend.length ? ' · ' + x.pend.length + ' com pendência' : ''}`);
+  // 4. presença e participação
+  const pres = acVarios(x.per) ? `${x.diasPres} de ${x.nDias} dias no escritório` : x.pres ? (x.per === 'hoje' ? 'no escritório' : 'veio') : x.folga && x.per === 'hoje' ? 'folga / abonado' : (x.per === 'hoje' ? 'sem check-in' : 'não veio');
+  L.push('', `📍 *Presença e participação*`, `• Presença: ${pres}`, `• Ligações: ${x.lig} (${x.num} números diferentes)`, `• Leads recebidos: ${x.leads}`, `• Visitas marcadas: ${x.vm}`);
+  // 5. reservas
+  const rvs = rankingVendas.filter(v => !v.caiu && ds.has(v.dia) && (v.corretores || []).some(c => c.uid === x.p.uid));
+  L.push('', `🏆 *Reservas: ${rvs.length}*`);
+  rvs.slice(0, 15).forEach(v => { const r = (typeof reservasTodas !== 'undefined' ? reservasTodas : []).find(y => y.id === v.id) || {}; L.push(`• ${dbr(v.dia)}${r.cliente ? ' · ' + cli(r.cliente) : ''}${r.empreendimento ? ' · ' + r.empreendimento : ''}${(v.corretores || []).length > 1 ? ' (parceria)' : ''}${v.ass ? ' · assinou' : ''}`); });
+  if (x.per === 'hoje' && x.al.length) L.push('', '⚠️ Atenção: ' + x.al.map(a => a[0]).join(' · '));
+  L.push('', `_Gerado por ${primeiro(perfil?.nome || '')} no app Frade_`);
+  const txt = L.join('\n');
+  try { await navigator.clipboard.writeText(txt); toast('Relatório copiado'); } catch(e) {}
+  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank', 'noopener');
+};
+window.acSetPer = k => { acPer = k; acDiaSel = ''; acSoAlerta = k === 'hoje' && acSoAlerta; renderAcomp(true); };
 window.acSetModo = m => { acModo = m; try { localStorage.setItem('acModo', m); } catch(e) {} renderAcomp(true); };
 // v171: total de leads do período igual ao do Painel (inclui SDRs e nomes ainda sem cadastro), com a divisão por pessoa
 function acLeadsTotal(){
@@ -9739,7 +9784,7 @@ function acTotais(){
     aprov:un.length, aprovL:grupo(un, x => [x.uid, '']),
     vis:vs.length, real:vs.filter(r => r.status === 'Realizada').length, sdr:vs.filter(visitaDeSdr).length, sdrReal:vs.filter(r => visitaDeSdr(r) && r.status === 'Realizada').length, visL:grupo(vs, r => [r.corretorUid, r.corretorNome]) };
 }
-window.acVerTot = k => { const pr = acPer === 'hoje' ? 'de hoje' : acPer === 'ontem' ? 'de ontem' : 'do mês', T = acTotais();
+window.acVerTot = k => { const pr = acRot(acPer, 1), T = acTotais();
   const cfg = { docs:['Documentações', T.docsL, 'Mesma conta do Painel executivo: as documentações da planilha de avaliações.'], aprov:['Cartas aprovadas', T.aprovL, 'Mesma conta do Painel executivo: aprovações da planilha e cartas lançadas no app, sem repetir cliente.'], vis:['Visitas', T.visL, acPer === 'mes' ? 'Mesma conta do Ranking de visitas (Este mês): todas as visitas com data neste mês, inclusive as agendadas para os próximos dias. Canceladas não entram. Entre parênteses, quantas já foram realizadas.' : 'Todas as visitas com data no período (menos as canceladas). Entre parênteses, quantas foram realizadas.'] }[k];
   const tot = cfg[1].reduce((a, x) => a + x.n, 0), grupos = {}; cfg[1].forEach(x => (grupos[x.tipo] = grupos[x.tipo] || []).push(x));
   $('acLdTit').textContent = `${cfg[0]} ${pr} · ${tot}`;
@@ -9748,7 +9793,7 @@ window.acVerTot = k => { const pr = acPer === 'hoje' ? 'de hoje' : acPer === 'on
   abrir('acLdModal'); };
 window.acSetFoco = f => { if (f === 'leadsTot') { acVerLeadsTotal(); return; } if (f.endsWith('Tot')) { acVerTot(f.slice(0, -3)); return; } if (f === 'al') { acSoAlerta = !acSoAlerta; acFoco = ''; } else acFoco = acFoco === f ? '' : f; renderAcomp(true); };
 window.acVer = (tipo, uid) => { const x = (window._acLinhas || []).find(y => y.p.uid === uid); if (!x) return;
-  const pr = x.per === 'hoje' ? 'de hoje' : x.per === 'ontem' ? 'de ontem' : 'do mês';
+  const pr = acRot(x.per, 1);
   if (tipo === 'leads' && x.per === 'hoje') return acVerLeads(uid);
   const dd = d => d.slice(8) + '/' + d.slice(5, 7);
   if (tipo === 'leads') { $('acLdTit').textContent = `Leads ${pr} · ${x.nome}`; $('acLdCorpo').innerHTML = x.leadsPorDia.length ? x.leadsPorDia.map(([d, q]) => `<div class="ac-ld"><div><b>${dd(d)}</b><small>${parseISO(d).toLocaleDateString('pt-BR', { weekday:'long' })}</small></div><b>${q} lead${q > 1 ? 's' : ''}</b></div>`).join('') + '<div class="muted" style="font-size:12px;margin-top:8px">Nos dias que já fecharam o app guarda só a quantidade de cada um.</div>' : '<div class="muted">Nenhum lead nesse período.</div>'; }
@@ -9772,22 +9817,22 @@ function renderAcomp(soDados){
   if ($('acAgenda')) $('acAgenda').innerHTML = ls.length ? htmlAcAgenda(acPessoas()) : '';
   const t = k => ls.reduce((s2, x) => s2 + (Number(x[k]) || 0), 0), nAl = ls.filter(x => x.al.length).length;
   const tile = (f, val, rot, extra = '') => `<button type="button" class="${acFoco === f || (f === 'al' && acSoAlerta) ? 'on' : ''} ${extra}" onclick="acSetFoco('${f}')"><b>${val}</b><span>${rot}</span></button>`;
-  $('acResumo').innerHTML = ls.length ? `<div class="ac-barra"><div class="ac-res">${(() => { const pr = acPer === 'hoje' ? 'hoje' : acPer === 'ontem' ? 'ontem' : 'no mês'; return tile('pres', acPer === 'mes' ? t('diasPres') + '<small> dias</small>' : `${ls.filter(x => x.pres).length}<small>/${ls.length}</small>`, acPer === 'mes' ? 'de escritório (somados)' : 'no escritório') + tile('leadsTot', acLeadsTotal().total, 'leads ' + pr) + tile('lig', t('lig'), 'ligações') + (T0 => tile('docsTot', Math.max(T0.docs, souAnjo() ? t('docs') : 0), 'docs ' + pr) + tile('visTot', `${Math.max(T0.vis, souAnjo() ? t('visHoje') : 0)}<small> · ${T0.real} realizada${T0.real === 1 ? '' : 's'}</small>`, 'visitas ' + pr) + (acPer === 'hoje' ? '' : tile('aprovTot', Math.max(T0.aprov, souAnjo() ? t('aprov') : 0), 'cartas aprovadas')))(acTotais()) + (acPer === 'hoje' ? tile('al', ls.reduce((s2, x) => s2 + x.al.length, 0), 'alertas', nAl ? 'tem' : '') : ''); })()}</div>
-    <div class="ac-ctl">${acPer === 'hoje' ? `<button type="button" class="ac-chip ${acSoAlerta ? 'on' : ''}" onclick="acSetFoco('al')">Só com alerta (${nAl})</button>` : ''}<div class="seg ac-seg">${[['ontem', 'Ontem'], ['hoje', 'Hoje'], ['mes', 'Mês']].map(([k, r]) => `<button class="${acPer === k ? 'on' : ''}" onclick="acSetPer('${k}')">${r}</button>`).join('')}</div></div></div>` : '';
+  $('acResumo').innerHTML = ls.length ? `<div class="ac-barra"><div class="ac-res">${(() => { const pr = acRot(acPer); return tile('pres', acVarios(acPer) ? t('diasPres') + '<small> dias</small>' : `${ls.filter(x => x.pres).length}<small>/${ls.length}</small>`, acVarios(acPer) ? 'de escritório (somados)' : 'no escritório') + tile('leadsTot', acLeadsTotal().total, 'leads ' + pr) + tile('lig', t('lig'), 'ligações') + (T0 => tile('docsTot', Math.max(T0.docs, souAnjo() ? t('docs') : 0), 'docs ' + pr) + tile('visTot', `${Math.max(T0.vis, souAnjo() ? t('visHoje') : 0)}<small> · ${T0.real} realizada${T0.real === 1 ? '' : 's'}</small>`, 'visitas ' + pr) + (acPer === 'hoje' ? '' : tile('aprovTot', Math.max(T0.aprov, souAnjo() ? t('aprov') : 0), 'cartas aprovadas')))(acTotais()) + (acPer === 'hoje' ? tile('al', ls.reduce((s2, x) => s2 + x.al.length, 0), 'alertas', nAl ? 'tem' : '') : ''); })()}</div>
+    <div class="ac-ctl">${acPer === 'hoje' ? `<button type="button" class="ac-chip ${acSoAlerta ? 'on' : ''}" onclick="acSetFoco('al')">Só com alerta (${nAl})</button>` : ''}<div class="seg ac-seg">${[['ontem', 'Ontem'], ['hoje', 'Hoje'], ['sete', 'Últimos 7 dias'], ['mes', 'Mês']].map(([k, r]) => `<button class="${acPer === k ? 'on' : ''}" onclick="acSetPer('${k}')">${r}</button>`).join('')}</div><label class="ac-data ${acPer === 'dia' ? 'on' : ''}" title="Escolher o dia">Dia <input type="date" value="${acPer === 'dia' ? acDiaSel : acPer === 'ontem' ? mdOntem() : hojeISO()}" max="${hojeISO()}" min="${mesAnterior(1)}-01" onchange="acSetData(this.value)" aria-label="Escolher o dia para ver"></label></div></div>` : '';
   if (acSoAlerta) ls = ls.filter(x => x.al.length);
-  const ord = { aprov:(a, b) => b.aprov - a.aprov, pres:(a, b) => acPer === 'mes' ? a.diasPres - b.diasPres : (a.pres - b.pres), leads:(a, b) => b.leads - a.leads, lig:(a, b) => b.lig - a.lig, docs:(a, b) => b.docs - a.docs, vis:(a, b) => b.visHoje - a.visHoje }[acFoco];
+  const ord = { aprov:(a, b) => b.aprov - a.aprov, pres:(a, b) => acVarios(acPer) ? a.diasPres - b.diasPres : (a.pres - b.pres), leads:(a, b) => b.leads - a.leads, lig:(a, b) => b.lig - a.lig, docs:(a, b) => b.docs - a.docs, vis:(a, b) => b.visHoje - a.visHoje }[acFoco];
   ls.sort((a, b) => (ord ? ord(a, b) : 0) || b.al.length - a.al.length || (b.pres - a.pres) || b.docs - a.docs || a.nome.localeCompare(b.nome, 'pt-BR'));
   const z = v => v ? `<b>${v}</b>` : '<i class="ac-z">0</i>';
   const metaPrin = x => { if (!x.temMeta) return ''; const k = MD_ITENS.find(([kk]) => x.meta[kk]); if (!k) return ''; const a = x.v[k[0]] || 0, m0 = x.meta[k[0]]; return `<div class="ac-mt ${x.bateu ? 'ok' : ''}"><span>${x.bateu ? 'Metas do dia batidas' : esc(k[1]) + ' ' + a + ' de ' + m0}</span><i><u style="width:${Math.min(100, Math.round(a / m0 * 100))}%"></u></i></div>`; };
   // v167: só WhatsApp, já com a mensagem pronta (o que está pendente ou o resumo do dia)
-  const msgCor = x => { const p1 = x.nome.split(' ')[0], eu = primeiro(perfil?.nome || ''), qd = x.per === 'ontem' ? 'ontem' : x.per === 'mes' ? 'este mês' : 'hoje';
+  const msgCor = x => { const p1 = x.nome.split(' ')[0], eu = primeiro(perfil?.nome || ''), qd = x.per === 'ontem' ? 'ontem' : x.per === 'sete' ? 'nos últimos 7 dias' : x.per === 'dia' ? 'em ' + acDm(acDiaSel) : acVarios(x.per) ? 'este mês' : 'hoje';
     // v170: cobrança do dia, pedindo o retorno do que aconteceu com os leads
     const txt = x.leads
-      ? `Oi, ${p1}! Tudo bem? Aqui é ${eu}. ${qd === 'hoje' ? 'Hoje' : qd === 'ontem' ? 'Ontem' : 'Este mês'} você recebeu ${x.leads} lead${x.leads > 1 ? 's' : ''}. Me passa um retorno de como foi: conseguiu falar com eles? Qual foi o final de cada um? Gerou documentação, visita ou alguma oportunidade? Me manda um resumo por aqui.`
-      : `Oi, ${p1}! Tudo bem? Aqui é ${eu}. Me passa um retorno do seu dia ${qd === 'hoje' ? 'de hoje' : qd === 'ontem' ? 'de ontem' : 'neste mês'}: com quem você falou, o que gerou (documentação, visita, proposta) e o que ficou pendente. Me manda um resumo por aqui.`;
+      ? `Oi, ${p1}! Tudo bem? Aqui é ${eu}. ${qd.charAt(0).toUpperCase() + qd.slice(1)} você recebeu ${x.leads} lead${x.leads > 1 ? 's' : ''}. Me passa um retorno de como foi: conseguiu falar com eles? Qual foi o final de cada um? Gerou documentação, visita ou alguma oportunidade? Me manda um resumo por aqui.`
+      : `Oi, ${p1}! Tudo bem? Aqui é ${eu}. Me passa um retorno do seu dia ${qd === 'hoje' ? 'de hoje' : qd === 'ontem' ? 'de ontem' : qd === 'este mês' ? 'neste mês' : qd}: com quem você falou, o que gerou (documentação, visita, proposta) e o que ficou pendente. Me manda um resumo por aqui.`;
     return encodeURIComponent(txt); };
   const acoes = x => (x.tel ? `<a class="ac-ic" href="https://wa.me/${soDig(x.tel).replace(/^(?!55)/, '55')}?text=${msgCor(x)}" target="_blank" rel="noopener" title="Mandar mensagem pronta para ${esc(x.nome)} no WhatsApp" aria-label="WhatsApp">💬</a>` : '');
-  const sit = x => x.per === 'mes' ? `<i>${x.diasPres} de ${x.nDias} dias no escritório</i>` : x.per === 'ontem' ? (x.pres ? '<i class="ac-ok">Veio ontem</i>' : '<i class="ac-nao">Não veio ontem</i>') : x.pres ? '<i class="ac-ok">No escritório</i>' : x.folga ? '<i>Folga / abonado</i>' : '<i class="ac-nao">Sem check-in</i>';
+  const sit = x => acVarios(x.per) ? `<i>${x.diasPres} de ${x.nDias} dias no escritório</i>` : x.per === 'ontem' || x.per === 'dia' ? (x.pres ? `<i class="ac-ok">Veio ${x.per === 'dia' ? 'em ' + acDm(acDiaSel) : 'ontem'}</i>` : `<i class="ac-nao">Não veio ${x.per === 'dia' ? 'em ' + acDm(acDiaSel) : 'ontem'}</i>`) : x.pres ? '<i class="ac-ok">No escritório</i>' : x.folga ? '<i>Folga / abonado</i>' : '<i class="ac-nao">Sem check-in</i>';
   const alHtml = x => x.al.map(([t2, g]) => `<span class="ac-al1 ${g}">${esc(t2)}</span>`).join('');
   const dia = d => d === hojeISO() ? 'hoje' : d === somaDias(hojeISO(), 1) ? 'amanhã' : d.slice(8) + '/' + d.slice(5, 7);
   const grupos = souGerente() && (!acEq || acEq === 'todas') ? listaEquipes().map(e => [e.id, ls.filter(x => x.p.equipe === e.id)]).concat([['', ls.filter(x => !listaEquipes().some(e => e.id === x.p.equipe))]]).filter(([, l]) => l.length) : [[null, ls]];
@@ -9802,7 +9847,8 @@ function renderAcomp(soDados){
         return `<details class="gv ac-gv"><summary><b>${g.n} cliente${g.n > 1 ? 's' : ''} parado${g.n > 1 ? 's' : ''}</b> · ${[q(g.semVis.length, 'AGENDE'), q(g.faltou.length, 'REMARQUE'), q(g.semResp.length, 'PEÇA AJUDA')].filter(Boolean).join(' · ')}</summary>${htmlGv(g)}</details>`; })()}
       ${x.agenda.length ? `<div class="ac-sec"><h4>Próximas visitas</h4>${x.agenda.map(v => `<div class="ac-vis" role="button" tabindex="0" onclick="editarVisita('${v.id}')" title="Abrir a visita"><span class="ac-d">${dia(v.date)} ${esc(v.time || '')}</span><span class="ac-c">${esc(v.cliente || '')}</span><span class="ac-st st-${stCls(v.status)}">${esc(v.status)}</span></div>`).join('')}</div>` : ''}
       ${x.anal.length || x.pend.length ? `<div class="ac-prime">Na Prime: ${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''}</div>` : ''}
-      <footer class="ac-pe3">${(() => { const pr = x.per === 'hoje' ? 'de hoje' : x.per === 'ontem' ? 'de ontem' : 'do mês'; return `<button class="ac-pb" ${x.leads ? '' : 'disabled'} onclick="acVer('leads','${x.p.uid}')"><b>${x.leads}</b><span>Ver leads ${pr}</span></button><button class="ac-pb" ${x.visL.length ? '' : 'disabled'} onclick="acVer('visitas','${x.p.uid}')"><b>${x.visL.length}</b><span>Ver visitas ${pr}</span></button><button class="ac-pb" ${x.aprov ? '' : 'disabled'} onclick="acVer('cartas','${x.p.uid}')"><b>${x.aprov}</b><span>Cartas aprovadas</span></button>`; })()}</footer>
+      <footer class="ac-pe3">${(() => { const pr = acRot(x.per, 1); return `<button class="ac-pb" ${x.leads ? '' : 'disabled'} onclick="acVer('leads','${x.p.uid}')"><b>${x.leads}</b><span>Ver leads ${pr}</span></button><button class="ac-pb" ${x.visL.length ? '' : 'disabled'} onclick="acVer('visitas','${x.p.uid}')"><b>${x.visL.length}</b><span>Ver visitas ${pr}</span></button><button class="ac-pb" ${x.aprov ? '' : 'disabled'} onclick="acVer('cartas','${x.p.uid}')"><b>${x.aprov}</b><span>Cartas aprovadas</span></button>`; })()}</footer>
+      <button type="button" class="btn btn-ghost btn-block ac-rel" onclick="acRelatorio('${x.p.uid}')">📋 Relatório ${esc(acRot(x.per, 1))} para a liderança</button>
     </article>`;
   $('acCorpo').innerHTML = !ls.length ? vazio(acSoAlerta ? 'Ninguém com alerta agora' : souAnjo() ? 'Nenhum corretor ligado a você ainda' : 'Nenhum corretor para mostrar', acSoAlerta ? 'Tudo em dia.' : souAnjo() ? 'A gerência escolhe quem cada anjo acompanha.' : souCoord() ? `Sua equipe no cadastro: ${esc(eqNome(perfil.equipe || '') || 'nenhuma')}. Os corretores aparecem aqui quando estão aprovados e nessa mesma equipe.` : 'Mude o filtro acima.')
     : grupos.map(([eq, l]) => cabGrupo(eq, l) + (false
@@ -14258,7 +14304,8 @@ function htmlAnjoCheckHoje(){
 const podeVerRankAnjos = () => souAtivo() && !souCeo() && (souAnjo() || souCoord() || souGerente());
 const anjoEqs = p => new Set([p.equipe, ...(p.membros || []).map(u => ((pessoasRk() || []).find(x => x.uid === u) || {}).equipe)].filter(Boolean));
 function anjosVisiveis(){
-  const base = (perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo');
+  // v404: o coordenador não carrega o perfil dos anjos (só corretor, coordenador e SDR da equipe); fora a gerência, a lista vem do ranking, que tem os anjos e os afilhados
+  const base = (souGerente() && perfisTodos && perfisTodos.length ? perfisTodos : pessoasRk()).filter(p => ehAnjoCoord(p) && p.status !== 'inativo');
   if (souGerente()) return rankEquipe ? base.filter(p => anjoEqs(p).has(rankEquipe)) : base;
   if (souCoord()) return base.filter(p => anjoEqs(p).has(perfil.equipe || '-'));
   if (souAnjo()) return base;
