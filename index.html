@@ -7929,7 +7929,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 415;
+const APP_VERSAO = 416;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13616,7 +13616,7 @@ function htmlCheckinHoje(){
 // v196: 2º check-in do dia (tarde). Só para quem fez o 1º antes do horário da tarde
 const tardeCfg = () => { const P = appCfg.pontos || {}; return { hora:Math.min(23, Math.max(0, Number(P.tardeHora ?? 13) || 13)), desde:String(P.tardeDesde || '2026-10-22') }; };
 function precisaTarde(c){
-  const t = tardeCfg(); if (!c || c.tarde || c.saida || !ligaPontua() || ciHoje() < t.desde || !(ciCfg().dias || [1,2,3,4,5,6]).includes(new Date().getDay())) return false;
+  const t = tardeCfg(); if (!c || c.tarde || c.saida || !ligaPontua() || ciHoje() < t.desde) return false; /* v416: quem veio no domingo também marca a tarde e pontua (domingo e sábado só contam a favor) */
   return new Date().getHours() >= t.hora && new Date(c.entrada || 0).getHours() < t.hora;
 }
 window.precisaTarde = precisaTarde;
