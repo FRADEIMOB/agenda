@@ -2342,7 +2342,7 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ac-prime{font-size:12.5px;color:var(--muted)}
 
 /* v167: agenda de visitas em Meus corretores */
-.ag-card{margin-bottom:16px;padding:16px}.ac-agenda-fim{margin-top:18px}.ac-rel{margin-top:10px;font-weight:700}@media (max-width:640px){.ac-agenda-fim .ag-seg{display:grid;grid-template-columns:repeat(3,1fr);width:100%}.ac-agenda-fim .ag-seg button{white-space:normal;line-height:1.2;padding:7px 4px;font-size:12.5px}}.ac-data{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card,#fff);border:1px solid var(--line,#e5e7eb);border-radius:10px;padding:4px 8px}.ac-data.on{border-color:var(--accent,#E2622B);color:var(--accent,#E2622B)}.ac-data input{border:0;background:transparent;font:inherit;color:var(--text,inherit);padding:2px}.ag-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}.ag-top h2{margin:0;font-size:17px}.ag-top span{font-size:12.5px;color:var(--muted)}
+.ag-card{margin-bottom:16px;padding:16px}.t3-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px}.t3-grade figure{margin:0;display:flex;flex-direction:column;gap:8px}.t3-grade img{width:100%;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.12)}.t3-grade figcaption{font-size:12.5px;color:var(--muted)}.ac-agenda-fim{margin-top:18px}.ac-rel{margin-top:10px;font-weight:700}@media (max-width:640px){.ac-agenda-fim .ag-seg{display:grid;grid-template-columns:repeat(3,1fr);width:100%}.ac-agenda-fim .ag-seg button{white-space:normal;line-height:1.2;padding:7px 4px;font-size:12.5px}}.ac-data{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card,#fff);border:1px solid var(--line,#e5e7eb);border-radius:10px;padding:4px 8px}.ac-data.on{border-color:var(--accent,#E2622B);color:var(--accent,#E2622B)}.ac-data input{border:0;background:transparent;font:inherit;color:var(--text,inherit);padding:2px}.ag-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}.ag-top h2{margin:0;font-size:17px}.ag-top span{font-size:12.5px;color:var(--muted)}
 .ag-seg button i{font-style:normal;font-size:11px;font-weight:800;margin-left:6px;padding:1px 6px;border-radius:99px;background:var(--card2)}.ag-seg button.on i{background:color-mix(in srgb,var(--accent) 18%,var(--card));color:var(--accent)}
 .ag-lista{display:flex;flex-direction:column;gap:6px;max-height:430px;overflow:auto}
 .ag-dia{font-size:12px;font-weight:800;color:var(--muted);margin:8px 0 2px;text-transform:capitalize}
@@ -3541,7 +3541,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 
       <!-- APRESENTAÇÃO DA REUNIÃO -->
       <section class="view" id="v-apresentacao">
-        <div class="page-head"><div><h1>Apresentação</h1><div class="sub">Escolha o período e o app monta todos os slides no estilo da Frade, com os números do app.</div></div></div>
+        <div class="page-head"><div><h1>Apresentação</h1><div class="sub">Escolha o período e o app monta todos os slides no estilo da Frade, com os números do app.</div></div><div class="ph-acoes"><button class="btn btn-primary" onclick="abrirTop3()">Top 3 em fotos</button></div></div>
         <div class="ap-escolha" id="apEscolha"></div>
         <div class="card" style="margin-top:18px"><div class="hint" style="margin:0">Na apresentação: passe com as setas (ou arrastando no celular), use <b>📺 Tela cheia</b> na TV, <b>🖨️ PDF</b> para salvar e <b>⬇ PowerPoint</b> para editar. O último slide tem espaço para escrever os direcionamentos na hora da reunião.</div></div>
       </section>
@@ -4419,6 +4419,13 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
   </div>
 </div>
 <!-- v334: atividades do checklist dos anjos e coordenadores -->
+<div class="modal" id="top3Modal">
+  <div class="sheet" style="width:min(980px,100%)">
+    <div class="sheet-head"><div><h2>Top 3 em fotos</h2><div class="muted" style="font-size:13px;margin-top:3px">Corretores (com os anjos), anjos pelo papel de anjo e SDRs. Uma foto para cada.</div></div><button class="icon-btn" onclick="fechar('top3Modal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div class="seg" id="t3Per"></div><div id="t3Corpo" class="t3-grade"></div></div>
+    <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('top3Modal')">Fechar</button><button class="btn btn-ghost" onclick="top3Folhas()">Folhas para o quadro (A4)</button><button class="btn btn-ghost" onclick="top3Baixar()">Baixar as 3</button><button class="btn btn-primary" onclick="top3Compartilhar()">Compartilhar</button></div>
+  </div>
+</div>
 <div class="modal" id="achModal">
   <div class="sheet" style="width:min(600px,100%)">
     <div class="sheet-head"><div><h2>Pontos do checklist dos anjos</h2></div><button class="icon-btn" onclick="fechar('achModal')" data-ic="x"></button></div>
@@ -7922,7 +7929,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 406;
+const APP_VERSAO = 409;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8491,7 +8498,8 @@ function pontosDoMesBase(m, val, corte){
     // v296: o número do dia (mddoc) já soma conversa + resumo. Na SDR vale o MAIOR dos dois no dia (o mesmo trabalho não conta duas vezes):
     // o resumo já pontua na linha dele; aqui entra só o que a conversa tiver a mais que o resumo
     // v399: na SDR o grupo de crédito é o mesmo trabalho do resumo do dia (decisão do Allan, 12/11): a doc da SDR vem só do resumo; o grupo não soma nada
-    const dg = papelDe(r.uid) === 'sdr' ? 0 : soma(r.mddoc);
+    // v409: a SDR volta a pontuar as fichas do grupo: entra só o que as fichas do dia tiverem a mais que o resumo (o resumo já pontua na linha dele)
+    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => a + Math.max(0, (Number(v) || 0) - (Number((r.sdoc || {})[d]) || 0)), 0) : soma(r.mddoc);
     x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
@@ -8522,6 +8530,107 @@ function pontosDoMesBase(m, val, corte){
   return [...g.values()].sort((a,b) => b.pontos-a.pontos || b.vendas-a.vendas || b.cartas-a.cartas || a.nome.localeCompare(b.nome,'pt-BR'));
 }
 window.pontosDoMes = pontosDoMes;
+
+// =====================================================================
+// v407: Top 3 em fotos (gerência): corretores com os anjos (pontos do ranking), anjos pelo papel de anjo e SDRs (pontos).
+// Papel de anjo = metade checklist (dias com o checklist marcado, sobre os dias úteis) + metade resultado dos afilhados
+// (média de pontos por afilhado, sobre a maior média entre os anjos). Nota de 0 a 100.
+// =====================================================================
+window.t3Per = 'semana';
+function t3Faixa(k){ const h = hojeISO(), d = parseISO(h), dow = (d.getDay() + 6) % 7, seg = somaDias(h, -dow);
+  if (k === 'semana') return [somaDias(seg, -7), somaDias(seg, -1), 'Semana ' + acDm(somaDias(seg, -7)) + ' a ' + acDm(somaDias(seg, -1))];
+  if (k === 'quinzena') { const dia = Number(h.slice(8)), m = h.slice(0, 7); if (dia > 15) return [m + '-01', m + '-15', 'Quinzena 01 a 15/' + m.slice(5)]; const ma = mesAnterior(1), f = fimDoMes(ma); return [ma + '-16', f, 'Quinzena 16 a ' + acDm(f)]; }
+  const m = h.slice(0, 7); return [m + '-01', h, 'Mês até ' + acDm(h)]; }
+function top3Dados(de, ate){
+  const l = pontosEntre(de, ate, de), ativo = uid => { const p = (perfisTodos || []).find(x => x.uid === uid) || (pessoasRk() || []).find(x => x.uid === uid); return p && p.status === 'ativo'; };
+  const cor = l.filter(x => ativo(x.uid) && ['corretor','coordenador','anjo'].includes(papelDe(x.uid))).slice(0, 3);
+  const sdr = l.filter(x => ativo(x.uid) && papelDe(x.uid) === 'sdr').slice(0, 3);
+  const uteis = []; for (let d = de; d <= ate; d = somaDias(d, 1)) if (parseISO(d).getDay() !== 0) uteis.push(d);
+  const anjos = anjosVisiveis().filter(a => a.status !== 'inativo').map(a => { const us = (a.membros || []).filter(ativo);
+    const ach = Object.assign({}, ...rankingAtiv.filter(r => r.uid === a.uid).map(r => r.ach || {}));
+    const diasChk = uteis.filter(d => { const o = ach[d] || {}; return o.fech || o.val || Object.keys(o).some(k => /^(f_|l_|c\d)/.test(k)); }).length;
+    const xs = l.filter(x => us.includes(x.uid)), soma = k => xs.reduce((t, x) => t + (Number(x[k]) || 0), 0);
+    return { nome:a.nome, uid:a.uid, n:us.length, diasChk, med:us.length ? soma('pontos') / us.length : 0, real:soma('realizadas'), docs:soma('docGeral'), vendas:soma('vendas') }; }).filter(a => a.n);
+  const maxMed = Math.max(1, ...anjos.map(a => a.med));
+  anjos.forEach(a => { a.nota = Math.round(50 * (uteis.length ? a.diasChk / uteis.length : 0) + 50 * (a.med / maxMed)); });
+  anjos.sort((a, b) => b.nota - a.nota || b.med - a.med);
+  return { cor, sdr, anjos:anjos.slice(0, 3), nUteis:uteis.length };
+}
+function top3Img(titulo, periodo, itens){
+  const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  const F = (w, px) => `${w} ${px}px "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif`;
+  g.fillStyle = '#16213A'; g.fillRect(0, 0, W, H);
+  g.fillStyle = '#E2622B'; g.fillRect(0, 0, W, 14);
+  g.fillStyle = '#FFFFFF'; g.font = F(800, 40); g.fillText('FRADE IMÓVEIS', 80, 120);
+  g.fillStyle = '#E2622B'; g.font = F(800, 92); g.fillText('TOP 3', 80, 250);
+  g.fillStyle = '#FFFFFF'; g.font = F(800, 64); g.fillText(titulo, 80, 330);
+  g.fillStyle = 'rgba(255,255,255,.65)'; g.font = F(600, 36); g.fillText(periodo, 80, 390);
+  const cores = ['#E2B33B', '#C9CED8', '#C98A4B'], y0 = 430, alt = 262;
+  itens.forEach((it, i) => { const y = y0 + i * (alt + 22);
+    g.fillStyle = i === 0 ? 'rgba(226,98,43,.18)' : 'rgba(255,255,255,.06)'; g.beginPath(); g.roundRect ? g.roundRect(80, y, W - 160, alt, 28) : g.rect(80, y, W - 160, alt); g.fill();
+    g.fillStyle = cores[i]; g.beginPath(); g.arc(190, y + alt / 2, 64, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#16213A'; g.font = F(800, 64); g.textAlign = 'center'; g.fillText(String(i + 1) + 'º', 190, y + alt / 2 + 22); g.textAlign = 'left';
+    const nome = String(it.nome || ''); let fs = 58; g.font = F(800, fs); while (g.measureText(nome).width > W - 160 - 300 && fs > 34) { fs -= 2; g.font = F(800, fs); }
+    g.fillStyle = '#FFFFFF'; g.fillText(nome, 290, y + 92);
+    g.fillStyle = '#E2622B'; g.font = F(800, 46); g.fillText(it.valor, 290, y + 148);
+    g.fillStyle = 'rgba(255,255,255,.72)'; g.font = F(600, 28); const larg = W - 160 - 250, linhas = ['']; String(it.det || '').split(' ').forEach(w => { const t = linhas[linhas.length - 1] ? linhas[linhas.length - 1] + ' ' + w : w; if (g.measureText(t).width > larg && linhas[linhas.length - 1]) linhas.push(w); else linhas[linhas.length - 1] = t; });
+    linhas.slice(0, 2).forEach((t, k) => g.fillText(t, 290, y + 196 + k * 38));
+  });
+  if (!itens.length) { g.fillStyle = 'rgba(255,255,255,.7)'; g.font = F(600, 40); g.fillText('Sem dados no período', 80, 560); }
+  g.fillStyle = 'rgba(255,255,255,.45)'; g.font = F(600, 26); g.fillText('Gerado pelo app Frade · ' + acDm(hojeISO()), 80, H - 36);
+  return c.toDataURL('image/png');
+}
+const t3Nome = n => nomeBonito(String(n || '')).split(' ').filter(Boolean).filter((w, i, a) => i === 0 || i === a.length - 1).join(' ');
+window.top3Fotos = (k = window.t3Per) => {
+  const [de, ate, rot] = t3Faixa(k), D = top3Dados(de, ate), mil = n => Math.round(Number(n) || 0).toLocaleString('pt-BR');
+  const pl = (n, a, b) => { n = Math.round((Number(n) || 0) * 10) / 10; return String(n).replace('.', ',') + ' ' + (n === 1 ? a : b); };
+  const cor = D.cor.map(x => ({ nome:t3Nome(x.nome), valor:mil(x.pontos) + ' pontos', det:`${pl(x.realizadas, 'visita realizada', 'visitas realizadas')} · ${pl(x.docGeral, 'doc', 'docs')} · ${pl(x.vendas, 'venda', 'vendas')}` }));
+  const anj = D.anjos.map(a => ({ nome:t3Nome(a.nome), valor:'nota ' + a.nota, det:`checklist em ${a.diasChk} de ${D.nUteis} dias · afilhados: ${pl(a.real, 'visita', 'visitas')}, ${pl(a.docs, 'doc', 'docs')}, ${pl(a.vendas, 'venda', 'vendas')}` }));
+  const sdr = D.sdr.map(x => ({ nome:t3Nome(x.nome), valor:mil(x.pontos) + ' pontos', det:`${pl(x.docs, 'doc', 'docs')} · ${pl(x.visitas, 'visita marcada', 'visitas marcadas')} · ${mil(x.ligacoes)} ligações` }));
+  return [['CORRETORES', top3Img('CORRETORES', rot, cor)], ['ANJOS', top3Img('ANJOS', rot, anj)], ['SDRS', top3Img('SDRS', rot, sdr)]].map(([t, u]) => ({ t, u, nome:`top3-${t.toLowerCase()}-${de}.png` }));
+};
+// v408: folhas A4 para imprimir e pendurar no quadro: uma folha por pessoa (1º, 2º e 3º de corretores, anjos e SDRs), com a foto do perfil
+window.top3Folhas = () => {
+  const [de, ate, rot] = t3Faixa(t3Per), D = top3Dados(de, ate), w = window.open('', '_blank'); if (!w) { toast('Libere as janelas (pop-up) para imprimir'); return; }
+  const mil = n => Math.round(Number(n) || 0).toLocaleString('pt-BR'), pl = (n, a, b) => { n = Math.round((Number(n) || 0) * 10) / 10; return String(n).replace('.', ',') + ' ' + (n === 1 ? a : b); };
+  const foto = uid => ((perfisTodos || []).find(p => p.uid === uid) || {}).foto || '', ini = n => t3Nome(n).split(' ').map(x => x[0] || '').join('').toUpperCase();
+  const cores = ['#D9A521', '#9AA3B2', '#B9773A'], e = x => String(x || '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+  const folha = (cat, i, uid, nome, valor, det) => { const f = foto(uid), c = cores[i];
+    return `<section class="f"><div class="topo"><div class="mk">FRADE IMÓVEIS</div><div class="lg" style="color:${c}">${i + 1}º LUGAR</div><div class="ct">${cat}</div><div class="pr">${e(rot)}</div></div>
+      <div class="ft" style="border-color:${c}">${f ? `<img src="${e(f)}" alt="">` : `<span>${e(ini(nome))}</span>`}</div>
+      <div class="nm">${e(t3Nome(nome))}</div><div class="vl">${e(valor)}</div><div class="dt">${e(det)}</div><div class="base"></div></section>`; };
+  const pags = [
+    ...D.cor.map((x, i) => folha('CORRETORES', i, x.uid, x.nome, mil(x.pontos) + ' pontos', `${pl(x.realizadas, 'visita realizada', 'visitas realizadas')} · ${pl(x.docGeral, 'doc', 'docs')} · ${pl(x.vendas, 'venda', 'vendas')}`)),
+    ...D.anjos.map((a, i) => folha('ANJOS', i, a.uid, a.nome, 'nota ' + a.nota, `checklist em ${a.diasChk} de ${D.nUteis} dias · afilhados: ${pl(a.real, 'visita', 'visitas')}, ${pl(a.docs, 'doc', 'docs')}, ${pl(a.vendas, 'venda', 'vendas')}`)),
+    ...D.sdr.map((x, i) => folha('SDRS', i, x.uid, x.nome, mil(x.pontos) + ' pontos', `${pl(x.docs, 'doc', 'docs')} · ${pl(x.visitas, 'visita marcada', 'visitas marcadas')} · ${mil(x.ligacoes)} ligações`)) ];
+  w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Top 3 · ${e(rot)}</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;800&display=swap" rel="stylesheet"><style>
+    @page{size:A4 portrait;margin:0}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Plus Jakarta Sans',Arial,sans-serif;background:#ddd;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .f{width:210mm;height:297mm;background:#fff;position:relative;overflow:hidden;margin:0 auto 8mm;page-break-after:always;break-after:page}
+    .topo{background:#16213A;color:#fff;text-align:center;padding:16mm 10mm 0;height:104mm;border-top:4mm solid #E2622B}
+    .mk{font-size:5mm;font-weight:800;letter-spacing:.3mm;opacity:.85}.lg{font-size:30mm;font-weight:800;line-height:1;margin-top:5mm}.ct{font-size:9mm;font-weight:800;margin-top:4mm}.pr{font-size:5.5mm;opacity:.75;margin-top:2mm}
+    .ft{width:120mm;height:120mm;border-radius:50%;border:5mm solid;margin:-20mm auto 0;overflow:hidden;background:#E9E4DE;display:flex;align-items:center;justify-content:center;position:relative}
+    .ft img{width:100%;height:100%;object-fit:cover}.ft span{font-size:42mm;font-weight:800;color:#16213A}
+    .nm{text-align:center;font-size:15mm;font-weight:800;color:#16213A;margin-top:9mm;padding:0 10mm}.vl{text-align:center;font-size:11mm;font-weight:800;color:#E2622B;margin-top:3mm}
+    .dt{text-align:center;font-size:5.5mm;color:#5b6375;margin:4mm 18mm 0}.base{position:absolute;left:0;right:0;bottom:0;height:4mm;background:#E2622B}
+    .bar{position:sticky;top:0;background:#16213A;color:#fff;padding:10px;text-align:center;font-family:Arial;font-size:14px;z-index:2}.bar button{margin-left:10px;padding:8px 14px;border:0;border-radius:8px;background:#E2622B;color:#fff;font-weight:700;cursor:pointer}
+    @media print{body{background:#fff}.bar{display:none}.f{margin:0}}
+  </style></head><body><div class="bar">${pags.length} folhas · ${e(rot)} · A4 colorido <button onclick="print()">Imprimir</button></div>${pags.join('') || '<p style="padding:20px">Sem dados no período.</p>'}</body></html>`);
+  w.document.close(); setTimeout(() => { try { w.focus(); w.print(); } catch(e) {} }, 1200);
+};
+let _t3 = [];
+function renderTop3(){
+  $('t3Per').innerHTML = [['semana', 'Semana passada'], ['quinzena', 'Última quinzena'], ['mes', 'Mês até hoje']].map(([k, r]) => `<button class="${t3Per === k ? 'on' : ''}" onclick="t3Per='${k}';renderTop3()">${r}</button>`).join('');
+  $('t3Corpo').innerHTML = '<div class="muted">Montando as fotos…</div>';
+  setTimeout(() => { try { _t3 = top3Fotos(t3Per); $('t3Corpo').innerHTML = _t3.map(x => `<figure><img src="${x.u}" alt="Top 3 ${esc(x.t.toLowerCase())}"><figcaption>${esc(x.nome)}</figcaption></figure>`).join(''); } catch(e) { $('t3Corpo').innerHTML = '<div class="muted">Não deu para montar: ' + esc(e.message) + '</div>'; } }, 50);
+}
+window.abrirTop3 = () => { if (!souGerente()) return; abrir('top3Modal'); renderTop3(); };
+window.renderTop3 = renderTop3;
+window.top3Baixar = () => { _t3.forEach((x, i) => setTimeout(() => { const a = document.createElement('a'); a.href = x.u; a.download = x.nome; document.body.appendChild(a); a.click(); a.remove(); }, i * 400)); };
+window.top3Compartilhar = async () => {
+  try { const fs = await Promise.all(_t3.map(async x => new File([await (await fetch(x.u)).blob()], x.nome, { type:'image/png' })));
+    if (navigator.canShare && navigator.canShare({ files:fs })) { await navigator.share({ files:fs, title:'Top 3' }); return; } } catch(e) { if (e && e.name === 'AbortError') return; }
+  toast('Este aparelho não compartilha fotos direto: baixando as 3'); top3Baixar();
+};
 
 // =====================================================================
 // v193: rankings novos. O dono cria um ranking com nome e data de início: todo mundo começa zerado nele,
@@ -8712,7 +8821,7 @@ function linhasPontos(x, P){
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     // v297: na SDR, resumo e conversa são a mesma coisa: uma linha só, com o maior número de cada dia
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdrPts ?? (x.docsSdr || 0) * vS) + (x.docGeral || 0) * n('docGeral');
-      return [['Documentações (do resumo do dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
+      return [['Documentações (grupos de crédito e resumo do dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
@@ -9928,13 +10037,20 @@ window.abrirEquipeAnjo = uid => {
   const a = perfisTodos.find(p => p.uid === uid); if (!a) return; window._anjoEd = uid;
   const m = new Set(a.membros || []), gente = perfisTodos.filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)).sort((x, y) => (x.equipe || '').localeCompare(y.equipe || '') || x.nome.localeCompare(y.nome, 'pt-BR'));
   $('anjoTit').textContent = 'Equipe do anjo ' + primeiro(a.nome);
-  $('anjoLista').innerHTML = gente.map(p => `<label class="fv-chk"><input type="checkbox" value="${p.uid}" ${m.has(p.uid) ? 'checked' : ''}> ${esc(p.nome)} <small class="muted">${esc(PAPEIS[p.papel] || '')}${p.equipe ? ' · ' + esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, '')) : ''}</small></label>`).join('') || '<div class="muted">Nenhum corretor ativo.</div>';
+  const anjoDe = u => perfisTodos.find(x => x.uid !== uid && x.papel === 'anjo' && (x.membros || []).includes(u));
+  $('anjoLista').innerHTML = gente.map(p => { const o = !m.has(p.uid) && anjoDe(p.uid); return `<label class="fv-chk"><input type="checkbox" value="${p.uid}" ${m.has(p.uid) ? 'checked' : ''}> ${esc(p.nome)} <small class="muted">${esc(PAPEIS[p.papel] || '')}${p.equipe ? ' · ' + esc(eqNome(p.equipe).replace(/^[^\p{L}]+/u, '')) : ''}${o ? ' · hoje com ' + esc(primeiro(o.nome)) : ''}</small></label>`; }).join('') || '<div class="muted">Nenhum corretor ativo.</div>';
   abrir('anjoModal');
 };
 window.salvarEquipeAnjo = async () => {
   const uid = window._anjoEd, sel = [...document.querySelectorAll('#anjoLista input:checked')].map(i => i.value);
   const nomes = sel.map(u => (perfisTodos.find(p => p.uid === u) || {}).nome || '');
-  try { await gravar(setDoc(doc(db,'perfis',uid), { membros:sel, membrosNomes:nomes }, { merge:true })); fechar('anjoModal'); toast(`Equipe do anjo salva (${sel.length})`); } catch(e) { toast('Erro: ' + e.message); }
+  // v407: quem entra na equipe deste anjo sai automaticamente da equipe do anjo anterior
+  const b = writeBatch(db); b.set(doc(db,'perfis',uid), { membros:sel, membrosNomes:nomes }, { merge:true }); const tirados = [];
+  perfisTodos.filter(p => p.uid !== uid && (p.membros || []).some(u => sel.includes(u))).forEach(p => {
+    const fica = (p.membros || []).filter(u => !sel.includes(u)), saiu = (p.membros || []).filter(u => sel.includes(u));
+    b.set(doc(db,'perfis',p.uid), { membros:fica, membrosNomes:fica.map(u => (perfisTodos.find(x => x.uid === u) || {}).nome || '') }, { merge:true });
+    saiu.forEach(u => tirados.push(`${primeiro((perfisTodos.find(x => x.uid === u) || {}).nome || '')} (saiu de ${primeiro(p.nome)})`)); });
+  try { await gravar(b.commit()); fechar('anjoModal'); toast(`Equipe do anjo salva (${sel.length})${tirados.length ? ' · ' + tirados.join(', ') : ''}`); } catch(e) { toast('Erro: ' + e.message); }
 };
 // ---------- v105: rankings na TV (todos lado a lado) ----------
 function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate(d.getDate() + (dow === 0 ? -1 : 6 - dow)); return iso(d); }
@@ -11431,9 +11547,14 @@ window.ligar = (tel, cliente, origem) => {
   iniciarLigacao(tel, cliente, origem);
   const a = document.createElement('a'); a.href = 'tel:' + n; document.body.appendChild(a); a.click(); a.remove();
 };
+// v406: ligação só conta dentro do horário comercial (padrão 8h às 22h; a gerência muda em appCfg.pontos.ligHoraIni / ligHoraFim).
+// Fora dele (ex.: de madrugada) a ligação acontece normalmente, mas não entra nos números nem no ranking.
+const ligHorario = () => { const c = appCfg.pontos || {}, ini = Number(c.ligHoraIni ?? 8), fim = Number(c.ligHoraFim ?? 22); return [isFinite(ini) ? ini : 8, isFinite(fim) ? fim : 22]; };
+const ligNoHorario = () => { const [ini, fim] = ligHorario(), h = new Date().getHours(); return h >= ini && h < fim; };
 async function registrarLigacao(tel, cliente, origem){
   const sdr = !ligaConta() && ligaSdr();
   if (!ligaConta() && !sdr) return '';
+  if (!ligNoHorario()) { const [ini, fim] = ligHorario(); toast(`Fora do horário de ligações (${ini}h às ${fim}h): esta não conta.`); return ''; }
   const t = chaveTel(tel); if (!t) return '';
   const h = hojeISO(), m = h.slice(0,7), rec = minhasLigHoje.some(x => x.telNorm === t), b = writeBatch(db), ref = doc(collection(db,'ligacoes'));
   b.set(ref, { uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', tel:String(tel || ''), telNorm:t, cliente:String(cliente || '').slice(0,80), origem:origem || '', dia:h, em:Date.now(), recontato:rec, v:97, ...(sdr ? { sdr:true } : {}) });
@@ -18092,6 +18213,30 @@ function modeloSlides(D){
   const vl = D.vendas.slice(0, 8);
   S.push({ fundo:'faixa', titulo:`VENDAS ${D.doPer}`, blocos:vl.length ? [{ tipo:'tabela', cab:['Data','Cliente','Corretor','Valor'], linhas:vl.map(v => [v.dia ? v.dia.slice(8,10) + '/' + v.dia.slice(5,7) : '', nomeBonito(v.cliente), v.corretores.map(c => primeiro(c.nome)).join(' / '), v.valor ? brl(v.valor) : '–']) }, ...(D.vendas.length > 8 ? [{ tipo:'nota', t:`+ ${D.vendas.length - 8} vendas ${D.noPer} · total ${brl(A.valorVendido)}.` }] : [])] : [{ tipo:'grande', t:`Nenhuma venda registrada ${D.noPer}.` }] });
   if (D.sdr.length) S.push({ fundo:'faixa', titulo:'SDRS', blocos:[{ tipo:'tabela', cab:['SDR','Visitas','Realizadas','Leads','Docs','Aprovações'], linhas:D.sdr.slice(0, 8).map(x => [x.nome, x.visitas, x.realizadas, x.leads, x.docs, x.aprov]) }] });
+  // v407: top 3 (corretores com os anjos, anjos pelo papel de anjo, SDRs), aprovados sem reserva e pontos da operação
+  try { const t3 = (de, ate) => { const T = top3Dados(de, ate), f = n => Math.round(Number(n) || 0).toLocaleString('pt-BR');
+      return [{ t:'CORRETORES', l:T.cor.map(x => [t3Nome(x.nome), f(x.pontos) + ' pts']) }, { t:'ANJOS', l:T.anjos.map(a => [t3Nome(a.nome), 'nota ' + a.nota]) }, { t:'SDRS', l:T.sdr.map(x => [t3Nome(x.nome), f(x.pontos) + ' pts']) }]; };
+    S.push({ fundo:'creme', titulo:`TOP 3 ${D.doPer}`, blocos:[{ tipo:'colunas', inteiro:true, itens:t3(D.de, D.ate) }, { tipo:'nota', t:'Corretores e SDRs pelos pontos do ranking. Anjos pelo papel de anjo: metade checklist (dias marcados) e metade resultado dos afilhados (pontos por afilhado).' }] });
+    /* v408: na reunião semanal só os números da semana; a quinzena fica para as premiações (Top 3 em fotos) */
+  } catch(e) { console.warn('top3 slide', e); }
+  try { const ch = (cpf, tel) => { const c = soDig(cpf || ''); return c.length === 11 ? 'c' + c : tel ? 't' + tel : ''; };
+    const res = new Set(); (typeof reservasTodas !== 'undefined' ? reservasTodas : []).filter(r => !r.caiu && !r.arquivado).forEach(r => { const c = soDig(r.cpf || r.cpfNorm || ''); if (c.length === 11) res.add('c' + c); const t = r.telNorm || chaveTel(r.telefone || ''); if (t) res.add('t' + t); });
+    const ap = new Map(); avaliacoes.filter(a => infoStatus(a.status).g === 'aprovado' && (a.aprovadoEm || a.data || '') >= D.de && (a.aprovadoEm || a.data || '') <= D.ate).forEach(a => { const k = ch(a.cpfNorm || a.cpf, a.telNorm) || 'a' + a.id; if (!ap.has(k)) ap.set(k, { uid:a.corretorUid || uidDaAv(a) || '', nome:a.corretorNome || a.aba || '', cpf:a.cpfNorm || a.cpf, tel:a.telNorm }); });
+    (typeof cartas !== 'undefined' ? cartas : []).filter(c => !c.arquivado && (c.data || '') >= D.de && (c.data || '') <= D.ate).forEach(c => { const t = c.telNorm || chaveTel(c.telefone || ''), k = ch(c.cpf, t) || 'k' + c.id; if (!ap.has(k)) ap.set(k, { uid:c.corretorUid || '', nome:c.corretorNome || '', cpf:c.cpf, tel:t }); });
+    const g = {}; ap.forEach(a => { const nm = ((perfisTodos || []).find(p => p.uid === a.uid) || {}).nome || a.nome || 'Sem corretor'; const o = g[nm] = g[nm] || { ap:0, rv:0 }; o.ap++; const c = soDig(a.cpf || ''); if ((c.length === 11 && res.has('c' + c)) || (a.tel && res.has('t' + a.tel))) o.rv++; });
+    const lin = Object.entries(g).map(([n, o]) => [t3Nome(n), o.ap, o.rv, o.ap - o.rv]).filter(x => x[3] > 0).sort((a, b) => b[3] - a[3] || b[1] - a[1]).slice(0, 8);
+    const tot = [...Object.values(g)].reduce((a, o) => [a[0] + o.ap, a[1] + o.rv], [0, 0]);
+    S.push({ fundo:'faixa', titulo:'APROVADOS SEM RESERVA', blocos:lin.length ? [{ tipo:'tabela', cab:['Corretor', 'Aprovados', 'Viraram reserva', 'Sem reserva'], linhas:lin }, { tipo:'nota', t:`${tot[0]} aprovado${tot[0] === 1 ? '' : 's'} ${D.noPer}: ${tot[1]} já com reserva, ${tot[0] - tot[1]} ainda sem. Cliente aprovado sem reserva é a venda mais perto de acontecer.` }] : [{ tipo:'grande', t:'Todos os aprovados do período já viraram reserva.' }] });
+  } catch(e) { console.warn('aprovados sem reserva slide', e); }
+  try { const h = hojeISO(), ag = new Date().toTimeString().slice(0, 5);
+    const sb = (typeof visitas !== 'undefined' ? visitas : []).filter(v => !v.arquivado && v.date >= D.de && v.date <= D.ate && ['Pendente', 'Confirmada', 'Reagendada'].includes(v.status) && (v.date < h || (v.date === h && v.time && v.time < ag)));
+    const porC = {}; sb.forEach(v => { const n = t3Nome(v.corretorNome || ((perfisTodos || []).find(p => p.uid === v.corretorUid) || {}).nome || 'Sem corretor'); porC[n] = (porC[n] || 0) + 1; });
+    const quem = Object.entries(porC).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([n, q]) => `${n.split(' ')[0]} ${q}`).join(', ');
+    let semChk = []; try { const T = top3Dados(D.de, D.ate); semChk = anjosVisiveis().filter(a => a.status !== 'inativo' && (a.membros || []).length).filter(a => { const ach = Object.assign({}, ...rankingAtiv.filter(r => r.uid === a.uid).map(r => r.ach || {})); return !Object.entries(ach).some(([d, o]) => d >= D.de && d <= D.ate && o && (o.fech || o.val || Object.keys(o).some(k => /^(f_|l_|c\d)/.test(k)))); }).map(a => t3Nome(a.nome).split(' ')[0]); } catch(e) {}
+    S.push({ fundo:'faixa', titulo:'PONTOS DA OPERAÇÃO', blocos:[{ tipo:'tabela', cab:['O que olhar', 'Quantos', 'Quem'], linhas:[
+      ['Visitas sem baixa (passou e ninguém marcou se aconteceu)', sb.length, quem || '–'],
+      ['Anjos sem checklist no período', semChk.length, semChk.slice(0, 5).join(', ') || '–'] ] }, { tipo:'nota', t:'Visita sem baixa não conta como realizada no ranking nem no relatório. Anjo sem checklist não pontua no papel de anjo.' }] });
+  } catch(e) { console.warn('operação slide', e); }
   S.push({ fundo:'faixa', titulo:`DIRECIONAMENTOS — ${D.proxRot}`, blocos:[{ tipo:'notas', itens:[{ t:'Foco e ação', id:'n1', d:'Toque para escrever' }, { t:'Metas', id:'n2', d:'Toque para escrever' }] }] });
   return S;
 }
@@ -18106,7 +18251,7 @@ function slideHtml(s){
     if (k.tipo === 'funil') { const mx = Math.max(1, ...k.itens.map(i => i.v)); return `<div class="ap-fn">${k.itens.map((i, n) => `<div class="l"><span>${i.r}</span><div class="b"><i style="width:${Math.max(2, i.v / mx * 100)}%;${n === 3 ? 'background:' + APC.lj : ''}"></i><b>${apFmt(i.v)}</b></div><em>${esc(i.o)}</em></div>`).join('')}</div>`; }
     if (k.tipo === 'ranking') return k.itens.length ? `<div class="ap-rk">${k.itens.map((i, n) => `<div><span>${n < 3 ? ['🥇','🥈','🥉'][n] : (n + 1) + 'º'} ${esc(i.n)}</span><b>${esc(i.v)}</b></div>`).join('')}</div>` : `<div class="ap-gr">Nada registrado ${apDados?.noPer || 'no período'}.</div>`;
     if (k.tipo === 'tabela') return `<table class="ap-tb"><thead><tr>${k.cab.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${k.linhas.map(l => `<tr>${l.map(c => `<td>${esc(String(c))}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-    if (k.tipo === 'colunas') return `<div class="ap-cl">${k.itens.map(c => `<div><h3>${esc(c.t)}</h3>${c.l.length ? c.l.map((r, n) => `<p><span>${['🥇','🥈','🥉'][n]} ${esc(primeiro(r[0]))}</span><b>${esc(String(r[1]))}</b></p>`).join('') : '<p><span>—</span></p>'}</div>`).join('')}</div>`;
+    if (k.tipo === 'colunas') return `<div class="ap-cl">${k.itens.map(c => `<div><h3>${esc(c.t)}</h3>${c.l.length ? c.l.map((r, n) => `<p><span>${['🥇','🥈','🥉'][n]} ${esc(k.inteiro ? r[0] : primeiro(r[0]))}</span><b>${esc(String(r[1]))}</b></p>`).join('') : '<p><span>—</span></p>'}</div>`).join('')}</div>`;
     if (k.tipo === 'nota') return `<div class="ap-nt">${esc(k.t)}</div>`;
     if (k.tipo === 'grande') return `<div class="ap-gr">${esc(k.t)}</div>`;
     if (k.tipo === 'notas') return `<div class="ap-dir">${k.itens.map(c => `<div><h3>${esc(c.t)}</h3><div class="ed" contenteditable="true" data-nota="${c.id}" data-dica="${esc(c.d)}">${apNotasTxt[c.id] || ''}</div></div>`).join('')}</div>`;
@@ -18291,11 +18436,13 @@ function mdValores(dias){
   // docs: tudo que é documentação do cliente designada para a pessoa (planilha de avaliação e pasta enviada), sem contar o mesmo cliente duas vezes no dia
   // v401: SDR conta só o resumo do dia (o grupo do WhatsApp é a mesma coisa do resumo: não soma), igual ao ranking
   const sdrs = new Set((pessoasRk() || []).filter(p => p.papel === 'sdr').map(p => p.uid));
-  const vistos = new Set(), doc = (u, d, ch) => { if (!u || sdrs.has(u) || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); add(u, 'docs'); };
+  // v409: a SDR volta a contar as fichas dos grupos de crédito igual ao corretor (pedido do Allan, 16/11); no dia vale o MAIOR entre fichas e resumo, sem somar os dois
+  const sdrDia = new Map(), vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); if (sdrs.has(u)) { const kk = u + '|' + d; sdrDia.set(kk, (sdrDia.get(kk) || 0) + 1); return; } add(u, 'docs'); };
   try { avaliacoesUnificadas().forEach(a => docsDaAv(a).forEach(x => doc(x.uid, x.dia, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id))); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
-  try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) add(x.uid, 'docs', Number(x.docs) || 0); })); } catch(e) {}
+  try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) { const kk = x.uid + '|' + d; sdrDia.set(kk, Math.max(sdrDia.get(kk) || 0, Number(x.docs) || 0)); } })); } catch(e) {}
+  sdrDia.forEach((q, kk) => add(kk.split('|')[0], 'docs', q));
   return out;
 }
 const mdFalta = (meta, v) => { const r = {}; MD_ITENS.forEach(([k]) => r[k] = Math.max(0, (meta[k] || 0) - (v[k] || 0))); return r; };
