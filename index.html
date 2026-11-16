@@ -7922,7 +7922,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 405;
+const APP_VERSAO = 406;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8290,6 +8290,9 @@ const mesAtual = () => hojeISO().slice(0,7);
 function mesAnterior(n){ const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - n); return iso(d).slice(0,7); }
 function nomeMes(m){ const [a, mm] = m.split('-').map(Number); return maiuscula(new Date(a, mm-1, 1).toLocaleDateString('pt-BR', { month:'long', year:'numeric' })); }
 // telefone → chave de comparação (DDD + 8 últimos dígitos). Sem DDD, considera 83 (Paraíba)
+// v406: chave curta e embaralhada do cliente (CPF ou telefone), para o anjo saber se um aprovado já virou reserva sem ver a reserva
+function ckHash(x){ let h = 2166136261; for (const ch of String(x)) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h.toString(36); }
+function ckCli(x){ const c = soDig(x.cpf || x.cpfNorm || ''), t = x.telNorm || (x.telefone ? chaveTel(x.telefone) : ''); return [c.length === 11 ? 'c' + ckHash('c' + c) : '', t ? 't' + ckHash('t' + t) : ''].filter(Boolean); }
 function chaveTel(t){
   let d = soDig(t);
   if (d.startsWith('55') && d.length >= 12) d = d.slice(2);
@@ -9696,39 +9699,61 @@ function htmlAcAgenda(pessoas){
     <div class="seg ag-seg">${[['hoje', 'Visitas de hoje', conta(h, h)], ['amanha', 'De amanhã', conta(am, am)], ['semana', 'Próximos 7 dias', conta(h, fim)]].map(([k, r, n]) => `<button class="${acDia === k ? 'on' : ''}" onclick="acSetDia('${k}')">${r}<i>${n}</i></button>`).join('')}</div></header>
     ${l.length ? `<div class="ag-lista">${linhas}</div>` : `<div class="muted ag-vazio">${acDia === 'hoje' ? 'Nenhuma visita marcada para hoje.' : acDia === 'amanha' ? 'Nenhuma visita marcada para amanhã.' : 'Nenhuma visita nos próximos 7 dias.'}</div>`}</section>`;
 }
-// v405: relatório de um corretor para mandar no WhatsApp, só do período escolhido na tela.
-// Na ordem do alinhamento de segunda dos anjos: cartas aprovadas, visitas, documentações, presença e participação, reservas.
+// v406: relatório de um corretor para o grupo da liderança, só do período escolhido na tela.
+// Os 5 itens do alinhamento de segunda dos anjos + "Para a reunião" (aprovados sem reserva, parados, próximas visitas) + conversa.
+// Sem emojis: o WhatsApp do computador troca alguns por "?" quando o texto chega pelo link.
 window.acRelatorio = async uid => {
   const x = (window._acLinhas || []).find(l => l.p.uid === uid); if (!x) { toast('Abra a tela de novo'); return; }
   const dias = acDias(x.per), ds = new Set(dias), dbr = d => acDm(d), h = hojeISO(), de = dias[0], ate = dias[dias.length - 1];
-  const per = x.per === 'hoje' ? 'hoje, ' + dbr(h) : x.per === 'ontem' ? 'ontem, ' + dbr(de) : x.per === 'dia' ? dbr(de) : (x.per === 'sete' ? 'últimos 7 dias' : 'mês') + ` (${dbr(de)} a ${dbr(ate)})`;
-  const cli = n => nomeBonito(String(n || 'Cliente')).split(' ').slice(0, 2).join(' ');
-  const L = [`*Relatório · ${x.nome}*`, `Período: ${per}`];
-  // 1. cartas aprovadas
-  L.push('', `✅ *Cartas aprovadas: ${x.aprov}*`); x.cartasL.slice(0, 15).forEach(c => L.push(`• ${cli(c.cliente)}${c.valor ? ' · ' + brl(c.valor) : ''}`));
-  // 2. visitas realizadas e não realizadas
-  const passou = v => v.date < h || (v.date === h && v.time && v.time < new Date().toTimeString().slice(0, 5));
-  const real = x.visL.filter(v => v.status === 'Realizada'), nao = x.visL.filter(v => v.status !== 'Realizada' && (v.status === 'Não compareceu' || PERDA_V.includes(v.status) || passou(v)));
-  const futuras = x.visL.filter(v => !real.includes(v) && !nao.includes(v));
-  L.push('', `🏠 *Visitas: ${real.length} realizada${real.length === 1 ? '' : 's'} · ${nao.length} não realizada${nao.length === 1 ? '' : 's'}*`);
-  real.slice(0, 15).forEach(v => L.push(`• ✔ ${dbr(v.date)} · ${cli(v.cliente)}${v.empreendimento ? ' · ' + v.empreendimento : ''}`));
-  nao.slice(0, 15).forEach(v => L.push(`• ✖ ${dbr(v.date)} · ${cli(v.cliente)} (${v.status === 'Não compareceu' ? 'não veio' : String(v.status || '').toLowerCase()})`));
-  if (futuras.length) L.push(`• Ainda vão acontecer: ${futuras.length}`);
-  // 3. status das documentações
-  let avs = []; try { avs = [...new Map(docsNoPeriodo(avaliacoes, de, ate).filter(d => (d.uid || uidDaAv(d.a)) === x.p.uid).map(d => [d.a.cpfNorm || d.a.telNorm || d.a.id, d.a])).values()]; } catch(e) {}
-  const gr = {}; avs.forEach(a => { const g = infoStatus(a.status).g || ''; (gr[g] = gr[g] || []).push(a); });
-  L.push('', `📄 *Documentações: ${x.docs}*`);
-  ['aprovado', 'condicionado', 'analise', 'reprovado', 'outro', 'encerrado', 'troca', ''].filter(g => gr[g]).forEach(g => L.push(`• ${(GRUPOS_V[g] || GRUPOS_V['']).n}: ${gr[g].length}`));
-  if (x.anal.length || x.pend.length) L.push(`• Na Prime: ${x.anal.length} em análise${x.pend.length ? ' · ' + x.pend.length + ' com pendência' : ''}`);
-  // 4. presença e participação
-  const pres = acVarios(x.per) ? `${x.diasPres} de ${x.nDias} dias no escritório` : x.pres ? (x.per === 'hoje' ? 'no escritório' : 'veio') : x.folga && x.per === 'hoje' ? 'folga / abonado' : (x.per === 'hoje' ? 'sem check-in' : 'não veio');
-  L.push('', `📍 *Presença e participação*`, `• Presença: ${pres}`, `• Ligações: ${x.lig} (${x.num} números diferentes)`, `• Leads recebidos: ${x.leads}`, `• Visitas marcadas: ${x.vm}`);
-  // 5. reservas
+  const per = x.per === 'hoje' ? 'hoje, ' + dbr(h) : x.per === 'ontem' ? 'ontem, ' + dbr(de) : x.per === 'dia' ? dbr(de) : `${dbr(de)} a ${dbr(ate)}`;
+  const pn = n => nomeBonito(String(n || 'Cliente')).split(' ')[0], mil = n => (Number(n) || 0).toLocaleString('pt-BR');
+  const nomes = (l, f) => l.length ? ' · ' + l.slice(0, 6).map(f).join(', ') + (l.length > 6 ? '…' : '') : '';
+  const hr = t => { const [a, b] = String(t || '').split(':'); return a ? Number(a) + 'h' + (b && b !== '00' ? b : '') : ''; };
+  // visitas
+  const agora = new Date().toTimeString().slice(0, 5), passou = v => v.date < h || (v.date === h && v.time && v.time < agora);
+  const real = x.visL.filter(v => v.status === 'Realizada'), nao = x.visL.filter(v => v.status === 'Não compareceu');
+  const semBaixa = x.visL.filter(v => !real.includes(v) && !nao.includes(v) && v.status !== 'Cancelada' && passou(v));
+  // documentações: fichas do período (como o ranking conta) e a situação de cada cliente
+  let fichas = []; try { fichas = docsNoPeriodo(avaliacoes, de, ate).filter(d => (d.uid || uidDaAv(d.a)) === x.p.uid); } catch(e) {}
+  const avs = [...new Map(fichas.map(d => [d.a.cpfNorm || d.a.telNorm || d.a.id, d.a])).values()], gr = {};
+  avs.forEach(a => { const g = infoStatus(a.status).g || ''; gr[g] = (gr[g] || 0) + 1; });
+  const rotG = { aprovado:'Aprovado', condicionado:'Condicionado', analise:'Em análise', reprovado:'Reprovado/restrição', outro:'Outro correspondente', encerrado:'Encerrado', troca:'Troca de corretor', '':'Sem retorno' };
+  // presença (domingo só conta se a pessoa veio)
+  const ra = rankingAtiv.filter(r => r.uid === x.p.uid), ck = d => ra.map(r => (r.chk || {})[d] || ((r.pres || {})[d] ? 'escritorio' : '')).find(Boolean) || '';
+  const veio = dias.filter(d => ck(d)), ext = veio.filter(d => ck(d) === 'externo').length, uteis = dias.filter(d => parseISO(d).getDay() !== 0 || ck(d)).length;
+  const pres = dias.length > 1 ? `${veio.length} de ${uteis} dias úteis${ext ? ` (${ext} externo${ext === 1 ? '' : 's'})` : ''}` : veio.length ? (ext ? 'veio (externo)' : 'veio') : x.folga ? 'folga/abonado' : (x.per === 'hoje' ? 'sem check-in' : 'não veio');
+  // reservas do período
   const rvs = rankingVendas.filter(v => !v.caiu && ds.has(v.dia) && (v.corretores || []).some(c => c.uid === x.p.uid));
-  L.push('', `🏆 *Reservas: ${rvs.length}*`);
-  rvs.slice(0, 15).forEach(v => { const r = (typeof reservasTodas !== 'undefined' ? reservasTodas : []).find(y => y.id === v.id) || {}; L.push(`• ${dbr(v.dia)}${r.cliente ? ' · ' + cli(r.cliente) : ''}${r.empreendimento ? ' · ' + r.empreendimento : ''}${(v.corretores || []).length > 1 ? ' (parceria)' : ''}${v.ass ? ' · assinou' : ''}`); });
-  if (x.per === 'hoje' && x.al.length) L.push('', '⚠️ Atenção: ' + x.al.map(a => a[0]).join(' · '));
-  L.push('', `_Gerado por ${primeiro(perfil?.nome || '')} no app Frade_`);
+  const rvNome = v => { const r = (typeof reservasTodas !== 'undefined' ? reservasTodas : []).find(y => y.id === v.id) || {}; return r.cliente ? pn(r.cliente) : dbr(v.dia); };
+  // para a reunião: aprovados (mês atual e anterior) que ainda não viraram reserva
+  const ini = mesAnterior(1) + '-01', comRes = new Set(rankingVendas.filter(v => !v.caiu).flatMap(v => v.ck || []));
+  const visAll = (souAnjo() ? [...new Map([..._acVis, ...visitas].map(v => [v.id, v])).values()] : visitas).filter(v => v.corretorUid === x.p.uid && v.status !== 'Cancelada');
+  const aprovados = new Map();
+  avaliacoes.filter(a => (a.corretorUid === x.p.uid || uidDaAv(a) === x.p.uid) && infoStatus(a.status).g === 'aprovado' && (a.aprovadoEm || a.data || '') >= ini).forEach(a => { const k = a.cpfNorm || a.telNorm || a.id; if (!aprovados.has(k)) aprovados.set(k, { nome:a.nome, cpf:a.cpfNorm || '', tel:a.telNorm || '' }); });
+  (typeof rankingCartas !== 'undefined' ? rankingCartas : []).filter(c => c.corretorUid === x.p.uid && !c.arquivado && (c.data || '') >= ini).forEach(c => { const f = (typeof cartas !== 'undefined' ? cartas : []).find(y => y.id === c.id) || {}; const cp = soDig(f.cpf || ''), t = f.telefone ? chaveTel(f.telefone) : ''; const k = cp || t || 'c' + c.id; if (!aprovados.has(k)) aprovados.set(k, { nome:f.cliente || '', cpf:cp, tel:t }); });
+  const semRes = [...aprovados.values()].filter(a => !ckCli({ cpf:a.cpf, telNorm:a.tel }).some(k => comRes.has(k))).map(a => {
+    const nm = norm(a.nome || '').split(' ').filter(Boolean), vs = visAll.filter(v => (a.tel && chaveTel(v.telefone || '') === a.tel) || (nm.length > 1 && norm(v.cliente || '').includes(nm[0]) && norm(v.cliente || '').includes(nm[nm.length - 1])));
+    const fez = vs.filter(v => v.status === 'Realizada').map(v => v.date).sort().pop(), vai = vs.filter(v => v.date >= h && v.status !== 'Realizada' && !PERDA_V.includes(v.status)).map(v => v.date).sort()[0];
+    return `${pn(a.nome)} (${vai ? 'visita ' + dbr(vai) : fez ? 'visitou ' + dbr(fez) : 'sem visita'})`; });
+  let par = ''; if (x.p.papel !== 'sdr') { try { const g = gvItens(x.p.uid); if (g.n) par = `${g.n}` + [[g.semVis.length, 'agendar'], [g.faltou.length, 'remarcar'], [g.semResp.length, 'pedir ajuda']].filter(([n]) => n).map(([n, t], i) => `${i ? ', ' : ' · '}${n} ${t}`).join(''); } catch(e) {} }
+  const prox = visAll.filter(v => (v.date > h || (v.date === h && (!v.time || v.time >= agora))) && v.date <= somaDias(h, 7) && v.status !== 'Realizada' && !PERDA_V.includes(v.status)).sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+  const porDia = {}; prox.forEach(v => (porDia[v.date] = porDia[v.date] || []).push(`${hr(v.time)} ${pn(v.cliente)}`.trim()));
+  const L = [`*Relatório · ${x.nome}*`, `_${per} · ${souAnjo() ? 'anjo ' : ''}${primeiro(perfil?.nome || '')}_`, '',
+    `*1. Cartas aprovadas:* ${x.aprov}${nomes(x.cartasL, c => pn(c.cliente))}`, '',
+    '*2. Visitas*', `Realizadas: ${real.length}${nomes(real, v => pn(v.cliente))}`, `Não vieram: ${nao.length}${nomes(nao, v => pn(v.cliente))}`];
+  if (semBaixa.length) L.push(`Sem baixa: ${semBaixa.length}${nomes(semBaixa, v => `${pn(v.cliente)} (${dbr(v.date)})`)}`);
+  L.push('', `*3. Documentações:* ${fichas.length} ficha${fichas.length === 1 ? '' : 's'}${avs.length !== fichas.length ? ` de ${avs.length} cliente${avs.length === 1 ? '' : 's'}` : ''}`);
+  Object.keys(rotG).filter(g => gr[g]).forEach(g => L.push(`${rotG[g]}: ${gr[g]}`));
+  L.push('', '*4. Presença e participação*', `Presença: ${pres}`, `Ligações: ${mil(x.lig)} · ${mil(x.num)} números`, `Leads: ${x.leads} · Visitas marcadas: ${x.vm}`, '', `*5. Reservas:* ${rvs.length}${nomes(rvs, rvNome)}`);
+  const reu = [];
+  if (semRes.length) reu.push(`Aprovados sem reserva: ${semRes.length}`, ...semRes.slice(0, 8).map(t => '· ' + t));
+  if (par) reu.push(`Parados: ${par}`);
+  if (prox.length) reu.push('Próximas visitas:', ...Object.entries(porDia).map(([d, l]) => `· ${dbr(d)} · ${l.join(' · ')}`));
+  if (x.per === 'hoje' && x.al.length) reu.push('Atenção: ' + x.al.map(a => a[0]).join(' · '));
+  if (reu.length) L.push('', '──────────', '*Para a reunião*', ...reu);
+  // a conversa do bate-papo (opcional)
+  let conv = ''; try { conv = (prompt('Algo da conversa com ' + x.nome.split(' ')[0] + '? (opcional, deixe em branco para pular)') || '').trim(); } catch(e) {}
+  if (conv) L.push('', '*Conversa*', conv.slice(0, 600));
   const txt = L.join('\n');
   try { await navigator.clipboard.writeText(txt); toast('Relatório copiado'); } catch(e) {}
   window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank', 'noopener');
@@ -9848,7 +9873,7 @@ function renderAcomp(soDados){
       ${x.agenda.length ? `<div class="ac-sec"><h4>Próximas visitas</h4>${x.agenda.map(v => `<div class="ac-vis" role="button" tabindex="0" onclick="editarVisita('${v.id}')" title="Abrir a visita"><span class="ac-d">${dia(v.date)} ${esc(v.time || '')}</span><span class="ac-c">${esc(v.cliente || '')}</span><span class="ac-st st-${stCls(v.status)}">${esc(v.status)}</span></div>`).join('')}</div>` : ''}
       ${x.anal.length || x.pend.length ? `<div class="ac-prime">Na Prime: ${x.anal.length} em análise${x.pend.length ? ` · <b class="ac-nao">${x.pend.length} com pendência</b>` : ''}</div>` : ''}
       <footer class="ac-pe3">${(() => { const pr = acRot(x.per, 1); return `<button class="ac-pb" ${x.leads ? '' : 'disabled'} onclick="acVer('leads','${x.p.uid}')"><b>${x.leads}</b><span>Ver leads ${pr}</span></button><button class="ac-pb" ${x.visL.length ? '' : 'disabled'} onclick="acVer('visitas','${x.p.uid}')"><b>${x.visL.length}</b><span>Ver visitas ${pr}</span></button><button class="ac-pb" ${x.aprov ? '' : 'disabled'} onclick="acVer('cartas','${x.p.uid}')"><b>${x.aprov}</b><span>Cartas aprovadas</span></button>`; })()}</footer>
-      <button type="button" class="btn btn-ghost btn-block ac-rel" onclick="acRelatorio('${x.p.uid}')">📋 Relatório ${esc(acRot(x.per, 1))} para a liderança</button>
+      <button type="button" class="btn btn-ghost btn-block ac-rel" onclick="acRelatorio('${x.p.uid}')">Relatório ${esc(acRot(x.per, 1))} para a liderança</button>
     </article>`;
   $('acCorpo').innerHTML = !ls.length ? vazio(acSoAlerta ? 'Ninguém com alerta agora' : souAnjo() ? 'Nenhum corretor ligado a você ainda' : 'Nenhum corretor para mostrar', acSoAlerta ? 'Tudo em dia.' : souAnjo() ? 'A gerência escolhe quem cada anjo acompanha.' : souCoord() ? `Sua equipe no cadastro: ${esc(eqNome(perfil.equipe || '') || 'nenhuma')}. Os corretores aparecem aqui quando estão aprovados e nessa mesma equipe.` : 'Mude o filtro acima.')
     : grupos.map(([eq, l]) => cabGrupo(eq, l) + (false
@@ -17552,12 +17577,12 @@ function sincVendasRanking(){
     reservasTodas.forEach(r => {
       const assH = (r.etapaHist || []).filter(x => x.etapa === 'ASSINOU').sort((x, y) => (x.em || 0) - (y.em || 0))[0], assEm = assH ? assH.em : (r.etapa === 'ASSINOU' ? r.etapaEm : 0);
       const assF = planPend(r.id) ? '' : (((typeof finVendas !== 'undefined' ? finVendas : {})[r.id] || {}).assinaturaEm || '');
-      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), caiuEm:r.caiuEm ? iso(new Date(r.caiuEm)) : '', ind:ehVendaIndicacao(r), ass:assF || (!Object.keys(typeof finVendas !== 'undefined' ? finVendas : {}).length && (atual.get(r.id) || {}).ass) || (assEm ? iso(new Date(assEm)) : ''), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })) };
+      const d = { dia:r.dia || '', valor:Number(r.valor) || 0, caiu:!!(r.caiu || r.arquivado), caiuEm:r.caiuEm ? iso(new Date(r.caiuEm)) : '', ind:ehVendaIndicacao(r), ass:assF || (!Object.keys(typeof finVendas !== 'undefined' ? finVendas : {}).length && (atual.get(r.id) || {}).ass) || (assEm ? iso(new Date(assEm)) : ''), corretores:corretoresDaReserva(r.corretorTexto).map(c => ({ uid:c.uid || '', nome:c.nome || '', equipe:c.equipe || '' })), ck:ckCli(r) };
       const a = atual.get(r.id);
       // v269: SDR da venda (visita dela realizada). Sem as visitas carregadas, ou sem achar a visita (fora da janela), mantém a que já estava; "Não veio de SDR" limpa
       { let s = null; try { s = carregado.visitas || r.sdrManual || r.sdrUid ? sdrDaReserva(r) : undefined; } catch(e) {}
         d.sdr = s && s.uid ? { uid:s.uid, nome:s.nome || '' } : (r.sdrManual ? null : (a && a.sdr) || null); }
-      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || (a.caiuEm || '') !== d.caiuEm || !!a.ind !== d.ind || (a.ass || '') !== d.ass || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores) || JSON.stringify(a.sdr || null) !== JSON.stringify(d.sdr)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
+      if (!a || a.dia !== d.dia || a.valor !== d.valor || !!a.caiu !== d.caiu || (a.caiuEm || '') !== d.caiuEm || !!a.ind !== d.ind || (a.ass || '') !== d.ass || JSON.stringify(a.corretores || []) !== JSON.stringify(d.corretores) || JSON.stringify(a.sdr || null) !== JSON.stringify(d.sdr) || JSON.stringify(a.ck || []) !== JSON.stringify(d.ck)) { if (n < 400) { b.set(doc(db,'ranking_vendas',r.id), d); n++; } }
       // quem pode ver a reserva no app (o próprio corretor e o parceiro)
       const uids = d.corretores.map(c => c.uid).filter(Boolean); if (r.criadoPor && !uids.includes(r.criadoPor)) uids.push(r.criadoPor);
       if (JSON.stringify(r.corretorUids || []) !== JSON.stringify(uids) && n < 400) { b.set(doc(db,'reservas',r.id), { corretorUids:uids }, { merge:true }); n++; }
