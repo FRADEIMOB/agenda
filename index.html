@@ -7929,7 +7929,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 409;
+const APP_VERSAO = 411;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8499,7 +8499,8 @@ function pontosDoMesBase(m, val, corte){
     // o resumo já pontua na linha dele; aqui entra só o que a conversa tiver a mais que o resumo
     // v399: na SDR o grupo de crédito é o mesmo trabalho do resumo do dia (decisão do Allan, 12/11): a doc da SDR vem só do resumo; o grupo não soma nada
     // v409: a SDR volta a pontuar as fichas do grupo: entra só o que as fichas do dia tiverem a mais que o resumo (o resumo já pontua na linha dele)
-    const dg = papelDe(r.uid) === 'sdr' ? Object.entries(r.mddoc || {}).reduce((a, [d, v]) => a + Math.max(0, (Number(v) || 0) - (Number((r.sdoc || {})[d]) || 0)), 0) : soma(r.mddoc);
+    // v411: voltou para a v399 (a ficha da SDR aparece duas vezes, planilha e WhatsApp, e duplicava): a doc da SDR vem só do resumo
+    const dg = papelDe(r.uid) === 'sdr' ? 0 : soma(r.mddoc);
     x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
@@ -8821,7 +8822,7 @@ function linhasPontos(x, P){
     ['Visitas realizadas', x.realizadas, n('vRealizada'), (x.realizadas || 0) * n('vRealizada')], ['Não compareceu', x.faltas, n('vFalta'), (x.faltas || 0) * n('vFalta')],
     // v297: na SDR, resumo e conversa são a mesma coisa: uma linha só, com o maior número de cada dia
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdrPts ?? (x.docsSdr || 0) * vS) + (x.docGeral || 0) * n('docGeral');
-      return [['Documentações (grupos de crédito e resumo do dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
+      return [['Documentações (do resumo do dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
@@ -10060,7 +10061,7 @@ function dadosTvRkNovo(id){
   const h = hojeISO(), l = r.inicio > h ? [] : rkLinhas(r);
   const col = (k, t, sub, c, f) => ({ k, t, s:sub, c, l:l.map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:f(x) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v) });
   const cols = [col('pts', 'Pontos', 'desde ' + dataBR(r.inicio).slice(0, 5), '#f28c38', x => x.pontos),
-    col('vis', 'Visitas', 'realizadas', '#38bdf8', x => x.realizadas || 0), col('apr', 'Aprovações', 'cartas aprovadas', '#a78bfa', x => x.cartas || 0),
+    col('vis', 'Visitas', 'realizadas', '#38bdf8', x => x.realizadas || 0),
     col('vgv', 'Vendas', 'reservas', '#22c55e', x => x.vendas || 0), col('lig', 'Ligações', 'pelo app', '#facc15', x => x.ligacoes || 0),
     col('bz', 'Presenças', 'manhã e tarde', '#2dd4bf', x => (x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0))];
   const eqs = listaEquipes().map(e => ({ e, n:l.filter(x => x.equipe === e.id).reduce((a, x) => a + Math.max(0, x.pontos), 0) })).sort((a, b) => b.n - a.n);
@@ -10153,7 +10154,6 @@ function dadosTvRank(){
   return { m, sab, eqs, feirao, cols:[
     { k:'pts', t:'Pontos', s:'geral do mês', c:'#f28c38', l:pts },
     { k:'vis', t:'Visitas', s:'realizadas no mês', c:'#38bdf8', l:vis },
-    { k:'apr', t:'Aprovações', s:'cartas aprovadas', c:'#a78bfa', l:apr },
     { k:'vgv', t:'VGV', s:'valor vendido', c:'#22c55e', l:vgv, fmt:v => v >= 1e6 ? (v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits:1 }) + ' mi' : Math.round(v / 1000).toLocaleString('pt-BR') + ' mil' },
     { k:'bz', t:'Bolsão', s:'leads pegos', c:'#f472b6', l:bz },
     { k:'lig', t:'Ligações', s:'feitas pelo app', c:'#facc15', l:lig },
@@ -18437,7 +18437,7 @@ function mdValores(dias){
   // v401: SDR conta só o resumo do dia (o grupo do WhatsApp é a mesma coisa do resumo: não soma), igual ao ranking
   const sdrs = new Set((pessoasRk() || []).filter(p => p.papel === 'sdr').map(p => p.uid));
   // v409: a SDR volta a contar as fichas dos grupos de crédito igual ao corretor (pedido do Allan, 16/11); no dia vale o MAIOR entre fichas e resumo, sem somar os dois
-  const sdrDia = new Map(), vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); if (sdrs.has(u)) { const kk = u + '|' + d; sdrDia.set(kk, (sdrDia.get(kk) || 0) + 1); return; } add(u, 'docs'); };
+  const sdrDia = new Map(), vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); if (sdrs.has(u)) return; add(u, 'docs'); };
   try { avaliacoesUnificadas().forEach(a => docsDaAv(a).forEach(x => doc(x.uid, x.dia, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id))); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
