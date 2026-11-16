@@ -7929,7 +7929,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 414;
+const APP_VERSAO = 415;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8513,13 +8513,14 @@ function pontosDoMesBase(m, val, corte){
   // ausência: dia de trabalho (já passado) sem presença no escritório nem externa
   if (n('ausencia')) {
     const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO(); // v198: ausência segue só a data dela (as antigas continuam valendo)
-    const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay()) && !feriados(d.getFullYear()).has(k)) uteis.push(k); } /* v322: feriado não conta ausência */
+    const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay()) && d.getDay() !== 6 && !feriados(d.getFullYear()).has(k)) uteis.push(k); } /* v322: feriado não conta ausência; v415: sábado também não (faltar no sábado não é ausência) */
     const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
       const ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
       const x = pega({ corretorUid:p.uid, corretorNome:p.nome, equipe:p.equipe });
       const folga = d => (x._abo && x._abo.has(d)) || ['folga','ferias','atestado'].includes((typeof presencas !== 'undefined' && presencas[d]?.marcados?.[p.uid]?.status) || '');
-      const ausD = uteis.filter(d => d >= ini && !(x._pres && x._pres.has(d)) && !folga(d)), aus = ausD.length;
+      /* v415: novato não perde ponto no dia em que foi cadastrado (Ângelo, cadastrado 13/11) */
+      const ausD = uteis.filter(d => d > ini && !(x._pres && x._pres.has(d)) && !folga(d)), aus = ausD.length;
       x._ausDias = ausD; x.ausencias = aus;
       // v199: ausência antes da data nova vale o valor antigo; da data em diante, o valor de "Ausência"
       const corteA = String(val.presencaDesde || ''), temAnt = val.ausenciaAntes !== undefined && val.ausenciaAntes !== '' && val.ausenciaAntes !== null;
@@ -8548,14 +8549,14 @@ function top3Dados(de, ate){
   const l = pontosEntre(de, ate, de), ativo = uid => { const p = (perfisTodos || []).find(x => x.uid === uid) || (pessoasRk() || []).find(x => x.uid === uid); return p && p.status === 'ativo'; };
   const cor = l.filter(x => ativo(x.uid) && ['corretor','coordenador','anjo'].includes(papelDe(x.uid))).slice(0, 3);
   const sdr = l.filter(x => ativo(x.uid) && papelDe(x.uid) === 'sdr').slice(0, 3);
-  const uteis = []; for (let d = de; d <= ate; d = somaDias(d, 1)) if (parseISO(d).getDay() !== 0) uteis.push(d);
+  const uteis = [], todos = []; for (let d = de; d <= ate; d = somaDias(d, 1)) { const w = parseISO(d).getDay(); if (w !== 0) todos.push(d); if (w !== 0 && w !== 6) uteis.push(d); } /* v415: sábado não é obrigatório; se o anjo fez o checklist no sábado, conta a favor */
   const anjos = anjosVisiveis().filter(a => a.status !== 'inativo').map(a => { const us = (a.membros || []).filter(ativo);
     const ach = Object.assign({}, ...rankingAtiv.filter(r => r.uid === a.uid).map(r => r.ach || {}));
-    const diasChk = uteis.filter(d => { const o = ach[d] || {}; return o.fech || o.val || Object.keys(o).some(k => /^(f_|l_|c\d)/.test(k)); }).length;
+    const diasChk = todos.filter(d => { const o = ach[d] || {}; return o.fech || o.val || Object.keys(o).some(k => /^(f_|l_|c\d)/.test(k)); }).length;
     const xs = l.filter(x => us.includes(x.uid)), soma = k => xs.reduce((t, x) => t + (Number(x[k]) || 0), 0);
     return { nome:a.nome, uid:a.uid, n:us.length, diasChk, med:us.length ? soma('pontos') / us.length : 0, real:soma('realizadas'), docs:soma('docGeral'), vendas:soma('vendas') }; }).filter(a => a.n);
   const maxMed = Math.max(1, ...anjos.map(a => a.med));
-  anjos.forEach(a => { a.nota = Math.round(50 * (uteis.length ? a.diasChk / uteis.length : 0) + 50 * (a.med / maxMed)); });
+  anjos.forEach(a => { a.nota = Math.round(50 * (uteis.length ? Math.min(1, a.diasChk / uteis.length) : 0) + 50 * (a.med / maxMed)); });
   anjos.sort((a, b) => b.nota - a.nota || b.med - a.med);
   return { cor, sdr, anjos:anjos.slice(0, 3), nUteis:uteis.length };
 }
@@ -8859,7 +8860,7 @@ function htmlDiasPres(x){
   if (['_pres','_chk','_abo'].some(k => x[k] && typeof x[k].has !== 'function')) return ''; /* v324: linha de mês fechado (guardada) não tem os dias */
   const P = appCfg.pontos, dias = ciCfg().dias || [1,2,3,4,5,6], hj = hojeISO(), m = mesAtual(), desde = String(P.ausenciaDesde || '2026-10-07');
   const p = pessoasRk().find(y => y.uid === x.uid) || {}, ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
-  const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && iso(d) >= ini && !feriados(d.getFullYear()).has(iso(d))) L.push(iso(d)); } /* v322: feriado fora da lista */
+  const L = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m && iso(d) < hj; d.setDate(d.getDate() + 1)) { if (dias.includes(d.getDay()) && d.getDay() !== 6 && iso(d) > ini && !feriados(d.getFullYear()).has(iso(d))) L.push(iso(d)); } /* v322: feriado fora da lista */
   if (!L.length) return '';
   const pv = Number(P.presenca) || 0, av = Number(P.ausencia) || 0, sn = v => (v > 0 ? '+' : '') + v;
   const st = d => { const mk = presencas[d]?.marcados?.[x.uid]?.status || '';
@@ -9832,7 +9833,7 @@ window.acRelatorio = async uid => {
   const rotG = { aprovado:'Aprovado', condicionado:'Condicionado', analise:'Em análise', reprovado:'Reprovado/restrição', outro:'Outro correspondente', encerrado:'Encerrado', troca:'Troca de corretor', '':'Sem retorno' };
   // presença (domingo só conta se a pessoa veio)
   const ra = rankingAtiv.filter(r => r.uid === x.p.uid), ck = d => ra.map(r => (r.chk || {})[d] || ((r.pres || {})[d] ? 'escritorio' : '')).find(Boolean) || '';
-  const veio = dias.filter(d => ck(d)), ext = veio.filter(d => ck(d) === 'externo').length, uteis = dias.filter(d => parseISO(d).getDay() !== 0 || ck(d)).length;
+  const veio = dias.filter(d => ck(d)), ext = veio.filter(d => ck(d) === 'externo').length, uteis = dias.filter(d => ![0, 6].includes(parseISO(d).getDay()) || ck(d)).length; /* v415: sábado só entra se a pessoa veio */
   const pres = dias.length > 1 ? `${veio.length} de ${uteis} dias úteis${ext ? ` (${ext} externo${ext === 1 ? '' : 's'})` : ''}` : veio.length ? (ext ? 'veio (externo)' : 'veio') : x.folga ? 'folga/abonado' : (x.per === 'hoje' ? 'sem check-in' : 'não veio');
   // reservas do período
   const rvs = rankingVendas.filter(v => !v.caiu && ds.has(v.dia) && (v.corretores || []).some(c => c.uid === x.p.uid));
