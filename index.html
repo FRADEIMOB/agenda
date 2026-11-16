@@ -7929,7 +7929,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 411;
+const APP_VERSAO = 414;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8500,6 +8500,8 @@ function pontosDoMesBase(m, val, corte){
     // v399: na SDR o grupo de crédito é o mesmo trabalho do resumo do dia (decisão do Allan, 12/11): a doc da SDR vem só do resumo; o grupo não soma nada
     // v409: a SDR volta a pontuar as fichas do grupo: entra só o que as fichas do dia tiverem a mais que o resumo (o resumo já pontua na linha dele)
     // v411: voltou para a v399 (a ficha da SDR aparece duas vezes, planilha e WhatsApp, e duplicava): a doc da SDR vem só do resumo
+    // v413: na SDR entra só o que as fichas do grupo do dia (sem a linha da planilha) tiverem a mais que o resumo (o resumo já pontua na linha dele)
+    // v414: decisão do Allan (16/11 16h09): a SDR continua só pelo resumo do dia; a conferência com os grupos é feita no dia seguinte
     const dg = papelDe(r.uid) === 'sdr' ? 0 : soma(r.mddoc);
     x.docGeral = (x.docGeral || 0) + dg;
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
@@ -10189,7 +10191,8 @@ function conferirEventosTv(){
   if (agora - _tvAbriuEm < 20e3) { _tvBase = atual; return; } // primeiros segundos: os dados ainda estão chegando
   Object.entries(atual).forEach(([k, v]) => { const antes = _tvBase[k] || 0; if (v > antes) { const [tipo, uid] = k.split('|');
     const ja = _tvFila.find(e => e.tipo === tipo && e.uid === uid); if (ja) ja.n += v - antes; else _tvFila.push({ tipo, uid, n:v - antes, em:agora }); } });
-  _tvBase = atual; if (!_tvMostrando) mostrarEventoTv();
+  // v412: a base guarda o MAIOR número já visto de cada pessoa. Se a lista some e volta (recarga dos dados, sincronização), não anuncia de novo o que já passou
+  Object.entries(atual).forEach(([k, v]) => { if (v > (_tvBase[k] || 0)) _tvBase[k] = v; }); if (!_tvMostrando) mostrarEventoTv();
 }
 
 // v108: sons gerados no próprio app (sem arquivos): comemoração da TV e alerta do bolsão
@@ -18438,7 +18441,9 @@ function mdValores(dias){
   const sdrs = new Set((pessoasRk() || []).filter(p => p.papel === 'sdr').map(p => p.uid));
   // v409: a SDR volta a contar as fichas dos grupos de crédito igual ao corretor (pedido do Allan, 16/11); no dia vale o MAIOR entre fichas e resumo, sem somar os dois
   const sdrDia = new Map(), vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); if (sdrs.has(u)) return; add(u, 'docs'); };
-  try { avaliacoesUnificadas().forEach(a => docsDaAv(a).forEach(x => doc(x.uid, x.dia, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id))); } catch(e) {}
+  // v413: na SDR contam só as fichas que ela mandou no grupo (os envios), nunca a linha da planilha (é o mesmo cliente e duplicava)
+  try { avaliacoesUnificadas().forEach(a => { const env = new Set((Array.isArray(a.envios) ? a.envios : []).map(e => String(e).split('|')[0])), ch = a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id;
+    docsDaAv(a).forEach(x => { if (sdrs.has(x.uid) && !env.has(x.dia)) return; doc(x.uid, x.dia, ch); }); }); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
   try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) { const kk = x.uid + '|' + d; sdrDia.set(kk, Math.max(sdrDia.get(kk) || 0, Number(x.docs) || 0)); } })); } catch(e) {}
