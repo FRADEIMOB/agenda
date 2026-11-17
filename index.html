@@ -7952,7 +7952,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 418;
+const APP_VERSAO = 419;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15059,7 +15059,7 @@ function vendaFin(r){
   const assT = f.assTendaEm || r.assTendaEm || '', assEm = f.assinaturaEm || r.assCaixaEm || '', prazo = Number(f.prazoDias || r.prazoDias) || 0;
   const prevA = f.prevAdiant || (assT ? somaDiasISO(assT, prazo || rg.diasAdiant) : somaDiasISO(r.dia, rg.diasAdiant)), prevR = f.prevRestante || (assEm ? somaDiasISO(assEm, prazo || rg.diasRestante) : '');
   const valCorA = tipo === 'adiantamento' && totRec > 0 ? Math.round(valCor * adiant / totRec * 100) / 100 : 0, regCaixa = f.registroCaixaEm || r.registroCaixaEm || '';
-  const ok = { reserva:!!f.sinalPago, entrada:f.geraEntrada === 'nao' || !!f.entradaPaga, identificacao:!!f.identificada, assinatura:!!assEm, faturada:!!f.faturada,
+  const ok = { reserva:!!f.sinalPago, entrada:f.geraEntrada === 'nao' || !!f.entradaPaga || entradaNaConstrutora(r, f, cons), identificacao:!!f.identificada, assinatura:!!assEm, faturada:!!f.faturada,
     recebida: tipo === 'adiantamento' ? !!(f.recAdiant && f.recRestante) : !!f.recRestante, paga:!!f.corPago };
   const etapa = ETAPAS_FIN.findIndex(([k]) => !ok[k]);
   const aReceber = (tipo === 'adiantamento' && !f.recAdiant ? adiant : 0) + (!f.recRestante ? rest : 0);
@@ -15272,13 +15272,18 @@ window.excluirNota = async () => {
 // ===== v282: Comissões em uma tela só: o que falta receber, o que falta pagar, o que precisa de atenção =====
 window.finComSub = 'vendas'; window.finComFil = 'atencao'; window.finComTodos = false; window.finComCor = ''; window.finComAss = ''; window.finComCons = '';
 // v292: parcelas da entrada do cliente que vencem hoje ou já venceram (as pagas são as marcadas na venda)
-function parcelasCobrar(f, h){
+// v418: na Tenda a entrada é paga direto à construtora (até 110x): a imobiliária não cobra nem acompanha parcela, a não ser que a reserva diga que foi paga à imobiliária
+function entradaNaConstrutora(r, f, cons){ r = r || {}; f = f || {}; const q = r.entradaQuem || f.entradaQuem || ''; if (q === 'imobiliaria') return false; if (q === 'construtora') return true;
+  return /tenda|colibri/i.test([cons, r.construtora, r.empreendimento, f.construtora].filter(Boolean).join(' ')); }
+window.entradaNaConstrutora = entradaNaConstrutora;
+function parcelasCobrar(f, h, cons, r){
+  if (entradaNaConstrutora(r, f, cons)) return [];
   if (!(Number(f.entradaValor) > 0) || !f.entradaPrimeira || f.entradaPaga || f.excluida) return [];
   const pagas = Number(f.entradaPagas) || 0; return parcelasEntrada({ total:f.entradaValor, n:f.entradaParcelas || 1, ato:f.entradaAto, primeira:f.entradaPrimeira }).filter(p => p.i > pagas && p.data <= h);
 }
 function atencaoVenda(v, h){
   const a = [], f = v.f, pl = f.plan || {};
-  parcelasCobrar(f, h).forEach(p => a.push(`Cobrar ${p.ato ? 'o ato' : 'a parcela ' + p.i} da entrada (${brl2(p.valor)}) · ${p.data === h ? 'vence hoje' : 'venceu ' + dataBR(p.data)}`));
+  parcelasCobrar(f, h, v.cons, v.r).forEach(p => a.push(`Cobrar ${p.ato ? 'o ato' : 'a parcela ' + p.i} da entrada (${brl2(p.valor)}) · ${p.data === h ? 'vence hoje' : 'venceu ' + dataBR(p.data)}`));
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
   if ((Number(v.r.valor) || 0) > 3000000) a.push(`Valor do imóvel parece errado (${brl(Number(v.r.valor))}); o app está usando ${brl(v.vgv)}. Corrija na reserva`);
   if (!v.total) a.push('Sem valor de comissão');
@@ -15301,8 +15306,8 @@ window.fcMarcarPaga = async (id, sim) => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 function htmlComissoes(){
-  const sub = ['notas', 'corretores'].includes(window.finComSub) ? window.finComSub : 'vendas';
-  const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'corretores' ? 'on' : ''}" onclick="finComSub='corretores';render()">Por corretor</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
+  const sub = window.finComSub === 'notas' ? 'notas' : 'vendas'; /* v418: a aba "Por corretor" saiu (a tabela "Comissão de cada corretor" em Vendas já abre as vendas) */
+  const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
   if (sub === 'notas') return seg + htmlNotas2();
   const h = hojeISO(), tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
   // v283: segue o mês escolhido lá em cima (vendas pela data da reserva); dá para ver todos os meses
@@ -15590,7 +15595,8 @@ function rcCampos(){
 window.fvParcPaga = (i, sim) => { const el = $('fvEntPagas'); if (el) el.value = sim ? i : i - 1; const ps = parcelasEntrada(rcEntrada()); const n = sim ? i : i - 1, todas = ps.length > 0 && n >= ps.length; if ($('fvEntPaga')) $('fvEntPaga').checked = todas; fvRcPrev();
   if (finVEdit) gravar(setDoc(doc(db,'fin_vendas',finVEdit), { entradaPagas:n, entradaPaga:todas, atualizadoEm:Date.now() }, { merge:true })).then(() => toast(sim ? 'Parcela marcada como paga ✓' : 'Parcela voltou para pendente')).catch(e => toast('Erro: ' + e.message)); };
 window.fvRcModo = () => { const p = $('fvRcModo').value === 'parcelado'; $('fvRcParc').classList.toggle('hide', !p); if (p && !$('fvEntParc').value) $('fvEntParc').value = 5; fvRcPrev(); };
-window.fvRcPrev = () => { const el = $('fvRcLista'); if (!el) return; const ps = parcelasEntrada(rcEntrada()), pagas = Number($('fvEntPagas')?.value) || 0, h = hojeISO();
+window.fvRcPrev = () => { const el = $('fvRcLista'); if (!el) return;
+  try { const rr = vendasFin().find(x => x.id === finVEdit); if (rr && entradaNaConstrutora(rr, finVendas[rr.id] || {}, vendaFin(rr).cons)) { el.innerHTML = '<small class="muted">Entrada paga direto à construtora (na Tenda, em até 110x). A imobiliária não cobra e o app não avisa vencimento dessas parcelas.</small>'; return; } } catch(e) {} const ps = parcelasEntrada(rcEntrada()), pagas = Number($('fvEntPagas')?.value) || 0, h = hojeISO();
   el.innerHTML = ps.length ? `<small class="muted">Marque as parcelas que o cliente já pagou. No dia do vencimento de cada uma, o app avisa a gerência para cobrar.</small>` + ps.map(p => { const paga = p.i <= pagas, st = paga ? 'paga' : p.data < h ? 'atrasada' : p.data === h ? 'vence hoje' : '';
     return `<div class="${paga ? 'pg' : p.data < h ? 'at' : ''}"><label><input type="checkbox" ${paga ? 'checked' : ''} onchange="fvParcPaga(${p.i},this.checked)"> ${ps.length === 1 ? 'À vista' : (p.ato ? 'Ato' : 'Parcela ' + String(p.i).padStart(2, '0'))} · ${dataBR(p.data)}${st ? ` <em>${st}</em>` : ''}</label><b>${brl2(p.valor)}</b></div>`; }).join('') + (ps.length > 1 ? `<div class="tot"><span>Total</span><b>${brl2(ps.reduce((a, p) => a + p.valor, 0))}</b></div>` : '') : '<small class="muted">Coloque o valor da entrada para ver as parcelas.</small>'; };
 function reciboHtml(x){
@@ -15694,7 +15700,7 @@ window.abrirVendaFin = (id, semAbrir) => {
   /* v418: etapa concluída fica verde; etapa atrasada ou que precisa de ação fica vermelha (com o motivo) */
   const hj = hojeISO(), atrasoEt = i => { const k = (ETAPAS_FIN[i] || [])[0];
     if (k === 'reserva' && !v.ok.reserva && diffDias(r.dia || hj) <= -3) return 'sinal sem confirmação há ' + (-diffDias(r.dia)) + ' dias';
-    if (k === 'entrada' && !v.ok.entrada && parcelasCobrar(f, hj).length) return 'parcela da entrada vencida';
+    if (k === 'entrada' && !v.ok.entrada && parcelasCobrar(f, hj, v.cons, r).length) return 'parcela da entrada vencida';
     if (k === 'faturada' && !f.faturada && v.regCaixa && diffDias(v.regCaixa) <= -10) return 'pedir a nota à construtora';
     if (k === 'faturada' && !f.faturada && v.assEm && diffDias(v.assEm) <= -7) return 'assinou há ' + (-diffDias(v.assEm)) + ' dias e a nota não foi emitida';
     if (k === 'recebida' && !v.ok.recebida && ((v.tipo === 'adiantamento' && !f.recAdiant && v.prevA && v.prevA < hj) || (!f.recRestante && v.prevR && v.prevR < hj))) return 'recebimento atrasado';
@@ -15723,11 +15729,11 @@ window.abrirVendaFin = (id, semAbrir) => {
     <div class="fv-etapas"><h4>Etapas</h4>
     ${sec(0, 'Reserva e sinal', f.sinalPago ? 'sinal pago' + (f.sinalValor ? ' · ' + brl2(f.sinalValor) : '') + (f.sinalQuem ? ' à ' + (f.sinalQuem === 'imobiliaria' ? 'imobiliária' : 'construtora') : '') : '', `${Number(r.sinalValor) > 0 ? '<div class="fv-auto">Informado pelo corretor na reserva. Confira e salve.</div>' : ''}${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="row2"><div class="fg"><label>Data do pagamento</label><input id="fvSinalD" type="date" value="${f.sinalData || ''}"></div><div class="fg" style="align-self:end"><small class="muted">O valor do sinal fica em "Cliente, entrada e recibo".</small></div></div>
       <div class="row2"><div class="fg"><label>Como pagou</label><select id="fvSinalF">${FORMAS_SINAL.map(([k,n]) => `<option value="${k}" ${f.sinalForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg"><label>Quem recebeu</label><select id="fvSinalQ"><option value="">—</option><option value="construtora" ${f.sinalQuem === 'construtora' ? 'selected' : ''}>Construtora</option><option value="imobiliaria" ${f.sinalQuem === 'imobiliaria' ? 'selected' : ''}>Imobiliária</option></select></div></div>`)}
-    ${sec(1, 'Entrada', f.geraEntrada === 'nao' ? 'não tem entrada' : f.entradaPaga ? (r.entradaQuem === 'construtora' ? 'paga à construtora' : 'entrada paga') : r.entradaQuem === 'imobiliaria' ? 'paga à imobiliária: acompanhar' : '', `${r.tipoVenda || r.entradaQuem ? '<div class="fv-auto">Informado na reserva' + (r.condicoes ? ': ' + esc(r.condicoes) : '') + '. ' + (r.entradaQuem === 'construtora' ? 'Entrada paga à construtora: não precisa acompanhar aqui.' : r.entradaQuem === 'imobiliaria' ? 'Entrada paga à imobiliária: marque as parcelas conforme forem pagas.' : '') + '</div>' : ''}<div class="row2"><div class="fg"><label>Vai gerar entrada?</label><select id="fvGera"><option value="">—</option><option value="sim" ${f.geraEntrada === 'sim' ? 'selected' : ''}>Sim</option><option value="nao" ${f.geraEntrada === 'nao' ? 'selected' : ''}>Não</option></select></div>
+    ${sec(1, 'Entrada', f.geraEntrada === 'nao' ? 'não tem entrada' : entradaNaConstrutora(r, f, v.cons) ? (/tenda|colibri/i.test(v.cons || '') ? 'paga direto à Tenda, em até 110x' : 'paga à construtora') : f.entradaPaga ? 'entrada paga' : r.entradaQuem === 'imobiliaria' ? 'paga à imobiliária: acompanhar' : '', `${r.tipoVenda || r.entradaQuem ? '<div class="fv-auto">Informado na reserva' + (r.condicoes ? ': ' + esc(r.condicoes) : '') + '. ' + (r.entradaQuem === 'construtora' ? 'Entrada paga à construtora: não precisa acompanhar aqui.' : r.entradaQuem === 'imobiliaria' ? 'Entrada paga à imobiliária: marque as parcelas conforme forem pagas.' : '') + '</div>' : ''}<div class="row2"><div class="fg"><label>Vai gerar entrada?</label><select id="fvGera"><option value="">—</option><option value="sim" ${f.geraEntrada === 'sim' ? 'selected' : ''}>Sim</option><option value="nao" ${f.geraEntrada === 'nao' ? 'selected' : ''}>Não</option></select></div>
       <div class="fg" style="align-self:end"><small class="muted">Valor e parcelas da entrada ficam em "Cliente, entrada e recibo".</small></div></div>
       <div class="row2"><div class="fg"><label>Como vai pagar</label><select id="fvForma">${FORMAS_ENT.map(([k,n]) => `<option value="${k}" ${f.entradaForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg" style="align-self:end">${chk('fvEntPaga', f.entradaPaga, 'Entrada paga')}</div></div>
       ${(() => { /* v418: parcelas da entrada paga à imobiliária: uma linha por parcela, baixa num toque */
-        if (!(Number(f.entradaValor) > 0)) return '';
+        if (!(Number(f.entradaValor) > 0) || entradaNaConstrutora(r, f, v.cons)) return '';
         if (!f.entradaPrimeira) return '<div class="hint" style="margin:0 0 8px">Para listar as parcelas e dar baixa uma a uma, coloque o vencimento da 1ª parcela em "Cliente, entrada e recibo".</div>';
         const ps = parcelasEntrada({ total:f.entradaValor, n:f.entradaParcelas || 1, ato:f.entradaAto, primeira:f.entradaPrimeira }), pagas = f.entradaPaga ? ps.length : Number(f.entradaPagas) || 0;
         return `<div class="fv-parcs">${ps.map(p => { const ok = p.i <= pagas, venc = !ok && p.data < hj, prox = p.i === pagas + 1;
