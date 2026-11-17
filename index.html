@@ -405,6 +405,18 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
 .pend:first-of-type{border-top:0}
 .pend select{width:auto;padding:8px 10px;font-size:13px}
 .pend b{display:block}.pend span{font-size:12.5px;color:var(--muted)}
+/* v418: reserva nova (tipo de venda, sinal, conta da comissão) */
+.row2.fg{align-items:end}#resvModal input:not([type=checkbox]):not([type=file]),#resvModal select{height:46px;box-sizing:border-box}.row2.fg>div>label{min-height:0}
+#resvModal .rv-conta small{font-size:12px}
+.rv-sec{font-weight:700;font-size:13px;color:var(--muted);margin:14px 0 6px;padding-top:10px;border-top:1px solid var(--border)}
+.rv-conta{background:var(--soft,#f3f4f7);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:13px}.rv-conta:empty{display:none}.rv-conta div{display:flex;justify-content:space-between;gap:10px;padding:2px 0}.rv-conta .t{font-weight:700;border-top:1px solid var(--border);margin-top:4px;padding-top:6px}.rv-conta small{display:block;color:var(--muted);margin-top:6px;line-height:1.4}
+.et-tenda{border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 0 14px}.et-tenda b{display:block;margin-bottom:8px}.et-tenda .et-tl{display:grid;grid-template-columns:1fr 150px;gap:8px;align-items:center;margin-bottom:8px}.et-tenda label{display:flex;gap:8px;align-items:center;font-size:14px;text-transform:none;font-weight:600;margin:0}.et-tenda input[type=checkbox]{width:20px;height:20px;flex:0 0 20px;margin:0;padding:0}.et-tenda small{display:block;color:var(--muted);font-size:12px;margin:2px 0 8px}
+.fv-parcs{display:grid;gap:6px;margin:0 0 10px}.fv-pl{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:8px 10px}.fv-pl span{display:grid}.fv-pl small{font-size:12px;color:var(--muted)}.fv-pl.ok{border-color:color-mix(in srgb,var(--ok) 55%,var(--border));background:color-mix(in srgb,var(--ok) 7%,var(--card))}.fv-pl.ok small{color:var(--ok);font-weight:700}.fv-pl.venc{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 6%,var(--card))}.fv-pl.venc small{color:var(--danger);font-weight:700}.fv-pl .btn{padding:6px 12px;font-size:13px}
+.fv-auto{font-size:12.5px;color:var(--ok);font-weight:600;margin:0 0 8px}
+.fv-pc{border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--card,#fff)}.fv-pc.ok{border-color:var(--ok);background:var(--ok-soft,#eefaf2)}.fv-pc-h{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}.fv-pc-h b{font-size:14px}.fv-pc-h span{font-size:12px;font-weight:700;color:var(--muted)}.fv-pc.ok .fv-pc-h span{color:var(--ok)}.fv-pc-l{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:2px 0}.fv-pc-l span{color:var(--muted)}.fv-pc .btn{margin-top:8px;width:100%;white-space:normal}
+.fc-real{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px}.fc-real div{border:1px solid var(--border);border-radius:12px;padding:10px 12px}.fc-real span{font-size:12.5px;color:var(--muted);display:block}.fc-real b{font-size:18px;display:block}.fc-real small{font-size:12px;color:var(--muted)}.fc-real .re{border-color:var(--ok)}
+/* v417: no celular o e-mail comprido não estica mais a linha; seletores e botões ocupam a largura certa */
+.pend>*{min-width:0}.pend>div:first-child span{display:block;overflow-wrap:anywhere}.pend .pend-obs{display:block;margin-top:2px}
 .team-row{display:flex;gap:8px;align-items:center;padding:8px 0}
 .team-row input{flex:1}
 .team-row .emo{width:64px;flex:none;text-align:center}
@@ -422,7 +434,7 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
 .snooze.enviado{border-color:var(--ok);color:var(--ok)}
 @media(max-width:820px){.conf-row{flex-wrap:wrap}.conf-row .ca{width:100%;justify-content:flex-start}}
 .rep-sec{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px}
-@media(max-width:820px){.tb-grid{grid-template-columns:1fr 1fr}.tb-grid>:first-child{grid-column:1/-1}.vcard{flex-wrap:wrap}.v-actions{width:100%;justify-content:flex-start;padding-left:72px}.person .ps{display:none}.pend{grid-template-columns:1fr 1fr}.pend>div:first-child{grid-column:1/-1}.rep-kpis{grid-template-columns:repeat(2,1fr)}.rank .hide-m{display:none}}
+@media(max-width:820px){.tb-grid{grid-template-columns:1fr 1fr}.tb-grid>:first-child{grid-column:1/-1}.vcard{flex-wrap:wrap}.v-actions{width:100%;justify-content:flex-start;padding-left:72px}.person .ps{display:none}.pend{grid-template-columns:1fr 1fr;gap:10px;padding:14px 0}.pend>div:first-child{grid-column:1/-1}.pend select{width:100%;padding:10px 12px;font-size:14px}.pend .btn{width:100%;justify-content:center}.rep-kpis{grid-template-columns:repeat(2,1fr)}.rank .hide-m{display:none}}
 
 .perm{width:100%;border-collapse:collapse;font-size:14px}
 .perm th{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:10px 8px;border-bottom:1px solid var(--border);font-weight:700}
@@ -2117,7 +2129,7 @@ body.fv-drag,body.fv-drag *{cursor:grabbing!important}
 .fv-et{border:1px solid var(--border);border-radius:12px;margin-bottom:6px;background:var(--card)}.fv-et[open]{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}
 .fv-et summary{display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;list-style:none}.fv-et summary::-webkit-details-marker{display:none}
 .fv-et summary i{font-style:normal;width:24px;height:24px;border-radius:99px;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--card2);color:var(--muted);flex:none}
-.fv-et.feito summary i{background:var(--ok);color:#fff}.fv-et summary span{display:grid}.fv-et summary b{font-size:14px}.fv-et summary small{font-size:12px;color:var(--muted)}
+.fv-et.feito summary i{background:var(--ok);color:#fff}.fv-et.feito{border-color:color-mix(in srgb,var(--ok) 55%,var(--border));background:color-mix(in srgb,var(--ok) 7%,var(--card))}.fv-et.atraso{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 6%,var(--card))}.fv-et.atraso summary i{background:var(--danger);color:#fff}.fv-et .fv-at{color:var(--danger);font-weight:700}.fv-et summary span{display:grid}.fv-et summary b{font-size:14px}.fv-et summary small{font-size:12px;color:var(--muted)}
 .fv-et-in{padding:2px 12px 12px 46px}
 .fv-notas{display:grid;gap:6px;justify-items:start;margin-top:6px}.fv-nota{all:unset;cursor:pointer;font-size:13px;background:var(--card2);border-radius:8px;padding:6px 10px}
 .fin-tipo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.fin-tipo button{border:1.5px solid var(--border);background:var(--card);border-radius:12px;padding:10px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;color:var(--text2);display:grid;gap:1px}
@@ -3204,8 +3216,9 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 .fv-rc .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.fv-rc-lista{display:grid;gap:4px;margin:4px 0 12px;border:1px solid var(--border);border-radius:10px;padding:8px 12px;background:var(--bg)}.fv-rc-lista div{display:flex;justify-content:space-between;align-items:center;font-size:13.5px}.fv-rc-lista label{display:flex;gap:7px;align-items:center;cursor:pointer}.fv-rc-lista input{width:16px;height:16px}.fv-rc-lista em{font-style:normal;font-size:11px;font-weight:800;border-radius:99px;padding:1px 7px;background:#c2410c18;color:#c2410c}.fv-rc-lista .pg{color:var(--muted)}.fv-rc-lista .pg em{background:#16a34a18;color:#15803d}.fv-rc-lista .at em{background:#dc262618;color:#b91c1c}.fv-rc-lista .tot{border-top:1px solid var(--border);padding-top:5px;margin-top:2px;font-weight:800}.fv-rc-lista span::first-letter{text-transform:uppercase}
 .fv-rc-bts{display:flex;gap:10px;margin:6px 0}.fv-rc-bts .btn{flex:1}@media(max-width:760px){.fv-rc .row3{grid-template-columns:1fr 1fr}}
 .fc-cor{margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden}.fc-cor summary{cursor:pointer;padding:12px 14px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}.fc-cor summary span{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
-.fc-cor-t{display:grid;border-top:1px solid var(--border)}.fc-cor-h,.fc-cor-l{display:grid;grid-template-columns:1.6fr .6fr 1fr 1fr 1fr 1fr;gap:8px;padding:8px 14px;align-items:center;text-align:right;font-size:13.5px}.fc-cor-h>:first-child,.fc-cor-l>:first-child{text-align:left}
+.fc-cor-t{display:grid;border-top:1px solid var(--border)}.fc-cor-h,.fc-cor-l{display:grid;grid-template-columns:1.6fr .6fr 1fr 1fr 1fr 1fr 28px;gap:8px;padding:8px 14px;align-items:center;text-align:right;font-size:13.5px}.fc-cor-h>:first-child,.fc-cor-l>:first-child{text-align:left}
 .fc-cor-h{font-size:12px;color:var(--muted);font-weight:700}.fc-cor-l{border:0;border-top:1px solid var(--border);background:none;color:inherit;font:inherit;cursor:pointer}.fc-cor-l:hover{background:var(--bg)}.fc-cor-l.on{background:rgba(28,95,142,.08)}.fc-cor-l .ok{color:#16a34a}.fc-cor-l .zero{color:var(--muted)}.fc-cor-tot{font-weight:800;cursor:default!important;background:var(--bg)!important}.fc-cor-l .pg{color:#c2410c;font-weight:700}
+.fc-cor-ab{font-style:normal;font-size:20px;line-height:1;font-weight:700;color:var(--accent);text-align:center;transition:transform .15s}.fc-cor-ab.on{transform:rotate(90deg)}.fc-cor-vs{background:var(--bg);border-top:1px solid var(--border);padding:6px 10px 10px 24px;display:grid;gap:6px}.fc-cor-v{display:grid;grid-template-columns:1fr auto 16px;gap:10px;align-items:center;text-align:left;border:1px solid var(--border);border-radius:10px;background:var(--card);padding:8px 10px;font:inherit;color:inherit;cursor:pointer}.fc-cor-v span{display:grid}.fc-cor-v small{font-size:12px;color:var(--muted)}.fc-cor-vv{text-align:right;font-weight:700}.fc-cor-vv small.ok{color:#16a34a}.fc-cor-vv small.pg{color:#c2410c}.fc-cor-v i{font-style:normal;color:var(--muted)}
 .fc-h{display:flex;align-items:center;gap:8px;margin:16px 2px 8px;font-weight:800;font-size:14px}.fc-h span{font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 .fc-lista{display:grid;gap:8px}
 .fc-l{display:grid;gap:5px;text-align:left;width:100%;border:1px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--card);cursor:pointer;font:inherit;color:inherit}
@@ -3220,7 +3233,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 .ic-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}.ic-res>div{border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}.ic-res b{display:block;font-size:20px}.ic-res span{font-size:12px;color:var(--muted)}
 .ic-chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:13.5px;cursor:pointer}.ic-chk input{margin-top:3px;width:18px;height:18px;flex:none}.ic-sem{margin-top:10px;font-size:13px}.ic-sem summary{cursor:pointer;color:var(--muted)}.ic-sem div{padding:3px 0}.ic-sem small{color:var(--muted)}
 .ic-lista{margin-top:12px;max-height:46vh;overflow:auto;display:grid;gap:6px}.ic-l{border:1px solid var(--border);border-radius:10px;padding:8px 11px;display:grid}.ic-l small{color:var(--muted);font-size:12.5px}.ic-l.nova em{font-style:normal;font-size:11px;color:#16a34a;font-weight:800;margin-left:6px}
-@media(max-width:760px){.fc-fil select{flex:1;min-width:0}.fc-cor-h,.fc-cor-l{grid-template-columns:1.4fr .5fr 1fr 1fr;font-size:12.5px;padding:8px 10px}.fc-cor-h>:nth-child(4),.fc-cor-l>:nth-child(4),.fc-cor-h>:nth-child(6),.fc-cor-l>:nth-child(6){display:none}.fc-ks{grid-template-columns:1fr 1fr;gap:8px}.fc-k{padding:11px 12px}.fc-k b{font-size:19px}.fc-fil{flex-wrap:wrap}.fc-fil .btn{flex:1}.ic-res{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.fc-fil select{flex:1;min-width:0}.fc-cor-h,.fc-cor-l{grid-template-columns:1.4fr .5fr 1fr 1fr 24px;font-size:12.5px;padding:8px 10px}.fc-cor-h>:nth-child(4),.fc-cor-l>:nth-child(4),.fc-cor-h>:nth-child(6),.fc-cor-l>:nth-child(6){display:none}.fc-ks{grid-template-columns:1fr 1fr;gap:8px}.fc-k{padding:11px 12px}.fc-k b{font-size:19px}.fc-fil{flex-wrap:wrap}.fc-fil .btn{flex:1}.ic-res{grid-template-columns:1fr 1fr}}
 </style>
 <script>
 (function(){
@@ -4524,14 +4537,24 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <div class="fg"><label>Parceria (outro corretor que dividiu a venda)</label><select id="rvParc"><option value="">Sem parceria</option></select><div class="hint" style="margin-top:4px">Com parceria, a venda e a comissão do corretor são divididas entre os dois.</div></div>
       <div class="fg"><label>Cliente</label><input id="rvCli"></div>
       <div class="row2 fg"><div><label>CPF</label><input id="rvCpf" inputmode="numeric"></div><div><label>Telefone</label><input id="rvTel" inputmode="tel"></div></div>
-      <div class="row2 fg"><div><label>Empreendimento</label><input id="rvEmp"></div><div><label>Construtora</label><input id="rvConst"></div></div>
-      <div class="row2 fg"><div><label>Valor de venda</label><input id="rvValor" inputmode="decimal" placeholder="R$ 0,00"></div><div><label>Entrada</label><input id="rvEntrada"></div></div>
-      <div class="row2 fg"><div><label>Comissão total</label><input id="rvCom"></div><div><label>Percentual</label><input id="rvPerc"></div></div>
-      <div class="row2 fg"><div><label>Origem do lead</label><input id="rvOrig"></div><div><label>Previsão de assinatura</label><input id="rvPrev"></div></div>
-      <div class="fg"><label>Venda que começou pela SDR</label><select id="rvSdr"></select><div class="hint" id="rvSdrDica" style="margin-top:4px"></div></div>
-      <div class="fg"><label>Status do imóvel</label><input id="rvStImo"></div>
-      <div class="row2 fg"><div><label>Criativo (se do CRM)</label><input id="rvCriativo"></div><div><label>Número da construtora</label><input id="rvNumConst" inputmode="tel"></div></div>
-      <div class="fg"><label>Emissão parte da nota CNPJ corretor (sim/não)</label><input id="rvNota" placeholder="sim ou não"></div>
+      <div class="row2 fg"><div><label>E-mail</label><input id="rvEmail" type="email" inputmode="email"></div><div><label>PIS</label><input id="rvPis" inputmode="numeric"></div></div>
+      <div class="rv-sec">Imóvel</div>
+      <div class="row2 fg"><div><label>Empreendimento</label><input id="rvEmp"></div><div><label>Construtora</label><input id="rvConst" oninput="rvConta()"></div></div>
+      <div class="row2 fg"><div><label>Bloco e apartamento</label><input id="rvUnid" placeholder="Ex.: Bl. 04 · Ap. 302"></div><div><label>Status do imóvel</label><input id="rvStImo"></div></div>
+      <div class="fg"><label>Previsão de assinatura</label><input id="rvPrev"></div>
+      <div class="rv-sec">Valores</div>
+      <div class="row2 fg"><div><label>Valor de venda</label><input id="rvValor" inputmode="decimal" placeholder="R$ 0,00" oninput="rvConta()"></div><div><label>Valor de avaliação</label><input id="rvAval" inputmode="decimal" placeholder="R$ 0,00"></div></div>
+      <div class="row2 fg"><div><label>Sinal (R$)</label><input id="rvSinal" inputmode="decimal" placeholder="0,00" oninput="rvConta()"></div><div><label>Sinal pago para</label><select id="rvSinalQ" onchange="rvConta()"><option value="">—</option><option value="construtora">Construtora</option><option value="imobiliaria">Imobiliária</option></select></div></div>
+      <div class="row2 fg"><div><label>Sinal pago em</label><input id="rvSinalD" type="date"></div><div><label>Como pagou o sinal</label><select id="rvSinalF"><option value="">—</option><option value="pix">Pix</option><option value="dinheiro">Dinheiro</option><option value="boleto">Boleto</option><option value="cartao">Cartão de crédito</option><option value="debito">Cartão de débito</option></select></div></div>
+      <div class="row2 fg"><div><label>Entrada</label><input id="rvEntrada" oninput="rvConta()"></div><div><label>Entrada paga para</label><select id="rvEntQ" onchange="rvConta()"><option value="">—</option><option value="construtora">Construtora</option><option value="imobiliaria">Imobiliária</option></select></div></div>
+      <div class="fg"><label>Condições de venda</label><textarea id="rvCond" style="min-height:52px" placeholder="Ex.: entrada de R$ 5.000 em 10x no boleto"></textarea></div>
+      <div class="rv-sec">Comissão</div>
+      <div class="fg"><label>Tipo de venda</label><select id="rvTipo" onchange="rvTipoMuda()"><option value="">Escolha</option><option value="indicacao">Indicação · corretor fica com 60%</option><option value="imobiliaria">Imobiliária / CRM · corretor fica com 50%</option><option value="sdr">SDR · corretor fica com 25%</option></select>
+        <div class="hint" style="margin-top:4px">Lead do Instagram do corretor é Indicação. Lead do Instagram da imobiliária é Imobiliária / CRM.</div><input id="rvPerc" class="hide"><input id="rvOrig" class="hide"><input id="rvNumConst" class="hide"><input id="rvTipoTxt" class="hide"><input id="rvSinalTxt" class="hide"></div>
+      <div class="fg hide" id="rvSdrBox"><label>Qual SDR</label><select id="rvSdr"></select><div class="hint" id="rvSdrDica" style="margin-top:4px"></div></div>
+      <div class="row2 fg"><div><label>Valor da comissão</label><input id="rvCom" oninput="rvConta()" placeholder="R$ 0,00"></div><div><label>Prazo para pagar (dias)</label><input id="rvPrazo" inputmode="numeric" placeholder="Ex.: 30 após assinar"></div></div>
+      <div class="rv-conta" id="rvConta"></div>
+      <div class="row2 fg"><div><label>Criativo (se do CRM)</label><input id="rvCriativo"></div><div><label>Nota no CNPJ do corretor?</label><select id="rvNota"><option value="">—</option><option value="sim">Sim</option><option value="não">Não</option></select></div></div>
       <div class="fg"><label>Observação</label><textarea id="rvObs" style="min-height:60px"></textarea></div>
       <div class="fg rv-docs-box"><label>📎 Documentação do cliente <span class="muted" id="rvDocsCont" style="font-weight:500"></span></label>
         <div class="hint" style="margin:0 0 8px">Anexe o que já tiver. O resto você completa depois, abrindo a reserva em Vendas.</div>
@@ -6999,7 +7022,7 @@ function renderCorretores(){
       return `<div class="pend"><div><b>${esc(p.nome)}</b><span>${esc(PAPEIS[p.papel] || p.papel)} · assistiu <b>${vi} de ${tot}</b> aula${tot === 1 ? '' : 's'}${tot && vi >= tot ? ' ✓' : ''}</span></div>
         <select id="te_${p.uid}">${opEq(p.equipe)}</select><button class="btn btn-primary" onclick="liberarApp('${p.uid}')">Liberar o app</button></div>`; }).join(''); }
   $('pendLista').innerHTML = pend.map(p => `<div class="pend">
-      <div><b>${esc(p.nome)}</b><span>${esc(p.email||'')} · ao aprovar, começa só pelas aulas</span></div>
+      <div><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span><span class="pend-obs">Ao aprovar, começa só pelas aulas</span></div>
       <select id="pp_${p.uid}">${opcoesPapel({ papel:'corretor' }, souDono())}</select>
       <select id="pe_${p.uid}">${opEq(p.equipe)}</select>
       <button class="btn btn-primary" onclick="aprovar('${p.uid}')">Aprovar</button>
@@ -7929,7 +7952,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 416;
+const APP_VERSAO = 418;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8600,7 +8623,7 @@ window.top3Folhas = () => {
   const foto = uid => ((perfisTodos || []).find(p => p.uid === uid) || {}).foto || '', ini = n => t3Nome(n).split(' ').map(x => x[0] || '').join('').toUpperCase();
   const cores = ['#D9A521', '#9AA3B2', '#B9773A'], e = x => String(x || '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
   const folha = (cat, i, uid, nome, valor, det) => { const f = foto(uid), c = cores[i];
-    return `<section class="f"><div class="topo"><div class="mk">FRADE IMÓVEIS</div><div class="lg" style="color:${c}">${i + 1}º LUGAR</div><div class="ct">${cat}</div><div class="pr">${e(rot)}</div></div>
+    return `<section class="f"><div class="topo"><div class="mk">FRADE IMÓVEIS</div><div class="lg" style="color:${c}">${i + 1}º LUGAR</div><div class="ct">${cat}</div></div>
       <div class="ft" style="border-color:${c}">${f ? `<img src="${e(f)}" alt="">` : `<span>${e(ini(nome))}</span>`}</div>
       <div class="nm">${e(t3Nome(nome))}</div><div class="vl">${e(valor)}</div><div class="dt">${e(det)}</div><div class="base"></div></section>`; };
   const pags = [
@@ -14997,8 +15020,16 @@ function acharConstrutora(r){
   const palavras = ' ' + emp.replace(/[^a-z0-9]+/g, ' ') + ' ', nome = m.nomes.find(n => { const k = norm(n).trim(); return k.length >= 2 && palavras.includes(' ' + k + ' '); });
   return nome || '';
 }
+// v418: o que a reserva (corretor) e a ADM já informaram entra sozinho nas etapas do financeiro; o que o financeiro gravar vale por cima
+function autoDaReserva(r){ if (!r || !(r.tipoVenda || r.sinalQuem || r.entradaQuem || r.assCaixaEm || r.assTendaEm)) return {}; const o = {};
+  if (Number(r.sinalValor) > 0) Object.assign(o, { sinalPago:true, sinalValor:Number(r.sinalValor), sinalQuem:r.sinalQuem || '', sinalData:r.sinalData || r.dia || '', sinalForma:r.sinalForma || '' });
+  const ev = lerDec(r.entrada); o.geraEntrada = ev > 0 ? 'sim' : 'nao'; if (ev > 0) { o.entradaValor = ev; if (r.entradaQuem === 'construtora') o.entradaPaga = true; }
+  if (r.assCaixaEm) o.assinaturaEm = r.assCaixaEm; if (Number(r.valorAvaliacao) > 0) o.valorAvaliacao = Number(r.valorAvaliacao);
+  if (/^s/i.test(r.notaCnpj || '')) { o.nota = 'com'; o.emissor = 'CNPJ do corretor'; }
+  return o; }
+window.autoDaReserva = autoDaReserva;
 function vendaFin(r){
-  const f = finVendas[r.id] || {}, consAuto = !(f.construtora || r.construtora), cons = consNome(f.construtora || r.construtora || '') || acharConstrutora(r), rg = regraConst(cons);
+  const f = { ...autoDaReserva(r), ...Object.fromEntries(Object.entries(finVendas[r.id] || {}).filter(([, x]) => x !== '' && x !== null && x !== undefined)) }, consAuto = !(f.construtora || r.construtora), cons = consNome(f.construtora || r.construtora || '') || acharConstrutora(r), rg = regraConst(cons);
   const tipo = f.tipo || rg.tipo, vgv = valorImovel(r);
   // o "percentual" da reserva: até 10 é % sobre o imóvel; acima disso (ou 0,5 / 0,6) é a parte do corretor
   // v282: o "%" da planilha (0,4 / 0,5 / 0,7 / 40%) é a parte da IMOBILIÁRIA; o corretor fica com o resto (40% imobiliária = 60% corretor). Até 10 continua sendo % sobre o imóvel
@@ -15010,19 +15041,29 @@ function vendaFin(r){
   const brutaRes = (() => { const t = String(r.comissao || ''); if (!t || /%/.test(t)) return 0;
     const nums = (t.match(/\d[\d.,]*\s*(?:k|mil)?/gi) || []).map(x => { const k = /k|mil/i.test(x); const y = x.replace(/k|mil/gi, '').trim(); let v = !y.includes(',') && /^\d{1,3}(\.\d{3})+$/.test(y) ? Number(y.replace(/\./g, '')) : lerDec(y); if (k) v *= 1000; return v; }).filter(v => v > 0);
     const ok = nums.filter(v => vgv && v >= vgv * 0.01 && v <= vgv * 0.15); return ok.length ? Math.max(...ok) : 0; })();
-  const total = f.comissao != null && f.comissao !== '' ? Number(f.comissao) : (brutaRes || Math.round(vgv * pctImob) / 100);
+  // v418: reserva e financeiro são o mesmo registro: se a reserva (corretor/ADM) foi alterada depois do financeiro, vale a comissão da reserva
+  const resNova = !!r.tipoVenda && Number(r.atualizadoEm || 0) > Number((finVendas[r.id] || {}).atualizadoEm || 0);
+  const total = resNova && brutaRes ? brutaRes : f.comissao != null && f.comissao !== '' ? Number(f.comissao) : (brutaRes || Math.round(vgv * pctImob) / 100);
   const pctA = tipo === 'adiantamento' ? Number(f.pctAdiant ?? rg.pctAdiant) || 0 : 0;
-  const adiant = Math.round(total * pctA) / 100, rest = Math.round((total - adiant) * 100) / 100;
-  const pctNF = f.nota === 'sem' ? 0 : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7) || 0, imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : Math.round(total * pctNF) / 100, liquido = Math.round((total - imposto) * 100) / 100;
-  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number(f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0, valCorBruto = f.valCor != null && f.valCor !== '' ? Number(f.valCor) : Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCorBruto) * 100) / 100;
+  // v418: reserva nova: o sinal e a entrada pagos à imobiliária saem da comissão cheia (na Tenda, da 1ª parte), antes do imposto e da divisão com o corretor
+  const novaR = !!(r.tipoVenda || r.sinalQuem || r.entradaQuem), sinV = Number(r.sinalValor) || Number(f.sinalValor) || 0, sinQ = r.sinalQuem || f.sinalQuem || '';
+  const deducao = novaR ? Math.round(((sinQ === 'imobiliaria' ? sinV : 0) + ((r.entradaQuem || f.entradaQuem) === 'imobiliaria' ? (Number(f.entradaValor) || lerDec(r.entrada)) : 0)) * 100) / 100 : 0;
+  const adiant0 = Math.round(total * pctA) / 100, rest0 = Math.round((total - adiant0) * 100) / 100;
+  const adiant = tipo === 'adiantamento' ? Math.max(0, Math.round((adiant0 - deducao) * 100) / 100) : adiant0, rest = tipo === 'adiantamento' ? rest0 : Math.max(0, Math.round((rest0 - deducao) * 100) / 100);
+  const totRec = Math.round((adiant + rest) * 100) / 100;
+  const pctNF = f.nota === 'sem' ? 0 : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7) || 0, imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : Math.round(totRec * pctNF) / 100, liquido = Math.round((totRec - imposto) * 100) / 100;
+  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number((!f.pctCorManual && r.tipoVenda && TIPOS_VENDA[r.tipoVenda] ? TIPOS_VENDA[r.tipoVenda].pct : null) ?? f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0, valCorBruto = f.valCor != null && f.valCor !== '' ? Number(f.valCor) : Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCorBruto) * 100) / 100;
   // adiantamento/vale e descontos avulsos saem da parte do corretor (a divisão é sempre sobre o líquido)
   const descontos = (f.descontos || []).filter(x => Number(x.valor) > 0), descTotal = Math.round(descontos.reduce((a, x) => a + Number(x.valor), 0) * 100) / 100, valCor = Math.round((valCorBruto - descTotal) * 100) / 100;
-  const prevA = f.prevAdiant || somaDiasISO(r.dia, rg.diasAdiant), prevR = f.prevRestante || (f.assinaturaEm ? somaDiasISO(f.assinaturaEm, rg.diasRestante) : '');
-  const ok = { reserva:!!f.sinalPago, entrada:f.geraEntrada === 'nao' || !!f.entradaPaga, identificacao:!!f.identificada, assinatura:!!f.assinaturaEm, faturada:!!f.faturada,
+  // v418: a ADM marca "Assinou Tenda" e "Assinou Caixa" na reserva; o prazo da construtora é digitado em cada venda (dias após a assinatura)
+  const assT = f.assTendaEm || r.assTendaEm || '', assEm = f.assinaturaEm || r.assCaixaEm || '', prazo = Number(f.prazoDias || r.prazoDias) || 0;
+  const prevA = f.prevAdiant || (assT ? somaDiasISO(assT, prazo || rg.diasAdiant) : somaDiasISO(r.dia, rg.diasAdiant)), prevR = f.prevRestante || (assEm ? somaDiasISO(assEm, prazo || rg.diasRestante) : '');
+  const valCorA = tipo === 'adiantamento' && totRec > 0 ? Math.round(valCor * adiant / totRec * 100) / 100 : 0, regCaixa = f.registroCaixaEm || r.registroCaixaEm || '';
+  const ok = { reserva:!!f.sinalPago, entrada:f.geraEntrada === 'nao' || !!f.entradaPaga, identificacao:!!f.identificada, assinatura:!!assEm, faturada:!!f.faturada,
     recebida: tipo === 'adiantamento' ? !!(f.recAdiant && f.recRestante) : !!f.recRestante, paga:!!f.corPago };
   const etapa = ETAPAS_FIN.findIndex(([k]) => !ok[k]);
   const aReceber = (tipo === 'adiantamento' && !f.recAdiant ? adiant : 0) + (!f.recRestante ? rest : 0);
-  return { r, f, cons, consAuto:consAuto && !!cons, rg, tipo, pctImob, vgv, total, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valCorBruto, descontos, descTotal, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
+  return { r, f, cons, consAuto:consAuto && !!cons, rg, tipo, pctImob, vgv, total, deducao, totRec, assT, assEm, prazo, valCorA, regCaixa, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valCorBruto, descontos, descTotal, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
 }
 // o que entra e o que sai em um mês (para o golpe de vista)
 function previsaoMes(m){
@@ -15241,7 +15282,9 @@ function atencaoVenda(v, h){
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
   if ((Number(v.r.valor) || 0) > 3000000) a.push(`Valor do imóvel parece errado (${brl(Number(v.r.valor))}); o app está usando ${brl(v.vgv)}. Corrija na reserva`);
   if (!v.total) a.push('Sem valor de comissão');
-  if (v.ok.assinatura && !f.faturada && f.assinaturaEm && diffDias(f.assinaturaEm) <= -7) a.push(`Assinou há ${-diffDias(f.assinaturaEm)} dias e a nota não foi emitida`);
+  if (v.ok.assinatura && !f.faturada && v.assEm && diffDias(v.assEm) <= -7) a.push(`Assinou há ${-diffDias(v.assEm)} dias e a nota não foi emitida`);
+  if (v.regCaixa && !f.faturada && diffDias(v.regCaixa) <= -10) a.push(`Pedir a emissão da nota à construtora (registro na Caixa em ${dataBR(v.regCaixa).slice(0, 5)}, há ${-diffDias(v.regCaixa)} dias)`); // v418
+  if (v.tipo === 'adiantamento' && f.recAdiant && !f.corPagoA && !f.corPago && v.valCorA > 0) a.push(`Adiantamento recebido: pagar a parte do corretor (${brl2(v.valCorA)})`);
   if (v.ok.assinatura && !v.ok.recebida && !v.prevR && !(v.tipo === 'adiantamento' && !f.recAdiant && v.prevA)) a.push('Assinou e está sem data para receber');
   if (v.tipo === 'adiantamento' && !f.recAdiant && v.prevA && v.prevA < h && v.adiant) a.push(`Adiantamento atrasado (era ${dataBR(v.prevA)})`);
   if (!f.recRestante && v.prevR && v.prevR < h && v.rest) a.push(`Recebimento atrasado (era ${dataBR(v.prevR)})`);
@@ -15250,6 +15293,7 @@ function atencaoVenda(v, h){
   return a;
 }
 // v286: marcar direto na lista que a comissão já foi paga (recebida da construtora e paga ao corretor). Não cria lançamento no caixa.
+window.fcAbreCor = k => { const s = (window._fcAb ||= new Set()); if (s.has(k)) s.delete(k); else s.add(k); window._fcCorAberto = true; render(); };
 window.fcMarcarPaga = async (id, sim) => {
   const v = vendasFin().find(r => r.id === id), nome = v ? nomeBonito(v.cliente || '') : '';
   const d = sim ? { recAdiant:true, recRestante:true, faturada:true, corPago:true, planOk:true, pagaMarcadaEm:hojeISO(), atualizadoEm:Date.now() } : { corPago:false, recAdiant:false, recRestante:false, pagaMarcadaEm:'', atualizadoEm:Date.now() };
@@ -15257,8 +15301,8 @@ window.fcMarcarPaga = async (id, sim) => {
   catch(e) { toast('Erro: ' + e.message); }
 };
 function htmlComissoes(){
-  const sub = window.finComSub === 'notas' ? 'notas' : 'vendas';
-  const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
+  const sub = ['notas', 'corretores'].includes(window.finComSub) ? window.finComSub : 'vendas';
+  const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'corretores' ? 'on' : ''}" onclick="finComSub='corretores';render()">Por corretor</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
   if (sub === 'notas') return seg + htmlNotas2();
   const h = hojeISO(), tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
   // v283: segue o mês escolhido lá em cima (vendas pela data da reserva); dá para ver todos os meses
@@ -15285,7 +15329,7 @@ function htmlComissoes(){
   const mN = nomeMes(mesSel).split(' de ')[0].toLowerCase(), segM = `<div class="seg fin-subseg fc-mes"><button class="${todosM ? '' : 'on'}" onclick="finComTodos=false;render()">Vendas de ${mN}</button><button class="${todosM ? 'on' : ''}" onclick="finComTodos=true;render()">Todos os meses</button></div>`;
   const aReceber = vs.filter(v => v.aReceber > 0 && !v.ok.recebida), aPagar = vs.filter(v => v.ok.recebida && !v.f.corPago && v.valCor > 0), atencao = vs.filter(v => v.at.length), concl = vs.filter(v => v.ok.recebida && (v.f.corPago || !(v.valCor > 0)));
   const soma = (l, k) => l.reduce((a, v) => a + (Number(typeof k === 'function' ? k(v) : v[k]) || 0), 0);
-  const recDe = v => v.ok.recebida ? (Number(v.total) || 0) : v.f.recAdiant ? (Number(v.adiant) || 0) : 0, recebidas = vs.filter(v => recDe(v) > 0); // v391: comissões já recebidas das construtoras (inteiras ou só o adiantamento)
+  const recDe = v => v.ok.recebida ? (Number(v.totRec ?? v.total) || 0) : v.f.recAdiant ? (Number(v.adiant) || 0) : 0, recebidas = vs.filter(v => recDe(v) > 0); // v391: comissões já recebidas das construtoras (inteiras ou só o adiantamento)
   const fil = window.finComFil || 'atencao', grupos = { atencao, receber:aReceber, recebidas, pagar:aPagar, todas:vs, concl };
   const t = norm(finBusca), lista = (grupos[fil] || vs).filter(v => !t || norm([v.r.cliente, v.r.corretorTexto, v.cons, v.r.empreendimento].join(' ')).includes(t))
     .sort((a, b) => nomeBonito(a.r.cliente || '').localeCompare(nomeBonito(b.r.cliente || ''), 'pt-BR')); // v289: ordem alfabética
@@ -15297,12 +15341,30 @@ function htmlComissoes(){
       <div class="fc-l2"><span>${corN}${v.cons ? ' · ' + esc(v.cons) : v.r.empreendimento ? ' · ' + esc(v.r.empreendimento) : ''} · ${dataBR(v.r.dia).slice(0, 5)}</span><span class="fc-vals"><i>Comissão <b>${brl(v.total)}</b></i><i>Corretor <b>${brl(v.valCor)}</b> (${Math.round(v.pctCor)}%)</i>${prev ? `<i class="fc-prev">${prev}</i>` : ''}</span></div>
       <div class="fc-l3">${v.ok.recebida && (v.f.corPago || !(v.valCor > 0)) ? `<span class="fc-pago">✓ Paga</span><span class="fc-pgbt fc-des" onclick="event.stopPropagation();fcMarcarPaga('${v.r.id}',false)">Desmarcar</span>` : `<span class="fc-pgbt" onclick="event.stopPropagation();fcMarcarPaga('${v.r.id}',true)">Marcar como paga</span>`}</div>
       ${v.at.length ? `<div class="fc-at">⚠ ${v.at.map(esc).join(' · ')}</div>` : ''}</button>`; };
-  return `<div class="fc-segs">${seg}</div>${segAss}${segCons}<div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('recebidas', 'Já recebidas', brl(soma(recebidas, recDe)), `${recebidas.length} venda${recebidas.length === 1 ? '' : 's'}${recebidas.some(v => !v.ok.recebida) ? ' · algumas só o adiantamento' : ''}`, 'k-ok')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
+  // v418: recebimento real (já assinado: a construtora tem que pagar) x expectativa (só reserva: ainda não é venda)
+  const realDe = v => { if (v.ok.recebida) return 0; let x = 0; if (v.tipo === 'adiantamento') { if (!v.f.recAdiant && (v.assT || v.f.recAdiant)) x += v.adiant; if (!v.f.recRestante && v.assEm) x += v.rest; } else if (!v.f.recRestante && assinou(v)) x += v.rest; return x; };
+  const somaReal = soma(vs, realDe), somaExp = Math.max(0, soma(vs, v => v.ok.recebida ? 0 : v.aReceber) - somaReal);
+  const fcReal = `<div class="fc-real"><div class="re"><span>Recebimento real</span><b>${brl(somaReal)}</b><small>já assinado, a construtora tem que pagar</small></div><div><span>Expectativa</span><b>${brl(somaExp)}</b><small>só reserva, ainda não é venda</small></div></div>`;
+  const corBloco = sub === 'corretores' ? '' : cores.length ? `<details class="fc-cor" ${corSel || window._fcCorAberto ? 'open' : ''} ontoggle="window._fcCorAberto=this.open"><summary>Comissão de cada corretor em ${nomeMes(mesSel).split(' de ')[0].toLowerCase()} <span>${cores.length}</span></summary>
+      <div class="fc-cor-t"><div class="fc-cor-h"><span>Corretor</span><span>Vendas</span><span>Comissão</span><span>Já pago</span><span>Falta pagar</span><span>A receber</span><span></span></div>
+      ${cores.map(c => { const ab = (window._fcAb ||= new Set()).has(c.k), kq = esc(c.k).replace(/'/g, ''); /* v418: toque abre as vendas do corretor ali mesmo */
+        const vsC = ab ? vsMes.filter(v => corsDe(v).some(x => ckey(x) === c.k)).sort((a, b) => (a.r.dia || '').localeCompare(b.r.dia || '')) : [];
+        return `<button class="fc-cor-l ${ab ? 'on' : ''}" onclick="fcAbreCor('${kq}')" aria-expanded="${ab}"><b>${esc(nomeBonito(c.nome))}</b><span>${c.n}</span><span>${brl(c.total)}</span>${zv(c.pago, 'ok')}${zv(c.pagar, 'pg')}${zv(c.receber, '')}<i class="fc-cor-ab ${ab ? 'on' : ''}">›</i></button>${ab ? `<div class="fc-cor-vs">${vsC.map(v => { const parte = (v.valCor || 0) / corsDe(v).length, st = v.f.corPago ? 'pago' : v.ok.recebida ? 'falta pagar' : v.f.recAdiant ? '1ª parte recebida' : 'a receber';
+          return `<button class="fc-cor-v" onclick="abrirVendaFin('${v.r.id}')"><span><b>${esc(nomeBonito(v.r.cliente || 'Cliente'))}</b><small>${dataBR(v.r.dia).slice(0, 5)}${v.cons ? ' · ' + esc(v.cons) : ''}${corsDe(v).length > 1 ? ' · parceria' : ''}</small></span><span class="fc-cor-vv">${brl(parte)}<small class="${v.f.corPago ? 'ok' : v.ok.recebida ? 'pg' : ''}">${st}</small></span><i>›</i></button>`; }).join('') || '<div class="fc-vazio">Nenhuma venda.</div>'}</div>` : ''}`; }).join('')}
+      <div class="fc-cor-l fc-cor-tot"><b>Total</b><span>${vsMes.length}</span><span>${brl(somaC('total'))}</span>${zv(somaC('pago'), 'ok')}${zv(somaC('pagar'), 'pg')}${zv(somaC('receber'), '')}<span></span></div></div></details>` : '';
+  /* v418: aba "Por corretor": cada corretor abre as vendas dele, e cada venda abre para ver e mexer */
+  if (sub === 'corretores') { window._fcCorAberto = true;
+    return `<div class="fc-segs">${seg}</div><div class="seg fin-subseg fc-mes"><button class="${todosM ? '' : 'on'}" onclick="finComTodos=false;render()">Vendas de ${mN}</button><button class="${todosM ? 'on' : ''}" onclick="finComTodos=true;render()">Todos os meses</button></div>
+      <div class="hint" style="margin:6px 0 10px">Toque no corretor para ver as vendas dele. Toque na venda para abrir e mexer.</div>` + (cores.length ? cores.length ? `<details class="fc-cor fc-cor-aba" open><summary>Comissão de cada corretor em ${nomeMes(mesSel).split(' de ')[0].toLowerCase()} <span>${cores.length}</span></summary>
+      <div class="fc-cor-t"><div class="fc-cor-h"><span>Corretor</span><span>Vendas</span><span>Comissão</span><span>Já pago</span><span>Falta pagar</span><span>A receber</span><span></span></div>
+      ${cores.map(c => { const ab = (window._fcAb ||= new Set()).has(c.k), kq = esc(c.k).replace(/'/g, ''); /* v418: toque abre as vendas do corretor ali mesmo */
+        const vsC = ab ? vsMes.filter(v => corsDe(v).some(x => ckey(x) === c.k)).sort((a, b) => (a.r.dia || '').localeCompare(b.r.dia || '')) : [];
+        return `<button class="fc-cor-l ${ab ? 'on' : ''}" onclick="fcAbreCor('${kq}')" aria-expanded="${ab}"><b>${esc(nomeBonito(c.nome))}</b><span>${c.n}</span><span>${brl(c.total)}</span>${zv(c.pago, 'ok')}${zv(c.pagar, 'pg')}${zv(c.receber, '')}<i class="fc-cor-ab ${ab ? 'on' : ''}">›</i></button>${ab ? `<div class="fc-cor-vs">${vsC.map(v => { const parte = (v.valCor || 0) / corsDe(v).length, st = v.f.corPago ? 'pago' : v.ok.recebida ? 'falta pagar' : v.f.recAdiant ? '1ª parte recebida' : 'a receber';
+          return `<button class="fc-cor-v" onclick="abrirVendaFin('${v.r.id}')"><span><b>${esc(nomeBonito(v.r.cliente || 'Cliente'))}</b><small>${dataBR(v.r.dia).slice(0, 5)}${v.cons ? ' · ' + esc(v.cons) : ''}${corsDe(v).length > 1 ? ' · parceria' : ''}</small></span><span class="fc-cor-vv">${brl(parte)}<small class="${v.f.corPago ? 'ok' : v.ok.recebida ? 'pg' : ''}">${st}</small></span><i>›</i></button>`; }).join('') || '<div class="fc-vazio">Nenhuma venda.</div>'}</div>` : ''}`; }).join('')}
+      <div class="fc-cor-l fc-cor-tot"><b>Total</b><span>${vsMes.length}</span><span>${brl(somaC('total'))}</span>${zv(somaC('pago'), 'ok')}${zv(somaC('pagar'), 'pg')}${zv(somaC('receber'), '')}<span></span></div></div></details>` : '' : '<div class="fc-vazio">Nenhuma venda nesse período.</div>'); }
+  return `<div class="fc-segs">${seg}</div>${segAss}${segCons}${fcReal}<div class="fc-ks">${card('atencao', 'Precisa de atenção', atencao.length, atencao.length === 1 ? 'venda' : 'vendas', 'k-at')}${card('receber', 'Falta receber', brl(soma(aReceber, 'aReceber')), `${aReceber.length} venda${aReceber.length === 1 ? '' : 's'} · construtoras`, 'k-rec')}${card('recebidas', 'Já recebidas', brl(soma(recebidas, recDe)), `${recebidas.length} venda${recebidas.length === 1 ? '' : 's'}${recebidas.some(v => !v.ok.recebida) ? ' · algumas só o adiantamento' : ''}`, 'k-ok')}${card('pagar', 'Falta pagar', brl(soma(aPagar, 'valCor')), `${aPagar.length} corretor${aPagar.length === 1 ? '' : 'es'} a pagar`, 'k-pag')}${card('todas', 'Todas as vendas', vs.length, `${concl.length} concluída${concl.length === 1 ? '' : 's'}`, 'k-tod')}</div>
     <div class="fin-filtros fc-fil"><input id="finBuscaI" placeholder="Buscar cliente, corretor ou construtora..." value="${esc(finBusca)}" oninput="finBusca=this.value;renderFinanceiro();setTimeout(()=>{const i=document.getElementById('finBuscaI');i.focus();i.setSelectionRange(i.value.length,i.value.length)},0)"><select id="fcCorSel" onchange="finComCor=this.value;render()"><option value="">Todos os corretores</option>${cores.map(c => `<option value="${esc(c.k)}" ${c.k === corSel ? 'selected' : ''}>${esc(nomeBonito(c.nome))}</option>`).join('')}</select><button class="btn btn-ghost" onclick="abrirImpComissoes()">Importar planilha</button></div>
-    ${cores.length ? `<details class="fc-cor" ${corSel || window._fcCorAberto ? 'open' : ''} ontoggle="window._fcCorAberto=this.open"><summary>Comissão de cada corretor em ${nomeMes(mesSel).split(' de ')[0].toLowerCase()} <span>${cores.length}</span></summary>
-      <div class="fc-cor-t"><div class="fc-cor-h"><span>Corretor</span><span>Vendas</span><span>Comissão</span><span>Já pago</span><span>Falta pagar</span><span>A receber</span></div>
-      ${cores.map(c => `<button class="fc-cor-l ${c.k === corSel ? 'on' : ''}" onclick="finComCor=${c.k === corSel ? "''" : `'${esc(c.k).replace(/'/g, '')}'`};render()"><b>${esc(nomeBonito(c.nome))}</b><span>${c.n}</span><span>${brl(c.total)}</span>${zv(c.pago, 'ok')}${zv(c.pagar, 'pg')}${zv(c.receber, '')}</button>`).join('')}
-      <div class="fc-cor-l fc-cor-tot"><b>Total</b><span>${vsMes.length}</span><span>${brl(somaC('total'))}</span>${zv(somaC('pago'), 'ok')}${zv(somaC('pagar'), 'pg')}${zv(somaC('receber'), '')}</div></div></details>` : ''}
+    ${corBloco}
     <div class="fc-h">${{ atencao:'Precisa de atenção', receber:'Falta receber das construtoras', recebidas:'Já recebidas das construtoras', pagar:'Falta pagar aos corretores', todas:'Todas as vendas', concl:'Concluídas' }[fil]} <span>${lista.length}</span></div>
     <div class="fc-lista">${lista.map(linha).join('') || `<div class="fc-vazio">${fil === 'atencao' ? 'Nada precisando de atenção agora.' : 'Nenhuma venda aqui.'}</div>`}</div>
     ${tiradas.length ? `<div class="fv-tiradas"><button class="btn btn-ghost" onclick="finVerTiradas=!finVerTiradas;render()">🗑️ ${tiradas.length} venda${tiradas.length > 1 ? 's' : ''} excluída${tiradas.length > 1 ? 's' : ''} do financeiro · ${finVerTiradas ? 'esconder' : 'ver'}</button>${finVerTiradas ? tiradas.map(r => `<div class="arq-row"><div class="ai"><b>${esc(r.cliente || 'Cliente')}</b><span class="muted" style="font-size:12.5px">${dataBR(r.dia)} · ${esc(r.corretorTexto || '')}</span></div><button class="snooze" onclick="voltarVendaFin('${r.id}')">Voltar</button></div>`).join('') : ''}</div>` : ''}`;
@@ -15629,12 +15691,23 @@ window.abrirVendaFin = (id, semAbrir) => {
   $('fvSub').textContent = `${dataBR(r.dia)} · ${v.cor.map(c => c.nome).join(' + ') || r.corretorTexto || ''} · VGV ${brl(v.vgv)}`;
   const val = x => x != null && x !== '' ? String(x).replace('.', ',') : '';
   const atual = v.etapa;
-  const sec = (i, titulo, resumo, corpo) => { const feito = i < ETAPAS_FIN.length && v.ok[ETAPAS_FIN[i][0]];
-    return `<details class="fv-et ${feito ? 'feito' : ''}" ${i === atual ? 'open' : ''}><summary><i>${feito ? '✓' : i + 1}</i><span><b>${titulo}</b>${resumo ? `<small>${resumo}</small>` : ''}</span></summary><div class="fv-et-in">${corpo}</div></details>`; };
+  /* v418: etapa concluída fica verde; etapa atrasada ou que precisa de ação fica vermelha (com o motivo) */
+  const hj = hojeISO(), atrasoEt = i => { const k = (ETAPAS_FIN[i] || [])[0];
+    if (k === 'reserva' && !v.ok.reserva && diffDias(r.dia || hj) <= -3) return 'sinal sem confirmação há ' + (-diffDias(r.dia)) + ' dias';
+    if (k === 'entrada' && !v.ok.entrada && parcelasCobrar(f, hj).length) return 'parcela da entrada vencida';
+    if (k === 'faturada' && !f.faturada && v.regCaixa && diffDias(v.regCaixa) <= -10) return 'pedir a nota à construtora';
+    if (k === 'faturada' && !f.faturada && v.assEm && diffDias(v.assEm) <= -7) return 'assinou há ' + (-diffDias(v.assEm)) + ' dias e a nota não foi emitida';
+    if (k === 'recebida' && !v.ok.recebida && ((v.tipo === 'adiantamento' && !f.recAdiant && v.prevA && v.prevA < hj) || (!f.recRestante && v.prevR && v.prevR < hj))) return 'recebimento atrasado';
+    if (k === 'paga' && v.ok.recebida && !f.corPago && v.valCor > 0) return 'comissão recebida e corretor ainda não pago';
+    if (k === 'paga' && f.recAdiant && !f.corPagoA && !f.corPago && v.valCorA > 0) return '1ª parte recebida: pagar o corretor';
+    return ''; };
+  const sec = (i, titulo, resumo, corpo) => { const feito = i < ETAPAS_FIN.length && v.ok[ETAPAS_FIN[i][0]], at = feito ? '' : atrasoEt(i);
+    return `<details class="fv-et ${feito ? 'feito' : at ? 'atraso' : ''}" ${i === atual || at ? 'open' : ''}><summary><i>${feito ? '✓' : at ? '!' : i + 1}</i><span><b>${titulo}</b>${at ? `<small class="fv-at">${esc(at)}</small>` : resumo ? `<small>${resumo}</small>` : ''}</span></summary><div class="fv-et-in">${corpo}</div></details>`; };
   const notasV = (window.finNotas || []).filter(n => n.vendaId === r.id);
   $('fvCorpo').innerHTML = `
     <div class="fv-topo" title="Toque num valor para editar"><div onclick="fvEditar('fvBruta')"><span>Comissão bruta ✏️</span><b>${brl2(v.total)}</b></div><div onclick="fvEditar('fvImpV')"><span>Imposto (${String(v.pctNF).replace('.', ',')}%) ✏️</span><b class="fin-neg">− ${brl2(v.imposto)}</b></div><div onclick="fvEditar('fvValCor')"><span>Corretor${v.descTotal ? ' (já com descontos)' : ''} ✏️</span><b>${brl2(v.valCor)}</b>${v.descTotal ? `<small class="fv-desc-s">${brl2(v.valCorBruto)} − ${brl2(v.descTotal)}</small>` : ''}</div><div onclick="fvEditar('fvPctC')"><span>Fica na imobiliária ✏️</span><b class="fin-pos">${brl2(v.valImob)}</b></div></div>
     ${f.obsPlan || f.nfPlan ? `<div class="fv-parc fv-obsplan">Planilha: ${esc([f.nfPlan, f.obsPlan].filter(Boolean).join(' · '))}</div>` : ''}
+    ${v.deducao ? `<div class="fv-parc">Comissão cheia <b>${brl2(v.total)}</b> − sinal/entrada pagos à imobiliária <b>${brl2(v.deducao)}</b> = a receber da construtora <b>${brl2(v.totRec)}</b>. A parte do corretor (${Math.round(v.pctCor)}%) é sobre o líquido desse valor.</div>` : ''}
     ${v.tipo === 'adiantamento' ? `<div class="fv-parc">Adiantamento <b>${brl2(v.adiant)}</b>${v.prevA ? ' em ' + dataBR(v.prevA) : ''} · restante <b>${brl2(v.rest)}</b>${v.prevR ? ' em ' + dataBR(v.prevR) : ' depois da assinatura'}</div>` : `<div class="fv-parc">Paga tudo de uma vez${v.prevR ? ' em ' + dataBR(v.prevR) : ', depois da assinatura'}</div>`}
     <div class="fv-bloco"><h4>Comissão</h4>
       <div class="row2"><div class="fg"><label>Construtora</label><input id="fvCons" list="fvConsL" value="${esc(v.cons)}" oninput="fvTipoAuto()"><datalist id="fvConsL">${construtoras().map(c => `<option value="${esc(c.nome)}">`).join('')}</datalist></div>
@@ -15648,24 +15721,39 @@ window.abrirVendaFin = (id, semAbrir) => {
       <div class="fg" style="margin-top:10px"><label>Andamento do processo</label><select id="fvProc">${['','Formulário','Avaliação do imóvel','Conformidade','Extrato','Aguardando unidade','Obra','Suspensiva','Assinatura agendada','Assinou'].map(x => `<option ${f.processo === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
     ${fvBlocoRecibo(r, v, f)}
     <div class="fv-etapas"><h4>Etapas</h4>
-    ${sec(0, 'Reserva e sinal', f.sinalPago ? 'sinal pago' + (f.sinalValor ? ' · ' + brl2(f.sinalValor) : '') : '', `${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="row2"><div class="fg"><label>Data do pagamento</label><input id="fvSinalD" type="date" value="${f.sinalData || ''}"></div><div class="fg" style="align-self:end"><small class="muted">O valor do sinal fica em "Cliente, entrada e recibo".</small></div></div>
+    ${sec(0, 'Reserva e sinal', f.sinalPago ? 'sinal pago' + (f.sinalValor ? ' · ' + brl2(f.sinalValor) : '') + (f.sinalQuem ? ' à ' + (f.sinalQuem === 'imobiliaria' ? 'imobiliária' : 'construtora') : '') : '', `${Number(r.sinalValor) > 0 ? '<div class="fv-auto">Informado pelo corretor na reserva. Confira e salve.</div>' : ''}${chk('fvSinal', f.sinalPago, 'Cliente pagou o sinal')}<div class="row2"><div class="fg"><label>Data do pagamento</label><input id="fvSinalD" type="date" value="${f.sinalData || ''}"></div><div class="fg" style="align-self:end"><small class="muted">O valor do sinal fica em "Cliente, entrada e recibo".</small></div></div>
       <div class="row2"><div class="fg"><label>Como pagou</label><select id="fvSinalF">${FORMAS_SINAL.map(([k,n]) => `<option value="${k}" ${f.sinalForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg"><label>Quem recebeu</label><select id="fvSinalQ"><option value="">—</option><option value="construtora" ${f.sinalQuem === 'construtora' ? 'selected' : ''}>Construtora</option><option value="imobiliaria" ${f.sinalQuem === 'imobiliaria' ? 'selected' : ''}>Imobiliária</option></select></div></div>`)}
-    ${sec(1, 'Entrada', f.geraEntrada === 'nao' ? 'não tem entrada' : f.entradaPaga ? 'entrada paga' : '', `<div class="row2"><div class="fg"><label>Vai gerar entrada?</label><select id="fvGera"><option value="">—</option><option value="sim" ${f.geraEntrada === 'sim' ? 'selected' : ''}>Sim</option><option value="nao" ${f.geraEntrada === 'nao' ? 'selected' : ''}>Não</option></select></div>
+    ${sec(1, 'Entrada', f.geraEntrada === 'nao' ? 'não tem entrada' : f.entradaPaga ? (r.entradaQuem === 'construtora' ? 'paga à construtora' : 'entrada paga') : r.entradaQuem === 'imobiliaria' ? 'paga à imobiliária: acompanhar' : '', `${r.tipoVenda || r.entradaQuem ? '<div class="fv-auto">Informado na reserva' + (r.condicoes ? ': ' + esc(r.condicoes) : '') + '. ' + (r.entradaQuem === 'construtora' ? 'Entrada paga à construtora: não precisa acompanhar aqui.' : r.entradaQuem === 'imobiliaria' ? 'Entrada paga à imobiliária: marque as parcelas conforme forem pagas.' : '') + '</div>' : ''}<div class="row2"><div class="fg"><label>Vai gerar entrada?</label><select id="fvGera"><option value="">—</option><option value="sim" ${f.geraEntrada === 'sim' ? 'selected' : ''}>Sim</option><option value="nao" ${f.geraEntrada === 'nao' ? 'selected' : ''}>Não</option></select></div>
       <div class="fg" style="align-self:end"><small class="muted">Valor e parcelas da entrada ficam em "Cliente, entrada e recibo".</small></div></div>
       <div class="row2"><div class="fg"><label>Como vai pagar</label><select id="fvForma">${FORMAS_ENT.map(([k,n]) => `<option value="${k}" ${f.entradaForma === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div class="fg" style="align-self:end">${chk('fvEntPaga', f.entradaPaga, 'Entrada paga')}</div></div>
+      ${(() => { /* v418: parcelas da entrada paga à imobiliária: uma linha por parcela, baixa num toque */
+        if (!(Number(f.entradaValor) > 0)) return '';
+        if (!f.entradaPrimeira) return '<div class="hint" style="margin:0 0 8px">Para listar as parcelas e dar baixa uma a uma, coloque o vencimento da 1ª parcela em "Cliente, entrada e recibo".</div>';
+        const ps = parcelasEntrada({ total:f.entradaValor, n:f.entradaParcelas || 1, ato:f.entradaAto, primeira:f.entradaPrimeira }), pagas = f.entradaPaga ? ps.length : Number(f.entradaPagas) || 0;
+        return `<div class="fv-parcs">${ps.map(p => { const ok = p.i <= pagas, venc = !ok && p.data < hj, prox = p.i === pagas + 1;
+          return `<div class="fv-pl ${ok ? 'ok' : venc ? 'venc' : ''}"><span><b>${p.ato ? 'Ato' : 'Parcela ' + p.i}</b><small>${ok ? 'paga' : (venc ? 'venceu ' : 'vence ') + dataBR(p.data).slice(0, 5)}</small></span><b>${brl2(p.valor)}</b>${prox ? `<button type="button" class="btn btn-primary" onclick="fvBaixaParc(${p.i},${ps.length})">Dar baixa</button>` : ok && p.i === pagas ? `<button type="button" class="link" onclick="fvBaixaParc(${p.i - 1},${ps.length})">desfazer</button>` : '<i></i>'}</div>`; }).join('')}</div>`; })()}
       <div class="row2"><div class="fg"><label>Parcelas já pagas</label><input id="fvEntPagas" type="number" min="0" max="60" value="${f.entradaPagas || ''}" placeholder="0" oninput="fvRcPrev()"></div></div>
       ${Number(f.entradaParcelas) > 1 ? `<div class="fv-parc-bar"><i style="width:${Math.min(100, Math.round((Number(f.entradaPagas) || 0) / f.entradaParcelas * 100))}%"></i></div><small class="muted">${Number(f.entradaPagas) || 0} de ${f.entradaParcelas} parcelas pagas${f.entradaValor ? ' · ' + brl2(f.entradaValor / f.entradaParcelas) + ' cada' : ''}</small>` : ''}`)}
     ${sec(2, 'Identificação', f.identificada ? 'identificada' : '', chk('fvIdent', f.identificada, 'Venda identificada no nome do corretor na construtora'))}
-    ${sec(3, 'Assinatura com a Caixa', f.assinaturaEm ? 'assinou em ' + dataBR(f.assinaturaEm) : '', `<div class="fg"><label>Data da assinatura</label><input id="fvAss" type="date" value="${f.assinaturaEm || ''}"></div>`)}
+    ${sec(3, 'Assinatura com a Caixa', f.assinaturaEm ? 'assinou em ' + dataBR(f.assinaturaEm) : v.assT ? 'assinou ' + esc(v.cons || 'construtora') + ' em ' + dataBR(v.assT) + ', falta a Caixa' : '', `${r.assCaixaEm || r.assTendaEm ? '<div class="fv-auto">Marcado pela ADM em Reservas.' + (v.regCaixa ? ' Registro na Caixa em ' + dataBR(v.regCaixa) + '.' : '') + '</div>' : '<div class="fv-auto">A ADM marca a assinatura em Reservas (etapa da reserva) e ela aparece aqui sozinha.</div>'}<div class="fg"><label>Data da assinatura</label><input id="fvAss" type="date" value="${f.assinaturaEm || ''}"></div>`)}
     ${sec(4, 'Nota fiscal e cobrança', f.faturada ? 'faturada' + (f.nf ? ' · NF ' + esc(f.nf) : '') : '', `<div class="row2"><div class="fg"><label>Nota fiscal</label><select id="fvNota"><option value="">—</option><option value="com" ${f.nota === 'com' ? 'selected' : ''}>Com nota</option><option value="sem" ${f.nota === 'sem' ? 'selected' : ''}>Sem nota</option></select></div>
         <div class="fg"><label>Emitida por</label><select id="fvEmissor">${NF_EMISSORES.map(x => `<option ${f.emissor === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
       <div class="row2"><div class="fg"><label>Número da nota</label><input id="fvNF" value="${esc(f.nf || '')}"></div><div class="fg"><label>% de imposto da nota</label><input id="fvPctNF" type="number" step="0.01" value="${Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7)}"></div></div>
       ${chk('fvFat', f.faturada, 'Comissão faturada / cobrada da construtora')}
       <div class="fv-notas">${notasV.map(n => `<span class="fv-nota-l"><button class="fv-nota" onclick="fechar('fvModal');editarNota('${n.id}')">🧾 NF ${esc(n.numero || 's/ nº')} · ${brl2(n.valor)} · ${NF_ST[n.status] || ''}</button>${n.anexo ? `<button class="link" onclick="abrirAnexoNota('${n.id}')">📎 ver</button>` : ''}</span>`).join('')}<button class="link" onclick="fechar('fvModal');editarNota(null,'${r.id}')">+ Registrar nota fiscal desta venda</button></div>`)}
-    ${sec(5, 'Comissão recebida', v.ok.recebida ? 'recebida' : '', `<div id="fvBoxA" class="${v.tipo === 'adiantamento' ? '' : 'hide'}"><div class="row2"><div class="fg"><label>Adiantamento previsto para</label><input id="fvPrevA" type="date" value="${v.prevA || ''}"></div><div class="fg" style="align-self:end">${chk('fvRecA', f.recAdiant, 'Adiantamento recebido')}</div></div></div>
-      <div class="row2"><div class="fg"><label>${v.tipo === 'adiantamento' ? 'Restante' : 'Comissão'} prevista para</label><input id="fvPrevR" type="date" value="${v.prevR || ''}"></div><div class="fg" style="align-self:end">${chk('fvRecR', f.recRestante, v.tipo === 'adiantamento' ? 'Restante recebido' : 'Comissão recebida')}</div></div>
-      <div class="hint" style="margin:0">Marcando como recebida, a entrada vai sozinha para “Entradas e saídas”.</div>`)}
-    ${sec(6, 'Corretor pago', f.corPago ? 'pago' : '', chk('fvCorP', f.corPago, `Comissão do corretor paga (${brl2(v.valCor)})`) + `<div class="fv-rc-bts" style="margin-top:8px"><button type="button" class="btn btn-ghost" onclick="fvReciboCom('imprimir')">Recibo da comissão</button><button type="button" class="btn btn-ghost" onclick="fvReciboCom('compartilhar')">Compartilhar recibo</button>${f.reciboComNum ? `<small class="muted">Recibo ${esc(f.reciboComNum)}${f.corPagoEm ? ' · pago em ' + dataBR(f.corPagoEm) : ''}</small>` : ''}</div>`)}
+    ${sec(5, 'Comissão recebida', v.ok.recebida ? 'recebida' : '', (() => { /* v418: um quadro por parte da comissão, com o botão dentro */
+      const pc = (n, tit, val, prev, rec, cor, corOk, k) => `<div class="fv-pc ${rec ? 'ok' : ''}"><div class="fv-pc-h"><b>${tit}</b><span>${rec ? 'Recebida' : 'A receber'}</span></div>
+        <div class="fv-pc-l"><span>Valor</span><b>${brl2(val)}</b></div><div class="fv-pc-l"><span>Previsão</span><b>${prev ? dataBR(prev) : 'depois da assinatura'}</b></div>
+        <div class="fv-pc-l"><span>Parte do corretor</span><b>${brl2(cor)} · ${corOk ? 'paga' : 'a pagar'}</b></div>
+        ${rec ? '' : k === 'R' && v.tipo === 'adiantamento' && !v.assEm ? '<div class="hint" style="margin:6px 0 0">Libera quando a ADM marcar "Assinou Caixa" em Reservas.</div>' : `<button type="button" class="btn btn-primary btn-block" onclick="fvConfirmar('${k}')">Confirmar recebimento</button>`}</div>`;
+      const pa = Math.round(v.pctA);
+      return (v.tipo === 'adiantamento' ? pc(1, `1ª parte · ${pa}%${v.assT ? ' · assinou ' + esc(v.cons || 'construtora') : ''}`, v.adiant, v.prevA, f.recAdiant, v.valCorA, f.corPagoA, 'A') + pc(2, `2ª parte · ${100 - pa}%${v.assEm ? ' · assinou Caixa' : ''}`, v.rest, v.prevR, f.recRestante, Math.round((v.valCor - v.valCorA) * 100) / 100, f.corPago, 'R')
+        : pc(1, 'Comissão', v.totRec, v.prevR, f.recRestante, v.valCor, f.corPago, 'R'))
+      + `<div class="hint" style="margin:8px 0 0">Confirmar recebimento dá baixa na parte, lança a entrada no caixa e marca a parte do corretor como paga, com recibo.</div>
+      <details class="fv-manual"><summary>Ajustar datas ou marcar à mão</summary>
+        <div id="fvBoxA" class="${v.tipo === 'adiantamento' ? '' : 'hide'}"><div class="row2"><div class="fg"><label>1ª parte prevista para</label><input id="fvPrevA" type="date" value="${v.prevA || ''}"></div><div class="fg" style="align-self:end">${chk('fvRecA', f.recAdiant, '1ª parte recebida')}</div></div></div>
+        <div class="row2"><div class="fg"><label>${v.tipo === 'adiantamento' ? '2ª parte' : 'Comissão'} prevista para</label><input id="fvPrevR" type="date" value="${v.prevR || ''}"></div><div class="fg" style="align-self:end">${chk('fvRecR', f.recRestante, v.tipo === 'adiantamento' ? '2ª parte recebida' : 'Comissão recebida')}</div></div></details>`; })())}
+    ${sec(6, 'Corretor pago', f.corPago ? 'pago' : f.corPagoA ? '1ª parte paga' : '', (v.tipo === 'adiantamento' ? chk('fvCorPA', f.corPagoA, `1ª parte paga (${brl2(v.valCorA)})`) : '') + chk('fvCorP', f.corPago, v.tipo === 'adiantamento' ? `2ª parte paga (${brl2(v.valCor - v.valCorA)})` : `Comissão do corretor paga (${brl2(v.valCor)})`) + `<div class="fv-rc-bts" style="margin-top:8px"><button type="button" class="btn btn-ghost" onclick="fvReciboCom('imprimir')">Recibo da comissão</button><button type="button" class="btn btn-ghost" onclick="fvReciboCom('compartilhar')">Compartilhar recibo</button>${f.reciboComNum ? `<small class="muted">Recibo ${esc(f.reciboComNum)}${f.corPagoEm ? ' · pago em ' + dataBR(f.corPagoEm) : ''}</small>` : ''}</div>`)}
     </div>
     <div class="fv-bloco fv-descs"><h4>Descontos na comissão do corretor</h4><div class="hint" style="margin:0 0 8px">Adiantamento, vale ou outro desconto. Sai da parte do corretor (a divisão com a imobiliária é sempre sobre o valor líquido, depois do imposto).</div><div id="fvDescLista"></div><button type="button" class="btn btn-ghost" onclick="fvDescAdd()">+ Adicionar desconto</button></div>
     <div class="fg"><label>Observação</label><textarea id="fvObs" rows="2">${esc(f.obs || '')}</textarea></div>`;
@@ -15742,18 +15830,24 @@ function fvDescDesenha(){
 }
 window.fvDescDesenha = fvDescDesenha;
 window.fvDescAdd = () => { (window._fvDesc ||= []).push({ tipo:'adiantamento', descricao:'', valor:0, uid:'' }); fvDescDesenha(); };
+// v418: baixa de uma parcela da entrada (paga à imobiliária) num toque
+window.fvBaixaParc = (i, n) => { const e = $('fvEntPagas'); if (e) e.value = i || ''; const pg = $('fvEntPaga'); if (pg) pg.checked = i >= n; salvarVendaFin(); };
+// v418: confirmar o recebimento num toque (baixa da parcela + entrada no caixa + parte do corretor paga com recibo)
+window.fvConfirmar = k => { const s = (id, on) => { const e = $(id); if (e) e.checked = on; };
+  if (k === 'A') { s('fvRecA', true); s('fvCorPA', true); } else { s('fvRecR', true); s('fvCorP', true); if ($('fvTipo').value !== 'adiantamento') s('fvFat', true); }
+  salvarVendaFin(); };
 window.fvTipoAuto = () => { const rg = regraConst($('fvCons').value); $('fvTipo').value = rg.tipo; $('fvTipo').onchange?.(); if (rg.tipo === 'adiantamento' && rg.pctAdiant && !Number($('fvPctA').value)) $('fvPctA').value = rg.pctAdiant; };
 window.salvarVendaFin = async () => {
   const r = vendasFin().find(x => x.id === finVEdit); if (!r) return;
   const num = id => lerDec($(id).value) || 0, v0 = vendaFin(r);
   const bruta = $('fvBruta').value.trim();
-  const d = { reservaId:r.id, cliente:r.cliente || '', construtora:$('fvCons').value.trim(), tipo:$('fvTipo').value, pctImob:Number($('fvPct').value) || 0, pctAdiant:$('fvTipo').value === 'adiantamento' ? Number($('fvPctA').value) || 0 : 0, pctCor:Number($('fvPctC').value) || 0,
+  const d = { reservaId:r.id, cliente:r.cliente || '', construtora:$('fvCons').value.trim(), tipo:$('fvTipo').value, pctImob:Number($('fvPct').value) || 0, pctAdiant:$('fvTipo').value === 'adiantamento' ? Number($('fvPctA').value) || 0 : 0, pctCor:Number($('fvPctC').value) || 0, pctCorManual:!!(r.tipoVenda && TIPOS_VENDA[r.tipoVenda] && (Number($('fvPctC').value) || 0) !== TIPOS_VENDA[r.tipoVenda].pct),
     comissao:bruta ? lerDec(bruta) : '', valCor:$('fvValCor').value.trim() ? lerDec($('fvValCor').value) : '', impostoV:$('fvImpV').value.trim() ? lerDec($('fvImpV').value) : '', processo:$('fvProc').value, emissor:$('fvEmissor').value, nf:$('fvNF').value.trim(), pctImposto:Number($('fvPctNF').value) || 0,
     sinalPago:$('fvSinal').checked, sinalValor:num('fvSinalV'), sinalData:$('fvSinalD').value, sinalForma:$('fvSinalF').value, sinalQuem:$('fvSinalQ').value,
     geraEntrada:$('fvGera').value, entradaValor:num('fvEntV'), entradaForma:$('fvForma').value, entradaPaga:$('fvEntPaga').checked, entradaParcelas:Number($('fvEntParc').value) || 0, entradaPagas:Number($('fvEntPagas').value) || 0,
     descontos:(window._fvDesc || []).filter(x => Number(x.valor) > 0).map(x => ({ tipo:x.tipo || 'avulso', descricao:String(x.descricao || '').trim().slice(0, 100), valor:Math.round(Number(x.valor) * 100) / 100, uid:x.uid || '' })),
     identificada:$('fvIdent').checked, assinaturaEm:$('fvAss').value, nota:$('fvNota').value, faturada:$('fvFat').checked,
-    prevAdiant:$('fvPrevA').value, prevRestante:$('fvPrevR').value, recAdiant:$('fvTipo').value === 'adiantamento' && $('fvRecA').checked, recRestante:$('fvRecR').checked, corPago:$('fvCorP').checked,
+    prevAdiant:$('fvPrevA').value, prevRestante:$('fvPrevR').value, recAdiant:$('fvTipo').value === 'adiantamento' && $('fvRecA').checked, recRestante:$('fvRecR').checked, corPago:$('fvCorP').checked, corPagoA:$('fvTipo').value === 'adiantamento' && !!$('fvCorPA')?.checked,
     obs:$('fvObs').value.trim(), atualizadoEm:Date.now(), atualizadoPor:perfil.nome, planOk:true, ...rcCampos() };
   // só guarda a previsão se a pessoa mudou a data sugerida
   const rg = regraConst(d.construtora);
@@ -15768,9 +15862,12 @@ window.salvarVendaFin = async () => {
       if (on && !tem) b.set(ref, { ...dados, pago:true, pagoEm:Date.now(), vendaId:r.id, criadoEm:Date.now(), criadoPor:perfil.nome }); else if (on && tem) b.set(ref, { valor:dados.valor }, { merge:true }); else if (!on && tem) b.delete(ref); };
     const hoje = hojeISO();
     if (n.tipo === 'adiantamento') { lanc('adiant', d.recAdiant, { tipo:'entrada', categoria:'Comissão de venda', descricao:`Adiantamento · ${r.cliente || ''}`, valor:n.adiant, data:hoje }); lanc('rest', d.recRestante, { tipo:'entrada', categoria:'Comissão de venda', descricao:`Restante da comissão · ${r.cliente || ''}`, valor:n.rest, data:hoje }); lanc('int', false, {}); }
-    else { lanc('int', d.recRestante, { tipo:'entrada', categoria:'Comissão de venda', descricao:`Comissão · ${r.cliente || ''}`, valor:n.total, data:hoje }); lanc('adiant', false, {}); lanc('rest', false, {}); }
+    else { lanc('int', d.recRestante, { tipo:'entrada', categoria:'Comissão de venda', descricao:`Comissão · ${r.cliente || ''}`, valor:n.totRec, data:hoje }); lanc('adiant', false, {}); lanc('rest', false, {}); }
     if (n.imposto) lancImp(d, n, r, b);
-    lanc('cor', d.corPago, { tipo:'saida', categoria:'Comissão de corretor', descricao:`Comissão do corretor · ${r.cliente || ''} (${n.cor.map(c => primeiro(c.nome)).join(' + ') || r.corretorTexto || ''})`, valor:n.valCor, data:hoje });
+    // v418: na construtora que paga em 2 partes, a parte do corretor do adiantamento é paga quando o adiantamento chega; o resto, quando chega o restante
+    const corA = n.tipo === 'adiantamento' && !!d.corPagoA, nmCor = n.cor.map(c => primeiro(c.nome)).join(' + ') || r.corretorTexto || '';
+    lanc('corA', corA, { tipo:'saida', categoria:'Comissão de corretor', descricao:`Comissão do corretor (1ª parte) · ${r.cliente || ''} (${nmCor})`, valor:n.valCorA, data:hoje });
+    lanc('cor', d.corPago, { tipo:'saida', categoria:'Comissão de corretor', descricao:`Comissão do corretor${corA ? ' (2ª parte)' : ''} · ${r.cliente || ''} (${nmCor})`, valor:Math.round((n.valCor - (corA ? n.valCorA : 0)) * 100) / 100, data:hoje });
     if (n.etapa !== v0.etapa) { b.set(doc(db,'fin_vendas',r.id), { etapa:n.etapa, etapaDesde:hojeISO() }, { merge:true }); }
     // v300: um campo só: a comissão e o % do corretor do financeiro aparecem iguais na reserva (Reservas e Vendas)
     if (!r.manual && reservasTodas.some(x => x.id === r.id)) { const rr = reservasTodas.find(x => x.id === r.id), com = d.comissao !== '' && d.comissao != null ? fmtReaisIn(Number(d.comissao)) : (rr.comissao || ''), pct = d.pctCor ? String(d.pctCor).replace('.', ',') + '%' : (rr.percentual || '');
@@ -17450,10 +17547,25 @@ window.abrirEtapa = id => {
   $('etCli').textContent = `${nomeBonito(r.cliente) || 'Cliente'}${r.empreendimento ? ' · ' + r.empreendimento : ''}`;
   /* v334: o que o corretor mandou do contrato aparece aqui para a ADM conferir antes de marcar Assinou */
   { const a = r.assinCor, el = $('etAssin'); if (el) el.innerHTML = a ? `<div class="et-assin"><b>Corretor anexou o contrato assinado</b><span>Assinou em ${dataBR(a.data)} · enviado por ${esc(primeiro(a.por || ''))}${a.unidade ? ' · ' + esc(a.unidade) : ''}</span><span>Venda ${brl2(a.valorVenda)} · Comissão ${brl2(a.comissao)} · NF: ${a.nf === 'corretor' ? 'corretor' : a.nf === 'imobiliaria' ? 'imobiliária' : '—'}</span><span>Entrada: ${a.entrada ? brl2(a.entradaValor) + (a.negociado ? ` · negociado da comissão ${brl2(a.negociado)} em ${a.negociadoParcelas}x no boleto` : '') + (a.clientePagou ? ` · cliente pagou ${brl2(a.clientePagou)}` : '') : 'não teve'}</span>${a.obs ? `<span>${esc(a.obs)}</span>` : ''}<span class="et-assin-bt"><button class="link" onclick="fechar('etapaModal');editarReserva('${r.id}')">Ver a foto do contrato</button><button class="link" onclick="copiarFinFrade('${r.id}')">Copiar texto do Financeiro</button></span></div>` : ''; }
+  /* v418: a ADM marca as assinaturas. Construtora que paga em 2 partes (Tenda): "Assinou Tenda" libera a 1ª parte e "Assinou Caixa" a 2ª. Registro na Caixa: 10 dias depois o app lembra de pedir a nota */
+  { const el = $('etAssin'), cons = r.construtora || acharConstrutora(r), rg = regraConst(cons), duas = rg.tipo === 'adiantamento', pa = Number(rg.pctAdiant) || 0, h = hojeISO();
+    if (el && opTudo() && !souCeo()) el.insertAdjacentHTML('beforeend', `<div class="et-tenda"><b>Assinaturas${duas ? ' · ' + esc(rg.nome || cons) : ''} (só a ADM marca)</b>
+      ${duas ? `<div class="et-tl"><label><input type="checkbox" id="etAssT" ${r.assTendaEm ? 'checked' : ''}> Assinou ${esc(rg.nome || 'construtora')} · libera ${pa}%</label><input type="date" id="etAssTD" value="${r.assTendaEm || h}" max="${h}"></div>` : ''}
+      <div class="et-tl"><label><input type="checkbox" id="etAssC" ${r.assCaixaEm ? 'checked' : ''}> Assinou Caixa${duas ? ' · libera ' + (100 - pa) + '%' : ''}</label><input type="date" id="etAssCD" value="${r.assCaixaEm || h}" max="${h}"></div>
+      <div class="et-tl"><label>Registro na Caixa</label><input type="date" id="etRegC" value="${r.registroCaixaEm || ''}" max="${h}"></div>
+      <small>10 dias depois do registro o app lembra o Financeiro de pedir a emissão da nota. Assinou Caixa também muda a etapa para ASSINOU.</small>
+      <button class="btn btn-primary btn-block" onclick="salvarAssRes()">Salvar assinaturas</button></div>`); }
   $('etOpcoes').innerHTML = ETAPAS_RES.map(([e]) => `<button class="et-op ${e === atual ? 'on' : ''}" onclick="mudarEtapaRes('${e}')">${pillEtapa(e)}${e === atual ? '<span class="et-atual">etapa atual</span>' : ''}</button>`).join('');
   const h = (r.etapaHist || []).slice().sort((a, b) => (b.em || 0) - (a.em || 0));
   $('etHist').innerHTML = h.length ? `<h4 class="cart-h" style="margin-top:16px">Histórico</h4>${h.slice(0, 20).map(x => `<div class="et-h"><span>${pillEtapa(x.etapa)}</span><small>${new Date(x.em).toLocaleDateString('pt-BR')} às ${new Date(x.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })} · ${esc(primeiro(x.por || ''))}</small></div>`).join('')}` : '';
   abrir('etapaModal');
+};
+window.salvarAssRes = async () => {
+  const r = reservasTodas.find(x => x.id === etId); if (!r || !opTudo() || souCeo()) return;
+  const t = $('etAssT'), d = { assTendaEm:t ? (t.checked ? $('etAssTD').value || hojeISO() : '') : (r.assTendaEm || ''), assCaixaEm:$('etAssC').checked ? $('etAssCD').value || hojeISO() : '', registroCaixaEm:$('etRegC').value || '', assMarcadoPor:perfil.nome || '', assMarcadoEm:Date.now() };
+  if (d.assCaixaEm && etapaDe(r) !== 'ASSINOU') Object.assign(d, { etapa:'ASSINOU', etapaEm:Date.now(), etapaPor:perfil.nome, etapaHist:[...(r.etapaHist || []), { etapa:'ASSINOU', em:Date.now(), por:perfil.nome || '' }].slice(-40) });
+  try { await gravar(updateDoc(doc(db,'reservas', etId), d)); fechar('etapaModal'); toast('Assinaturas salvas. O Financeiro já vê o que foi liberado.'); }
+  catch(err) { toast('Não foi possível salvar: ' + err.message); }
 };
 window.mudarEtapaRes = async e => {
   const r = reservasTodas.find(x => x.id === etId); if (!r || !opTudo()) return;
@@ -17469,7 +17581,7 @@ window.mudarEtapaRes = async e => {
 };
 let rvId = null;
 // o mesmo texto que os corretores mandam no grupo de reservas
-const CAMPOS_RV = [['DATA','rvDia'],['CLIENTE','rvCli'],['CPF','rvCpf'],['TELEFONE','rvTel'],['CORRETOR','rvCor'],['EMPREENDIMENTO','rvEmp'],['ORIGEM LEAD','rvOrig'],['CRIATIVO (se do CRM)','rvCriativo'],['STATUS DO IMOVEL','rvStImo'],['CONSTRUTORA','rvConst'],['NÚMERO CONSTRUTORA','rvNumConst'],['PREVISÃO ASSINATURA','rvPrev'],['VALOR DE VENDA','rvValor'],['VALOR DA ENTRADA','rvEntrada'],['VALOR TOTAL COMISSÃO','rvCom'],['PERCENTUAL COMISSÃO','rvPerc'],['EMISSÃO PARTE DA NOTA CNPJ CORRETOR (sim/não)','rvNota']];
+const CAMPOS_RV = [['DATA','rvDia'],['CLIENTE','rvCli'],['CPF','rvCpf'],['TELEFONE','rvTel'],['CORRETOR','rvCor'],['EMPREENDIMENTO','rvEmp'],['ORIGEM LEAD','rvOrig'],['CRIATIVO (se do CRM)','rvCriativo'],['STATUS DO IMOVEL','rvStImo'],['CONSTRUTORA','rvConst'],['PREVISÃO ASSINATURA','rvPrev'],['VALOR DE VENDA','rvValor'],['VALOR DA ENTRADA','rvEntrada'],['VALOR TOTAL COMISSÃO','rvCom'],['TIPO DE VENDA','rvTipoTxt'],['SINAL','rvSinalTxt'],['PRAZO DA CONSTRUTORA (dias após assinar)','rvPrazo'],['EMISSÃO PARTE DA NOTA CNPJ CORRETOR (sim/não)','rvNota']];
 function textoReserva(){
   const val = id => { const v = ($(id)?.value || '').trim(); return id === 'rvDia' && v ? dataBR(v) : v; };
   return '❌❌❌❌❌❌\nNOVA RESERVA\n' + CAMPOS_RV.map(([r, id]) => `- ${r}: ${val(id)}`).join('\n\n') + (($('rvObs')?.value || '').trim() ? '\n\n- OBS: ' + $('rvObs').value.trim() : '');
@@ -17490,10 +17602,35 @@ window.lerTextoReserva = () => {
     let v = l.slice(l.indexOf(':') + 1).trim(); if (!v || l.indexOf(':') < 0) return;
     if (id === 'rvDia') { const m = v.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/); if (!m) return; v = `${m[3].length === 2 ? '20' + m[3] : m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`; }
     if (id === 'rvCor' && !opTudo()) return; // o corretor é quem está cadastrando
+    if (id === 'rvNota') v = /^s/i.test(v) ? 'sim' : /^n/i.test(v) ? 'não' : '';
     $(id).value = v; n++;
   });
+  try { const tt = norm($('rvTipoTxt').value || ''), pc = lerDec($('rvPerc').value);
+    const tp = /indica/.test(tt) ? 'indicacao' : /sdr/.test(tt) ? 'sdr' : /imobili|crm/.test(tt) ? 'imobiliaria' : pc === 60 ? 'indicacao' : pc === 50 ? 'imobiliaria' : pc === 25 ? 'sdr' : '';
+    if (tp) { $('rvTipo').value = tp; rvTipoMuda(); }
+    const st = $('rvSinalTxt').value || ''; if (st) { const sv = lerDec(st); if (sv) $('rvSinal').value = fmtReaisIn(sv); if (/imobili/i.test(st)) $('rvSinalQ').value = 'imobiliaria'; else if (/constru/i.test(st)) $('rvSinalQ').value = 'construtora'; }
+    rvConta(); } catch(e) {}
   toast(n ? `${n} campos preenchidos. Confira e salve.` : 'Não reconheci o texto. Ele precisa ter "CLIENTE:", "CPF:" etc.');
 };
+// v418: tipo de venda define a parte do corretor (Indicação 60%, Imobiliária/CRM 50%, SDR 25%)
+const TIPOS_VENDA = { indicacao:{ nome:'Indicação', pct:60, origem:'Indicação' }, imobiliaria:{ nome:'Imobiliária / CRM', pct:50, origem:'CRM' }, sdr:{ nome:'SDR', pct:25, origem:'SDR' } };
+window.TIPOS_VENDA = TIPOS_VENDA;
+const tipoVendaDe = r => { if (!r) return ''; if (r.tipoVenda && TIPOS_VENDA[r.tipoVenda]) return r.tipoVenda; const pc = lerDec(r.percentual), o = norm(r.origem || '');
+  if (pc === 60) return 'indicacao'; if (pc === 25) return 'sdr'; if (pc === 50) return 'imobiliaria'; if (/indica/.test(o)) return 'indicacao'; if (/^sdr/.test(o)) return 'sdr'; return ''; };
+window.rvTipoMuda = () => { const t = TIPOS_VENDA[$('rvTipo').value];
+  if (t) { $('rvPerc').value = t.pct + '%'; const o = $('rvOrig').value.trim(); if (!o || Object.values(TIPOS_VENDA).some(x => x.origem === o)) $('rvOrig').value = t.origem; $('rvTipoTxt').value = t.nome + ' (' + t.pct + '% do corretor)'; }
+  $('rvSdrBox')?.classList.toggle('hide', $('rvTipo').value !== 'sdr'); rvConta(); };
+// a conta da comissão, descrita: o sinal e a entrada pagos à imobiliária saem da comissão cheia
+window.rvConta = () => { const el = $('rvConta'); if (!el) return;
+  const com = (() => { const t = String($('rvCom').value || ''); if (!t || /%|definir/i.test(t)) return 0; return lerDec(t.replace(/\s*(k|mil)\s*$/i, '')) * (/(k|mil)\s*$/i.test(t) ? 1000 : 1); })();
+  const sv = lerDec($('rvSinal').value), sq = $('rvSinalQ').value, ev = lerDec($('rvEntrada').value), eq = $('rvEntQ').value, t = TIPOS_VENDA[$('rvTipo').value];
+  $('rvSinalTxt').value = sv ? brl2(sv) + (sq ? ' pago à ' + (sq === 'imobiliaria' ? 'imobiliária' : 'construtora') : '') : '';
+  if (!com) { el.innerHTML = ''; return; }
+  const ds = sq === 'imobiliaria' ? sv : 0, de = eq === 'imobiliaria' ? ev : 0, rec = Math.max(0, com - ds - de), pNF = Number(finCfg?.pctImposto ?? 15.7) || 0, liq = rec - rec * pNF / 100;
+  const rg = typeof regraConst === 'function' ? regraConst($('rvConst').value) : {}, ad = rg.tipo === 'adiantamento' ? Number(rg.pctAdiant) || 0 : 0;
+  el.innerHTML = `<div><span>Comissão cheia</span><b>${brl2(com)}</b></div>${ds ? `<div><span>Sinal pago à imobiliária</span><b>− ${brl2(ds)}</b></div>` : ''}${de ? `<div><span>Entrada paga à imobiliária</span><b>− ${brl2(de)}</b></div>` : ''}
+    <div class="t"><span>A receber da construtora</span><b>${brl2(rec)}</b></div>${t ? `<div><span>Parte do corretor (${t.pct}% do líquido)</span><b>${brl2(liq * t.pct / 100)}</b></div>` : ''}
+    <small>${ds || de ? 'O sinal e a entrada pagos à imobiliária já ficaram com a imobiliária, por isso saem da comissão cheia antes da divisão. ' : ''}Líquido = a receber menos ${String(pNF).replace('.', ',')}% de imposto da nota.${ad ? ` ${esc(rg.nome || 'Essa construtora')} paga em 2 partes: ${ad}% quando assina com a construtora e ${100 - ad}% quando assina com a Caixa.` : ''}</small>`; };
 // ---------- documentação do cliente na reserva ----------
 const DOCS_RES = [['identidade','RG ou CNH'],['cpf','CPF'],['estado_civil','Certidão de nascimento ou casamento'],['residencia','Comprovante de residência'],['renda','Comprovante de renda'],['ctps','Carteira de trabalho'],['ir','Declaração de Imposto de Renda'],['fgts','Extrato do FGTS'],['conjuge','Documentos do cônjuge'],['contrato','Contrato assinado'],['outros','Outros documentos']];
 const rvDocNome = t => (DOCS_RES.find(([k]) => k === t) || [, 'Documento'])[1];
@@ -17581,7 +17718,9 @@ window.editarReserva = id => {
     if (fv.comissao != null && fv.comissao !== '' && Number(fv.comissao) > 0) v('rvCom', fmtReaisIn(Number(fv.comissao)));
     if (fv.pctCor != null && fv.pctCor !== '' && Number(fv.pctCor) > 0) v('rvPerc', String(Math.round(Number(fv.pctCor) * 100) / 100).replace('.', ',') + '%'); }
   v('rvOrig', r?.origem); v('rvPrev', r?.previsao); try { pintarRvSdr(r || null); } catch(e) {} v('rvStImo', r?.statusImovel); v('rvObs', r?.obs);
-  v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', r?.notaCnpj); v('rvColar', '');
+  v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', /^s/i.test(r?.notaCnpj || '') ? 'sim' : /^n/i.test(r?.notaCnpj || '') ? 'não' : ''); v('rvColar', '');
+  /* v418 */ v('rvEmail', r?.email); v('rvPis', r?.pis); v('rvUnid', r?.unidade); v('rvAval', r?.valorAvaliacao ? fmtValorInput(r.valorAvaliacao) : ''); v('rvSinal', r?.sinalValor ? fmtReaisIn(r.sinalValor) : ''); v('rvSinalQ', r?.sinalQuem || ''); v('rvSinalD', r?.sinalData || ''); v('rvSinalF', r?.sinalForma || ''); v('rvEntQ', r?.entradaQuem || ''); v('rvCond', r?.condicoes); v('rvPrazo', r?.prazoDias || '');
+  v('rvTipo', tipoVendaDe(r)); { const tv = TIPOS_VENDA[$('rvTipo').value]; v('rvTipoTxt', tv ? tv.nome + ' (' + tv.pct + '% do corretor)' : ''); } $('rvTipo').disabled = meuEdit; $('rvTipo').title = meuEdit ? 'Só a gerência altera' : ''; $('rvSdrBox')?.classList.toggle('hide', $('rvTipo').value !== 'sdr' && !(r?.sdrManual && r?.sdrUid)); setTimeout(rvConta, 0);
   if (!r && !opTudo()) v('rvCor', perfil.nome);
   $('rvCorLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)).map(p => `<option value="${esc(p.nome)}">`).join('');
   $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu || !opTudo());
@@ -17593,6 +17732,11 @@ function pintarParc(atual){ const el = $('rvParc'); if (!el) return;
   const cur = String(atual || '').trim(), achado = cur ? (corretoresDaReserva(cur)[0] || {}) : {}, val = achado.uid ? nomeBonito(achado.nome) : cur;
   const ops = [...new Set([...(val && !nomes.includes(val) ? [val] : []), ...nomes])];
   el.innerHTML = `<option value="">Sem parceria</option>` + ops.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join(''); el.value = val || ''; }
+// v418: campos novos da reserva
+function rvCamposNovos(comTipo){ const sv = lerDec($('rvSinal').value), pz = parseInt(soDig($('rvPrazo').value)) || 0;
+  const o = { email:$('rvEmail').value.trim().slice(0, 120), pis:$('rvPis').value.trim().slice(0, 30), unidade:$('rvUnid').value.trim().slice(0, 60), valorAvaliacao:lerValor($('rvAval').value) || 0,
+    sinalValor:sv > 0 ? Math.round(sv * 100) / 100 : 0, sinalQuem:$('rvSinalQ').value, sinalData:$('rvSinalD').value || '', sinalForma:$('rvSinalF').value, entradaQuem:$('rvEntQ').value, condicoes:$('rvCond').value.trim().slice(0, 500), prazoDias:pz };
+  if (comTipo) o.tipoVenda = $('rvTipo').value; return o; }
 // v304: "Corretor" + "Parceria" viram o mesmo texto de sempre ("Edivan / Matheus"), sem repetir nome
 function corTextoForm(){ const a = ($('rvCor')?.value || '').trim(), b = ($('rvParc')?.value || '').trim();
   const l = []; [a, b].forEach(x => String(x).split(/\s*(?:\/|\+|,)\s*/).map(y => y.trim()).filter(Boolean).forEach(y => { if (!l.some(z => norm(z) === norm(y))) l.push(y); }));
@@ -17607,7 +17751,7 @@ window.salvarReserva = async () => {
     let ct = corTextoForm(); if (!norm(ct).includes(norm(perfil.nome)) && !corretoresDaReserva(ct).some(c => c.uid === uidAtual)) ct = perfil.nome + (ct ? ' / ' + ct : '');
     const dd = { dia:dia2, cliente:cli2, cpf:cpf2.length === 11 ? cpf2 : '', cpfNorm:cpf2.length === 11 ? cpf2 : '', telefone:tel2, telNorm:chaveTel(tel2), corretorTexto:ct,
       empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(),
-      statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(), criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
+      statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(), criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome, ...rvCamposNovos(false) };
     Object.assign(dd, sdrCamposReserva({ ...r, ...dd })); // v258
     const mudou = Object.keys(dd).filter(k => !['atualizadoEm','editadoPor'].includes(k)).some(k => String(dd[k] ?? '') !== String(r[k] ?? ''));
     if (!rvNovos.length && !rvTirar.length && !mudou) { btn.disabled = false; fechar('resvModal'); return; }
@@ -17628,7 +17772,9 @@ window.salvarReserva = async () => {
   const d = { dia, cliente:cli, cpf:cpf.length === 11 ? cpf : '', cpfNorm:cpf.length === 11 ? cpf : '', telefone:tel, telNorm:chaveTel(tel), corretorTexto:corTextoForm(),
     empreendimento:$('rvEmp').value.trim(), construtora:$('rvConst').value.trim(), valor:lerValor($('rvValor').value) || 0, entrada:$('rvEntrada').value.trim(), comissao:$('rvCom').value.trim(),
     percentual:$('rvPerc').value.trim(), origem:$('rvOrig').value.trim(), previsao:$('rvPrev').value.trim(), statusImovel:$('rvStImo').value.trim(), obs:$('rvObs').value.trim(),
-    criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome };
+    criativo:$('rvCriativo').value.trim(), numConstrutora:$('rvNumConst').value.trim(), notaCnpj:$('rvNota').value.trim(), atualizadoEm:Date.now(), editadoPor:perfil.nome, ...rvCamposNovos(true) };
+  if (!rvId && !d.tipoVenda) { toast('Escolha o tipo de venda'); $('rvTipo').focus(); return; }
+  if (!d.tipoVenda) delete d.tipoVenda;
   if (!rvId && !d.origem) { try { const od = origemDetectada(d); if (od) { d.origem = od.origem; d.origemAuto = true; d.origemFonte = od.fonte.slice(0, 160); } } catch(e) {} } // v251
   if (!rvId && !d.criativo) { try { const cv = criativoDe(d); if (cv) d.criativo = cv.c; } catch(e) {} } // v252
   try { Object.assign(d, sdrCamposReserva(rvId ? { ...(reservasTodas.find(x => x.id === rvId) || {}), ...d } : d)); } catch(e) {} // v258
