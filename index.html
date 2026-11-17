@@ -2344,6 +2344,18 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .fl-acoes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .fi-prev{background:#f3efe8;border-radius:12px;padding:10px;margin:6px 0 10px;max-height:58vh;overflow:auto;text-align:center}
 .fi-prev img{width:100%;max-width:420px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+#bzCorre{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:9999;transform:translate(-50%,-160%);display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 26px;border:0;border-radius:18px;background:linear-gradient(135deg,#ff4d2e,#ff9a1f);color:#fff;font:inherit;box-shadow:0 10px 30px rgba(255,77,46,.45);cursor:pointer;transition:transform .45s cubic-bezier(.2,1.4,.4,1);max-width:calc(100vw - 32px)}
+#bzCorre b{font-size:20px;font-weight:900;letter-spacing:.5px;white-space:nowrap}
+#bzCorre span{font-size:13px;font-weight:600;opacity:.95}
+#bzCorre.on{transform:translate(-50%,0)}
+#bzCorre.on.pulo b{animation:bzPulo .6s ease-in-out 4}
+#bzCorre.on{animation:bzBrilho 1.2s ease-in-out 3}
+#bzCorre.do-ic{top:auto;transform:translateY(40px) scale(.2);transform-origin:var(--seta,50%) 100%;opacity:0;transition:transform .5s cubic-bezier(.2,1.5,.4,1),opacity .25s}
+#bzCorre.do-ic.on{transform:none;opacity:1}
+#bzCorre.do-ic::after{content:"";position:absolute;bottom:-9px;left:calc(var(--seta,50%) - 10px);border:10px solid transparent;border-bottom:0;border-top-color:#ff7a25}
+@keyframes bzPulo{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes bzBrilho{0%,100%{box-shadow:0 10px 30px rgba(255,77,46,.45)}50%{box-shadow:0 10px 44px rgba(255,154,31,.9)}}
+@media (prefers-reduced-motion:reduce){#bzCorre,#bzCorre b{animation:none!important;transition:none}}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -5599,14 +5611,19 @@ function traduzMsg(t){
   if (/quota/i.test(t)) return 'O app está sobrecarregado. Tente de novo em 1 minuto.';
   return t;
 }
-function toast(texto, acao, fn){
+function toast(texto, acao, fn, chave){
   texto = traduzMsg(texto);
+  const box = $('toasts'); if (!box) return;
+  // v420: nada de pilha na tela. Aviso igual (ou da mesma chave) substitui o anterior; no máximo 2 avisos ao mesmo tempo.
+  const k = chave || texto;
+  [...box.children].forEach(x => { if (x.dataset.k === k) { clearTimeout(x._t); x.remove(); } });
+  while (box.children.length >= 2) { clearTimeout(box.firstChild._t); box.firstChild.remove(); }
   const el = document.createElement('div');
-  el.className = 'toast';
+  el.className = 'toast'; el.dataset.k = k;
   el.innerHTML = `<span>${esc(texto)}</span>`;
   if (acao) { const b = document.createElement('button'); b.textContent = acao; b.onclick = () => { fn(); el.remove(); }; el.appendChild(b); }
-  $('toasts').appendChild(el);
-  setTimeout(() => el.remove(), acao ? 6000 : 3200);
+  box.appendChild(el);
+  el._t = setTimeout(() => el.remove(), acao ? 6000 : 3200);
 }
 
 // ================= Navegação =================
@@ -7953,7 +7970,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 419;
+const APP_VERSAO = 420;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8088,8 +8105,30 @@ let msgSuportado = false, messaging = null;
 isSupported().then(ok => { msgSuportado = ok; if (ok) { messaging = getMessaging(fb); onMessage(messaging, p => mostrarNotificacaoAberta(p)); } render(); }).catch(() => {});
 function mostrarNotificacaoAberta(p){
   const t = p.notification?.title || p.data?.titulo || 'Frade Imóveis', b = p.notification?.body || p.data?.texto || '';
-  toast(t + (b ? ' · ' + b : ''));
-  navigator.serviceWorker?.ready.then(reg => reg.showNotification(t, { body:b, icon:'frade-icone-192.png', badge:'frade-icone-192.png' })).catch(() => {});
+  // v420: com o app aberto, o aviso vai para a notificação do celular (a mesma do app fechado), não para a tela
+  const link = p.data?.link || p.fcmOptions?.link || '', bz = String(link).includes('#bolsao');
+  notifCelular(t, b, bz ? 'bolsao' : t.slice(0, 40), link, () => toast(t + (b ? ' · ' + b : '')));
+}
+// v420: com o app na tela, um aviso só, animado: CORRE PRO BOLSÃO (o número vai somando; some sozinho)
+function avisoBolsao(n){
+  let el = document.getElementById('bzCorre');
+  if (!el) { el = document.createElement('button'); el.id = 'bzCorre'; el.type = 'button';
+    el.onclick = () => { el.classList.remove('on'); setView('bolsao'); }; document.body.appendChild(el); }
+  el.innerHTML = `<b>CORRE PRO BOLSÃO!</b><span>${n} lead${n > 1 ? 's' : ''} novo${n > 1 ? 's' : ''} · toque para pegar</span>`;
+  // sai do próprio ícone do Bolsão (barra de baixo); sem o ícone na tela, aparece no topo
+  const ic = document.getElementById('mbBolsao'), r = ic && !ic.classList.contains('hide') && ic.offsetParent ? ic.getBoundingClientRect() : null;
+  el.classList.toggle('do-ic', !!r);
+  if (r) { const cx = r.left + r.width / 2, w = Math.min(300, innerWidth - 32), x = Math.max(16, Math.min(innerWidth - 16 - w, cx - w / 2));
+    el.style.cssText = `left:${x}px;width:${w}px;bottom:${innerHeight - r.top + 12}px;--seta:${cx - x}px`; } else el.style.cssText = '';
+  el.classList.remove('on', 'pulo'); void el.offsetWidth; el.classList.add('on', 'pulo');
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 9000);
+}
+// v420: notificação de verdade no celular; avisos com a mesma etiqueta se substituem (não empilham)
+function notifCelular(t, b, tag, link, semPermissao){
+  let ok = false; try { ok = typeof Notification !== 'undefined' && Notification.permission === 'granted' && !!navigator.serviceWorker; } catch(e) {}
+  if (!ok) { semPermissao && semPermissao(); return; }
+  navigator.serviceWorker.ready.then(reg => reg.showNotification(t, { body:b, icon:'frade-icone-192.png', badge:'frade-icone-192.png', tag, renotify:true,
+    ...(tag === 'bolsao' ? { vibrate:[400,120,400,120,700] } : {}), data:{ link: link || './' } })).catch(() => semPermissao && semPermissao());
 }
 function estadoNotif(){
   if (!notifConfigurada()) return 'nao-configurado';
@@ -9985,7 +10024,7 @@ function renderAcomp(soDados){
   const ord = { aprov:(a, b) => b.aprov - a.aprov, pres:(a, b) => acVarios(acPer) ? a.diasPres - b.diasPres : (a.pres - b.pres), leads:(a, b) => b.leads - a.leads, lig:(a, b) => b.lig - a.lig, docs:(a, b) => b.docs - a.docs, vis:(a, b) => b.visHoje - a.visHoje }[acFoco];
   ls.sort((a, b) => (ord ? ord(a, b) : 0) || b.al.length - a.al.length || (b.pres - a.pres) || b.docs - a.docs || a.nome.localeCompare(b.nome, 'pt-BR'));
   const z = v => v ? `<b>${v}</b>` : '<i class="ac-z">0</i>';
-  const metaPrin = x => { if (!x.temMeta) return ''; const k = MD_ITENS.find(([kk]) => x.meta[kk]); if (!k) return ''; const a = x.v[k[0]] || 0, m0 = x.meta[k[0]]; return `<div class="ac-mt ${x.bateu ? 'ok' : ''}"><span>${x.bateu ? 'Metas do dia batidas' : esc(k[1]) + ' ' + a + ' de ' + m0}</span><i><u style="width:${Math.min(100, Math.round(a / m0 * 100))}%"></u></i></div>`; };
+  const metaPrin = x => { if (!x.temMeta) return ''; const k = MD_ITENS.find(([kk]) => x.meta[kk]); if (!k) return ''; const a = x.v[k[0]] || 0, m0 = x.meta[k[0]]; return `<div class="ac-mt ${x.bateu ? 'ok' : ''}"><span>${x.bateu ? 'Metas do dia batidas' : (k[0] === 'lig' ? 'Números diferentes ligados' : esc(k[1])) + ' ' + a + ' de ' + m0}</span><i><u style="width:${Math.min(100, Math.round(a / m0 * 100))}%"></u></i></div>`; };
   // v167: só WhatsApp, já com a mensagem pronta (o que está pendente ou o resumo do dia)
   const msgCor = x => { const p1 = x.nome.split(' ')[0], eu = primeiro(perfil?.nome || ''), qd = x.per === 'ontem' ? 'ontem' : x.per === 'sete' ? 'nos últimos 7 dias' : x.per === 'dia' ? 'em ' + acDm(acDiaSel) : acVarios(x.per) ? 'este mês' : 'hoje';
     // v170: cobrança do dia, pedindo o retorno do que aconteceu com os leads
@@ -12150,7 +12189,12 @@ function assinarBolsao(){
     // v108: chegou lead novo no bolsão -> sirene + vibração para quem pode pegar
     const livres = bzLivres().map(x => x.id);
     if (vistos) { const novos = livres.filter(id => !vistos.has(id)).length, pode = ['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) || (souGerente() && !souCeo());
-      if (novos && pode && bzPresente() && view !== 'tvrank') { Som.bolsao(); toast(`${novos} lead${novos > 1 ? 's' : ''} novo${novos > 1 ? 's' : ''} no bolsão. Pegue o seu!`, 'Abrir', () => setView('bolsao')); } }
+      // v420: um aviso só, somando os leads que chegaram nos últimos segundos; som no máximo a cada 20 s; nada se já está no bolsão
+      if (novos && pode && bzPresente() && view !== 'tvrank' && view !== 'bolsao') { const ag = Date.now(); window._bzAv = (window._bzAv && ag - window._bzAv.em < 8000) ? { n: window._bzAv.n + novos, em: ag, som: window._bzAv.som } : { n: novos, em: ag, som: window._bzAv?.som || 0 };
+        const n = window._bzAv.n; if (ag - window._bzAv.som > 20000) { window._bzAv.som = ag; Som.bolsao(); }
+        const txt = `${n} lead${n > 1 ? 's' : ''} novo${n > 1 ? 's' : ''} no bolsão`;
+        if (document.hidden) notifCelular('🎣 ' + txt, 'Quem pegar primeiro atende. Toque para pegar o seu.', 'bolsao', './#bolsao', () => {});
+        else avisoBolsao(n); } }
     if (k === 'a' || vistos) vistos = new Set([...(vistos || []), ...livres]);
     render(); bzRecircular(); };
   ['a','b','c'].forEach(x => window['_bz_' + x] = []);
