@@ -2523,6 +2523,17 @@ details.ach-dobra>summary{cursor:pointer;list-style:none}details.ach-dobra>summa
 .emp-v2 .emp-capa img.emp-foto{object-fit:contain;z-index:1}.emp-v2:hover .emp-capa img.emp-foto{transform:scale(1.02)}.emp-v2:hover .emp-capa img.emp-fundo{transform:scale(1.15)}
 .ev-galeria .ev-fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(22px) brightness(.7);transform:scale(1.15)}.ev-galeria .ev-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1}.ev-galeria .ev-seta,.ev-galeria .ev-cont{z-index:2}
 .emp-filtros{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:10px;margin-bottom:16px}
+/* v423: filtros rápidos dos imóveis (faixa de preço, pronto/planta, suíte, com fotos, novos) */
+.emp-chips{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 10px}
+.emp-chips .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.emp-chips{column-gap:16px}
+.emp-chips button{border:1px solid var(--border);background:var(--card);color:var(--text2);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600;line-height:1.2}
+.emp-chips button.on{background:var(--marinho,#022C45);border-color:var(--marinho,#022C45);color:#fff}
+.emp-chips button small{font-weight:500;opacity:.7;margin-left:4px}
+.emp-res{display:flex;justify-content:flex-end;align-items:center;font-size:13px;color:var(--muted);margin:0 0 12px}
+.emp-res .link{font-weight:600}
+@media(max-width:760px){.emp-chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}.emp-chips .grp{flex-wrap:nowrap}.emp-chips button{white-space:nowrap}}
+
 .emp-filtros input{margin:0}
 .emp-filtros select{margin:0;font-weight:600;border-radius:12px}.emp-filtros select.on{border-color:var(--accent);color:var(--accent);background-color:color-mix(in srgb,var(--accent) 7%,var(--card))}
 @media(max-width:760px){.emp-filtros{grid-template-columns:1fr}}
@@ -3601,6 +3612,8 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
         <div class="page-head emp-head"><div><h1>Imóveis</h1><div class="sub" id="empSub">Fotos, valores, localização e material de venda para mandar ao cliente.</div></div>
           <button class="btn btn-ghost hide" id="btnEmpGrupo" onclick="abrirWaLeitura('imoveis')">Ler grupo de imóveis</button></div>
         <div class="emp-filtros"><input id="empBusca" placeholder="Buscar imóvel ou construtora..." oninput="empFiltro=this.value;renderEmp()"><select id="empBairros" aria-label="Filtrar por bairro" onchange="empBairro=this.value;renderEmp()"></select></div>
+        <div class="emp-chips" id="empChips"></div>
+        <div class="emp-res" id="empRes"></div>
         <div id="empLista" class="emp-grid"></div>
       </section>
 
@@ -4574,7 +4587,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
       <div class="fg hide" id="rvSdrBox"><label>Qual SDR</label><select id="rvSdr"></select><div class="hint" id="rvSdrDica" style="margin-top:4px"></div></div>
       <div class="row2 fg"><div><label>Valor da comissão</label><input id="rvCom" oninput="rvConta()" placeholder="R$ 0,00"></div><div><label>Prazo para pagar (dias)</label><input id="rvPrazo" inputmode="numeric" placeholder="Ex.: 30 após assinar"></div></div>
       <div class="rv-conta" id="rvConta"></div>
-      <div class="row2 fg"><div><label>Criativo (se do CRM)</label><input id="rvCriativo"></div><div><label>Nota no CNPJ do corretor?</label><select id="rvNota" onchange="rvConta()"><option value="">—</option><option value="sim">Sim</option><option value="não">Não</option></select></div></div>
+      <div class="row2 fg"><div><label>Criativo (se do CRM)</label><input id="rvCriativo"></div><div><label>Quem emite a nota?</label><select id="rvNota" onchange="rvConta()"><option value="">—</option><option value="não">Imobiliária, a comissão inteira (15,7%)</option><option value="sim">Corretor, a comissão inteira</option><option value="parte">Dividida: o corretor emite a parte dele e a imobiliária a dela</option></select></div></div>
       <div class="fg hide" id="rvPctNFBox"><label>Imposto da nota do corretor (%)</label><input id="rvPctNF" inputmode="decimal" placeholder="Ex.: 6" oninput="rvConta()"><div class="hint" style="margin-top:4px">Nota da imobiliária é sempre 15,7%. Na nota do corretor, o % é o da empresa dele.</div></div>
       <div class="fg"><label>Observação</label><textarea id="rvObs" style="min-height:60px"></textarea></div>
       <div class="fg rv-docs-box"><label>📎 Documentação do cliente <span class="muted" id="rvDocsCont" style="font-weight:500"></span></label>
@@ -7978,7 +7991,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 422;
+const APP_VERSAO = 423;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11033,6 +11046,11 @@ const bairroEmp = e => { const b = String(e.local || '').split(',')[0].trim(); r
 const chaveBairro = b => norm(b).replace(/\s+/g, ' ');
 window.empBairro = '';
 const quandoEmp = e => Number(e.postadoEm) || Number(e.criadoEm) || 0;
+// v423: preço em mil reais, lido de "R$ 221 mil", "R$ 159.990", "184.900", "R$ 1,2 mi"
+const precoMil = e => { const s = String(e.preco || '').toLowerCase().replace(/\s/g, ''); const m = s.match(/(\d[\d.]*)(,\d+)?/); if (!m) return 0; let n = Number(m[1].replace(/\./g, '') + (m[2] ? '.' + m[2].slice(1) : '')); if (/mi(lh|$)/.test(s) && n < 100) n *= 1000; else if (n >= 1000) n = n / 1000; return Math.round(n); };
+const EMP_FAIXAS = [['ate180','Até 180 mil',1,180],['180a200','180 a 200 mil',181,200],['200a250','200 a 250 mil',201,250],['250a350','250 a 350 mil',251,350],['acima350','Acima de 350 mil',351,99999]];
+window.empF = (k, v) => { const F = window._empF ||= {}; if (v != null) F[k] = F[k] === v ? '' : v; else F[k] = !F[k]; renderEmp(); };
+window.empLimpar = () => { window._empF = { faixa:'', pronto:'', suite:false, fotos:false, novos:false }; empBairro = ''; empFiltro = ''; if ($('empBusca')) $('empBusca').value = ''; renderEmp(); };
 function renderEmp(){
   if ($('btnEmpGrupo')) { $('btnEmpGrupo').classList.toggle('hide', !souGerente() || souCeo()); $('btnEmpGrupo').title = htmlWaLeitInfo('imoveis').replace(/<[^>]+>/g, ''); }
   if (view !== 'empreendimentos') return;
@@ -11044,7 +11062,23 @@ function renderEmp(){
     const alfa = bs.slice().sort((a, b) => a[1].nome.localeCompare(b[1].nome, 'pt-BR'));
     $('empBairros').innerHTML = `<option value="">Todos os bairros (${ativos.length})</option>` + alfa.map(([k, x]) => `<option value="${esc(k)}" ${empBairro === k ? 'selected' : ''}>${esc(x.nome)} (${x.n})</option>`).join('');
     $('empBairros').classList.toggle('on', !!empBairro); }
-  const l = ativos.filter(e => (!empBairro || chaveBairro(bairroEmp(e)) === empBairro) && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco].join(' ')).includes(t))).sort((a,b) => quandoEmp(b) - quandoEmp(a) || (a.nome || '').localeCompare(b.nome || '', 'pt-BR')); // v366: os postados por último no grupo aparecem primeiro
+  // v423: filtros rápidos (somam com a busca e o bairro); a lista continua do mais novo para o mais antigo
+  const F = window._empF ||= { faixa:'', pronto:'', suite:false, fotos:false, novos:false };
+  const base = ativos.filter(e => (!empBairro || chaveBairro(bairroEmp(e)) === empBairro) && (!t || norm([e.nome, e.local, e.desc, e.construtora, e.endereco, e.contato].join(' ')).includes(t)));
+  const passa = (e, sem) => { const v = precoMil(e);
+    if (sem !== 'faixa' && F.faixa) { const fx = EMP_FAIXAS.find(x => x[0] === F.faixa); if (!fx || !v || v < fx[2] || v > fx[3]) return false; }
+    if (sem !== 'pronto' && F.pronto === 'pronto' && !/pronto/i.test(e.entrega || '')) return false;
+    if (sem !== 'pronto' && F.pronto === 'planta' && (!e.entrega || /pronto/i.test(e.entrega))) return false;
+    if (sem !== 'suite' && F.suite && !(/su[ií]te/i.test([e.desc, e.nome].join(' ')) && !/sem su[ií]te|su[ií]te:\s*n/i.test(e.desc || ''))) return false;
+    if (sem !== 'fotos' && F.fotos && !((e.nFotos || 0) > 0 || e.capa)) return false;
+        return true; };
+  const l = base.filter(e => passa(e)).sort((a,b) => quandoEmp(b) - quandoEmp(a) || (a.nome || '').localeCompare(b.nome || '', 'pt-BR')); // v366: os postados por último no grupo aparecem primeiro
+  { const n = (k, extra) => base.filter(e => passa(e, k) && extra(e)).length, ch = (on, txt, js, cnt) => `<button class="${on ? 'on' : ''}" onclick="${js}">${txt}${cnt != null ? `<small>${cnt}</small>` : ''}</button>`;
+    $('empChips').innerHTML = `<div class="grp">${EMP_FAIXAS.map(([k, txt, a, b]) => ch(F.faixa === k, txt, `empF('faixa','${k}')`, n('faixa', e => { const v = precoMil(e); return v && v >= a && v <= b; }))).join('')}</div>
+      <div class="grp">${ch(F.pronto === 'pronto', 'Pronto para morar', "empF('pronto','pronto')", n('pronto', e => /pronto/i.test(e.entrega || '')))}${ch(F.pronto === 'planta', 'Na planta', "empF('pronto','planta')", n('pronto', e => e.entrega && !/pronto/i.test(e.entrega)))}</div>
+      <div class="grp">${ch(F.suite, 'Com suíte', "empF('suite')")}${ch(F.fotos, 'Com fotos', "empF('fotos')")}</div>`;
+    const algum = F.faixa || F.pronto || F.suite || F.fotos || empBairro || t;
+    $('empRes').innerHTML = algum ? '<button class="link" onclick="empLimpar()">Limpar filtros</button>' : ''; $('empRes').classList.toggle('hide', !algum); }
   { const nb = new Set(ativos.map(e => chaveBairro(bairroEmp(e))).filter(Boolean)).size; if ($('empSub')) $('empSub').textContent = `${ativos.length} imóve${ativos.length === 1 ? 'l' : 'is'}${nb ? ' em ' + nb + ' bairro' + (nb === 1 ? '' : 's') : ''} · fotos, valores, localização e material para mandar ao cliente`; }
   const nomeCartao = e => String(e.nome || '').split(' · ')[0], consCartao = e => e.construtora || (String(e.nome || '').split(' · ')[1] || '');
   const monograma = e => nomeCartao(e).replace(/^(Residencial|Res\.|Edif[ií]cio|Ed\.|Casa)\s+/i, '').split(/\s+/).filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'F';
@@ -11058,7 +11092,7 @@ function renderEmp(){
       ${fichaEmp(e)}
       <div class="emp-pe"><span class="emp-views">${ICF.olho}${Number(e.views) || 0}</span><span class="emp-ver">Ver imóvel</span></div>
     </div>`; }).join('')
-    : `<div class="card" style="grid-column:1/-1">${vazio(t || empBairro ? 'Nada encontrado' : 'Nenhum imóvel ainda', t || empBairro ? 'Tente outro nome ou outro bairro.' : 'Os imóveis do grupo do WhatsApp aparecem aqui.')}</div>`;
+    : `<div class="card" style="grid-column:1/-1">${vazio(base.length || t || empBairro ? 'Nada encontrado' : 'Nenhum imóvel ainda', base.length || t || empBairro ? 'Tire um filtro ou toque em Limpar filtros.' : 'Os imóveis do grupo do WhatsApp aparecem aqui.')}</div>`;
   pintarIcones($('empLista'));
 }
 // linha de ícones: área, quartos, vagas, banheiros (só o que estiver preenchido)
@@ -11298,16 +11332,20 @@ let _ewAutoN = 0, _ewFila = Promise.resolve();
 function salvarEmpWaAuto(x, origem){
   _ewFila = _ewFila.then(async () => { let ok = 0;
     try { if (!souAtivo() || souCeo()) throw new Error('sem permissão');
-      const ex = empreendimentos.find(e => norm(e.nome) === norm(x.nome)), ref = ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), tx = (v, m) => String(v || '').trim().slice(0, m);
+      // v423: o mesmo imóvel do grupo é achado pela mensagem do cartão (waId) ou por bairro + preço + contato (chaveWa), e só depois pelo nome
+      const chaveDe = e => e.chaveWa || [norm(e.local || '').replace(/^casa /, '').replace(/, joao pessoa$/, ''), (() => { const m = String(e.preco || '').replace(/\s/g, '').match(/(\d[\d.]*)/); if (!m) return ''; let n = Number(m[1].replace(/\./g, '')); if (n >= 1000) n = Math.round(n / 1000); return n ? String(n) : ''; })(), norm(e.contato || '').split(' ')[0]].join('|');
+      const ex = (x.waId && empreendimentos.find(e => e.waId === x.waId)) || (x.chaveWa && empreendimentos.find(e => chaveDe(e) === x.chaveWa)) || empreendimentos.find(e => norm(e.nome) === norm(x.nome)), ref = ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), tx = (v, m) => String(v || '').trim().slice(0, m);
       const dados = { nome:tx(x.nome, 80), local:tx(x.local, 80), desc:tx(x.desc, 300), preco:tx(x.preco, 20), area:tx(x.area, 12), quartos:tx(x.quartos, 8), construtora:tx(x.construtora, 60), contato:tx(x.contato, 30), entrega:tx(x.entrega, 60), avaliacao:tx(x.avaliacao, 60),
-        endereco:tx(x.endereco, 160), mapa:linkOk(x.mapa || '') ? tx(x.mapa, 300) : '', unidades:tx(x.unidades, 1500), fonte:'whatsapp', fonteGrupo:tx(x.grupo, 60), atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+        endereco:tx(x.endereco, 160), mapa:linkOk(x.mapa || '') ? tx(x.mapa, 300) : '', unidades:tx(x.unidades, 1500), fonte:'whatsapp', fonteGrupo:tx(x.grupo, 60), waId:tx(x.waId, 60), chaveWa:tx(x.chaveWa, 120), atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
+      if (ex) ['nome','desc','local','preco','contato','avaliacao','entrega'].forEach(k => { if (ex[k]) delete dados[k]; }); // v423: não troca o que já foi arrumado à mão
       { const em = Number(x.em) || (ex ? 0 : Date.now()); if (em && em > (Number(ex?.postadoEm) || 0)) dados.postadoEm = em; } // v366: quando foi postado no grupo (ordem da aba Imóveis)
       Object.keys(dados).forEach(k => { if (dados[k] === '' && ex && ex[k]) delete dados[k]; if (ex && x.soFotos && !['atualizadoEm','atualizadoPor','atualizadoPorNome'].includes(k) && ex[k]) delete dados[k]; });
       if (!ex) Object.assign(dados, { criadoEm:Date.now(), criadoPor:uidAtual, arquivado:false, materiais:[], views:0 });
-      await gravar(setDoc(ref, dados, { merge:true }));
-      const fotos = (x.fotos || []).filter(f => typeof f === 'string' && f.startsWith('data:image/') && f.length < 900000).slice(0, 15);
+      const ate = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('demorou para gravar')), ms))]); // v423: nunca trava a fila
+      await ate(gravar(setDoc(ref, dados, { merge:true })), 25000);
+      const fotos = [...new Set((x.fotos || []).filter(f => typeof f === 'string' && f.startsWith('data:image/') && f.length < 900000))].slice(0, 15); // sem foto repetida
       if (fotos.length) { const exist = ex ? (await getDocs(query(collection(db,'emp_fotos'), where('empId','==',ref.id)))).docs.map(d => ({ id:d.id, ...d.data() })) : [];
-        if (fotos.length > exist.length || (x.trocarFotos && fotos.length)) await gravarFotosEmp(ref.id, fotos, exist.map(f => f.id), []); } /* v341: trocarFotos = fotos em boa qualidade (abertas no visualizador do WhatsApp) substituem as miniaturas */
+        if (fotos.length >= exist.length) await ate(gravarFotosEmp(ref.id, fotos, exist.map(f => f.id), []), 120000); } /* v341: trocarFotos = fotos em boa qualidade (abertas no visualizador do WhatsApp) substituem as miniaturas */
       ok = 1; _ewAutoN++; toast(`Imóveis do WhatsApp: ${_ewAutoN} salvo${_ewAutoN === 1 ? '' : 's'} (${x.nome})`);
     } catch(e) { toast('Erro em ' + x.nome + ': ' + e.message); }
     try { origem.postMessage({ tipo:'frade-emp-ok', nome:x.nome, ok }, 'https://web.whatsapp.com'); } catch(e) {}
@@ -15011,7 +15049,7 @@ window.lerDec = lerDec;
 // ======== FINANCEIRO 2: funil das comissões, previsão do mês e despesas fixas ========
 let finVendas = {}, finFixas = [], finVEdit = null, _fixasFeitas = '';
 const CONST_PADRAO = [{ nome:'Tenda', tipo:'adiantamento', pctAdiant:30, diasAdiant:15, diasRestante:30, obs:'Tenda só aceita emissão da nota no PJ 66.' }, { nome:'Delta', tipo:'integral', pctAdiant:0, diasAdiant:0, diasRestante:30, obs:'Aceita apenas a nota de Priscilla Cortez.' }, { nome:'Plataforma', tipo:'integral', pctAdiant:0, diasAdiant:0, diasRestante:30, obs:'Aceita apenas 1 nota.' }, { nome:'Mirantes', tipo:'integral', pctAdiant:0, diasAdiant:0, diasRestante:30, obs:'Aceita apenas 1 nota.' }, { nome:'Outras construtoras', tipo:'integral', pctAdiant:0, diasAdiant:0, diasRestante:30, obs:'' }];
-const NF_EMISSORES = ['','Frade 66 (PJ principal)','Frade 69 (PB)','CNPJ do corretor'];
+const NF_EMISSORES = ['','Frade 66 (PJ principal)','Frade 69 (PB)','CNPJ do corretor','Dividida (corretor + imobiliária)'];
 const NF_ST = { a_emitir:'a emitir', emitida:'emitida, esperando pagamento', paga:'paga', cancelada:'cancelada' };
 const ETAPAS_FIN = [['reserva','Reserva e sinal'], ['entrada','Entrada'], ['identificacao','Identificação'], ['assinatura','Assinatura Caixa'], ['faturada','Comissão faturada'], ['recebida','Comissão recebida'], ['paga','Corretor pago']];
 const FORMAS_ENT = [['','—'], ['pix','Pix / à vista'], ['boleto','Boleto'], ['cartao_construtora','Cartão de crédito (construtora)'], ['cartao_imobiliaria','Cartão de crédito (imobiliária)']];
@@ -15086,7 +15124,7 @@ function autoDaReserva(r){ if (!r || !(r.tipoVenda || r.sinalQuem || r.entradaQu
   if (Number(r.sinalValor) > 0) Object.assign(o, { sinalPago:true, sinalValor:Number(r.sinalValor), sinalQuem:r.sinalQuem || '', sinalData:r.sinalData || r.dia || '', sinalForma:r.sinalForma || '' });
   const ev = lerDec(r.entrada); o.geraEntrada = ev > 0 ? 'sim' : 'nao'; if (ev > 0) { o.entradaValor = ev; if (r.entradaQuem === 'construtora') o.entradaPaga = true; }
   if (r.assCaixaEm) o.assinaturaEm = r.assCaixaEm; if (Number(r.valorAvaliacao) > 0) o.valorAvaliacao = Number(r.valorAvaliacao);
-  if (/^s/i.test(r.notaCnpj || '')) { o.nota = 'com'; o.emissor = 'CNPJ do corretor'; }
+  if (r.notaCnpj === 'parte') { o.nota = 'com'; o.emissor = 'Dividida (corretor + imobiliária)'; } else if (/^s/i.test(r.notaCnpj || '')) { o.nota = 'com'; o.emissor = 'CNPJ do corretor'; }
   return o; }
 window.autoDaReserva = autoDaReserva;
 function vendaFin(r){
@@ -15113,9 +15151,14 @@ function vendaFin(r){
   const adiant = tipo === 'adiantamento' ? Math.max(0, Math.round((adiant0 - deducao) * 100) / 100) : adiant0, rest = tipo === 'adiantamento' ? rest0 : Math.max(0, Math.round((rest0 - deducao) * 100) / 100);
   const totRec = Math.round((adiant + rest) * 100) / 100;
   // v419: nota da imobiliária = 15,7% fixo; nota no CNPJ do corretor = % de cada corretor, informado na venda (sem ele, o app não desconta e avisa)
-  const nfCor = f.emissor === 'CNPJ do corretor' || /^s/i.test(r.notaCnpj || ''), pctNFCor = f.pctImposto != null && f.pctImposto !== '' ? Number(f.pctImposto) : (Number(lerDec(r.pctNFCor)) || null);
-  const pctNF = f.nota === 'sem' ? 0 : nfCor ? (pctNFCor || 0) : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7) || 0, imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : Math.round(totRec * pctNF) / 100, liquido = Math.round((totRec - imposto) * 100) / 100;
-  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number((!f.pctCorManual && r.tipoVenda && TIPOS_VENDA[r.tipoVenda] ? TIPOS_VENDA[r.tipoVenda].pct : null) ?? f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0, valCorBruto = f.valCor != null && f.valCor !== '' ? Number(f.valCor) : Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCorBruto) * 100) / 100;
+  // v423: nota dividida = o corretor emite só a parte dele (com o % da empresa dele) e a imobiliária emite a dela (15,7%)
+  const nfDiv = f.emissor ? /^dividida/i.test(f.emissor) : r.notaCnpj === 'parte';
+  const nfCor = !nfDiv && (f.emissor === 'CNPJ do corretor' || (!f.emissor && /^s/i.test(r.notaCnpj || ''))), pctNFCor = f.pctImposto != null && f.pctImposto !== '' && (nfCor || nfDiv) ? Number(f.pctImposto) : (Number(lerDec(r.pctNFCor)) || null);
+  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number((!f.pctCorManual && r.tipoVenda && TIPOS_VENDA[r.tipoVenda] ? TIPOS_VENDA[r.tipoVenda].pct : null) ?? f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0;
+  const pctImobNF = Number(finCfg.pctImposto ?? 15.7) || 0, corGross = Math.round(totRec * pctCor) / 100, impCorDiv = Math.round(corGross * (pctNFCor || 0)) / 100, impImobDiv = Math.round((totRec - corGross) * pctImobNF) / 100;
+  const pctNF = f.nota === 'sem' ? 0 : nfDiv ? (totRec > 0 ? Math.round((impCorDiv + impImobDiv) / totRec * 10000) / 100 : 0) : nfCor ? (pctNFCor || 0) : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7) || 0;
+  const imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : f.nota === 'sem' ? 0 : nfDiv ? Math.round((impCorDiv + impImobDiv) * 100) / 100 : Math.round(totRec * pctNF) / 100, liquido = Math.round((totRec - imposto) * 100) / 100;
+  const valCorBruto = f.valCor != null && f.valCor !== '' ? Number(f.valCor) : nfDiv && f.nota !== 'sem' ? Math.round((corGross - impCorDiv) * 100) / 100 : Math.round(liquido * pctCor) / 100, valImob = Math.round((liquido - valCorBruto) * 100) / 100;
   // adiantamento/vale e descontos avulsos saem da parte do corretor (a divisão é sempre sobre o líquido)
   const descontos = (f.descontos || []).filter(x => Number(x.valor) > 0), descTotal = Math.round(descontos.reduce((a, x) => a + Number(x.valor), 0) * 100) / 100, valCor = Math.round((valCorBruto - descTotal) * 100) / 100;
   // v418: a ADM marca "Assinou Tenda" e "Assinou Caixa" na reserva; o prazo da construtora é digitado em cada venda (dias após a assinatura)
@@ -15126,7 +15169,7 @@ function vendaFin(r){
     recebida: tipo === 'adiantamento' ? !!(f.recAdiant && f.recRestante) : !!f.recRestante, paga:!!f.corPago };
   const etapa = ETAPAS_FIN.findIndex(([k]) => !ok[k]);
   const aReceber = (tipo === 'adiantamento' && !f.recAdiant ? adiant : 0) + (!f.recRestante ? rest : 0);
-  return { r, f, cons, consAuto:consAuto && !!cons, rg, tipo, pctImob, vgv, total, nfCor, nfCorSemPct:nfCor && f.nota !== 'sem' && !pctNFCor, deducao, totRec, assT, assEm, prazo, valCorA, regCaixa, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valCorBruto, descontos, descTotal, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
+  return { r, f, cons, consAuto:consAuto && !!cons, rg, tipo, pctImob, vgv, total, nfCor, nfDiv, impCorDiv, impImobDiv, nfCorSemPct:(nfCor || nfDiv) && f.nota !== 'sem' && !pctNFCor, deducao, totRec, assT, assEm, prazo, valCorA, regCaixa, pctA, adiant, rest, pctNF, imposto, liquido, cor, pctCor, valCor, valCorBruto, descontos, descTotal, valImob, prevA, prevR, ok, etapa: etapa < 0 ? ETAPAS_FIN.length : etapa, aReceber };
 }
 // o que entra e o que sai em um mês (para o golpe de vista)
 function previsaoMes(m){
@@ -15350,9 +15393,9 @@ function atencaoVenda(v, h){
   if (pl.caiu) a.push('A planilha diz que a reserva caiu');
   if ((Number(v.r.valor) || 0) > 3000000) a.push(`Valor do imóvel parece errado (${brl(Number(v.r.valor))}); o app está usando ${brl(v.vgv)}. Corrija na reserva`);
   if (!v.total) a.push('Sem valor de comissão');
-  if (v.nfCorSemPct) a.push('Nota no CNPJ do corretor: informe o % de imposto da nota dele (o app ainda não descontou)');
+  if (v.nfCorSemPct) a.push(v.nfDiv ? 'Nota dividida: informe o % de imposto da nota do corretor (o app ainda não descontou a parte dele)' : 'Nota no CNPJ do corretor: informe o % de imposto da nota dele (o app ainda não descontou)');
   if (v.ok.assinatura && !f.faturada && v.assEm && diffDias(v.assEm) <= -7) a.push(`Assinou há ${-diffDias(v.assEm)} dias e a nota não foi emitida`);
-  if (v.regCaixa && !f.faturada && diffDias(v.regCaixa) <= -10) a.push(`Pedir a emissão da nota à construtora (registro na Caixa em ${dataBR(v.regCaixa).slice(0, 5)}, há ${-diffDias(v.regCaixa)} dias)`); // v418
+  if (v.regCaixa && !f.faturada && diffDias(v.regCaixa) <= -10) a.push(`A construtora já pediu a nota? A imobiliária emite quando ela pedir (registro na Caixa em ${dataBR(v.regCaixa).slice(0, 5)}, há ${-diffDias(v.regCaixa)} dias)`); // v418
   if (v.tipo === 'adiantamento' && f.recAdiant && !f.corPagoA && !f.corPago && v.valCorA > 0) a.push(`Adiantamento recebido: pagar a parte do corretor (${brl2(v.valCorA)})`);
   if (v.ok.assinatura && !v.ok.recebida && !v.prevR && !(v.tipo === 'adiantamento' && !f.recAdiant && v.prevA)) a.push('Assinou e está sem data para receber');
   if (v.tipo === 'adiantamento' && !f.recAdiant && v.prevA && v.prevA < h && v.adiant) a.push(`Adiantamento atrasado (era ${dataBR(v.prevA)})`);
@@ -15789,7 +15832,7 @@ window.abrirVendaFin = (id, semAbrir) => {
   const hj = hojeISO(), atrasoEt = i => { const k = (ETAPAS_FIN[i] || [])[0];
     if (k === 'reserva' && !v.ok.reserva && diffDias(r.dia || hj) <= -3) return 'sinal sem confirmação há ' + (-diffDias(r.dia)) + ' dias';
     if (k === 'entrada' && !v.ok.entrada && parcelasCobrar(f, hj, v.cons, r).length) return 'parcela da entrada vencida';
-    if (k === 'faturada' && !f.faturada && v.regCaixa && diffDias(v.regCaixa) <= -10) return 'pedir a nota à construtora';
+    if (k === 'faturada' && !f.faturada && v.regCaixa && diffDias(v.regCaixa) <= -10) return 'emitir a nota quando a construtora pedir';
     if (k === 'faturada' && !f.faturada && v.assEm && diffDias(v.assEm) <= -7) return 'assinou há ' + (-diffDias(v.assEm)) + ' dias e a nota não foi emitida';
     if (k === 'recebida' && !v.ok.recebida && ((v.tipo === 'adiantamento' && !f.recAdiant && v.prevA && v.prevA < hj) || (!f.recRestante && v.prevR && v.prevR < hj))) return 'recebimento atrasado';
     if (k === 'paga' && v.ok.recebida && !f.corPago && v.valCor > 0) return 'comissão recebida e corretor ainda não pago';
@@ -15832,7 +15875,7 @@ window.abrirVendaFin = (id, semAbrir) => {
     ${sec(3, 'Assinatura com a Caixa', f.assinaturaEm ? 'assinou em ' + dataBR(f.assinaturaEm) : v.assT ? 'assinou ' + esc(v.cons || 'construtora') + ' em ' + dataBR(v.assT) + ', falta a Caixa' : '', `${r.assCaixaEm || r.assTendaEm ? '<div class="fv-auto">Marcado pela ADM em Reservas.' + (v.regCaixa ? ' Registro na Caixa em ' + dataBR(v.regCaixa) + '.' : '') + '</div>' : '<div class="fv-auto">A ADM marca a assinatura em Reservas (etapa da reserva) e ela aparece aqui sozinha.</div>'}<div class="fg"><label>Data da assinatura</label><input id="fvAss" type="date" value="${f.assinaturaEm || ''}"></div>`)}
     ${sec(4, 'Nota fiscal e cobrança', f.faturada ? 'faturada' + (f.nf ? ' · NF ' + esc(f.nf) : '') : '', `<div class="row2"><div class="fg"><label>Nota fiscal</label><select id="fvNota"><option value="">—</option><option value="com" ${f.nota === 'com' ? 'selected' : ''}>Com nota</option><option value="sem" ${f.nota === 'sem' ? 'selected' : ''}>Sem nota</option></select></div>
         <div class="fg"><label>Emitida por</label><select id="fvEmissor">${NF_EMISSORES.map(x => `<option ${f.emissor === x ? 'selected' : ''} value="${x}">${x || '—'}</option>`).join('')}</select></div></div>
-      <div class="row2"><div class="fg"><label>Número da nota</label><input id="fvNF" value="${esc(f.nf || '')}"></div><div class="fg"><label>% de imposto da nota</label><input id="fvPctNF" type="number" step="0.01" value="${v.nfCor ? (f.pctImposto != null && f.pctImposto !== '' ? f.pctImposto : (lerDec(r.pctNFCor) || '')) : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7)}" placeholder="${v.nfCor ? '% da nota do corretor' : ''}"></div></div>
+      <div class="row2"><div class="fg"><label>Número da nota</label><input id="fvNF" value="${esc(f.nf || '')}"></div><div class="fg"><label>% de imposto da nota</label><input id="fvPctNF" type="number" step="0.01" value="${v.nfCor || v.nfDiv ? (f.pctImposto != null && f.pctImposto !== '' ? f.pctImposto : (lerDec(r.pctNFCor) || '')) : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7)}" placeholder="${v.nfCor || v.nfDiv ? '% da nota do corretor' : ''}">${v.nfDiv ? `<div class="hint" style="margin-top:4px">Nota dividida: o corretor emite só a parte dele, com este %. A imobiliária emite a parte dela com ${String(Number(finCfg.pctImposto ?? 15.7)).replace('.', ',')}%. Imposto do corretor ${brl2(v.impCorDiv)} · imposto da imobiliária ${brl2(v.impImobDiv)}.</div>` : v.nfCor ? '<div class="hint" style="margin-top:4px">Nota do corretor na comissão inteira: o % dele vale sobre tudo, antes de dividir.</div>' : ''}</div></div>
       ${chk('fvFat', f.faturada, 'Comissão faturada / cobrada da construtora')}
       <div class="fv-notas">${notasV.map(n => `<span class="fv-nota-l"><button class="fv-nota" onclick="fechar('fvModal');editarNota('${n.id}')">🧾 NF ${esc(n.numero || 's/ nº')} · ${brl2(n.valor)} · ${NF_ST[n.status] || ''}</button>${n.anexo ? `<button class="link" onclick="abrirAnexoNota('${n.id}')">📎 ver</button>` : ''}</span>`).join('')}<button class="link" onclick="fechar('fvModal');editarNota(null,'${r.id}')">+ Registrar nota fiscal desta venda</button></div>`)}
     ${sec(5, 'Comissão recebida', v.ok.recebida ? 'recebida' : '', (() => { /* v418: um quadro por parte da comissão, com o botão dentro */
@@ -17720,12 +17763,14 @@ window.rvConta = () => { const el = $('rvConta'); if (!el) return;
   const sv = lerDec($('rvSinal').value), sq = $('rvSinalQ').value, ev = lerDec($('rvEntrada').value), eq = $('rvEntQ').value, t = TIPOS_VENDA[$('rvTipo').value];
   $('rvSinalTxt').value = sv ? brl2(sv) + (sq ? ' pago à ' + (sq === 'imobiliaria' ? 'imobiliária' : 'construtora') : '') : '';
   if (!com) { el.innerHTML = ''; return; }
-  const nfC = $('rvNota').value === 'sim'; $('rvPctNFBox')?.classList.toggle('hide', !nfC);
-  const ds = sq === 'imobiliaria' ? sv : 0, de = eq === 'imobiliaria' ? ev : 0, rec = Math.max(0, com - ds - de), pNF = nfC ? lerDec($('rvPctNF').value) : Number(finCfg?.pctImposto ?? 15.7) || 0, liq = rec - rec * pNF / 100;
+  const nfC = $('rvNota').value === 'sim', nfD = $('rvNota').value === 'parte'; $('rvPctNFBox')?.classList.toggle('hide', !nfC && !nfD);
+  const ds = sq === 'imobiliaria' ? sv : 0, de = eq === 'imobiliaria' ? ev : 0, rec = Math.max(0, com - ds - de), pImob = Number(finCfg?.pctImposto ?? 15.7) || 0, pCorNF = lerDec($('rvPctNF').value);
+  // v423: nota dividida = cada um paga o imposto da própria parte (corretor o % dele, imobiliária 15,7%)
+  const pNF = nfC ? pCorNF : pImob, liq = nfD ? rec : rec - rec * pNF / 100, parteCor = t ? (nfD ? rec * t.pct / 100 * (1 - pCorNF / 100) : liq * t.pct / 100) : 0;
   const rg = typeof regraConst === 'function' ? regraConst($('rvConst').value) : {}, ad = rg.tipo === 'adiantamento' ? Number(rg.pctAdiant) || 0 : 0;
   el.innerHTML = `<div><span>Comissão cheia</span><b>${brl2(com)}</b></div>${ds ? `<div><span>Sinal pago à imobiliária</span><b>− ${brl2(ds)}</b></div>` : ''}${de ? `<div><span>Entrada paga à imobiliária</span><b>− ${brl2(de)}</b></div>` : ''}
-    <div class="t"><span>A receber da construtora</span><b>${brl2(rec)}</b></div>${t ? `<div><span>Parte do corretor (${t.pct}% do líquido)</span><b>${brl2(liq * t.pct / 100)}</b></div>` : ''}
-    <small>${ds || de ? 'O sinal e a entrada pagos à imobiliária já ficaram com a imobiliária, por isso saem da comissão cheia antes da divisão. ' : ''}${nfC && !pNF ? 'Nota no CNPJ do corretor: coloque o % do imposto dele para o app descontar. ' : `Líquido = a receber menos ${String(pNF).replace('.', ',')}% de imposto da nota${nfC ? ' do corretor' : ' da imobiliária'}. `}${ad ? ` ${esc(rg.nome || 'Essa construtora')} paga em 2 partes: ${ad}% quando assina com a construtora e ${100 - ad}% quando assina com a Caixa.` : ''}</small>`; };
+    <div class="t"><span>A receber da construtora</span><b>${brl2(rec)}</b></div>${t ? `<div><span>Parte do corretor (${t.pct}%${nfD ? ', menos o imposto da nota dele' : ' do líquido'})</span><b>${brl2(parteCor)}</b></div>` : ''}${nfD && t ? `<div><span>Parte da imobiliária (${100 - t.pct}%, menos 15,7%)</span><b>${brl2(rec * (100 - t.pct) / 100 * (1 - pImob / 100))}</b></div>` : ''}
+    <small>${ds || de ? 'O sinal e a entrada pagos à imobiliária já ficaram com a imobiliária, por isso saem da comissão cheia antes da divisão. ' : ''}${(nfC || nfD) && !pCorNF ? 'Nota do corretor: coloque o % do imposto dele para o app descontar. ' : nfD ? `Nota dividida: o corretor emite só a parte dele (${String(pCorNF).replace('.', ',')}% de imposto) e a imobiliária emite a dela (${String(pImob).replace('.', ',')}%). Cada um paga o imposto da própria parte. ` : `Líquido = a receber menos ${String(pNF).replace('.', ',')}% de imposto da nota${nfC ? ' do corretor, sobre a comissão inteira' : ' da imobiliária'}. `}${ad ? ` ${esc(rg.nome || 'Essa construtora')} paga em 2 partes: ${ad}% quando assina com a construtora e ${100 - ad}% quando assina com a Caixa.` : ''}</small>`; };
 // ---------- documentação do cliente na reserva ----------
 const DOCS_RES = [['identidade','RG ou CNH'],['cpf','CPF'],['estado_civil','Certidão de nascimento ou casamento'],['residencia','Comprovante de residência'],['renda','Comprovante de renda'],['ctps','Carteira de trabalho'],['ir','Declaração de Imposto de Renda'],['fgts','Extrato do FGTS'],['conjuge','Documentos do cônjuge'],['contrato','Contrato assinado'],['outros','Outros documentos']];
 const rvDocNome = t => (DOCS_RES.find(([k]) => k === t) || [, 'Documento'])[1];
@@ -17813,7 +17858,7 @@ window.editarReserva = id => {
     if (fv.comissao != null && fv.comissao !== '' && Number(fv.comissao) > 0) v('rvCom', fmtReaisIn(Number(fv.comissao)));
     if (fv.pctCor != null && fv.pctCor !== '' && Number(fv.pctCor) > 0) v('rvPerc', String(Math.round(Number(fv.pctCor) * 100) / 100).replace('.', ',') + '%'); }
   v('rvOrig', r?.origem); v('rvPrev', r?.previsao); try { pintarRvSdr(r || null); } catch(e) {} v('rvStImo', r?.statusImovel); v('rvObs', r?.obs);
-  v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', /^s/i.test(r?.notaCnpj || '') ? 'sim' : /^n/i.test(r?.notaCnpj || '') ? 'não' : ''); v('rvColar', '');
+  v('rvCriativo', r?.criativo); v('rvNumConst', r?.numConstrutora); v('rvNota', r?.notaCnpj === 'parte' ? 'parte' : /^s/i.test(r?.notaCnpj || '') ? 'sim' : /^n/i.test(r?.notaCnpj || '') ? 'não' : ''); v('rvColar', '');
   /* v418 */ v('rvEmail', r?.email); v('rvPis', r?.pis); v('rvUnid', r?.unidade); v('rvAval', r?.valorAvaliacao ? fmtValorInput(r.valorAvaliacao) : ''); v('rvSinal', r?.sinalValor ? fmtReaisIn(r.sinalValor) : ''); v('rvSinalQ', r?.sinalQuem || ''); v('rvSinalD', r?.sinalData || ''); v('rvSinalF', r?.sinalForma || ''); v('rvEntQ', r?.entradaQuem || ''); v('rvCond', r?.condicoes); v('rvPrazo', r?.prazoDias || ''); v('rvPctNF', r?.pctNFCor ? String(r.pctNFCor).replace('.', ',') : '');
   v('rvTipo', tipoVendaDe(r)); { const tv = TIPOS_VENDA[$('rvTipo').value]; v('rvTipoTxt', tv ? tv.nome + ' (' + tv.pct + '% do corretor)' : ''); } $('rvTipo').disabled = meuEdit; $('rvTipo').title = meuEdit ? 'Só a gerência altera' : ''; $('rvSdrBox')?.classList.toggle('hide', $('rvTipo').value !== 'sdr' && !(r?.sdrManual && r?.sdrUid)); setTimeout(rvConta, 0);
   if (!r && !opTudo()) v('rvCor', perfil.nome);
