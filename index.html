@@ -2358,6 +2358,8 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 @media (prefers-reduced-motion:reduce){#bzCorre,#bzCorre b{animation:none!important;transition:none}}
 
 .frm-res{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.frm-res>div{border:1px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--card);display:flex;flex-direction:column;gap:2px}.frm-res span{font-size:12px;color:var(--muted)}.frm-res b{font-size:22px;color:#14532d}.frm-res .sd b{color:var(--muted)}.frm-res small{font-size:11px;color:var(--muted)}
+.frm-esc{display:flex;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap}.frm-esc label{margin:0;font-weight:600;color:var(--text2)}.frm-esc select{width:auto;min-width:260px;margin:0;font-weight:600}
+.frm-res.um{grid-template-columns:1fr}.frm-res .at b{color:#b91c1c}
 .frm{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--card)}
 .frm-m{display:grid;grid-template-columns:1fr auto auto 18px;gap:14px;align-items:center;width:100%;padding:14px 16px;border:0;border-top:1px solid var(--border);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}.frm-m:first-child{border-top:0}
 .frm-m span{font-size:12px;color:var(--muted)}.frm-m strong{font-size:16px;min-width:110px;text-align:right}.frm-m i{font-style:normal;color:#c2410c;transition:transform .2s}.frm-m.on{background:rgba(30,64,120,.06)}.frm-m.on i{transform:rotate(90deg)}
@@ -7991,7 +7993,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 423;
+const APP_VERSAO = 424;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9518,12 +9520,26 @@ function docsDaAv(a){
     return a.origem === 'whatsapp' ? l : [base, ...l]; } // cliente da planilha: a linha da planilha + cada ficha mandada na conversa
   return [base];
 }
+// v424: só para os números de docs (Desempenho, Painel, Meu dia). O ranking continua com docsDaAv (o Allan não quer mexer no ranking).
+function docsDaAvUnico(a){
+  // v424: o mesmo cliente é UMA doc. A ficha da conversa (do corretor ou da SDR) e a linha da planilha com até 7 dias de diferença viram uma só,
+  // contada para o dono da linha da planilha, no dia mais cedo. Só conta de novo o reenvio com mais de 7 dias de distância.
+  const base = { dia:diaDocAv(a), uid:uidDaAv(a) };
+  if (!(DOCS_NOVA_DESDE && Array.isArray(a.envios) && a.envios.length)) return [base];
+  const l = a.envios.map(e => { const [dia, aba] = String(e).split('|'); return { dia, uid:!aba || aba.trim() === String(a.aba || '').trim() ? uidDaAv(a) : uidDaAv({ aba }) }; }).filter(x => x.dia && docsNova(x.dia)).sort((x, y) => x.dia.localeCompare(y.dia));
+  const dif = (x, y) => Math.abs((parseISO(x) - parseISO(y)) / 864e5);
+  if (a.origem === 'whatsapp') { if (!docsNova(base.dia) || !l.length) l.unshift(base); const out = []; let ult = ''; l.forEach(x => { if (ult && dif(x.dia, ult) <= 7) return; ult = x.dia; out.push(x); }); return out; }
+  const perto = x => base.dia && dif(x.dia, base.dia) <= 7, juntas = l.filter(perto);
+  const out = [juntas.length ? { ...base, dia:[base.dia, ...juntas.map(x => x.dia)].filter(Boolean).sort()[0] } : base]; let ult = '';
+  l.filter(x => !perto(x)).forEach(x => { if (ult && dif(x.dia, ult) <= 7) return; ult = x.dia; out.push(x); });
+  return out;
+}
 /* v346: docs de um período do jeito do ranking: cada ficha conta no dia e para quem mandou, o mesmo cliente uma vez por pessoa e por dia.
    Desempenho, Painel e Meu dia usam isto (antes contavam uma doc por cliente, pela 1ª data, e não batiam com os pontos). */
 function docsNoPeriodo(lista, de, ate){
   const vistos = new Set(), out = [];
   (lista || []).forEach(a => { const ch = a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id;
-    docsDaAv(a).forEach(x => { if (!x.dia || x.dia < de || x.dia > ate) return; const u = x.uid || ''; const k = (u || 'n:' + (a.corretorNome || a.aba || '')) + '|' + x.dia + '|' + ch; if (vistos.has(k)) return; vistos.add(k); out.push({ a, uid:u, dia:x.dia }); }); });
+    docsDaAvUnico(a).forEach(x => { if (!x.dia || x.dia < de || x.dia > ate) return; const u = x.uid || ''; const k = (u || 'n:' + (a.corretorNome || a.aba || '')) + '|' + x.dia + '|' + ch; if (vistos.has(k)) return; vistos.add(k); out.push({ a, uid:u, dia:x.dia }); }); });
   return out;
 }
 function diaDocAv(a){ const d = a.data || '', c = a.criadoEm ? iso(new Date(a.criadoEm)) : '';
@@ -11264,6 +11280,7 @@ let empWa = [], _empWaOrig = null;
 const empQuebrado = e => /^\W*\[?Encaminhad|^\W*Localiza|\.pdf$|^Sem nome|^Torre \d+$|^APARTAMENTOS$|^Condom[ií]nio R$/i.test(String(e.nome || '').trim());
 window.addEventListener('message', ev => {
   if (ev.origin !== 'https://web.whatsapp.com') return; const d = ev.data || {};
+  if ((d.tipo === 'frade-pdf' || d.tipo === 'frade-fotos-add') && d.ref) { anexarMaterialWa(d, ev.source); return; } // v423: páginas de PDF e quadros de vídeo do grupo viram fotos do imóvel
   if (d.tipo === 'frade-emp-auto' && d.item && typeof d.item.nome === 'string') { _empWaOrig = ev.source; salvarEmpWaAuto(d.item, ev.source); return; }
   if (d.tipo === 'frade-emp-item' && d.item && typeof d.item.nome === 'string') {
     _empWaOrig = ev.source; const it = d.item;
@@ -11326,6 +11343,32 @@ function abrirEmpWa(){
   const qb = empreendimentos.filter(empQuebrado);
   if (qb.length) $('ewCorpo').insertAdjacentHTML('beforeend', `<label class="ew-l ew-qb"><input type="checkbox" id="ewQb" checked><span class="ew-f"></span><span class="ew-t"><b>Apagar ${qb.length} cartões quebrados</b><small>Da importação antiga, sem nome de verdade (ex.: ${esc(String(qb[0].nome).slice(0, 40))})</small></span></label>`);
   abrir('ewModal');
+}
+// v423: PDF (tabela, book) e vídeo do grupo TOP 10 IMÓVEIS viram fotos do imóvel. d.ref = { waId, chaveWa, nome }
+let _pdfLib = null;
+const pdfLib = async () => { if (_pdfLib) return _pdfLib;
+  await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; s.onload = ok; s.onerror = () => no(new Error('não carregou o leitor de PDF')); document.head.appendChild(s); });
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; return _pdfLib = window.pdfjsLib; };
+async function paginasPdf(buf, max){
+  const lib = await pdfLib(), pdf = await lib.getDocument({ data:buf }).promise, out = [];
+  for (let i = 1; i <= Math.min(pdf.numPages, max || 8); i++) { const pg = await pdf.getPage(i), v0 = pg.getViewport({ scale:1 }), v = pg.getViewport({ scale:Math.min(3, 1400 / Math.max(v0.width, v0.height)) });
+    const c = document.createElement('canvas'); c.width = Math.round(v.width); c.height = Math.round(v.height); const cx = c.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, c.width, c.height);
+    await pg.render({ canvasContext:cx, viewport:v }).promise; let q = 0.85, u = c.toDataURL('image/jpeg', q); while (u.length > 850000 && q > 0.4) { q -= 0.1; u = c.toDataURL('image/jpeg', q); } out.push(u); }
+  return out;
+}
+let _matFila = Promise.resolve();
+function anexarMaterialWa(d, origem){
+  _matFila = _matFila.then(async () => { let ok = 0, err = '', n = 0;
+    try { if (!souAtivo() || souCeo()) throw new Error('sem permissão');
+      const r = d.ref || {}, e = (r.waId && empreendimentos.find(x => x.waId === r.waId)) || (r.chaveWa && empreendimentos.find(x => x.chaveWa === r.chaveWa)) || empreendimentos.find(x => norm(x.nome) === norm(r.nome || ''));
+      if (!e) throw new Error('imóvel não achado');
+      const fotos = d.tipo === 'frade-pdf' ? await paginasPdf(d.buf, d.max) : (d.fotos || []).filter(f => typeof f === 'string' && f.startsWith('data:image/') && f.length < 900000);
+      const exist = (await getDocs(query(collection(db,'emp_fotos'), where('empId','==',e.id)))).docs.map(x => ({ id:x.id, ...x.data() })).sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+      const ja = new Set(exist.map(f => String(f.dados || '').slice(-200))), novas = fotos.filter(f => !ja.has(f.slice(-200))).slice(0, Math.max(0, 20 - exist.length));
+      if (novas.length) await gravarFotosEmp(e.id, novas, [], exist); n = novas.length; ok = 1;
+    } catch(e) { err = e.message; }
+    try { origem.postMessage({ tipo:'frade-pdf-ok', id:d.id, ok, err, info:'+' + n + ' fotos' }, 'https://web.whatsapp.com'); } catch(e) {}
+  });
 }
 // v340: o Allan pediu todos os imóveis do grupo com todas as fotos: cada um é gravado na hora (mesmo nome = atualiza; fotos trocadas quando vierem mais)
 let _ewAutoN = 0, _ewFila = Promise.resolve();
@@ -15428,9 +15471,14 @@ function htmlReceberMeses(){
   const nome = k => k === 'atraso' ? 'Atrasado (já passou da data)' : k === 'zsem' ? 'Sem data ainda' : nomeMes(k) + (k === h.slice(0, 7) ? ' (este mês)' : '');
   const ab = (window._frmAb ||= new Set(['atraso', h.slice(0, 7)]));
   if (!itens.length) return '<div class="fc-vazio">Nada a receber das construtoras.</div>';
-  return `<div class="hint" style="margin:6px 0 10px">O que as construtoras têm para pagar, mês a mês, pela data prevista de cada parte da comissão. Toque no mês para ver as vendas; toque na venda para abrir.</div>
-    <div class="frm-res"><div><span>Com data prevista</span><b>${brl(geral)}</b></div><div class="sd"><span>Sem data ainda</span><b>${brl(semData)}</b><small>esperando assinatura</small></div></div>
-    <div class="frm">${ordem.map(k => { const l = grupos.get(k).sort((a, b) => (a.data || '').localeCompare(b.data || '') || a.cli.localeCompare(b.cli, 'pt-BR')), on = ab.has(k);
+  // v424: escolher um mês para ver só o que entra nele
+  const sel = grupos.has(window._frmMes || '') ? window._frmMes : '', mostra = sel ? [sel] : ordem;
+  const escolha = `<div class="frm-esc"><label for="frmMesSel">Ver</label><select id="frmMesSel" onchange="window._frmMes=this.value;render()"><option value="">Todos os meses</option>${ordem.map(k => `<option value="${k}" ${sel === k ? 'selected' : ''}>${nome(k).replace(' (já passou da data)', '')} · ${brl(tot(grupos.get(k)))}</option>`).join('')}</select>${sel ? '<button class="link" onclick="window._frmMes=\'\';render()">Ver todos</button>' : ''}</div>`;
+  const resumo = sel ? `<div class="frm-res um"><div class="${sel === 'atraso' ? 'at' : sel === 'zsem' ? 'sd' : ''}"><span>${sel === 'atraso' ? 'Atrasado' : sel === 'zsem' ? 'Sem data ainda' : 'A receber em ' + nomeMes(sel)}</span><b>${brl(tot(grupos.get(sel)))}</b><small>${grupos.get(sel).length} parte${grupos.get(sel).length > 1 ? 's' : ''} de comissão${sel === 'zsem' ? ' · esperando assinatura' : ''}</small></div></div>`
+    : `<div class="frm-res"><div><span>Com data prevista</span><b>${brl(geral)}</b></div><div class="sd"><span>Sem data ainda</span><b>${brl(semData)}</b><small>esperando assinatura</small></div></div>`;
+  return `<div class="hint" style="margin:6px 0 10px">O que as construtoras têm para pagar, mês a mês, pela data prevista de cada parte da comissão. Escolha o mês ou toque nele para ver as vendas; toque na venda para abrir.</div>
+    ${escolha}${resumo}
+    <div class="frm">${mostra.map(k => { const l = grupos.get(k).sort((a, b) => (a.data || '').localeCompare(b.data || '') || a.cli.localeCompare(b.cli, 'pt-BR')), on = sel ? true : ab.has(k);
       return `<button class="frm-m ${k === 'atraso' ? 'at' : k === 'zsem' ? 'sd' : ''} ${on ? 'on' : ''}" onclick="frmAbre('${k}')"><b>${nome(k)}</b><span>${l.length} parte${l.length > 1 ? 's' : ''}</span><strong>${brl(tot(l))}</strong><i>›</i></button>`
         + (on ? `<div class="frm-l">${l.map(x => `<button class="fc-cor-v" onclick="abrirVendaFin('${x.id}')"><span><b>${esc(x.cli)}</b><small>${esc(x.corN)}${x.cons ? ' · ' + esc(x.cons) : ''} · ${x.parte}</small></span><span class="fc-cor-vv">${brl(x.valor)}<small class="${k === 'atraso' ? 'pg' : ''}">${x.data ? dataBR(x.data) : x.falta}</small></span><i>›</i></button>`).join('')}</div>` : ''); }).join('')}</div>`;
 }
