@@ -413,7 +413,7 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
 .et-tenda{border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 0 14px}.et-tenda b{display:block;margin-bottom:8px}.et-tenda .et-tl{display:grid;grid-template-columns:1fr 150px;gap:8px;align-items:center;margin-bottom:8px}.et-tenda label{display:flex;gap:8px;align-items:center;font-size:14px;text-transform:none;font-weight:600;margin:0}.et-tenda input[type=checkbox]{width:20px;height:20px;flex:0 0 20px;margin:0;padding:0}.et-tenda small{display:block;color:var(--muted);font-size:12px;margin:2px 0 8px}
 .fv-parcs{display:grid;gap:6px;margin:0 0 10px}.fv-pl{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:8px 10px}.fv-pl span{display:grid}.fv-pl small{font-size:12px;color:var(--muted)}.fv-pl.ok{border-color:color-mix(in srgb,var(--ok) 55%,var(--border));background:color-mix(in srgb,var(--ok) 7%,var(--card))}.fv-pl.ok small{color:var(--ok);font-weight:700}.fv-pl.venc{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 6%,var(--card))}.fv-pl.venc small{color:var(--danger);font-weight:700}.fv-pl .btn{padding:6px 12px;font-size:13px}
 .fv-auto{font-size:12.5px;color:var(--ok);font-weight:600;margin:0 0 8px}
-.fv-pc{border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--card,#fff)}.fv-pc.ok{border-color:var(--ok);background:var(--ok-soft,#eefaf2)}.fv-pc-h{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}.fv-pc-h b{font-size:14px}.fv-pc-h span{font-size:12px;font-weight:700;color:var(--muted)}.fv-pc.ok .fv-pc-h span{color:var(--ok)}.fv-pc-l{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:2px 0}.fv-pc-l span{color:var(--muted)}.fv-pc .btn{margin-top:8px;width:100%;white-space:normal}
+.fv-pc{border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--card)}.fv-pc.ok{border-color:var(--ok);background:var(--ok-soft,#eefaf2)}.fv-pc-h{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}.fv-pc-h b{font-size:14px}.fv-pc-h span{font-size:12px;font-weight:700;color:var(--muted)}.fv-pc.ok .fv-pc-h span{color:var(--ok)}.fv-pc-l{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:2px 0}.fv-pc-l span{color:var(--muted)}.fv-pc .btn{margin-top:8px;width:100%;white-space:normal}
 .fc-real{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px}.fc-real div{border:1px solid var(--border);border-radius:12px;padding:10px 12px}.fc-real span{font-size:12.5px;color:var(--muted);display:block}.fc-real b{font-size:18px;display:block}.fc-real small{font-size:12px;color:var(--muted)}.fc-real .re{border-color:var(--ok)}
 /* v417: no celular o e-mail comprido não estica mais a linha; seletores e botões ocupam a largura certa */
 .pend>*{min-width:0}.pend>div:first-child span{display:block;overflow-wrap:anywhere}.pend .pend-obs{display:block;margin-top:2px}
@@ -447,7 +447,7 @@ html[data-theme="dark"] .st-pendente{color:#fcd34d}html[data-theme="dark"] .st-c
 .perm-info{flex:1 1 100%}.perm-info summary{cursor:pointer;color:var(--muted);font-size:13px;width:max-content}
 .perm td{padding:8px 8px}.perm tr.perm-gr td{padding:18px 8px 6px;border-bottom:0;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}.perm tr.perm-gr td span{font-weight:600;opacity:.7;margin-left:4px}
 .perm tr.perm-sep td{padding:18px 8px 8px;border-bottom:0}
-.perm td select{background-color:transparent;border:1px solid transparent;box-shadow:none;padding:7px 28px 7px 8px;font-weight:500}.perm tr:hover td select,.perm td select:focus{border-color:var(--border);background-color:var(--card,#fff)}
+.perm td select{background-color:transparent;border:1px solid transparent;box-shadow:none;padding:7px 28px 7px 8px;font-weight:500}.perm tr:hover td select,.perm td select:focus{border-color:var(--border);background-color:var(--card)}
 .perm .btn-excluir{opacity:0;transition:opacity .15s}.perm tr:hover .btn-excluir,.perm .btn-excluir:focus{opacity:.6}
 @media(hover:none){.perm .btn-excluir{opacity:.45}.perm td select{border-color:var(--border)}}
 .leg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
@@ -653,7 +653,7 @@ table.rank td.pts{font-weight:800;color:var(--accent)}
 button.poup{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}.poup-ver{margin-left:auto;font-style:normal;font-weight:700;font-size:13px;background:rgba(255,255,255,.18);padding:6px 12px;border-radius:99px;flex:none}.cart-topo{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#0f6b4a,#16a34a);color:#fff;margin-bottom:12px}.cart-topo small{opacity:.85}.cart-it{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.cart-it small{display:block;color:var(--muted);font-size:12.5px}.cart-it span{color:#16a34a;font-weight:800;white-space:nowrap}
 @media (max-width:900px){
   /* v128: (+) em grade de atalhos, numa folha só acima do botão */
-  html.fab-aberto #fabMenu.fab-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;left:16px;right:16px;bottom:calc(146px + env(safe-area-inset-bottom));padding:14px 10px;border-radius:22px;background:var(--card,#fff);box-shadow:0 18px 50px rgba(0,0,0,.28);border:1px solid var(--border)}
+  html.fab-aberto #fabMenu.fab-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;left:16px;right:16px;bottom:calc(146px + env(safe-area-inset-bottom));padding:14px 10px;border-radius:22px;background:var(--card);box-shadow:0 18px 50px rgba(0,0,0,.28);border:1px solid var(--border)}
   html.fab-aberto #fabMenu button{flex-direction:column-reverse;justify-content:flex-end;gap:7px;padding:8px 4px;border-radius:14px}
   html.fab-aberto #fabMenu button:active{background:var(--card2)}
   html.fab-aberto #fabMenu span{background:none;box-shadow:none;padding:0;font-size:12.5px;font-weight:700;text-align:center;line-height:1.2}
@@ -1699,7 +1699,7 @@ html,body{overflow-x:clip;touch-action:manipulation}
   html.fab-aberto .fab-menu{display:flex;flex-direction:column;align-items:flex-end;gap:12px;position:fixed;right:18px;bottom:calc(146px + env(safe-area-inset-bottom));z-index:9}
   .fab-menu button{display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;cursor:pointer;animation:fmIn .16s ease-out both}
   .fab-menu button.hide{display:none}
-  .fab-menu span{background:var(--card,#fff);color:var(--text);font-weight:700;font-size:15px;padding:8px 14px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  .fab-menu span{background:var(--card);color:var(--text);font-weight:700;font-size:15px;padding:8px 14px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   .fab-menu i{position:relative;display:grid;place-items:center;width:52px;height:52px;margin-right:2px;border-radius:50%;color:#fff;font-style:normal;box-shadow:0 8px 20px rgba(0,0,0,.25)}
   .fab-menu i svg{width:24px;height:24px}
   .fab-menu .fm-lig i{background:#1f6feb}.fab-menu .fm-ind i{background:#7c3aed}.fab-menu .fm-bz i{background:#0B4669}.fab-menu .fm-cart i{background:#16a34a}.fab-menu .fm-zap i{background:#25d366}.fab-menu .fm-add i{background:var(--destaque,#f5841f);font-size:28px;font-weight:400}
@@ -2356,6 +2356,14 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 @keyframes bzPulo{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
 @keyframes bzBrilho{0%,100%{box-shadow:0 10px 30px rgba(255,77,46,.45)}50%{box-shadow:0 10px 44px rgba(255,154,31,.9)}}
 @media (prefers-reduced-motion:reduce){#bzCorre,#bzCorre b{animation:none!important;transition:none}}
+
+.frm-res{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.frm-res>div{border:1px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--card);display:flex;flex-direction:column;gap:2px}.frm-res span{font-size:12px;color:var(--muted)}.frm-res b{font-size:22px;color:#14532d}.frm-res .sd b{color:var(--muted)}.frm-res small{font-size:11px;color:var(--muted)}
+.frm{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--card)}
+.frm-m{display:grid;grid-template-columns:1fr auto auto 18px;gap:14px;align-items:center;width:100%;padding:14px 16px;border:0;border-top:1px solid var(--border);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}.frm-m:first-child{border-top:0}
+.frm-m span{font-size:12px;color:var(--muted)}.frm-m strong{font-size:16px;min-width:110px;text-align:right}.frm-m i{font-style:normal;color:#c2410c;transition:transform .2s}.frm-m.on{background:rgba(30,64,120,.06)}.frm-m.on i{transform:rotate(90deg)}
+.frm-m.at b,.frm-m.at strong{color:#b91c1c}.frm-m.sd b,.frm-m.sd strong{color:var(--muted)}
+.frm-l{padding:6px 12px 12px;background:rgba(30,64,120,.04);display:flex;flex-direction:column;gap:6px}
+@media(max-width:600px){.frm-m{grid-template-columns:1fr auto 14px}.frm-m span{display:none}.frm-res b{font-size:18px}}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -2366,7 +2374,7 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .ac-prime{font-size:12.5px;color:var(--muted)}
 
 /* v167: agenda de visitas em Meus corretores */
-.ag-card{margin-bottom:16px;padding:16px}.t3-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px}.t3-grade figure{margin:0;display:flex;flex-direction:column;gap:8px}.t3-grade img{width:100%;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.12)}.t3-grade figcaption{font-size:12.5px;color:var(--muted)}.ac-agenda-fim{margin-top:18px}.ac-rel{margin-top:10px;font-weight:700}@media (max-width:640px){.ac-agenda-fim .ag-seg{display:grid;grid-template-columns:repeat(3,1fr);width:100%}.ac-agenda-fim .ag-seg button{white-space:normal;line-height:1.2;padding:7px 4px;font-size:12.5px}}.ac-data{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card,#fff);border:1px solid var(--line,#e5e7eb);border-radius:10px;padding:4px 8px}.ac-data.on{border-color:var(--accent,#E2622B);color:var(--accent,#E2622B)}.ac-data input{border:0;background:transparent;font:inherit;color:var(--text,inherit);padding:2px}.ag-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}.ag-top h2{margin:0;font-size:17px}.ag-top span{font-size:12.5px;color:var(--muted)}
+.ag-card{margin-bottom:16px;padding:16px}.t3-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px}.t3-grade figure{margin:0;display:flex;flex-direction:column;gap:8px}.t3-grade img{width:100%;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.12)}.t3-grade figcaption{font-size:12.5px;color:var(--muted)}.ac-agenda-fim{margin-top:18px}.ac-rel{margin-top:10px;font-weight:700}@media (max-width:640px){.ac-agenda-fim .ag-seg{display:grid;grid-template-columns:repeat(3,1fr);width:100%}.ac-agenda-fim .ag-seg button{white-space:normal;line-height:1.2;padding:7px 4px;font-size:12.5px}}.ac-data{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line,#e5e7eb);border-radius:10px;padding:4px 8px}.ac-data.on{border-color:var(--accent,#E2622B);color:var(--accent,#E2622B)}.ac-data input{border:0;background:transparent;font:inherit;color:var(--text,inherit);padding:2px}.ag-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}.ag-top h2{margin:0;font-size:17px}.ag-top span{font-size:12.5px;color:var(--muted)}
 .ag-seg button i{font-style:normal;font-size:11px;font-weight:800;margin-left:6px;padding:1px 6px;border-radius:99px;background:var(--card2)}.ag-seg button.on i{background:color-mix(in srgb,var(--accent) 18%,var(--card));color:var(--accent)}
 .ag-lista{display:flex;flex-direction:column;gap:6px;max-height:430px;overflow:auto}
 .ag-dia{font-size:12px;font-weight:800;color:var(--muted);margin:8px 0 2px;text-transform:capitalize}
@@ -3641,7 +3649,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
           <div class="an-topo-bts"><button class="btn btn-ghost hide" id="bzExpBt" onclick="exportarBolsao()">Exportar planilha</button><button class="btn btn-ghost hide" id="bzDispBt" onclick="abrirDisparo()">Configurar disparo</button><button class="btn btn-primary hide" id="bzDisparaBt" onclick="dispararBolsao()">Disparar</button><button class="btn btn-ghost hide" id="bzPerdBt" onclick="abrirPerdidos()">Trazer clientes perdidos</button><button class="btn btn-primary hide" id="bzNovoBt" onclick="abrirBolsaoNovo()">+ Adicionar</button></div></div>
         <div id="bzMl"></div>
         <div class="an-tabs" id="bzTabs" style="margin-bottom:10px"></div>
-        <div class="bz-busca" style="margin-bottom:14px;position:relative"><input id="bzBuscaI" type="search" inputmode="search" placeholder="Pesquisar pelo número ou pelo nome do cliente" oninput="bzBuscar(this.value)" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:12px;font-size:15px;background:var(--card,#fff);color:inherit"></div>
+        <div class="bz-busca" style="margin-bottom:14px;position:relative"><input id="bzBuscaI" type="search" inputmode="search" placeholder="Pesquisar pelo número ou pelo nome do cliente" oninput="bzBuscar(this.value)" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:12px;font-size:15px;background:var(--card);color:inherit"></div>
         <div id="bzLista"></div>
       </section>
 
@@ -7970,7 +7978,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 420;
+const APP_VERSAO = 422;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12338,7 +12346,7 @@ function renderBolsao(){
   const _foco = document.activeElement; if (_foco && $('bzLista').contains(_foco) && /^(SELECT|INPUT|TEXTAREA)$/.test(_foco.tagName)) return;
   const _sc = bzGuardaScroll();
   const gere = (souGerente() && !souCeo()) || souCoord();
-  $('bzNovoBt').classList.toggle('hide', !gere); $('bzPerdBt').classList.toggle('hide', !gere); $('bzExpBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDispBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').textContent = _bzTimer ? 'Parar disparo' : 'Disparar'; $('bzDisparaBt').classList.toggle('btn-primary', !_bzTimer); $('bzDisparaBt').classList.toggle('btn-ghost', !!_bzTimer);
+  $('bzNovoBt').classList.toggle('hide', !gere); $('bzPerdBt').classList.toggle('hide', !gere); $('bzExpBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDispBt').classList.toggle('hide', !(souGerente() && !souCeo())); $('bzDisparaBt').classList.toggle('hide', !(souGerente() && !souCeo())); { const lig = !!_bzTimer || bzDisp().ativo !== false; /* v422: ligado no Carteiro também conta: o botão mostra Parar */ $('bzDisparaBt').textContent = lig ? 'Parar disparo' : 'Disparar'; $('bzDisparaBt').classList.toggle('btn-primary', !lig); $('bzDisparaBt').classList.toggle('btn-ghost', lig); }
   const fila = bolsao.filter(x => x.status === 'fila').length;
   const abas = [['livres', 'Disponíveis', bzLivres().length], ['meus', 'Os que eu peguei', bzTodosMeus().length], ['ranking', 'Ranking', 0], ...(podeGerir() ? [['todos', 'Acompanhar', bolsao.filter(x => x.status !== 'livre' && x.status !== 'fila').length]] : []), ...(souGerente() && !souCeo() ? [['fila', 'Na fila', fila]] : [])];
   $('bzTabs').innerHTML = abas.map(([k, r, q]) => `<button class="${bzAba === k ? 'on' : ''}" onclick="bzVerAba('${k}')">${r}${q ? ` <i>${q}</i>` : ''}</button>`).join('');
@@ -12642,7 +12650,10 @@ async function bzSoltarUmaVez(){
 }
 function pararDisparo(){ if (_bzTimer) clearInterval(_bzTimer); _bzTimer = null; render(); }
 window.dispararBolsao = async () => {
-  if (_bzTimer) { pararDisparo(); toast('Disparo parado. O Carteiro segue soltando sozinho se o gatilho do Cloudflare estiver ligado.'); return; }
+  // v422: Parar de verdade: desliga o timer desta tela E o disparo automático do Carteiro (o Momento da ligação 10:30/14:30 continua)
+  if (_bzTimer || bzDisp().ativo !== false) { pararDisparo();
+    try { await gravar(setDoc(doc(db,'config','app'), { bolsaoDisparo:{ ...bzDisp(), ativo:false, paradoEm:Date.now(), paradoPor:perfil?.nome || '' } }, { merge:true })); toast('Disparo parado. Nenhum lead sai da fila até você tocar em Disparar de novo.'); }
+    catch(e) { toast('Não deu para parar: ' + e.message); } render(); return; }
   const c = bzDisp();
   if (!bolsao.some(x => x.status === 'fila')) { toast('A fila está vazia. Adicione leads com "Soltar aos poucos" marcado.'); return; }
   if (c.ativo === false) { try { await setDoc(doc(db,'config','app'), { bolsaoDisparo:{ ...c, ativo:true } }, { merge:true }); } catch(e) {} }
@@ -13901,6 +13912,11 @@ setInterval(() => saidaConferir(), SAIDA_INT);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { _saidaT = 0; setTimeout(() => saidaConferir(), 1500); } });
 setTimeout(() => saidaConferir(), 6e3);
 window.saidaConferir = saidaConferir; window.saidaPerguntar = saidaPerguntar;
+// v420: tocou na notificação com o app aberto -> abre direto a aba que avisou
+const abrirAbaDoLink = link => { const h = String(link || '').split('#')[1] || ''; if (!h) return; if (h === 'saida') { _saidaT = 0; saidaConferir(true); return; }
+  if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setView(h); else if (/^whatsapp\/|^plantao$/.test(h)) { location.hash = h; } };
+navigator.serviceWorker?.addEventListener('message', ev => { if (ev.data && ev.data.tipo === 'abrir-aba') abrirAbaDoLink(ev.data.link); });
+addEventListener('hashchange', () => { const h = location.hash.slice(1); if (h && TITULOS[h] && perfil && souAtivo()) { history.replaceState(null, '', location.pathname); abrirAbaDoLink('#' + h); } });
 addEventListener('hashchange', () => { if (location.hash === '#saida') { history.replaceState(null, '', location.pathname); _saidaT = 0; saidaConferir(true); } });
 // v241: relatório de visitas detalhado por período (a gerência e o coordenador escolhem as datas)
 const RV_GRUPOS = [['marcadas','Marcadas para essas datas','#0b57d0'],['realizadas','Realizadas','#11734b'],['canceladas','Canceladas','#b10202'],['pendentes','Pendentes','#b45309'],['adiadas','Adiadas','#7c3aed'],['faltaram','Não compareceu','#5b6b7c']];
@@ -14858,7 +14874,7 @@ function renderExtrato(){ renderPrefNotif();
 function renderFinanceiro(){
   if (view !== 'financeiro' || !souGerente()) return;
   if (!finMes || finMes < FIN_DESDE) window.finMes = mesAtual();
-  if (document.activeElement?.id !== 'finMesSel') { const todos = false; window.finComTodos = false;
+  if (document.activeElement?.id !== 'finMesSel') { const todos = false; /* v421: não zera o "Todos os meses" da aba Por corretor */
     $('finMesSel').innerHTML = mesesFin().map(m => `<option value="${m}">${nomeMes(m)}${m === mesAtual() ? ' (até hoje)' : ''}</option>`).join('');
     $('finMesSel').value = todos ? 'todos' : finMes; }
   const l = finDoMes(finMes), h = hojeISO();
@@ -15353,10 +15369,34 @@ window.fcMarcarPaga = async (id, sim) => {
   try { await gravar(setDoc(doc(db,'fin_vendas',id), d, { merge:true })); logFin(`${sim ? 'Marcou como paga' : 'Desmarcou paga'}: ${nome}`); toast(sim ? `Comissão de ${nome} marcada como paga ✓` : `${nome} voltou para pendente`); }
   catch(e) { toast('Erro: ' + e.message); }
 };
+// v421: quanto as construtoras têm para pagar em cada mês (todas as vendas, pela data prevista de cada parte)
+function htmlReceberMeses(){
+  const h = hojeISO(), itens = [];
+  vendasFin().filter(r => vendaAtivaFin(r) && (r.dia || '').slice(0, 7) >= FIN_DESDE).map(vendaFin).forEach(v => {
+    const corN = v.cor.map(c => primeiro(c.nome)).join(' + ') || nomeBonito(v.r.corretorTexto || '');
+    const base = { id:v.r.id, cli:nomeBonito(v.r.cliente || 'Cliente'), corN, cons:v.cons || v.r.empreendimento || '' };
+    if (v.tipo === 'adiantamento' && !v.f.recAdiant && v.adiant > 0) itens.push({ ...base, parte:'1ª parte', valor:v.adiant, data:v.prevA || '', falta:v.prevA ? '' : 'falta assinar com a construtora' });
+    if (!v.f.recRestante && v.rest > 0) itens.push({ ...base, parte:v.tipo === 'adiantamento' ? '2ª parte' : 'Comissão', valor:v.rest, data:v.prevR || '', falta:v.prevR ? '' : 'falta assinar na Caixa' });
+  });
+  const grupos = new Map(), chave = it => !it.data ? 'zsem' : it.data < h ? 'atraso' : it.data.slice(0, 7);
+  itens.forEach(it => { const k = chave(it); if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(it); });
+  const ordem = [...grupos.keys()].sort((a, b) => a === 'atraso' ? -1 : b === 'atraso' ? 1 : a.localeCompare(b));
+  const tot = l => l.reduce((a, x) => a + x.valor, 0), geral = tot(itens.filter(x => x.data)), semData = tot(grupos.get('zsem') || []);
+  const nome = k => k === 'atraso' ? 'Atrasado (já passou da data)' : k === 'zsem' ? 'Sem data ainda' : nomeMes(k) + (k === h.slice(0, 7) ? ' (este mês)' : '');
+  const ab = (window._frmAb ||= new Set(['atraso', h.slice(0, 7)]));
+  if (!itens.length) return '<div class="fc-vazio">Nada a receber das construtoras.</div>';
+  return `<div class="hint" style="margin:6px 0 10px">O que as construtoras têm para pagar, mês a mês, pela data prevista de cada parte da comissão. Toque no mês para ver as vendas; toque na venda para abrir.</div>
+    <div class="frm-res"><div><span>Com data prevista</span><b>${brl(geral)}</b></div><div class="sd"><span>Sem data ainda</span><b>${brl(semData)}</b><small>esperando assinatura</small></div></div>
+    <div class="frm">${ordem.map(k => { const l = grupos.get(k).sort((a, b) => (a.data || '').localeCompare(b.data || '') || a.cli.localeCompare(b.cli, 'pt-BR')), on = ab.has(k);
+      return `<button class="frm-m ${k === 'atraso' ? 'at' : k === 'zsem' ? 'sd' : ''} ${on ? 'on' : ''}" onclick="frmAbre('${k}')"><b>${nome(k)}</b><span>${l.length} parte${l.length > 1 ? 's' : ''}</span><strong>${brl(tot(l))}</strong><i>›</i></button>`
+        + (on ? `<div class="frm-l">${l.map(x => `<button class="fc-cor-v" onclick="abrirVendaFin('${x.id}')"><span><b>${esc(x.cli)}</b><small>${esc(x.corN)}${x.cons ? ' · ' + esc(x.cons) : ''} · ${x.parte}</small></span><span class="fc-cor-vv">${brl(x.valor)}<small class="${k === 'atraso' ? 'pg' : ''}">${x.data ? dataBR(x.data) : x.falta}</small></span><i>›</i></button>`).join('')}</div>` : ''); }).join('')}</div>`;
+}
+window.frmAbre = k => { const s = (window._frmAb ||= new Set()); s.has(k) ? s.delete(k) : s.add(k); render(); };
 function htmlComissoes(){
-  const sub = window.finComSub === 'notas' ? 'notas' : 'vendas'; /* v418: a aba "Por corretor" saiu (a tabela "Comissão de cada corretor" em Vendas já abre as vendas) */
-  const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
+  const sub = ['notas','corretores','meses'].includes(window.finComSub) ? window.finComSub : 'vendas'; /* v421: a aba "Por corretor" voltou (o Allan quer a tela dela) */
+  const seg = `<div class="seg fin-subseg"><button class="${sub === 'vendas' ? 'on' : ''}" onclick="finComSub='vendas';render()">Vendas</button><button class="${sub === 'corretores' ? 'on' : ''}" onclick="finComSub='corretores';render()">Por corretor</button><button class="${sub === 'meses' ? 'on' : ''}" onclick="finComSub='meses';render()">A receber por mês</button><button class="${sub === 'notas' ? 'on' : ''}" onclick="finComSub='notas';render()">Notas fiscais</button></div>`;
   if (sub === 'notas') return seg + htmlNotas2();
+  if (sub === 'meses') return `<div class="fc-segs">${seg}</div>` + htmlReceberMeses();
   const h = hojeISO(), tiradas = vendasFin().filter(r => finVendas[r.id]?.excluida);
   // v283: segue o mês escolhido lá em cima (vendas pela data da reserva); dá para ver todos os meses
   const mesSel = finMes || mesAtual(), todosM = !!window.finComTodos, noMes = r => todosM ? (r.dia || '').slice(0, 7) >= FIN_DESDE : (r.dia || '').slice(0, 7) === mesSel;
@@ -15408,7 +15448,7 @@ function htmlComissoes(){
   /* v418: aba "Por corretor": cada corretor abre as vendas dele, e cada venda abre para ver e mexer */
   if (sub === 'corretores') { window._fcCorAberto = true;
     return `<div class="fc-segs">${seg}</div><div class="seg fin-subseg fc-mes"><button class="${todosM ? '' : 'on'}" onclick="finComTodos=false;render()">Vendas de ${mN}</button><button class="${todosM ? 'on' : ''}" onclick="finComTodos=true;render()">Todos os meses</button></div>
-      <div class="hint" style="margin:6px 0 10px">Toque no corretor para ver as vendas dele. Toque na venda para abrir e mexer.</div>` + (cores.length ? cores.length ? `<details class="fc-cor fc-cor-aba" open><summary>Comissão de cada corretor em ${nomeMes(mesSel).split(' de ')[0].toLowerCase()} <span>${cores.length}</span></summary>
+      <div class="hint" style="margin:6px 0 10px">Toque no corretor para ver as vendas dele. Toque na venda para abrir e mexer.</div>` + (cores.length ? cores.length ? `<details class="fc-cor fc-cor-aba" open><summary>Comissão de cada corretor ${todosM ? 'em todos os meses' : 'em ' + nomeMes(mesSel).split(' de ')[0].toLowerCase()} <span>${cores.length}</span></summary>
       <div class="fc-cor-t"><div class="fc-cor-h"><span>Corretor</span><span>Vendas</span><span>Comissão</span><span>Já pago</span><span>Falta pagar</span><span>A receber</span><span></span></div>
       ${cores.map(c => { const ab = (window._fcAb ||= new Set()).has(c.k), kq = esc(c.k).replace(/'/g, ''); /* v418: toque abre as vendas do corretor ali mesmo */
         const vsC = ab ? vsMes.filter(v => corsDe(v).some(x => ckey(x) === c.k)).sort((a, b) => (a.r.dia || '').localeCompare(b.r.dia || '')) : [];

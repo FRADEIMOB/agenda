@@ -12,13 +12,14 @@ self.addEventListener('notificationclick', e => {
   const d = e.notification.data || {}, link = (d.FCM_MSG && d.FCM_MSG.data && d.FCM_MSG.data.link) || d.link || './';
   e.waitUntil(clients.matchAll({ type:'window', includeUncontrolled:true }).then(ws => {
     for (const w of ws) if (w.url.includes('/agenda/') && 'focus' in w) {
-      if (link.includes('#') && 'navigate' in w) return w.navigate(link).then(x => (x || w).focus());
+      // v420: app já aberto -> vai para a aba da notificação (ex.: #bolsao) sem recarregar
+      try { w.postMessage({ tipo:'abrir-aba', link }); } catch (er) {}
       return w.focus();
     }
     return clients.openWindow(link);
   }));
 });
-const CACHE = 'minha-agenda-v420';
+const CACHE = 'minha-agenda-v422';
 const ARQUIVOS = ['./', './index.html', './manifest.json', './frade-icone-192.png', './frade-icone-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './frade-icone-180.png', './logo-frade.png', './logo-frade-claro.png'];
 
 self.addEventListener('install', e => {
