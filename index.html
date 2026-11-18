@@ -7588,7 +7588,7 @@ window.formatarValor = el => { if (ehReais(el)) return; const n = lerValor(el.va
 // ---------- ranking de VGV (valor geral de vendas) ----------
 function rankingVgv(de, ate, eqF){
   const g = new Map();
-  const fonte = opTudo() ? vendasUnificadas(de, ate) : rankingVendas.filter(x => !x.caiu && x.dia >= de && x.dia <= ate).map(x => ({ valor:x.valor || 0, corretores:x.corretores || [], equipe:(x.corretores || [])[0]?.equipe || '' }));
+  const fonte = opTudo() ? vendasUnificadas(de, ate) : rankingVendas.filter(x => !x.caiu && x.dia >= de && x.dia <= ate).map(x => { const cs = (x.corretores || []).map(c => ({ ...c, equipe:eqNaData(c.uid, x.dia, c.equipe) })); return { valor:x.valor || 0, corretores:cs, equipe:cs[0]?.equipe || '' }; });
   fonte.forEach(v => {
     const cs = v.corretores.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:v.equipe }];
     cs.forEach(c => { if (eqF && c.equipe !== eqF) return;
@@ -7861,7 +7861,7 @@ function renderPainelPapel(){
   const rkP = pontosDoMes(mesAtual()), pPos = rkP.findIndex(g => g.uid === uidAtual), pEu = rkP[pPos];
   // cartão do perfil
   // aprovações = planilha + cartas do app, sem repetir cliente; vendas = reservas + cartas vendidas
-  const aprovMes = aprovUnificadas(avaliacoes.filter(a => a.data >= mi && a.data <= mf), cartas.filter(noMes));
+  const aprovMes = aprovUnificadas(avaliacoesAprov.filter(a => a.data >= mi && a.data <= mf), cartas.filter(noMes));
   const minhasCartas = aprovMes.filter(x => x.uid === uidAtual).length;
   const totMes = visitas.filter(v => v.date >= mi && v.date <= mf && v.status !== 'Cancelada').length /* v246: mesma lista da aba Visitas (Este mês) */, cartasMes = cartas.filter(noMes).length;
   const vendasMes = souGerente() ? vendasUnificadas(mi, mf).length : cartas.filter(vendaNoMes).length, minhasVendas = cartas.filter(c => c.corretorUid === uidAtual && vendaNoMes(c)).length;
@@ -7993,7 +7993,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 424;
+const APP_VERSAO = 426;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8332,6 +8332,16 @@ function filtrarAvaliacoes(){
   // doc que veio do WhatsApp some sozinho quando a administração lança o mesmo cliente na planilha (não conta duas vezes)
   avaliacoesTodas.forEach(a => { if (a.origem !== 'whatsapp') { if (a.cpfNorm) naPlan.add('c' + a.cpfNorm); if (a.telNorm) naPlan.add('t' + a.telNorm); } });
   avaliacoes = avaliacoesTodas.filter(a => !ig.has(chaveAba(a.aba)) && !(a.origem === 'whatsapp' && ((a.cpfNorm && naPlan.has('c' + a.cpfNorm)) || (a.telNorm && naPlan.has('t' + a.telNorm)))));
+  // v424: para os números de aprovações (Desempenho, Painel, resumo do perfil) o GRUPO DE CRÉDITO é o mais certeiro (o Allan: "a atualização mais certeira sempre vai ser dos grupos").
+  // Se o grupo já tem a resposta da Prime (aprovado, condicionado, reprovado, restrição), vale o grupo. Se o grupo ainda está só no pedido (avaliação, verificar CPF), vale a planilha.
+  // O ranking continua usando "avaliacoes" (não muda).
+  { const chs = a => [a.cpfNorm && 'c' + a.cpfNorm, a.telNorm && 't' + a.telNorm].filter(Boolean), resp = a => ['aprovado','condicionado','reprovado','outro'].includes(infoStatus(a.status).g);
+    const quando = a => [a.data || '', ...(a.envios || []).map(e => String(e).split('|')[0])].filter(Boolean).sort().pop() || '';
+    const grupo = new Map(); avaliacoesTodas.forEach(a => { if (a.origem !== 'whatsapp' || ig.has(chaveAba(a.aba)) || !resp(a)) return; chs(a).forEach(k => { const o = grupo.get(k); if (!o || quando(a) >= quando(o)) grupo.set(k, a); }); });
+    const doGrupo = a => chs(a).map(k => grupo.get(k)).find(Boolean);
+    const base = avaliacoes.filter(a => { if (a.origem === 'whatsapp') return true; const gr = doGrupo(a); return !(gr && infoStatus(a.status).g === 'aprovado' && infoStatus(gr.status).g !== 'aprovado'); });
+    const naBase = new Set(base); const extra = [...new Set(grupo.values())].filter(a => infoStatus(a.status).g === 'aprovado' && !naBase.has(a));
+    avaliacoesAprov = [...base, ...extra]; }
 }
 // abas que cada cargo NÃO vê (o gestor liga e desliga em Configurações → Abas por cargo)
 const ABAS_OCULTAS_PADRAO = { corretor:['whatsapp','analises','bolsao'], anjo:['whatsapp','analises','bolsao'], coordenador:['whatsapp'], sdr:[], adm:[], marketing:[] };
@@ -8572,6 +8582,9 @@ function pontosDoMesBase(m, val, corte){
     const x = pega({ corretorUid:r.uid, corretorNome:(RK().find(p => p.uid === r.uid) || {}).nome || r.nome, equipe:r.equipe });
     const diasPres = new Set([...Object.keys(r.pres || {}), ...Object.keys(r.chk || {})]);
     const pr = diasPres.size, l = somaCap(r.lig, val) + somaCap(r.rec, val), c = 0;
+    // v426: decisão do Allan (18/11): a partir de 18/11, ligação de dia sem check-in (nem presença marcada) não dá ponto. A ligação continua aparecendo no número de ligações
+    const ligChkDesde = String(val.ligSoCheckinDesde ?? '2026-11-18'), comChk = mp => Object.fromEntries(Object.entries(mp || {}).filter(([d]) => !ligChkDesde || d < ligChkDesde || diasPres.has(d)));
+    const lPts = somaCap(comChk(r.lig), val) + somaCap(comChk(r.rec), val); x.ligSemChk = (x.ligSemChk || 0) + (l - lPts);
     // v196: presença só pontua a partir da data escolhida; a tarde é o 2º check-in do dia
     const presDesde = String(val.presencaDesde || ''), prPts = [...diasPres].filter(d => !presDesde || d >= presDesde).length;
     const tardes = Object.keys(r.chkt || {}).filter(d => (!presDesde || d >= presDesde) && d >= String(val.tardeDesde || '')).length;
@@ -8593,7 +8606,7 @@ function pontosDoMesBase(m, val, corte){
     const agora = new Date(), hj = hojeISO(), lim = Number(val.funilHora) || 18;
     const semFunil = n('funil') ? [...diasPres].filter(d => d < hj || (d === hj && agora.getHours() >= lim)).filter(d => !(r.fun || {})[d]).length : 0;
     x.prospectos = (x.prospectos || 0) + pro; x.indicacoes = (x.indicacoes || 0) + ind; x.semFunil = (x.semFunil || 0) + semFunil;
-    x.pontos += prPts * n('presenca') + tardes * n('presencaTarde') + Math.floor(l / bloco) * n('ligacao')
+    x.pontos += prPts * n('presenca') + tardes * n('presencaTarde') + Math.floor(lPts / bloco) * n('ligacao')
       + pro * n('prospecto') + ind * n('indicacao') + doca * n('docsAnexados') + semFunil * n('funil') + dg * n('docGeral');
   });
   // ausência: dia de trabalho (já passado) sem presença no escritório nem externa
@@ -8746,6 +8759,28 @@ let _assDesde = '';
 function pontosEntre(de, ate, inicioRk){
   _assDesde = inicioRk || ''; try { return pontosEntre0(de, ate); } finally { _assDesde = ''; }
 }
+/* v425: quem troca de equipe no meio do período leva os pontos dele, mas na soma das EQUIPES
+   o que ele fez antes da troca continua com a equipe antiga (perfil.trocasEquipe: [{dia, de, para}]). */
+const _trocaCache = new Map();
+function eqNaData(uid, dia, eqAtual){ const p = uid && (perfisTodos || []).find(x => x.uid === uid); if (!p || !dia) return eqAtual;
+  const t = (p.trocasEquipe || []).filter(tr => tr && tr.dia && tr.de && dia < tr.dia).sort((a, b) => a.dia.localeCompare(b.dia))[0]; return t ? t.de : eqAtual; }
+function marcaPer(l, de, ate, ini){ if (l) { l._de = de; l._ate = ate; l._ini = ini || de; } return l; }
+function ptsEq(l, eqId, pos, eqF){
+  const eq = eqF || (x => x.equipe), v = x => pos ? Math.max(0, x.pontos || 0) : (x.pontos || 0);
+  let t = (l || []).filter(x => eq(x) === eqId).reduce((a, x) => a + v(x), 0);
+  if (!l || !l._de) return t;
+  (perfisTodos || []).forEach(p => (p.trocasEquipe || []).forEach(tr => {
+    if (!tr || !tr.dia || !tr.de || tr.dia <= l._de || tr.dia > (l._ate || '9999-12-31')) return;
+    const x = l.find(y => y.uid === p.uid); if (!x) return;
+    const k = [p.uid, l._de, tr.dia, l._ini, rankingDocs.length, rankingAtiv.length, rankingCartas.length].join('|');
+    let antes = _trocaCache.get(k);
+    if (antes === undefined) { antes = Math.max(0, (pontosEntre(l._de, somaDias(tr.dia, -1), l._ini).find(y => y.uid === p.uid) || {}).pontos || 0); _trocaCache.set(k, antes); }
+    antes = Math.min(antes, Math.max(0, v(x)));
+    if (tr.de === eqId && eq(x) !== eqId) t += antes;
+    if (eq(x) === eqId && tr.de !== eqId) t -= antes;
+  }));
+  return t;
+}
 function pontosEntre0(de, ate){
   const g = new Map(), h = hojeISO(); ate = !ate || ate > h ? h : ate;
   for (let m = de.slice(0, 7); m <= ate.slice(0, 7); m = (() => { const [a, b] = m.split('-').map(Number); return b === 12 ? `${a + 1}-01` : `${a}-${String(b + 1).padStart(2, '0')}`; })()) {
@@ -8762,8 +8797,8 @@ function renderRankingNovo(id){
   const r = rkTodos().find(x => x.id === id);
   if (!r || (r.encerrado && !souGerente())) { rankTipo = 'pontos'; render(); return; }
   const h = hojeISO(), fim = r.fim && r.fim < h ? r.fim : h, emCurso = !r.encerrado && (!r.fim || r.fim >= h) && r.inicio <= h;
-  const todos = r.inicio > h ? [] : rkLinhas(r);
-  const eqs = listaEquipes().map(e => ({ e, n:todos.filter(x => x.equipe === e.id).reduce((a, x) => a + x.pontos, 0) })), max = Math.max(0, ...eqs.map(x => x.n));
+  const todos = marcaPer(r.inicio > h ? [] : rkLinhas(r), r.inicio, fim, r.inicio);
+  const eqs = listaEquipes().map(e => ({ e, n:ptsEq(todos, e.id) })), max = Math.max(0, ...eqs.map(x => x.n));
   $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n === max ? 'lead' : ''}"><div class="ti">${esc(x.e.icone || '')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n === max ? ' · liderando' : ''}</span></div>`).join('');
   const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
   $('rankTit').textContent = r.nome;
@@ -9017,8 +9052,8 @@ function renderRankingPontos(){
   const mesesPts = [...new Set([mesAtual(), ...Object.keys(pontosMeses || {})])].filter(x => /^\d{4}-\d{2}$/.test(x)).sort().reverse();
   if (!souGerente() || !mesesPts.includes(rankMesPts)) window.rankMesPts = mesAtual();
   if ($('rMesPts')) { $('rMesPts').classList.toggle('hide', !souGerente()); if (souGerente()) $('rMesPts').innerHTML = mesesPts.map(x => `<option value="${x}" ${x === rankMesPts ? 'selected' : ''}>${nomeMes(x)}${x === mesAtual() ? ' (atual)' : ''}</option>`).join(''); }
-  const m = rankMesPts, todos = m === mesAtual() ? pontosDoMes(m) : linhasDoMes(m);
-  const eqs = listaEquipes().map(e => ({ e, n: todos.filter(x => x.equipe === e.id).reduce((a,x) => a + x.pontos, 0) }));
+  const m = rankMesPts, todos = m === mesAtual() ? marcaPer(pontosDoMes(m), m + '-01', hojeISO()) : linhasDoMes(m);
+  const eqs = listaEquipes().map(e => ({ e, n: ptsEq(todos, e.id) }));
   const max = Math.max(0, ...eqs.map(x => x.n));
   $('battle').innerHTML = eqs.map(x => `<div class="team-card ${x.n && x.n===max?'lead':''}"><div class="ti">${esc(x.e.icone||'')}</div><span>${esc(x.e.nome)}</span><b>${x.n}</b><span>pontos${x.n && x.n===max?' · liderando':''}</span></div>`).join('');
   const lista = todos.filter(x => !rankEquipe || x.equipe === rankEquipe);
@@ -9420,7 +9455,7 @@ function infoStatus(st){
   dias = dias === '' || dias === null || dias === undefined ? null : Number(dias);
   return { g, dias, cor:(GRUPOS_V[g] || GRUPOS_V['']).c, nome:(GRUPOS_V[g] || GRUPOS_V['']).n };
 }
-let avaliacoes = [], integ = {}, leadsDias = [], relatoriosLista = null;
+let avaliacoes = [], avaliacoesAprov = [], integ = {}, leadsDias = [], relatoriosLista = null;
 window.aFil = { busca:'', periodo:'mes', grupo:'', corretor:'' };
 
 function assinarEtapa2(){
@@ -9450,8 +9485,13 @@ function assinarEtapa2(){
       }
       if (!vivo) return;
       publicar();
-      const fim = onSnapshot(query(collection(db,'avaliacoes'), where('atualizadoEm','>', max)), s => {
-        s.docChanges().forEach(ch => { if (ch.type !== 'removed') pega(ch.doc); }); publicar(); }, silencio);
+      // v426: o "max" do que está guardado no aparelho não garante que o aparelho tem tudo antes dele (ex.: o carteiro gravou 17 docs
+      // às 16h com o app fechado e o aparelho já tinha uma doc das 19h): busca desde a última vez que este aparelho ouviu a nuvem, com folga de 2 horas
+      const kSinc = 'avalSinc:' + uidAtual; let ultSinc = 0; try { ultSinc = Number(localStorage.getItem(kSinc)) || 0; } catch(e) {}
+      const desde = Math.max(0, Math.min(max, ultSinc || 0) - 2 * 3600e3);
+      const fim = onSnapshot(query(collection(db,'avaliacoes'), where('atualizadoEm','>', desde)), s => {
+        s.docChanges().forEach(ch => { if (ch.type !== 'removed') pega(ch.doc); }); publicar();
+        if (!s.metadata.fromCache) { try { localStorage.setItem(kSinc, String(Date.now())); } catch(e) {} } }, silencio);
       if (vivo) subsPapel.push(fim); else fim();
     })();
   }
@@ -10161,13 +10201,13 @@ function sabadoFeirao(){ const d = new Date(); const dow = d.getDay(); d.setDate
 // v200: ranking novo na TV (mesmas colunas, contando só a partir da data de início)
 function dadosTvRkNovo(id){
   const r = rkTodos().find(x => x.id === id); if (!r) return null;
-  const h = hojeISO(), l = r.inicio > h ? [] : rkLinhas(r);
+  const h = hojeISO(), l = marcaPer(r.inicio > h ? [] : rkLinhas(r), r.inicio, r.fim && r.fim < h ? r.fim : h, r.inicio);
   const col = (k, t, sub, c, f) => ({ k, t, s:sub, c, l:l.map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe, v:f(x) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v) });
   const cols = [col('pts', 'Pontos', 'desde ' + dataBR(r.inicio).slice(0, 5), '#f28c38', x => x.pontos),
     col('vis', 'Visitas', 'realizadas', '#38bdf8', x => x.realizadas || 0),
     col('vgv', 'Vendas', 'reservas', '#22c55e', x => x.vendas || 0), col('lig', 'Ligações', 'pelo app', '#facc15', x => x.ligacoes || 0),
     col('bz', 'Presenças', 'manhã e tarde', '#2dd4bf', x => (x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0))];
-  const eqs = listaEquipes().map(e => ({ e, n:l.filter(x => x.equipe === e.id).reduce((a, x) => a + Math.max(0, x.pontos), 0) })).sort((a, b) => b.n - a.n);
+  const eqs = listaEquipes().map(e => ({ e, n:ptsEq(l, e.id, true) })).sort((a, b) => b.n - a.n);
   return { r, cols, eqs };
 }
 // v204: nome que aparece na TV (o apelido, como a pessoa é chamada no escritório)
@@ -10195,11 +10235,11 @@ function htmlTvApresenta(D, modo){
   const r = D.r, h = hojeISO(), tc = tardeCfg(), tardeHoje = h >= tc.desde;
   const curto = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? p[0] + ' ' + p[p.length - 1][0] + '.' : (p[0] || '—'); };
   const eqN = e => e ? eqNome(e).replace(/^[^\p{L}]+/u, '').trim() : '';
-  const lista = (de, ate) => (de > h ? [] : pontosEntre(de, ate, r.inicio)).map(x => ({ ...x, ck:(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0) })).filter(x => x.pontos > 0 || x.ck).sort((a, b) => b.pontos - a.pontos || b.ck - a.ck);
+  const lista = (de, ate) => marcaPer((de > h ? [] : pontosEntre(de, ate, r.inicio)).map(x => ({ ...x, ck:(x.presPontua ?? x.presencas ?? 0) + (x.tardes || 0) })).filter(x => x.pontos > 0 || x.ck).sort((a, b) => b.pontos - a.pontos || b.ck - a.ck), de, ate > h ? h : ate, r.inicio);
   const podio = l => { const t = l.slice(0, 3); if (!t.length) return '';
     const ordem = [t[1], t[0], t[2]].map((x, i) => x ? { x, pos:[2, 1, 3][i] } : null).filter(Boolean);
     return `<div class="tvp-pod">${ordem.map(({ x, pos }) => `<div class="tvp-p p${pos}">${avTv(x.uid, x.nome, 'tvp-av')}<b>${esc(nomeTv(x.uid, x.nome))}</b><small>${x.pontos.toLocaleString('pt-BR')} pontos</small><div class="tvp-deg"><span>${pos}</span></div></div>`).join('')}</div>`; };
-  const equipes = l => { const es = listaEquipes().map(e => ({ e, n:l.filter(x => x.equipe === e.id).reduce((a, x) => a + Math.max(0, x.pontos), 0), q:l.filter(x => x.equipe === e.id).length })).filter(x => x.q);
+  const equipes = l => { const es = listaEquipes().map(e => ({ e, n:ptsEq(l, e.id, true), q:l.filter(x => x.equipe === e.id).length })).filter(x => x.q || x.n);
     const max = Math.max(0, ...es.map(x => x.n));
     return es.length ? `<div class="tvp-eqs">${es.map(x => `<div class="tvp-eq ${x.n && x.n === max ? 'lider' : ''}"><span>${esc(eqN(x.e.id))}</span><b>${x.n.toLocaleString('pt-BR')}</b><small>pontos${x.n && x.n === max ? ' · liderando' : ''}</small></div>`).join('')}</div>` : ''; };
   const COLS = [['pts','Pontos','#f28c38'],['ck','Check-in','#2dd4bf'],['lig','Ligações','#facc15'],['docs','Docs','#38bdf8'],['vr','Realizadas','#22c55e'],['vd','Vendas','#a78bfa']];
@@ -10248,7 +10288,8 @@ function dadosTvRank(){
   const ligSab = agrupa(rankingAtiv.filter(r => r.lig?.[sab] || r.rec?.[sab]), r => r.uid, r => r.nome, r => r.equipe, r => (Number(r.lig?.[sab]) || 0) + (Number(r.rec?.[sab]) || 0));
   const resSab = (() => { const g = new Map(); rankingVendas.filter(v => !v.caiu && noM(v.dia)).forEach(v => { const cs = v.corretores?.length ? v.corretores : [{ uid:'', nome:'Sem corretor', equipe:'' }]; cs.forEach(c => { const k = c.uid || 'n:' + norm(c.nome); if (!g.has(k)) g.set(k, { uid:c.uid, nome:nm(c.uid, c.nome), equipe:eqDe(c.uid, c.equipe), v:0 }); g.get(k).v += 1 / cs.length; }); }); return [...g.values()].sort((a, b) => b.v - a.v); })();
   const sdr = rankingSdr(de, ate).map(x => ({ uid:x.uid, nome:x.nome, equipe:'', v:Number(x.docs) || 0, sub:'SDR' })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
-  const eqs = listaEquipes().map(e => ({ e, n:pontosDoMes(m).filter(x => eqDe(x.uid, x.equipe) === e.id).reduce((a, x) => a + x.pontos, 0) })).sort((a, b) => b.n - a.n);
+  const ptsM = marcaPer(pontosDoMes(m), m + '-01', hojeISO());
+  const eqs = listaEquipes().map(e => ({ e, n:ptsEq(ptsM, e.id, false, x => eqDe(x.uid, x.equipe)) })).sort((a, b) => b.n - a.n);
   const dSab = sab.slice(8,10) + '/' + sab.slice(5,7);
   const feirao = [
     { k:'flig', t:'Ligações', s:'geral do mês', c:'#facc15', l:lig }, // v111: no feirão as 3 colunas são gerais do mês
@@ -18082,7 +18123,8 @@ function vendasUnificadas(de, ate){
     const k = ck(c.cpf, c.telNorm || chaveTel(c.telefone), c.id);
     if (!m.has(k)) m.set(k, { dia:c.vendaEm || c.data, cliente:c.cliente, valor:0, corretores:[{ uid:c.corretorUid, nome:c.corretorNome, equipe:c.equipe || '' }], equipe:c.equipe || '', fonte:'carta' });
   });
-  return [...m.values()];
+  // v425: venda feita antes de o corretor trocar de equipe fica com a equipe em que ele estava
+  return [...m.values()].map(v => { const cs = (v.corretores || []).map(c => ({ ...c, equipe:eqNaData(c.uid, v.dia, c.equipe) })); return { ...v, corretores:cs, equipe:cs.length ? (v.fonte === 'reserva' ? eqPrincipal(cs) : cs[0].equipe) : v.equipe }; });
 }
 window.vendasUnificadas = vendasUnificadas;
 function numerosPeriodo(de, ate){
@@ -18100,7 +18142,7 @@ function numerosPeriodo(de, ate){
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
     semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
-    sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoes.filter(a => noP(a.data)), cs), vendas:vendasUnificadas(de, ate).length, vendasL:vendasUnificadas(de, ate), valorVendido:vendasUnificadas(de, ate).reduce((a,v) => a + v.valor, 0), valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
+    sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoesAprov.filter(a => noP(a.data)), cs), vendas:vendasUnificadas(de, ate).length, vendasL:vendasUnificadas(de, ate), valorVendido:vendasUnificadas(de, ate).reduce((a,v) => a + v.valor, 0), valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
 }
 function variacao(a, b){
@@ -18295,7 +18337,7 @@ function calcDesempenho(de, ate){
   // aprovações: planilha + cartas do app, sem repetir cliente
   const m = new Map(), chaveCli = (cpf, tel, id) => { const c = soDig(cpf); return c.length === 11 ? 'c' + c : (tel ? 't' + tel : 'i' + id); };
   // v172: igual ao relatório do mês: toda linha aprovada da planilha com data no período conta, o mesmo cliente uma vez só
-  avaliacoes.filter(a => a.data >= de && a.data <= ate && infoStatus(a.status).g === 'aprovado').forEach(a => { const k = chaveCli(a.cpfNorm || a.cpf, a.telNorm, a.id); if (!m.has(k)) m.set(k, [a.corretorUid, a.corretorNome || a.aba, a.equipe]); });
+  avaliacoesAprov.filter(a => a.data >= de && a.data <= ate && infoStatus(a.status).g === 'aprovado').forEach(a => { const k = chaveCli(a.cpfNorm || a.cpf, a.telNorm, a.id); if (!m.has(k)) m.set(k, [a.corretorUid, a.corretorNome || a.aba, a.equipe]); });
   cartas.filter(c => c.data >= de && c.data <= ate).forEach(c => { const k = chaveCli(c.cpfNorm || c.cpf, c.telNorm || chaveTel(c.telefone), c.id); m.set(k, [c.corretorUid, c.corretorNome, c.equipe]); });
   m.forEach(([uid, nome, eq]) => { pega(uid, nome, eq).aprov++; });
   // vendas (reservas): em parceria, conta para cada corretor da reserva; no total conta uma vez
@@ -19197,7 +19239,7 @@ function montarResumosSdr(){
 async function sincDocsSdr(){
   if (!souGerente() || souCeo() || !sdrResumos.length) return;
   const meses = [mesAtual(), mesAnterior(1)], porDoc = new Map();
-  sdrResumos.filter(x => !ehWa(x.sdrUid) && meses.includes((x.dia || '').slice(0, 7))).forEach(x => { const k = x.dia.slice(0, 7) + '_' + x.sdrUid; if (!porDoc.has(k)) porDoc.set(k, { m:x.dia.slice(0, 7), uid:x.sdrUid, nome:x.sdrNome, equipe:x.equipe, dias:{} }); porDoc.get(k).dias[x.dia] = docsDoResumo(x); });
+  sdrResumos.filter(x => !ehWa(x.sdrUid) && meses.includes((x.dia || '').slice(0, 7))).forEach(x => { const k = x.dia.slice(0, 7) + '_' + x.sdrUid; if (!porDoc.has(k)) porDoc.set(k, { m:x.dia.slice(0, 7), uid:x.sdrUid, nome:x.sdrNome, equipe:x.equipe, dias:{} }); porDoc.get(k).dias[x.dia] = docsRankResumo(x); });
   const ops = [];
   porDoc.forEach((v, k) => { const atual = (rankingAtiv.find(r => r.id === k) || {}).sdoc || {}; const muda = Object.entries(v.dias).some(([d, q]) => Number(atual[d] || 0) !== q); if (muda) ops.push([k, v]); });
   for (let i = 0; i < ops.length; i += 200) { const b = writeBatch(db); ops.slice(i, i + 200).forEach(([k, v]) => b.set(doc(db,'ranking_ativ', k), { mes:v.m, uid:v.uid, nome:v.nome || '', equipe:v.equipe || '', sdoc:v.dias, atualizadoEm:Date.now() }, { merge:true })); try { await b.commit(); } catch(e) { console.warn('sinc docs SDR', e.message); return; } }
@@ -19933,9 +19975,12 @@ function lerFormResumo(){
 }
 // v173: CPF também conta como documentação
 const docsDoResumo = r => ['novos','recuperados'].reduce((a, k) => a + ['crm','insta'].reduce((b, c) => b + (Number(r[k]?.[c]?.doc) || 0) + (Number(r[k]?.[c]?.cpf) || 0), 0), 0);
+// v426: resumo corrigido pela gerência guarda em docRank o número que já estava no ranking (o ranking não muda; o relatório mostra o número corrigido)
+const docsRankResumo = r => (r && r.docRank !== undefined && r.docRank !== null && r.docRank !== '') ? Number(r.docRank) || 0 : docsDoResumo(r);
 async function gravarResumo(r, sdr){
   const id = `${r.dia}_${sdr.uid}`;
-  if (!ehWa(sdr.uid)) { const m = r.dia.slice(0, 7); try { await setDoc(doc(db,'ranking_ativ', m + '_' + sdr.uid), { mes:m, uid:sdr.uid, nome:sdr.nome || '', equipe:sdr.equipe || '', sdoc:{ [r.dia]:docsDoResumo(r) }, atualizadoEm:Date.now() }, { merge:true }); } catch(e) { console.warn('docs da SDR no ranking', e.message); } }
+  { const ant = (sdrResumosBrutos || []).find(x => x.id === id); if (ant && ant.docRank !== undefined && ant.docRank !== null && ant.docRank !== '') r = { ...r, docRank:ant.docRank }; }
+  if (!ehWa(sdr.uid)) { const m = r.dia.slice(0, 7); try { await setDoc(doc(db,'ranking_ativ', m + '_' + sdr.uid), { mes:m, uid:sdr.uid, nome:sdr.nome || '', equipe:sdr.equipe || '', sdoc:{ [r.dia]:docsRankResumo(r) }, atualizadoEm:Date.now() }, { merge:true }); } catch(e) { console.warn('docs da SDR no ranking', e.message); } }
   await gravar(setDoc(doc(db,'sdr_resumos',id), { ...r, autor:r.autor || '', sdrUid:sdr.uid, sdrNome:sdr.nome, equipe:sdr.equipe || '', texto:textoResumo(r), por:perfil.nome, em:Date.now() }));
 }
 window.salvarResumoSdr = async (mandar) => {
