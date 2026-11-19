@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<script>(function(){var f=null;try{f=localStorage.getItem("natalTema")}catch(e){}var d=new Date(),md=(d.getMonth()+1)*100+d.getDate(),tv=/[?&]tv=|#tv/.test(location.href);var on=!tv&&(f==="on"||(f!=="off"&&(md>=1201||md<=106)));window.NATAL=on;if(on)document.documentElement.classList.add("natal");})();</script>
+<script>(function(){var f=null;try{f=localStorage.getItem("natalTema")}catch(e){}var d=new Date(),md=(d.getMonth()+1)*100+d.getDate(),tv=/[?&]tv=|#tv/.test(location.href);var on=!tv&&(f==="on"||(f!=="off"&&(md>=1119||md<=106)));window.NATAL=on;if(on)document.documentElement.classList.add("natal");})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Minha Agenda · Frade Imóveis</title>
 <meta name="description" content="Minha Agenda: tarefas, compromissos e lembretes sincronizados em todos os seus aparelhos.">
@@ -4168,11 +4168,9 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
               <button class="btn btn-primary" id="btnNotif" onclick="ativarNotificacoes()">Ativar</button></div>
             <div class="set-row hide" id="rowTesteNotif"><div><b>Testar notificação</b><span>Envia uma notificação para este aparelho</span></div>
               <button class="btn btn-ghost" onclick="testarNotificacao()">Testar</button></div>
-            <div class="set-row gerente-only hide"><div><b>Tema de Natal neste aparelho</b><span>Liga sozinho de 01/12 a 06/01. Ligue aqui para ver antes.</span></div>
+            <div class="set-row gerente-only hide"><div><b>Tema de Natal neste aparelho</b><span>Ligado de 19/11 a 06/01. Aqui dá para desligar neste aparelho.</span></div>
               <select id="cfgNatal" style="width:auto" onchange="natalTema(this.value)"><option value="">Automático</option><option value="on">Ligado</option><option value="off">Desligado</option></select></div>
-            <div class="set-row"><div><b>Tour do app</b><span>Mostra de novo, passo a passo, onde fica cada coisa</span></div>
-              <button class="btn btn-ghost" onclick="abrirTour(true)">Ver o tour</button></div>
-            <div class="set-row"><div><b>Tema</b><span>Claro, escuro ou igual ao aparelho</span></div>
+                        <div class="set-row"><div><b>Tema</b><span>Claro, escuro ou igual ao aparelho</span></div>
               <div class="seg" id="segTema"></div></div>
             <div class="set-row"><div><b>Lembretes</b><span>Aviso antes das tarefas com horário (com o app aberto)</span></div>
               <label class="toggle"><input type="checkbox" id="cfgNotifChk" onchange="alternarNotif(this.checked)"><span></span></label></div>
@@ -8128,7 +8126,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 428;
+const APP_VERSAO = 429;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12764,7 +12762,8 @@ window.bzRecircularAgora = () => { _bzVoltaT = 0; return bzRecircular(); };
 const BZ_MIN_LIG = () => { const v = Number(appCfg.bolsaoMinLig); return isFinite(v) && v >= 0 ? v : 3; };
 const bzLigs = x => (x.historico || []).filter(h => h.txt === 'ligou');
 const bzMinhasLigs = x => bzLigs(x).filter(h => h.uid === uidAtual && (h.em || 0) >= (x.pegoEm || 0)).length;
-const bzFaltaInsistir = x => x.status === 'pego' && x.pegoPor === uidAtual && !x.resultado && bzMinhasLigs(x) < BZ_MIN_LIG();
+// v429: só trava por cliente pego HOJE. Antes um cliente antigo, de dias atrás, sem as 3 ligações travava o corretor para sempre (ele não conseguia pegar mais nenhum)
+const bzFaltaInsistir = x => x.status === 'pego' && x.pegoPor === uidAtual && !x.resultado && bzMinhasLigs(x) < BZ_MIN_LIG() && (x.pegoDia ? x.pegoDia === hojeISO() : Date.now() - (Number(x.pegoEm) || 0) < 24 * 3600e3);
 async function bzRegistrarLigacao(tel){
   const t = chaveTel(tel); if (!t) return;
   const x = bolsao.find(b => b.status === 'pego' && b.pegoPor === uidAtual && chaveTel(b.telefone) === t); if (!x) return;
@@ -14471,7 +14470,8 @@ async function abrirTour(forcar){
   drv({ showProgress:true, progressText:'{{current}} de {{total}}', nextBtnText:'Próximo', prevBtnText:'Voltar', doneBtnText:'Entendi', popoverClass:'frade-tour', steps:passos }).drive();
 }
 window.abrirTour = abrirTour;
-setInterval(() => { try { if (perfil && uidAtual && souAtivo() && !document.hidden) abrirTour(false); } catch(e) {} }, 4000);
+// v429: tour desligado (no celular saía fora da tela). abrirTour fica só no código, sem chamada automática nem botão
+try { document.querySelectorAll('.driver-overlay,.driver-popover').forEach(e => e.remove()); } catch(e) {}
 
 function avisarSubiuRanking(lista, pos){
   if (!['corretor','coordenador','anjo'].includes(perfil?.papel)) return;
