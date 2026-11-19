@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script>(function(){var f=null;try{f=localStorage.getItem("natalTema")}catch(e){}var d=new Date(),md=(d.getMonth()+1)*100+d.getDate(),tv=/[?&]tv=|#tv/.test(location.href);var on=!tv&&(f==="on"||(f!=="off"&&(md>=1201||md<=106)));window.NATAL=on;if(on)document.documentElement.classList.add("natal");})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Minha Agenda · Frade Imóveis</title>
 <meta name="description" content="Minha Agenda: tarefas, compromissos e lembretes sincronizados em todos os seus aparelhos.">
@@ -2345,6 +2346,15 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 .fi-prev{background:#f3efe8;border-radius:12px;padding:10px;margin:6px 0 10px;max-height:58vh;overflow:auto;text-align:center}
 .fi-prev img{width:100%;max-width:420px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
 #bzCorre{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:9999;transform:translate(-50%,-160%);display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 26px;border:0;border-radius:18px;background:linear-gradient(135deg,#ff4d2e,#ff9a1f);color:#fff;font:inherit;box-shadow:0 10px 30px rgba(255,77,46,.45);cursor:pointer;transition:transform .45s cubic-bezier(.2,1.4,.4,1);max-width:calc(100vw - 32px)}
+#v-ranking.rk-carregando>*:not(.page-head){visibility:hidden}
+#v-ranking.rk-carregando,#tvRank.rk-carregando{position:relative;min-height:60vh}
+#v-ranking.rk-carregando::after,#tvRank.rk-carregando::after{content:"Atualizando o ranking…";position:absolute;left:0;right:0;top:120px;text-align:center;font-weight:700;font-size:16px;color:var(--muted,#6B7C8F)}
+#tvRank.rk-carregando::after{top:40vh;font-size:2vw;color:#9FB3C8}
+#tvRank.rk-carregando>*{visibility:hidden}
+#vendaNova{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:2147483000;width:min(420px,calc(100vw - 28px));transform:translate(-50%,-140%) scale(.9);background:linear-gradient(135deg,#022C45,#0B4669);color:#fff;border-radius:20px;padding:16px 18px;text-align:center;box-shadow:0 20px 50px rgba(2,44,69,.45);transition:transform .5s cubic-bezier(.2,1.4,.4,1);cursor:pointer}
+#vendaNova.on{transform:translate(-50%,0)}#vendaNova b{display:block;font-size:24px;font-weight:900;color:#FF8A1A;letter-spacing:.5px}#vendaNova span{font-size:15px;font-weight:600}
+.driver-popover.frade-tour{border-radius:16px;max-width:320px}.driver-popover.frade-tour .driver-popover-title{color:#022C45;font-weight:800;font-size:17px}.driver-popover.frade-tour .driver-popover-description{font-size:14.5px;line-height:1.45}
+.driver-popover.frade-tour .driver-popover-next-btn{background:#E8510C;color:#fff;text-shadow:none;border:0;border-radius:8px;padding:6px 12px}.driver-popover.frade-tour .driver-popover-prev-btn{border-radius:8px}
 #bzCorre b{font-size:20px;font-weight:900;letter-spacing:.5px;white-space:nowrap}
 #bzCorre span{font-size:13px;font-weight:600;opacity:.95}
 #bzCorre.on{transform:translate(-50%,0)}
@@ -3269,6 +3279,113 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 @media(max-width:760px){.fc-fil select{flex:1;min-width:0}.fc-cor-h,.fc-cor-l{grid-template-columns:1.4fr .5fr 1fr 1fr 24px;font-size:12.5px;padding:8px 10px}.fc-cor-h>:nth-child(4),.fc-cor-l>:nth-child(4),.fc-cor-h>:nth-child(6),.fc-cor-l>:nth-child(6){display:none}.fc-ks{grid-template-columns:1fr 1fr;gap:8px}.fc-k{padding:11px 12px}.fc-k b{font-size:19px}.fc-fil{flex-wrap:wrap}.fc-fil .btn{flex:1}.ic-res{grid-template-columns:1fr 1fr}}
 </style>
 <script>
+// v427: tema de Natal (01/12 a 06/01, ou forçado neste aparelho em Configurações). Só na abertura, no login, no gorro do F e no bolsão.
+// Gorro de pelúcia (estilo veludo + pelo), coordenadas próprias 0..600 x 0..520; a faixa de pelo fica embaixo à direita, a ponta cai para a esquerda com o pompom
+function gorroSVG(id){ id=id||'g';
+ const fios=(cx,cy,rx,ry,n,len)=>{let s='';for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,r=Math.sqrt(Math.random());const x=cx+Math.cos(a)*rx*r,y=cy+Math.sin(a)*ry*r;const ang=a+(Math.random()-.5)*.8;const l=len*(.5+Math.random()*.7);s+=`<path d="M${x.toFixed(1)} ${y.toFixed(1)} l${(Math.cos(ang)*l).toFixed(1)} ${(Math.sin(ang)*l).toFixed(1)}" stroke="${Math.random()<.5?'#fff':'#DCE3EA'}" stroke-width="${(1+Math.random()*1.6).toFixed(1)}" stroke-linecap="round" opacity="${(.5+Math.random()*.5).toFixed(2)}"/>`;}return s;};
+ return `<g>
+ <defs>
+  <filter id="${id}pelo" x="-15%" y="-25%" width="130%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="16" xChannelSelector="R" yChannelSelector="G"/></filter>
+  <filter id="${id}vel"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="2" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0" result="a"/><feComposite in="a" in2="SourceGraphic" operator="in" result="t"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="t"/></feMerge></filter>
+  <filter id="${id}sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#08192A" flood-opacity=".45"/></filter>
+  <linearGradient id="${id}v" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E52A35"/><stop offset=".45" stop-color="#C8101E"/><stop offset="1" stop-color="#8A0712"/></linearGradient>
+  <radialGradient id="${id}b" cx=".45" cy=".3" r=".75"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#F1F4F7"/><stop offset="1" stop-color="#C9D2DC"/></radialGradient>
+ </defs>
+ <g filter="url(#${id}sh)">
+  <g filter="url(#${id}vel)">
+   <path fill="url(#${id}v)" d="M130 330 C 120 250 150 170 230 120 C 300 76 390 70 450 110 C 520 156 560 240 572 330 Z"/>
+   <path fill="url(#${id}v)" d="M232 124 C 170 150 120 210 96 280 C 80 330 74 380 82 430 L 120 432 C 128 386 140 340 168 300 C 190 268 214 250 246 236 Z"/>
+   <path fill="#7A0610" opacity=".55" d="M168 300 C 190 262 230 236 270 226 C 236 214 208 176 232 124 C 180 160 140 220 128 300 Z"/>
+   <path fill="#FF5A63" opacity=".28" d="M300 110 C 360 92 430 108 470 150 C 420 126 360 120 300 138 Z"/>
+   <path fill="#5E040B" opacity=".35" d="M430 130 C 480 180 520 250 540 330 L 500 330 C 490 260 470 200 430 130 Z"/>
+  </g>
+  <g filter="url(#${id}pelo)"><rect x="118" y="296" width="472" height="96" rx="48" fill="url(#${id}b)"/></g>
+  ${fios(354,344,226,40,520,13)}
+  <g filter="url(#${id}pelo)"><circle cx="98" cy="452" r="50" fill="url(#${id}b)"/></g>
+  ${fios(98,452,44,44,260,12)}
+ </g></g>`; }
+
+
+window.__natalCSS = `
+ .nt-neve{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+ .nt-neve i{position:absolute;top:-12px;border-radius:50%;animation:ntCai linear infinite}
+ @keyframes ntCai{to{transform:translate3d(var(--dx,20px),110vh,0)}}
+ .nt-luzes{position:absolute;left:0;right:0;bottom:-14px;height:30px;pointer-events:none}
+ .nt-luzes svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+ .nt-luzes i{position:absolute;top:9px;width:9px;height:13px;margin-left:-4.5px;border-radius:50%/60% 60% 40% 40%;animation:ntPisca 1.6s ease-in-out infinite}
+ .nt-luzes i:before{content:"";position:absolute;left:2px;top:-3px;width:5px;height:4px;border-radius:1px;background:#0B2236}
+ @keyframes ntPisca{0%,100%{opacity:1;filter:brightness(1.15)}50%{opacity:.55;filter:brightness(.8)}}
+ #frAbre .fa-pn .nt-luzes{animation:faPnTx var(--T,3.8s) ease-out both}
+ @media (prefers-reduced-motion:reduce){.nt-neve{display:none}.nt-luzes i{animation:none}}
+ 
+ .nt-nw{position:absolute;left:40.80%;top:-27.46%;width:58.59%;aspect-ratio:1;pointer-events:none;clip-path:polygon(-100.0% -300%,200.0% -300%,200.0% 177.9%,-100.0% 41.1%)}
+ .nt-nl{position:absolute;inset:0}
+ .nt-ext{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+ .nt-lo{position:absolute;inset:0;clip-path:inset(0 0 21% 0)}
+ .nt-lo svg{display:block}
+ html body #frAbre .nt-nl{transform:translateY(110%);opacity:0;animation:ntSobe var(--T,7.6s) both}
+ @keyframes ntSobe{0%,38%{transform:translateY(110%);opacity:0}38.5%{opacity:1;animation-timing-function:cubic-bezier(.25,.9,.35,1.18)}45%{transform:translateY(-5%)}47%,100%{transform:none;opacity:1}}
+ html body #frAbre:not(.curto) .fa-logo{animation:faMove var(--T) cubic-bezier(.5,0,.25,1) both,ntZoom var(--T) both}
+ @keyframes ntZoom{0%,46.5%{width:160px;height:160px;margin-left:-80px;margin-top:0}47%{animation-timing-function:cubic-bezier(.3,1.25,.5,1)}51%,57.5%{width:264px;height:264px;margin-left:-147px;margin-top:-104px}58%{animation-timing-function:cubic-bezier(.5,0,.3,1)}62%,100%{width:160px;height:160px;margin-left:-80px;margin-top:0}}
+ .nt-tel{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+ @media (prefers-reduced-motion:reduce){#frAbre .nt-nl{animation:none;transform:none;opacity:1}#frAbre .fa-logo{scale:none;translate:none}}
+
+ html.natal .brand-mark.marca{overflow:visible;position:relative}
+ html.natal .brand-mark.marca img{border-radius:inherit}
+ html.natal .brand-mark.marca::after{content:"";position:absolute;left:-14%;top:-36%;width:128%;height:139%;background:var(--nt-gorro-f) no-repeat center/contain;pointer-events:none}
+ html.natal .bz-card{position:relative;overflow:visible}
+ html.natal .bz-card::after{content:"";position:absolute;top:-13px;right:10px;width:34px;height:34px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 20 C 8 4 0 12 6 18 C 9 21 15 21 20 20 C 25 21 31 21 34 18 C 40 12 32 4 20 20Z' fill='%23E2283A'/%3E%3Cpath d='M20 20 l-7 14 l5 -3 l2 5z M20 20 l7 14 l-5 -3 l-2 5z' fill='%23C8101E'/%3E%3Ccircle cx='20' cy='20' r='4.5' fill='%23B30E1B'/%3E%3C/svg%3E") no-repeat center/contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18));pointer-events:none}
+ html.natal #bzCorre{background:linear-gradient(135deg,#C8101E,#E8510C)!important;box-shadow:0 10px 30px rgba(200,16,30,.35)!important;overflow:visible!important}
+ html.natal #bzCorre::after{content:"";position:absolute;left:-16px;top:-24px;width:54px;height:44px;transform:rotate(-18deg);background:var(--nt-gorro-b) no-repeat center/contain;pointer-events:none}
+`;
+window.__noelPoe = function(host, antes, comTelhado, dados){
+ if(!host || !window.lottie || !dados) return null;
+ var w=document.createElement('div'); w.className='nt-nw'; var n=document.createElement('div'); n.className='nt-nl'; n.innerHTML='<svg class="nt-ext" viewBox="0 0 1000 1000"><path d="M226 780 L644 780 L640 1400 L232 1400 Z" fill="#B4452A"/><path d="M226 780 L250 780 L252 1400 L232 1400Z" fill="#000" opacity=".10"/><path d="M618 780 L644 780 L640 1400 L616 1400Z" fill="#000" opacity=".12"/><path d="M232 858 C 360 855 500 861 636 857" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M300 802 L 302 852" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M430 802 L 432 852" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M560 802 L 562 852" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 916 C 360 913 500 919 636 915" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M365 860 L 367 910" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M495 860 L 497 910" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M610 860 L 612 910" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 974 C 360 971 500 977 636 973" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M300 918 L 302 968" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M430 918 L 432 968" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M560 918 L 562 968" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 1032 C 360 1029 500 1035 636 1031" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M365 976 L 367 1026" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M495 976 L 497 1026" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M610 976 L 612 1026" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 1090 C 360 1087 500 1093 636 1089" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M300 1034 L 302 1084" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M430 1034 L 432 1084" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M560 1034 L 562 1084" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 1148 C 360 1145 500 1151 636 1147" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M365 1092 L 367 1142" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M495 1092 L 497 1142" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M610 1092 L 612 1142" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 1206 C 360 1203 500 1209 636 1205" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M300 1150 L 302 1200" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M430 1150 L 432 1200" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M560 1150 L 562 1200" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 1264 C 360 1261 500 1267 636 1263" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M365 1208 L 367 1258" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M495 1208 L 497 1258" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M610 1208 L 612 1258" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 1322 C 360 1319 500 1325 636 1321" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M300 1266 L 302 1316" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M430 1266 L 432 1316" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M560 1266 L 562 1316" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M232 1380 C 360 1377 500 1383 636 1379" stroke="#7E2C18" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M365 1324 L 367 1374" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M495 1324 L 497 1374" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/><path d="M610 1324 L 612 1374" stroke="#7E2C18" stroke-width="3.5" stroke-linecap="round"/></svg>'; var l=document.createElement('div'); l.className='nt-lo'; n.appendChild(l); w.appendChild(n);
+ if(antes) host.insertBefore(w, antes); else host.appendChild(w);
+ if(comTelhado) host.insertAdjacentHTML('beforeend','<svg class="nt-tel" viewBox="0 0 512 512"><defs><linearGradient id="ntTl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF8A1A"/><stop offset=".5" stop-color="#FF7400"/><stop offset=".5" stop-color="#E65A06"/><stop offset="1" stop-color="#D04600"/></linearGradient></defs><path fill="url(#ntTl)" d="M258 84 416 156v60h-8L256 148 104 216h-8v-60z"/></svg>');
+ return lottie.loadAnimation({container:l,renderer:'svg',loop:true,autoplay:true,animationData:JSON.parse(JSON.stringify(dados)),rendererSettings:{preserveAspectRatio:'xMidYMid meet'}});
+};
+
+window.__natalNoel = function(){ if (window.__noelP) return window.__noelP;
+ return window.__noelP = new Promise(function(ok){ var d=null, feito=false; function fim(v){ if(!feito){ feito=true; ok(v); } } function tenta(){ if(d && window.lottie) fim(d); }
+  fetch('natal-noel.json').then(function(r){ return r.ok ? r.json() : null; }).then(function(j){ if(!j) return fim(null); d=j; tenta(); }).catch(function(){ fim(null); });
+  if (window.lottie) return; var urls=['https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie_svg.min.js','https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie_svg.min.js'];
+  (function vai(i){ if(i>=urls.length) return fim(null); var s=document.createElement('script'); s.src=urls[i]; s.onload=tenta; s.onerror=function(){ vai(i+1); }; document.head.appendChild(s); })(0);
+  setTimeout(function(){ fim(null); }, 15000); }); };
+window.__natalEntrada = function(fa){
+ if (!window.NATAL || document.getElementById('ntEstilo')) return; var t0 = performance.now();
+ var st=document.createElement('style'); st.id='ntEstilo'; st.textContent=window.__natalCSS; document.head.appendChild(st);
+ var cores=['#FF5A5F','#FFD166','#3DDC97','#5BC0EB','#FF9F1C'];
+ function neve(host,n,cor,tam){ if(!host) return; var d=document.createElement('div'); d.className='nt-neve'; var h='';
+  for(var i=0;i<n;i++){ var s=(tam[0]+Math.random()*(tam[1]-tam[0])).toFixed(1), dur=(6+Math.random()*7).toFixed(1), del=(-Math.random()*13).toFixed(1), dx=((Math.random()-.5)*60).toFixed(0);
+   h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;width:'+s+'px;height:'+s+'px;background:'+cor+';opacity:'+(.45+Math.random()*.5).toFixed(2)+';animation-duration:'+dur+'s;animation-delay:'+del+'s;--dx:'+dx+'px"></i>'; }
+  d.innerHTML=h; host.appendChild(d); }
+ function luzes(host,n){ if(!host) return; var d=document.createElement('div'); d.className='nt-luzes'; var p='M0 4';
+  for(var i=0;i<n;i++){ var x0=i*100/n, x1=(i+1)*100/n; p+=' Q '+((x0+x1)/2)+' 16 '+x1+' 4'; }
+  var h='<svg viewBox="0 0 100 30" preserveAspectRatio="none"><path d="'+p+'" stroke="#0B2236" stroke-width=".35" fill="none"/></svg>';
+  for(var j=0;j<n;j++){ var c=cores[j%5]; h+='<i style="left:'+((j+.5)/n*100)+'%;background:'+c+';box-shadow:0 0 9px 2px '+c+'99;animation-delay:'+(-(j%4)*.4)+'s"></i>'; }
+  d.innerHTML=h; host.appendChild(d); }
+
+ window.__ntNeve=neve; window.__ntLuzes=luzes;
+ if (fa){ neve(fa,34,'#B7C7D5',[2,4.5]); var pn=fa.querySelector('.fa-pn'); if(pn){ neve(pn,40,'#FFFFFF',[1.6,4]); luzes(pn,11); }
+  var lg=fa.querySelector('.fa-logo');
+  window.__natalNoel().then(function(d){ if(!d || !lg || !document.body.contains(lg)) return; var dt=performance.now()-t0; if (dt > 3300) return;
+   __noelPoe(lg, lg.querySelector('.fa-p4'), false, d); var nl=lg.querySelector('.nt-nl'); if(nl) nl.style.animationDelay=(-dt/1000).toFixed(3)+'s'; }); }
+};
+window.__natalResto = function(){
+ if (!window.NATAL) return; if (!document.getElementById('ntEstilo')) window.__natalEntrada(null);
+ try { var f='<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -120 600 650"><g transform="translate(132 -44) rotate(-4 300 300) scale(.45)">'+gorroSVG('f')+'</g></svg>';
+  var b='<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 40 600 470">'+gorroSVG('b')+'</svg>';
+  document.documentElement.style.setProperty('--nt-gorro-f','url("data:image/svg+xml,'+encodeURIComponent(f)+'")');
+  document.documentElement.style.setProperty('--nt-gorro-b','url("data:image/svg+xml,'+encodeURIComponent(b)+'")'); } catch(e) {}
+ var lp=document.querySelector('.login-pn'); if(lp && !lp.dataset.nt){ lp.dataset.nt=1; var l2=lp.querySelector('.lp-logo'); __ntNeve(lp,40,'#FFFFFF',[1.6,4]); __ntLuzes(lp,11);
+  if(l2) window.__natalNoel().then(function(d){ if(d) __noelPoe(l2, null, true, d); }); }
+};
+if (window.NATAL) document.addEventListener('DOMContentLoaded', function(){ try { __natalResto(); } catch(e) {} });
+document.addEventListener('DOMContentLoaded', function(){ var c=document.getElementById('cfgNatal'); if (c) { try { c.value = localStorage.getItem('natalTema') || ''; } catch(e) {} } });
+function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else localStorage.removeItem('natalTema'); sessionStorage.removeItem('frAbriu'); } catch(e) {} location.reload(); }
+</script>
+<script>
 (function(){
   var el = document.getElementById('frAbre'); if (!el) return;
   var ja = false; try { ja = sessionStorage.getItem('frAbriu') === '1'; sessionStorage.setItem('frAbriu', '1'); } catch(e) {}
@@ -3284,7 +3401,8 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
     e.classList.add('sai'); setTimeout(function(){ e.remove(); }, 400);
   };
   el.addEventListener('click', fim);
-  setTimeout(fim, mot ? 500 : (cel ? 3250 : 2300));
+  var NT = !!window.NATAL && !mot; if (NT) { el.style.setProperty('--T', '7.6s'); try { window.__natalEntrada(el); } catch(e) {} }
+  setTimeout(fim, mot ? 500 : (cel ? (NT ? 6500 : 3250) : (NT ? 4600 : 2300)));
 })();
 </script>
 
@@ -4050,6 +4168,10 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
               <button class="btn btn-primary" id="btnNotif" onclick="ativarNotificacoes()">Ativar</button></div>
             <div class="set-row hide" id="rowTesteNotif"><div><b>Testar notificação</b><span>Envia uma notificação para este aparelho</span></div>
               <button class="btn btn-ghost" onclick="testarNotificacao()">Testar</button></div>
+            <div class="set-row gerente-only hide"><div><b>Tema de Natal neste aparelho</b><span>Liga sozinho de 01/12 a 06/01. Ligue aqui para ver antes.</span></div>
+              <select id="cfgNatal" style="width:auto" onchange="natalTema(this.value)"><option value="">Automático</option><option value="on">Ligado</option><option value="off">Desligado</option></select></div>
+            <div class="set-row"><div><b>Tour do app</b><span>Mostra de novo, passo a passo, onde fica cada coisa</span></div>
+              <button class="btn btn-ghost" onclick="abrirTour(true)">Ver o tour</button></div>
             <div class="set-row"><div><b>Tema</b><span>Claro, escuro ou igual ao aparelho</span></div>
               <div class="seg" id="segTema"></div></div>
             <div class="set-row"><div><b>Lembretes</b><span>Aviso antes das tarefas com horário (com o app aberto)</span></div>
@@ -5312,7 +5434,7 @@ body:has(#app:not(.hide)) #v-simulador .fg select{border:1px solid var(--border)
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc, updateDoc, addDoc, increment, deleteField, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, CACHE_SIZE_UNLIMITED, getCountFromServer, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc, updateDoc, addDoc, increment, deleteField, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -5327,7 +5449,9 @@ const fb = initializeApp(firebaseConfig);
 const auth = getAuth(fb);
 // Guarda os dados no aparelho: funciona sem internet e envia quando a conexão voltar
 let db;
-try { db = initializeFirestore(fb, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }); }
+// v428: cache sem limite. Com o limite padrão (40 MB) o Firestore apagava do aparelho as avaliações antigas (as da planilha), e o aparelho do gestor
+// passava a contar só as docs dos grupos e baixava o número no ranking (Priscilla 83 → 51 docs, ia e voltava a cada 3 minutos)
+try { db = initializeFirestore(fb, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager(), cacheSizeBytes: CACHE_SIZE_UNLIMITED }) }); }
 catch(e) { db = getFirestore(fb); }
 
 // ================= Ícones =================
@@ -6820,7 +6944,18 @@ function agrupaRanking(rows){
   }
   return [...g.values()].sort((a,b) => b.total-a.total || b.real-a.real || b.conf-a.conf || a.nome.localeCompare(b.nome,'pt-BR'));
 }
+// v428: ao abrir o app, o ranking só aparece quando os números param de mudar (os dados chegam aos poucos: primeiro o que está no aparelho, depois a nuvem).
+// Antes mostrava 0, 35, 880... até chegar no número certo. Espera os números ficarem 2 s parados (no máximo 12 s); depois disso atualiza ao vivo normalmente
+let _rkEst = 0, _rkSig = '', _rkSigT = 0, _rkIni = 0;
+function rkEstavel(){
+  if (_rkEst) return true; const t = Date.now(); if (!_rkIni) _rkIni = t;
+  let sig = '-'; try { sig = '-' + pontosDoMes(mesAtual()).slice(0, 15).map(x => (x.uid || x.nome) + ':' + x.pontos).join(','); } catch(e) {}
+  if (sig !== _rkSig) { _rkSig = sig; _rkSigT = t; }
+  if ((sig && t - _rkSigT >= 2000 && (!opTudo() || window._avalCompleto || t - _rkIni > 7000)) || t - _rkIni > 12000) { _rkEst = t; return true; }
+  clearTimeout(window._rkEstT); window._rkEstT = setTimeout(() => { try { render(); } catch(e) {} }, 500); return false;
+}
 function renderRanking(){
+  { const ok = rkEstavel(); $('v-ranking')?.classList.toggle('rk-carregando', !ok); if (!ok) return; }
   if (rankTipo === 'anjos' && !podeVerRankAnjos()) rankTipo = 'hoje'; /* v372: ranking dos anjos só para anjos, coordenadores dos anjos e gerência */
   if (!souGerente() && (['passado','todas'].includes(rankPeriodo) || String(rankPeriodo).startsWith('m:'))) rankPeriodo = 'mes'; /* v323: meses anteriores só para a gerência */
   preencherSel('rPeriodo', '<option value="mes">Este mês</option>' + (souGerente() ? '<option value="passado">Mês passado</option>' : '') + '<option value="semana">Esta semana</option><option value="proximas">De hoje em diante</option>' + (souGerente() ? '<option value="todas">Todo o período</option>' : ''), rankPeriodo);
@@ -7377,7 +7512,7 @@ function assinarCartas(erro){
   else qc = query(collection(db,'cartas'), where('corretorUid','==',uidAtual));
   if (qc) subsPapel.push(onSnapshot(qc, s => { cartasBrutas = s.docs.map(d => ({ id:d.id, ...d.data() })); cartas = cartasBrutas.filter(x => !x.arquivado); render(); }, erro));
   // resumo das vendas para o ranking de VGV de todos (sem dados do cliente); a gestão mantém ele em dia
-  subsPapel.push(onSnapshot(collection(db,'ranking_vendas'), s => { rankingVendas = s.docs.map(d => ({ id:d.id, ...d.data() })); window._rvOk = true; render(); sincVendasRanking(); sincExtrato(); conferirMetasBatidas(); }, e => console.warn('ranking_vendas:', e.code || e.message)));
+  subsPapel.push(onSnapshot(collection(db,'ranking_vendas'), s => { rankingVendas = s.docs.map(d => ({ id:d.id, ...d.data() })); try { vendaNovaAviso(s); } catch(e) {} window._rvOk = true; render(); sincVendasRanking(); sincExtrato(); conferirMetasBatidas(); }, e => console.warn('ranking_vendas:', e.code || e.message)));
   if (!opTudo() && ['corretor','coordenador','anjo'].includes(perfil?.papel)) subsPapel.push(onSnapshot(query(collection(db,'reservas'), where('corretorUids','array-contains',uidAtual)), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); }, e => console.warn('minhas reservas:', e.code || e.message)));
   if (opTudo()) subsPapel.push(onSnapshot(collection(db,'reservas'), s => { reservasTodas = s.docs.map(d => ({ id:d.id, ...d.data() })); reservas = reservasTodas.filter(x => !x.arquivado && !x.caiu); render(); sincVendasRanking(); sincExtrato(); }, e => console.warn('reservas:', e.code || e.message)));
   subsPapel.push(onSnapshot(souGerente() || historicoCompleto ? collection(db,'ranking_cartas') : query(collection(db,'ranking_cartas'), where('data','>=', somaMeses(mesAtual() + '-01', -6))), s => { rankingCartas = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(x => !x.arquivado); carregado.rc = true; render(); fecharMesesPendentes(); }, erro));
@@ -7993,7 +8128,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 426;
+const APP_VERSAO = 428;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9483,6 +9618,11 @@ function assinarEtapa2(){
         try { (await getDocs(historicoCompleto ? collection(db,'avaliacoes') : query(collection(db,'avaliacoes'), where('data','>=',janela)))).docs.forEach(pega);
           try { localStorage.setItem(chaveFull, '1'); } catch(e) {} } catch(e) { silencio(e); }
       }
+      // v428: confere com a nuvem se o aparelho tem todas as avaliações do período (1 leitura). Faltando, busca tudo de novo
+      try { const qj = historicoCompleto ? collection(db,'avaliacoes') : query(collection(db,'avaliacoes'), where('data','>=',janela));
+        const nNuvem = (await getCountFromServer(qj)).data().count, nAqui = [...mapa.values()].filter(a => historicoCompleto || (a.data || '') >= janela).length;
+        if (nAqui !== nNuvem) { const tudo = await getDocs(qj); [...mapa.keys()].forEach(id => { const a = mapa.get(id); if (historicoCompleto || (a.data || '') >= janela) mapa.delete(id); }); tudo.docs.forEach(pega); try { localStorage.setItem(chaveFull, '1'); } catch(e) {} }
+        window._avalCompleto = true; } catch(e) { silencio(e); }
       if (!vivo) return;
       publicar();
       // v426: o "max" do que está guardado no aparelho não garante que o aparelho tem tudo antes dele (ex.: o carteiro gravou 17 docs
@@ -10394,6 +10534,7 @@ function mostrarEventoTv(){
 }
 function renderTvRank(){
   const el = $('tvRank'); if (!el) return;
+  { const ok = rkEstavel(); el.classList.toggle('rk-carregando', !ok); if (!ok) { if (!el.innerHTML.trim()) el.innerHTML = '<div class="tvr-topo"></div>'; return; } }
   let d = dadosTvRank(), agora = new Date();
   if (window.tvModo === undefined) window.tvModo = agora.getDay() === 6 ? 'feirao' : 'rk:' + rkAutoMes().id; /* v323 */
   const rkTv = rkTodos().filter(x => !x.encerrado), modoRk = String(window.tvModo).match(/^(rk|ap|on):(.+)$/), rkSel = modoRk ? dadosTvRkNovo(modoRk[2]) : null, ap = !!(modoRk && /^(ap|on)$/.test(modoRk[1]));
@@ -13770,12 +13911,13 @@ const CI_MEIO = { qr:'📷', gps:'📍', manual:'✋', externo:'🚗' };
 function distanciaM(a, b){ const R = 6371000, r = x => x * Math.PI / 180, dLat = r(b.lat - a.lat), dLng = r(b.lng - a.lng);
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLng / 2) ** 2; return Math.round(2 * R * Math.asin(Math.sqrt(h))); }
 // v193: fica até 12 s ouvindo o GPS e fica com a leitura mais precisa (alguns celulares mandam primeiro uma posição aproximada, pela antena)
-const pegarGps = () => new Promise(ok => { window._gpsErro = 0; if (!navigator.geolocation) { window._gpsErro = 9; return ok(null); }
+// v428: aceita (opcional) encerra na hora quando a leitura já decide (ex.: já dá para afirmar que está dentro do escritório)
+const pegarGps = (aceita) => new Promise(ok => { window._gpsErro = 0; if (!navigator.geolocation) { window._gpsErro = 9; return ok(null); }
   let melhor = null, fim = false, wid = null;
   const acaba = () => { if (fim) return; fim = true; try { if (wid !== null) navigator.geolocation.clearWatch(wid); } catch(e) {} clearTimeout(tm); ok(melhor); };
   const tm = setTimeout(acaba, 12000);
   try { wid = navigator.geolocation.watchPosition(p => { const g = { lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6), prec:Math.round(p.coords.accuracy) };
-      if (!melhor || g.prec < melhor.prec) melhor = g; if (g.prec <= 50) acaba(); },
+      if (!melhor || g.prec < melhor.prec) melhor = g; if (g.prec <= 50) return acaba(); try { if (aceita && aceita(g)) { melhor = g; acaba(); } } catch(e) {} },
     e => { window._gpsErro = e.code || 2; if (e.code === 1 || melhor) acaba(); }, { enableHighAccuracy:true, maximumAge:0, timeout:12000 }); }
   catch(e) { window._gpsErro = 2; acaba(); } });
 function assinarCheckins(){
@@ -13832,7 +13974,7 @@ window.checkinTarde = async via => {
   let extra = {};
   if (via === 'gps') { const cfg = ciCfg();
     if (bt) { bt.disabled = true; bt.textContent = 'Conferindo a localização…'; }
-    const gps = await pegarGps();
+    const gps = await pegarGps(cfg.local?.lat ? g => distanciaM(g, cfg.local) <= (Number(cfg.raio) || 150) + Math.min(g.prec || 0, 100) : null);
     if (cfg.local?.lat) {
       if (!gps) { volta(); ajudaGps(window._gpsErro === 1 ? 'negado' : 'sem'); return; }
       const dist = distanciaM(gps, cfg.local);
@@ -13841,9 +13983,9 @@ window.checkinTarde = async via => {
     } else if (gps) extra = { tardeLocal:gps };
   }
   const agora = Date.now(), h = hojeISO();
-  try { await updateDoc(doc(db,'checkins', ciId(uidAtual)), { tarde:agora, tardeVia:via, ...extra });
-    await setDoc(doc(db,'ranking_ativ', h.slice(0, 7) + '_' + uidAtual), { mes:h.slice(0, 7), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', chkt:{ [h]:via }, atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('tarde ranking', e.message));
-    festejar(`✅ Check-in da tarde às ${hm(agora)}!`); }
+  try { const w = updateDoc(doc(db,'checkins', ciId(uidAtual)), { tarde:agora, tardeVia:via, ...extra });
+    setDoc(doc(db,'ranking_ativ', h.slice(0, 7) + '_' + uidAtual), { mes:h.slice(0, 7), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', chkt:{ [h]:via }, atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('tarde ranking', e.message));
+    festejar(`✅ Check-in da tarde às ${hm(agora)}!`); w.catch(e => { volta(); toast('Erro: ' + e.message); }); }
   catch(e) { volta(); toast('Erro: ' + e.message); }
 };
 function htmlCiGestao(){
@@ -13902,8 +14044,9 @@ window.fecharCamera = () => { clearTimeout(_ciLoop); if (_ciStream) { _ciStream.
 async function fazerCheckin(token){
   if (meuCheckin) { if (precisaTarde(meuCheckin)) return checkinTarde('qr'); if (ciFora(meuCheckin) || meuCheckin.saida) return voltarEscritorio('qr'); toast('Você já marcou a presença hoje ✓'); return; }
   const agora = Date.now();
-  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'qr', token }); marcarPresencaRanking('escritorio');
-    avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
+  try { const w = setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via:'qr', token });
+    toast('Marcando a presença…');
+    await w; marcarPresencaRanking('escritorio'); avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
   catch(e) { toast(e.code === 'permission-denied' ? 'Código vencido ou inválido. Aponte de novo para o código da recepção.' : 'Erro: ' + e.message); }
 }
 window.fazerCheckin = fazerCheckin;
@@ -13911,7 +14054,7 @@ window.fazerCheckin = fazerCheckin;
 window.chegueiEscritorio = async () => {
   if (meuCheckin && precisaTarde(meuCheckin) && !ciFora(meuCheckin)) return checkinTarde('gps');
   const bt = $('ciBtEsc'); if (bt) { bt.disabled = true; bt.textContent = 'Conferindo a localização…'; }
-  const cfg = ciCfg(), gps = await pegarGps();
+  const cfg = ciCfg(), dentro = g => cfg.local?.lat && distanciaM(g, cfg.local) <= (Number(cfg.raio) || 150) + Math.min(g.prec || 0, 100), gps = await pegarGps(cfg.local?.lat ? dentro : null);
   const volta = () => { if (bt) { bt.disabled = false; bt.textContent = '🏢 Cheguei no escritório'; } };
   let via = 'manual', dist = null;
   if (cfg.local?.lat) {
@@ -13924,8 +14067,9 @@ window.chegueiEscritorio = async () => {
   } else if (gps) via = 'gps';
   if (meuCheckin) return voltarEscritorio(via, gps, dist);
   const agora = Date.now();
-  try { await setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via, ...(gps ? { local:gps } : {}), ...(dist !== null ? { dist } : {}) }); marcarPresencaRanking('escritorio');
-    avisarCarteiro('checkin', ciId(uidAtual)); festejar(`✅ Presença marcada às ${hm(agora)}!`); }
+  try { const w = setDoc(doc(db,'checkins', ciId(uidAtual)), { dia:ciHoje(), mes:mesAtual(), uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', papel:perfil.papel, entrada:agora, via, ...(gps ? { local:gps } : {}), ...(dist !== null ? { dist } : {}) });
+    marcarPresencaRanking('escritorio'); festejar(`✅ Presença marcada às ${hm(agora)}!`);
+    w.then(() => avisarCarteiro('checkin', ciId(uidAtual))).catch(e => { volta(); toast('Erro: ' + e.message); }); }
   catch(e) { volta(); toast('Erro: ' + e.message); }
 };
 // v193: quando a localização falha, explica o que fazer naquele celular e oferece o código da recepção
@@ -14274,6 +14418,61 @@ document.addEventListener('pointerdown', e => { const b = e.target.closest && e.
 // comemorações
 function festejar(msg){ try { soltarConfete(160); } catch(e) {} vibrar([30, 50, 30]); if (msg) toast(msg); }
 window.festejar = festejar;
+// v428: venda nova vira festa para a equipe toda: faixa "NOVA VENDA!" + confete em todos os aparelhos (e na TV), uma vez por venda
+let _vnPrimeira = true;
+function vendaNovaAviso(s){
+  const hj = hojeISO(), novas = s.docChanges().filter(ch => ch.type === 'added').map(ch => ({ id:ch.doc.id, ...ch.doc.data() })).filter(d => !d.caiu && d.dia === hj);
+  let vistos = []; try { vistos = JSON.parse(localStorage.getItem('vendaVista') || '[]'); } catch(e) {}
+  // na primeira carga do aparelho só registra as de hoje (não festeja de novo o que já foi festejado em outro aparelho dessa pessoa)
+  const ja = new Set(vistos), nv = novas.filter(d => !ja.has(d.id));
+  if (!nv.length) { _vnPrimeira = false; return; }
+  try { localStorage.setItem('vendaVista', JSON.stringify([...vistos, ...nv.map(d => d.id)].slice(-60))); } catch(e) {}
+  if (_vnPrimeira && s.metadata.fromCache) { _vnPrimeira = false; return; }
+  _vnPrimeira = false;
+  const d = nv[nv.length - 1], nomes = (d.corretores || []).map(c => { const p = (perfisTodos || []).find(x => x.uid === c.uid); return String((p && p.nome) || c.nome || '').trim().split(/\s+/)[0]; }).filter(Boolean);
+  mostrarVendaNova(nomes, nv.length);
+}
+function mostrarVendaNova(nomes, qtd){
+  let el = document.getElementById('vendaNova');
+  if (!el) { el = document.createElement('div'); el.id = 'vendaNova'; el.onclick = () => el.classList.remove('on'); document.body.appendChild(el); }
+  const quem = nomes.length > 1 ? nomes.slice(0, -1).join(', ') + ' e ' + nomes[nomes.length - 1] : (nomes[0] || 'A equipe');
+  el.innerHTML = `<b>${qtd > 1 ? qtd + ' NOVAS VENDAS!' : 'NOVA VENDA!'}</b><span>${esc(quem)} ${nomes.length > 1 ? 'fecharam' : 'fechou'} uma venda. Bora pra próxima!</span>`;
+  requestAnimationFrame(() => el.classList.add('on'));
+  try { soltarConfete(240); setTimeout(() => soltarConfete(140), 700); } catch(e) {} vibrar([40, 60, 40]);
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 7000);
+}
+window.mostrarVendaNova = mostrarVendaNova;
+// v428: tour guiado (Driver.js) para a equipe: aparece uma vez por pessoa na tela Hoje; pode ver de novo em Configurações
+const TOUR_V = 'tour1_';
+async function carregaDriver(){
+  if (window.driver?.js?.driver) return window.driver.js.driver;
+  if (!document.getElementById('driverCss')) { const l = document.createElement('link'); l.id = 'driverCss'; l.rel = 'stylesheet'; l.href = 'https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css'; document.head.appendChild(l); }
+  await new Promise((ok, erro) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js'; s.onload = ok; s.onerror = erro; document.head.appendChild(s); });
+  return window.driver.js.driver;
+}
+const visivel = el => !!(el && el.offsetParent && el.getBoundingClientRect().width > 0);
+let _tourIndo = false;
+async function abrirTour(forcar){
+  if (!forcar) { try { if (localStorage.getItem(TOUR_V + uidAtual)) return; } catch(e) { return; } }
+  if (!perfil || !uidAtual || document.getElementById('frAbre') || document.querySelector('[class*="modal"].open, .sheet.open')) return;
+  if (view !== 'hoje') { if (!forcar) return; setView('hoje'); await new Promise(r => setTimeout(r, 400)); }
+  if (!forcar && (window._tourFalhou || _tourIndo || /[?&]tv=|#tv/.test(location.href) || document.documentElement.classList.contains('modo-tvr'))) return;
+  _tourIndo = true; let drv; try { drv = await carregaDriver(); } catch(e) { window._tourFalhou = true; _tourIndo = false; if (forcar) toast('Sem internet para abrir o tour agora'); return; } _tourIndo = false;
+  const nome = String(perfil.nome || '').trim().split(/\s+/)[0], primeiro = sel => [...document.querySelectorAll(sel)].find(visivel);
+  const pres = $('ciBtEsc') ? ($('ciBtEsc').closest('.card') || $('ciBtEsc').parentElement.parentElement) : null;
+  const passos = [
+    { element:primeiro('[data-brand]'), popover:{ title:`Bem-vindo${nome ? ', ' + nome : ''}!`, description:'Este é o app da Frade. Em poucos passos você vê o básico do dia a dia.' } },
+    { element:visivel(pres) ? pres : null, popover:{ title:'1º: marque sua presença', description:'Chegou no escritório? Toque em "Cheguei no escritório". Sem presença você não pega lead do bolsão e as ligações não pontuam.' } },
+    { element:primeiro('#mbBolsao, .sidebar [data-view="bolsao"]'), popover:{ title:'Bolsão de leads', description:'Os leads sem dono ficam aqui. Quando chegar lead novo, o app avisa: é só tocar e pegar.' } },
+    { element:primeiro('.mobilebar [data-view="ranking"], .sidebar [data-view="ranking"], .mobilebar'), popover:{ title:'Ranking e o resto do app', description:'Aqui você acompanha seus pontos no ranking e acessa as outras telas.' } }
+  ].filter(x => visivel(x.element));
+  if (passos.length < 2) return;
+  try { localStorage.setItem(TOUR_V + uidAtual, String(Date.now())); } catch(e) {}
+  drv({ showProgress:true, progressText:'{{current}} de {{total}}', nextBtnText:'Próximo', prevBtnText:'Voltar', doneBtnText:'Entendi', popoverClass:'frade-tour', steps:passos }).drive();
+}
+window.abrirTour = abrirTour;
+setInterval(() => { try { if (perfil && uidAtual && souAtivo() && !document.hidden) abrirTour(false); } catch(e) {} }, 4000);
+
 function avisarSubiuRanking(lista, pos){
   if (!['corretor','coordenador','anjo'].includes(perfil?.papel)) return;
   const i = lista.findIndex(x => x.uid === uidAtual); if (i < 0) return;
@@ -18952,7 +19151,7 @@ async function sincMetasDia(forcar){
       const meses = {}; dias.forEach(d => { (meses[d.slice(0, 7)] = meses[d.slice(0, 7)] || []).push(d); });
       Object.entries(meses).forEach(([m, ds]) => {
         const id = m + '_' + p.uid, ra = rankingAtiv.find(r => r.id === id) || {}, up = {};
-        [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => ds.filter(d => k === 'docs' || curtos.has(d)).forEach(d => { const val = ((porUid.get(p.uid) || {})[d] || {})[k] || 0, ant = (ra[c] || {})[d] || 0; if (val !== ant && !(k === 'docs' && val < ant && !souDono())) { /* v393: só o gestor (que tem as docs dos grupos) pode baixar o número de docs */ up[c] = up[c] || {}; up[c][d] = val; } }));
+        [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => ds.filter(d => k === 'docs' || curtos.has(d)).forEach(d => { const val = ((porUid.get(p.uid) || {})[d] || {})[k] || 0, ant = (ra[c] || {})[d] || 0; if (val !== ant && !(k === 'docs' && val < ant && (!souDono() || !window._avalCompleto))) { /* v393: só o gestor (que tem as docs dos grupos) pode baixar o número de docs; v428: e só com as avaliações do aparelho conferidas com a nuvem */ up[c] = up[c] || {}; up[c][d] = val; } }));
         if (Object.keys(up).length && n < 400) { b.set(doc(db,'ranking_ativ', id), { mes:m, uid:p.uid, nome:p.nome || '', equipe:p.equipe || '', ...up, atualizadoEm:Date.now() }, { merge:true }); n++; }
       });
     });
