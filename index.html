@@ -2351,6 +2351,69 @@ body.rv-imprime #rvPrint{display:block;color:#1c2430;font:11px/1.4 system-ui,-ap
 #v-ranking.rk-carregando::after,#tvRank.rk-carregando::after{content:"Atualizando o ranking…";position:absolute;left:0;right:0;top:120px;text-align:center;font-weight:700;font-size:16px;color:var(--muted,#6B7C8F)}
 #tvRank.rk-carregando::after{top:40vh;font-size:2vw;color:#9FB3C8}
 #tvRank.rk-carregando>*{visibility:hidden}
+/* v430: lead com CARTA APROVADA no bolsão: cartão verde-claro com brilho que passa, misturado na fila com os outros */
+.bz-card.carta,.bzf-card.carta{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(140deg,#ECFDF3 0%,#D1FAE5 55%,#BBF7D0 100%)!important;border:1.5px solid #6EE7A8!important;border-left:5px solid #16A34A!important;box-shadow:0 10px 26px -10px rgba(22,163,74,.45);animation:bzCartaEntra .7s cubic-bezier(.2,1.5,.4,1) both,bzCartaPulso 1.6s ease-in-out .7s infinite}
+@keyframes bzCartaEntra{0%{transform:scale(.92);opacity:0}100%{transform:none;opacity:1}}
+@keyframes bzCartaPulso{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.55),0 10px 26px -10px rgba(22,163,74,.45)}50%{box-shadow:0 0 0 7px rgba(34,197,94,0),0 12px 30px -8px rgba(22,163,74,.6);border-color:#22C55E}}
+html.natal .bz-card.carta{overflow:visible}
+.bz-card.carta::before,.bzf-card.carta::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.75) 45%,transparent 60%) no-repeat;background-size:250% 100%;animation:bzCartaBrilho 3.2s ease-in-out infinite}
+@keyframes bzCartaBrilho{0%{background-position:130% 0}60%,100%{background-position:-60% 0}}
+.bz-card.carta .an-cli,.bzf-card.carta b{color:#14532D!important}
+.bz-selo-carta{display:inline-flex;align-items:center;gap:6px;background:#16A34A;color:#fff!important;font-weight:900;font-size:12.5px;letter-spacing:1px;padding:5px 12px 5px 9px;border-radius:999px;box-shadow:0 4px 12px rgba(22,163,74,.35)}
+.bz-selo-carta svg{color:#fff}
+.bzf-card.carta{padding-top:34px!important}
+.bzf-card.carta::after{content:"CARTA APROVADA";position:absolute;top:9px;left:12px;background:#16A34A;color:#fff;font-weight:900;font-size:10.5px;letter-spacing:.8px;padding:3px 8px;border-radius:999px}
+html[data-theme="dark"] .bz-card.carta .an-cli,html[data-theme="dark"] .bzf-card.carta b{color:#14532D!important}
+@media (prefers-reduced-motion:reduce){.bz-card.carta::before,.bzf-card.carta::before,.bz-card.carta,.bzf-card.carta{animation:none}}
+.bz-card.carta{animation:bzCartaEntra .9s cubic-bezier(.2,1.4,.35,1) both,bzCartaPulso 1.6s ease-in-out .9s infinite!important}
+@keyframes bzCartaEntra{0%{transform:perspective(700px) rotateX(-75deg) translateY(-18px) scale(.9);opacity:0}55%{transform:perspective(700px) rotateX(10deg) scale(1.03);opacity:1}100%{transform:none;opacity:1}}
+.bz-estrelas{position:absolute;inset:0;pointer-events:none;z-index:1}
+.bz-estrelas b{position:absolute;width:16px;height:16px;background:#FACC15;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);animation:bzEstrela 2.2s ease-in-out infinite;filter:drop-shadow(0 0 4px rgba(250,204,21,.9))}
+.bz-estrelas b:nth-child(1){top:12px;right:64px}
+.bz-estrelas b:nth-child(2){top:46px;right:28px;width:11px;height:11px;animation-delay:.55s;background:#fff;filter:drop-shadow(0 0 4px rgba(34,197,94,.9))}
+.bz-estrelas b:nth-child(3){bottom:16px;right:44px;width:13px;height:13px;animation-delay:1.1s}
+.bz-estrelas b:nth-child(4){bottom:38px;right:96px;width:9px;height:9px;animation-delay:1.6s;background:#fff;filter:drop-shadow(0 0 4px rgba(34,197,94,.9))}
+@keyframes bzEstrela{0%,100%{transform:scale(0) rotate(0);opacity:0}40%{transform:scale(1.15) rotate(45deg);opacity:1}70%{transform:scale(.8) rotate(90deg);opacity:.8}}
+@media (prefers-reduced-motion:reduce){.bz-estrelas b{animation:none;opacity:.8;transform:none}}
+#cartaPega{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,40,24,.45);backdrop-filter:blur(3px);opacity:0;transition:opacity .3s}
+#cartaPega.on{opacity:1}
+#cartaPega .cp-box{width:min(380px,100%);background:linear-gradient(150deg,#F0FDF4,#DCFCE7 60%,#BBF7D0);border:2px solid #22C55E;border-radius:24px;padding:26px 22px 20px;text-align:center;color:#14532D;box-shadow:0 24px 60px rgba(6,60,30,.35);transform:scale(.8) translateY(20px);transition:transform .45s cubic-bezier(.2,1.5,.4,1)}
+#cartaPega.on .cp-box{transform:none}
+#cartaPega .cp-selo{display:inline-block;background:#16A34A;color:#fff;font-weight:900;letter-spacing:1.2px;font-size:13px;padding:6px 14px;border-radius:999px;box-shadow:0 6px 16px rgba(22,163,74,.4)}
+#cartaPega h3{margin:14px 0 8px;font-size:22px;line-height:1.2;color:#14532D}
+#cartaPega p{margin:0 0 8px;font-size:15.5px;line-height:1.45;color:#166534}
+#cartaPega .cp-missao{background:#fff;border:2px dashed #22C55E;border-radius:16px;padding:12px 14px;margin:6px 0 4px;display:grid;gap:3px}
+#cartaPega .cp-missao small{font-size:11.5px;font-weight:900;letter-spacing:1.4px;color:#16A34A}
+#cartaPega .cp-missao b{font-size:18px;line-height:1.3;color:#14532D}
+#cartaPega .cp-forte{font-size:20px;font-weight:900;color:#15803D;margin:10px 0 16px}
+#cartaPega .cp-bt{background:#16A34A;color:#fff;border:0;border-radius:14px;padding:13px 34px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(22,163,74,.35)}
+.bz-carta-regra{font-size:13px;line-height:1.4;color:#166534;background:rgba(255,255,255,.75);border-radius:10px;padding:6px 9px}
+#cartaPega .cp-regra{font-size:13.5px;line-height:1.45;background:#FEF9C3;border:1px solid #FDE047;color:#713F12;border-radius:12px;padding:9px 11px;margin:8px 0 2px;text-align:left}
+.cc-box{display:grid;gap:8px;background:#fff;border:1.5px dashed #22C55E;border-radius:12px;padding:10px;font-size:13.5px;line-height:1.4;color:#166534}
+.cc-box small{color:#B45309;font-weight:700}
+.cc-box.ok{border-style:solid}
+.cc-bt{justify-self:start;border:0;border-radius:10px;padding:9px 14px;font-weight:800;font-size:14.5px;background:#E5E7EB;color:#6B7280;cursor:pointer}
+.cc-bt.on{background:#16A34A;color:#fff;animation:ccAbre .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes ccAbre{0%{transform:scale(.7)}100%{transform:none}}
+#cartaPega .cp-cpf{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;background:#fff;border:2px solid #22C55E;border-radius:16px;padding:10px 12px;margin:10px 0}
+#cartaPega .cp-cpf small{width:100%;font-size:11px;font-weight:900;letter-spacing:1.3px;color:#16A34A}
+#cartaPega .cp-cpf b{font-size:22px;color:#14532D;font-variant-numeric:tabular-nums}
+#cartaPega .cp-cpf button{background:#DCFCE7;color:#15803D;border:0;border-radius:10px;padding:7px 12px;font-weight:800}
+#cartaPega .cp-txt{text-align:left;background:#0B2A1A;color:#D1FAE5;border-radius:14px;padding:12px 14px;font:13px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;margin:0 0 14px;max-height:40vh;overflow:auto}
+#cartaPega .cp-box{max-height:92vh;overflow:auto}
+#cartaBanner{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 66px);z-index:900;width:min(560px,calc(100vw - 20px));display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#ECFDF3,#D1FAE5);border:1.5px solid #22C55E;border-left:5px solid #16A34A;border-radius:14px;padding:8px 10px;box-shadow:0 10px 26px -8px rgba(22,163,74,.45);cursor:pointer;animation:cbnEntra .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes cbnEntra{0%{transform:translate(-50%,-30px);opacity:0}100%{transform:translateX(-50%);opacity:1}}
+#cartaBanner .cbn-ic{font-size:18px}
+#cartaBanner .cbn-tx{display:grid;flex:1;min-width:0;line-height:1.25}
+#cartaBanner .cbn-tx b{font-size:12.5px;letter-spacing:.4px;color:#14532D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cartaBanner .cbn-tx small{font-size:12px;color:#166534}
+#cartaBanner .cbn-tx small strong{color:#14532D}
+#cartaBanner .cbn-t{font:800 16px ui-monospace,Menlo,monospace;color:#15803D;background:#fff;border-radius:8px;padding:4px 7px;font-variant-numeric:tabular-nums}
+#cartaBanner .cbn-t.urg{color:#B91C1C;animation:cbnPisca 1s steps(2) infinite}
+@keyframes cbnPisca{50%{opacity:.45}}
+#cartaBanner .cbn-lig{border:0;background:#16A34A;color:#fff;font-weight:800;border-radius:10px;padding:8px 12px;font-size:14px}
+body.com-carta-banner main,body.com-carta-banner .main{padding-top:64px}
+@media (min-width:900px){#cartaBanner{top:14px}}
 #vendaNova{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:2147483000;width:min(420px,calc(100vw - 28px));transform:translate(-50%,-140%) scale(.9);background:linear-gradient(135deg,#022C45,#0B4669);color:#fff;border-radius:20px;padding:16px 18px;text-align:center;box-shadow:0 20px 50px rgba(2,44,69,.45);transition:transform .5s cubic-bezier(.2,1.4,.4,1);cursor:pointer}
 #vendaNova.on{transform:translate(-50%,0)}#vendaNova b{display:block;font-size:24px;font-weight:900;color:#FF8A1A;letter-spacing:.5px}#vendaNova span{font-size:15px;font-weight:600}
 .driver-popover.frade-tour{border-radius:16px;max-width:320px}.driver-popover.frade-tour .driver-popover-title{color:#022C45;font-weight:800;font-size:17px}.driver-popover.frade-tour .driver-popover-description{font-size:14.5px;line-height:1.45}
@@ -3334,7 +3397,7 @@ window.__natalCSS = `
  html.natal .brand-mark.marca img{border-radius:inherit}
  html.natal .brand-mark.marca::after{content:"";position:absolute;left:-14%;top:-36%;width:128%;height:139%;background:var(--nt-gorro-f) no-repeat center/contain;pointer-events:none}
  html.natal .bz-card{position:relative;overflow:visible}
- html.natal .bz-card::after{content:"";position:absolute;top:-13px;right:10px;width:34px;height:34px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 20 C 8 4 0 12 6 18 C 9 21 15 21 20 20 C 25 21 31 21 34 18 C 40 12 32 4 20 20Z' fill='%23E2283A'/%3E%3Cpath d='M20 20 l-7 14 l5 -3 l2 5z M20 20 l7 14 l-5 -3 l-2 5z' fill='%23C8101E'/%3E%3Ccircle cx='20' cy='20' r='4.5' fill='%23B30E1B'/%3E%3C/svg%3E") no-repeat center/contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18));pointer-events:none}
+ html.natal .bz-card::after{content:"";position:absolute;top:-18px;right:6px;width:48px;height:44px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 46'%3E%3Cg transform='translate%2814 44%29 rotate%2835%29'%3E%3Cpath d='M0 0V-31a5.5 5.5 0 0 1 11 0v3' fill='none' stroke='%239F1239' stroke-width='6.4' stroke-linecap='round'/%3E%3Cpath d='M0 0V-31a5.5 5.5 0 0 1 11 0v3' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M0 0V-31a5.5 5.5 0 0 1 11 0v3' fill='none' stroke='%23E11D48' stroke-width='5' stroke-dasharray='2.8 2.8'/%3E%3C/g%3E%3Cg transform='translate%2836 44%29 scale%28-1 1%29 rotate%2835%29'%3E%3Cpath d='M0 0V-31a5.5 5.5 0 0 1 11 0v3' fill='none' stroke='%239F1239' stroke-width='6.4' stroke-linecap='round'/%3E%3Cpath d='M0 0V-31a5.5 5.5 0 0 1 11 0v3' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M0 0V-31a5.5 5.5 0 0 1 11 0v3' fill='none' stroke='%23E11D48' stroke-width='5' stroke-dasharray='2.8 2.8'/%3E%3C/g%3E%3Cpath d='M17 29c4-5 7-4 8-1-3 3-6 4-8 1z' fill='%2315803D'/%3E%3Cpath d='M33 29c-4-5-7-4-8-1 3 3 6 4 8 1z' fill='%2316A34A'/%3E%3Ccircle cx='23' cy='28.5' r='2.6' fill='%23B91C1C'/%3E%3Ccircle cx='27' cy='28.5' r='2.6' fill='%23DC2626'/%3E%3Ccircle cx='25' cy='25.6' r='2.3' fill='%23EF4444'/%3E%3C/svg%3E") no-repeat center/contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));pointer-events:none}
  html.natal #bzCorre{background:linear-gradient(135deg,#C8101E,#E8510C)!important;box-shadow:0 10px 30px rgba(200,16,30,.35)!important;overflow:visible!important}
  html.natal #bzCorre::after{content:"";position:absolute;left:-16px;top:-24px;width:54px;height:44px;transform:rotate(-18deg);background:var(--nt-gorro-b) no-repeat center/contain;pointer-events:none}
 `;
@@ -3949,7 +4012,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
           <div id="presLista"></div>
           <div id="presSemConta"></div>
           <div class="rep-sec" style="margin:16px 0 8px">Resumo do mês</div>
-          <div id="presMes"></div>
+          <div id="presMes" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
         </div>
         <div class="card hide" id="cardRecrut" style="margin-bottom:20px">
           <div class="card-head"><h2>Recrutamentos</h2><button class="btn btn-ghost" onclick="abrirRecrut()">+ Registrar recrutamento</button></div>
@@ -8126,7 +8189,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 429;
+const APP_VERSAO = 430;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8197,6 +8260,105 @@ function telaGanho(valor, v, meu){
   setTimeout(() => el.remove(), 5500);
 }
 const ptsDe = k => valorNoDia({ ...(appCfg?.pontos || {}), degraus:juntaDegraus(DEGRAUS_GERAL, appCfg?.pontos?.degraus) }, k, hojeISO()); // v258
+const _bzCartaVista = new Set(); let _bzCartaPronto = false;
+// v430: quem pega uma CARTA APROVADA do bolsão recebe uma mensagem de incentivo
+function cartaPegaFesta(x){
+  document.getElementById('cartaPega')?.remove();
+  const nome = String(perfil?.nome || '').trim().split(/\s+/)[0], cli = nomeCurto ? nomeCurto(x.nome || '') : (x.nome || '');
+  const el = document.createElement('div'); el.id = 'cartaPega';
+  el.innerHTML = `<div class="cp-box" role="dialog" aria-live="assertive"><div class="cp-selo">CARTA APROVADA</div>
+    <h3>${nome ? esc(nome) + ', você' : 'Você'} pegou uma carta aprovada!</h3>
+    <div class="cp-missao"><small>SUA MISSÃO</small><b>Ligue e libere o CPF ${cli ? 'de <span style="white-space:nowrap">' + esc(cli) + '</span>' : 'do cliente'}</b></div>
+    <div class="cp-regra"><b>Regra:</b> o CPF só libera se o cliente <b>atender</b> e você <b>segurar a ligação por pelo menos 3 minutos</b>, ligando pelo botão Ligar do app. Ligação curta não libera.</div>
+    <p class="cp-forte">Dê o seu máximo!</p>
+    <button class="cp-bt" type="button">Aceito a missão!</button></div>`;
+  const fechar = () => { el.classList.remove('on'); setTimeout(() => el.remove(), 300); };
+  el.addEventListener('click', e => { if (e.target === el || e.target.closest('.cp-bt')) fechar(); });
+  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
+  try { soltarConfete(200); } catch(e) {} vibrar([60, 50, 60, 50, 120]);
+  setTimeout(fechar, 9000);
+}
+window.cartaPegaFesta = cartaPegaFesta;
+
+// ---------- v430: CARTA APROVADA no bolsão: o CPF só libera com ligação atendida de pelo menos 3 minutos ----------
+// O CPF fica em bolsao_cpf/{id do lead} (regra do Firebase: lê só a gerência e quem pegou o lead). O app só mostra depois da ligação.
+const CARTA_MIN_SEG = 180, CARTA_PRAZO_MS = 24 * 3600e3, CARTA_PRAZO_TXT = 'carta: prazo de 24h para liberar o CPF';
+const cartaLib = id => (state && state.cartaLib && state.cartaLib[id]) || null;
+function htmlCartaCpf(x){
+  const lib = cartaLib(x.id);
+  if (lib) return `<div class="cc-box ok"><span>✓ CPF liberado · ligação de ${fmtDurLig(lib.seg)}</span><button class="cc-bt on" onclick="cartaVerCpf('${x.id}')">🔓 Ver CPF</button></div>`;
+  const ult = (state && state.cartaUlt && state.cartaUlt[x.id]) || null;
+  return `<div class="cc-box"><span>🔒 Para liberar o CPF: ligue pelo botão <strong>Ligar</strong>, o cliente precisa <strong>atender</strong> e a ligação tem que durar <strong>pelo menos 3 minutos</strong>.${ult ? `<br><small>Última tentativa: ${fmtDurLig(ult.seg)}${ult.sim ? '' : ', não atendeu'}. Faltou ${ult.sim ? fmtDurLig(Math.max(0, CARTA_MIN_SEG - ult.seg)) : 'o cliente atender'}.</small>` : ''}</span><button class="cc-bt" onclick="cartaVerCpf('${x.id}')">🔒 Liberar CPF</button></div>`;
+}
+function cartaChecaLigacao(c, sim){
+  const t = chaveTel(c.tel || ''); if (!t) return;
+  const x = bolsao.find(b => b.carta && b.status === 'pego' && b.pegoPor === uidAtual && bzTelK(b) === t); if (!x || cartaLib(x.id)) return;
+  state.cartaUlt = { ...(state.cartaUlt || {}), [x.id]:{ seg:c.seg, sim:!!sim, em:Date.now() } };
+  if (sim && c.seg >= CARTA_MIN_SEG) {
+    state.cartaLib = { ...(state.cartaLib || {}), [x.id]:{ seg:c.seg, em:Date.now() } }; salvar();
+    updateDoc(doc(db,'bolsao', x.id), { historico:bzHist(x, 'CPF liberado · ligação de ' + fmtDurLig(c.seg)) }).catch(() => {});
+    try { soltarConfete(120); } catch(e) {} vibrar([40, 40, 80]);
+    setTimeout(() => cartaVerCpf(x.id), 600);
+  } else {
+    salvar();
+    if (!cartaPrazo(x)) updateDoc(doc(db,'bolsao', x.id), { historico:bzHist(x, CARTA_PRAZO_TXT) }).catch(() => {});
+    const falta = Math.max(0, CARTA_MIN_SEG - c.seg);
+    setTimeout(() => avisoCarta(sim ? `A ligação durou ${fmtDurLig(c.seg)}. Para liberar o CPF de ${esc(nomeCurto(x.nome || ''))} ela precisa de pelo menos <b>3 minutos</b> com o cliente na linha. Faltaram <b>${fmtDurLig(falta)}</b>. Ligue de novo e segure o cliente.<br><br>⏳ Você tem <b>24 horas</b> para conseguir. Se não conseguir, a carta volta para o bolsão e vai para outro corretor.` : `O cliente não atendeu, então o CPF continua travado. Ligue de novo: libera quando ele atender e a ligação durar pelo menos <b>3 minutos</b>.<br><br>⏳ Você tem <b>24 horas</b> para conseguir. Se não conseguir, a carta volta para o bolsão e vai para outro corretor.`), 400);
+  }
+  render();
+}
+
+// v430: prazo de 24h (marcado no histórico do lead na primeira tentativa que não liberou) + caixinha no topo com a contagem
+const cartaPrazo = x => { const h = (x.historico || []).filter(e => e.txt === CARTA_PRAZO_TXT).pop(); return h ? (h.em || 0) + CARTA_PRAZO_MS : 0; };
+const cartaLiberadaHist = x => (x.historico || []).some(e => /^CPF liberado/.test(e.txt || ''));
+function cartaMinhasPendentes(){ return (bolsao || []).filter(x => x.carta && x.status === 'pego' && x.pegoPor === uidAtual && !cartaLib(x.id) && !cartaLiberadaHist(x) && cartaPrazo(x)); }
+const fmtResta = ms => { const t = Math.max(0, Math.floor(ms / 1000)), h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), sg = t % 60; return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sg).padStart(2, '0')}`; };
+function pintaCartaBanner(){
+  let el = document.getElementById('cartaBanner');
+  const l = uidAtual ? cartaMinhasPendentes().sort((a, b) => cartaPrazo(a) - cartaPrazo(b)) : [];
+  if (!l.length) { if (el) el.remove(); document.body.classList.remove('com-carta-banner'); return; }
+  const x = l[0], resta = cartaPrazo(x) - Date.now();
+  if (!el) { el = document.createElement('div'); el.id = 'cartaBanner'; el.addEventListener('click', e => { if (e.target.closest('.cbn-lig')) return; try { bzAba = 'meus'; setView('bolsao'); } catch(er) {} }); document.body.appendChild(el); }
+  document.body.classList.add('com-carta-banner');
+  const urg = resta < 3 * 3600e3 ? ' urg' : '';
+  const html = `<span class="cbn-ic">⏳</span><span class="cbn-tx"><b>CARTA APROVADA</b><small><strong>${esc(nomeCurto(x.nome || ''))}</strong> · ligue e segure 3 min para liberar o CPF${l.length > 1 ? ` · +${l.length - 1} carta${l.length > 2 ? 's' : ''}` : ''}</small></span><span class="cbn-t${urg}">${fmtResta(resta)}</span>${x.telefone ? `<button class="cbn-lig" type="button" data-tel="${esc(x.telefone)}" data-cli="${esc(x.nome || '')}" data-or="bolsão" onclick="ligarBtn(this)">Ligar</button>` : ''}`;
+  if (el._k !== x.id + '|' + l.length) { el.innerHTML = html; el._k = x.id + '|' + l.length; } else { const t = el.querySelector('.cbn-t'); if (t) { t.textContent = fmtResta(resta); t.className = 'cbn-t' + urg; } }
+}
+setInterval(() => { try { pintaCartaBanner(); } catch(e) {} }, 1000);
+// o app do gestor devolve ao bolsão a carta que passou das 24h sem liberar o CPF (vai para outro corretor)
+async function cartaVencidas(){
+  if (!souDono()) return; const agora = Date.now();
+  for (const x of (bolsao || []).filter(b => b.carta && b.status === 'pego' && !cartaLiberadaHist(b) && cartaPrazo(b) && cartaPrazo(b) < agora)) {
+    try { await updateDoc(doc(db,'bolsao', x.id), { status:'livre', liberadoGerencia:true, pegoPor:'', pegoNome:'', pegoEm:0, resultado:'', liberadoEm:agora, tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'carta voltou ao bolsão: 24h sem ligação de 3 min (estava com ' + (x.pegoNome || '') + ')') }); } catch(e) { console.warn('carta vencida', e.message); }
+  }
+}
+setInterval(() => { try { cartaVencidas(); } catch(e) {} }, 60000);
+function avisoCarta(html){
+  document.getElementById('cartaPega')?.remove();
+  const el = document.createElement('div'); el.id = 'cartaPega';
+  el.innerHTML = `<div class="cp-box"><div class="cp-selo" style="background:#B45309">CPF AINDA TRAVADO</div><p style="margin:14px 0 16px;font-size:16px;line-height:1.5;color:#14532D">${html}</p><button class="cp-bt" type="button">Entendi</button></div>`;
+  el.addEventListener('click', e => { if (e.target === el || e.target.closest('.cp-bt')) { el.classList.remove('on'); setTimeout(() => el.remove(), 300); } });
+  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
+}
+window.cartaVerCpf = async id => {
+  const x = bolsao.find(b => b.id === id); if (!x) return;
+  if (!cartaLib(id) && !souGerente()) { avisoCarta('Ligue primeiro. O CPF só libera depois de uma ligação de pelo menos <b>3 minutos</b> com o cliente atendendo, feita pelo botão <b>Ligar</b> do app.'); return; }
+  let cpf = '';
+  try { const d = await getDoc(doc(db,'bolsao_cpf', id)); cpf = d.exists() ? String(d.data().cpf || '') : ''; } catch(e) { toast('Não deu para buscar o CPF: ' + e.message); return; }
+  if (!cpf) { toast('Esta carta está sem CPF cadastrado. Fale com a gerência.'); return; }
+  const fmt = soDig(cpf).replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+  const txt = ['❌❌❌❌❌❌❌❌', 'Verificar CPF', '', `Nome: ${x.nome || ''}`, `Telefone: ${String(x.telefone || '').replace(/^['’`\s]+/, '')}`, `CPF: ${fmt}`, 'Está em outro CCA? ', 'Ver se tem Restrição?: ', 'Parcela e prazo se tiver análise válida: ', 'Renda cadastrada: '].join('\n');
+  document.getElementById('cartaPega')?.remove();
+  const el = document.createElement('div'); el.id = 'cartaPega';
+  el.innerHTML = `<div class="cp-box"><div class="cp-selo">MISSÃO CUMPRIDA</div><h3 style="font-size:20px">Agora libere o CPF no grupo de crédito</h3>
+    <div class="cp-cpf"><small>CPF DE ${esc(String(nomeCurto(x.nome || '')).toUpperCase())}</small><b>${esc(fmt)}</b><button type="button" data-c="cpf">Copiar CPF</button></div>
+    <pre class="cp-txt">${esc(txt)}</pre>
+    <button class="cp-bt" type="button" data-c="txt" style="width:100%">📋 Copiar texto para o grupo</button>
+    <p style="margin:10px 0 0;font-size:13px">Cole no seu grupo de crédito PRIME/FRADE.</p><button class="link" type="button" data-c="x" style="margin-top:8px">Fechar</button></div>`;
+  el.addEventListener('click', async e => { const b = e.target.closest('button'); if (e.target === el || (b && b.dataset.c === 'x')) { el.classList.remove('on'); setTimeout(() => el.remove(), 300); return; }
+    if (!b) return; try { await navigator.clipboard.writeText(b.dataset.c === 'cpf' ? soDig(cpf) : txt); b.textContent = b.dataset.c === 'cpf' ? '✓ Copiado' : '✓ Copiado! Agora cole no grupo'; } catch(er) { toast('Não deu para copiar'); } });
+  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
+};
 function soltarConfete(qtd = 160){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cv = $('confete'), ctx = cv.getContext('2d');
@@ -11937,6 +12099,7 @@ function voltouDaLigacao(){
 document.addEventListener('visibilitychange', voltouDaLigacao);
 window.ligConfResp = async sim => {
   fechar('ligConfModal'); const c = _ligConf; _ligConf = null; if (!c) return;
+  try { cartaChecaLigacao(c, sim); } catch(e) { console.warn('carta cpf', e.message); }
   const pro = sim && $('ligConfPro').checked, vis = sim && $('ligConfVis').checked, fei = vis && $('ligConfFei').checked;
   // v112: marcou visita na ligação -> abre a visita já preenchida (cliente, telefone, hoje, Feirão)
   const abreVisita = () => { if (!vis) return; novaVisita(); setTimeout(() => { $('vmCliente').value = c.cliente || ''; $('vmFone').value = c.tel || ''; $('vmFeirao').checked = fei;
@@ -12484,8 +12647,10 @@ const bzJaPeguei = () => { const t = new Set(); bolsao.filter(x => x.pegoPor ===
 const bzAtendido = x => !x.repetidoDe && ((x.historico || []).some(e => e.txt === 'pegou') || !!x.resultado || ['pego','encerrado'].includes(x.status));
 const bzAtendidosTels = () => { const t = new Set(window._bzAtendTodos || []); bolsao.filter(x => x.status !== 'livre' && x.status !== 'fila' && bzAtendido(x)).forEach(x => t.add(bzTelK(x))); t.delete(''); return t; };
 const bzVoltaProibida = (x, at) => !x.liberadoGerencia && (bzAtendido(x) || at.has(bzTelK(x)));
+// v430: números bloqueados pela gerência nunca aparecem no bolsão (config/app.bolsaoBloqueados, chave do telefone)
+const bzBloq = () => new Set((appCfg.bolsaoBloqueados || []).map(String));
 const bzLivres = () => { if (!souGerente()) bzCarregarHist(); const at = bzAtendidosTels(); const ocup = new Set([...bolsao.filter(x => x.status === 'pego').map(bzTelK).filter(Boolean), ...(window._bzOcupOutros || [])]), vistos = new Set(), meu = souGerente() ? new Set() : bzJaPeguei();
-  return bolsao.filter(x => x.status === 'livre' && !bzVoltaProibida(x, at)).sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0)).filter(x => { const k = bzTelK(x); if (!k) return true; if (ocup.has(k) || vistos.has(k) || meu.has(k)) return false; vistos.add(k); return true; }); };
+  const bl = bzBloq(); return bolsao.filter(x => x.status === 'livre' && !x.bloqueado && !bl.has(bzTelK(x)) && !bzVoltaProibida(x, at)).sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0)).filter(x => { const k = bzTelK(x); if (!k) return true; if (ocup.has(k) || vistos.has(k) || meu.has(k)) return false; vistos.add(k); return true; }); };
 // o app do gestor junta os repetidos de verdade no banco: fica um por telefone (o que está com alguém, ou o mais antigo) e os outros saem do giro
 let _bzLimpT = 0;
 async function bzJuntarRepetidos(forcar){
@@ -12627,9 +12792,11 @@ function renderBolsao(){
     $('bzLista').innerHTML = seq + `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th><th class="hide-m">Chegou</th>${md === 'manual' && dono ? '<th></th>' : ''}</tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td><td class="hide-m">${x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</td>${md === 'manual' && dono ? `<td><div class="bz-mv"><button class="icon-btn" title="Mandar para o começo" aria-label="Mandar para o começo" onclick="bzMover('${x.id}','topo')" ${i ? '' : 'disabled'}>⤒</button><button class="icon-btn" title="Subir" aria-label="Subir" onclick="bzMover('${x.id}',-1)" ${i ? '' : 'disabled'}>↑</button><button class="icon-btn" title="Descer" aria-label="Descer" onclick="bzMover('${x.id}',1)" ${i < l.length - 1 ? '' : 'disabled'}>↓</button></div></td>` : ''}</tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
     const l = appCfg.bolsaoOrdem ? bzOrdenar(bzLivres()) : bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
-    $('bzLista').innerHTML = (souGerente() && !souCeo() ? htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}><div class="an-c1"><span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span></div>
-      <b class="an-cli">${esc(bzNome(x))}</b><div class="an-c2">${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
+    $('bzLista').innerHTML = (souGerente() && !souCeo() ? htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${x.carta ? ' carta' : ''}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}>${x.carta ? '<i class="bz-estrelas" aria-hidden="true"><b></b><b></b><b></b><b></b></i>' : ''}<div class="an-c1">${x.carta ? '<span class="bz-selo-carta"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>CARTA APROVADA</span>' : `<span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span>`}</div>
+      <b class="an-cli">${esc(bzNome(x))}</b>${x.carta ? '<div class="bz-carta-regra">🔒 O CPF só libera depois de uma ligação de <b>3 minutos</b> com o cliente atendendo</div>' : ''}<div class="an-c2">${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>${x.zapConversaId ? 'Pegar e conversar' : 'Pegar e ligar'}</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
+    // v430: carta aprovada que acabou de aparecer: confete na tela de quem está olhando (uma vez por carta neste aparelho)
+    try { const novas = l.filter(x => x.carta && !_bzCartaVista.has(x.id)); novas.forEach(x => _bzCartaVista.add(x.id)); if (novas.length && _bzCartaPronto) { soltarConfete(90); vibrar([30, 40, 30]); } _bzCartaPronto = true; } catch(e) {}
   } else if (bzAba === 'meus') {
     $('bzLista').innerHTML = htmlBzFunil();
   } else {
@@ -12675,13 +12842,14 @@ window.apagarAnotacao = nid => { const x = _ntX; if (!x || !confirm('Apagar esta
 function bzCardFunil(x, et){
   const tempo = ms => anTempo(ms), aberto = x.status === 'pego';
   const opts = bzEtapas().filter(e => e.k !== (x.resultado || '')).map(e => `<option value="${e.k}">${esc(e.n)}</option>`).join('');
-  return `<div class="bzf-card${aberto && !x.resultado ? ' novo' : ''}">
+  return `<div class="bzf-card${aberto && !x.resultado ? ' novo' : ''}${x.carta ? ' carta' : ''}">
     <div class="bzf-l1"><b>${esc(x.nome || 'Cliente')}</b><small>${tempo(x.resultadoEm || x.pegoEm)}</small></div>
     <div class="bzf-l2">${x.telefone ? `<span>${esc(String(x.telefone).replace(/^['’`\s]+/, ''))}</span>` : ''}${x.origem === 'perdido' ? '<span>cliente perdido</span>' : ''}${x.empreendimento ? `<span>${esc(x.empreendimento)}</span>` : ''}</div>
     ${x.obs ? `<div class="an-c3">${esc(x.obs)}</div>` : ''}
     ${(() => { const l = notasDe(x); return l.length ? `<div class="nt-ult" onclick="abrirNotas('${x.id}')">📝 ${esc(l[0].txt.length > 90 ? l[0].txt.slice(0, 90) + '…' : l[0].txt)}</div>` : ''; })()}
     <div class="bz-lig">${htmlLigar(x.telefone, x.nome, 'bolsão')}${x.zapConversaId ? `<button class="snooze wa" onclick="abrirZapCid('${esc(x.zapConversaId)}')">Abrir conversa</button>` : zapOficialOn() && x.telefone ? `<button class="snooze wa" onclick="zapChamarCrm('${x.id}')">WhatsApp da Frade</button>` : ''}<button class="snooze nt-bt" onclick="abrirNotas('${x.id}')" title="Anotações sobre o cliente">📝 Anotações${notasDe(x).length ? ` <i>${notasDe(x).length}</i>` : ''}</button></div>
     ${aberto ? htmlBzLigs(x) : ''}
+    ${x.carta && aberto ? htmlCartaCpf(x) : ''}
     <div class="bzf-mov"><select onchange="if(this.value)resultadoBolsao('${x.id}',this.value)" aria-label="Mover para outra etapa"><option value="">${x.resultado ? 'Mover para outra etapa' : 'Como foi? Mover para…'}</option>${opts}</select></div>
     ${aberto ? `<button class="link" onclick="devolverBolsao('${x.id}')">Devolver (não volta ao bolsão)</button>` : ''}</div>`;
 }
@@ -12794,6 +12962,7 @@ window.pegarBolsao = async id => {
     if (ligaPontua()) setDoc(doc(db,'ranking_ativ', mm + '_' + uidAtual), { mes:mm, uid:uidAtual, nome:perfil.nome, equipe:perfil.equipe || '', bz:{ [h]: increment(1) }, atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('bz ranking', e.message));
     if (state) { const pg = state.bzPeguei || {}, lim = Date.now() - 30 * 864e5; Object.keys(pg).forEach(k => { if ((pg[k].em || 0) < lim) delete pg[k]; }); pg[id] = { n:String(x.nome || '').slice(0, 60), t:String(x.telefone || '').slice(0, 25), em:Date.now() }; state.bzPeguei = pg; salvar(); }
     bzAba = 'meus'; vibrar(15); render();
+    if (x.carta) { try { cartaPegaFesta(x); } catch(e) {} }
     // v152: lead que veio do WhatsApp da Frade: a conversa passa para quem pegou e abre dentro do app
     if (x.zapConversaId) { try { const r = await carteiroJson({ tipo:'zap_bolsao', id }); if (r.ok) { toast('Cliente é seu. A conversa abriu no WhatsApp da Frade.'); abrirZapCid(r.cid); return; } } catch(e2) { console.warn('zap_bolsao', e2.message); } }
     // v100: já abre a ligação pelo WhatsApp do corretor (e conta como ligação)
@@ -12829,7 +12998,7 @@ window.abrirBolsaoNovo = () => { window._bzArq = []; $('bzArq').value = ''; $('b
 async function bzGravar(itens, avisar, aosPoucos){
   const tels = new Set(bolsao.map(x => chaveTel(x.telefone)).filter(Boolean)); let n = 0, rep = 0; // v224: número que já passou pelo bolsão não entra de novo
   for (let i = 0; i < itens.length; i += 400) { const b = writeBatch(db);
-    itens.slice(i, i + 400).forEach(x => { const t = chaveTel(x.telefone); if (t && tels.has(t)) { rep++; return; } if (t) tels.add(t);
+    itens.slice(i, i + 400).forEach(x => { const t = chaveTel(x.telefone); if (t && (tels.has(t) || bzBloq().has(t))) { rep++; return; } if (t) tels.add(t);
       b.set(doc(collection(db,'bolsao')), { criativo:String(x.criativo || '').slice(0, 120), nome:String(x.nome || '').slice(0, 80), telefone:String(x.telefone || '').replace(/^['’`\s]+/, '').slice(0, 25), telNorm:chaveTel(x.telefone || ''), origem:x.origem, motivo:String(x.motivo || '').slice(0, 80), empreendimento:String(x.empreendimento || '').slice(0, 80), obs:String(x.obs || '').slice(0, 200), ref:x.ref || '', status:'livre', pegoPor:'', criadoEm:Date.now(), criadoPor:uidAtual, criadoNome:perfil.nome, tentativas:0, ...(aosPoucos ? { status:'fila', ordem:Date.now() + n } : {}) }); n++; });
     await b.commit(); }
   if (n && avisar && !aosPoucos) avisarCarteiro('bolsao', '', true, { n });
