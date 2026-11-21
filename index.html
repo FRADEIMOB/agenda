@@ -771,6 +771,12 @@ html.modo-tvr .tve.on{opacity:1;background:radial-gradient(circle at 50% 45%,col
 .ganho-voa b{display:block;font-size:44px;font-weight:800;color:#16a34a;text-shadow:0 4px 18px rgba(22,163,74,.35)}.ganho-voa span{font-size:15px;font-weight:600;color:var(--text)}
 @keyframes ganhoSobe{0%{opacity:0;transform:translate(-50%,30px) scale(.8)}15%{opacity:1;transform:translate(-50%,0) scale(1.08)}30%{transform:translate(-50%,-10px) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-140px)}}
 @media (prefers-reduced-motion:reduce){.ganho-voa{animation:none;opacity:1}}
+#btAvisoHoje{display:none!important}
+.hj-bts{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.hj-bt{flex:1 1 0;min-width:150px;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font:600 14px/1.2 inherit;cursor:pointer;position:relative;text-align:left}
+.hj-bt{white-space:nowrap}.hj-bt small{font-weight:500;color:var(--muted);font-size:12.5px}
+.hj-bt.novo{border-color:#EE8A3C}.hj-bt.novo::after{content:"";position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;background:#EE8A3C}
+.hj-bt:active{transform:scale(.98)}
 .rel-dia{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;margin-bottom:16px;border-radius:16px;background:#0E2A3E;color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(14,42,62,.22)}
 .rel-dia b{display:block;font-size:14.5px;letter-spacing:.3px}.rel-dia span{display:block;font-size:13px;opacity:.8;margin-top:3px}
 .rel-dia .btn{background:#EE8A3C;border:0;color:#fff;flex:none}
@@ -779,6 +785,38 @@ html.modo-tvr .tve.on{opacity:1;background:radial-gradient(circle at 50% 45%,col
 
 /* Mobile */
 .mobilebar{display:none}
+html body:has(#app) #statsTarefas#statsTarefas,html body #cardAgendaHoje#cardAgendaHoje{display:none!important} /* v434: tarefas saíram da tela inicial */
+.menu-topo{display:none}
+@media (max-width:900px){
+  /* v434: o menu sai do "Você" da barra de baixo e vira o botão Menu no topo; abre pela lateral esquerda, de cima a baixo, sem tomar a tela toda */
+  .menu-topo{display:flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:11px;padding:7px 11px;font:700 13.5px/1 inherit;cursor:pointer}
+  #mbVoce{display:none!important}
+  html body #menuModal.modal{justify-content:flex-start;align-items:stretch;padding:0}
+  html body #menuModal.modal>.sheet{position:fixed;top:0;bottom:0;left:0;margin:0;align-self:stretch;width:min(310px,82vw)!important;height:100vh;height:100dvh;max-height:none!important;border-radius:0 20px 20px 0!important;border-left:0;animation:menuLado .26s cubic-bezier(.2,.9,.3,1) both}
+  html body #menuModal .sheet-head{padding-top:calc(14px + env(safe-area-inset-top,0px))}
+  html body #menuModal .sheet-body{flex:1;overflow-y:auto;padding:8px 10px calc(16px + env(safe-area-inset-bottom,0px))}
+  html body #menuModal.modal>.sheet{background:var(--card);border:0;box-shadow:18px 0 40px -12px rgba(2,6,23,.35)}
+  html body #menuModal .sheet-head{display:flex;align-items:center;gap:10px;background:linear-gradient(150deg,#0E2A3E,#16405C);color:#fff;border:0;padding:calc(18px + env(safe-area-inset-top,0px)) 14px 18px 16px;border-radius:0 20px 0 0}
+  html body #menuModal .mn-tit{display:none}
+  html body #menuModal .mn-user{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+  html body #menuModal .mn-av{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#EE8A3C;color:#fff;font:800 18px/1 inherit;flex:none}
+  html body #menuModal .mn-av{overflow:hidden}html body #menuModal .mn-av img{width:100%;height:100%;object-fit:cover;display:block}
+  html body #menuModal .mn-q{display:grid;min-width:0}
+  html body #menuModal .mn-q b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html body #menuModal .mn-q small{font-size:12.5px;opacity:.75;margin-top:2px}
+  html body #menuModal .sheet-head .icon-btn{color:#fff;background:rgba(255,255,255,.12);border:0}
+  html body #menuModal .menu-list>button{border:0;border-radius:12px;padding:8px 10px;gap:12px;font-size:14.5px;font-weight:600;color:var(--text);margin:1px 0}
+  html body #menuModal .menu-list>button>:first-child{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:10px;background:var(--accent-soft);color:var(--accent)}
+  html body #menuModal .menu-list>button>:first-child svg{width:18px;height:18px;color:currentColor}
+  html body #menuModal .menu-list>button:active,html body #menuModal .menu-list>button:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+  html body #menuModal .menu-list>button.mn-on{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent)}
+  html body #menuModal .menu-list>button[onclick*="'config'"]{margin-top:10px;position:relative}
+  html body #menuModal .menu-list>button[onclick*="'config'"]::before{content:"";position:absolute;left:8px;right:8px;top:-6px;height:1px;background:var(--border)}
+  html body #menuModal .menu-list>button[onclick*="sair"]{color:#B91C1C}
+  html body #menuModal .menu-list>button[onclick*="sair"]>:first-child{background:#FEE2E2;color:#B91C1C}
+}
+@keyframes menuLado{from{transform:translateX(-100%)}to{transform:none}}
+
 .fab{display:none}
 @media(max-width:1100px){.grid-home,.cal-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){
@@ -2402,6 +2440,9 @@ html[data-theme="dark"] .bz-card.carta .an-cli,html[data-theme="dark"] .bzf-card
 #cartaPega .cp-txt{text-align:left;background:#0B2A1A;color:#D1FAE5;border-radius:14px;padding:12px 14px;font:13px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;margin:0 0 14px;max-height:40vh;overflow:auto}
 #cartaPega .cp-box{max-height:92vh;overflow:auto}
 #cartaBanner{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 66px);z-index:900;width:min(560px,calc(100vw - 20px));display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#ECFDF3,#D1FAE5);border:1.5px solid #22C55E;border-left:5px solid #16A34A;border-radius:14px;padding:8px 10px;box-shadow:0 10px 26px -8px rgba(22,163,74,.45);cursor:pointer;animation:cbnEntra .5s cubic-bezier(.2,1.4,.4,1)}
+#credAviso{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 84px);z-index:900;width:min(560px,calc(100vw - 20px));display:flex;align-items:center;gap:10px;background:#FFF7ED;border:1.5px solid #FDBA74;border-left:5px solid #EA580C;border-radius:14px;padding:9px 10px;box-shadow:0 10px 26px -8px rgba(234,88,12,.4);animation:cbnEntra .5s cubic-bezier(.2,1.4,.4,1)}
+#credAviso .ca-tx{flex:1;min-width:0;display:grid;line-height:1.3}#credAviso .ca-tx b{font-size:13.5px;color:#9A3412}#credAviso .ca-tx small{font-size:12.5px;color:#7C2D12}
+#credAviso button{border:0;background:#EA580C;color:#fff;font-weight:700;border-radius:9px;padding:7px 12px;cursor:pointer;flex-shrink:0}
 @keyframes cbnEntra{0%{transform:translate(-50%,-30px);opacity:0}100%{transform:translateX(-50%);opacity:1}}
 #cartaBanner .cbn-ic{font-size:18px}
 #cartaBanner .cbn-tx{display:grid;flex:1;min-width:0;line-height:1.25}
@@ -3577,6 +3618,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
         <div class="sino-w"><button class="icon-btn sino" id="btnSino" onclick="abrirSino(event)" title="Notificações" aria-label="Notificações"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="sino-n hide" id="sinoN">0</span></button>
           <div class="sino-painel hide" id="sinoPainel" onclick="event.stopPropagation()"><div class="sino-cab"><b>Notificações</b><span><button class="link" onclick="marcarTodasLidas()">marcar todas como lidas</button><button class="link" onclick="fecharSino();setView('config');setTimeout(()=>{const c=document.getElementById('cfgNotif');if(c){c.classList.add('aberto');c.scrollIntoView({behavior:'smooth'});}},300)">ajustar</button></span></div><div class="sino-lista" id="sinoLista"></div></div></div>
         <button class="icon-btn" onclick="alternarTema()" title="Modo claro/escuro" id="btnTema"></button>
+        <button class="menu-topo" id="btnMenuTopo" onclick="abrir('menuModal')" aria-label="Abrir o menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
         <button class="btn btn-primary hide-m" id="btnTopo" onclick="acaoPrincipal()"><i data-ic="plus" style="width:17px;height:17px;display:grid"></i><span id="btnNovoTxt">Nova tarefa</span></button>
       </div>
     </header>
@@ -3584,7 +3626,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
     <div class="content">
       <!-- HOJE -->
       <section class="view" id="v-hoje">
-        <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" onclick="novoAviso()">Publicar aviso</button></div>
+        <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" id="btAvisoHoje" onclick="novoAviso()">Publicar aviso</button></div>
         <div class="hoje-topo">
           <div id="checkinHoje"></div>
           <div id="poupHoje"></div>
@@ -3635,7 +3677,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
               <div class="card-head"><h2>Painel da equipe</h2><span class="muted">este mês</span></div>
               <div id="painelEquipe"></div>
             </div>
-          <div class="card">
+          <div class="card" id="cardAgendaHoje" style="display:none"><!-- v434: saiu da tela inicial (pedido do Allan); as tarefas continuam na aba Tarefas -->
               <div class="card-head"><h2>Agenda de hoje</h2><span class="muted" id="hojeResumo"></span></div>
               <div id="alertaAtraso"></div>
               <div class="quick"><input id="quick" placeholder='Nova tarefa (ex.: "ligar cliente amanhã 14h")' onkeydown="if(event.key==='Enter')addRapida()"><button class="btn btn-primary" onclick="addRapida()">Adicionar</button></div>
@@ -5457,7 +5499,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
 </div>
 <div class="modal" id="menuModal">
   <div class="sheet" style="width:min(420px,100%)">
-    <div class="sheet-head"><h2>Menu</h2><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
+    <div class="sheet-head"><h2 class="mn-tit">Menu</h2><div class="mn-user"><div class="mn-av" id="mnAv"></div><div class="mn-q"><b id="mnNome"></b><small id="mnPapel"></small></div></div><button class="icon-btn" onclick="fechar('menuModal')" data-ic="x"></button></div>
     <div class="sheet-body menu-list">
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('cartas')"><i data-ic="card"></i>Cartas aprovadas</button>
@@ -6629,7 +6671,15 @@ const eqNome = id => equipes[id] ? `${equipes[id].icone||''} ${equipes[id].nome}
 const listaEquipes = () => Object.values(equipes).sort((a,b) => (a.ordem||99)-(b.ordem||99) || a.nome.localeCompare(b.nome,'pt-BR'));
 const primeiro = n => String(n||'').trim().split(' ')[0];
 window.render = render;
-window.abrir = id => { try { voltarAoModalPai(); } catch(e) {} $(id).classList.add('open'); pintarIcones(); };
+window.abrir = id => { try { voltarAoModalPai(); } catch(e) {} if (id === 'menuModal') try { menuTopo(); } catch(e) {} $(id).classList.add('open'); pintarIcones(); };
+// v434: topo do menu lateral com o nome e o papel de quem está usando, e a tela atual marcada
+function menuTopo(){
+  const nome = (typeof perfil !== 'undefined' && perfil?.nome) || '', pap = (typeof perfil !== 'undefined' && perfil?.papel) || '';
+  if ($('mnNome')) $('mnNome').textContent = nome ? nome.split(' ').slice(0, 2).join(' ') : 'Frade Imóveis';
+  if ($('mnPapel')) $('mnPapel').textContent = (typeof souDono === 'function' && souDono()) ? 'Gestor' : (PAPEIS[pap] || '');
+  if ($('mnAv')) { const ft = (typeof perfil !== 'undefined' && perfil?.foto) || ''; $('mnAv').innerHTML = ft ? `<img src="${esc(ft)}" alt="">` : esc((nome.trim()[0] || 'F').toUpperCase()); }
+  document.querySelectorAll('#menuModal .menu-list>button').forEach(bt => bt.classList.toggle('mn-on', !!view && (bt.getAttribute('onclick') || '').includes("setView('" + view + "')")));
+}
 /* v350: voltar para onde estava. Quando um quadro (modal) é fechado para abrir outro a partir dele (ex.: relatório → reserva,
    visita → editar), ao fechar o segundo o app reabre o primeiro na mesma posição, em vez de voltar ao início. */
 const MODAIS_SEM_VOLTA = /^(menuModal|maisModal|gpsAjudaModal)$/;
@@ -8194,7 +8244,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 431;
+const APP_VERSAO = 434;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -10851,10 +10901,12 @@ function assinarRelDia(){
   _relDiaUnsub = onSnapshot(ref, s => { relDia = s.exists() ? { id:s.id, ...s.data() } : null; render(); }, e => console.warn('relDia', e.code || e.message));
 }
 function htmlRelDia(){
-  if (view !== 'hoje' || !podeRelCor()) return '';
+  // v434: "Publicar aviso" e "Relatório dos corretores" viram dois botões pequenos lado a lado (pedido do Allan)
+  if (view !== 'hoje') return '';
+  const rel = podeRelCor(), av = souAtivo() && podeGerir(); if (!rel && !av) return '';
   let visto = false; try { visto = localStorage.getItem('relCorVisto') === mdOntem(); } catch(e) {}
-  const [a, m, d] = mdOntem().split('-');
-  return `<div class="rel-dia${visto ? ' visto' : ''}" onclick="abrirRelCor()" role="button"><div><b>RELATÓRIO DOS CORRETORES</b><span>${d}/${m}/${a} · ${souAnjo() ? 'quem você acompanha' : souCoord() ? 'sua equipe' : 'todas as equipes'}</span></div><button class="btn btn-primary">Ver</button></div>`;
+  const [, m, d] = mdOntem().split('-');
+  return `<div class="hj-bts">${av ? `<button type="button" class="hj-bt" onclick="novoAviso()"><span class="hj-ic">📢</span>Publicar aviso</button>` : ''}${rel ? `<button type="button" class="hj-bt${visto ? '' : ' novo'}" onclick="abrirRelCor()"><span class="hj-ic">📋</span>Relatório <small>${d}/${m}</small></button>` : ''}</div>`;
 }
 // ---------- v160: relatório do dia de cada corretor (anjo, coordenador e gerência puxam na hora, de qualquer dia) ----------
 const podeRelCor = () => souAtivo() && (souAnjo() || souCoord() || (souGerente() && !souCeo()) || souAdm());
@@ -12366,7 +12418,9 @@ function htmlAcoesHoje0(onde){
     const r = _resOntem;
     const rd = (r && r.dados) || {}, rab = !!window._resAb;
     const linhaRes = r ? (r.dados ? `Leads ${rd.leads || 0} · Docs ${rd.docs || 0} · Visitas ${rd.realizadas || 0} realizadas · Vendas ${rd.vendas || 0}` : 'Toque para ler o resumo') : 'Ainda não saiu. O carteiro monta às 8h.';
-    out.push(`<section class="ah-card ah-res${rab ? ' ab' : ''}"><header><div><b>Resumo de ontem</b><small>${linhaRes}</small></div>${r ? `<button class="btn btn-sm btn-ghost ah-res-bt" onclick="window._resAb=!window._resAb;this.closest('.ah-res').classList.toggle('ab',window._resAb);this.textContent=window._resAb?'Fechar':'Ver resumo'">${rab ? 'Fechar' : 'Ver resumo'}</button>` : `<button class="btn btn-sm btn-ghost" onclick="gerarResumoAgora()">Gerar agora</button>`}</header>
+    const resK = 'resVisto', resId = String((r && (r.id || r.dia)) || ''); let resVisto = false; try { resVisto = !!resId && localStorage.getItem(resK) === resId; } catch(e) {}
+    // v434: depois de lido e fechado, o resumo some da tela inicial até sair o próximo
+    if (r && !resVisto) out.push(`<section class="ah-card ah-res${rab ? ' ab' : ''}"><header><div><b>Resumo de ontem</b><small>${linhaRes}</small></div>${r ? `<button class="btn btn-sm btn-ghost ah-res-bt" onclick="if(window._resAb){try{localStorage.setItem('${resK}','${esc(resId)}')}catch(e){};window._resAb=false;this.closest('.ah-res').remove();return}window._resAb=true;this.closest('.ah-res').classList.add('ab');this.textContent='Fechar'">${rab ? 'Fechar' : 'Ver resumo'}</button>` : `<button class="btn btn-sm btn-ghost" onclick="gerarResumoAgora()">Gerar agora</button>`}</header>
       ${r ? `<div class="ah-res-l"><pre class="ah-pre">${esc(String(r.texto || '').replace(/\*/g, ''))}</pre><div class="ah-bts"><button class="btn btn-sm btn-ghost" onclick="copiarResumo()">Copiar</button><a class="btn btn-sm btn-ghost wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(r.texto || '')}">Mandar no WhatsApp</a><button class="btn btn-sm btn-ghost" onclick="gerarResumoAgora()">Gerar de novo</button></div></div>` : ''}</section>`);
     const cv = cartasVencendoL(null, 30).filter(c => c.venc.slice(0, 7) === mesAtual());
     if (cv.length) out.push(`<section class="ah-card ah-res"><header><div><b>${cv.length} carta${cv.length > 1 ? 's' : ''} aprovada${cv.length > 1 ? 's' : ''} vence${cv.length > 1 ? 'm' : ''} este mês sem venda</b><small>${brl(cv.reduce((a, c) => a + (Number(c.valor) || 0), 0))} em crédito aprovado. Vale chamar esses clientes esta semana.</small></div><button class="btn btn-sm btn-ghost" onclick="setView('cartas')">Ver cartas</button></header></section>`);
@@ -12542,6 +12596,33 @@ async function processarZapCredito(){
   } catch(e) { console.warn('grupos de crédito', e.message); }
   finally { window._zcRodando = false; }
 }
+/* v432: aviso para o gestor quando os grupos de crédito param de chegar no app (mais de 3 horas sem mensagem em dia útil, das 9h às 18h) */
+let _credUlt = 0, _credUltBusca = 0;
+async function credUltimaMsg(){
+  if (souDono() && zapCred.length) return Math.max(...zapCred.map(z => Number(z.em) || 0));
+  if (Date.now() - _credUltBusca < 10 * 60e3) return _credUlt; _credUltBusca = Date.now();
+  try { const s = await getDocs(query(collection(db,'zap_credito'), orderBy('em','desc'), limit(1))); _credUlt = s.docs.length ? Number(s.docs[0].data().em) || 0 : 0; } catch(e) { _credUlt = 0; }
+  return _credUlt; }
+async function checaCredAviso(){
+  const el = document.getElementById('credAviso'), some = () => { if (el) el.remove(); };
+  try {
+    if (!souDono() || souCeo() || /[?&]tv=|#tv/.test(location.href)) return some(); // v433: só o gestor do app vê (pedido do Allan)
+    const agora = new Date(), h = agora.getHours(), dia = agora.getDay(), hj = hojeISO();
+    if (dia === 0 || dia === 6 || h < 9 || h >= 18 || feriados(agora.getFullYear()).has(hj)) return some();
+    const ult = await credUltimaMsg(); if (!ult) return some();
+    const ini = new Date(); ini.setHours(8, 0, 0, 0);
+    const parado = Date.now() - Math.max(ult, ini.getTime());
+    let fechado = 0; try { fechado = Number(sessionStorage.getItem('credAvisoOk') || 0); } catch(e) {}
+    if (parado < 3 * 3600e3 || Date.now() - fechado < 3600e3) return some();
+    const hrs = Math.floor(parado / 3600e3), u = new Date(ult);
+    const quando = iso(u) === hj ? 'às ' + u.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : 'em ' + u.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' }) + ' às ' + u.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+    const html = `<span style="font-size:20px">⚠️</span><div class="ca-tx"><b>Grupos de crédito parados há ${hrs}h</b><small>A última mensagem chegou ${quando}. As docs dos corretores podem estar faltando: peça ao Claude para ler os grupos.</small></div><button type="button" onclick="credAvisoOk()">Ok</button>`;
+    if (el) { if (el._h !== html) { el.innerHTML = html; el._h = html; } return; }
+    const d = document.createElement('div'); d.id = 'credAviso'; d.innerHTML = html; d._h = html; document.body.appendChild(d);
+  } catch(e) { console.warn('aviso grupos', e.message); }
+}
+window.credAvisoOk = () => { try { sessionStorage.setItem('credAvisoOk', String(Date.now())); } catch(e) {} const el = document.getElementById('credAviso'); if (el) el.remove(); };
+setInterval(checaCredAviso, 5 * 60e3); setTimeout(checaCredAviso, 45e3);
 function assinarExtrato(){
   extratoMeu = []; extratoTodos = {}; try { assinarZapCredito(); } catch(e) {}
   if (souGerente()) subsPapel.push(onSnapshot(collection(db,'extrato'), s => { extratoTodos = {}; s.docs.forEach(d => extratoTodos[d.id] = d.data()); sincExtrato(); }, e => console.warn('extrato', e.code || e.message)));
