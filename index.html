@@ -4403,8 +4403,8 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
   <button data-view="desempenho" class="so-ceo" onclick="setView('desempenho')"><i data-ic="trend"></i>Equipe</button>
   <button data-view="vendas" class="so-ceo" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas</button>
   <button data-view="financeiro" class="so-ceo" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
-  <button data-view="calendario" id="mbAgenda" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
-  <button data-view="bolsao" id="mbBolsao" class="mb-bz hide" onclick="setView('bolsao')"><span class="mb-bz-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="mbBzN"></b></span>Bolsão</button>
+  <button data-view="calendario" id="mbAgenda" class="hide" style="display:none" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
+  <button data-view="bolsao" id="mbBolsao" class="mb-bz" onclick="setView('bolsao')"><span class="mb-bz-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="mbBzN"></b></span>Bolsão</button>
   <button data-view="ranking" class="nao-sdr" onclick="setView('ranking')"><i data-ic="tbRank"></i>Ranking</button>
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button data-view="empreendimentos" id="mbImoveis" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Imóveis</button>
@@ -8200,9 +8200,9 @@ $('busca').addEventListener('blur', () => setTimeout(() => $('buscaRes').classLi
 // v113: atalho do bolsão no (+) para quem pode pegar lead (segue o painel de abas por cargo)
 // v118: Carteira Frade no (+) (corretor, coordenador e anjo com o bônus ligado; a gerência vê sempre, para testar)
 const podeCartMenu = () => souAtivo() && !souCorresp() && (participaCarteira() || souGerente());
-const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente() || (['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) && !abaOculta('bolsao')));
+const podeBzMenu = () => souAtivo() && !souCorresp() && !souCeo() && (souGerente() || (['corretor','coordenador','sdr','anjo'].includes(perfil?.papel) && (!appCfg?.abasOcultas || !abaOculta('bolsao')))); // v438: antes da configuração chegar, não esconde o bolsão (evitava piscar)
 // v279: quem usa o bolsão vê ele no meio da barra de baixo, em destaque (com quantos leads estão livres); a Agenda vai para o menu do +
-function mbBolsaoVis(){ const b = $('mbBolsao'), a = $('mbAgenda'); if (!b || !a) return; const tem = podeBzMenu(); // v280: também para a gerência (só o CEO e quem tem o bolsão escondido ficam com a Agenda)
+function mbBolsaoVis(){ const b = $('mbBolsao'), a = $('mbAgenda'); if (!b || !a) return; if (typeof perfil === 'undefined' || !perfil) return; /* v438: enquanto carrega, a barra fica como está (sem piscar) */ const tem = podeBzMenu(); // v280: também para a gerência (só o CEO e quem tem o bolsão escondido ficam com a Agenda)
   b.classList.toggle('hide', !tem); a.classList.add('hide'); /* v434: a Agenda saiu da barra de baixo (pedido do Allan); fica no Menu */ const n = tem && _bzHistTodos && bzPresente() ? bzLivres().length : 0; /* só conta quando o bolsão já foi carregado (não gasta leituras do Firebase) */ const e = $('mbBzN'); if (e) e.textContent = n ? (n > 99 ? '99+' : String(n)) : ''; }
 window.fabFechar = () => document.documentElement.classList.remove('fab-aberto');
 window.fabClique = () => {
@@ -8246,7 +8246,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 437;
+const APP_VERSAO = 438;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
