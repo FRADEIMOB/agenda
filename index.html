@@ -2414,6 +2414,11 @@ html[data-theme="dark"] .bz-card.carta .an-cli,html[data-theme="dark"] .bzf-card
 #cartaBanner .cbn-lig{border:0;background:#16A34A;color:#fff;font-weight:800;border-radius:10px;padding:8px 12px;font-size:14px}
 body.com-carta-banner main,body.com-carta-banner .main{padding-top:64px}
 @media (min-width:900px){#cartaBanner{top:14px}}
+.cm-trava{background:#FEF9C3;border:1.5px solid #FDE047;color:#713F12;border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.45;margin:8px 0}
+.cm-trava span{display:block;margin-top:4px;font-weight:800;color:#854D0E}
+#cartaPega .cf-l{display:grid;gap:5px;font-size:13.5px;font-weight:700;color:#14532D;margin:8px 0}
+#cartaPega .cf-l input{border:1.5px solid #86EFAC;border-radius:12px;padding:11px 12px;font-size:16px;background:#fff;color:#0F2A1A}
+#cartaPega .cf-err{color:#B91C1C;font-size:13px;font-weight:700;min-height:18px;margin:2px 0 8px}
 #vendaNova{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:2147483000;width:min(420px,calc(100vw - 28px));transform:translate(-50%,-140%) scale(.9);background:linear-gradient(135deg,#022C45,#0B4669);color:#fff;border-radius:20px;padding:16px 18px;text-align:center;box-shadow:0 20px 50px rgba(2,44,69,.45);transition:transform .5s cubic-bezier(.2,1.4,.4,1);cursor:pointer}
 #vendaNova.on{transform:translate(-50%,0)}#vendaNova b{display:block;font-size:24px;font-weight:900;color:#FF8A1A;letter-spacing:.5px}#vendaNova span{font-size:15px;font-weight:600}
 .driver-popover.frade-tour{border-radius:16px;max-width:320px}.driver-popover.frade-tour .driver-popover-title{color:#022C45;font-weight:800;font-size:17px}.driver-popover.frade-tour .driver-popover-description{font-size:14.5px;line-height:1.45}
@@ -8189,7 +8194,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 430;
+const APP_VERSAO = 431;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8269,7 +8274,7 @@ function cartaPegaFesta(x){
   el.innerHTML = `<div class="cp-box" role="dialog" aria-live="assertive"><div class="cp-selo">CARTA APROVADA</div>
     <h3>${nome ? esc(nome) + ', você' : 'Você'} pegou uma carta aprovada!</h3>
     <div class="cp-missao"><small>SUA MISSÃO</small><b>Ligue e libere o CPF ${cli ? 'de <span style="white-space:nowrap">' + esc(cli) + '</span>' : 'do cliente'}</b></div>
-    <div class="cp-regra"><b>Regra:</b> o CPF só libera se o cliente <b>atender</b> e você <b>segurar a ligação por pelo menos 3 minutos</b>, ligando pelo botão Ligar do app. Ligação curta não libera.</div>
+    <div class="cp-regra"><b>Regra:</b> ligue pelo botão <b>Ligar</b> do app. Se o cliente <b>atender</b>, converse <b>pelo menos 2 minutos</b> e responda a ficha da conversa: o CPF libera. Se <b>não atender</b>, insista: você tem <b>24 horas</b>, senão a carta vai para outro corretor.</div>
     <p class="cp-forte">Dê o seu máximo!</p>
     <button class="cp-bt" type="button">Aceito a missão!</button></div>`;
   const fechar = () => { el.classList.remove('on'); setTimeout(() => el.remove(), 300); };
@@ -8280,33 +8285,57 @@ function cartaPegaFesta(x){
 }
 window.cartaPegaFesta = cartaPegaFesta;
 
-// ---------- v430: CARTA APROVADA no bolsão: o CPF só libera com ligação atendida de pelo menos 3 minutos ----------
+// ---------- v430: CARTA APROVADA no bolsão: o CPF libera com ligação atendida de 2 min + ficha da conversa; sem atender, 24h para insistir ----------
 // O CPF fica em bolsao_cpf/{id do lead} (regra do Firebase: lê só a gerência e quem pegou o lead). O app só mostra depois da ligação.
-const CARTA_MIN_SEG = 180, CARTA_PRAZO_MS = 24 * 3600e3, CARTA_PRAZO_TXT = 'carta: prazo de 24h para liberar o CPF';
+const CARTA_MIN_SEG = 120, CARTA_PRAZO_MS = 24 * 3600e3, CARTA_PRAZO_TXT = 'carta: prazo de 24h para liberar o CPF';
 const cartaLib = id => (state && state.cartaLib && state.cartaLib[id]) || null;
 function htmlCartaCpf(x){
   const lib = cartaLib(x.id);
   if (lib) return `<div class="cc-box ok"><span>✓ CPF liberado · ligação de ${fmtDurLig(lib.seg)}</span><button class="cc-bt on" onclick="cartaVerCpf('${x.id}')">🔓 Ver CPF</button></div>`;
-  const ult = (state && state.cartaUlt && state.cartaUlt[x.id]) || null;
-  return `<div class="cc-box"><span>🔒 Para liberar o CPF: ligue pelo botão <strong>Ligar</strong>, o cliente precisa <strong>atender</strong> e a ligação tem que durar <strong>pelo menos 3 minutos</strong>.${ult ? `<br><small>Última tentativa: ${fmtDurLig(ult.seg)}${ult.sim ? '' : ', não atendeu'}. Faltou ${ult.sim ? fmtDurLig(Math.max(0, CARTA_MIN_SEG - ult.seg)) : 'o cliente atender'}.</small>` : ''}</span><button class="cc-bt" onclick="cartaVerCpf('${x.id}')">🔒 Liberar CPF</button></div>`;
+  const u = (state && state.cartaUlt && state.cartaUlt[x.id]) || null;
+  if (u && u.sim && u.seg >= CARTA_MIN_SEG) return `<div class="cc-box"><span>Ligação de ${fmtDurLig(u.seg)} com o cliente. Falta só a ficha da conversa.</span><button class="cc-bt on" onclick="cartaFichaDe('${x.id}')">📝 Responder e liberar o CPF</button></div>`;
+  return `<div class="cc-box"><span>🔒 Para liberar o CPF: ligue pelo botão <strong>Ligar</strong>. Se o cliente <strong>atender</strong>, converse <strong>pelo menos 2 minutos</strong> e responda a ficha da conversa. Se <strong>não atender</strong>, insista: você tem 24 horas.${u ? `<br><small>Última tentativa: ${u.sim ? 'atendeu, ' + fmtDurLig(u.seg) + ' (curta)' : 'não atendeu'}.</small>` : ''}</span><button class="cc-bt" onclick="cartaVerCpf('${x.id}')">🔒 Liberar CPF</button></div>`;
 }
 function cartaChecaLigacao(c, sim){
   const t = chaveTel(c.tel || ''); if (!t) return;
   const x = bolsao.find(b => b.carta && b.status === 'pego' && b.pegoPor === uidAtual && bzTelK(b) === t); if (!x || cartaLib(x.id)) return;
-  state.cartaUlt = { ...(state.cartaUlt || {}), [x.id]:{ seg:c.seg, sim:!!sim, em:Date.now() } };
-  if (sim && c.seg >= CARTA_MIN_SEG) {
-    state.cartaLib = { ...(state.cartaLib || {}), [x.id]:{ seg:c.seg, em:Date.now() } }; salvar();
-    updateDoc(doc(db,'bolsao', x.id), { historico:bzHist(x, 'CPF liberado · ligação de ' + fmtDurLig(c.seg)) }).catch(() => {});
-    try { soltarConfete(120); } catch(e) {} vibrar([40, 40, 80]);
-    setTimeout(() => cartaVerCpf(x.id), 600);
-  } else {
-    salvar();
+  state.cartaUlt = { ...(state.cartaUlt || {}), [x.id]:{ seg:c.seg, sim:!!sim, em:Date.now() } }; salvar();
+  const nm = esc(nomeCurto(x.nome || ''));
+  if (sim && c.seg >= CARTA_MIN_SEG) { setTimeout(() => cartaFicha(x, c.seg), 400); }
+  else if (sim) { setTimeout(() => avisoCarta(`A ligação com ${nm} durou só ${fmtDurLig(c.seg)}. Para liberar o CPF a conversa precisa durar pelo menos <b>2 minutos</b> e ser produtiva. Ligue de novo e converse com o cliente.`), 400); }
+  else {
     if (!cartaPrazo(x)) updateDoc(doc(db,'bolsao', x.id), { historico:bzHist(x, CARTA_PRAZO_TXT) }).catch(() => {});
-    const falta = Math.max(0, CARTA_MIN_SEG - c.seg);
-    setTimeout(() => avisoCarta(sim ? `A ligação durou ${fmtDurLig(c.seg)}. Para liberar o CPF de ${esc(nomeCurto(x.nome || ''))} ela precisa de pelo menos <b>3 minutos</b> com o cliente na linha. Faltaram <b>${fmtDurLig(falta)}</b>. Ligue de novo e segure o cliente.<br><br>⏳ Você tem <b>24 horas</b> para conseguir. Se não conseguir, a carta volta para o bolsão e vai para outro corretor.` : `O cliente não atendeu, então o CPF continua travado. Ligue de novo: libera quando ele atender e a ligação durar pelo menos <b>3 minutos</b>.<br><br>⏳ Você tem <b>24 horas</b> para conseguir. Se não conseguir, a carta volta para o bolsão e vai para outro corretor.`), 400);
+    setTimeout(() => avisoCarta(`${nm} não atendeu, então o CPF continua travado. <b>Insista:</b> ligue de novo até ele atender.<br><br>⏳ Você tem <b>24 horas</b>. Se não conseguir, a carta volta para o bolsão e vai para outro corretor.`), 400);
   }
   render();
 }
+// cliente atendeu e a ligação passou de 2 min: o corretor justifica com a ficha da ligação (3 respostas) e o CPF libera
+function cartaFicha(x, seg){
+  document.getElementById('cartaPega')?.remove();
+  const el = document.createElement('div'); el.id = 'cartaPega';
+  el.innerHTML = `<div class="cp-box" style="text-align:left"><div style="text-align:center"><div class="cp-selo">LIGAÇÃO DE ${esc(fmtDurLig(seg).toUpperCase())}</div></div>
+    <h3 style="font-size:19px;text-align:center">Conte como foi a conversa com ${esc(nomeCurto(x.nome || ''))} para liberar o CPF</h3>
+    <label class="cf-l">Renda aproximada do cliente<input id="cfRenda" inputmode="decimal" placeholder="Ex.: 2.500"></label>
+    <label class="cf-l">Interesse: região ou empreendimento<input id="cfInt" placeholder="Ex.: Mangabeira, Reserva dos Colibris"></label>
+    <label class="cf-l">Melhor dia e horário para a visita<input id="cfVis" placeholder="Ex.: sábado de manhã"></label>
+    <div id="cfErr" class="cf-err"></div>
+    <button class="cp-bt" type="button" id="cfOk" style="width:100%">Liberar o CPF</button>
+    <button class="link" type="button" id="cfDepois" style="width:100%;margin-top:8px">Responder depois</button></div>`;
+  const fechar = () => { el.classList.remove('on'); setTimeout(() => el.remove(), 300); };
+  el.querySelector('#cfDepois').onclick = fechar;
+  el.querySelector('#cfOk').onclick = () => {
+    const r = el.querySelector('#cfRenda').value.trim(), it = el.querySelector('#cfInt').value.trim(), vi = el.querySelector('#cfVis').value.trim();
+    if (soDig(r).length < 3 || it.length < 3 || vi.length < 3) { el.querySelector('#cfErr').textContent = 'Responda as 3 perguntas com o que o cliente falou na ligação.'; return; }
+    state.cartaLib = { ...(state.cartaLib || {}), [x.id]:{ seg, em:Date.now() } };
+    const k = notaChave(x); state.notasCli = state.notasCli || {}; state.notasCli[k] = [{ id:Date.now().toString(36), em:Date.now(), txt:`Ligação da carta aprovada (${fmtDurLig(seg)}): renda ${r} · interesse ${it} · visita ${vi}` }, ...(state.notasCli[k] || [])].slice(0, 100);
+    salvar();
+    updateDoc(doc(db,'bolsao', x.id), { historico:bzHist(x, `CPF liberado · ligação de ${fmtDurLig(seg)} · renda ${r} · interesse ${it} · visita ${vi}`.slice(0, 300)) }).catch(() => {});
+    fechar(); try { soltarConfete(140); } catch(e) {} vibrar([40, 40, 80]); render();
+    setTimeout(() => cartaVerCpf(x.id), 500);
+  };
+  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on')); setTimeout(() => el.querySelector('#cfRenda')?.focus(), 400);
+}
+window.cartaFichaDe = id => { const x = bolsao.find(b => b.id === id), u = state.cartaUlt && state.cartaUlt[id]; if (x && u && u.sim && u.seg >= CARTA_MIN_SEG) cartaFicha(x, u.seg); };
 
 // v430: prazo de 24h (marcado no histórico do lead na primeira tentativa que não liberou) + caixinha no topo com a contagem
 const cartaPrazo = x => { const h = (x.historico || []).filter(e => e.txt === CARTA_PRAZO_TXT).pop(); return h ? (h.em || 0) + CARTA_PRAZO_MS : 0; };
@@ -8321,7 +8350,7 @@ function pintaCartaBanner(){
   if (!el) { el = document.createElement('div'); el.id = 'cartaBanner'; el.addEventListener('click', e => { if (e.target.closest('.cbn-lig')) return; try { bzAba = 'meus'; setView('bolsao'); } catch(er) {} }); document.body.appendChild(el); }
   document.body.classList.add('com-carta-banner');
   const urg = resta < 3 * 3600e3 ? ' urg' : '';
-  const html = `<span class="cbn-ic">⏳</span><span class="cbn-tx"><b>CARTA APROVADA</b><small><strong>${esc(nomeCurto(x.nome || ''))}</strong> · ligue e segure 3 min para liberar o CPF${l.length > 1 ? ` · +${l.length - 1} carta${l.length > 2 ? 's' : ''}` : ''}</small></span><span class="cbn-t${urg}">${fmtResta(resta)}</span>${x.telefone ? `<button class="cbn-lig" type="button" data-tel="${esc(x.telefone)}" data-cli="${esc(x.nome || '')}" data-or="bolsão" onclick="ligarBtn(this)">Ligar</button>` : ''}`;
+  const html = `<span class="cbn-ic">⏳</span><span class="cbn-tx"><b>CARTA APROVADA</b><small><strong>${esc(nomeCurto(x.nome || ''))}</strong> · não atendeu: insista para liberar o CPF${l.length > 1 ? ` · +${l.length - 1} carta${l.length > 2 ? 's' : ''}` : ''}</small></span><span class="cbn-t${urg}">${fmtResta(resta)}</span>${x.telefone ? `<button class="cbn-lig" type="button" data-tel="${esc(x.telefone)}" data-cli="${esc(x.nome || '')}" data-or="bolsão" onclick="ligarBtn(this)">Ligar</button>` : ''}`;
   if (el._k !== x.id + '|' + l.length) { el.innerHTML = html; el._k = x.id + '|' + l.length; } else { const t = el.querySelector('.cbn-t'); if (t) { t.textContent = fmtResta(resta); t.className = 'cbn-t' + urg; } }
 }
 setInterval(() => { try { pintaCartaBanner(); } catch(e) {} }, 1000);
@@ -8329,10 +8358,40 @@ setInterval(() => { try { pintaCartaBanner(); } catch(e) {} }, 1000);
 async function cartaVencidas(){
   if (!souDono()) return; const agora = Date.now();
   for (const x of (bolsao || []).filter(b => b.carta && b.status === 'pego' && !cartaLiberadaHist(b) && cartaPrazo(b) && cartaPrazo(b) < agora)) {
-    try { await updateDoc(doc(db,'bolsao', x.id), { status:'livre', liberadoGerencia:true, pegoPor:'', pegoNome:'', pegoEm:0, resultado:'', liberadoEm:agora, tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'carta voltou ao bolsão: 24h sem ligação de 3 min (estava com ' + (x.pegoNome || '') + ')') }); } catch(e) { console.warn('carta vencida', e.message); }
+    try { await updateDoc(doc(db,'bolsao', x.id), { status:'livre', liberadoGerencia:true, pegoPor:'', pegoNome:'', pegoEm:0, resultado:'', liberadoEm:agora, tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'carta voltou ao bolsão: 24h sem liberar o CPF (estava com ' + (x.pegoNome || '') + ')') }); } catch(e) { console.warn('carta vencida', e.message); }
   }
 }
 setInterval(() => { try { cartaVencidas(); } catch(e) {} }, 60000);
+
+// v430: as CARTAS APROVADAS só tocam para o corretor que bateu a META DE LIGAÇÕES do dia (Metas do dia > Ligações). Sem meta definida, ficam liberadas.
+function cartaMetaInfo(){
+  let meta = 0, feitas = 0; try { meta = Number((metaDiaDe(uidAtual) || {}).lig) || 0; } catch(e) {}
+  try { feitas = Number(((mdValores([hojeISO()]).get(uidAtual)) || {}).lig) || 0; } catch(e) {}
+  return { meta, feitas, ok: !meta || feitas >= meta };
+}
+const cartasLiberadas = () => cartaMetaInfo().ok;
+function htmlCartaTrava(){
+  if (souGerente()) return ''; const i = cartaMetaInfo(); if (i.ok) return '';
+  const n = (bolsao || []).filter(x => x.carta && x.status === 'livre').length; if (!n) return '';
+  return `<div class="cm-trava">🔒 <b>${n} carta${n > 1 ? 's' : ''} aprovada${n > 1 ? 's' : ''}</b> esperando no bolsão. Bata a sua <b>meta de ligações de hoje</b> para elas começarem a tocar para você. <span>${i.feitas} de ${i.meta} ligações · faltam ${Math.max(0, i.meta - i.feitas)}</span></div>`;
+}
+let _cmAntes = null;
+function cartaMetaFesta(){
+  if (!uidAtual || !perfil || souGerente()) return; const i = cartaMetaInfo(); if (!i.meta) return;
+  const k = 'cartaMeta:' + uidAtual + ':' + hojeISO(); let ja = false; try { ja = !!localStorage.getItem(k); } catch(e) {}
+  if (i.ok && !ja && _cmAntes !== null) {
+    try { localStorage.setItem(k, '1'); } catch(e) {}
+    document.getElementById('cartaPega')?.remove();
+    const el = document.createElement('div'); el.id = 'cartaPega';
+    el.innerHTML = `<div class="cp-box"><div class="cp-selo">META DE LIGAÇÃO</div><h3 style="font-size:26px;line-height:1.15;margin-top:16px">VOCÊ LIBEROU AS CARTAS APROVADAS!!</h3><p>Você bateu as ${i.meta} ligações de hoje. A partir de agora as cartas aprovadas começam a tocar no seu bolsão. Fique de olho!</p><button class="cp-bt" type="button">Bora!</button></div>`;
+    el.addEventListener('click', e => { if (e.target === el || e.target.closest('.cp-bt')) { el.classList.remove('on'); setTimeout(() => el.remove(), 300); } });
+    document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
+    try { soltarConfete(260); setTimeout(() => soltarConfete(160), 800); } catch(e) {} vibrar([80, 60, 80, 60, 200]);
+    try { render(); } catch(e) {}
+  }
+  _cmAntes = i.ok;
+}
+setInterval(() => { try { cartaMetaFesta(); } catch(e) {} }, 5000);
 function avisoCarta(html){
   document.getElementById('cartaPega')?.remove();
   const el = document.createElement('div'); el.id = 'cartaPega';
@@ -8342,7 +8401,7 @@ function avisoCarta(html){
 }
 window.cartaVerCpf = async id => {
   const x = bolsao.find(b => b.id === id); if (!x) return;
-  if (!cartaLib(id) && !souGerente()) { avisoCarta('Ligue primeiro. O CPF só libera depois de uma ligação de pelo menos <b>3 minutos</b> com o cliente atendendo, feita pelo botão <b>Ligar</b> do app.'); return; }
+  if (!cartaLib(id) && !souGerente()) { avisoCarta('Ligue primeiro pelo botão <b>Ligar</b> do app. Se o cliente atender, converse pelo menos <b>2 minutos</b> e responda a ficha da conversa para liberar o CPF.'); return; }
   let cpf = '';
   try { const d = await getDoc(doc(db,'bolsao_cpf', id)); cpf = d.exists() ? String(d.data().cpf || '') : ''; } catch(e) { toast('Não deu para buscar o CPF: ' + e.message); return; }
   if (!cpf) { toast('Esta carta está sem CPF cadastrado. Fale com a gerência.'); return; }
@@ -9874,6 +9933,9 @@ function docsDaAvUnico(a){
   l.filter(x => !perto(x)).forEach(x => { if (ult && dif(x.dia, ult) <= 7) return; ult = x.dia; out.push(x); });
   return out;
 }
+// v431: a partir de 22/11 o mesmo cliente não soma planilha + grupo (pedido do Allan, 21/11). Os dias anteriores ficam exatamente como estavam.
+const DOCS_UNICO_DESDE = '2026-11-22';
+function docsDaAvRank(a){ return [...docsDaAv(a).filter(x => !x.dia || x.dia < DOCS_UNICO_DESDE), ...docsDaAvUnico(a).filter(x => x.dia && x.dia >= DOCS_UNICO_DESDE)]; }
 /* v346: docs de um período do jeito do ranking: cada ficha conta no dia e para quem mandou, o mesmo cliente uma vez por pessoa e por dia.
    Desempenho, Painel e Meu dia usam isto (antes contavam uma doc por cliente, pela 1ª data, e não batiam com os pontos). */
 function docsNoPeriodo(lista, de, ate){
@@ -12650,7 +12712,7 @@ const bzVoltaProibida = (x, at) => !x.liberadoGerencia && (bzAtendido(x) || at.h
 // v430: números bloqueados pela gerência nunca aparecem no bolsão (config/app.bolsaoBloqueados, chave do telefone)
 const bzBloq = () => new Set((appCfg.bolsaoBloqueados || []).map(String));
 const bzLivres = () => { if (!souGerente()) bzCarregarHist(); const at = bzAtendidosTels(); const ocup = new Set([...bolsao.filter(x => x.status === 'pego').map(bzTelK).filter(Boolean), ...(window._bzOcupOutros || [])]), vistos = new Set(), meu = souGerente() ? new Set() : bzJaPeguei();
-  const bl = bzBloq(); return bolsao.filter(x => x.status === 'livre' && !x.bloqueado && !bl.has(bzTelK(x)) && !bzVoltaProibida(x, at)).sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0)).filter(x => { const k = bzTelK(x); if (!k) return true; if (ocup.has(k) || vistos.has(k) || meu.has(k)) return false; vistos.add(k); return true; }); };
+  const bl = bzBloq(), cartaOk = souGerente() || cartasLiberadas(); return bolsao.filter(x => x.status === 'livre' && !x.bloqueado && !bl.has(bzTelK(x)) && (!x.carta || cartaOk) && !bzVoltaProibida(x, at)).sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0)).filter(x => { const k = bzTelK(x); if (!k) return true; if (ocup.has(k) || vistos.has(k) || meu.has(k)) return false; vistos.add(k); return true; }); };
 // o app do gestor junta os repetidos de verdade no banco: fica um por telefone (o que está com alguém, ou o mais antigo) e os outros saem do giro
 let _bzLimpT = 0;
 async function bzJuntarRepetidos(forcar){
@@ -12792,8 +12854,8 @@ function renderBolsao(){
     $('bzLista').innerHTML = seq + `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th><th class="hide-m">Chegou</th>${md === 'manual' && dono ? '<th></th>' : ''}</tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td><td class="hide-m">${x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</td>${md === 'manual' && dono ? `<td><div class="bz-mv"><button class="icon-btn" title="Mandar para o começo" aria-label="Mandar para o começo" onclick="bzMover('${x.id}','topo')" ${i ? '' : 'disabled'}>⤒</button><button class="icon-btn" title="Subir" aria-label="Subir" onclick="bzMover('${x.id}',-1)" ${i ? '' : 'disabled'}>↑</button><button class="icon-btn" title="Descer" aria-label="Descer" onclick="bzMover('${x.id}',1)" ${i < l.length - 1 ? '' : 'disabled'}>↓</button></div></td>` : ''}</tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
     const l = appCfg.bolsaoOrdem ? bzOrdenar(bzLivres()) : bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
-    $('bzLista').innerHTML = (souGerente() && !souCeo() ? htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${x.carta ? ' carta' : ''}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}>${x.carta ? '<i class="bz-estrelas" aria-hidden="true"><b></b><b></b><b></b><b></b></i>' : ''}<div class="an-c1">${x.carta ? '<span class="bz-selo-carta"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>CARTA APROVADA</span>' : `<span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span>`}</div>
-      <b class="an-cli">${esc(bzNome(x))}</b>${x.carta ? '<div class="bz-carta-regra">🔒 O CPF só libera depois de uma ligação de <b>3 minutos</b> com o cliente atendendo</div>' : ''}<div class="an-c2">${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
+    $('bzLista').innerHTML = htmlCartaTrava() + (souGerente() && !souCeo() ? htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${x.carta ? ' carta' : ''}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}>${x.carta ? '<i class="bz-estrelas" aria-hidden="true"><b></b><b></b><b></b><b></b></i>' : ''}<div class="an-c1">${x.carta ? '<span class="bz-selo-carta"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>CARTA APROVADA</span>' : `<span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span>`}</div>
+      <b class="an-cli">${esc(bzNome(x))}</b>${x.carta ? '<div class="bz-carta-regra">🔒 O CPF só libera depois de uma ligação <b>produtiva</b> com o cliente (2 min ou mais + ficha da conversa)</div>' : ''}<div class="an-c2">${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>${x.zapConversaId ? 'Pegar e conversar' : 'Pegar e ligar'}</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
     // v430: carta aprovada que acabou de aparecer: confete na tela de quem está olhando (uma vez por carta neste aparelho)
     try { const novas = l.filter(x => x.carta && !_bzCartaVista.has(x.id)); novas.forEach(x => _bzCartaVista.add(x.id)); if (novas.length && _bzCartaPronto) { soltarConfete(90); vibrar([30, 40, 30]); } _bzCartaPronto = true; } catch(e) {}
@@ -12931,7 +12993,7 @@ const BZ_MIN_LIG = () => { const v = Number(appCfg.bolsaoMinLig); return isFinit
 const bzLigs = x => (x.historico || []).filter(h => h.txt === 'ligou');
 const bzMinhasLigs = x => bzLigs(x).filter(h => h.uid === uidAtual && (h.em || 0) >= (x.pegoEm || 0)).length;
 // v429: só trava por cliente pego HOJE. Antes um cliente antigo, de dias atrás, sem as 3 ligações travava o corretor para sempre (ele não conseguia pegar mais nenhum)
-const bzFaltaInsistir = x => x.status === 'pego' && x.pegoPor === uidAtual && !x.resultado && bzMinhasLigs(x) < BZ_MIN_LIG() && (x.pegoDia ? x.pegoDia === hojeISO() : Date.now() - (Number(x.pegoEm) || 0) < 24 * 3600e3);
+const bzFaltaInsistir = x => x.status === 'pego' && x.pegoPor === uidAtual && !x.resultado && !x.carta && bzMinhasLigs(x) < BZ_MIN_LIG() && (x.pegoDia ? x.pegoDia === hojeISO() : Date.now() - (Number(x.pegoEm) || 0) < 24 * 3600e3);
 async function bzRegistrarLigacao(tel){
   const t = chaveTel(tel); if (!t) return;
   const x = bolsao.find(b => b.status === 'pego' && b.pegoPor === uidAtual && chaveTel(b.telefone) === t); if (!x) return;
@@ -19188,7 +19250,7 @@ function mdValores(dias){
   const sdrDia = new Map(), vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); if (sdrs.has(u)) return; add(u, 'docs'); };
   // v413: na SDR contam só as fichas que ela mandou no grupo (os envios), nunca a linha da planilha (é o mesmo cliente e duplicava)
   try { avaliacoesUnificadas().forEach(a => { const env = new Set((Array.isArray(a.envios) ? a.envios : []).map(e => String(e).split('|')[0])), ch = a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id;
-    docsDaAv(a).forEach(x => { if (sdrs.has(x.uid) && !env.has(x.dia)) return; doc(x.uid, x.dia, ch); }); }); } catch(e) {}
+    docsDaAvRank(a).forEach(x => { if (sdrs.has(x.uid) && !env.has(x.dia)) return; doc(x.uid, x.dia, ch); }); }); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
   try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) { const kk = x.uid + '|' + d; sdrDia.set(kk, Math.max(sdrDia.get(kk) || 0, Number(x.docs) || 0)); } })); } catch(e) {}
@@ -19214,7 +19276,7 @@ function mdBateramOntem(){
 // v257: tocar em "Docs" mostra quais documentações contaram hoje e de onde vieram (e, para a gerência, as que chegaram sem dono)
 function docsDoDiaLista(d, u){
   const out = [], vistos = new Set(), add = (uu, ch, fonte, nome, quando) => { if (uu !== u) return; const k = ch; if (vistos.has(k)) return; vistos.add(k); out.push({ fonte, nome, quando }); };
-  try { avaliacoesUnificadas().forEach(a => docsDaAv(a).forEach(x => { if (x.dia !== d) return; add(x.uid, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id, a.origem === 'whatsapp' ? 'Conversa do WhatsApp' : 'Planilha de avaliações · aba ' + (a.aba || ''), a.nome || 'Cliente', a.criadoEm); })); } catch(e) {}
+  try { avaliacoesUnificadas().forEach(a => docsDaAvRank(a).forEach(x => { if (x.dia !== d) return; add(x.uid, a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id, a.origem === 'whatsapp' ? 'Conversa do WhatsApp' : 'Planilha de avaliações · aba ' + (a.aba || ''), a.nome || 'Cliente', a.criadoEm); })); } catch(e) {}
   (analises || []).forEach(a => { if (!a.enviadaEm || iso(new Date(a.enviadaEm)) !== d) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); add(a.corretorUid, cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id, 'Pasta enviada pelo app', c.nome || 'Cliente', a.enviadaEm); });
   try { rankingSdr(d, d).forEach(x => { if (x.uid === u && x.docs) out.push({ fonte:'Resumo do dia (SDR)', nome:`${x.docs} documentaç${x.docs === 1 ? 'ão' : 'ões'} no resumo`, quando:0 }); }); } catch(e) {}
   return out; }
