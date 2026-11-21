@@ -794,7 +794,8 @@ html body:has(#app) #statsTarefas#statsTarefas,html body #cardAgendaHoje#cardAge
   html body #menuModal.modal{justify-content:flex-start;align-items:stretch;padding:0}
   html body #menuModal.modal>.sheet{position:fixed;top:0;bottom:0;left:0;margin:0;align-self:stretch;width:min(310px,82vw)!important;height:100vh;height:100dvh;max-height:none!important;border-radius:0 20px 20px 0!important;border-left:0;animation:menuLado .26s cubic-bezier(.2,.9,.3,1) both}
   html body #menuModal .sheet-head{padding-top:calc(14px + env(safe-area-inset-top,0px))}
-  html body #menuModal .sheet-body{flex:1;overflow-y:auto;padding:8px 10px calc(16px + env(safe-area-inset-bottom,0px))}
+  html:has(#menuModal.open),html:has(#menuModal.open) body{overflow:hidden!important;overscroll-behavior:none}
+  html body #menuModal .sheet-body{flex:1;min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;overflow-y:auto;padding:8px 10px calc(16px + env(safe-area-inset-bottom,0px))}
   html body #menuModal.modal>.sheet{background:var(--card);border:0;box-shadow:18px 0 40px -12px rgba(2,6,23,.35)}
   html body #menuModal .sheet-head{display:flex;align-items:center;gap:10px;background:linear-gradient(150deg,#0E2A3E,#16405C);color:#fff;border:0;padding:calc(18px + env(safe-area-inset-top,0px)) 14px 18px 16px;border-radius:0 20px 0 0}
   html body #menuModal .mn-tit{display:none}
@@ -8245,7 +8246,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 436;
+const APP_VERSAO = 437;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -8415,10 +8416,13 @@ async function cartaVencidas(){
 setInterval(() => { try { cartaVencidas(); } catch(e) {} }, 60000);
 
 // v430: as CARTAS APROVADAS só tocam para o corretor que bateu a META DE LIGAÇÕES do dia (Metas do dia > Ligações). Sem meta definida, ficam liberadas.
+let _cmiC = null;
 function cartaMetaInfo(){
+  if (_cmiC && Date.now() - _cmiC.t < 10000) return _cmiC.v;
+  if (!(bolsao || []).some(x => x.carta)) { _cmiC = { t:Date.now(), v:{ meta:0, feitas:0, ok:true } }; return _cmiC.v; } // v437: sem carta aprovada no bolsão não precisa contar nada
   let meta = 0, feitas = 0; try { meta = Number((metaDiaDe(uidAtual) || {}).lig) || 0; } catch(e) {}
   try { feitas = Number(((mdValores([hojeISO()]).get(uidAtual)) || {}).lig) || 0; } catch(e) {}
-  return { meta, feitas, ok: !meta || feitas >= meta };
+  _cmiC = { t:Date.now(), v:{ meta, feitas, ok: !meta || feitas >= meta } }; return _cmiC.v;
 }
 const cartasLiberadas = () => cartaMetaInfo().ok;
 function htmlCartaTrava(){
@@ -9986,7 +9990,7 @@ function docsDaAvUnico(a){
 }
 // v431: a partir de 22/11 o mesmo cliente não soma planilha + grupo (pedido do Allan, 21/11). Os dias anteriores ficam exatamente como estavam.
 const DOCS_UNICO_DESDE = '2026-11-22';
-function docsDaAvRank(a){ return [...docsDaAv(a).filter(x => !x.dia || x.dia < DOCS_UNICO_DESDE), ...docsDaAvUnico(a).filter(x => x.dia && x.dia >= DOCS_UNICO_DESDE)]; }
+function docsDaAvRank(a){ const v = docsDaAv(a); if (!v.some(x => x.dia && x.dia >= DOCS_UNICO_DESDE)) return v; return [...v.filter(x => !x.dia || x.dia < DOCS_UNICO_DESDE), ...docsDaAvUnico(a).filter(x => x.dia && x.dia >= DOCS_UNICO_DESDE)]; }
 /* v346: docs de um período do jeito do ranking: cada ficha conta no dia e para quem mandou, o mesmo cliente uma vez por pessoa e por dia.
    Desempenho, Painel e Meu dia usam isto (antes contavam uma doc por cliente, pela 1ª data, e não batiam com os pontos). */
 function docsNoPeriodo(lista, de, ate){
@@ -11556,7 +11560,10 @@ function renderEmp(){
   const nomeCartao = e => String(e.nome || '').split(' · ')[0], consCartao = e => e.construtora || (String(e.nome || '').split(' · ')[1] || '');
   const monograma = e => nomeCartao(e).replace(/^(Residencial|Res\.|Edif[ií]cio|Ed\.|Casa)\s+/i, '').split(/\s+/).filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'F';
   const precoTxt = e => e.preco ? (/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco) : '';
-  $('empLista').innerHTML = l.length ? l.map(e => { const c = capaDe(e), n = (e.nFotos || 0), b = bairroEmp(e);
+  // v437: a lista tinha 245 imóveis com as fotos de capa dentro da página (mais de 7 MB) e travava o celular: agora mostra 24 por vez e carrega mais ao rolar
+  { const sig = JSON.stringify([t, empBairro, F]); if (window._empSig !== sig || !window._empN) { window._empSig = sig; window._empN = 24; } }
+  const lTodos = l, lMostra = l.slice(0, window._empN);
+  $('empLista').innerHTML = l.length ? lMostra.map(e => { const c = capaDe(e), n = (e.nFotos || 0), b = bairroEmp(e);
     return `<div class="emp-capa-card emp-v2" role="button" tabindex="0" onclick="verEmp('${e.id}')" onkeydown="if(event.key==='Enter')verEmp('${e.id}')">
       <div class="emp-capa" id="cap_${e.id}">${c ? `<img class="emp-fundo" src="${esc(c)}" alt="" aria-hidden="true" loading="lazy"><img class="emp-foto" src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.previousElementSibling.remove();this.remove()">` : `<span class="emp-mono">${esc(monograma(e))}</span>`}
         ${b ? `<span class="emp-tag">${esc(b)}</span>` : ''}${precoTxt(e) ? `<span class="emp-preco-f"><small>a partir de</small>${esc(precoTxt(e))}</span>` : ''}
@@ -11564,10 +11571,12 @@ function renderEmp(){
       <div class="emp-info"><b>${esc(nomeCartao(e))}</b>${consCartao(e) || e.entrega ? `<span class="emp-sub">${esc([consCartao(e), e.entrega].filter(Boolean).join(' · '))}</span>` : ''}${e.desc ? `<em>${esc(e.desc)}</em>` : ''}</div>
       ${fichaEmp(e)}
       <div class="emp-pe"><span class="emp-views">${ICF.olho}${Number(e.views) || 0}</span><span class="emp-ver">Ver imóvel</span></div>
-    </div>`; }).join('')
+    </div>`; }).join('') + (lTodos.length > lMostra.length ? `<div id="empMais" style="grid-column:1/-1;display:flex;justify-content:center;padding:8px 0 18px"><button class="btn btn-ghost" onclick="empMais()">Ver mais imóveis (${lTodos.length - lMostra.length})</button></div>` : '')
     : `<div class="card" style="grid-column:1/-1">${vazio(base.length || t || empBairro ? 'Nada encontrado' : 'Nenhum imóvel ainda', base.length || t || empBairro ? 'Tire um filtro ou toque em Limpar filtros.' : 'Os imóveis do grupo do WhatsApp aparecem aqui.')}</div>`;
   pintarIcones($('empLista'));
+  { const m = document.getElementById('empMais'); if (m && 'IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { io.disconnect(); empMais(); } }, { rootMargin:'600px' }); io.observe(m); } }
 }
+window.empMais = () => { window._empN = (window._empN || 24) + 24; const y = scrollY; renderEmp(); scrollTo(0, y); };
 // linha de ícones: área, quartos, vagas, banheiros (só o que estiver preenchido)
 const ICF = {
   area:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/></svg>',
@@ -19311,6 +19320,16 @@ const mdVazio = () => ({ lig:0, docs:0, vm:0, vr:0 });
 // dias de trabalho da semana até hoje (segunda a sábado)
 function mdDiasSemana(ate){ const h = ate || hojeISO(), d = parseISO(h), w = (d.getDay() + 6) % 7, seg = somaDias(h, -w), l = []; for (let i = 0; i <= w; i++) { const x = somaDias(seg, i); if (parseISO(x).getDay() !== 0) l.push(x); } return l; }
 // soma os números de cada pessoa nos dias pedidos
+// v437: as docs de todas as avaliações (quem, que dia, qual cliente) ficam guardadas e só são refeitas quando as avaliações mudam (ou a cada 30 s)
+let _mdDocsC = null;
+function mdDocsLista(){
+  const nC = (typeof cartas !== 'undefined' && cartas) ? cartas.length : 0;
+  if (_mdDocsC && _mdDocsC.a === avaliacoes && _mdDocsC.n === avaliacoes.length && _mdDocsC.c === nC && Date.now() - _mdDocsC.t < 30000) return _mdDocsC.l;
+  const l = [];
+  avaliacoesUnificadas().forEach(a => { const env = new Set((Array.isArray(a.envios) ? a.envios : []).map(e => String(e).split('|')[0])), ch = a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id;
+    docsDaAvRank(a).forEach(x => l.push({ uid:x.uid, dia:x.dia, ch, env })); });
+  _mdDocsC = { a:avaliacoes, n:avaliacoes.length, c:nC, t:Date.now(), l }; return l;
+}
 function mdValores(dias){
   const ds = new Set(dias), out = new Map(), add = (u, k, n = 1) => { if (!u || !n) return; const o = out.get(u) || mdVazio(); o[k] += n; out.set(u, o); };
   // ligações: cada número diferente no dia conta 1 (o app soma na hora da ligação)
@@ -19331,8 +19350,7 @@ function mdValores(dias){
   // v409: a SDR volta a contar as fichas dos grupos de crédito igual ao corretor (pedido do Allan, 16/11); no dia vale o MAIOR entre fichas e resumo, sem somar os dois
   const sdrDia = new Map(), vistos = new Set(), doc = (u, d, ch) => { if (!u || !ds.has(d) || !ok(u)) return; const k = u + '|' + d + '|' + ch; if (vistos.has(k)) return; vistos.add(k); if (sdrs.has(u)) return; add(u, 'docs'); };
   // v413: na SDR contam só as fichas que ela mandou no grupo (os envios), nunca a linha da planilha (é o mesmo cliente e duplicava)
-  try { avaliacoesUnificadas().forEach(a => { const env = new Set((Array.isArray(a.envios) ? a.envios : []).map(e => String(e).split('|')[0])), ch = a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'a' + a.id;
-    docsDaAvRank(a).forEach(x => { if (sdrs.has(x.uid) && !env.has(x.dia)) return; doc(x.uid, x.dia, ch); }); }); } catch(e) {}
+  try { mdDocsLista().forEach(x => { if (!ds.has(x.dia)) return; if (sdrs.has(x.uid) && !x.env.has(x.dia)) return; doc(x.uid, x.dia, x.ch); }); } catch(e) {} // v437: lista das docs calculada uma vez (antes recalculava as 5 mil avaliações a cada chamada e travava o celular)
   (analises || []).forEach(a => { if (!a.enviadaEm) return; const c = a.cliente || {}, cpf = soDig(c.cpf || ''), tel = chaveTel(c.telefone || c.tel || ''); doc(a.corretorUid, iso(new Date(a.enviadaEm)), cpf.length === 11 ? 'c' + cpf : tel ? 't' + tel : 'p' + a.id); });
   // SDR: documentações do resumo do dia
   try { dias.forEach(d => rankingSdr(d, d).forEach(x => { if (x.uid && ok(x.uid) && x.docs) { const kk = x.uid + '|' + d; sdrDia.set(kk, Math.max(sdrDia.get(kk) || 0, Number(x.docs) || 0)); } })); } catch(e) {}
