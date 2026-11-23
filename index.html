@@ -8260,7 +8260,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 444;
+const APP_VERSAO = 445;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -14926,25 +14926,67 @@ window.sortearApp = async () => {
   if (sxRec) setTimeout(() => { if (sxRec && sxRec.state !== 'inactive') sxRec.stop(); }, 4000); // v444: a gravação para sozinha depois do último ganhador
   try { const ref = doc(collection(db,'sorteios')); await setDoc(ref, { titulo:$('sxNomeI').value.trim() || 'Sorteio Frade', premio:$('sxPremio').value.trim(), ganhadores:esc2, participantes:pool.length, fonte:$('sxFonte').value, em:Date.now(), por:perfil.nome, porUid:uidAtual }); if ($('sxAvisar')?.checked !== false) avisarCarteiro('sorteio', ref.id); } catch(e) { console.warn('sorteio', e.message); }
 };
-// v444: gravar o sorteio (vídeo da tela do sorteio). No computador grava só o quadro do sorteio; o vídeo vai para os Downloads.
-let sxRec = null, sxStream = null, sxPartes = [];
+// v445: gravar o sorteio. O app desenha o próprio vídeo (1080x1920, em pé, para status e stories) a partir do que aparece no
+// quadro do sorteio: título, prêmio, nome girando e os ganhadores, com confete. Nada de captura de tela. O vídeo vai para os Downloads.
+let sxRec = null, sxPartes = [], sxCv = null, sxRaf = 0, sxConf = [], sxNGan = 0, sxFlash = 0, sxGravIni = 0;
 function sxPintaGrav(){ const b = $('sxGrav'); if (!b) return; b.textContent = sxRec ? '⏹ Parar e salvar' : '⏺ Gravar'; b.classList.toggle('gravando', !!sxRec); }
+function sxTexto(c, t, x, y, max, tam, peso, cor, al = 'center'){
+  let f = tam; c.font = `${peso} ${f}px ${window._sxFonte}`; while (c.measureText(t).width > max && f > 24) { f -= 2; c.font = `${peso} ${f}px ${window._sxFonte}`; }
+  c.fillStyle = cor; c.textAlign = al; c.fillText(t, x, y); return f;
+}
+function sxQuebra(c, t, max){ const ps = String(t).split(/\s+/), l = []; let at = ''; ps.forEach(w => { const n = at ? at + ' ' + w : w; if (c.measureText(n).width > max && at) { l.push(at); at = w; } else at = n; }); if (at) l.push(at); return l; }
+function sxRet(c, x, y, w, h, r){ c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function sxQuadro(){
+  const c = sxCv.getContext('2d'), W = 1080, H = 1920, t = performance.now();
+  // fundo
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0b2340'); g.addColorStop(.55, '#12355b'); g.addColorStop(1, '#0a1d35'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  const r = c.createRadialGradient(W * .85, 120, 40, W * .85, 120, 900); r.addColorStop(0, 'rgba(249,115,22,.38)'); r.addColorStop(1, 'rgba(249,115,22,0)'); c.fillStyle = r; c.fillRect(0, 0, W, H);
+  c.strokeStyle = 'rgba(255,255,255,.05)'; c.lineWidth = 60; c.beginPath(); c.arc(W * .9, H * .52, 420 + Math.sin(t / 1400) * 12, 0, Math.PI * 2); c.stroke();
+  c.fillStyle = '#F26A1B'; c.fillRect(0, 0, W, 14);
+  // topo
+  sxTexto(c, 'FRADE IMÓVEIS', 90, 170, 900, 40, 800, 'rgba(255,255,255,.92)', 'left');
+  const tit = ($('sxNomeI').value || 'Sorteio Frade').trim(); c.font = `800 92px ${window._sxFonte}`; const lt = sxQuebra(c, tit, 900).slice(0, 2);
+  lt.forEach((l, i) => sxTexto(c, l, 90, 300 + i * 104, 900, 92, 800, '#fff', 'left'));
+  let y = 300 + lt.length * 104 + 10; const pr = ($('sxPremio').value || '').trim();
+  if (pr) { c.font = `700 40px ${window._sxFonte}`; const tx = '🎁 ' + pr, w = Math.min(900, c.measureText(tx).width + 64); sxRet(c, 90, y - 8, w, 76, 38); c.fillStyle = 'rgba(255,255,255,.12)'; c.fill(); c.strokeStyle = 'rgba(255,255,255,.28)'; c.lineWidth = 2; c.stroke(); sxTexto(c, tx, 90 + 32, y + 44, w - 64, 40, 700, '#fff', 'left'); y += 110; }
+  // cartão do nome
+  const nome = ($('sxNome').textContent || '').trim(), sub = ($('sxSub').textContent || '').trim(), gan = $('sxNome').classList.contains('ganhou');
+  const cy = Math.max(y + 40, 760), ch = 440; sxRet(c, 60, cy, W - 120, ch, 40); c.fillStyle = gan ? 'rgba(242,106,27,.22)' : 'rgba(255,255,255,.07)'; c.fill();
+  c.strokeStyle = gan ? 'rgba(242,106,27,.9)' : 'rgba(255,255,255,.18)'; c.lineWidth = gan ? 6 : 3; c.stroke();
+  if (sxFlash > 0) { c.fillStyle = `rgba(255,255,255,${sxFlash * .35})`; sxRet(c, 60, cy, W - 120, ch, 40); c.fill(); sxFlash = Math.max(0, sxFlash - .04); }
+  let tam = 120, ln = []; for (tam of [120, 104, 92, 80, 68]) { c.font = `800 ${tam}px ${window._sxFonte}`; ln = sxQuebra(c, nome, W - 220); if (ln.length <= (tam >= 104 ? 2 : 3)) break; } ln = ln.slice(0, 3);
+  ln.forEach((l, i) => sxTexto(c, l, W / 2, cy + ch / 2 + (i - (ln.length - 1) / 2) * (tam * 1.05) + tam * .35, W - 200, tam, 800, '#fff'));
+  sxTexto(c, sub.replace('🎉 ', ''), W / 2, cy + ch + 80, W - 160, 44, 600, gan ? '#FFB27A' : 'rgba(255,255,255,.75)');
+  // ganhadores
+  const gs = [...$('sxAgora').querySelectorAll('span')].map(s => s.lastChild?.textContent || s.textContent);
+  if (gs.length > sxNGan) { sxFlash = 1; for (let i = 0; i < 160; i++) sxConf.push({ x:W / 2 + (Math.random() - .5) * 300, y:cy + 40, vx:(Math.random() - .5) * 26, vy:-Math.random() * 30 - 8, r:Math.random() * Math.PI, vr:(Math.random() - .5) * .4, w:10 + Math.random() * 14, h:6 + Math.random() * 8, cor:['#F26A1B','#FFC24B','#FFFFFF','#4FC3F7','#7BE495'][i % 5] }); }
+  sxNGan = gs.length;
+  if (gs.length) { let gy = cy + ch + 190; sxTexto(c, gs.length > 1 ? 'GANHADORES' : 'GANHADOR', 90, gy, 900, 36, 800, 'rgba(255,255,255,.6)', 'left'); gy += 40;
+    const alt = Math.min(118, (H - 160 - gy) / Math.max(1, gs.length));
+    gs.forEach((n, i) => { const yy = gy + i * alt; sxRet(c, 90, yy, W - 180, alt - 18, 24); c.fillStyle = 'rgba(255,255,255,.08)'; c.fill();
+      c.beginPath(); c.arc(150, yy + (alt - 18) / 2, 36, 0, Math.PI * 2); c.fillStyle = ['#E3B341','#C9D1DC','#D28A4C'][i] || '#F26A1B'; c.fill();
+      sxTexto(c, (i + 1) + 'º', 150, yy + (alt - 18) / 2 + 13, 60, 36, 800, '#12243B');
+      sxTexto(c, n, 210, yy + (alt - 18) / 2 + 17, W - 330, 50, 700, '#fff', 'left'); }); }
+  // confete
+  sxConf = sxConf.filter(p => p.y < H + 40); sxConf.forEach(p => { p.vy += .9; p.x += p.vx; p.y += p.vy; p.vx *= .99; p.r += p.vr; c.save(); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.cor; c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); c.restore(); });
+  sxTexto(c, 'Frade Imóveis · ' + new Date().toLocaleDateString('pt-BR'), W / 2, H - 70, 900, 32, 600, 'rgba(255,255,255,.5)');
+  if (sxRec) sxRaf = requestAnimationFrame(sxQuadro);
+}
 window.sxGravar = async () => {
   if (sxRec) { if (sxRec.state !== 'inactive') sxRec.stop(); return; }
-  if (!navigator.mediaDevices?.getDisplayMedia || !window.MediaRecorder) { toast('Este aparelho não deixa o app gravar. No celular, use a gravação de tela do próprio aparelho.'); return; }
-  try { sxStream = await navigator.mediaDevices.getDisplayMedia({ video:{ frameRate:30 }, audio:false, preferCurrentTab:true, selfBrowserSurface:'include' }); }
-  catch(e) { toast('Gravação cancelada'); return; }
-  const tr = sxStream.getVideoTracks()[0];
-  try { if (window.CropTarget && tr.cropTo) await tr.cropTo(await CropTarget.fromElement($('sxPalco'))); } catch(e) {}
-  const tipo = ['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || '';
+  if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) { toast('Este aparelho não deixa o app gravar. Use a gravação de tela do próprio aparelho.'); return; }
+  window._sxFonte = getComputedStyle($('sxNome')).fontFamily || 'system-ui, sans-serif';
+  try { await document.fonts?.ready; } catch(e) {}
+  sxCv = document.createElement('canvas'); sxCv.width = 1080; sxCv.height = 1920; sxConf = []; sxNGan = [...$('sxAgora').querySelectorAll('span')].length; sxFlash = 0;
+  const st = sxCv.captureStream(30), tipo = ['video/mp4;codecs=avc1.640028','video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || '';
   sxPartes = [];
-  try { sxRec = new MediaRecorder(sxStream, tipo ? { mimeType:tipo, videoBitsPerSecond:6000000 } : {}); } catch(e) { sxStream.getTracks().forEach(t => t.stop()); sxStream = null; toast('Não deu para gravar: ' + e.message); return; }
+  try { sxRec = new MediaRecorder(st, tipo ? { mimeType:tipo, videoBitsPerSecond:10000000 } : { videoBitsPerSecond:10000000 }); } catch(e) { sxRec = null; toast('Não deu para gravar: ' + e.message); return; }
   sxRec.ondataavailable = e => { if (e.data && e.data.size) sxPartes.push(e.data); };
-  sxRec.onstop = () => { const mt = sxRec?.mimeType || tipo || 'video/webm', ext = mt.includes('mp4') ? 'mp4' : 'webm', b = new Blob(sxPartes, { type:mt }), a = document.createElement('a');
-    a.href = URL.createObjectURL(b); a.download = `sorteio-${hojeISO()}-${new Date().toTimeString().slice(0, 5).replace(':', 'h')}.${ext}`; document.body.appendChild(a); a.click();
-    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 5000); try { sxStream.getTracks().forEach(t => t.stop()); } catch(e) {} sxRec = null; sxStream = null; sxPintaGrav(); toast('Vídeo do sorteio salvo nos Downloads'); };
-  tr.addEventListener('ended', () => { if (sxRec && sxRec.state !== 'inactive') sxRec.stop(); });
-  sxRec.start(500); sxPintaGrav(); toast('Gravando. Toque em Sortear: a gravação para sozinha 4 segundos depois do último ganhador.');
+  sxRec.onstop = () => { cancelAnimationFrame(sxRaf); const mt = (sxRec?.mimeType || tipo || 'video/webm').split(';')[0], ext = mt.includes('mp4') ? 'mp4' : 'webm', blob = new Blob(sxPartes, { type:mt }), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = `sorteio-${hojeISO()}-${new Date().toTimeString().slice(0, 5).replace(':', 'h')}.${ext}`; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 5000); try { st.getTracks().forEach(t => t.stop()); } catch(e) {} sxRec = null; sxCv = null; sxPintaGrav(); toast('Vídeo do sorteio salvo nos Downloads'); };
+  sxGravIni = Date.now(); sxQuadro(); sxRec.start(1000); sxPintaGrav();
+  toast('Gravando. Toque em Sortear: a gravação para sozinha 4 segundos depois do último ganhador. Deixe esta tela aberta.');
 };
 window.sxCopiar = async () => {
   const u = sxHistorico[0]; if (!u) { toast('Ainda não tem ganhador'); return; }
