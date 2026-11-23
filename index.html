@@ -2498,6 +2498,38 @@ body.com-carta-banner main,body.com-carta-banner .main{padding-top:64px}
 .sx-grav{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3)}.sx-grav:hover{background:rgba(255,255,255,.2)}
 .sx-grav.gravando{background:#D93025;border-color:#D93025;animation:sxPisca 1.2s infinite}
 @keyframes sxPisca{50%{opacity:.6}}@media (prefers-reduced-motion:reduce){.sx-grav.gravando{animation:none}}
+
+.fa-lista{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px;counter-reset:fa}
+.fa-lista li{counter-increment:fa;display:grid;grid-template-columns:28px 1fr auto;gap:2px 8px;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.fa-lista li::before{content:counter(fa) "º";font-weight:800;color:var(--text2);grid-row:span 2}
+.fa-lista li.vez{border-color:color-mix(in srgb,var(--accent) 50%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--card))}
+.fa-lista li small{grid-column:2/-1;font-size:12px;color:var(--text2)}
+.fa-lista .fa-tag{font-size:11px;font-weight:700;background:var(--accent);color:#fff;border-radius:999px;padding:2px 8px}
+
+.av-abas button{min-width:110px}
+.av-lembra{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;margin:0 0 12px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--card));font-size:14px}
+.av-val-lista{display:grid;gap:8px}
+.av-val-a{border:1px solid var(--border);border-radius:14px;background:var(--card);padding:10px 12px}
+.av-val-a>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;list-style:none}
+.av-val-a>summary::-webkit-details-marker{display:none}
+.av-val-n{display:grid}.av-val-n small{font-size:12px;color:var(--text2)}
+.av-dias{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;margin-top:10px}
+.av-d{display:grid;gap:1px;text-align:left;padding:7px 9px;border-radius:10px;border:1px solid var(--border);background:var(--bg);font:inherit;font-size:12.5px;color:var(--text)}
+.av-d b{font-size:11px;text-transform:capitalize;color:var(--text2)}.av-d i{font-style:normal;font-size:11.5px;color:var(--text2)}
+.av-d.ok{border-color:color-mix(in srgb,var(--ok,#16a34a) 45%,var(--border));background:color-mix(in srgb,var(--ok,#16a34a) 8%,var(--card))}.av-d.ok i{color:var(--ok,#16a34a);font-weight:700}
+.av-d.avpend{cursor:pointer;border-color:color-mix(in srgb,var(--accent) 55%,var(--border));background:color-mix(in srgb,var(--accent) 8%,var(--card))}.av-d.avpend i{color:var(--accent);font-weight:700}
+.av-d.nada{opacity:.6}
+html body button.av-d{display:grid!important;justify-items:start;align-content:start;gap:1px;height:auto;min-height:0;line-height:1.3;white-space:normal}
+.av-det{margin:10px 0 0;padding-left:16px;font-size:13px;display:grid;gap:6px}
+
+/* v447: menu de baixo fixo no iPhone. No iOS, overflow no html e no body ao mesmo tempo faz o body virar a área que rola e o menu
+   "anda" com a tela; e o desfoque (backdrop-filter) num elemento fixo atrasa durante a rolagem. Fica só no body (vale para a tela toda)
+   e o menu ganha camada própria e fundo sólido. */
+.mobilebar{transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+@supports (-webkit-touch-callout:none){
+  html:root{overflow-x:visible!important}
+  html:root body{overflow-x:clip!important}
+  html:root body .mobilebar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--card)!important;transform:translate3d(0,0,0)!important;-webkit-transform:translate3d(0,0,0)!important}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -7102,7 +7134,7 @@ function renderRanking(){
   $('rPeriodo').classList.toggle('hide', rankTipo === 'pontos' || rankTipo.startsWith('rk:')); if ($('podio')) $('podio').innerHTML = '';
   document.getElementById('paneRanking')?.classList.toggle('rk-hoje', rankTipo === 'hoje');
   if (rankTipo === 'hoje') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirMetasDia()">Metas do dia</button><button class="btn btn-ghost" onclick="abrirMetas()">Metas de reservas</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Metas de hoje'; $('rankNota').textContent = 'Cada número mostra quanto falta para bater a meta de hoje.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankHoje(); return; }
-  if (rankTipo === 'anjos') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirAnjoCheckCfg()">Pontos do checklist</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Ranking dos anjos · ' + nomeMes(mesAtual()).split(' de ')[0].toLowerCase(); $('rankNota').textContent = 'Pontos do anjo = média de pontos dos afilhados no ranking geral × dias úteis com o checklist feito. Ex.: afilhados com média 200 e checklist em 4 de 5 dias úteis = 160. Feriado não conta como dia útil; sábado feito conta a favor. Não soma nada no ranking geral.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankAnjos(); return; }
+  if (rankTipo === 'anjos') { $('janelaRank').innerHTML = souGerente() && !souCeo() ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="btn btn-ghost" onclick="abrirAnjoCheckCfg()">Pontos do checklist</button></div>' : ''; $('rPeriodo').classList.add('hide'); $('rankTit').textContent = 'Ranking dos anjos · ' + nomeMes(mesAtual()).split(' de ')[0].toLowerCase(); $('rankNota').textContent = 'Pontos do anjo = média de pontos dos afilhados no ranking geral × dias úteis com o checklist feito e validado pela gerência (a validação vale a partir de 23/11). Ex.: afilhados com média 200 e checklist validado em 4 de 5 dias úteis = 160. Feriado não conta como dia útil; sábado feito conta a favor. Não soma nada no ranking geral.'; $('battle').innerHTML = ''; $('rankLista').innerHTML = htmlRankAnjos(); return; }
   if (rankTipo.startsWith('rk:')) { renderRankingNovo(rankTipo.slice(3)); return; }
   if (rankTipo === 'pontos') { $('janelaRank').innerHTML = ''; $('rankNota').textContent = 'Os pontos zeram todo dia 1º. O histórico de cada mês fica guardado em Relatórios.'; renderRankingPontos(); return; }
   if (rankTipo === 'cartas') { $('janelaRank').innerHTML = ''; renderRankingCartas(); return; }
@@ -8260,7 +8292,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 445;
+const APP_VERSAO = 447;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9068,9 +9100,11 @@ function t3Faixa(k){ const h = hojeISO(), d = parseISO(h), dow = (d.getDay() + 6
   const m = h.slice(0, 7); return [m + '-01', h, 'Mês até ' + acDm(h)]; }
 // v442: nota do anjo = média de pontos dos afilhados × parte dos dias úteis com o checklist feito (o anjo tem que fazer o trabalho).
 // Dia útil = segunda a sexta, sem feriado, a partir do início do checklist; hoje só conta se já fez. Sábado feito conta a favor.
+const ANJO_VAL_DESDE = '2026-11-23';
+const anjoFezDia = (uid, d) => { const o = fdAch(uid, d); return !!(o.fech || o.val || Object.keys(o).some(k => /^(f_|l_|c\d)/.test(k))); };
 function anjoTrabalho(a, de, ate){
   const h = hojeISO(), ini = fdInicio(), ach = Object.assign({}, ...rankingAtiv.filter(r => r.uid === a.uid).map(r => r.ach || {}));
-  const fez = d => { const o = ach[d] || {}; return !!(o.fech || o.val || Object.keys(o).some(k => /^(f_|l_|c\d)/.test(k))); };
+  const fez = d => { const o = ach[d] || {}; return !!(o.fech || o.val || Object.keys(o).some(k => /^(f_|l_|c\d)/.test(k))) && (d < ANJO_VAL_DESDE || !!o.val); }; // v446: a partir de 23/11 o dia só conta depois que a gerência valida
   let uteis = 0, dias = 0;
   for (let d = de; d <= ate; d = somaDias(d, 1)) { if (d < ini) continue; const w = parseISO(d).getDay(); if (w === 0) continue;
     const f = fez(d), util = w !== 6 && !feriados(Number(d.slice(0, 4))).has(d) && (d < h || f);
@@ -14270,7 +14304,7 @@ const filaAnjosCfg = () => appCfg.filaAnjos || {};
 const usaFilaAnjos = () => souSdr() && filaAnjosCfg().ativo !== false && (filaAnjosCfg().sdrs || []).includes(uidAtual);
 function filaAnjosAssinar(){
   const d = ciHoje(); if (_faSub && _faDia === d) return; try { _faSub && _faSub(); } catch(e) {} _faSub = null; _faDia = d; filaAnjosDoc = null;
-  _faSub = onSnapshot(doc(db,'fila_anjos',d), s => { filaAnjosDoc = s.exists() ? s.data() : null; if ($('visModal')?.classList.contains('open') && !vEditId) vmPintarFila(); }, e => console.warn('fila dos anjos', e.code || e.message));
+  _faSub = onSnapshot(doc(db,'fila_anjos',d), s => { filaAnjosDoc = s.exists() ? s.data() : null; if ($('visModal')?.classList.contains('open') && !vEditId) vmPintarFila(); if (souGerente() && view === 'hoje') render(); }, e => console.warn('fila dos anjos', e.code || e.message));
 }
 function filaAnjos(){
   const f = filaAnjosDoc || {}, ent = f.entrada || {}, ult = f.ult || {}, sai = f.saiu || {};
@@ -14279,10 +14313,30 @@ function filaAnjos(){
     .map(x => ({ ...x, chave:Math.max(x.ent, x.ult) })).sort((a, b) => a.chave - b.chave);
 }
 // o anjo entra na fila sozinho quando o check-in dele aparece (uma vez por dia)
+// v446: quem marca saída do escritório sai da fila; se voltar no mesmo dia, entra de novo no fim da fila
 async function filaAnjoEntrar(){
-  if (!souAnjo() || !meuCheckin || !meuCheckin.entrada) return; const d = ciHoje(), k = d + '_' + uidAtual; if (_faEu === k) return; _faEu = k;
-  try { await setDoc(doc(db,'fila_anjos',d), { dia:d, entrada:{ [uidAtual]:Number(meuCheckin.entrada) }, nomes:{ [uidAtual]:perfil.nome }, atualizadoEm:Date.now() }, { merge:true }); }
-  catch(e) { _faEu = ''; console.warn('fila dos anjos', e.code || e.message); }
+  if (!souAnjo() || !meuCheckin || !meuCheckin.entrada) return; const d = ciHoje(), saiu = !!meuCheckin.saida, k = d + '_' + uidAtual + (saiu ? '_s' : '_e'); if (_faEu === k) return;
+  const antes = _faEu; _faEu = k;
+  const dados = saiu ? { saiu:{ [uidAtual]:Number(meuCheckin.saida) || Date.now() } }
+    : { entrada:{ [uidAtual]:Number(meuCheckin.entrada) }, nomes:{ [uidAtual]:perfil.nome }, saiu:{ [uidAtual]:0 }, ...(antes === d + '_' + uidAtual + '_s' ? { ult:{ [uidAtual]:Date.now() } } : {}) };
+  try { await setDoc(doc(db,'fila_anjos',d), { dia:d, ...dados, atualizadoEm:Date.now() }, { merge:true }); }
+  catch(e) { _faEu = antes; console.warn('fila dos anjos', e.code || e.message); }
+}
+// v446: lembrete da gerência: dias dos anjos esperando validação (esta semana e a passada)
+function htmlLembreteValidar(){
+  if (!souGerente() || souCeo()) return ''; const s0 = anjoValSem; let n = 0;
+  try { anjoValSem = 'passada'; n += anjoValPend(anjoValDias()).filter(x => x[1] >= ANJO_VAL_DESDE).length; anjoValSem = 'atual'; n += anjoValPend(anjoValDias()).filter(x => x[1] >= ANJO_VAL_DESDE).length; } finally { anjoValSem = s0; }
+  if (!n) return '';
+  return `<div class="av-lembra"><span>🛡️ <b>${n} dia${n === 1 ? '' : 's'} dos anjos esperando validação.</b> Só conta no ranking dos anjos depois de validado.</span><button class="btn btn-sm btn-primary" onclick="rankTipo='anjos';anjoAba='validar';setView('ranking')">Validar</button></div>`;
+}
+// v446: a gerência vê a fila dos anjos no Hoje (quem é o da vez, a ordem e quantas visitas cada um recebeu hoje)
+function htmlFilaAnjosHoje(){
+  if (!souGerente() || souCeo() || !filaAnjosDoc) return '';
+  const l = filaAnjos(), f = filaAnjosDoc, sai = Object.keys(f.saiu || {}).filter(u => (f.saiu || {})[u]).map(u => primeiro((rkPessoas.find(p => p.uid === u) || {}).nome || (f.nomes || {})[u] || ''));
+  const tot = Object.values(f.qtd || {}).reduce((a, n) => a + (Number(n) || 0), 0);
+  return cartaoDobra('filaAnjos', true, 'fa-card', 'Fila dos anjos', l.length ? `da vez: ${esc(primeiro(l[0].nome))} · ${tot} visita${tot === 1 ? '' : 's'} hoje` : 'ninguém na fila',
+    l.length ? `<ol class="fa-lista">${l.map((x, i) => `<li class="${i ? '' : 'vez'}"><b>${esc(x.nome)}</b>${i ? '' : '<span class="fa-tag">da vez</span>'}<small>${x.n ? x.n + ' visita' + (x.n === 1 ? '' : 's') + ' hoje' : 'nenhuma visita ainda'}</small></li>`).join('')}</ol>${sai.length ? `<div class="muted" style="font-size:12.5px;margin-top:6px">Saíram do escritório: ${sai.map(esc).join(', ')}</div>` : ''}`
+      : '<div class="muted">Nenhum anjo fez check-in hoje.</div>');
 }
 window.vmPintarFila = () => {
   const box = $('vmFilaAnjo'); if (!box) return; const on = usaFilaAnjos() && !vEditId; box.classList.toggle('hide', !on); if (!on) return;
@@ -14305,6 +14359,7 @@ function assinarCheckins(){
     const daEquipe = souCoord() && !souGerente() ? [where('equipe','==', perfil.equipe || '')] : [];
     subsPapel.push(onSnapshot(query(collection(db,'checkins'), where('dia','==',ciHoje()), ...daEquipe), s => { checkinsHoje = s.docs.map(d => ({ id:d.id, ...d.data() })); meuCheckin = checkinsHoje.find(c => c.uid === uidAtual) || null; render(); pintarRecepcao(); filaAnjoEntrar(); }, e => console.warn('checkins', e.code || e.message)));
     subsPapel.push(onSnapshot(query(collection(db,'checkins'), where('mes','==', mesAtual()), ...daEquipe), s => { checkinsMes = s.docs.map(d => d.data()); }, () => {}));
+    if (souGerente() && !souCeo()) filaAnjosAssinar();
   } else subsPapel.push(onSnapshot(doc(db,'checkins', ciId(uidAtual)), s => { meuCheckin = s.exists() ? { id:s.id, ...s.data() } : null; render(); filaAnjoEntrar(); }, e => console.warn('checkin', e.code || e.message)));
   if (souSdr()) filaAnjosAssinar();
   subsPapel.push(onSnapshot(doc(db,'fila', ciHoje()), s => { filaHoje = s.exists() ? s.data() : null; render(); pintarRecepcao(); }, () => {}));
@@ -15239,7 +15294,7 @@ function htmlValidarOntem(){
 function htmlAnjoTopo(){
   if (!souAtivo() || souCeo() || hojeISO() < fdInicio()) return '';
   if (souAnjo()) return htmlFechAnjo();
-  if (souCoord() || souGerente()) return htmlAnjosAoVivo();
+  if (souCoord() || souGerente()) return htmlLembreteValidar() + htmlFilaAnjosHoje() + htmlAnjosAoVivo();
   return '';
 }
 // v400: cartões do Hoje que recolhem (o app lembra se ficou aberto) e escolha do dia
@@ -15292,8 +15347,8 @@ function htmlAnjosAoVivo(){
 function htmlAnjoCheckHoje(){
   if (!souAtivo() || souCeo()) return '';
   if (souAnjo()) return ''; // v400: o checklist do anjo fica no topo do Hoje (anjoTopoHoje)
-  if (souGerente()) { const us = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && p.papel === 'corretor' && !acTeste(p) && naEquipeGer(p.equipe)).map(p => p.uid); return htmlGerEqFiltro() + htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
-  if (podeGerir()) { const us = acPessoas0().filter(p => p.papel === 'corretor' && !acTeste(p)).map(p => p.uid); return htmlValidarOntem() + htmlGvCard(us, 'Clientes parados até ontem'); }
+  if (souGerente()) { const us = (perfisTodos.length ? perfisTodos : perfisLista).filter(p => p.status === 'ativo' && p.papel === 'corretor' && !acTeste(p) && naEquipeGer(p.equipe)).map(p => p.uid); return htmlGerEqFiltro() + htmlGvCard(us, 'Clientes parados até ontem'); }
+  if (podeGerir()) { const us = acPessoas0().filter(p => p.papel === 'corretor' && !acTeste(p)).map(p => p.uid); return htmlGvCard(us, 'Clientes parados até ontem'); }
   if (perfil.papel === 'corretor') return (hojeISO() < fdInicio() ? '' : htmlLargCorretor()) + htmlGvCard([uidAtual], 'Seus clientes parados');
   return '';
 }
@@ -15407,7 +15462,45 @@ function linhasAnjosAfil(de, ate){
       afs:xs.map(x => ({ nome:acNome((base.find(p => p.uid === x.uid) || {}).nome || x.nome || 'Corretor'), pts:Math.round(Number(x.pontos) || 0) })).sort((a, b) => b.pts - a.pts) }; })
     .filter(x => x.n).sort((a, b) => b.pts - a.pts || b.med - a.med || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
 }
+// v446: aba "Validar" dentro de Ranking > Anjos (gerência): a semana de cada anjo, dia a dia, com validar por dia, por anjo ou tudo
+window.anjoAba = window.anjoAba || 'ranking'; window.anjoValSem = window.anjoValSem || 'atual';
+function anjoValDias(){ const h = hojeISO(), dow = (parseISO(h).getDay() + 6) % 7, seg = somaDias(h, -dow - (anjoValSem === 'passada' ? 7 : 0)), l = [];
+  for (let i = 0; i < 6; i++) { const d = somaDias(seg, i); if (d > h) break; l.push(d); } return l; }
+function anjoValPend(dias){ const out = []; anjosVisiveis().filter(a => a.status !== 'inativo' && (a.membros || []).length).forEach(a => dias.forEach(d => { if (d >= fdInicio() && anjoFezDia(a.uid, d) && !fdAch(a.uid, d).val && (d < hojeISO() || fdAch(a.uid, d).fech)) out.push([a.uid, d]); })); return out; }
+window.anjoValidarVarios = async (lista, msg) => {
+  if (!souGerente() || souCeo() || !lista.length) return; const por = {}; lista.forEach(([u, d]) => { (por[u] = por[u] || []).push(d); });
+  try { const b = writeBatch(db), v = { em:Date.now(), por:perfil.nome };
+    Object.entries(por).forEach(([u, ds]) => { const porMes = {}; ds.forEach(d => { (porMes[d.slice(0, 7)] = porMes[d.slice(0, 7)] || {})[d] = { val:v }; });
+      Object.entries(porMes).forEach(([m, ach]) => b.set(doc(db,'ranking_ativ', m + '_' + u), { ach, atualizadoEm:Date.now() }, { merge:true })); });
+    await gravar(b.commit()); toast(msg || 'Validado'); } catch(e) { toast('Erro: ' + e.message); } };
+window.anjoValSemana = uid => { const l = anjoValPend(anjoValDias()).filter(x => x[0] === uid); anjoValidarVarios(l, l.length + ' dia' + (l.length === 1 ? '' : 's') + ' validado' + (l.length === 1 ? '' : 's')); };
+window.anjoValTudo = () => { const l = anjoValPend(anjoValDias()); if (!l.length) return; anjoValidarVarios(l, 'Semana validada: ' + l.length + ' dias'); };
+function htmlValidarAnjos(){
+  if (!souGerente() || souCeo()) return '';
+  const dias = anjoValDias(), h = hojeISO(), pend = anjoValPend(dias), fer = d => feriados(Number(d.slice(0, 4))).has(d);
+  const anjos = anjosVisiveis().filter(a => a.status !== 'inativo' && (a.membros || []).length).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  const sem = (k, t) => `<button class="${anjoValSem === k ? 'on' : ''}" onclick="anjoValSem='${k}';render()">${t}</button>`;
+  const cel = (a, d) => { const o = fdAch(a.uid, d), dm = d.slice(8) + '/' + d.slice(5, 7), w = ['dom','seg','ter','qua','qui','sex','sáb'][parseISO(d).getDay()];
+    if (o.val) return `<span class="av-d ok" title="Validado por ${esc(o.val.por || '')}"><b>${w}</b>${dm}<i>✓ validado</i></span>`;
+    if (d < fdInicio()) return `<span class="av-d"><b>${w}</b>${dm}<i>—</i></span>`;
+    if (anjoFezDia(a.uid, d) && (d < h || o.fech)) return `<span class="av-d avpend" role="button" tabindex="0" onclick="anjoValidarVarios([['${a.uid}','${d}']])" onkeydown="if(event.key==='Enter')this.click()"><b>${w}</b><span>${dm}</span><i>${o.fech ? 'fechou ' + horaCurta(o.fech) : 'fez, não fechou'} · validar</i></span>`;
+    if (d === h) return `<span class="av-d"><b>${w}</b>${dm}<i>em andamento</i></span>`;
+    return `<span class="av-d nada"><b>${w}</b>${dm}<i>${fer(d) ? 'feriado' : parseISO(d).getDay() === 6 ? 'sábado' : 'não fez'}</i></span>`; };
+  return `<div class="ach-cab" style="margin:0 0 10px"><b>Validar o checklist dos anjos</b><div class="fd-sn">${sem('atual','Esta semana')}${sem('passada','Semana passada')}</div></div>
+    <div class="hint" style="margin:0 0 10px">O dia do anjo só conta no ranking dos anjos depois de validado (a partir de 23/11). Toque num dia para validar, ou valide a semana do anjo de uma vez. Abra o anjo para ver o que ele marcou.</div>
+    ${pend.length ? `<button class="btn btn-primary" style="margin-bottom:12px" onclick="anjoValTudo()">Validar tudo (${pend.length} dia${pend.length === 1 ? '' : 's'})</button>` : '<div class="muted" style="margin-bottom:12px">Nada esperando validação nesta semana.</div>'}
+    <div class="av-val-lista">${anjos.map(a => { const pa = pend.filter(x => x[0] === a.uid).length;
+      return `<details class="av-val-a"${pa ? ' open' : ''}><summary><span class="av-val-n"><b>${esc(a.nome)}</b><small>${pa ? pa + ' para validar' : 'em dia'}</small></span>${pa ? `<button class="btn btn-sm" onclick="event.preventDefault();event.stopPropagation();anjoValSemana('${a.uid}')">Validar a semana</button>` : ''}</summary>
+        <div class="av-dias">${dias.map(d => cel(a, d)).join('')}</div>
+        <ul class="av-det">${dias.filter(d => anjoFezDia(a.uid, d)).map(d => `<li><b>${dataBR(d).slice(0, 5)}</b><ul>${htmlDetFech(a, d)}</ul></li>`).join('') || '<li class="muted">Nada marcado nesta semana.</li>'}</ul></details>`; }).join('')}</div>`;
+}
 function htmlRankAnjos(){
+  if (souGerente() && !souCeo()) { const n = anjoValPend(anjoValDias()).length, ab = (k, t) => `<button class="${anjoAba === k ? 'on' : ''}" onclick="anjoAba='${k}';render()">${t}</button>`;
+    const topo = `<div class="fd-sn av-abas" style="margin:0 0 12px">${ab('ranking','Ranking')}${ab('validar','Validar' + (n ? ' (' + n + ')' : ''))}</div>`;
+    if (anjoAba === 'validar') return topo + htmlValidarAnjos(); return topo + htmlRankAnjos0(); }
+  return htmlRankAnjos0();
+}
+function htmlRankAnjos0(){
   const [de, ate, rot] = faixaAnjos(), l = linhasAnjosAfil(de, ate), bt = (k, t) => `<button class="${anjoPer === k ? 'on' : ''}" onclick="anjoPer='${k}';render()">${t}</button>`;
   const filtro = `<div class="ach-cab" style="margin:0 0 10px"><b>Pontos dos anjos · ${esc(rot)}</b><div class="fd-sn">${bt('semana','Esta semana')}${bt('passada','Semana passada')}${bt('mes','Mês')}</div></div>`;
   if (!l.length) return htmlFechGerencia() + filtro + vazio('Nenhum anjo com afilhados', 'Ligue os corretores de cada anjo em Meus corretores.');
@@ -20444,7 +20537,8 @@ window.simDocAcao = async (d, acao) => {
   if (!d) { toast('Faça a simulação primeiro'); return; }
   if (acao === 'imprimir' && !ehCelular()) { // computador: abre a janela de impressão (dá para escolher "Salvar como PDF")
     const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
-    const dd = f.contentWindow.document; dd.open(); dd.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${esc(d.titulo)}</title><style>@page{margin:12mm}body{margin:0}.sd{width:auto!important;padding:0!important}</style></head><body>${simDocHtml(d)}</body></html>`); dd.close();
+    const dd = f.contentWindow.document; dd.open(); dd.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${esc(d.titulo)}</title><style>@page{margin:12mm}body{margin:0}.sd{width:auto!important;padding:0!important}}
+</style></head><body>${simDocHtml(d)}</body></html>`); dd.close();
     setTimeout(() => { try { f.contentWindow.focus(); f.contentWindow.print(); } catch(err) { toast('Não deu para imprimir neste aparelho'); } setTimeout(() => f.remove(), 60000); }, 500); return; }
   const ios = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document;
   toast('Gerando o PDF…');
