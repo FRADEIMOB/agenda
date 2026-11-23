@@ -2494,6 +2494,10 @@ body.com-carta-banner main,body.com-carta-banner .main{padding-top:64px}
 .fa-box{grid-column:1/-1;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--card));border-radius:14px;padding:10px 12px;margin:0 0 10px;display:grid;gap:4px}
 .fa-box b{font-size:15px}.fa-box small{font-size:12px;color:var(--text2)}.fa-box .fa-vez{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .fa-box .fa-tag{font-size:11px;font-weight:700;background:var(--accent);color:#fff;border-radius:999px;padding:2px 8px}
+
+.sx-grav{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3)}.sx-grav:hover{background:rgba(255,255,255,.2)}
+.sx-grav.gravando{background:#D93025;border-color:#D93025;animation:sxPisca 1.2s infinite}
+@keyframes sxPisca{50%{opacity:.6}}@media (prefers-reduced-motion:reduce){.sx-grav.gravando{animation:none}}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -3938,7 +3942,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
             <div class="sx-top"><div><small id="sxOrigem">Sorteio</small><h2 id="sxTitulo">Sorteio Frade</h2></div><span class="sx-premio hide" id="sxPremioB">🎁 <span id="sxPremioT"></span></span></div>
             <div class="sx-janela"><div><div class="sx-nome" id="sxNome">Pronto para sortear</div><div class="sx-sub" id="sxSub">Escolha quem participa e toque em Sortear.</div></div></div>
             <div class="sx-agora" id="sxAgora"></div>
-            <div class="sx-pe"><button class="btn sx-bt" id="sxBt" onclick="sortearApp()">🎲 Sortear</button><span id="sxInfo"></span></div>
+            <div class="sx-pe"><button class="btn sx-bt" id="sxBt" onclick="sortearApp()">🎲 Sortear</button><button class="btn sx-grav" id="sxGrav" onclick="sxGravar()">⏺ Gravar</button><span id="sxInfo"></span></div>
           </section>
           <aside class="card sx-cfg">
             <div class="fg"><label>Nome do sorteio</label><input id="sxNomeI" maxlength="80" value="Sorteio Frade" oninput="sxPinta()"></div>
@@ -8256,7 +8260,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 443;
+const APP_VERSAO = 444;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -14919,7 +14923,28 @@ window.sortearApp = async () => {
     if (i < esc2.length - 1) await new Promise(r => setTimeout(r, 1500));
   }
   sxGirando = false; sxPinta();
+  if (sxRec) setTimeout(() => { if (sxRec && sxRec.state !== 'inactive') sxRec.stop(); }, 4000); // v444: a gravação para sozinha depois do último ganhador
   try { const ref = doc(collection(db,'sorteios')); await setDoc(ref, { titulo:$('sxNomeI').value.trim() || 'Sorteio Frade', premio:$('sxPremio').value.trim(), ganhadores:esc2, participantes:pool.length, fonte:$('sxFonte').value, em:Date.now(), por:perfil.nome, porUid:uidAtual }); if ($('sxAvisar')?.checked !== false) avisarCarteiro('sorteio', ref.id); } catch(e) { console.warn('sorteio', e.message); }
+};
+// v444: gravar o sorteio (vídeo da tela do sorteio). No computador grava só o quadro do sorteio; o vídeo vai para os Downloads.
+let sxRec = null, sxStream = null, sxPartes = [];
+function sxPintaGrav(){ const b = $('sxGrav'); if (!b) return; b.textContent = sxRec ? '⏹ Parar e salvar' : '⏺ Gravar'; b.classList.toggle('gravando', !!sxRec); }
+window.sxGravar = async () => {
+  if (sxRec) { if (sxRec.state !== 'inactive') sxRec.stop(); return; }
+  if (!navigator.mediaDevices?.getDisplayMedia || !window.MediaRecorder) { toast('Este aparelho não deixa o app gravar. No celular, use a gravação de tela do próprio aparelho.'); return; }
+  try { sxStream = await navigator.mediaDevices.getDisplayMedia({ video:{ frameRate:30 }, audio:false, preferCurrentTab:true, selfBrowserSurface:'include' }); }
+  catch(e) { toast('Gravação cancelada'); return; }
+  const tr = sxStream.getVideoTracks()[0];
+  try { if (window.CropTarget && tr.cropTo) await tr.cropTo(await CropTarget.fromElement($('sxPalco'))); } catch(e) {}
+  const tipo = ['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || '';
+  sxPartes = [];
+  try { sxRec = new MediaRecorder(sxStream, tipo ? { mimeType:tipo, videoBitsPerSecond:6000000 } : {}); } catch(e) { sxStream.getTracks().forEach(t => t.stop()); sxStream = null; toast('Não deu para gravar: ' + e.message); return; }
+  sxRec.ondataavailable = e => { if (e.data && e.data.size) sxPartes.push(e.data); };
+  sxRec.onstop = () => { const mt = sxRec?.mimeType || tipo || 'video/webm', ext = mt.includes('mp4') ? 'mp4' : 'webm', b = new Blob(sxPartes, { type:mt }), a = document.createElement('a');
+    a.href = URL.createObjectURL(b); a.download = `sorteio-${hojeISO()}-${new Date().toTimeString().slice(0, 5).replace(':', 'h')}.${ext}`; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 5000); try { sxStream.getTracks().forEach(t => t.stop()); } catch(e) {} sxRec = null; sxStream = null; sxPintaGrav(); toast('Vídeo do sorteio salvo nos Downloads'); };
+  tr.addEventListener('ended', () => { if (sxRec && sxRec.state !== 'inactive') sxRec.stop(); });
+  sxRec.start(500); sxPintaGrav(); toast('Gravando. Toque em Sortear: a gravação para sozinha 4 segundos depois do último ganhador.');
 };
 window.sxCopiar = async () => {
   const u = sxHistorico[0]; if (!u) { toast('Ainda não tem ganhador'); return; }
@@ -19864,6 +19889,7 @@ window.avisarPeloWhats = v => {
   if (!v) return;
   window._sdrVis = v;
   const equipe = membrosSelecionaveis().filter(p => p.uid !== uidAtual);
+  if (v.corretorUid && v.corretorNome && !equipe.some(p => p.uid === v.corretorUid)) equipe.unshift({ uid:v.corretorUid, nome:v.corretorNome, papel:'anjo' }); // v444: anjo de outra equipe (fila dos anjos)
   const atual = v.corretorUid || (v.corretorNome ? '__livre' : '');
   $('msgSub').textContent = `Visita de ${nomeBonito(v.cliente)} · avise quem vai atender`;
   $('msgLista').innerHTML = `<div class="sdr-envio">
@@ -19880,8 +19906,9 @@ window.avisarPeloWhats = v => {
 function sdrEscolhido(){
   const q = $('sdrQuem').value;
   if (q === '__livre') return { uid:'', nome:$('sdrLivre').value.trim() };
-  const p = q ? perfisTodos.find(x => x.uid === q) : null;
-  return p ? { uid:p.uid, nome:p.nome, telefone:p.telefone || '', equipe:p.equipe } : { uid:'', nome:'' };
+  // v444: anjo não vem no perfisTodos da SDR: busca também na lista da equipe, na lista pública e na própria visita
+  const v = window._sdrVis || {}, p = q ? (perfisTodos.find(x => x.uid === q) || membrosSelecionaveis().find(x => x.uid === q) || (rkPessoas || []).find(x => x.uid === q) || (v.corretorUid === q && v.corretorNome ? { uid:q, nome:v.corretorNome } : null)) : null;
+  return p ? { uid:p.uid, nome:p.nome, telefone:p.telefone || '', equipe:p.equipe || '' } : { uid:'', nome:'' };
 }
 window.sdrAtualizaTexto = () => { const v = window._sdrVis, e = sdrEscolhido(); $('sdrTxt').value = textoVisitaSdr({ ...v, corretorNome:e.nome }); };
 window.sdrMudouQuem = inicio => {
