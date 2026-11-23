@@ -2530,6 +2530,8 @@ html body button.av-d{display:grid!important;justify-items:start;align-content:s
   html:root{overflow-x:visible!important}
   html:root body{overflow-x:clip!important}
   html:root body .mobilebar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--card)!important;transform:translate3d(0,0,0)!important;-webkit-transform:translate3d(0,0,0)!important}
+
+.emp-aviso{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--card));font-size:14px}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -8292,7 +8294,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 447;
+const APP_VERSAO = 448;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11588,7 +11590,9 @@ function renderEmp(){
   if ($('btnEmpGrupo')) { $('btnEmpGrupo').classList.toggle('hide', !souGerente() || souCeo()); $('btnEmpGrupo').title = htmlWaLeitInfo('imoveis').replace(/<[^>]+>/g, ''); }
   if (view !== 'empreendimentos') return;
   const t = norm(window.empFiltro || '');
-  const ativos = empreendimentos.filter(e => !e.arquivado);
+  const ger = souGerente() && !souCeo(), ajusta = e => e.fonte === 'whatsapp' && (Number(e.criadoEm) || 0) > Date.now() - 30 * 864e5 && (!precoMil(e) || !((e.nFotos || 0) > 0 || e.capa));
+  const ativos = empreendimentos.filter(e => !e.arquivado && (ger || precoMil(e) > 0)).filter(e => !window._empAjuste || ajusta(e)); // v448: sem preço só a gerência vê
+  const nAj = ger ? empreendimentos.filter(e => !e.arquivado && ajusta(e)) : [];
   { const g = new Map(); ativos.forEach(e => { const b = bairroEmp(e); if (!b) return; const k = chaveBairro(b), x = g.get(k) || { nome:b, n:0 }; x.n++; if (/[à-ú]/i.test(b) && !/[à-ú]/i.test(x.nome)) x.nome = b; g.set(k, x); });
     const bs = [...g.entries()].sort((a, b) => b[1].n - a[1].n || a[1].nome.localeCompare(b[1].nome, 'pt-BR'));
     if (empBairro && !g.has(empBairro)) empBairro = '';
@@ -11613,13 +11617,16 @@ function renderEmp(){
     const algum = F.faixa || F.pronto || F.suite || F.fotos || empBairro || t;
     $('empRes').innerHTML = algum ? '<button class="link" onclick="empLimpar()">Limpar filtros</button>' : ''; $('empRes').classList.toggle('hide', !algum); }
   { const nb = new Set(ativos.map(e => chaveBairro(bairroEmp(e))).filter(Boolean)).size; if ($('empSub')) $('empSub').textContent = `${ativos.length} imóve${ativos.length === 1 ? 'l' : 'is'}${nb ? ' em ' + nb + ' bairro' + (nb === 1 ? '' : 's') : ''} · fotos, valores, localização e material para mandar ao cliente`; }
-  const nomeCartao = e => String(e.nome || '').split(' · ')[0], consCartao = e => e.construtora || (String(e.nome || '').split(' · ')[1] || '');
+  const _pN = e => String(e.nome || '').split(' · '), _ehB = e => { const p = _pN(e); return p.length > 1 && bairroEmp(e) && chaveBairro(p[0]) === chaveBairro(bairroEmp(e)); };
+  const nomeCartao = e => _ehB(e) ? _pN(e)[1] : _pN(e)[0], consCartao = e => e.construtora || (_ehB(e) ? '' : (_pN(e)[1] || ''));
   const monograma = e => nomeCartao(e).replace(/^(Residencial|Res\.|Edif[ií]cio|Ed\.|Casa)\s+/i, '').split(/\s+/).filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'F';
   const precoTxt = e => e.preco ? (/^r\$/i.test(e.preco) ? e.preco : 'R$ ' + e.preco) : '';
   // v437: a lista tinha 245 imóveis com as fotos de capa dentro da página (mais de 7 MB) e travava o celular: agora mostra 24 por vez e carrega mais ao rolar
   { const sig = JSON.stringify([t, empBairro, F]); if (window._empSig !== sig || !window._empN) { window._empSig = sig; window._empN = 24; } }
   const lTodos = l, lMostra = l.slice(0, window._empN);
-  $('empLista').innerHTML = l.length ? lMostra.map(e => { const c = capaDe(e), n = (e.nFotos || 0), b = bairroEmp(e);
+  const avisoAj = !ger ? '' : window._empAjuste ? `<div class="emp-aviso" style="grid-column:1/-1"><span>🏠 <b>Mostrando só os ${nAj.length} que precisam de ajuste.</b> Abra cada um e complete o preço ou as fotos.</span><button class="btn btn-sm" onclick="_empAjuste=false;renderEmp()">Mostrar todos</button></div>`
+    : nAj.length ? (() => { const sp = nAj.filter(e => !precoMil(e)).length, sf = nAj.filter(e => !((e.nFotos || 0) > 0 || e.capa)).length; return `<div class="emp-aviso" style="grid-column:1/-1"><span>🏠 <b>${nAj.length} imóve${nAj.length === 1 ? 'l' : 'is'} do grupo precisa${nAj.length === 1 ? '' : 'm'} de ajuste</b>${sp ? ' · ' + sp + ' sem preço' : ''}${sf ? ' · ' + sf + ' sem foto' : ''}</span><button class="btn btn-sm btn-primary" onclick="_empAjuste=true;renderEmp()">Ver e corrigir</button></div>`; })() : '';
+  $('empLista').innerHTML = avisoAj + (l.length ? lMostra.map(e => { const c = capaDe(e), n = (e.nFotos || 0), b = bairroEmp(e);
     return `<div class="emp-capa-card emp-v2" role="button" tabindex="0" onclick="verEmp('${e.id}')" onkeydown="if(event.key==='Enter')verEmp('${e.id}')">
       <div class="emp-capa" id="cap_${e.id}">${c ? `<img class="emp-fundo" src="${esc(c)}" alt="" aria-hidden="true" loading="lazy"><img class="emp-foto" src="${esc(c)}" alt="${esc(e.nome)}" loading="lazy" onerror="this.previousElementSibling.remove();this.remove()">` : `<span class="emp-mono">${esc(monograma(e))}</span>`}
         ${b ? `<span class="emp-tag">${esc(b)}</span>` : ''}${precoTxt(e) ? `<span class="emp-preco-f"><small>a partir de</small>${esc(precoTxt(e))}</span>` : ''}
@@ -11628,7 +11635,7 @@ function renderEmp(){
       ${fichaEmp(e)}
       <div class="emp-pe"><span class="emp-views">${ICF.olho}${Number(e.views) || 0}</span><span class="emp-ver">Ver imóvel</span></div>
     </div>`; }).join('') + (lTodos.length > lMostra.length ? `<div id="empMais" style="grid-column:1/-1;display:flex;justify-content:center;padding:8px 0 18px"><button class="btn btn-ghost" onclick="empMais()">Ver mais imóveis (${lTodos.length - lMostra.length})</button></div>` : '')
-    : `<div class="card" style="grid-column:1/-1">${vazio(base.length || t || empBairro ? 'Nada encontrado' : 'Nenhum imóvel ainda', base.length || t || empBairro ? 'Tire um filtro ou toque em Limpar filtros.' : 'Os imóveis do grupo do WhatsApp aparecem aqui.')}</div>`;
+    : `<div class="card" style="grid-column:1/-1">${vazio(base.length || t || empBairro ? 'Nada encontrado' : 'Nenhum imóvel ainda', base.length || t || empBairro ? 'Tire um filtro ou toque em Limpar filtros.' : 'Os imóveis do grupo do WhatsApp aparecem aqui.')}</div>`);
   pintarIcones($('empLista'));
   { const m = document.getElementById('empMais'); if (m && 'IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { io.disconnect(); empMais(); } }, { rootMargin:'600px' }); io.observe(m); } }
 }
@@ -11894,12 +11901,32 @@ function anexarMaterialWa(d, origem){
 }
 // v340: o Allan pediu todos os imóveis do grupo com todas as fotos: cada um é gravado na hora (mesmo nome = atualiza; fotos trocadas quando vierem mais)
 let _ewAutoN = 0, _ewFila = Promise.resolve();
+// v448: nome padrão dos imóveis do grupo: "Bairro · Empreendimento · R$ preço". Tira do nome o que vem do arquivo (tabela, mês, ano, datas)
+// e o contato; sem nome do empreendimento entra "Casa" ou "Apartamento"; sem preço entra "preço a confirmar" (só a gerência vê até completar).
+const EMP_MINUS = new Set(['de','da','do','das','dos','e','em','no','na','com']);
+const tituloPt = t => String(t || '').toLowerCase().split(/\s+/).filter(Boolean).map((w, i) => i && EMP_MINUS.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+function nomeEmpPadrao(x){
+  const ACENTO = { bancarios:'Bancários', industrias:'Indústrias', mucumagro:'Muçumagro', milenio:'Milênio', jose:'José', americo:'Américo', joao:'João', manaira:'Manaíra', satiro:'Sátiro', cuia:'Cuiá', varjao:'Varjão', ceu:'Céu', oitizero:'Oitizeiro', funcionarios:'Funcionários', cidade:'Cidade', universitaria:'Universitária', esperanca:'Esperança', boa:'Boa', mangabeira:'Mangabeira', ii:'II' };
+  const bairro = tituloPt(String(x.local || '').split(',')[0].replace(/^casa\s+/i, '').trim()).split(' ').map(w => ACENTO[norm(w)] || w).join(' ');
+  const limpa = t => String(t || '').replace(/\.pdf$/i, '').replace(/r\$\s*[\d.,]+\s*(mil)?/gi, ' ').replace(/[_]+/g, ' ')
+    .replace(/\b(tabela|tab\.?|de valores|valores|pre[cç]os?|book|caderno|apresenta[cç][aã]o|plantas?|lan[cç]amento|atualizad[ao])\b/gi, ' ')
+    .replace(/\b(janeiro|fevereiro|mar[cç]o|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro|jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\b/gi, ' ')
+    .replace(/\b\d+\s*fotos?\b/gi, ' ').replace(/\b20\d\d\b/g, ' ').replace(/\b\d{1,2}\s*[-/.]\s*\d{1,2}(\s*[-/.]\s*\d{2,4})?\b/g, ' ').replace(/\b\d{1,2}\s+\d{1,2}\b/g, ' ').replace(/[-–·|]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const partes = String(x.nome || '').split(' · ').map(t => t.trim()), cand = [...(x.docs || []), partes.length > 1 ? partes[1] : ''].map(limpa).find(t => t.length >= 3 && /[a-zà-ú]/i.test(t) && !/^\d+$/.test(t)) || '';
+  const contato = norm(x.contato || ''), emp0 = cand && contato && norm(cand) === contato.split(' ')[0] ? '' : cand;
+  const tipo = /\bcasa\b/i.test([x.local, x.nome, x.desc].join(' ')) ? 'Casa' : 'Apartamento';
+  const emp = emp0 ? tituloPt(emp0).replace(/\bResidencial\b/i, 'Residencial').slice(0, 40) : tipo;
+  const v = precoMil({ preco:x.preco }), preco = v ? 'R$ ' + v + ' mil' : 'preço a confirmar';
+  return [bairro || 'Imóvel', emp, preco].join(' · ').slice(0, 80);
+}
+window.nomeEmpPadrao = nomeEmpPadrao;
 function salvarEmpWaAuto(x, origem){
+  const nomeOrig = x.nome; try { x = { ...x, nome:nomeEmpPadrao(x) }; } catch(e) {}
   _ewFila = _ewFila.then(async () => { let ok = 0;
     try { if (!souAtivo() || souCeo()) throw new Error('sem permissão');
       // v423: o mesmo imóvel do grupo é achado pela mensagem do cartão (waId) ou por bairro + preço + contato (chaveWa), e só depois pelo nome
       const chaveDe = e => e.chaveWa || [norm(e.local || '').replace(/^casa /, '').replace(/, joao pessoa$/, ''), (() => { const m = String(e.preco || '').replace(/\s/g, '').match(/(\d[\d.]*)/); if (!m) return ''; let n = Number(m[1].replace(/\./g, '')); if (n >= 1000) n = Math.round(n / 1000); return n ? String(n) : ''; })(), norm(e.contato || '').split(' ')[0]].join('|');
-      const ex = (x.waId && empreendimentos.find(e => e.waId === x.waId)) || (x.chaveWa && empreendimentos.find(e => chaveDe(e) === x.chaveWa)) || empreendimentos.find(e => norm(e.nome) === norm(x.nome)), ref = ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), tx = (v, m) => String(v || '').trim().slice(0, m);
+      const ex = (x.waId && empreendimentos.find(e => e.waId === x.waId)) || (x.chaveWa && empreendimentos.find(e => chaveDe(e) === x.chaveWa)) || empreendimentos.find(e => norm(e.nome) === norm(x.nome) || norm(e.nome) === norm(nomeOrig)), ref = ex ? doc(db,'empreendimentos',ex.id) : doc(collection(db,'empreendimentos')), tx = (v, m) => String(v || '').trim().slice(0, m);
       const dados = { nome:tx(x.nome, 80), local:tx(x.local, 80), desc:tx(x.desc, 300), preco:tx(x.preco, 20), area:tx(x.area, 12), quartos:tx(x.quartos, 8), construtora:tx(x.construtora, 60), contato:tx(x.contato, 30), entrega:tx(x.entrega, 60), avaliacao:tx(x.avaliacao, 60),
         endereco:tx(x.endereco, 160), mapa:linkOk(x.mapa || '') ? tx(x.mapa, 300) : '', unidades:tx(x.unidades, 1500), fonte:'whatsapp', fonteGrupo:tx(x.grupo, 60), waId:tx(x.waId, 60), chaveWa:tx(x.chaveWa, 120), atualizadoEm:Date.now(), atualizadoPor:uidAtual, atualizadoPorNome:perfil?.nome || '' };
       if (ex) ['nome','desc','local','preco','contato','avaliacao','entrega'].forEach(k => { if (ex[k]) delete dados[k]; }); // v423: não troca o que já foi arrumado à mão
@@ -11913,7 +11940,7 @@ function salvarEmpWaAuto(x, origem){
         if (fotos.length >= exist.length) await ate(gravarFotosEmp(ref.id, fotos, exist.map(f => f.id), []), 120000); } /* v341: trocarFotos = fotos em boa qualidade (abertas no visualizador do WhatsApp) substituem as miniaturas */
       ok = 1; _ewAutoN++; toast(`Imóveis do WhatsApp: ${_ewAutoN} salvo${_ewAutoN === 1 ? '' : 's'} (${x.nome})`);
     } catch(e) { toast('Erro em ' + x.nome + ': ' + e.message); }
-    try { origem.postMessage({ tipo:'frade-emp-ok', nome:x.nome, ok }, 'https://web.whatsapp.com'); } catch(e) {}
+    try { origem.postMessage({ tipo:'frade-emp-ok', nome:nomeOrig, ok }, 'https://web.whatsapp.com'); } catch(e) {}
   });
 }
 window.salvarEmpWa = async () => {
@@ -18636,7 +18663,7 @@ async function rvSubirArq(f, tipo, rid, uids){
   if (mime.startsWith('image/') && mime !== 'image/gif') { const durl = await comprimirFoto(f, 1800, 0.8); blob = await (await fetch(durl)).blob(); mime = 'image/jpeg'; }
   const b64 = await new Promise((ok, erro) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = erro; r.readAsDataURL(blob); });
   const id = 'rd_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), P = 900000, n = Math.ceil(b64.length / P);
-  for (let i = 0; i < n; i++) await setDoc(doc(db,'reserva_docs', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime, reservaId:rid, corretorUids:uids || [], porUid:uidAtual });
+  for (let i = 0; i < n; i++) await setDoc(doc(db,'reserva_docs', id + '_' + i), { d:b64.slice(i * P, (i + 1) * P), i, n, mime, reservaId:rid, corretorUids:uids || [], porUid:auth.currentUser?.uid || uidAtual }); // v448: o dono do arquivo é sempre quem está logado (a regra confere isso)
   return { id, n, mime, tipo, nome:f.name || 'arquivo', tamanho:blob.size, em:Date.now(), por:perfil.nome };
 }
 // sobe os novos, tira os removidos e devolve a lista final + os tipos que entraram agora
