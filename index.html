@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<script>(function(){var f=null;try{f=localStorage.getItem("natalTema")}catch(e){}var d=new Date(),md=(d.getMonth()+1)*100+d.getDate(),tv=/[?&]tv=|#tv/.test(location.href);var on=!tv&&(f==="on"||(f!=="off"&&(md>=1119||md<=106)));window.NATAL=on;if(on)document.documentElement.classList.add("natal");})();</script>
+<script>(function(){var f=null;try{f=localStorage.getItem("natalTema")}catch(e){}var d=new Date(),md=(d.getMonth()+1)*100+d.getDate(),tv=/[?&]tv=|#tv/.test(location.href);var on=!tv&&(f==="on"||(f!=="off"&&(md>=1119||md<=106)));window.NATAL=on;if(on)document.documentElement.classList.add("natal");if(!tv&&Date.now()<Date.parse("2026-12-01T00:00:00-03:00")&&Date.now()>=Date.parse("2026-11-24T00:00:00-03:00"))document.documentElement.classList.add("bf-semana");})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Minha Agenda · Frade Imóveis</title>
 <meta name="description" content="Minha Agenda: tarefas, compromissos e lembretes sincronizados em todos os seus aparelhos.">
@@ -2530,10 +2530,220 @@ html body button.av-d{display:grid!important;justify-items:start;align-content:s
   html:root{overflow-x:visible!important}
   html:root body{overflow-x:clip!important}
   html:root body .mobilebar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--card)!important;transform:translate3d(0,0,0)!important;-webkit-transform:translate3d(0,0,0)!important}
+}
 
 .emp-aviso{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--card));font-size:14px}
 
 .anjos-pag{display:grid;gap:14px;max-width:1100px}
+
+
+/* v451: Black Friday */
+.bfx{max-width:560px;margin:0 auto;font-family:inherit;color:#fff;display:grid;gap:12px}
+.bfx .bf{background:#000;border-radius:20px;color:#fff;position:relative;overflow:hidden;padding:0 0 14px}
+.bfx .bf *{box-sizing:border-box}
+.bfx .bf-pre{background:#FFE600;color:#000;font-weight:800;border-radius:14px;padding:11px 14px;font-size:13.5px;box-shadow:var(--shadow)}
+.bfx .bf-ult{margin-top:10px;background:#C8101E;color:#fff;font-weight:900;border-radius:12px;padding:8px 12px;font-size:13px;animation:bfPulsa 1.2s ease-in-out infinite}
+@keyframes bfPulsa{50%{filter:brightness(1.35)}}
+.bfx .bf-regra{font-size:11px;color:#8a8a8a;margin-top:10px;line-height:1.4}
+.bfx .ult .it b.z{color:#888;font-weight:700;font-size:11.5px}
+.bfx .afs-t{font-size:11px;color:#999;font-weight:700;margin-bottom:4px}
+.bfx .afs .af .dots em{font-style:normal;font-weight:900;color:#FFE600}
+.bfx .disp{display:block;font-size:13px;color:#FF6A00;font-weight:800;margin-top:6px;letter-spacing:0;line-height:1.2}
+.bfx .bf-plc,.bfx .bf-card2,.bfx .bfg-card{background:var(--card,#fff);color:var(--text,#1F2D3A);border-radius:18px;padding:14px 16px;border:1px solid var(--border,#E8E1D8);box-shadow:var(--shadow)}
+.bfx .bf-plc h2,.bfx .bf-card2 h2,.bfx .bfg-card h2{font-size:15px;font-weight:800;display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0 0 8px;line-height:1.25}
+.bfx .bf-plc h2 span,.bfx .bf-card2 h2 span,.bfx .bfg-card h2 span{font-size:11px;color:var(--muted,#6B7783);font-weight:600;text-align:right}
+.bfx .bf-plc .lin{display:grid;grid-template-columns:24px 1fr 90px 26px;gap:8px;align-items:center;font-size:13px;padding:5px 0}
+.bfx .bf-plc .lin .p{font-weight:900;color:var(--muted,#6B7783)}
+.bfx .bf-plc .lin .br{height:8px;border-radius:5px;background:var(--border,#EEE7DE);overflow:hidden}
+.bfx .bf-plc .lin .br i{display:block;height:100%;background:var(--text,#1F2D3A);border-radius:5px}
+.bfx .bf-plc .lin.eu{font-weight:800}.bfx .bf-plc .lin.eu .p{color:#E65100}
+.bfx .bf-plc .lin.eu .br i{background:linear-gradient(90deg,#FF6A00,#FFE600)}
+.bfx .bf-plc .lin .n{text-align:right;font-weight:800}
+.bfx .bf-frente{font-size:12.5px;font-weight:800;color:#E65100;margin:0 0 4px}
+.bfx .bf-l{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--border,#EEE7DE);font-size:13px}
+.bfx .bf-l:first-of-type{border-top:0}
+.bfx .bf-l small{display:block;color:var(--muted,#6B7783);font-size:11.5px;margin-top:1px}
+.bfx .bf-l em{font-style:normal;font-weight:900;color:#1E8E5A;white-space:nowrap}
+.bfx .bf-vz{font-size:12.5px;color:var(--muted,#6B7783);margin:4px 0}
+.bfx .bf-card2.al{border-color:#FF6A00}
+.bfx .bf-lem{background:#25D366;color:#fff;font-weight:800;font-size:12px;border-radius:10px;padding:7px 10px;text-decoration:none;white-space:nowrap}
+.bfx .bfg-tot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.bfx .bfg-tot div{background:#151515;border:1px solid #2a2a2a;border-radius:14px;padding:10px 12px}
+.bfx .bfg-tot small{display:block;color:#aaa;font-size:11px;font-weight:700}
+.bfx .bfg-tot b{font-size:24px;font-weight:900;color:#FFE600}
+.bfx .bfg-l{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--border,#EEE7DE);font-size:13.5px;cursor:default}
+.bfx .bfg-l small{display:block;color:var(--muted,#6B7783);font-size:11.5px;font-weight:500;margin-top:1px}
+.bfx .bfg-l>b{text-align:right;white-space:nowrap}
+.bfx .bfg-d summary{list-style:none;cursor:pointer}
+.bfx .bfg-d summary::-webkit-details-marker{display:none}
+.bfx .bfg-v{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;margin:6px 0;border-radius:12px;background:var(--bg,#F5F1EB);font-size:12.5px;border-left:4px solid #C8101E}
+.bfx .bfg-v.ok{border-left-color:#1E8E5A}
+.bfx .bfg-v small{display:block;color:var(--muted,#6B7783);margin-top:2px;line-height:1.35}
+.bfx .bfg-bt{display:flex;flex-direction:column;gap:5px}
+.bfx .bfg-bt .btn{white-space:nowrap}
+#bfQModal .bfq-p{margin-bottom:14px}
+#bfQModal .bfq-p>b{display:block;font-size:14px;margin-bottom:6px}
+#bfQModal .bfq-ops{display:flex;flex-direction:column;gap:6px}
+#bfQModal .bfq-op{text-align:left;border:1.5px solid var(--border);background:var(--card);color:var(--text);border-radius:12px;padding:10px 12px;font:600 13.5px/1.3 inherit;cursor:pointer}
+#bfQModal .bfq-op.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent)}
+#bfQModal textarea{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:10px;font:inherit;background:var(--card);color:var(--text)}
+.bf-cele{position:fixed;inset:0;z-index:2147482000;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;padding:30px;font-family:Inter,system-ui,sans-serif;animation:bfIn .25s ease both;overflow:hidden}
+@keyframes bfIn{from{opacity:0;transform:scale(1.05)}}
+.bf-cele .s{font-size:13px;font-weight:800;letter-spacing:.28em;color:#FF6A00}
+.bf-cele .h{font-size:58px;font-weight:900;font-style:italic;line-height:.9;letter-spacing:-.03em;margin-top:10px}
+.bf-cele .h span{color:#FFE600;display:block}
+.bf-cele .p{font-size:16px;color:#ddd;margin-top:16px;line-height:1.45}.bf-cele .p b{color:#FFE600}
+.bf-cele .lk{font-size:60px}
+.bf-conf{position:absolute;top:-20px;width:9px;height:15px;border-radius:2px;animation:bfCai 2.6s linear both}
+@keyframes bfCai{to{transform:translateY(110vh) rotate(720deg)}}
+/* cápsula Bolsão | Black Friday na barra de baixo */
+#mbBF{display:none}
+.mobilebar.bf-duo #mbBF:not(.hide){display:flex}
+.mb-bf-c{display:grid;place-items:center;width:58px;height:54px;margin-top:-26px;background:#000;border-radius:28px;position:relative;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.35),0 0 0 4px var(--card)}
+.mb-bf-c b{font:900 italic 11.5px/.95 Inter,system-ui,sans-serif;color:#FFE600;text-align:center;margin-top:-5px;letter-spacing:-.02em}
+.mb-bf-c::after{content:'';position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(-45deg,#FFE600 0 5px,#000 5px 10px)}
+#mbBF{color:#000!important;font-weight:800!important;white-space:nowrap}
+html[data-tema="escuro"] #mbBF,html.dark #mbBF{color:#FFE600!important}
+.mobilebar.bf-duo #mbBolsao,.mobilebar.bf-duo #mbBF{flex:0 0 74px!important;padding-left:0!important;padding-right:0!important}
+.mobilebar.bf-duo #mbBolsao{margin-right:-1px}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c{width:74px;border-radius:28px 0 0 28px;box-shadow:0 8px 20px rgba(2,44,69,.35),-4px 0 0 0 var(--card),0 -4px 0 0 var(--card),0 4px 0 0 var(--card)}
+.mobilebar.bf-duo #mbBF .mb-bf-c{width:74px;border-radius:0 28px 28px 0;box-shadow:0 8px 20px rgba(0,0,0,.35),4px 0 0 0 var(--card),0 -4px 0 0 var(--card),0 4px 0 0 var(--card)}
+.mobilebar.bf-duo #mbBF .mb-bf-c::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1.5px;background:rgba(255,255,255,.35)}
+.mobilebar.bf-duo #mbBolsao:active .mb-bz-c,.mobilebar.bf-duo #mbBF:active .mb-bf-c{filter:brightness(.8);transform:translateY(2px)}
+.mobilebar:not(.bf-duo) #mbBF:not(.hide){display:flex}
+#v-blackfriday{padding-bottom:30px}
+/* abertura Black Friday + Natal */
+html.bf-semana #frAbre .fa-pn,html.bf-semana .login-pn{background:linear-gradient(160deg,#1a1a1a 0%,#000 70%)!important}
+html.bf-semana #frAbre .fa-pn::after,html.bf-semana .login-pn::after{content:'';position:absolute;left:0;right:0;bottom:0;height:16px;background:repeating-linear-gradient(-45deg,#FFE600 0 12px,#000 12px 24px);border-radius:0 0 44px 44px}
+html.bf-semana #frAbre .fa-pn-tx b span,html.bf-semana .login-pn .lp-tx b span{color:#FFE600}
+.nt-bfp{position:absolute;left:50%;top:calc(44% + 70px);transform:translateX(-50%);z-index:5;pointer-events:none;animation:bfPlaca .8s cubic-bezier(.3,1.4,.5,1) 5.25s both}
+#frAbre.curto .nt-bfp{animation-delay:2.8s}
+.nt-bfp-in{background:#000;border:3px solid #FFE600;border-radius:12px;padding:8px 16px 12px;text-align:center;position:relative;overflow:hidden;transform-origin:50% -30px;animation:bfBalanca 2.4s ease-in-out 6.05s infinite;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.nt-bfp-in b{display:block;font:900 italic 26px/.9 Inter,system-ui,sans-serif;color:#fff;letter-spacing:-.03em}
+.nt-bfp-in b span{color:#FFE600}
+.nt-bfp-in small{display:block;font:800 10px/1 Inter,system-ui,sans-serif;color:#FF6A00;letter-spacing:.25em;margin-top:6px}
+.nt-bfp-in::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:repeating-linear-gradient(-45deg,#FFE600 0 5px,#000 5px 10px)}
+.nt-bfp::before{content:'';position:absolute;left:50%;top:-26px;width:2px;height:26px;background:#FFE600;margin-left:-1px}
+@keyframes bfPlaca{from{opacity:0;transform:translate(-50%,-30px) scale(.6)}}
+@keyframes bfBalanca{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+
+.bfx .bf{background:#000;border-radius:20px;color:#fff;position:relative;overflow:hidden;padding:0 0 14px}
+.bfx .fita{height:14px;background:repeating-linear-gradient(-45deg,#FFE600 0 12px,#000 12px 24px)}
+.bfx .bf .in{padding:12px 16px 0}
+.bfx .cab{display:flex;justify-content:space-between;align-items:flex-start}
+.bfx .titulo .a{font-size:12px;font-weight:800;letter-spacing:.32em;color:#FF6A00}
+.bfx .titulo .b{font-size:43px;line-height:.86;font-weight:900;font-style:italic;letter-spacing:-.03em;margin-top:4px}
+.bfx .titulo .b span{color:#FFE600;display:block}
+.bfx .relo{text-align:right;font-size:10.5px;color:#aaa;font-weight:600}
+.bfx .relo .d{display:flex;gap:4px;margin-top:4px;justify-content:flex-end}
+.bfx .relo .d div{background:#1a1a1a;border:1px solid #333;border-radius:7px;padding:4px 0;width:36px;text-align:center}
+.bfx .relo .d b{display:block;font-size:17px;color:#fff;font-variant-numeric:tabular-nums;font-weight:800}
+.bfx .relo .d small{font-size:9px;color:#888}
+.bfx .saldo{margin-top:14px;display:grid;grid-template-columns:1fr auto;align-items:end}
+.bfx .saldo .l{font-size:11.5px;color:#bbb;font-weight:600;display:flex;gap:6px;align-items:center}
+.bfx .saldo .v{font-size:52px;font-weight:900;letter-spacing:-.03em;line-height:1;margin-top:3px;font-variant-numeric:tabular-nums}
+.bfx .saldo .v small{font-size:20px;font-weight:800;margin-right:4px;color:#bbb}
+.bfx .saldo .q{text-align:right}
+.bfx .saldo .q b{display:block;font-size:34px;font-weight:900;line-height:1;color:#FFE600}
+.bfx .saldo .q span{font-size:10.5px;color:#bbb}
+.bfx .cad{display:inline-flex;align-items:center;gap:5px;background:#2a2a2a;border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700;color:#ddd}
+.bfx .cad.lib{background:#19C37D;color:#000}
+.bfx .meta{margin-top:12px;background:#151515;border:1px solid #2a2a2a;border-radius:14px;padding:10px 12px}
+.bfx .meta .t{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700}
+.bfx .meta .t em{font-style:normal;color:#FFE600}
+.bfx .trilha{display:flex;gap:4px;margin-top:9px}
+.bfx .trilha i{flex:1;height:9px;border-radius:5px;background:#2c2c2c}
+.bfx .trilha i.on{background:linear-gradient(90deg,#FF6A00,#FFE600)}
+.bfx .esc{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}
+.bfx .tag{position:relative;background:#141414;border:1.5px dashed #3a3a3a;border-radius:10px 10px 10px 10px;padding:9px 2px 7px;text-align:center}
+.bfx .tag::before{content:'';position:absolute;top:6px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#000;border:1.5px solid #3a3a3a}
+.bfx .tag .v{font-size:22px;font-weight:900;font-style:italic;margin-top:6px;letter-spacing:-.02em}
+.bfx .tag .v small{font-size:10px;font-style:normal;font-weight:700;margin-left:1px}
+.bfx .tag .r{font-size:9.5px;color:#999;font-weight:600}
+.bfx .tag.ok{background:#0f2a1e;border:1.5px solid #19C37D}
+.bfx .tag.ok .v{color:#19C37D}
+.bfx .tag.at{background:#FFE600;border:1.5px solid #FFE600;color:#000;transform:scale(1.06)}
+.bfx .tag.at .r{color:#000}
+.bfx .tag.at::before{border-color:#000;background:#FFE600}
+.bfx .ult{margin-top:12px;border-top:1px solid #222}
+.bfx .ult .it{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #1d1d1d;font-size:12.5px}
+.bfx .ult .it small{color:#999;font-size:11px;margin-left:6px}
+.bfx .ult .it b{font-weight:900}
+.bfx .ult .it b.p{color:#aaa}
+.bfx .ult .it b.d{color:#19C37D}
+.bfx .miss{margin-top:12px;font-size:12.5px;color:#ddd;line-height:1.4}
+.bfx .miss b{color:#FFE600}
+.bfx .cond{margin-top:12px;border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:12.5px;font-weight:700}
+.bfx .cond.no{background:#2a0d00;border:1.5px solid #FF6A00;color:#ffd2b0}
+.bfx .cond.si{background:#0f2a1e;border:1.5px solid #19C37D;color:#b8f5d8}
+.bfx .cond .ic{font-size:22px}
+.bfx .cond small{display:block;font-weight:500;font-size:11.5px;opacity:.85;margin-top:1px}
+.bfx .esc2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.bfx .esc2 .tag .v{font-size:26px}
+.bfx .afs{margin-top:10px}
+.bfx .afs .af{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:6px 0;border-top:1px solid #1d1d1d;font-size:12.5px}
+.bfx .afs .af .dots{display:flex;gap:4px}
+.bfx .afs .af .dots i{width:16px;height:16px;border-radius:5px;background:#222;display:block}
+.bfx .afs .af .dots i.on{background:#FFE600}
+.bfx .duelo{margin-top:12px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.bfx .duelo .eq{background:#141414;border:1.5px solid #333;border-radius:14px;padding:8px 10px;text-align:center}
+.bfx .duelo .eq.eu{border-color:#FFE600}
+.bfx .duelo .eq small{display:block;font-size:10.5px;color:#aaa;font-weight:700;letter-spacing:.08em}
+.bfx .duelo .eq b{font-size:44px;font-weight:900;font-style:italic;line-height:1;font-variant-numeric:tabular-nums}
+.bfx .duelo .eq.eu b{color:#FFE600}
+.bfx .duelo .x{font-size:20px;font-weight:900;color:#FF6A00;font-style:italic}
+.bfx .marcos{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.bfx .mc{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;background:#141414;border:1.5px dashed #333;border-radius:12px;padding:8px 10px;font-size:12.5px}
+.bfx .mc .n{font-size:20px;font-weight:900;font-style:italic;text-align:center}
+.bfx .mc .n small{display:block;font-size:9px;font-style:normal;color:#999;font-weight:700}
+.bfx .mc .d{color:#ccc}
+.bfx .mc .d small{display:block;color:#888;font-size:10.5px;margin-top:1px}
+.bfx .mc .v{font-weight:900;font-size:15px}
+.bfx .mc.ok{border:1.5px solid #19C37D;background:#0f2a1e}
+.bfx .mc.ok .v{color:#19C37D}
+.bfx .mc.at{border:1.5px solid #FFE600;background:#262100}
+.bfx .mc.at .v{color:#FFE600}
+.bfx .mc.rb{border-color:#7a3a00}
+.bfx .mc.rb .v{color:#FF6A00}
+.bfx .mc.rb.dp{border:1.5px solid #FF6A00;background:#2a1200}
+/* v451: acabamento */
+.bfx .bfg-v.pd{border-left-color:#F5B400}
+.bfx .bf-val{margin-top:12px;background:#1d1a0a;border:1px solid #4a4210;color:#FFE600;border-radius:12px;padding:9px 12px;font-size:12.5px;font-weight:700}
+.bfx .bfg-val{margin-top:10px;background:#FFE600;color:#000;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.35}
+.bfx .esc,.bfx .esc2,.bfx .esc3{display:grid;gap:8px;margin-top:12px}
+.bfx .esc{grid-template-columns:repeat(4,1fr)}.bfx .esc2{grid-template-columns:repeat(2,1fr)}.bfx .esc3{grid-template-columns:repeat(3,1fr)}
+.bfx .tag{min-height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px}
+.bfx .tag .v{margin-top:0;line-height:1}
+.bfx .tag .r{line-height:1.2}
+.bfx .bf-plc .lin small.pc{margin-left:6px;font-size:10.5px;font-weight:800;color:#1E8E5A;background:color-mix(in srgb,#1E8E5A 14%,transparent);border-radius:999px;padding:1px 7px;vertical-align:1px}
+.bfx .ult{margin-top:12px}
+.bfx .ult .it{min-height:38px}
+.bfx .saldo{margin-top:16px}
+.bfx .meta{margin-top:14px}
+.bfx .miss{margin-top:14px}
+.bfx .bf-regra{margin-top:12px;padding-bottom:2px}
+.bfx .cond{margin-top:14px}
+.bfx .bf-l{min-height:48px}
+.bfx .bfg-l{min-height:50px}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c{animation:none!important}
+.bfx .tag::before{display:none}
+.bfx .tag{padding:10px 4px 8px}
+.bfx .titulo .a{white-space:normal;margin-bottom:8px}
+.bfx .cab{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.bfx .titulo .b{margin-top:0}
+.bfx>*{min-width:0}
+.bfx .bf{box-shadow:0 1px 2px rgba(0,0,0,.18),0 16px 36px -14px rgba(0,0,0,.55);border-radius:20px}
+.bfx .titulo .b{font-family:var(--tit,'Saira Condensed',sans-serif);font-weight:800;font-size:52px;line-height:.8;letter-spacing:-.01em}
+.bfx .titulo .a{font-size:11.5px;letter-spacing:.26em}
+.bfx .saldo .v,.bfx .saldo .q b,.bfx .tag .v,.bfx .duelo .eq b,.bfx .mc .n,.bfx .relo .d b,.bfx .bfg-tot b{font-family:var(--tit,'Saira Condensed',sans-serif);font-weight:800;letter-spacing:0}
+.bfx .saldo .v{font-size:60px;line-height:.9}
+.bfx .saldo .v small{font-family:inherit;font-size:18px;color:#9a9a9a;margin-right:6px}
+.bfx .saldo .q b{font-size:40px}
+.bfx .tag .v{font-size:26px;font-style:italic}
+.bfx .relo .d b{font-size:19px}
+.bfx .relo .d div{width:38px;border-radius:9px;background:#161616;border-color:#2c2c2c}
+.bfx .in{padding:14px 18px 0}
+.bfx .meta,.bfx .cond,.bfx .tag,.bfx .mc,.bfx .duelo .eq{border-radius:14px}
 </style>
 <style id="cp158">
 /* v168: Meus corretores por período */
@@ -3525,6 +3735,7 @@ window.__natalEntrada = function(fa){
   d.innerHTML=h; host.appendChild(d); }
 
  window.__ntNeve=neve; window.__ntLuzes=luzes;
+ if (fa && document.documentElement.classList.contains('bf-semana')) fa.insertAdjacentHTML('beforeend','<div class="nt-bfp"><div class="nt-bfp-in"><b>BLACK <span>FRIDAY</span></b><small>ARRANCADA FRADE</small></div></div>'); // v451
  if (fa){ neve(fa,34,'#B7C7D5',[2,4.5]); var pn=fa.querySelector('.fa-pn'); if(pn){ neve(pn,40,'#FFFFFF',[1.6,4]); luzes(pn,11); }
   var lg=fa.querySelector('.fa-logo');
   window.__natalNoel().then(function(d){ if(!d || !lg || !document.body.contains(lg)) return; var dt=performance.now()-t0; if (dt > 3300) return;
@@ -3621,6 +3832,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
       <button data-view="whatsapp" class="zap-nav hide" onclick="setView('whatsapp')"><i data-ic="zap"></i>WhatsApp <small class="zap-teste" id="zapTesteTag">teste</small><span class="count red hide" id="cZap">0</span></button>
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="bolsao" onclick="setView('bolsao')"><i data-ic="users"></i>Bolsão<span class="count hide" id="cBolsao">0</span></button>
+      <button data-view="blackfriday" class="bf-nav hide" onclick="setView('blackfriday')"><i data-ic="star"></i><b style="font-weight:900;font-style:italic">BLACK FRIDAY</b><span class="count red hide" id="cBF">0</span></button>
       <button data-view="anjos" class="anjos-nav hide" onclick="setView('anjos')"><i data-ic="star"></i>Anjos<span class="count red hide" id="cAnjos">0</span></button>
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <div class="nav-title" style="margin-top:14px">Resultados</div>
@@ -3972,6 +4184,9 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
         </div>
       </section>
 
+      <section class="view" id="v-blackfriday">
+        <div id="bfCorpo"></div>
+      </section>
       <section class="view" id="v-anjos">
         <div class="page-head"><div><h1>Anjos</h1><div class="sub">Fila dos anjos, o dia dos afilhados e a validação do checklist.</div></div></div>
         <div id="anjosCorpo"></div>
@@ -4458,6 +4673,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
   <button data-view="financeiro" class="so-ceo" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
   <button data-view="calendario" id="mbAgenda" class="hide" style="display:none" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
   <button data-view="bolsao" id="mbBolsao" class="mb-bz" onclick="setView('bolsao')"><span class="mb-bz-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="mbBzN"></b></span>Bolsão</button>
+  <button data-view="blackfriday" id="mbBF" class="mb-bf hide" onclick="setView('blackfriday')"><span class="mb-bf-c"><b>BLACK<br>FRIDAY</b></span>Black Friday</button>
   <button data-view="ranking" class="nao-sdr" onclick="setView('ranking')"><i data-ic="tbRank"></i>Ranking</button>
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button data-view="empreendimentos" id="mbImoveis" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Imóveis</button>
@@ -5250,6 +5466,12 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
     </div>
   </div>
 </div>
+<div class="modal" id="bfQModal">
+  <div class="sheet" style="width:min(460px,100%)">
+    <div class="sheet-head"><h2>Como foi a visita?</h2><button class="icon-btn" onclick="fechar('bfQModal')" data-ic="x"></button></div>
+    <div class="sheet-body"><div id="bfQCorpo"></div><button class="btn btn-primary btn-block" onclick="bfQConfirmar()">Dar baixa como realizada</button></div>
+  </div>
+</div>
 <div class="modal" id="carteiraModal">
   <div class="sheet" style="width:min(440px,100%)">
     <div class="sheet-head"><h2>Carteira Frade</h2><button class="icon-btn" onclick="fechar('carteiraModal')" data-ic="x"></button></div>
@@ -5558,6 +5780,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
     <div class="sheet-body menu-list">
       <button class="so-sdr hide" onclick="fechar('menuModal');setView('resumo')"><i data-ic="nota"></i>Resumo do dia</button>
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
+      <button class="bf-nav hide" onclick="fechar('menuModal');setView('blackfriday')"><i data-ic="star"></i>Black Friday</button>
       <button class="anjos-nav hide" onclick="fechar('menuModal');setView('anjos')"><i data-ic="star"></i>Anjos</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('cartas')"><i data-ic="card"></i>Cartas aprovadas</button>
       <button onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
@@ -5940,7 +6163,7 @@ function toast(texto, acao, fn, chave){
 
 // ================= Navegação =================
 const VIEW_SALVA = (() => { try { return sessionStorage.getItem('fradeView') || ''; } catch(e) { return ''; } })();
-const TITULOS = {anjos:'Anjos', sdrs:'SDR', reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {blackfriday:'Black Friday', anjos:'Anjos', sdrs:'SDR', reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -5961,6 +6184,7 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'comissoes' && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('comissoes') && !(souGerente() && !souCeo())) v = souGerente() ? 'financeiro' : 'hoje';
   if (v === 'sorteio' && !podeGerir() && !abaLiberada('sorteio')) v = 'hoje';
   if (v === 'anjos' && !podeAbaAnjos()) v = 'hoje';
+  if (v === 'blackfriday' && !bfPodeVer()) v = 'hoje';
   if (v === 'recepcao' && !podeGerir() && !abaLiberada('recepcao')) v = 'hoje';
   if (v !== 'recepcao') pararRecepcao();
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
@@ -6185,6 +6409,7 @@ function render(){
   if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo','#saida'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
   /* v316: ao atualizar a página, volta para a aba em que a pessoa estava */
   if (!window._viewRest && perfil && souAtivo() && !location.hash) { window._viewRest = true; const v0 = VIEW_SALVA;
+    if (!v0 && bfPapel() && bfComecou() && !bfAcabou()) setTimeout(() => setView('blackfriday'), 0); // v451: na semana da Black Friday a tela inicial é a aba Black Friday
     if (v0 && v0 !== view && !souTreino() && (TITULOS[v0] || document.querySelector(`[data-view="${v0}"]`))) setTimeout(() => setView(v0), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
@@ -7269,7 +7494,7 @@ function completarCriadoRanking(){ if (_rkCriadoOk || !souGerente() || souCeo() 
   for (let i = 0; i < ops.length; i += 300) { const b = writeBatch(db); ops.slice(i, i + 300).forEach(([id, em]) => b.update(doc(db,'ranking',id), { criadoEm:em })); b.commit().catch(e => console.warn('ranking criadoEm', e.code || e.message)); } }
 setInterval(() => { try { completarCriadoRanking(); } catch(e) {} }, 20000);
 function rankingDe(d){ return { equipe:d.equipe||'', corretorUid:d.corretorUid||'', corretorNome:d.corretorNome||'', date:d.date||'', status:d.status||'', semPontos:!!d.semPontos, criadoEm:Number(d.criadoEm)||0,
-  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'', empreendimento:String(d.empreendimento||'').slice(0,80), feirao:!!d.feirao }; }
+  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'', empreendimento:String(d.empreendimento||'').slice(0,80), feirao:!!d.feirao, bfq:bfVisQualif(d) }; }
 window.salvarVisita = async () => {
   const d = lerVisita();
   if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
@@ -7279,10 +7504,17 @@ window.salvarVisita = async () => {
   if (!d.origem && !vOrig) { toast('Escolha a origem do cliente'); $('vmOrigem').focus(); return; }
   if (d.origem === 'Outro' && !d.origemDetalhe) { toast('Digite qual foi a origem'); $('vmOrigemOutro').focus(); return; }
   if (PERDA_V.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('vmMotivo').focus(); return; }
+  { const sdrU = vOrig ? (vOrig.sdrUid || '') : (souSdr() ? uidAtual : ''); // v451: visita da SDR na Black Friday pede as 3 perguntas ao virar realizada
+    if (d.status === 'Realizada' && (!vOrig || vOrig.status !== 'Realizada') && !window._bfQForm && bfPrecisaQualif({ ...(vOrig || {}), ...d, sdrUid:sdrU, qualif:vOrig?.qualif })) { abrirBfQ(vEditId || '', 'form'); return; } }
+  const _qa = window._bfQForm; window._bfQForm = null;
   const id = vEditId || doc(collection(db,'visitas')).id;
   const dados = { ...d, criadoPor: vOrig?.criadoPor || uidAtual, criadoEm: vOrig?.criadoEm || Date.now(), atualizadoEm: Date.now(), semPontos: !!vOrig?.semPontos,
     sdrUid: vOrig ? (vOrig.sdrUid || '') : (souSdr() ? uidAtual : ''), sdrNome: vOrig ? (vOrig.sdrNome || '') : (souSdr() ? perfil.nome : '') };
   if (vOrig?.pesquisaId) dados.pesquisaId = vOrig.pesquisaId;
+  // v451: mantém as respostas da baixa, a validação da gerência e a hora da baixa ao editar
+  if (_qa) dados.qualif = _qa; else if (vOrig?.qualif) dados.qualif = vOrig.qualif;
+  if (vOrig?.bfVal) { dados.bfVal = vOrig.bfVal; dados.bfValPor = vOrig.bfValPor || ''; dados.bfValEm = vOrig.bfValEm || 0; }
+  if (dados.status === 'Realizada') { if (vOrig?.realizadaEm) dados.realizadaEm = vOrig.realizadaEm; else if (!vOrig || vOrig.status !== 'Realizada') dados.realizadaEm = Date.now(); }
   $('vmSalvar').disabled = true;
   try {
     const b = writeBatch(db);
@@ -7300,10 +7532,11 @@ window.salvarVisita = async () => {
   } catch(e) { toast('Não foi possível salvar: ' + e.message); }
   $('vmSalvar').disabled = false;
 };
-window.mudarStatus = async (id, st, motivo) => {
+window.mudarStatus = async (id, st, motivo, qa) => {
   const v = visitas.find(x => x.id === id); if (!v) return;
   if (PERDA_V.includes(st) && !motivo) { pedirMotivo('v', id, st); return; }
-  const dados = { ...v, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_V.includes(st) ? motivo : '', ...(st === 'Realizada' && v.status !== 'Realizada' ? { realizadaEm:Date.now() } : {}) }; delete dados.id;
+  if (st === 'Realizada' && v.status !== 'Realizada' && !qa && bfPrecisaQualif(v)) { abrirBfQ(id, 'status'); return; } // v451: visita da SDR na Black Friday pede as 3 perguntas
+  const dados = { ...v, status:st, atualizadoEm:Date.now(), motivoPerda: PERDA_V.includes(st) ? motivo : '', ...(st === 'Realizada' && v.status !== 'Realizada' ? { realizadaEm:Date.now() } : {}), ...(qa ? { qualif:qa } : {}) }; delete dados.id;
   try {
     const b = writeBatch(db);
     b.set(doc(db,'visitas',id), dados); b.set(doc(db,'ranking',id), rankingDe(dados));
@@ -8304,7 +8537,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 450;
+const APP_VERSAO = 451;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13458,12 +13691,13 @@ function saldoCarteira(uid, c = bvCfg()){
   // v119: no modo Feirão cada visita vale o valor fixo (padrão FRD 50), mesmo sem regra preenchida
   const cada = valorVisitaCart(c);
   const vendasA = vendasDoAnjo(uid), ganhoAnjo = vendasA.reduce((a, v) => a + v.valor, 0);
-  const ganho = (c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0)) + ganhoAnjo;
+  const bfc = (() => { try { return bfCarteira(uid); } catch(e) { return { disp:0, pend:0 }; } })(); // v451: Black Friday
+  const ganho = (c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0)) + ganhoAnjo + bfc.disp;
   const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0);
-  return { ganho, ganhoAnjo, vendasA, cada, vale, pendL, pend:pendL.length * cada, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
+  return { ganho, ganhoAnjo, vendasA, cada, vale, pendL, pend:pendL.length * cada + bfc.pend, bfDisp:bfc.disp, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
 }
 // v133: a carteira vale para todos os perfis (corretor, coordenador, SDR, anjo e gerência); só o correspondente fica de fora
-const participaCarteira = (c = bvCfg()) => souAtivo() && !souCorresp() && (c.ativo || (perfil?.papel === 'anjo' && avCfg().ativo && Number(avCfg().valor) > 0));
+const participaCarteira = (c = bvCfg()) => souAtivo() && !souCorresp() && (c.ativo || (perfil?.papel === 'anjo' && avCfg().ativo && Number(avCfg().valor) > 0) || bfParticipa());
 function htmlPoupanca(){
   const c = bvCfg(); if (view !== 'hoje' || !participaCarteira(c)) return '';
   const k = saldoCarteira(uidAtual, c);
@@ -14385,6 +14619,283 @@ function pintarAbaAnjos(){
   pintarIcones?.(el);
 }
 function contarAnjosPend(){ const c = $('cAnjos'); if (!c) return; let n = 0; if (souGerente() && !souCeo()) { const s0 = anjoValSem; try { anjoValSem = 'atual'; n = anjoValPend(anjoValDias()).filter(x => x[1] >= ANJO_VAL_DESDE).length; } finally { anjoValSem = s0; } } c.textContent = n; c.classList.toggle('hide', !n); }
+// v451: ARRANCADA BLACK FRIDAY (25 a 30/11). Aba própria (ao lado do Bolsão) para SDRs, anjos e coordenadores; a gerência acompanha tudo.
+// SDR: visita realizada e qualificada (3 perguntas na baixa) vale 20/30/40/50 FRD; libera a partir da 5ª. Anjo: venda dos corretores dele vale 200 (1ª e 2ª) e 300 (3ª em diante); libera com 1 reserva dele.
+// Coordenador: reservas da equipe 5 = 500, 7 = +200, 10 = +300; com 12 e 15 toma os 200 e 300 da outra equipe se ela não bateu 7 e 10 (confirma no fim).
+const BF_INI = '2026-11-25', BF_FIM = '2026-11-30';
+const BF_T0 = Date.parse('2026-11-25T00:00:00-03:00'), BF_T1 = Date.parse('2026-12-01T00:00:00-03:00'), BF_LIM = Date.parse('2026-12-01T12:00:00-03:00'), BF_SOME = Date.parse('2026-12-04T00:00:00-03:00');
+const bfNaData = d => !!d && d >= BF_INI && d <= BF_FIM;
+const bfAgora = () => Date.now();
+const bfComecou = () => bfAgora() >= BF_T0, bfAcabou = () => bfAgora() >= BF_T1;
+const bfVisivel = () => bfAgora() < BF_SOME;
+const bfGestao = () => souAtivo() && souGerente() && !souCeo();
+const bfPapel = () => souSdr() ? 'sdr' : souAnjo() ? 'anjo' : souCoord() ? 'coord' : (souAtivo() && perfil?.papel === 'corretor') ? 'cor' : '';
+const bfPodeVer = () => souAtivo() && bfVisivel() && (!!bfPapel() || bfGestao());
+const bfParticipa = () => souAtivo() && bfComecou() && bfAgora() < BF_SOME && ['sdr','anjo','coord'].includes(bfPapel());
+const bfPessoa = uid => uid === uidAtual ? perfil : (perfisTodos.find(x => x.uid === uid) || rkPessoas.find(x => x.uid === uid) || null);
+const bfN = n => (Number(n) || 0).toLocaleString('pt-BR');
+const bfEsc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+// ---------- as 3 perguntas da baixa (visitas das SDRs no período) ----------
+const BFQ = [
+  { k:'c', t:'Como está o crédito do cliente?', o:[['aprov','Carta aprovada ou condicionada',1],['anal','Documentação enviada, em análise',1],['limpo','Ainda não fez análise, mas tem renda e nome limpo',1],['rest','Nome com restrição',0],['semr','Sem renda comprovável ou sem perfil de valor',0]] },
+  { k:'i', t:'Qual foi o interesse do cliente?', o:[['avan','Escolheu imóvel e quer avançar',1],['fam','Gostou e vai decidir com a família',1],['conh','Só veio conhecer, sem intenção agora',0],['perf','Não tem perfil para o que procura',0]] },
+  { k:'p', t:'Qual o próximo passo combinado?', o:[['res','Reserva',1],['doc','Enviar ou completar documentação',1],['ret','Nova visita ou retorno com data',1],['nada','Nenhum',0]] }];
+const bfQTxt = (k, v) => ((BFQ.find(q => q.k === k)?.o || []).find(o => o[0] === v) || [])[1] || '';
+function bfPrecisaQualif(v){ return !!v && !!v.sdrUid && bfNaData(v.date) && !v.qualif; }
+function bfVisQualif(v){ return !!v && v.bfVal === 'ok'; } // v451: só vale depois que o gestor ou a Stefanne validam
+window._bfQ = null; window._bfQForm = null;
+window.abrirBfQ = (id, origem) => {
+  window._bfQ = { id, origem, r:{} }; const v = visitas.find(x => x.id === id);
+  $('bfQCorpo').innerHTML = `<p class="hint" style="margin:0 0 10px">Visita marcada pela SDR${v?.sdrNome ? ' <b>' + bfEsc(primeiro(nomeBonito(v.sdrNome))) + '</b>' : ''}${v?.cliente ? ' · cliente <b>' + bfEsc(v.cliente) + '</b>' : ''}. Responda para dar baixa como realizada.</p>`
+    + BFQ.map(q => `<div class="bfq-p"><b>${q.t}</b><div class="bfq-ops">${q.o.map(o => `<button type="button" class="bfq-op" data-k="${q.k}" data-v="${o[0]}" onclick="bfQEscolhe(this)">${o[1]}</button>`).join('')}</div></div>`).join('')
+    + `<div class="bfq-p"><b>Como foi o atendimento?</b><textarea id="bfQObs" rows="3" placeholder="Conte em uma ou duas frases o que aconteceu na visita"></textarea></div>`;
+  abrir('bfQModal');
+};
+window.bfQEscolhe = el => { const k = el.dataset.k; window._bfQ.r[k] = el.dataset.v; document.querySelectorAll(`#bfQCorpo .bfq-op[data-k="${k}"]`).forEach(b => b.classList.toggle('on', b === el)); };
+window.bfQConfirmar = () => {
+  const q = window._bfQ; if (!q) return; const r = q.r, obs = ($('bfQObs')?.value || '').trim();
+  if (BFQ.some(x => !r[x.k])) { toast('Responda as 3 perguntas'); return; }
+  if (obs.replace(/[^a-zA-ZÀ-ú]/g, '').length < 15) { toast('Escreva como foi o atendimento (pelo menos uma frase)'); $('bfQObs').focus(); return; }
+  const ok = BFQ.every(x => (x.o.find(o => o[0] === r[x.k]) || [])[2] === 1);
+  const qa = { c:r.c, i:r.i, p:r.p, obs:obs.slice(0, 600), ok, em:Date.now(), por:perfil?.nome || '', porUid:uidAtual };
+  fechar('bfQModal'); window._bfQ = null;
+  if (q.origem === 'status') mudarStatus(q.id, 'Realizada', '', qa); else { window._bfQForm = qa; salvarVisita(); }
+};
+// ---------- contas ----------
+const bfValSdr = n => n <= 5 ? 20 : n <= 7 ? 30 : n <= 9 ? 40 : 50;
+function bfSdr(uid){
+  const lista = visitas.filter(v => v.sdrUid === uid && !v.arquivado && v.status === 'Realizada' && bfNaData(v.date) && (!Number(v.realizadaEm) || Number(v.realizadaEm) <= BF_LIM))
+    .sort((a, b) => (Number(a.realizadaEm) || Date.parse(a.date + 'T' + (a.time || '12:00'))) - (Number(b.realizadaEm) || Date.parse(b.date + 'T' + (b.time || '12:00'))));
+  const ok = [], nq = [], sr = [], vistos = new Set();
+  lista.forEach(v => { const k = (v.telNorm || '') || norm(v.cliente || '') || v.id;
+    if (bfVisQualif(v)) { if (vistos.has(k)) { nq.push({ ...v, _rep:true }); return; } vistos.add(k); ok.push(v); }
+    else if (!v.bfVal) sr.push(v); else nq.push(v); });
+  const vals = ok.map((v, i) => bfValSdr(i + 1)), total = vals.reduce((a, x) => a + x, 0), n = ok.length;
+  const liberado = n >= 5 ? total : 0, pend = n < 5 && bfAgora() < BF_LIM ? total : 0;
+  return { ok, nq, sr, n, vals, total, liberado, pend };
+}
+function bfPlacarSdr(){
+  const cont = {}; rankingDocs.filter(r => r.sdrUid && r.status === 'Realizada' && bfNaData(r.date) && r.bfq).forEach(r => { cont[r.sdrUid] = (cont[r.sdrUid] || 0) + 1; });
+  if (bfPapel() === 'sdr') cont[uidAtual] = bfSdr(uidAtual).n;
+  const sdrs = rkPessoas.filter(p => p.papel === 'sdr' && p.status === 'ativo');
+  if (!sdrs.some(p => p.uid === uidAtual) && bfPapel() === 'sdr') sdrs.push({ uid:uidAtual, nome:perfil.nome });
+  return sdrs.map(p => ({ uid:p.uid, nome:primeiro(nomeBonito(p.nome || '')), n:cont[p.uid] || 0 })).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
+}
+const bfVendasPeriodo = () => (rankingVendas || []).filter(v => !v.caiu && bfNaData(v.dia)).sort((a, b) => (a.dia || '').localeCompare(b.dia || '') || String(a.id).localeCompare(String(b.id)));
+function bfAnjo(uid){
+  const mb = new Set(uid === uidAtual ? membrosAnjo() : membrosDoAnjo(uid)), vp = bfVendasPeriodo();
+  const vendas = mb.size ? vp.filter(v => (v.corretores || []).some(c => mb.has(c.uid))) : [];
+  const propria = vp.some(v => (v.corretores || []).some(c => c.uid === uid));
+  const vals = vendas.map((v, i) => i < 2 ? 200 : 300), total = vals.reduce((a, x) => a + x, 0);
+  const porC = {}; [...mb].forEach(u => { porC[u] = 0; }); vendas.forEach(v => (v.corretores || []).forEach(c => { if (mb.has(c.uid)) porC[c.uid]++; }));
+  return { mb:[...mb], vendas, vals, total, propria, porC, liberado:propria ? total : 0, pend:!propria && !bfAcabou() ? total : 0 };
+}
+const bfEqDe = uid => (bfPessoa(uid) || {}).equipe || '';
+function bfCoordInfo(){ return rkPessoas.filter(p => p.papel === 'coordenador' && p.status === 'ativo' && p.equipe); }
+function bfContaEq(eq){ return eq ? bfVendasPeriodo().filter(v => (v.corretores || []).some(c => bfEqDe(c.uid) === eq)).length : 0; }
+const BF_MC = [{ n:5, v:500 }, { n:7, v:200 }, { n:10, v:300 }];
+function bfCoord(uid){
+  const eq = bfEqDe(uid) || (uid === uidAtual ? perfil?.equipe : ''), rivalP = bfCoordInfo().find(p => p.equipe && p.equipe !== eq), rival = rivalP?.equipe || Object.keys(equipes || {}).find(k => k !== eq) || '';
+  const a = bfContaEq(eq), b = bfContaEq(rival);
+  const base = BF_MC.filter(m => a >= m.n).reduce((s, m) => s + m.v, 0);
+  const toma = (a >= 12 && b < 7 ? 200 : 0) + (a >= 15 && b < 10 ? 300 : 0), perde = (b >= 12 && a < 7 ? 200 : 0) + (b >= 15 && a < 10 ? 300 : 0);
+  return { eq, rival, a, b, base, toma, perde, liberado:base + (bfAcabou() ? toma : 0), disputa:bfAcabou() ? 0 : toma };
+}
+function bfPapelDe(uid){ const p = bfPessoa(uid); return p?.papel === 'sdr' ? 'sdr' : p?.papel === 'anjo' ? 'anjo' : p?.papel === 'coordenador' ? 'coord' : p?.papel === 'corretor' ? 'cor' : ''; }
+// corretor: comissão de lead da imobiliária (50%) sobe na Black: 1 venda no período = 55% nessa venda; 2 vendas = 60% em todas as vendas do período (inclusive a 1ª)
+const BF_COR = { base:50, um:55, dois:60 };
+function bfCor(uid){
+  const vs = bfVendasPeriodo().filter(v => (v.corretores || []).some(c => c.uid === uid)), n = vs.length;
+  const pct = n >= 2 ? BF_COR.dois : n === 1 ? BF_COR.um : BF_COR.base;
+  return { vs, n, pct, liberado:0 };
+}
+function bfRankCor(){
+  const cont = {}; bfVendasPeriodo().forEach(v => (v.corretores || []).forEach(c => { cont[c.uid] = (cont[c.uid] || 0) + 1; }));
+  return rkPessoas.filter(p => p.papel === 'corretor' && p.status === 'ativo').map(p => ({ uid:p.uid, nome:primeiro(nomeBonito(p.nome || '')), eq:p.equipe || '', n:cont[p.uid] || 0 })).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
+}
+function bfHtmlCor(){
+  const s = bfCor(uidAtual), n = s.n, rk = bfRankCor(), eu = rk.findIndex(x => x.uid === uidAtual), top = rk.filter(x => x.n > 0).slice(0, 10), mx = Math.max(3, ...top.map(x => x.n));
+  const at = n >= 2 ? 2 : n === 1 ? 1 : 0, prox = n >= 2 ? '' : n === 1 ? 'Mais 1 venda e todas as suas vendas da Black vão para 60%' : 'Feche 1 venda e ela vale 55%';
+  const T = [[BF_COR.base, 'comissão normal'], [BF_COR.um, '1ª venda'], [BF_COR.dois, '2 vendas · em todas']];
+  return `<div class="bf">${bfCab('COMISSÃO TURBINADA', `<div class="miss">Venda de lead da imobiliária vale <b>${BF_COR.base}%</b>. Na Black, fechou 1 venda: <b>${BF_COR.um}%</b>. Fechou 2: <b>${BF_COR.dois}%</b> em todas, inclusive na primeira.</div>`)}
+    <div class="saldo"><div><div class="l"><span>Sua comissão na Black</span><span class="cad ${n ? 'lib' : ''}">${n >= 2 ? '✓ máxima' : n ? '✓ subiu' : '🔒 feche 1 venda'}</span></div><div class="v">${s.pct}<small style="margin-left:2px;font-family:var(--tit);font-size:30px;color:#fff">%</small></div></div>
+    <div class="q"><b>${n}</b><span>venda${n === 1 ? '' : 's'} no<br>período</span></div></div>
+    <div class="meta"><div class="t"><span>${prox || 'Você está no máximo: 60% em todas as vendas da Black'}</span><em></em></div><div class="trilha"><i class="${n >= 1 ? 'on' : ''}"></i><i class="${n >= 2 ? 'on' : ''}"></i></div></div>
+    <div class="esc3">${T.map((x, i) => `<div class="tag ${i < at ? 'ok' : ''} ${i === at ? 'at' : ''}"><div class="v">${x[0]}<small>%</small></div><div class="r">${x[1]}</div></div>`).join('')}</div>
+    <div class="ult">${s.vs.length ? [...s.vs].reverse().slice(0, 5).map(v => `<div class="it"><span>Venda de ${bfDia(v.dia)}<small>${v.ind ? 'indicação · comissão própria' : (v.corretores || []).length > 1 ? 'em parceria' : 'lead da imobiliária'}</small></span><b class="${v.ind ? 'z' : 'd'}">${v.ind ? '—' : s.pct + '%'}</b></div>`).join('') : '<div class="it"><span style="color:#999">Suas vendas do período aparecem aqui, com a comissão de cada uma.</span></div>'}</div>
+    <p class="bf-regra">Conta reserva registrada de 25 a 30/11 (mesmo sem assinatura); venda em parceria conta para os dois. Se a reserva cair, sai da conta. O percentual vale para venda de lead da imobiliária.</p>
+  </div></div>
+  <div class="bf-plc"><h2>Ranking da Black <span>vendas · 25 a 30/11${eu >= 0 && rk[eu].n ? ' · você está em ' + (eu + 1) + 'º' : ''}</span></h2>${top.length ? top.map((x, i) => `<div class="lin ${x.uid === uidAtual ? 'eu' : ''}"><span class="p">${i + 1}º</span><span>${x.uid === uidAtual ? 'Você' : bfEsc(x.nome)}<small class="pc">${x.n >= 2 ? BF_COR.dois : BF_COR.um}%</small></span><span class="br"><i style="width:${x.n / mx * 100}%"></i></span><span class="n">${x.n}</span></div>`).join('') : '<p class="bf-vz">Ninguém vendeu ainda na Black. Seja o primeiro!</p>'}</div>`;
+}
+
+function bfCarteira(uid){
+  if (bfAgora() < BF_T0) return { disp:0, pend:0 };
+  const p = bfPapelDe(uid);
+  if (p === 'sdr') { const s = bfSdr(uid); return { disp:s.liberado, pend:s.pend }; }
+  if (p === 'anjo') { const s = bfAnjo(uid); return { disp:s.liberado, pend:s.pend }; }
+  if (p === 'coord') { const s = bfCoord(uid); return { disp:s.liberado, pend:s.disputa }; }
+
+  return { disp:0, pend:0 };
+}
+// ---------- tela ----------
+function bfRelogio(){
+  const alvo = bfComecou() ? BF_T1 : BF_T0, s = Math.max(0, Math.floor((alvo - bfAgora()) / 1000)), p2 = x => String(x).padStart(2, '0');
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), se = s % 60;
+  return `<div class="relo">${bfAcabou() ? 'encerrada' : bfComecou() ? 'termina em' : 'começa em'}<div class="d">${[[d,'dias'],[p2(h),'h'],[p2(m),'min'],[p2(se),'s']].map(([a, b]) => `<div><b>${a}</b><small>${b}</small></div>`).join('')}</div></div>`;
+}
+const bfCab = (sup, extra = '') => `<div class="fita"></div><div class="in"><div class="titulo"><div class="a">${sup}</div></div><div class="cab"><div class="titulo"><div class="b">BLACK<span>FRIDAY</span></div></div><div id="bfRelo">${bfRelogio()}</div></div>${extra}`;
+function bfHtmlSdr(){
+  const s = bfSdr(uidAtual), n = s.n, lib = n >= 5, at = (n + 1) <= 5 ? 0 : (n + 1) <= 7 ? 1 : (n + 1) <= 9 ? 2 : 3;
+  const T = [[20,'1ª a 5ª'],[30,'6ª e 7ª'],[40,'8ª e 9ª'],[50,'10ª +']];
+  let meta, tri;
+  if (!lib) { const k = 5 - n; meta = `<span>${k === 1 ? 'Falta 1 visita' : 'Faltam ' + k + ' visitas'} para liberar</span><em>FRD ${bfN(s.total + [20,20,20,20,20].slice(n).reduce((a, x) => a + x, 0))}</em>`; tri = [0,1,2,3,4].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join(''); }
+  else { const alvo = n < 7 ? 7 : n < 9 ? 9 : n + 1, ini = n < 7 ? 5 : n < 9 ? 7 : n, k = alvo - n; meta = `<span>Próxima vale FRD ${bfValSdr(n + 1)}${n < 9 ? ` · ${k === 1 ? 'falta 1' : 'faltam ' + k} p/ FRD ${bfValSdr(alvo + 1)}` : ''}</span><em></em>`; tri = Array.from({ length:alvo - ini }, (_, i) => `<i class="${i < n - ini ? 'on' : ''}"></i>`).join(''); }
+  const ult = [...s.ok.map((v, i) => ({ v, x:'+' + s.vals[i] + ' FRD', c:lib ? 'd' : 'p' })), ...s.nq.map(v => ({ v, x:v._rep ? 'cliente repetido' : 'não validada', c:'z' })), ...s.sr.map(v => ({ v, x:'em validação', c:'z' }))]
+    .sort((a, b) => (Number(b.v.realizadaEm) || 0) - (Number(a.v.realizadaEm) || 0)).slice(0, 4);
+  const aviso = !lib && bfComecou() && hojeISO() === BF_FIM ? `<div class="bf-ult">ÚLTIMO DIA! ${5 - n === 1 ? 'Falta 1 visita' : 'Faltam ' + (5 - n) + ' visitas'} para liberar.</div>` : '';
+  const pl = bfPlacarSdr(), mx = Math.max(5, ...pl.map(x => x.n)), eu = pl.findIndex(x => x.uid === uidAtual), frente = eu > 0 ? pl[eu - 1] : null;
+  return `<div class="bf">${bfCab('ARRANCADA')}
+    ${aviso}<div class="saldo"><div><div class="l"><span>${lib ? 'Na sua Carteira Frade' : 'Acumulado na arrancada'}</span><span class="cad ${lib ? 'lib' : ''}">${lib ? '✓ liberado' : '🔒 a liberar na 5ª'}</span></div><div class="v"><small>FRD</small>${bfN(s.total)}</div></div>
+    <div class="q"><b>${n}</b><span>visitas<br>validadas</span></div></div>
+    ${s.sr.length ? `<div class="bf-val">⏳ ${s.sr.length} visita${s.sr.length === 1 ? '' : 's'} realizada${s.sr.length === 1 ? '' : 's'} esperando a validação da gerência</div>` : ''}
+    <div class="meta"><div class="t">${meta}</div><div class="trilha">${tri}</div></div>
+    <div class="esc">${T.map((x, i) => `<div class="tag ${i < at ? 'ok' : ''} ${i === at ? 'at' : ''}"><div class="v">${x[0]}<small>FRD</small></div><div class="r">${x[1]}</div></div>`).join('')}</div>
+    <div class="ult">${ult.length ? ult.map(u => `<div class="it"><span>${bfEsc(u.v.cliente || 'Cliente')}<small>com ${bfEsc(primeiro(nomeBonito(u.v.corretorNome || '')))}</small></span><b class="${u.c}">${u.x}</b></div>`).join('') : `<div class="it"><span style="color:#999">Cada visita realizada aparece aqui. Só vale cliente com perfil de compra.</span></div>`}</div>
+    <p class="bf-regra">Conta só visita realizada de 25 a 30/11, com baixa do corretor, cliente com perfil de compra e validada pela gerência. Libera na Carteira Frade a partir da 5ª visita realizada; com menos de 5, não libera.</p>
+  </div></div>
+  <div class="bf-plc"><h2>Placar das SDRs <span>visitas realizadas · 25 a 30/11</span></h2>${frente ? `<p class="bf-frente">Falta${frente.n - pl[eu].n + 1 === 1 ? '' : 'm'} ${frente.n - pl[eu].n + 1} para passar a ${bfEsc(frente.nome)}</p>` : ''}
+    ${pl.map((x, i) => `<div class="lin ${x.uid === uidAtual ? 'eu' : ''}"><span class="p">${i + 1}º</span><span>${x.uid === uidAtual ? 'Você' : bfEsc(x.nome)}</span><span class="br"><i style="width:${x.n / mx * 100}%"></i></span><span class="n">${x.n}</span></div>`).join('')}</div>`;
+}
+function bfHtmlAnjo(){
+  const s = bfAnjo(uidAtual), n = s.vendas.length, lib = s.propria, at = (n + 1) <= 2 ? 0 : 1;
+  const nomes = s.mb.map(u => ({ u, nome:primeiro(nomeBonito((bfPessoa(u) || {}).nome || '')) || 'Corretor', q:s.porC[u] || 0 })).sort((a, b) => b.q - a.q || a.nome.localeCompare(b.nome));
+  return `<div class="bf">${bfCab('MISSÃO DO ANJO', `<div class="miss">Cada venda dos seus corretores vale <b>FRD 200</b> para você. Da <b>3ª venda</b> em diante, <b>FRD 300</b>.</div>`)}
+    <div class="saldo"><div><div class="l"><span>${lib ? 'Na sua Carteira Frade' : 'Acumulado na arrancada'}</span><span class="cad ${lib ? 'lib' : ''}">${lib ? '✓ liberado' : '🔒 bloqueado'}</span></div><div class="v"><small>FRD</small>${bfN(s.total)}</div></div>
+    <div class="q"><b>${n}</b><span>vendas dos<br>seus corretores</span></div></div>
+    ${lib ? `<div class="cond si"><span class="ic">✅</span><div>Sua reserva foi feita · prêmios liberados<small>Cada nova venda dos seus corretores cai na hora.</small></div></div>`
+      : `<div class="cond no"><span class="ic">🔒</span><div>Faça 1 reserva sua para liberar<small>Sem uma reserva sua até 30/11, o valor não é liberado.</small></div></div>`}
+    <div class="esc2">${[[200,'1ª e 2ª venda'],[300,'3ª venda em diante']].map((x, i) => `<div class="tag ${i < at ? 'ok' : ''} ${i === at ? 'at' : ''}"><div class="v">${x[0]}<small>FRD</small></div><div class="r">${x[1]}</div></div>`).join('')}</div>
+    <div class="afs"><div class="afs-t">SEUS CORRETORES</div>${nomes.length ? nomes.map(x => `<div class="af"><span>${bfEsc(x.nome)}</span><span class="dots">${x.q > 3 ? `<em>${x.q}</em>` : [0,1,2].map(i => `<i class="${i < x.q ? 'on' : ''}"></i>`).join('')}</span></div>`).join('') : '<div class="af"><span style="color:#999">Nenhum corretor ligado a você.</span></div>'}</div>
+    <p class="bf-regra">Conta reserva registrada de 25 a 30/11 (mesmo sem assinatura). Se a reserva cair, sai do saldo. Sua reserva só destrava; o que vale é a venda dos seus corretores.</p>
+  </div></div>`;
+}
+function bfHtmlCoord(){
+  const s = bfCoord(uidAtual), lib = s.a >= 5, nx = [...BF_MC, { n:12, v:200, rb:1 }, { n:15, v:300, rb:1 }].find(m => s.a < m.n);
+  const rn = eqNome(s.rival).replace(/^\S+\s/, '') || 'outra equipe', meu = eqNome(s.eq) || 'Sua equipe';
+  const M = [{ n:5, v:500, d:'Libera o prêmio', dono:1 }, { n:7, v:200, d:'+2 reservas', dono:1 }, { n:10, v:300, d:'+3 reservas', dono:1 }, { n:12, v:200, d:'Toma da ' + rn, s:'se ' + rn + ' não chegar a 7 até 30/11' }, { n:15, v:300, d:'Toma da ' + rn, s:'se ' + rn + ' não chegar a 10 até 30/11' }];
+  return `<div class="bf">${bfCab('DUELO DE EQUIPES')}
+    <div class="duelo"><div class="eq eu"><small>${bfEsc(meu)} (você)</small><b>${s.a}</b></div><div class="x">×</div><div class="eq"><small>${bfEsc(eqNome(s.rival))}</small><b>${s.b}</b></div></div>
+    <div class="saldo"><div><div class="l"><span>${lib ? 'Na sua Carteira Frade' : 'Prêmio da arrancada'}</span><span class="cad ${lib ? 'lib' : ''}">${lib ? '✓ liberado' : '🔒 libera com 5'}</span></div><div class="v"><small>FRD</small>${bfN(s.liberado)}${s.disputa ? `<span class="disp">+${bfN(s.disputa)} FRD da ${bfEsc(rn)} em disputa</span>` : ''}${s.perde ? `<span class="disp">${bfN(s.perde)} FRD seus em disputa</span>` : ''}</div></div>
+    <div class="q"><b>${nx ? nx.n - s.a : '✓'}</b><span>${nx ? `reservas para<br>${nx.rb ? 'tomar ' + nx.v + ' da ' + bfEsc(rn) : '+' + nx.v + ' FRD'}` : 'tudo<br>conquistado'}</span></div></div>
+    <div class="marcos">${M.map(x => { const ok = s.a >= x.n, at = nx && nx.n === x.n; const cl = x.dono ? (ok ? 'ok' : at ? 'at' : '') : ('rb' + (ok ? ' dp' : ''));
+      return `<div class="mc ${cl}"><div class="n">${x.n}<small>reservas</small></div><div class="d">${x.dono ? x.d : '🏴 ' + bfEsc(x.d)}<small>${x.dono ? 'da equipe no período' : (ok ? 'em disputa · ' : '') + bfEsc(x.s)}</small></div><div class="v">${x.dono ? '+' : ''}${x.v} FRD</div></div>`; }).join('')}</div>
+    <p class="bf-regra">Conta reserva registrada pela equipe de 25 a 30/11 (mesmo sem assinatura). Se a reserva cair, sai da conta. Os 500 de 5 reservas são garantidos; só os prêmios de 7 e 10 podem ser tomados.</p>
+  </div></div>`;
+}
+
+// ---------- blocos extras (telas mais completas) ----------
+const bfDia = d => d ? d.slice(8) + '/' + d.slice(5, 7) : '';
+const bfNomeC = uid => primeiro(nomeBonito((bfPessoa(uid) || {}).nome || ''));
+function bfHtmlSdrExtra(){
+  const s = bfSdr(uidAtual), h = hojeISO();
+  const agoraHM = new Date().toTimeString().slice(0, 5), ag = visitas.filter(v => v.sdrUid === uidAtual && !v.arquivado && bfNaData(v.date) && (v.date > h || (v.date === h && (v.time || '23:59') >= agoraHM)) && ['Pendente','Confirmada','Reagendada'].includes(v.status)).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  const esp = visitas.filter(v => v.sdrUid === uidAtual && !v.arquivado && bfNaData(v.date) && (v.date < h || (v.date === h && (v.time || '23:59') < new Date().toTimeString().slice(0, 5))) && ['Pendente','Confirmada'].includes(v.status));
+  let n = s.n; const pot = ag.reduce((a, v) => { n++; return a + bfValSdr(n); }, 0);
+  const tel = uid => { const p = perfisTodos.find(x => x.uid === uid); return soDig(p?.telefone || '').replace(/^(?!55)(\d{10,11})$/, '55$1'); };
+  const lembra = v => { const t = tel(v.corretorUid); if (!t) return ''; const m = `Oi, ${primeiro(nomeBonito(v.corretorNome || ''))}! A visita do cliente ${v.cliente || ''} (${bfDia(v.date)} às ${v.time || ''}) aconteceu? Dá a baixa no app, por favor 🙏`; return `<a class="bf-lem" href="https://wa.me/${t}?text=${encodeURIComponent(m)}" target="_blank" rel="noopener">Lembrar corretor</a>`; };
+  return `<div class="bf-card2"><h2>Suas visitas agendadas até 30/11 <span>${ag.length ? 'podem render até FRD ' + bfN(pot) : ''}</span></h2>
+    ${ag.length ? ag.slice(0, 8).map((v, i) => `<div class="bf-l"><span><b>${bfEsc(v.cliente || 'Cliente')}</b><small>${bfDia(v.date)} às ${bfEsc(v.time || '')} · ${bfEsc(primeiro(nomeBonito(v.corretorNome || '')))} · ${bfEsc(v.status)}</small></span><em>vale ${bfValSdr(s.n + i + 1)}</em></div>`).join('') : '<p class="bf-vz">Nenhuma visita agendada no período. Cada visita marcada e realizada vira FRD.</p>'}</div>
+    ${esp.length ? `<div class="bf-card2 al"><h2>Esperando baixa do corretor <span>${esp.length} visita${esp.length === 1 ? '' : 's'}</span></h2>${esp.map(v => `<div class="bf-l"><span><b>${bfEsc(v.cliente || 'Cliente')}</b><small>${bfDia(v.date)} às ${bfEsc(v.time || '')} · ${bfEsc(primeiro(nomeBonito(v.corretorNome || '')))}</small></span>${lembra(v)}</div>`).join('')}<p class="bf-vz">Só conta depois que o corretor der a baixa como realizada.</p></div>` : ''}`;
+}
+function bfRankAnjos(){
+  return rkPessoas.filter(p => p.papel === 'anjo' && p.status === 'ativo').map(p => { const s = bfAnjo(p.uid); return { uid:p.uid, nome:primeiro(nomeBonito(p.nome || '')), n:s.vendas.length, ok:s.propria }; }).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
+}
+function bfHtmlAnjoExtra(){
+  const s = bfAnjo(uidAtual), mb = new Set(s.mb), rk = bfRankAnjos(), mx = Math.max(3, ...rk.map(x => x.n));
+  const ult = [...s.vendas].reverse().slice(0, 6);
+  return `<div class="bf-card2"><h2>Últimas vendas dos seus corretores <span>${s.vendas.length} no período</span></h2>
+    ${ult.length ? ult.map((v, i) => { const idx = s.vendas.length - 1 - i; return `<div class="bf-l"><span><b>${bfEsc((v.corretores || []).filter(c => mb.has(c.uid)).map(c => primeiro(nomeBonito(c.nome || bfNomeC(c.uid)))).join(' e '))}</b><small>reserva de ${bfDia(v.dia)}</small></span><em>+${s.vals[idx]} FRD</em></div>`; }).join('') : '<p class="bf-vz">Nenhuma venda dos seus corretores ainda. Puxe a equipe: cada venda vale FRD 200, e da 3ª em diante FRD 300.</p>'}</div>
+    <div class="bf-plc"><h2>Ranking dos anjos <span>vendas dos corretores · 25 a 30/11</span></h2>
+    ${rk.map((x, i) => `<div class="lin ${x.uid === uidAtual ? 'eu' : ''}"><span class="p">${i + 1}º</span><span>${x.uid === uidAtual ? 'Você' : bfEsc(x.nome)}${x.ok ? '' : ' <small>🔒</small>'}</span><span class="br"><i style="width:${x.n / mx * 100}%"></i></span><span class="n">${x.n}</span></div>`).join('')}</div>`;
+}
+function bfHtmlCoordExtra(){
+  const s = bfCoord(uidAtual), vs = bfVendasPeriodo().filter(v => (v.corretores || []).some(c => bfEqDe(c.uid) === s.eq));
+  const porC = {}; vs.forEach(v => (v.corretores || []).filter(c => bfEqDe(c.uid) === s.eq).forEach(c => { porC[c.uid] = (porC[c.uid] || 0) + 1; }));
+  const top = Object.entries(porC).map(([u, n]) => ({ u, n, nome:bfNomeC(u) })).sort((a, b) => b.n - a.n).slice(0, 8), mx = Math.max(2, ...top.map(x => x.n));
+  return `<div class="bf-card2"><h2>Últimas reservas da equipe <span>${vs.length} no período</span></h2>
+    ${vs.length ? [...vs].reverse().slice(0, 6).map(v => `<div class="bf-l"><span><b>${bfEsc((v.corretores || []).map(c => primeiro(nomeBonito(c.nome || bfNomeC(c.uid)))).join(' e '))}</b><small>reserva de ${bfDia(v.dia)}</small></span><em>+1</em></div>`).join('') : '<p class="bf-vz">Nenhuma reserva da equipe ainda. 5 reservas liberam FRD 500.</p>'}</div>
+    <div class="bf-plc"><h2>Quem mais vendeu na equipe <span>25 a 30/11</span></h2>${top.length ? top.map((x, i) => `<div class="lin"><span class="p">${i + 1}º</span><span>${bfEsc(x.nome)}</span><span class="br"><i style="width:${x.n / mx * 100}%"></i></span><span class="n">${x.n}</span></div>`).join('') : '<p class="bf-vz">Ainda ninguém vendeu no período.</p>'}</div>`;
+}
+
+const QTXT = v => v.qualif ? BFQ.map(q => bfQTxt(q.k, v.qualif[q.k])).join(' · ') : '';
+function bfHtmlGestao(){
+  const sdrs = rkPessoas.filter(p => p.papel === 'sdr' && p.status === 'ativo'), anjos = rkPessoas.filter(p => p.papel === 'anjo' && p.status === 'ativo'), coords = bfCoordInfo();
+  const S = sdrs.map(p => ({ p, s:bfSdr(p.uid) })), A = anjos.map(p => ({ p, s:bfAnjo(p.uid) })), C = coords.map(p => ({ p, s:bfCoord(p.uid) }));
+  const totR = 0, totS = S.reduce((a, x) => a + x.s.liberado, 0), totA = A.reduce((a, x) => a + x.s.liberado, 0), totC = C.reduce((a, x) => a + x.s.liberado, 0);
+  const pendS = S.reduce((a, x) => a + x.s.pend, 0), pendA = A.reduce((a, x) => a + x.s.pend, 0), dispC = C.reduce((a, x) => a + x.s.disputa, 0);
+  const visL = x => `<div class="bfg-v ${x.bfVal === 'ok' ? 'ok' : x.bfVal === 'nao' ? '' : 'pd'}"><div><b>${bfEsc(x.cliente || 'Cliente')}</b> · ${bfEsc(primeiro(nomeBonito(x.corretorNome || '')))} · ${bfEsc((x.date || '').slice(8) + '/' + (x.date || '').slice(5, 7))}
+      <small>${x.qualif ? (x.qualif.ok ? '✅ ' : '⚠️ ') + bfEsc(QTXT(x)) + (x.qualif.obs ? '<br>“' + bfEsc(x.qualif.obs) + '” — ' + bfEsc(primeiro(nomeBonito(x.qualif.por || ''))) : '') : 'Sem as 3 respostas (baixa feita sem o questionário)'}${x.bfVal ? `<br><i>${x.bfVal === 'ok' ? 'Validada' : 'Derrubada'} por ${bfEsc(primeiro(nomeBonito(x.bfValPor || '')))}</i>` : ''}</small></div>
+      <div class="bfg-bt"><button class="btn btn-sm ${x.bfVal === 'ok' ? 'btn-primary' : ''}" onclick="bfValidar('${x.id}','ok')">Vale</button><button class="btn btn-sm ${x.bfVal === 'nao' ? 'btn-primary' : ''}" onclick="bfValidar('${x.id}','nao')">Não vale</button></div></div>`;
+  return `<div class="bf bf-g">${bfCab('ACOMPANHAMENTO', `<div class="bfg-tot"><div><small>Liberado</small><b>FRD ${bfN(totS + totA + totC + totR)}</b></div><div><small>Pendente / em disputa</small><b>FRD ${bfN(pendS + pendA + dispC)}</b></div></div>${(() => { const nv = S.reduce((a, x) => a + x.s.sr.length, 0); return nv ? `<div class="bfg-val">⏳ <b>${nv}</b> visita${nv === 1 ? '' : 's'} das SDRs para você validar · abra a SDR abaixo e toque em <b>Vale</b> ou <b>Não vale</b></div>` : ''; })()}`)}</div></div>
+    <div class="bfg-card"><h2>Coordenadores <span>reservas da equipe</span></h2>${C.length ? C.map(x => `<div class="bfg-l"><span><b>${bfEsc(primeiro(nomeBonito(x.p.nome)))}</b> · ${bfEsc(eqNome(x.s.eq))}<small>${x.s.a} reservas × ${x.s.b} da ${bfEsc(eqNome(x.s.rival))}${x.s.disputa ? ' · +' + bfN(x.s.disputa) + ' em disputa' : ''}</small></span><b>FRD ${bfN(x.s.liberado)}</b></div>`).join('') : '<p class="hint">Nenhum coordenador ativo com equipe.</p>'}</div>
+    <div class="bfg-card"><h2>Anjos <span>vendas dos corretores · reserva própria</span></h2>${A.map(x => `<div class="bfg-l"><span><b>${bfEsc(primeiro(nomeBonito(x.p.nome)))}</b><small>${x.s.vendas.length} venda${x.s.vendas.length === 1 ? '' : 's'} dos corretores · ${x.s.propria ? '✅ fez a reserva dele' : '🔒 ainda sem reserva própria'}</small></span><b>FRD ${bfN(x.s.liberado)}${x.s.pend ? `<small>+${bfN(x.s.pend)} bloqueado</small>` : ''}</b></div>`).join('') || '<p class="hint">Nenhum anjo ativo.</p>'}</div>
+    <div class="bfg-card"><h2>Corretores <span>comissão turbinada · lead da imobiliária</span></h2>${(() => { const R = bfRankCor().filter(x => x.n > 0); return R.length ? R.map(x => `<div class="bfg-l"><span><b>${bfEsc(x.nome)}</b><small>${x.n} venda${x.n === 1 ? '' : 's'} · ${bfEsc(eqNome(x.eq))}</small></span><b>${x.n >= 2 ? BF_COR.dois : BF_COR.um}%</b></div>`).join('') : '<p class="hint">Nenhuma venda de corretor no período ainda.</p>'; })()}</div>
+    <div class="bfg-card"><h2>SDRs <span>visitas realizadas · validação sua e da Stefanne</span></h2>${S.map(x => `<details class="bfg-d"><summary class="bfg-l"><span><b>${bfEsc(primeiro(nomeBonito(x.p.nome)))}</b><small>${x.s.n} validada${x.s.n === 1 ? '' : 's'}${x.s.nq.length ? ' · ' + x.s.nq.length + ' não vale' + (x.s.nq.length === 1 ? '' : 'm') : ''}${x.s.sr.length ? ' · <b style="color:#E65100">' + x.s.sr.length + ' para validar</b>' : ''}</small></span><b>FRD ${bfN(x.s.liberado)}${x.s.pend ? `<small>+${bfN(x.s.pend)} a liberar</small>` : ''}</b></summary>
+      ${[...x.s.sr, ...x.s.ok, ...x.s.nq].map(visL).join('') || '<p class="hint" style="padding:6px 0">Nenhuma visita realizada no período.</p>'}</details>`).join('') || '<p class="hint">Nenhuma SDR ativa.</p>'}</div>
+    <p class="hint" style="margin:10px 4px">Os valores liberados entram sozinhos na Carteira Frade de cada um; os saques chegam como sempre. Vendas e reservas vêm do ranking de vendas (reserva registrada, mesmo sem assinatura).</p>`;
+}
+function htmlBlackFriday(){
+  if (!bfPodeVer()) return '';
+  const p = bfPapel();
+  const pre = !bfComecou() ? `<div class="bf-pre">A arrancada começa amanhã, 25/11, à 0h. Os valores abaixo começam a contar a partir daí.</div>` : bfAcabou() ? `<div class="bf-pre">A arrancada terminou em 30/11. ${p === 'sdr' ? 'Baixas dadas até 01/12 às 12h ainda contam.' : 'Resultado final.'}</div>` : '';
+  const corpo = p === 'cor' ? bfHtmlCor() : p === 'sdr' ? bfHtmlSdr() + bfHtmlSdrExtra() : p === 'anjo' ? bfHtmlAnjo() + bfHtmlAnjoExtra() : p === 'coord' ? bfHtmlCoord() + bfHtmlCoordExtra() : bfHtmlGestao();
+  return `<div class="bfx">${pre}${corpo}</div>`;
+}
+// celebração quando o número sobe (uma vez por aparelho)
+function bfCelebrar(){
+  const p = bfPapel(); if (!p || !bfComecou() || view !== 'blackfriday') return;
+  let n = 0, lib = false, extra = '';
+  if (p === 'sdr') { const s = bfSdr(uidAtual); n = s.n; lib = n >= 5; extra = s.n ? '+' + s.vals[s.n - 1] : ''; }
+  else if (p === 'anjo') { const s = bfAnjo(uidAtual); n = s.vendas.length * 10 + (s.propria ? 1 : 0); lib = s.propria; extra = s.vendas.length ? '+' + s.vals[s.vendas.length - 1] : ''; }
+  else if (p === 'cor') { const s = bfCor(uidAtual); n = s.n; lib = s.n >= 1; }
+  else { const s = bfCoord(uidAtual); n = s.a; lib = s.a >= 5; }
+  const k = 'bfVisto_' + uidAtual; let ant = null; try { ant = JSON.parse(localStorage.getItem(k) || 'null'); } catch(e) {}
+  try { localStorage.setItem(k, JSON.stringify({ n, lib })); } catch(e) {}
+  if (!ant || n <= ant.n) return;
+  let h = '';
+  if (lib && !ant.lib) h = `<div class="lk">🔓</div><div class="s">${p === 'anjo' ? 'VOCÊ FEZ SUA RESERVA' : p === 'coord' ? '5 RESERVAS DA EQUIPE' : p === 'cor' ? '1ª VENDA DA BLACK' : '5ª VISITA REALIZADA'}</div><div class="h">${p === 'cor' ? 'COMISSÃO<span>55%!</span>' : 'LIBE<span>RADO!</span>'}</div><div class="p">${p === 'cor' ? 'Mais 1 venda e todas vão para <b>60%</b>.' : 'O prêmio caiu na sua Carteira Frade.'}</div>`;
+  else if (p === 'sdr' && [6, 8, 10].includes(n)) h = `<div class="s">${n}ª VISITA REALIZADA</div><div class="h">SUBIU DE<span>DEGRAU!</span></div><div class="p">Agora cada visita vale <b>FRD ${bfValSdr(n)}</b>.</div>`;
+  else if (p === 'cor' && n === 2) h = `<div class="s">2ª VENDA DA BLACK</div><div class="h">COMISSÃO<span>60%!</span></div><div class="p">Agora <b>todas</b> as suas vendas da Black valem 60%.</div>`;
+  else if (p === 'anjo' && Math.floor(n / 10) === 3) h = `<div class="s">3ª VENDA DOS SEUS CORRETORES</div><div class="h">SUBIU PARA<span>FRD 300!</span></div><div class="p">Agora cada venda dos seus corretores vale <b>FRD 300</b>.</div>`;
+  else if (p === 'coord' && [7, 10, 12, 15].includes(n)) h = `<div class="s">${n} RESERVAS DA EQUIPE</div><div class="h">${n >= 12 ? 'TOMANDO' : 'MAIS'}<span>${n >= 12 ? 'PRÊMIO!' : 'PRÊMIO!'}</span></div><div class="p">${n === 7 ? '+FRD 200 na sua Carteira Frade.' : n === 10 ? '+FRD 300. Prêmio completo!' : 'Prêmio da outra equipe em disputa até 30/11.'}</div>`;
+  else if (extra && p !== 'cor') h = `<div class="h"><span>${extra}</span></div><div class="p">${lib ? 'Já na sua Carteira Frade.' : '🔒 a liberar'}</div>`;
+  if (!h) return;
+  const el = document.createElement('div'); el.className = 'bf-cele'; el.innerHTML = `<div class="bf-cele-in">${h}</div>`; el.onclick = () => el.remove();
+  for (let i = 0; i < 30; i++) { const c = document.createElement('i'); c.className = 'bf-conf'; c.style.left = (i * 37 % 100) + '%'; c.style.animationDelay = (i % 7) * 0.08 + 's'; c.style.background = ['#FFE600','#FF6A00','#19C37D','#fff'][i % 4]; el.appendChild(c); }
+  document.body.appendChild(el); try { navigator.vibrate && navigator.vibrate([60, 40, 120]); } catch(e) {}
+  setTimeout(() => el.remove(), 3800);
+}
+window.bfValidar = async (id, val) => {
+  if (!bfGestao()) return; const v = visitas.find(x => x.id === id); if (!v) return;
+  const novo = v.bfVal === val ? '' : val, dados = { ...v, bfVal:novo, bfValPor:novo ? perfil.nome : '', bfValEm:novo ? Date.now() : 0 }; delete dados.id;
+  try { const b = writeBatch(db); b.set(doc(db,'visitas',id), { bfVal:dados.bfVal, bfValPor:dados.bfValPor, bfValEm:dados.bfValEm }, { merge:true }); b.set(doc(db,'ranking',id), { bfq:bfVisQualif(dados) }, { merge:true }); await gravar(b.commit()); toast(novo ? (novo === 'ok' ? 'Visita validada' : 'Visita não vale') : 'Validação desfeita'); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
+let _bfTick = null;
+function pintarBF(){
+  const pode = bfPodeVer();
+  document.querySelectorAll('.bf-nav').forEach(e => e.classList.toggle('hide', !pode));
+  if ($('cBF')) { let nv = 0; try { if (bfGestao() && bfComecou()) nv = rkPessoas.filter(p => p.papel === 'sdr' && p.status === 'ativo').reduce((a, p) => a + bfSdr(p.uid).sr.length, 0); } catch(e) {} $('cBF').textContent = nv; $('cBF').classList.toggle('hide', !nv); }
+  const mb = $('mbBF'), bar = $('mobilebar'); if (mb) mb.classList.toggle('hide', !pode);
+  if (bar) bar.classList.toggle('bf-duo', pode && !!$('mbBolsao') && !$('mbBolsao').classList.contains('hide'));
+  const el = $('bfCorpo'); if (!el || view !== 'blackfriday') { if (_bfTick) { clearInterval(_bfTick); _bfTick = null; } return; }
+  if (el.contains(document.activeElement) && document.activeElement.matches?.('summary,button')) {}
+  const abertos = el._h ? [...el.querySelectorAll('details[open]')].map(d => d.querySelector('summary b')?.textContent) : null;
+  const h = htmlBlackFriday(); if (el._h !== h) { el.innerHTML = h; el._h = h; el.querySelectorAll('details').forEach(d => { if (abertos ? abertos.includes(d.querySelector('summary b')?.textContent) : /para validar/.test(d.querySelector('summary')?.textContent || '')) d.open = true; }); }
+  if (!_bfTick) _bfTick = setInterval(() => { const r = $('bfRelo'); if (r && view === 'blackfriday') r.innerHTML = bfRelogio(); else { clearInterval(_bfTick); _bfTick = null; } }, 1000);
+  setTimeout(bfCelebrar, 300);
+}
+
 // v446: lembrete da gerência: dias dos anjos esperando validação (esta semana e a passada)
 function htmlLembreteValidar(){
   if (!souGerente() || souCeo()) return ''; const s0 = anjoValSem; let n = 0;
@@ -15805,6 +16316,7 @@ function renderExtrato(){ renderPrefNotif();
   if ($('aulasHoje')) { const h = view === 'hoje' ? htmlAulasHoje() : ''; if ($('aulasHoje')._h !== h) { $('aulasHoje').innerHTML = h; $('aulasHoje')._h = h; } }
   if ($('cAulas')) { const n = auPendentes().length; $('cAulas').textContent = n; $('cAulas').classList.toggle('hide', !n); }
   try { pintarAbaAnjos(); contarAnjosPend(); garantirTop3Fila(); } catch(e) {}
+  try { pintarBF(); } catch(e) { console.warn('black friday', e); }
   if (view === 'sorteio' && $('sxPalco') && !sxGirando && !$('sxPalco').contains(document.activeElement) && !document.querySelector('.sx-cfg')?.contains(document.activeElement)) { sxPinta(); sxPintaHist(); }
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
