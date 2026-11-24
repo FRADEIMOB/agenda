@@ -2603,18 +2603,14 @@ html body button.av-d{display:grid!important;justify-items:start;align-content:s
 .mb-bf-c b{font:900 italic 11.5px/.95 Inter,system-ui,sans-serif;color:#FFE600;text-align:center;margin-top:-5px;letter-spacing:-.02em}
 .mb-bf-c::after{content:'';position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(-45deg,#FFE600 0 5px,#000 5px 10px)}
 #mbBF{color:#000!important;font-weight:800!important;white-space:nowrap}
-html[data-tema="escuro"] #mbBF,html.dark #mbBF{color:#FFE600!important}
-.mobilebar.bf-duo #mbBolsao,.mobilebar.bf-duo #mbBF{flex:0 0 74px!important;padding-left:0!important;padding-right:0!important}
-.mobilebar.bf-duo #mbBolsao{margin-right:-1px}
-.mobilebar.bf-duo #mbBolsao .mb-bz-c{width:74px;border-radius:28px 0 0 28px;box-shadow:0 8px 20px rgba(2,44,69,.35),-4px 0 0 0 var(--card),0 -4px 0 0 var(--card),0 4px 0 0 var(--card)}
-.mobilebar.bf-duo #mbBF .mb-bf-c{width:74px;border-radius:0 28px 28px 0;box-shadow:0 8px 20px rgba(0,0,0,.35),4px 0 0 0 var(--card),0 -4px 0 0 var(--card),0 4px 0 0 var(--card)}
-.mobilebar.bf-duo #mbBF .mb-bf-c::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1.5px;background:rgba(255,255,255,.35)}
+[data-theme="dark"] #mbBF{color:#FFE600!important}
 .mobilebar.bf-duo #mbBolsao:active .mb-bz-c,.mobilebar.bf-duo #mbBF:active .mb-bf-c{filter:brightness(.8);transform:translateY(2px)}
 .mobilebar:not(.bf-duo) #mbBF:not(.hide){display:flex}
 #v-blackfriday{padding-bottom:30px}
 /* abertura Black Friday + Natal */
 html.bf-semana #frAbre .fa-pn,html.bf-semana .login-pn{background:linear-gradient(160deg,#1a1a1a 0%,#000 70%)!important}
-html.bf-semana #frAbre .fa-pn::after,html.bf-semana .login-pn::after{content:'';position:absolute;left:0;right:0;bottom:0;height:16px;background:repeating-linear-gradient(-45deg,#FFE600 0 12px,#000 12px 24px);border-radius:0 0 44px 44px}
+html.bf-semana #frAbre .fa-pn,html.bf-semana .login-pn{border-radius:0!important}
+html.bf-semana #frAbre .fa-pn::after,html.bf-semana .login-pn::after{content:'';position:absolute;left:0;right:0;bottom:0;height:16px;background:repeating-linear-gradient(-45deg,#FFE600 0 12px,#000 12px 24px)}
 html.bf-semana #frAbre .fa-pn-tx b span,html.bf-semana .login-pn .lp-tx b span{color:#FFE600}
 .nt-bfp{position:absolute;left:50%;top:calc(44% + 70px);transform:translateX(-50%);z-index:5;pointer-events:none;animation:bfPlaca .8s cubic-bezier(.3,1.4,.5,1) 5.25s both}
 #frAbre.curto .nt-bfp{animation-delay:2.8s}
@@ -2707,6 +2703,70 @@ html.bf-semana #frAbre .fa-pn-tx b span,html.bf-semana .login-pn .lp-tx b span{c
 .bfx .mc.rb .v{color:#FF6A00}
 .bfx .mc.rb.dp{border:1.5px solid #FF6A00;background:#2a1200}
 /* v451: acabamento */
+#bfHojeFaixa:empty{display:none}
+#bfHojeFaixa{margin:0 0 14px}
+.bf-hoje{width:100%;display:grid;grid-template-columns:1fr auto 18px;align-items:center;gap:12px;border:0;cursor:pointer;text-align:left;background:#000;color:#fff;border-radius:16px;padding:14px 14px 18px 16px;position:relative;overflow:hidden;box-shadow:0 10px 24px -12px rgba(0,0,0,.5);font:inherit}
+.bf-hoje::after{content:'';position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(-45deg,#FFE600 0 8px,#000 8px 16px)}
+.bf-hoje-t b{display:block;font-family:var(--tit,'Saira Condensed',sans-serif);font-weight:800;font-style:italic;font-size:26px;line-height:.9}
+.bf-hoje-t b i{color:#FFE600}
+.bf-hoje-t small{display:block;font-size:12.5px;color:#cfcfcf;margin-top:4px}
+.bf-hoje-r{text-align:right}
+.bf-hoje-r em{display:block;font-style:normal;font-size:10.5px;color:#999;font-weight:700}
+.bf-hoje-r strong{display:block;font-family:var(--tit,'Saira Condensed',sans-serif);font-size:20px;font-weight:800;color:#FFE600;white-space:nowrap}
+.bf-hoje-s{font-size:26px;color:#FFE600;line-height:1}
+.bf-hoje:active{transform:scale(.99)}
+.mb-duo{display:flex;flex:1;min-width:0;justify-content:center}
+.mb-duo>button{flex:1;min-width:0}
+.mobilebar.bf-duo .mb-duo{flex:0 0 156px;display:grid;grid-template-columns:78px 78px;position:relative}
+.mobilebar.bf-duo .mb-duo::before{content:'';position:absolute;left:0;right:0;top:-30px;height:62px;border-radius:31px;background:var(--card);box-shadow:0 10px 24px -8px rgba(0,0,0,.35),0 0 0 1px var(--border);pointer-events:none}
+.mobilebar.bf-duo .mb-duo>button{width:78px;min-width:0;padding:4px 0!important;margin:0!important;position:relative;z-index:1;display:flex!important;flex-direction:column;align-items:center;gap:4px;font-size:11px!important;line-height:1.1}
+.mobilebar.bf-duo #mbBolsao{justify-self:end}.mobilebar.bf-duo #mbBF{justify-self:start}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c,.mobilebar.bf-duo #mbBF .mb-bf-c{width:74px;height:54px;margin-top:-26px;box-shadow:none;animation:none}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c{border-radius:27px 0 0 27px}
+.mobilebar.bf-duo #mbBF .mb-bf-c{border-radius:0 27px 27px 0}
+.mobilebar.bf-duo #mbBolsao{align-items:center;padding-left:4px!important}.mobilebar.bf-duo #mbBF{align-items:center;padding-right:4px!important}
+.mobilebar.bf-duo #mbBolsao>.mb-bz-c~*,.mobilebar.bf-duo .mb-duo>button{white-space:nowrap}
+/* v451: semana da Black (até 30/11): toques de preto e amarelo no app todo */
+html.bf-semana .btn-primary{background:#111!important;color:#FFE600!important;border-color:#111!important;box-shadow:0 6px 16px rgba(0,0,0,.22)!important}
+html.bf-semana[data-theme="dark"] .btn-primary{background:#FFE600!important;color:#111!important;border-color:#FFE600!important}
+html.bf-semana .topbar::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:4px;background:repeating-linear-gradient(-45deg,#FFE600 0 8px,#111 8px 16px);pointer-events:none}
+html.bf-semana .topbar{border-bottom-color:transparent}
+html.bf-semana .mobilebar button.active:not(#mbBolsao):not(#mbBF){color:#111!important}
+html.bf-semana[data-theme="dark"] .mobilebar button.active:not(#mbBolsao):not(#mbBF){color:#FFE600!important}
+html.bf-semana .nav button.active{background:#111!important;color:#FFE600!important}
+html.bf-semana .nav button.active svg,html.bf-semana .nav button.active i{color:#FFE600!important}
+.nt-bfp{top:calc(44% + 88px)!important}
+.nt-bfp-in{padding:14px 26px 18px!important;border-width:3px!important;border-radius:16px!important}
+.nt-bfp-in b{font-family:var(--tit,'Saira Condensed',sans-serif)!important;font-weight:800!important;font-size:46px!important;line-height:.85!important;letter-spacing:0!important;white-space:nowrap}
+.nt-bfp-in small{font-size:10.5px!important;margin-top:8px!important;white-space:nowrap}
+.nt-bfp-in::after{height:7px!important}
+.nt-bfp-tx{margin:18px 0 0;text-align:center;font:700 15px/1.3 inherit;color:#1F2D3A;white-space:nowrap;animation:bfIn .6s ease 5.9s both}
+html.dark .nt-bfp-tx{color:#e6eef5}
+.manut-faixa.esc{display:none!important}
+.manut-faixa .mf-x{background:transparent!important;color:#fff!important;font-size:18px;line-height:1;padding:2px 4px!important}
+@media (max-width:900px){.manut-faixa{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 66px);font-size:12px;padding:5px 6px 5px 12px;gap:6px;border-radius:999px;white-space:nowrap}.manut-faixa button{padding:4px 9px}}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c b{right:auto;left:4px}
+.mobilebar.bf-duo #mbBF .mb-bf-c::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:1px;background:rgba(255,255,255,.28)}
+.bf-boas{position:fixed;inset:0;z-index:2147481000;background:rgba(6,10,16,.62);display:flex;align-items:flex-end;justify-content:center;animation:bfIn .25s ease both}
+.bf-boas.sai{opacity:0;transition:opacity .25s}
+.bfb-sheet{width:min(480px,100%);max-height:92vh;overflow:auto;background:var(--card);border-radius:24px 24px 0 0;box-shadow:0 -20px 50px rgba(0,0,0,.35);animation:bfSobe .35s cubic-bezier(.2,.9,.3,1) both}
+@media (min-width:700px){.bf-boas{align-items:center}.bfb-sheet{border-radius:24px}}
+@keyframes bfSobe{from{transform:translateY(40px);opacity:.4}}
+.bfb-top{background:#000;color:#fff;padding:0 22px 20px;position:relative;text-align:left}
+.bfb-fita{height:14px;margin:0 -22px 16px;background:repeating-linear-gradient(-45deg,#FFE600 0 12px,#000 12px 24px)}
+.bfb-top small{display:block;font-size:11px;font-weight:800;letter-spacing:.26em;color:#FF6A00}
+.bfb-top b{display:block;font-family:var(--tit,'Saira Condensed',sans-serif);font-weight:800;font-style:italic;font-size:58px;line-height:.82;margin-top:10px}
+.bfb-top b span{display:block;color:#FFE600}
+.bfb-top p{margin:16px 0 0;font-size:15px;line-height:1.45;color:#e6e6e6}
+.bfb-corpo{padding:20px 22px calc(20px + env(safe-area-inset-bottom,0px))}
+.bfb-lista{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.bfb-lista li{position:relative;padding-left:20px;font-size:14.5px;line-height:1.45;color:var(--text)}
+.bfb-lista li::before{content:'';position:absolute;left:2px;top:.5em;width:8px;height:8px;border-radius:2px;background:#FFE600;box-shadow:0 0 0 1.5px #000;transform:rotate(45deg)}
+.bfb-ci{margin:16px 0 0;font-size:13.5px;color:var(--muted)}
+.bfb-ci b{color:var(--text)}
+.bfb-bt{margin-top:18px;height:50px;font-size:15.5px;font-weight:800;border-radius:14px}
+.bfx .bf-ci{color:var(--text)}
+.bfx .bf-ci>*{margin:0!important}
 .bfx .bfg-v.pd{border-left-color:#F5B400}
 .bfx .bf-val{margin-top:12px;background:#1d1a0a;border:1px solid #4a4210;color:#FFE600;border-radius:12px;padding:9px 12px;font-size:12.5px;font-weight:700}
 .bfx .bfg-val{margin-top:10px;background:#FFE600;color:#000;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.35}
@@ -3735,10 +3795,10 @@ window.__natalEntrada = function(fa){
   d.innerHTML=h; host.appendChild(d); }
 
  window.__ntNeve=neve; window.__ntLuzes=luzes;
- if (fa && document.documentElement.classList.contains('bf-semana')) fa.insertAdjacentHTML('beforeend','<div class="nt-bfp"><div class="nt-bfp-in"><b>BLACK <span>FRIDAY</span></b><small>ARRANCADA FRADE</small></div></div>'); // v451
+ if (fa && document.documentElement.classList.contains('bf-semana')) fa.insertAdjacentHTML('beforeend','<div class="nt-bfp"><div class="nt-bfp-in"><b>BLACK <span>FRIDAY</span></b><small>ARRANCADA FRADE · 25 A 30/11</small></div><p class="nt-bfp-tx">A semana mais forte do ano começou.</p></div>'); // v451
  if (fa){ neve(fa,34,'#B7C7D5',[2,4.5]); var pn=fa.querySelector('.fa-pn'); if(pn){ neve(pn,40,'#FFFFFF',[1.6,4]); luzes(pn,11); }
   var lg=fa.querySelector('.fa-logo');
-  window.__natalNoel().then(function(d){ if(!d || !lg || !document.body.contains(lg)) return; var dt=performance.now()-t0; if (dt > 3300) return;
+  window.__natalNoel().then(function(d){ if(!d || !lg || !document.body.contains(lg)) return; var dt=performance.now()-t0; if (dt > (document.documentElement.classList.contains('bf-semana') ? 6000 : 3300)) return; /* v451: na semana da Black a abertura é mais longa, então o Noel ainda dá tempo de entrar */
    __noelPoe(lg, lg.querySelector('.fa-p4'), false, d); var nl=lg.querySelector('.nt-nl'); if(nl) nl.style.animationDelay=(-dt/1000).toFixed(3)+'s'; }); }
 };
 window.__natalResto = function(){
@@ -3771,7 +3831,8 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
   };
   el.addEventListener('click', fim);
   var NT = !!window.NATAL && !mot; if (NT) { el.style.setProperty('--T', '7.6s'); try { window.__natalEntrada(el); } catch(e) {} }
-  setTimeout(fim, mot ? 500 : (cel ? (NT ? 6500 : 3250) : (NT ? 4600 : 2300)));
+  var BFS = NT && document.documentElement.classList.contains('bf-semana'); // v451: na semana da Black a abertura fica mais tempo para mostrar a placa
+  setTimeout(fim, mot ? 500 : (cel ? (BFS ? 9000 : NT ? 6500 : 3250) : (BFS ? 6800 : NT ? 4600 : 2300)));
 })();
 </script>
 
@@ -3889,6 +3950,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
       <!-- HOJE -->
       <section class="view" id="v-hoje">
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" id="btAvisoHoje" onclick="novoAviso()">Publicar aviso</button></div>
+        <div id="bfHojeFaixa"></div>
         <div class="hoje-topo">
           <div id="checkinHoje"></div>
           <div id="poupHoje"></div>
@@ -4672,8 +4734,8 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
   <button data-view="vendas" class="so-ceo" onclick="setView('vendas')"><i data-ic="chave"></i>Vendas</button>
   <button data-view="financeiro" class="so-ceo" onclick="setView('financeiro')"><i data-ic="dinheiro"></i>Financeiro</button>
   <button data-view="calendario" id="mbAgenda" class="hide" style="display:none" onclick="setView('calendario')"><i data-ic="tbAg"></i>Agenda</button>
-  <button data-view="bolsao" id="mbBolsao" class="mb-bz" onclick="setView('bolsao')"><span class="mb-bz-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="mbBzN"></b></span>Bolsão</button>
-  <button data-view="blackfriday" id="mbBF" class="mb-bf hide" onclick="setView('blackfriday')"><span class="mb-bf-c"><b>BLACK<br>FRIDAY</b></span>Black Friday</button>
+  <div class="mb-duo" id="mbDuo"><button data-view="bolsao" id="mbBolsao" class="mb-bz" onclick="setView('bolsao')"><span class="mb-bz-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg><b id="mbBzN"></b></span>Bolsão</button>
+  <button data-view="blackfriday" id="mbBF" class="mb-bf hide" onclick="setView('blackfriday')"><span class="mb-bf-c"><b>BLACK<br>FRIDAY</b></span>Black Friday</button></div>
   <button data-view="ranking" class="nao-sdr" onclick="setView('ranking')"><i data-ic="tbRank"></i>Ranking</button>
   <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="list"></i>Resumo</button>
   <button data-view="empreendimentos" id="mbImoveis" onclick="setView('empreendimentos')"><i data-ic="predio"></i>Imóveis</button>
@@ -5492,7 +5554,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
   </div>
 </div>
 <div id="manutTela" class="manut-tela hide"><div class="manut-box"><div class="manut-ic"></div><h2>App em manutenção</h2><p id="manutTxt">Estamos ajustando o app. Volte em alguns minutos.</p><small id="manutDesde"></small><button class="btn btn-ghost" onclick="location.reload()">Tentar de novo</button></div></div>
-<div id="manutFaixa" class="manut-faixa hide">App em manutenção: só você está usando. <button onclick="alternarManutencao()">Sair da manutenção</button></div>
+<div id="manutFaixa" class="manut-faixa hide"><span>🔧 Manutenção · só você usando</span><button onclick="alternarManutencao()">Sair</button><button class="mf-x" aria-label="Esconder" onclick="this.parentElement.classList.add('esc')">×</button></div>
 <div class="modal" id="fbModal">
   <div class="sheet" style="width:min(480px,100%)">
     <div class="sheet-head"><h2>Reportar erro ou sugestão</h2><button class="icon-btn" onclick="fechar('fbModal')" data-ic="x"></button></div>
@@ -14849,7 +14911,9 @@ function htmlBlackFriday(){
   const p = bfPapel();
   const pre = !bfComecou() ? `<div class="bf-pre">A arrancada começa amanhã, 25/11, à 0h. Os valores abaixo começam a contar a partir daí.</div>` : bfAcabou() ? `<div class="bf-pre">A arrancada terminou em 30/11. ${p === 'sdr' ? 'Baixas dadas até 01/12 às 12h ainda contam.' : 'Resultado final.'}</div>` : '';
   const corpo = p === 'cor' ? bfHtmlCor() : p === 'sdr' ? bfHtmlSdr() + bfHtmlSdrExtra() : p === 'anjo' ? bfHtmlAnjo() + bfHtmlAnjoExtra() : p === 'coord' ? bfHtmlCoord() + bfHtmlCoordExtra() : bfHtmlGestao();
-  return `<div class="bfx">${pre}${corpo}</div>`;
+  // v451: quem ainda não marcou a presença (ou o check-in da tarde) faz por aqui mesmo, sem sair da Black Friday
+  let ci = ''; try { if (p && (!meuCheckin || precisaTarde(meuCheckin))) ci = htmlCheckinHoje(); } catch(e) {}
+  return `<div class="bfx">${ci ? `<div class="bf-ci">${ci}</div>` : ''}${pre}${corpo}</div>`;
 }
 // celebração quando o número sobe (uma vez por aparelho)
 function bfCelebrar(){
@@ -14881,13 +14945,46 @@ window.bfValidar = async (id, val) => {
   try { const b = writeBatch(db); b.set(doc(db,'visitas',id), { bfVal:dados.bfVal, bfValPor:dados.bfValPor, bfValEm:dados.bfValEm }, { merge:true }); b.set(doc(db,'ranking',id), { bfq:bfVisQualif(dados) }, { merge:true }); await gravar(b.commit()); toast(novo ? (novo === 'ok' ? 'Visita validada' : 'Visita não vale') : 'Validação desfeita'); }
   catch(e) { toast('Erro: ' + e.message); }
 };
+
+// v451: boas-vindas da Black Friday (uma vez por pessoa, a partir de 25/11): o que mudou no app para o perfil dela + lembrete do check-in + recado motivacional
+const BF_BOAS = {
+  sdr:{ f:'Hoje é dia de lotar a agenda.', it:['Cada visita realizada e validada vale de <b>FRD 20 a 50</b>.','Libera na Carteira Frade a partir da <b>5ª visita</b>.','Acompanhe tudo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
+  anjo:{ f:'Seus corretores vendendo, você ganha junto.', it:['Cada venda deles vale <b>FRD 200</b>; da 3ª em diante, <b>FRD 300</b>.','Libera quando você fizer <b>1 reserva sua</b>.','Acompanhe tudo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
+  coord:{ f:'Tenda × Tropa de Elite. Começou o duelo.', it:['5 reservas da equipe liberam <b>FRD 500</b>; 7 e 10 rendem mais.','Passou de 10? Você pode tomar os prêmios da outra equipe.','Placar ao vivo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
+  cor:{ f:'Sua comissão nunca esteve tão alta.', it:['Fechou 1 venda: ela vai para <b>55%</b>.','Fechou 2: <b>60%</b> em todas as vendas da Black.','Acompanhe na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
+  ger:{ f:'Semana de arrancada para o time inteiro.', it:['Acompanhe SDRs, anjos, coordenadores e corretores na aba <b>Black Friday</b>.','Visitas das SDRs só valem depois que você ou a Stefanne validam.','Os prêmios caem sozinhos na Carteira Frade.'] } };
+function bfBoasVindas(){
+  if (!souAtivo() || !bfComecou() || bfAcabou() || document.getElementById('bfBoas')) return;
+  const p = bfPapel() || (bfGestao() ? 'ger' : ''); if (!p || !BF_BOAS[p]) return;
+  const k = 'bfBoas_' + uidAtual; try { if (localStorage.getItem(k)) return; } catch(e) { return; }
+  const d = BF_BOAS[p], semCi = p !== 'ger' && !meuCheckin, nome = primeiro(nomeBonito(perfil?.nome || ''));
+  const el = document.createElement('div'); el.id = 'bfBoas'; el.className = 'bf-boas';
+  el.innerHTML = `<div class="bfb-sheet" role="dialog" aria-label="Novidades da Black Friday"><div class="bfb-top"><div class="bfb-fita"></div><small>NOVIDADE NO APP · 25 A 30/11</small><b>BLACK<span>FRIDAY</span></b><p>${nome ? (new Date().getHours() < 12 ? 'Bom dia' : new Date().getHours() < 18 ? 'Boa tarde' : 'Boa noite') + ', ' + bfEsc(nome) + '. ' : ''}${d.f}</p></div>
+    <div class="bfb-corpo"><ul class="bfb-lista">${d.it.map(x => `<li>${x}</li>`).join('')}</ul>
+    ${semCi ? `<p class="bfb-ci">⏰ <b>Não esqueça do check-in</b> assim que chegar.</p>` : ''}
+    <button class="btn btn-primary btn-block bfb-bt" onclick="bfBoasFechar()">Bora pra Black</button></div></div>`;
+  document.body.appendChild(el); try { localStorage.setItem(k, String(Date.now())); } catch(e) {}
+}
+window.bfBoasFechar = () => { const el = $('bfBoas'); if (el) { el.classList.add('sai'); setTimeout(() => el.remove(), 250); } if (view !== 'blackfriday' && bfPodeVer()) setView('blackfriday'); window.scrollTo(0, 0); };
+
+function htmlBfHojeFaixa(){
+  if (!bfPodeVer() || bfAcabou()) return '';
+  const alvo = bfComecou() ? BF_T1 : BF_T0, sg = Math.max(0, Math.floor((alvo - bfAgora()) / 1000)), d = Math.floor(sg / 86400), h = Math.floor(sg % 86400 / 3600), m = Math.floor(sg % 3600 / 60);
+  const p = bfPapel(), txt = !bfComecou() ? 'Começa amanhã à 0h' : p === 'sdr' ? 'Cada visita realizada vale até FRD 50' : p === 'anjo' ? 'Venda dos seus corretores vale até FRD 300' : p === 'coord' ? 'Duelo Tenda × Tropa de Elite' : p === 'cor' ? 'Sua comissão sobe para até 60%' : 'Acompanhe a arrancada do time';
+  return `<button type="button" class="bf-hoje" onclick="setView('blackfriday')"><span class="bf-hoje-t"><b>BLACK <i>FRIDAY</i></b><small>${txt}</small></span><span class="bf-hoje-r"><em>${bfComecou() ? 'termina em' : 'começa em'}</em><strong>${d ? d + 'd ' : ''}${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}min</strong></span><span class="bf-hoje-s" aria-hidden="true">›</span></button>`;
+}
 let _bfTick = null;
 function pintarBF(){
   const pode = bfPodeVer();
   document.querySelectorAll('.bf-nav').forEach(e => e.classList.toggle('hide', !pode));
   if ($('cBF')) { let nv = 0; try { if (bfGestao() && bfComecou()) nv = rkPessoas.filter(p => p.papel === 'sdr' && p.status === 'ativo').reduce((a, p) => a + bfSdr(p.uid).sr.length, 0); } catch(e) {} $('cBF').textContent = nv; $('cBF').classList.toggle('hide', !nv); }
   const mb = $('mbBF'), bar = $('mobilebar'); if (mb) mb.classList.toggle('hide', !pode);
-  if (bar) bar.classList.toggle('bf-duo', pode && !!$('mbBolsao') && !$('mbBolsao').classList.contains('hide'));
+  const bz = $('mbBolsao'); let bzTem = false; try { bzTem = podeBzMenu(); } catch(e) {}
+  if (bz && pode && bzTem) bz.classList.remove('hide'); // v451: o Bolsão nunca some quando a Black Friday aparece ao lado
+  const bzVis = !!bz && !bz.classList.contains('hide');
+  if (bar) bar.classList.toggle('bf-duo', pode && bzVis);
+  if (pode && perfilOk && carregado.ranking && !document.getElementById('frAbre')) setTimeout(bfBoasVindas, 600);
+  const fh = $('bfHojeFaixa'); if (fh) { const hh = view === 'hoje' ? htmlBfHojeFaixa() : ''; if (fh._h !== hh) { fh.innerHTML = hh; fh._h = hh; } }
   const el = $('bfCorpo'); if (!el || view !== 'blackfriday') { if (_bfTick) { clearInterval(_bfTick); _bfTick = null; } return; }
   if (el.contains(document.activeElement) && document.activeElement.matches?.('summary,button')) {}
   const abertos = el._h ? [...el.querySelectorAll('details[open]')].map(d => d.querySelector('summary b')?.textContent) : null;
