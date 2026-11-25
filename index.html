@@ -2703,6 +2703,21 @@ html.bf-semana #frAbre .fa-pn-tx b span,html.bf-semana .login-pn .lp-tx b span{c
 .bfx .mc.rb .v{color:#FF6A00}
 .bfx .mc.rb.dp{border:1.5px solid #FF6A00;background:#2a1200}
 /* v451: acabamento */
+/* v451: semana da Black: app todo preto (some sozinho em 01/12) */
+html.bf-semana[data-theme="dark"]{--bg:#050505;--card:#121212;--card2:#0c0c0c;--text:#F3F3F3;--text2:#D2D2D2;--muted:#9B9B9B;--border:#262626;--side:#000;--side-text:#BEBEBE;--side-hover:rgba(255,230,0,.07);--ok-soft:#0f2219;--danger-soft:#2a1210;--accent-soft:rgba(255,122,0,.14);--shadow:0 1px 0 rgba(255,255,255,.03),0 10px 24px -12px rgba(0,0,0,.8)}
+html.bf-semana[data-theme="dark"] .topbar{background:rgba(5,5,5,.92)}
+html.bf-semana[data-theme="dark"] .mobilebar{background:#0b0b0b!important;box-shadow:0 -1px 0 #222!important}
+html.bf-semana[data-theme="dark"] .bfx .bf{border:1px solid #232323}
+html.bf-semana[data-theme="dark"] .bf-hoje{border:1px solid #232323}
+html.bf-semana[data-theme="dark"] .brand-mark.marca{background:#000;box-shadow:0 0 0 1px #2a2a2a}
+html.bf-semana[data-theme="dark"] .mobilebar.bf-duo .mb-duo::before{background:#0b0b0b;box-shadow:0 0 0 1px #2a2a2a,0 10px 24px -8px rgba(0,0,0,.9)}
+html.bf-semana[data-theme="dark"] .bfx .bfg-v{background:#0c0c0c}
+html.bf-semana[data-theme="dark"] .bfx .bf-plc .lin .br i{background:#E6E6E6}
+.nt-corda{position:absolute;left:0;top:0;z-index:4;pointer-events:none;overflow:visible}
+.nt-corda path{fill:none;stroke:#FFE600;stroke-width:2.2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:bfCorda .5s ease-out forwards;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+@keyframes bfCorda{to{stroke-dashoffset:0}}
+.nt-bfp.corda::before{display:none}
+.nt-bfp-in b{font-size:40px!important}
 #bfHojeFaixa:empty{display:none}
 #bfHojeFaixa{margin:0 0 14px}
 .bf-hoje{width:100%;display:grid;grid-template-columns:1fr auto 18px;align-items:center;gap:12px;border:0;cursor:pointer;text-align:left;background:#000;color:#fff;border-radius:16px;padding:14px 14px 18px 16px;position:relative;overflow:hidden;box-shadow:0 10px 24px -12px rgba(0,0,0,.5);font:inherit}
@@ -3795,7 +3810,14 @@ window.__natalEntrada = function(fa){
   d.innerHTML=h; host.appendChild(d); }
 
  window.__ntNeve=neve; window.__ntLuzes=luzes;
- if (fa && document.documentElement.classList.contains('bf-semana')) fa.insertAdjacentHTML('beforeend','<div class="nt-bfp"><div class="nt-bfp-in"><b>BLACK <span>FRIDAY</span></b><small>ARRANCADA FRADE · 25 A 30/11</small></div><p class="nt-bfp-tx">A semana mais forte do ano começou.</p></div>'); // v451
+ if (fa && document.documentElement.classList.contains('bf-semana')) { fa.insertAdjacentHTML('beforeend','<div class="nt-bfp"><div class="nt-bfp-in"><b>BLACK <span>FRIDAY</span></b><small>ARRANCADA FRADE · 25 A 30/11</small></div><p class="nt-bfp-tx">A semana mais forte do ano começou.</p></div>'); setTimeout(function(){ /* a corda da placa sai da mão do Papai Noel e acompanha o logo enquanto ele sobe */
+   try { var nw=fa.querySelector('.nt-nw'), pl=fa.querySelector('.nt-bfp'); if(!nw||!pl) return; pl.classList.add('corda');
+    var rf=fa.getBoundingClientRect(); fa.insertAdjacentHTML('beforeend','<svg class="nt-corda" width="'+rf.width+'" height="'+rf.height+'" viewBox="0 0 '+rf.width+' '+rf.height+'"><path pathLength="1"/></svg>');
+    var path=fa.querySelector('.nt-corda path'), fimT=performance.now()+9000;
+    (function passo(){ if(!document.body.contains(fa)) return; var r=fa.getBoundingClientRect(), rn=nw.getBoundingClientRect(); if(rn.width){
+      var hx=rn.left-r.left+rn.width*.28, hy=rn.top-r.top+rn.height*.36, py=r.height*.44+88-2, px=r.width/2, my=(hy+py)/2;
+      path.setAttribute('d','M'+hx.toFixed(1)+' '+hy.toFixed(1)+' Q '+((hx+px)/2+6).toFixed(1)+' '+(my+14).toFixed(1)+' '+px.toFixed(1)+' '+py.toFixed(1)); }
+     if(performance.now()<fimT) requestAnimationFrame(passo); })(); } catch(e) {} }, 5150); } // v451
  if (fa){ neve(fa,34,'#B7C7D5',[2,4.5]); var pn=fa.querySelector('.fa-pn'); if(pn){ neve(pn,40,'#FFFFFF',[1.6,4]); luzes(pn,11); }
   var lg=fa.querySelector('.fa-logo');
   window.__natalNoel().then(function(d){ if(!d || !lg || !document.body.contains(lg)) return; var dt=performance.now()-t0; if (dt > (document.documentElement.classList.contains('bf-semana') ? 6000 : 3300)) return; /* v451: na semana da Black a abertura é mais longa, então o Noel ainda dá tempo de entrar */
@@ -3832,7 +3854,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
   el.addEventListener('click', fim);
   var NT = !!window.NATAL && !mot; if (NT) { el.style.setProperty('--T', '7.6s'); try { window.__natalEntrada(el); } catch(e) {} }
   var BFS = NT && document.documentElement.classList.contains('bf-semana'); // v451: na semana da Black a abertura fica mais tempo para mostrar a placa
-  setTimeout(fim, mot ? 500 : (cel ? (BFS ? 9000 : NT ? 6500 : 3250) : (BFS ? 6800 : NT ? 4600 : 2300)));
+  setTimeout(fim, mot ? 500 : (cel ? (BFS ? 11500 : NT ? 6500 : 3250) : (BFS ? 9000 : NT ? 4600 : 2300)));
 })();
 </script>
 
@@ -6040,12 +6062,13 @@ function normalizar(t){
 // ================= Tema =================
 function aplicarTema(){
   const pref = state?.profile?.theme || localStorage.getItem('tema') || 'auto';
-  const escuro = pref === 'dark' || (pref === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  const bfSem = document.documentElement.classList.contains('bf-semana'); // v451: na semana da Black o app fica todo preto
+  const escuro = bfSem || pref === 'dark' || (pref === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = escuro ? 'dark' : 'light';
   // cor da marca Frade para todos (identidade única)
   const cor = '#1C5F8E';
-  document.documentElement.style.setProperty('--accent', escuro ? '#3B9AD9' : cor);
-  document.querySelector('meta[name=theme-color]').content = '#123F63';
+  document.documentElement.style.setProperty('--accent', bfSem ? '#FF7A00' : escuro ? '#3B9AD9' : cor);
+  document.querySelector('meta[name=theme-color]').content = bfSem ? '#000000' : '#123F63';
   $('btnTema').innerHTML = escuro ? IC.sun : IC.moon;
   try { localStorage.setItem('tema', pref); localStorage.setItem('cor', cor); } catch(e){}
 }
@@ -21533,5 +21556,13 @@ window.addEventListener('load', function(){
   new ResizeObserver(function(){ lenis.resize(); }).observe(document.body);
 });
 </script>
+<style id="bf451preto">
+/* v451: semana da Black: app todo preto (some sozinho em 01/12, quando a classe bf-semana sai) */
+html.bf-semana[data-theme="dark"],html.bf-semana[data-theme="dark"] body,html.bf-semana[data-theme="dark"] body:has(#app:not(.hide)){--bg:#050505;--card:#121212;--card2:#0c0c0c;--text:#F3F3F3;--text2:#D2D2D2;--muted:#9B9B9B;--border:#262626;--side:#000;--side-text:#BEBEBE;--side-hover:rgba(255,230,0,.07);--vidro:#121212;--vidro-forte:#141414;--vidro-borda:#262626;--vn-bg:#050505;--vn-ln:#262626;--vn-or:#FF7A00;--vn-or-b:#FF7A00;--vn-or-s:rgba(255,122,0,.14);--accent:#FF7A00;--accent-soft:rgba(255,122,0,.14)}
+html.bf-semana[data-theme="dark"] body{background:radial-gradient(800px 500px at 110% -10%,rgba(255,230,0,.06),transparent 60%),radial-gradient(700px 500px at -10% 110%,rgba(255,122,0,.05),transparent 60%),#050505!important;background-attachment:fixed!important}
+html.bf-semana[data-theme="dark"] body:has(#app:not(.hide)) .sidebar{background:#000!important;border-right:1px solid #1c1c1c!important}
+html.bf-semana[data-theme="dark"] .topbar{background:rgba(5,5,5,.94)!important}
+html.bf-semana[data-theme="dark"] .card,html.bf-semana[data-theme="dark"] .stat,html.bf-semana[data-theme="dark"] .pd-kpi{-webkit-backdrop-filter:none;backdrop-filter:none}
+</style>
 </body>
 </html>
