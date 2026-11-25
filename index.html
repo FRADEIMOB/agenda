@@ -7628,7 +7628,7 @@ function completarCriadoRanking(){ if (_rkCriadoOk || !souGerente() || souCeo() 
   for (let i = 0; i < ops.length; i += 300) { const b = writeBatch(db); ops.slice(i, i + 300).forEach(([id, em]) => b.update(doc(db,'ranking',id), { criadoEm:em })); b.commit().catch(e => console.warn('ranking criadoEm', e.code || e.message)); } }
 setInterval(() => { try { completarCriadoRanking(); } catch(e) {} }, 20000);
 function rankingDe(d){ return { equipe:d.equipe||'', corretorUid:d.corretorUid||'', corretorNome:d.corretorNome||'', date:d.date||'', status:d.status||'', semPontos:!!d.semPontos, criadoEm:Number(d.criadoEm)||0,
-  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'', empreendimento:String(d.empreendimento||'').slice(0,80), feirao:!!d.feirao, bfq:bfVisQualif(d) }; }
+  criadoPor:d.criadoPor||'', sdrUid:d.sdrUid||'', sdrNome:d.sdrNome||'', empreendimento:String(d.empreendimento||'').slice(0,80), feirao:!!d.feirao, bfq:bfVisQualif(d) && bfMarcadaNaBlack(d) }; }
 window.salvarVisita = async () => {
   const d = lerVisita();
   if (!d.date || !d.time) { toast('Informe a data e o horário'); return; }
@@ -7639,7 +7639,7 @@ window.salvarVisita = async () => {
   if (d.origem === 'Outro' && !d.origemDetalhe) { toast('Digite qual foi a origem'); $('vmOrigemOutro').focus(); return; }
   if (PERDA_V.includes(d.status) && !d.motivoPerda) { toast('Escolha o motivo da perda'); $('vmMotivo').focus(); return; }
   { const sdrU = vOrig ? (vOrig.sdrUid || '') : (souSdr() ? uidAtual : ''); // v451: visita da SDR na Black Friday pede as 3 perguntas ao virar realizada
-    if (d.status === 'Realizada' && (!vOrig || vOrig.status !== 'Realizada') && !window._bfQForm && bfPrecisaQualif({ ...(vOrig || {}), ...d, sdrUid:sdrU, qualif:vOrig?.qualif })) { abrirBfQ(vEditId || '', 'form'); return; } }
+    if (d.status === 'Realizada' && (!vOrig || vOrig.status !== 'Realizada') && !window._bfQForm && bfPrecisaQualif({ ...(vOrig || {}), ...d, sdrUid:sdrU, qualif:vOrig?.qualif, criadoEm:vOrig?.criadoEm || Date.now() })) { abrirBfQ(vEditId || '', 'form'); return; } }
   const _qa = window._bfQForm; window._bfQForm = null;
   const id = vEditId || doc(collection(db,'visitas')).id;
   const dados = { ...d, criadoPor: vOrig?.criadoPor || uidAtual, criadoEm: vOrig?.criadoEm || Date.now(), atualizadoEm: Date.now(), semPontos: !!vOrig?.semPontos,
@@ -7835,7 +7835,9 @@ window.setCorEq = k => { corEquipeFiltro = k; render(); };
 window.liberarApp = async uid => {
   const p = perfisTodos.find(x => x.uid === uid); if (!p) return; const equipe = $('te_' + uid)?.value || '';
   if (!SEM_EQUIPE.includes(p.papel) && !equipe) { toast('Escolha a equipe antes de liberar'); return; }
-  try { await gravar(setDoc(doc(db,'perfis',uid), { soAulas:false, equipe, liberadoPor:uidAtual, liberadoEm:Date.now() }, { merge:true })); toast(`${primeiro(p.nome)} liberado no app ✓`); }
+  try { const t = Date.now(); await gravar(setDoc(doc(db,'perfis',uid), { soAulas:false, equipe, liberadoPor:uidAtual, liberadoEm:t }, { merge:true }));
+    setDoc(doc(db,'ranking_pessoas',uid), { liberadoEm:t }, { merge:true }).catch(() => {}); // v465: a ausência só conta depois que o app foi liberado
+    toast(`${primeiro(p.nome)} liberado no app ✓`); }
   catch(e) { toast('Erro: ' + e.message); }
 };
 window.aprovar = async uid => {
@@ -8671,7 +8673,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 461;
+const APP_VERSAO = 465;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9449,7 +9451,9 @@ function pontosDoMesBase(m, val, corte){
     const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay()) && d.getDay() !== 6 && !feriados(d.getFullYear()).has(k)) uteis.push(k); } /* v322: feriado não conta ausência; v415: sábado também não (faltar no sábado não é ausência) */
     const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
-      const ini = p.criadoEm ? iso(new Date(p.criadoEm)) : '';
+      // v465 (Allan, 25/11): quem ficou só com as aulas não perde ponto até o app ser liberado; o dia da liberação também não conta
+      const lib = Number(p.liberadoEm) || Number(((typeof perfisTodos !== 'undefined' && perfisTodos) || []).find(y => y.uid === p.uid)?.liberadoEm) || 0;
+      const ini = [p.criadoEm ? iso(new Date(p.criadoEm)) : '', lib ? iso(new Date(lib)) : ''].sort().pop();
       const x = pega({ corretorUid:p.uid, corretorNome:p.nome, equipe:p.equipe });
       const folga = d => (x._abo && x._abo.has(d)) || ['folga','ferias','atestado'].includes((typeof presencas !== 'undefined' && presencas[d]?.marcados?.[p.uid]?.status) || '');
       /* v415: novato não perde ponto no dia em que foi cadastrado (Ângelo, cadastrado 13/11) */
@@ -14773,6 +14777,8 @@ function contarAnjosPend(){ const c = $('cAnjos'); if (!c) return; let n = 0; if
 const BF_INI = '2026-11-25', BF_FIM = '2026-11-30';
 const BF_T0 = Date.parse('2026-11-25T00:00:00-03:00'), BF_T1 = Date.parse('2026-12-01T00:00:00-03:00'), BF_LIM = Date.parse('2026-12-01T12:00:00-03:00'), BF_SOME = Date.parse('2026-12-04T00:00:00-03:00');
 const bfNaData = d => !!d && d >= BF_INI && d <= BF_FIM;
+// SDR: só vale visita marcada E realizada de 25 a 30/11
+const bfMarcadaNaBlack = v => { const c = Number(v.criadoEm) || 0; return c >= BF_T0 && c < BF_T1; };
 const bfAgora = () => Date.now();
 const bfComecou = () => bfAgora() >= BF_T0, bfAcabou = () => bfAgora() >= BF_T1;
 const bfVisivel = () => bfAgora() < BF_SOME;
@@ -14795,7 +14801,7 @@ const BFQ = [
   { k:'i', t:'Qual foi o interesse do cliente?', o:[['avan','Escolheu imóvel e quer avançar',1],['fam','Gostou e vai decidir com a família',1],['conh','Só veio conhecer, sem intenção agora',0],['perf','Não tem perfil para o que procura',0]] },
   { k:'p', t:'Qual o próximo passo combinado?', o:[['res','Reserva',1],['doc','Enviar ou completar documentação',1],['ret','Nova visita ou retorno com data',1],['nada','Nenhum',0]] }];
 const bfQTxt = (k, v) => ((BFQ.find(q => q.k === k)?.o || []).find(o => o[0] === v) || [])[1] || '';
-function bfPrecisaQualif(v){ return !!v && !!v.sdrUid && bfNaData(v.date) && !v.qualif; }
+function bfPrecisaQualif(v){ return !!v && !!v.sdrUid && bfNaData(v.date) && bfMarcadaNaBlack(v) && !v.qualif; }
 function bfVisQualif(v){ return !!v && v.bfVal === 'ok'; } // v451: só vale depois que o gestor ou a Stefanne validam
 window._bfQ = null; window._bfQForm = null;
 window.abrirBfQ = (id, origem) => {
@@ -14818,7 +14824,7 @@ window.bfQConfirmar = () => {
 // ---------- contas ----------
 const bfValSdr = n => n <= 5 ? 20 : n <= 7 ? 30 : n <= 9 ? 40 : 50;
 function bfSdr(uid){
-  const lista = visitas.filter(v => v.sdrUid === uid && !v.arquivado && v.status === 'Realizada' && bfNaData(v.date) && (!Number(v.realizadaEm) || Number(v.realizadaEm) <= BF_LIM))
+  const lista = visitas.filter(v => v.sdrUid === uid && !v.arquivado && v.status === 'Realizada' && bfNaData(v.date) && bfMarcadaNaBlack(v) && (!Number(v.realizadaEm) || Number(v.realizadaEm) <= BF_LIM))
     .sort((a, b) => (Number(a.realizadaEm) || Date.parse(a.date + 'T' + (a.time || '12:00'))) - (Number(b.realizadaEm) || Date.parse(b.date + 'T' + (b.time || '12:00'))));
   const ok = [], nq = [], sr = [], vistos = new Set();
   lista.forEach(v => { const k = (v.telNorm || '') || norm(v.cliente || '') || v.id;
@@ -14865,20 +14871,22 @@ function bfCor(uid){
 }
 function bfRankCor(){
   const cont = {}; bfVendasPeriodo().forEach(v => (v.corretores || []).forEach(c => { cont[c.uid] = (cont[c.uid] || 0) + 1; }));
-  return rkPessoas.filter(p => p.papel === 'corretor' && p.status === 'ativo').map(p => ({ uid:p.uid, nome:primeiro(nomeBonito(p.nome || '')), eq:p.equipe || '', n:cont[p.uid] || 0 })).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
+  return rkPessoas.filter(p => (p.papel === 'corretor' || p.papel === 'anjo' || p.papel === 'coordenador') && p.status === 'ativo').map(p => ({ uid:p.uid, nome:primeiro(nomeBonito(p.nome || '')), eq:p.equipe || '', n:cont[p.uid] || 0 })).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
 }
-function bfHtmlCor(){
+function bfHtmlCor(mini){
   const s = bfCor(uidAtual), n = s.n, rk = bfRankCor(), eu = rk.findIndex(x => x.uid === uidAtual), top = rk.filter(x => x.n > 0).slice(0, 10), mx = Math.max(3, ...top.map(x => x.n));
   const at = n >= 2 ? 2 : n === 1 ? 1 : 0, prox = n >= 2 ? '' : n === 1 ? 'Mais 1 venda e todas as suas vendas da Black vão para 60%' : 'Feche 1 venda e ela vale 55%';
   const T = [[BF_COR.base, 'comissão normal'], [BF_COR.um, '1ª venda'], [BF_COR.dois, '2 vendas · em todas']];
-  return `<div class="bf">${bfCab('COMISSÃO TURBINADA', `<div class="miss">Venda de lead da imobiliária vale <b>${BF_COR.base}%</b>. Na Black, fechou 1 venda: <b>${BF_COR.um}%</b>. Fechou 2: <b>${BF_COR.dois}%</b> em todas, inclusive na primeira.</div>`)}
+  const card = `<div class="bf">${bfCab('COMISSÃO TURBINADA', `<div class="miss">Venda de lead da imobiliária vale <b>${BF_COR.base}%</b>. Na Black, fechou 1 venda: <b>${BF_COR.um}%</b>. Fechou 2: <b>${BF_COR.dois}%</b> em todas, inclusive na primeira.</div>`)}
     <div class="saldo"><div><div class="l"><span>Sua comissão na Black</span><span class="cad ${n ? 'lib' : ''}">${n >= 2 ? '✓ máxima' : n ? '✓ subiu' : '🔒 feche 1 venda'}</span></div><div class="v">${s.pct}<small style="margin-left:2px;font-family:var(--tit);font-size:30px;color:#fff">%</small></div></div>
     <div class="q"><b>${n}</b><span>venda${n === 1 ? '' : 's'} no<br>período</span></div></div>
     <div class="meta"><div class="t"><span>${prox || 'Você está no máximo: 60% em todas as vendas da Black'}</span><em></em></div><div class="trilha"><i class="${n >= 1 ? 'on' : ''}"></i><i class="${n >= 2 ? 'on' : ''}"></i></div></div>
     <div class="esc3">${T.map((x, i) => `<div class="tag ${i < at ? 'ok' : ''} ${i === at ? 'at' : ''}"><div class="v">${x[0]}<small>%</small></div><div class="r">${x[1]}</div></div>`).join('')}</div>
     <div class="ult">${s.vs.length ? [...s.vs].reverse().slice(0, 5).map(v => `<div class="it"><span>Venda de ${bfDia(v.dia)}<small>${v.ind ? 'indicação · comissão própria' : (v.corretores || []).length > 1 ? 'em parceria' : 'lead da imobiliária'}</small></span><b class="${v.ind ? 'z' : 'd'}">${v.ind ? '—' : s.pct + '%'}</b></div>`).join('') : '<div class="it"><span style="color:#999">Suas vendas do período aparecem aqui, com a comissão de cada uma.</span></div>'}</div>
     <p class="bf-regra">Conta reserva registrada de 25 a 30/11 (mesmo sem assinatura); venda em parceria conta para os dois. Se a reserva cair, sai da conta. O percentual vale para venda de lead da imobiliária.</p>
-  </div></div>
+  </div></div>`;
+  if (mini) return card;
+  return card + `
   <div class="bf-plc"><h2>Ranking da Black <span>vendas · 25 a 30/11${eu >= 0 && rk[eu].n ? ' · você está em ' + (eu + 1) + 'º' : ''}</span></h2>${top.length ? top.map((x, i) => `<div class="lin ${x.uid === uidAtual ? 'eu' : ''}"><span class="p">${i + 1}º</span><span>${x.uid === uidAtual ? 'Você' : bfEsc(x.nome)}<small class="pc">${x.n >= 2 ? BF_COR.dois : BF_COR.um}%</small></span><span class="br"><i style="width:${x.n / mx * 100}%"></i></span><span class="n">${x.n}</span></div>`).join('') : '<p class="bf-vz">Ninguém vendeu ainda na Black. Seja o primeiro!</p>'}</div>`;
 }
 
@@ -14915,7 +14923,7 @@ function bfHtmlSdr(){
     <div class="meta"><div class="t">${meta}</div><div class="trilha">${tri}</div></div>
     <div class="esc">${T.map((x, i) => `<div class="tag ${i < at ? 'ok' : ''} ${i === at ? 'at' : ''}"><div class="v">${x[0]}<small>FRD</small></div><div class="r">${x[1]}</div></div>`).join('')}</div>
     <div class="ult">${ult.length ? ult.map(u => `<div class="it"><span>${bfEsc(u.v.cliente || 'Cliente')}<small>com ${bfEsc(primeiro(nomeBonito(u.v.corretorNome || '')))}</small></span><b class="${u.c}">${u.x}</b></div>`).join('') : `<div class="it"><span style="color:#999">Cada visita realizada aparece aqui. Só vale cliente com perfil de compra.</span></div>`}</div>
-    <p class="bf-regra">Conta só visita realizada de 25 a 30/11, com baixa do corretor, cliente com perfil de compra e validada pela gerência. Libera na Carteira Frade a partir da 5ª visita realizada; com menos de 5, não libera.</p>
+    <p class="bf-regra">Conta só visita marcada e realizada de 25 a 30/11, com baixa do corretor, cliente com perfil de compra e validada pela gerência. Libera na Carteira Frade a partir da 5ª visita realizada; com menos de 5, não libera.</p>
   </div></div>
   <div class="bf-plc"><h2>Placar das SDRs <span>visitas realizadas · 25 a 30/11</span></h2>${frente ? `<p class="bf-frente">Falta${frente.n - pl[eu].n + 1 === 1 ? '' : 'm'} ${frente.n - pl[eu].n + 1} para passar a ${bfEsc(frente.nome)}</p>` : ''}
     ${pl.map((x, i) => `<div class="lin ${x.uid === uidAtual ? 'eu' : ''}"><span class="p">${i + 1}º</span><span>${x.uid === uidAtual ? 'Você' : bfEsc(x.nome)}</span><span class="br"><i style="width:${x.n / mx * 100}%"></i></span><span class="n">${x.n}</span></div>`).join('')}</div>`;
@@ -14952,8 +14960,8 @@ const bfDia = d => d ? d.slice(8) + '/' + d.slice(5, 7) : '';
 const bfNomeC = uid => primeiro(nomeBonito((bfPessoa(uid) || {}).nome || ''));
 function bfHtmlSdrExtra(){
   const s = bfSdr(uidAtual), h = hojeISO();
-  const agoraHM = new Date().toTimeString().slice(0, 5), ag = visitas.filter(v => v.sdrUid === uidAtual && !v.arquivado && bfNaData(v.date) && (v.date > h || (v.date === h && (v.time || '23:59') >= agoraHM)) && ['Pendente','Confirmada','Reagendada'].includes(v.status)).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
-  const esp = visitas.filter(v => v.sdrUid === uidAtual && !v.arquivado && bfNaData(v.date) && (v.date < h || (v.date === h && (v.time || '23:59') < new Date().toTimeString().slice(0, 5))) && ['Pendente','Confirmada'].includes(v.status));
+  const agoraHM = new Date().toTimeString().slice(0, 5), ag = visitas.filter(v => v.sdrUid === uidAtual && !v.arquivado && bfNaData(v.date) && bfMarcadaNaBlack(v) && (v.date > h || (v.date === h && (v.time || '23:59') >= agoraHM)) && ['Pendente','Confirmada','Reagendada'].includes(v.status)).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  const esp = visitas.filter(v => v.sdrUid === uidAtual && !v.arquivado && bfNaData(v.date) && bfMarcadaNaBlack(v) && (v.date < h || (v.date === h && (v.time || '23:59') < new Date().toTimeString().slice(0, 5))) && ['Pendente','Confirmada'].includes(v.status));
   let n = s.n; const pot = ag.reduce((a, v) => { n++; return a + bfValSdr(n); }, 0);
   const tel = uid => { const p = perfisTodos.find(x => x.uid === uid); return soDig(p?.telefone || '').replace(/^(?!55)(\d{10,11})$/, '55$1'); };
   const lembra = v => { const t = tel(v.corretorUid); if (!t) return ''; const m = `Oi, ${primeiro(nomeBonito(v.corretorNome || ''))}! A visita do cliente ${v.cliente || ''} (${bfDia(v.date)} às ${v.time || ''}) aconteceu? Dá a baixa no app, por favor 🙏`; return `<a class="bf-lem" href="https://wa.me/${t}?text=${encodeURIComponent(m)}" target="_blank" rel="noopener">Lembrar corretor</a>`; };
@@ -15003,7 +15011,7 @@ function htmlBlackFriday(){
   if (!bfPodeVer()) return '';
   const p = bfPapel();
   const pre = !bfComecou() ? `<div class="bf-pre">A arrancada começa amanhã, 25/11, à 0h. Os valores abaixo começam a contar a partir daí.</div>` : bfAcabou() ? `<div class="bf-pre">A arrancada terminou em 30/11. ${p === 'sdr' ? 'Baixas dadas até 01/12 às 12h ainda contam.' : 'Resultado final.'}</div>` : '';
-  const corpo = p === 'cor' ? bfHtmlCor() : p === 'sdr' ? bfHtmlSdr() + bfHtmlSdrExtra() : p === 'anjo' ? bfHtmlAnjo() + bfHtmlAnjoExtra() : p === 'coord' ? bfHtmlCoord() + bfHtmlCoordExtra() : bfHtmlGestao();
+  const corpo = p === 'cor' ? bfHtmlCor() : p === 'sdr' ? bfHtmlSdr() + bfHtmlSdrExtra() : p === 'anjo' ? bfHtmlAnjo() + bfHtmlCor(true) + bfHtmlAnjoExtra() : p === 'coord' ? bfHtmlCoord() + bfHtmlCor(true) + bfHtmlCoordExtra() : bfHtmlGestao();
   // v451: quem ainda não marcou a presença (ou o check-in da tarde) faz por aqui mesmo, sem sair da Black Friday
   let ci = ''; try { if (p && (!meuCheckin || precisaTarde(meuCheckin))) ci = htmlCheckinHoje(); } catch(e) {}
   return `<div class="bfx">${ci ? `<div class="bf-ci">${ci}</div>` : ''}${pre}${corpo}</div>`;
@@ -15012,6 +15020,12 @@ function htmlBlackFriday(){
 function bfCelebrar(){
   const p = bfPapel(); if (!p || !bfComecou() || view !== 'blackfriday') return;
   let n = 0, lib = false, extra = '';
+  if (p === 'anjo' || p === 'coord') { // anjo e coordenador também são corretores: 2 vendas próprias = 60%
+    const c = bfCor(uidAtual).n, k2 = 'bfVistoCor_' + uidAtual; let a2 = null;
+    try { a2 = JSON.parse(localStorage.getItem(k2) || 'null'); } catch(e) {}
+    try { localStorage.setItem(k2, JSON.stringify({ n:c })); } catch(e) {}
+    if (a2 && c > a2.n && (c === 1 || c === 2)) setTimeout(() => bfCeleShow(c === 1 ? `<div class="s">SUA 1ª VENDA DA BLACK</div><div class="h">COMISSÃO<span>55%!</span></div><div class="p">Mais 1 venda sua e todas vão para <b>60%</b>.</div>` : `<div class="s">SUA 2ª VENDA DA BLACK</div><div class="h">COMISSÃO<span>60%!</span></div><div class="p">Agora <b>todas</b> as suas vendas da Black valem 60%.</div>`), 4200);
+  }
   if (p === 'sdr') { const s = bfSdr(uidAtual); n = s.n; lib = n >= 5; extra = s.n ? '+' + s.vals[s.n - 1] : ''; }
   else if (p === 'anjo') { const s = bfAnjo(uidAtual); n = s.vendas.length * 10 + (s.propria ? 1 : 0); lib = s.propria; extra = s.vendas.length ? '+' + s.vals[s.vendas.length - 1] : ''; }
   else if (p === 'cor') { const s = bfCor(uidAtual); n = s.n; lib = s.n >= 1; }
@@ -15027,6 +15041,9 @@ function bfCelebrar(){
   else if (p === 'coord' && [7, 10, 12, 15].includes(n)) h = `<div class="s">${n} RESERVAS DA EQUIPE</div><div class="h">${n >= 12 ? 'TOMANDO' : 'MAIS'}<span>${n >= 12 ? 'PRÊMIO!' : 'PRÊMIO!'}</span></div><div class="p">${n === 7 ? '+FRD 200 na sua Carteira Frade.' : n === 10 ? '+FRD 300. Prêmio completo!' : 'Prêmio da outra equipe em disputa até 30/11.'}</div>`;
   else if (extra && p !== 'cor') h = `<div class="h"><span>${extra}</span></div><div class="p">${lib ? 'Já na sua Carteira Frade.' : '🔒 a liberar'}</div>`;
   if (!h) return;
+  bfCeleShow(h);
+}
+function bfCeleShow(h){
   const el = document.createElement('div'); el.className = 'bf-cele'; el.innerHTML = `<div class="bf-cele-in">${h}</div>`; el.onclick = () => el.remove();
   for (let i = 0; i < 30; i++) { const c = document.createElement('i'); c.className = 'bf-conf'; c.style.left = (i * 37 % 100) + '%'; c.style.animationDelay = (i % 7) * 0.08 + 's'; c.style.background = ['#FFE600','#FF6A00','#19C37D','#fff'][i % 4]; el.appendChild(c); }
   document.body.appendChild(el); try { navigator.vibrate && navigator.vibrate([60, 40, 120]); } catch(e) {}
@@ -15036,15 +15053,15 @@ function bfCelebrar(){
 window.bfValidar = async (id, val) => {
   if (!bfGestao()) return; const v = visitas.find(x => x.id === id); if (!v) return;
   const novo = v.bfVal === val ? '' : val, dados = { ...v, bfVal:novo, bfValPor:novo ? perfil.nome : '', bfValEm:novo ? Date.now() : 0 }; delete dados.id;
-  try { const b = writeBatch(db); b.set(doc(db,'visitas',id), { bfVal:dados.bfVal, bfValPor:dados.bfValPor, bfValEm:dados.bfValEm }, { merge:true }); b.set(doc(db,'ranking',id), { bfq:bfVisQualif(dados) }, { merge:true }); await gravar(b.commit()); toast(novo ? (novo === 'ok' ? 'Visita validada' : 'Visita não vale') : 'Validação desfeita'); try { novo === 'ok' ? Som.caixa() : novo === 'nao' ? Som.trava() : 0; } catch(e) {} }
+  try { const b = writeBatch(db); b.set(doc(db,'visitas',id), { bfVal:dados.bfVal, bfValPor:dados.bfValPor, bfValEm:dados.bfValEm }, { merge:true }); b.set(doc(db,'ranking',id), { bfq:bfVisQualif(dados) && bfMarcadaNaBlack(dados) }, { merge:true }); await gravar(b.commit()); toast(novo ? (novo === 'ok' ? 'Visita validada' : 'Visita não vale') : 'Validação desfeita'); try { novo === 'ok' ? Som.caixa() : novo === 'nao' ? Som.trava() : 0; } catch(e) {} }
   catch(e) { toast('Erro: ' + e.message); }
 };
 
 // v451: boas-vindas da Black Friday (uma vez por pessoa, a partir de 25/11): o que mudou no app para o perfil dela + lembrete do check-in + recado motivacional
 const BF_BOAS = {
   sdr:{ f:'Hoje é dia de lotar a agenda.', it:['Cada visita realizada e validada vale de <b>FRD 20 a 50</b>.','Libera na Carteira Frade a partir da <b>5ª visita</b>.','Acompanhe tudo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
-  anjo:{ f:'Seus corretores vendendo, você ganha junto.', it:['Cada venda deles vale <b>FRD 200</b>; da 3ª em diante, <b>FRD 300</b>.','Libera quando você fizer <b>1 reserva sua</b>.','Acompanhe tudo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
-  coord:{ f:'Tenda × Tropa de Elite. Começou o duelo.', it:['5 reservas da equipe liberam <b>FRD 500</b>; 7 e 10 rendem mais.','Passou de 10? Você pode tomar os prêmios da outra equipe.','Placar ao vivo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
+  anjo:{ f:'Seus corretores vendendo, você ganha junto.', it:['Cada venda deles vale <b>FRD 200</b>; da 3ª em diante, <b>FRD 300</b>.','Libera quando você fizer <b>1 reserva sua</b>.','E como corretor: 2 vendas suas = <b>60%</b> em todas.','Acompanhe tudo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
+  coord:{ f:'Tenda × Tropa de Elite. Começou o duelo.', it:['5 reservas da equipe liberam <b>FRD 500</b>; 7 e 10 rendem mais.','Passou de 10? Você pode tomar os prêmios da outra equipe.','E como corretor: 2 vendas suas = <b>60%</b> em todas.','Placar ao vivo na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
   cor:{ f:'Sua comissão nunca esteve tão alta.', it:['Fechou 1 venda: ela vai para <b>55%</b>.','Fechou 2: <b>60%</b> em todas as vendas da Black.','Acompanhe na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
   ger:{ f:'Semana de arrancada para o time inteiro.', it:['Acompanhe SDRs, anjos, coordenadores e corretores na aba <b>Black Friday</b>.','Visitas das SDRs só valem depois que você ou a Stefanne validam.','Os prêmios caem sozinhos na Carteira Frade.'] } };
 function bfBoasVindas(){
