@@ -3893,6 +3893,34 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
 })();
 </script>
 
+<script>
+/* v466: vigia de tela preta. Se o app não abrir em 30 s (erro no celular, versão velha presa no cache), mostra o motivo e um botão que limpa o cache e abre de novo */
+(function(){
+  var errs = [];
+  var falhou = [];
+  window.addEventListener('error', function(e){ if (e.message) errs.push(e.message + (e.lineno ? ' (linha ' + e.lineno + ')' : '')); else { var t = e.target || {}, u = String(t.src || t.href || ''); if (u) falhou.push(u.split('/').pop().split('?')[0].slice(0, 40)); } }, true);
+  window.addEventListener('unhandledrejection', function(e){ try { errs.push('promessa: ' + ((e.reason && (e.reason.message || e.reason.code)) || e.reason)); } catch(x) {} });
+  window.__limparEAbrir = function(){
+    var fim = function(){ try { sessionStorage.removeItem('frAbriu'); } catch(x) {} location.replace(location.pathname + '?v=' + Date.now()); };
+    var p = [];
+    try { if (navigator.serviceWorker) p.push(navigator.serviceWorker.getRegistrations().then(function(rs){ return Promise.all(rs.map(function(r){ return r.unregister(); })); })); } catch(x) {}
+    try { if (window.caches) p.push(caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){ return caches.delete(k); })); })); } catch(x) {}
+    Promise.all(p).then(fim, fim); setTimeout(fim, 3000);
+  };
+  setTimeout(function(){
+    if (window.__appOk) return;
+    var lg = document.getElementById('login'); if (window.__modOk && lg && !lg.classList.contains('hide')) return; // está na tela de login: abriu
+    var d = document.createElement('div'); d.id = 'vigiaApp';
+    d.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;font:15px/1.45 system-ui,-apple-system,sans-serif';
+    var ua = navigator.userAgent, ios = (ua.match(/OS (\d+)_(\d+)/) || [])[0] || '', and = (ua.match(/Android [\d.]+/) || [])[0] || '';
+    d.innerHTML = '<div style="font-weight:800;font-size:20px;margin-bottom:8px">O app não abriu</div>'
+      + '<div style="color:#bbb;max-width:340px">Toque no botão para limpar a memória do app e abrir de novo. Se continuar, mande um print desta tela para a gerência.</div>'
+      + '<button onclick="__limparEAbrir()" style="margin-top:18px;background:#FFE600;color:#000;border:0;border-radius:12px;padding:13px 22px;font-weight:800;font-size:15px">Limpar e abrir de novo</button>'
+      + '<div style="margin-top:18px;color:#777;font-size:11.5px;max-width:360px;word-break:break-word">' + (window.__modOk ? 'carregou' : 'não carregou o código') + ' · ' + (ios || and || 'outro aparelho') + (errs.length ? ' · ' + errs.slice(0, 3).join(' | ').replace(/</g, '&lt;').slice(0, 300) : '') + (falhou.length ? ' · sem rede para: ' + falhou.slice(0, 3).join(', ').replace(/</g, '&lt;') : '') + '</div>';
+    document.body.appendChild(d);
+  }, 30000);
+})();
+</script>
 <div class="loading" id="loading"><div class="spinner"></div></div>
 
 <!-- ================= LOGIN ================= -->
@@ -5938,6 +5966,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
 <div class="toasts" id="toasts"></div>
 
 <script type="module">
+window.__modOk = true;
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -6388,6 +6417,7 @@ function streak(){
   return n;
 }
 function render(){
+  window.__appOk = true; // v466: o app abriu (o vigia de tela preta desiste)
   if (!state) return;
   aplicarTema(); iaBolhaVis(); try { mbBolsaoVis(); } catch(e) {}
   pintarIcones();
@@ -8673,7 +8703,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 465;
+const APP_VERSAO = 466;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
