@@ -744,6 +744,31 @@ html.modo-tvr .tve.on{opacity:1;background:radial-gradient(circle at 50% 45%,col
 .manut-box{max-width:420px;text-align:center;color:#fff}.manut-box h2{font-size:26px;margin:14px 0 8px}.manut-box p{color:#cfe0ec;font-size:16px;line-height:1.45;margin:0 0 6px}.manut-box small{display:block;color:#8fb0c8;margin-bottom:18px}
 .manut-ic{width:64px;height:64px;margin:0 auto;border-radius:50%;border:5px solid rgba(255,255,255,.18);border-top-color:#f28c38;animation:manutGira 1.4s linear infinite}@keyframes manutGira{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.manut-ic{animation:none}}
+/* v460: manutenção em clima de Black Friday, com contagem */
+.manut-bf{display:none}
+html.bf-semana .manut-tela{background:#000;overflow:hidden}
+html.bf-semana .manut-tela::before,html.bf-semana .manut-tela::after{content:'';position:absolute;left:0;right:0;height:18px;background:repeating-linear-gradient(-45deg,#FFE600 0 14px,#000 14px 28px)}
+html.bf-semana .manut-tela::before{top:0}html.bf-semana .manut-tela::after{bottom:0}
+html.bf-semana .manut-box{max-width:460px;position:relative}
+html.bf-semana .manut-ic{border-color:rgba(255,230,0,.18);border-top-color:#FFE600;width:54px;height:54px;border-width:4px}
+html.bf-semana .manut-box h2{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;letter-spacing:.14em;color:#FFE600;margin:16px 0 2px}
+html.bf-semana .manut-box p{color:#bdbdbd;font-size:15px}
+html.bf-semana .manut-box small#manutDesde{display:none}
+html.bf-semana .manut-bf{display:block;margin:20px 0 16px}
+html.bf-semana #manutBFt{margin:0 0 6px}
+html.bf-semana .manut-ic{display:none}
+html.bf-semana .manut-box h2{margin:18px 0 8px!important}
+.manut-bf .mb-t{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:64px;line-height:.86;letter-spacing:-.02em;color:#fff;text-transform:uppercase}
+.manut-bf .mb-t span{display:block;color:#FFE600}
+.manut-bf .mb-l{margin:0 0 8px;font-size:13px;color:#aaa;font-weight:600}
+.manut-bf .mb-c{display:flex;justify-content:center;gap:8px}
+.manut-bf .mb-c div{min-width:66px;background:#141414;border:1.5px solid #2a2a2a;border-radius:14px;padding:8px 4px 6px}
+.manut-bf .mb-c b{display:block;font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;color:#FFE600;line-height:1;font-variant-numeric:tabular-nums}
+.manut-bf .mb-c small{display:block!important;margin:3px 0 0!important;font-size:10.5px;color:#888!important}
+.manut-bf .mb-ok{font-size:15px;color:#FFE600;font-weight:700;margin-top:6px}
+html.bf-semana .manut-box .btn{background:#FFE600!important;color:#000!important;border:0!important;font-weight:800}
+@media (max-width:380px){.manut-bf .mb-t{font-size:52px}.manut-bf .mb-c div{min-width:58px}.manut-bf .mb-c b{font-size:30px}}
+
 .manut-faixa{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:9999;background:#b45309;color:#fff;padding:9px 12px 9px 16px;border-radius:12px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;max-width:calc(100% - 32px)}
 .manut-faixa button{background:#fff;color:#b45309;border:0;border-radius:8px;padding:6px 10px;font-weight:700;white-space:nowrap}
 .tve-frd{position:relative;margin-top:1.4vw;font:700 2.6vw/1.1 'Saira Condensed',sans-serif;color:#fde68a}.tve-frd b{font-size:4.6vw;color:#f5c542;margin-left:.4vw;text-shadow:0 0 2vw rgba(245,197,66,.55)}.tve-frd.ganhou b{color:#4ade80;text-shadow:0 0 2vw rgba(74,222,128,.55)}.tve-frd small{display:block;font-size:1.5vw;color:#e8d9a6;margin-top:.3vw}
@@ -5585,7 +5610,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
     <div class="sheet-foot"><button class="btn btn-ghost" onclick="fechar('pixModal')">Cancelar</button><button class="btn btn-primary" onclick="salvarPix()">Salvar PIX</button></div>
   </div>
 </div>
-<div id="manutTela" class="manut-tela hide"><div class="manut-box"><div class="manut-ic"></div><h2>App em manutenção</h2><p id="manutTxt">Estamos ajustando o app. Volte em alguns minutos.</p><small id="manutDesde"></small><button class="btn btn-ghost" onclick="location.reload()">Tentar de novo</button></div></div>
+<div id="manutTela" class="manut-tela hide"><div class="manut-box"><div class="manut-ic"></div><div id="manutBFt" class="manut-bf"></div><h2>App em manutenção</h2><p id="manutTxt">Estamos ajustando o app. Volte em alguns minutos.</p><div id="manutBF" class="manut-bf"></div><small id="manutDesde"></small><button class="btn btn-ghost" onclick="location.reload()">Tentar de novo</button></div></div>
 <div id="manutFaixa" class="manut-faixa hide"><span>🔧 Manutenção · só você usando</span><button onclick="alternarManutencao()">Sair</button><button class="mf-x" aria-label="Esconder" onclick="this.parentElement.classList.add('esc')">×</button></div>
 <div class="modal" id="fbModal">
   <div class="sheet" style="width:min(480px,100%)">
@@ -6994,6 +7019,20 @@ function aplicarManutencao(){
   t.classList.toggle('hide', !on || dono); f.classList.toggle('hide', !on || !dono);
   document.getElementById('manutTxt').textContent = m.msg || 'Estamos ajustando o app. Volte em alguns minutos.';
   document.getElementById('manutDesde').textContent = on && m.em ? 'Desde ' + new Date(m.em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : '';
+  { const bx = document.getElementById('manutBF'), bfOn = document.documentElement.classList.contains('bf-semana');
+    clearInterval(window._manutBfT);
+    if (bx && on && !dono && bfOn) {
+      const ini = Date.parse('2026-11-25T00:00:00-03:00'), p2 = x => String(x).padStart(2,'0');
+      const pinta = () => { const s = Math.max(0, Math.floor((ini - Date.now()) / 1000));
+        const tt = document.getElementById('manutBFt'); if (tt && !tt.innerHTML) tt.innerHTML = '<div class="mb-t">Black<span>Friday</span></div>';
+        if (!s) { bx.innerHTML = '<div class="mb-ok">A Black Friday já começou. A aba libera daqui a pouco.</div>'; return; }
+        const d = Math.floor(s/86400), h = Math.floor(s%86400/3600), m = Math.floor(s%3600/60), se = s%60;
+        bx.innerHTML = '<div class="mb-l">A arrancada começa em</div><div class="mb-c">' + (d ? `<div><b>${d}</b><small>dias</small></div>` : '') + [[p2(h),'horas'],[p2(m),'min'],[p2(se),'seg']].map(([a,b]) => `<div><b>${a}</b><small>${b}</small></div>`).join('') + '</div>'; };
+      pinta(); window._manutBfT = setInterval(pinta, 1000);
+      const h2 = t.querySelector('h2'); if (h2) h2.textContent = 'App em manutenção';
+      document.getElementById('manutTxt').style.display = 'none';
+    } else if (bx) { bx.innerHTML = ''; document.getElementById('manutTxt').style.display = ''; const tt = document.getElementById('manutBFt'); if (tt) tt.innerHTML = ''; const h2 = t.querySelector('h2'); if (h2) h2.textContent = 'App em manutenção'; }
+  }
   const bt = document.getElementById('manutBt'); if (bt) { bt.textContent = on ? 'Sair da manutenção' : 'Entrar em manutenção'; bt.className = 'btn ' + (on ? 'btn-ghost' : 'btn-primary'); }
   const inp = document.getElementById('manutMsg'); if (inp && document.activeElement !== inp) inp.value = m.msg || '';
   const rf = document.getElementById('fbFone'); if (rf && document.activeElement !== rf) rf.value = appCfg.reporteFone || '';
@@ -8632,7 +8671,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 458;
+const APP_VERSAO = 461;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -21598,6 +21637,9 @@ html.bf-semana[data-theme="dark"] body{background:radial-gradient(800px 500px at
 html.bf-semana[data-theme="dark"] body:has(#app:not(.hide)) .sidebar{background:#000!important;border-right:1px solid #1c1c1c!important}
 html.bf-semana[data-theme="dark"] .topbar{background:rgba(5,5,5,.94)!important}
 html.bf-semana[data-theme="dark"] .card,html.bf-semana[data-theme="dark"] .stat,html.bf-semana[data-theme="dark"] .pd-kpi{-webkit-backdrop-filter:none;backdrop-filter:none}
+/* aviso (toast) legível no tema escuro: o texto ficava escuro no fundo escuro */
+html[data-theme="dark"] .toast{color:#fff!important}
+html.bf-semana .toast{background:#111!important;color:#fff!important;border:1px solid #2c2c2c;box-shadow:0 12px 30px rgba(0,0,0,.6)!important}
 </style>
 </body>
 </html>
