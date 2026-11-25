@@ -2702,6 +2702,15 @@ html.bf-semana #frAbre .fa-pn-tx b span,html.bf-semana .login-pn .lp-tx b span{c
 .bfx .mc.rb .v{color:#FF6A00}
 .bfx .mc.rb.dp{border:1.5px solid #FF6A00;background:#2a1200}
 /* v451: acabamento */
+#mbBF.bf-trava .mb-bf-c::after{content:'';position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(-45deg,#FFE600 0 5px,#000 5px 10px)}
+#mbBF.bf-trava .mb-bf-c b{opacity:.85}
+#mbBF.bf-trava .mb-bf-c::before{content:'🔒'!important;position:absolute!important;top:auto!important;bottom:2px!important;left:50%!important;right:auto!important;width:20px!important;height:20px!important;margin-left:-10px;border-radius:50%;background:#FFE600!important;box-shadow:0 0 0 2px #000;display:grid;place-items:center;font-size:11px;line-height:1;z-index:2}
+#mbBF.bf-trava .mb-bf-c b{margin-top:-16px!important}
+.bf-hoje-trava{cursor:default}
+.bf-lib{border:0;background:#FFE600;color:#000;font-weight:900;border-radius:10px;padding:9px 12px;font-size:13px;cursor:pointer;white-space:nowrap;position:relative;z-index:1}
+.bf-hoje.bf-hoje-trava{grid-template-columns:1fr auto auto}
+.bfx .bfg-lib{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:14px;padding:10px 12px;font-size:13px}
+.bfx .bfg-lib.ok{border-color:#1E8E5A}
 /* cápsula: tudo posicionado em coordenadas fixas dentro da caixa (fica no prumo em qualquer celular) */
 .mobilebar.bf-duo .mb-duo{flex:0 0 156px!important;width:156px;position:relative;display:block!important;align-self:stretch}
 .mobilebar.bf-duo .mb-duo>button{position:absolute!important;top:-30px;bottom:0;width:78px;margin:0!important;padding:62px 0 0!important;display:block!important;text-align:center;font-size:11px!important;font-weight:800!important;line-height:1.15;white-space:nowrap;z-index:1;transform:none!important}
@@ -6270,7 +6279,7 @@ window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'comissoes' && !['corretor','coordenador','anjo'].includes(perfil?.papel) && !abaLiberada('comissoes') && !(souGerente() && !souCeo())) v = souGerente() ? 'financeiro' : 'hoje';
   if (v === 'sorteio' && !podeGerir() && !abaLiberada('sorteio')) v = 'hoje';
   if (v === 'anjos' && !podeAbaAnjos()) v = 'hoje';
-  if (v === 'blackfriday' && !bfPodeVer()) v = 'hoje';
+  if (v === 'blackfriday' && !bfPodeVer()) { if (souAtivo() && bfPapel() && bfVisivel()) { toast('🔒 A Black Friday libera em breve. Fique de olho!'); try { Som.trava(); } catch(e) {} return; } v = 'hoje'; }
   if (v === 'recepcao' && !podeGerir() && !abaLiberada('recepcao')) v = 'hoje';
   if (v !== 'recepcao') pararRecepcao();
   if (v === 'financeiro' && window._finAbaHash) { window.finAba = window._finAbaHash; window._finAbaHash = ''; }
@@ -6495,7 +6504,7 @@ function render(){
   if (!window._hashGen && perfil && souAtivo() && location.hash && !['#whatsapp','#resumo','#saida'].includes(location.hash) && !location.hash.startsWith('#ci-')) { window._hashGen = true; const h = location.hash.slice(1); history.replaceState(null, '', location.pathname); if (h === 'comissoes' && souGerente()) window._finAbaHash = 'comissoes'; if (TITULOS[h]) setTimeout(() => setView(h), 0); }
   /* v316: ao atualizar a página, volta para a aba em que a pessoa estava */
   if (!window._viewRest && perfil && souAtivo() && !location.hash) { window._viewRest = true; const v0 = VIEW_SALVA;
-    if (!v0 && bfPapel() && bfComecou() && !bfAcabou()) setTimeout(() => setView('blackfriday'), 0); // v451: na semana da Black Friday a tela inicial é a aba Black Friday
+    if (!v0 && bfPapel() && bfLiberada() && bfComecou() && !bfAcabou()) setTimeout(() => setView('blackfriday'), 0); // v451: na semana da Black Friday a tela inicial é a aba Black Friday
     if (v0 && v0 !== view && !souTreino() && (TITULOS[v0] || document.querySelector(`[data-view="${v0}"]`))) setTimeout(() => setView(v0), 0); }
   // veio pela notificação do resumo: abre direto a aba
   if (!window._hashFeito && souSdr() && location.hash === '#resumo') { window._hashFeito = true; history.replaceState(null, '', location.pathname); setTimeout(() => setView('resumo'), 0); }
@@ -8623,7 +8632,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 452;
+const APP_VERSAO = 458;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -11172,6 +11181,20 @@ const Som = (() => {
     bolsao(){ [0, .32].forEach(t => nota(520, t, .3, { tipo:'sawtooth', vol:.4, ate:1180 }));
       [.72, .86, 1.0].forEach(t => nota(1760, t, .09, { vol:.38 })); nota(2349, 1.14, .32, { vol:.4 });
       try { navigator.vibrate && navigator.vibrate([400, 120, 400, 120, 700]); } catch(e) {} },
+    // v456: sons da Black Friday
+    caixa(){ nota(1568, 0, .06, { vol:.22 }); nota(2093, .06, .06, { vol:.22 }); nota(2637, .12, .55, { tipo:'triangle', vol:.2 }); nota(3136, .14, .45, { tipo:'sine', vol:.08 }); try { navigator.vibrate && navigator.vibrate(40); } catch(e) {} },
+    trava(){ nota(196, 0, .12, { tipo:'sawtooth', vol:.16 }); nota(147, .15, .2, { tipo:'sawtooth', vol:.16 }); try { navigator.vibrate && navigator.vibrate([30, 40, 30]); } catch(e) {} },
+    black(){ tchum(0, .45); [392, 523, 659, 784].forEach((f, i) => nota(f, .3 + i * .09, .11, { vol:.16 })); nota(1047, .68, .9, { tipo:'square', vol:.13, ataque:.02 }); nota(523, .68, .9, { tipo:'triangle', vol:.15 }); [2093, 2637, 3136].forEach((f, i) => nota(f, .9 + i * .07, .14, { tipo:'sine', vol:.06 })); },
+    // v458: som da meta batida (original, ~3 s, suave para não cansar): sopro subindo + grave + arpejo de sino + acorde aberto; muda de tom a cada vez
+    campeao(){ const a = c(); if (!a) return; const K = [1, 1.122, 1.335][Math.floor(Math.random() * 3)];
+      const sino = (f, t0, dur, vol) => { const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + t0; o.type = 'triangle'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .006); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + .02); };
+      { const n = Math.floor(a.sampleRate * .45), b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(i / n, 2);
+        const src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain(); src.buffer = b; f.type = 'lowpass'; f.frequency.setValueAtTime(400, a.currentTime); f.frequency.exponentialRampToValueAtTime(5000, a.currentTime + .45); g.gain.value = .35; src.connect(f).connect(g).connect(a.destination); src.start(); }
+      nota(110, .45, .6, { tipo:'sine', vol:.5, ate:40 });
+      [523.25, 659.25, 783.99, 987.77, 1174.66, 1567.98].forEach((f, i) => { sino(f * K, .45 + i * .07, 1.4, .09); sino(f * K * 2, .45 + i * .07, .7, .025); });
+      [261.63, 329.63, 392, 493.88, 587.33].forEach(f => nota(f * K, .5, 2.7, { tipo:'sine', vol:.045, ataque:.35 })); nota(130.81 * K, .5, 2.6, { tipo:'sine', vol:.1, ataque:.2 });
+      [2093, 2637, 3136].forEach((f, i) => sino(f * K, 1.25 + i * .11, .5, .03));
+      try { navigator.vibrate && navigator.vibrate([60, 50, 160]); } catch(e) {} },
     pronto: () => !!ctx && ctx.state === 'running'
   };
 })();
@@ -14716,7 +14739,13 @@ const bfComecou = () => bfAgora() >= BF_T0, bfAcabou = () => bfAgora() >= BF_T1;
 const bfVisivel = () => bfAgora() < BF_SOME;
 const bfGestao = () => souAtivo() && souGerente() && !souCeo();
 const bfPapel = () => souSdr() ? 'sdr' : souAnjo() ? 'anjo' : souCoord() ? 'coord' : (souAtivo() && perfil?.papel === 'corretor') ? 'cor' : '';
-const bfPodeVer = () => souAtivo() && bfVisivel() && (!!bfPapel() || bfGestao());
+const bfLiberada = () => !!(typeof appCfg !== 'undefined' && appCfg?.blackFriday?.liberada); // v452: o gestor libera a aba para o time num botão
+const bfPodeVer = () => souAtivo() && bfVisivel() && (bfGestao() || (!!bfPapel() && bfLiberada()));
+window.bfLiberar = async on => {
+  if (!souDono()) { toast('Só o gestor libera a Black Friday'); return; }
+  if (on && !confirm('Liberar a aba Black Friday para todo o time agora? Cada um vai ver o aviso das novidades ao abrir o app.')) return;
+  try { await gravar(setDoc(doc(db,'config','app'), { blackFriday:{ liberada:!!on, em:Date.now(), por:perfil?.nome || '' } }, { merge:true })); toast(on ? 'Black Friday liberada para o time' : 'Aba Black Friday escondida do time'); try { if (on) Som.black(); } catch(e) {} }
+  catch(e) { toast('Erro: ' + e.message); } };
 const bfParticipa = () => souAtivo() && bfComecou() && bfAgora() < BF_SOME && ['sdr','anjo','coord'].includes(bfPapel());
 const bfPessoa = uid => uid === uidAtual ? perfil : (perfisTodos.find(x => x.uid === uid) || rkPessoas.find(x => x.uid === uid) || null);
 const bfN = n => (Number(n) || 0).toLocaleString('pt-BR');
@@ -14744,7 +14773,7 @@ window.bfQConfirmar = () => {
   if (obs.replace(/[^a-zA-ZÀ-ú]/g, '').length < 15) { toast('Escreva como foi o atendimento (pelo menos uma frase)'); $('bfQObs').focus(); return; }
   const ok = BFQ.every(x => (x.o.find(o => o[0] === r[x.k]) || [])[2] === 1);
   const qa = { c:r.c, i:r.i, p:r.p, obs:obs.slice(0, 600), ok, em:Date.now(), por:perfil?.nome || '', porUid:uidAtual };
-  fechar('bfQModal'); window._bfQ = null;
+  fechar('bfQModal'); window._bfQ = null; try { Som.moeda(); } catch(e) {}
   if (q.origem === 'status') mudarStatus(q.id, 'Realizada', '', qa); else { window._bfQForm = qa; salvarVisita(); }
 };
 // ---------- contas ----------
@@ -14922,7 +14951,8 @@ function bfHtmlGestao(){
   const visL = x => `<div class="bfg-v ${x.bfVal === 'ok' ? 'ok' : x.bfVal === 'nao' ? '' : 'pd'}"><div><b>${bfEsc(x.cliente || 'Cliente')}</b> · ${bfEsc(primeiro(nomeBonito(x.corretorNome || '')))} · ${bfEsc((x.date || '').slice(8) + '/' + (x.date || '').slice(5, 7))}
       <small>${x.qualif ? (x.qualif.ok ? '✅ ' : '⚠️ ') + bfEsc(QTXT(x)) + (x.qualif.obs ? '<br>“' + bfEsc(x.qualif.obs) + '” — ' + bfEsc(primeiro(nomeBonito(x.qualif.por || ''))) : '') : 'Sem as 3 respostas (baixa feita sem o questionário)'}${x.bfVal ? `<br><i>${x.bfVal === 'ok' ? 'Validada' : 'Derrubada'} por ${bfEsc(primeiro(nomeBonito(x.bfValPor || '')))}</i>` : ''}</small></div>
       <div class="bfg-bt"><button class="btn btn-sm ${x.bfVal === 'ok' ? 'btn-primary' : ''}" onclick="bfValidar('${x.id}','ok')">Vale</button><button class="btn btn-sm ${x.bfVal === 'nao' ? 'btn-primary' : ''}" onclick="bfValidar('${x.id}','nao')">Não vale</button></div></div>`;
-  return `<div class="bf bf-g">${bfCab('ACOMPANHAMENTO', `<div class="bfg-tot"><div><small>Liberado</small><b>FRD ${bfN(totS + totA + totC + totR)}</b></div><div><small>Pendente / em disputa</small><b>FRD ${bfN(pendS + pendA + dispC)}</b></div></div>${(() => { const nv = S.reduce((a, x) => a + x.s.sr.length, 0); return nv ? `<div class="bfg-val">⏳ <b>${nv}</b> visita${nv === 1 ? '' : 's'} das SDRs para você validar · abra a SDR abaixo e toque em <b>Vale</b> ou <b>Não vale</b></div>` : ''; })()}`)}</div></div>
+  const libH = bfLiberada() ? `<div class="bfg-lib ok"><span>✓ Liberada para o time${appCfg.blackFriday?.por ? ' por ' + bfEsc(primeiro(nomeBonito(appCfg.blackFriday.por))) : ''}</span>${souDono() ? '<button class="btn btn-sm btn-ghost" onclick="bfLiberar(false)">Esconder</button>' : ''}</div>` : `<div class="bfg-lib"><span>🔒 O time ainda não vê esta aba. Só a contagem aparece no Hoje.</span>${souDono() ? '<button class="btn btn-sm btn-primary" onclick="bfLiberar(true)">Liberar para o time</button>' : ''}</div>`;
+  return libH + `<div class="bf bf-g">${bfCab('ACOMPANHAMENTO', `<div class="bfg-tot"><div><small>Liberado</small><b>FRD ${bfN(totS + totA + totC + totR)}</b></div><div><small>Pendente / em disputa</small><b>FRD ${bfN(pendS + pendA + dispC)}</b></div></div>${(() => { const nv = S.reduce((a, x) => a + x.s.sr.length, 0); return nv ? `<div class="bfg-val">⏳ <b>${nv}</b> visita${nv === 1 ? '' : 's'} das SDRs para você validar · abra a SDR abaixo e toque em <b>Vale</b> ou <b>Não vale</b></div>` : ''; })()}`)}</div></div>
     <div class="bfg-card"><h2>Coordenadores <span>reservas da equipe</span></h2>${C.length ? C.map(x => `<div class="bfg-l"><span><b>${bfEsc(primeiro(nomeBonito(x.p.nome)))}</b> · ${bfEsc(eqNome(x.s.eq))}<small>${x.s.a} reservas × ${x.s.b} da ${bfEsc(eqNome(x.s.rival))}${x.s.disputa ? ' · +' + bfN(x.s.disputa) + ' em disputa' : ''}</small></span><b>FRD ${bfN(x.s.liberado)}</b></div>`).join('') : '<p class="hint">Nenhum coordenador ativo com equipe.</p>'}</div>
     <div class="bfg-card"><h2>Anjos <span>vendas dos corretores · reserva própria</span></h2>${A.map(x => `<div class="bfg-l"><span><b>${bfEsc(primeiro(nomeBonito(x.p.nome)))}</b><small>${x.s.vendas.length} venda${x.s.vendas.length === 1 ? '' : 's'} dos corretores · ${x.s.propria ? '✅ fez a reserva dele' : '🔒 ainda sem reserva própria'}</small></span><b>FRD ${bfN(x.s.liberado)}${x.s.pend ? `<small>+${bfN(x.s.pend)} bloqueado</small>` : ''}</b></div>`).join('') || '<p class="hint">Nenhum anjo ativo.</p>'}</div>
     <div class="bfg-card"><h2>Corretores <span>comissão turbinada · lead da imobiliária</span></h2>${(() => { const R = bfRankCor().filter(x => x.n > 0); return R.length ? R.map(x => `<div class="bfg-l"><span><b>${bfEsc(x.nome)}</b><small>${x.n} venda${x.n === 1 ? '' : 's'} · ${bfEsc(eqNome(x.eq))}</small></span><b>${x.n >= 2 ? BF_COR.dois : BF_COR.um}%</b></div>`).join('') : '<p class="hint">Nenhuma venda de corretor no período ainda.</p>'; })()}</div>
@@ -14961,12 +14991,13 @@ function bfCelebrar(){
   const el = document.createElement('div'); el.className = 'bf-cele'; el.innerHTML = `<div class="bf-cele-in">${h}</div>`; el.onclick = () => el.remove();
   for (let i = 0; i < 30; i++) { const c = document.createElement('i'); c.className = 'bf-conf'; c.style.left = (i * 37 % 100) + '%'; c.style.animationDelay = (i % 7) * 0.08 + 's'; c.style.background = ['#FFE600','#FF6A00','#19C37D','#fff'][i % 4]; el.appendChild(c); }
   document.body.appendChild(el); try { navigator.vibrate && navigator.vibrate([60, 40, 120]); } catch(e) {}
+  try { if (/LIBE<span>RADO|META<span>BATIDA|COMISSÃO<span>60|PRÊMIO<span>COMPLETO|10 RESERVAS/.test(h)) Som.campeao(); else if (/SUBIU|COMISS|MAIS|TOMANDO/.test(h)) Som.festa(); else Som.caixa(); } catch(e) {}
   setTimeout(() => el.remove(), 3800);
 }
 window.bfValidar = async (id, val) => {
   if (!bfGestao()) return; const v = visitas.find(x => x.id === id); if (!v) return;
   const novo = v.bfVal === val ? '' : val, dados = { ...v, bfVal:novo, bfValPor:novo ? perfil.nome : '', bfValEm:novo ? Date.now() : 0 }; delete dados.id;
-  try { const b = writeBatch(db); b.set(doc(db,'visitas',id), { bfVal:dados.bfVal, bfValPor:dados.bfValPor, bfValEm:dados.bfValEm }, { merge:true }); b.set(doc(db,'ranking',id), { bfq:bfVisQualif(dados) }, { merge:true }); await gravar(b.commit()); toast(novo ? (novo === 'ok' ? 'Visita validada' : 'Visita não vale') : 'Validação desfeita'); }
+  try { const b = writeBatch(db); b.set(doc(db,'visitas',id), { bfVal:dados.bfVal, bfValPor:dados.bfValPor, bfValEm:dados.bfValEm }, { merge:true }); b.set(doc(db,'ranking',id), { bfq:bfVisQualif(dados) }, { merge:true }); await gravar(b.commit()); toast(novo ? (novo === 'ok' ? 'Visita validada' : 'Visita não vale') : 'Validação desfeita'); try { novo === 'ok' ? Som.caixa() : novo === 'nao' ? Som.trava() : 0; } catch(e) {} }
   catch(e) { toast('Erro: ' + e.message); }
 };
 
@@ -14978,7 +15009,7 @@ const BF_BOAS = {
   cor:{ f:'Sua comissão nunca esteve tão alta.', it:['Fechou 1 venda: ela vai para <b>55%</b>.','Fechou 2: <b>60%</b> em todas as vendas da Black.','Acompanhe na aba <b>Black Friday</b>, ao lado do Bolsão.'] },
   ger:{ f:'Semana de arrancada para o time inteiro.', it:['Acompanhe SDRs, anjos, coordenadores e corretores na aba <b>Black Friday</b>.','Visitas das SDRs só valem depois que você ou a Stefanne validam.','Os prêmios caem sozinhos na Carteira Frade.'] } };
 function bfBoasVindas(){
-  if (!souAtivo() || !bfComecou() || bfAcabou() || document.getElementById('bfBoas')) return;
+  if (!souAtivo() || !bfLiberada() || bfAcabou() || document.getElementById('bfBoas')) return;
   const p = bfPapel() || (bfGestao() ? 'ger' : ''); if (!p || !BF_BOAS[p]) return;
   const k = 'bfBoas_' + uidAtual; try { if (localStorage.getItem(k)) return; } catch(e) { return; }
   const d = BF_BOAS[p], semCi = p !== 'ger' && !meuCheckin, nome = primeiro(nomeBonito(perfil?.nome || ''));
@@ -14989,24 +15020,27 @@ function bfBoasVindas(){
     <button class="btn btn-primary btn-block bfb-bt" onclick="bfBoasFechar()">Bora pra Black</button></div></div>`;
   document.body.appendChild(el); try { localStorage.setItem(k, String(Date.now())); } catch(e) {}
 }
-window.bfBoasFechar = () => { const el = $('bfBoas'); if (el) { el.classList.add('sai'); setTimeout(() => el.remove(), 250); } if (view !== 'blackfriday' && bfPodeVer()) setView('blackfriday'); window.scrollTo(0, 0); };
+window.bfBoasFechar = () => { try { Som.black(); } catch(e) {} const el = $('bfBoas'); if (el) { el.classList.add('sai'); setTimeout(() => el.remove(), 250); } if (view !== 'blackfriday' && bfPodeVer()) setView('blackfriday'); window.scrollTo(0, 0); };
 
 function htmlBfHojeFaixa(){
-  if (!bfPodeVer() || bfAcabou()) return '';
+  if (!souAtivo() || !bfVisivel() || bfAcabou() || !(bfPapel() || bfGestao())) return '';
+  if (!bfLiberada()) { // v452: antes de liberar, o time vê só a contagem (sem acesso); o gestor vê o botão de liberar
+    const sg = Math.max(0, Math.floor(((bfComecou() ? BF_T1 : BF_T0) - bfAgora()) / 1000)), d = Math.floor(sg / 86400), h = Math.floor(sg % 86400 / 3600), m = Math.floor(sg % 3600 / 60);
+    return `<div class="bf-hoje bf-hoje-trava"><span class="bf-hoje-t"><b>BLACK <i>FRIDAY</i></b><small>${souDono() ? 'Escondida do time. Libere quando quiser.' : '🔒 Em breve. Fique de olho!'}</small></span><span class="bf-hoje-r"><em>${bfComecou() ? 'termina em' : 'começa em'}</em><strong>${d ? d + 'd ' : ''}${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}min</strong></span>${souDono() ? `<button type="button" class="bf-lib" onclick="bfLiberar(true)">Liberar</button>` : '<span class="bf-hoje-s" aria-hidden="true">🔒</span>'}</div>`; }
   const alvo = bfComecou() ? BF_T1 : BF_T0, sg = Math.max(0, Math.floor((alvo - bfAgora()) / 1000)), d = Math.floor(sg / 86400), h = Math.floor(sg % 86400 / 3600), m = Math.floor(sg % 3600 / 60);
   const p = bfPapel(), txt = !bfComecou() ? 'Começa amanhã à 0h' : p === 'sdr' ? 'Cada visita realizada vale até FRD 50' : p === 'anjo' ? 'Venda dos seus corretores vale até FRD 300' : p === 'coord' ? 'Duelo Tenda × Tropa de Elite' : p === 'cor' ? 'Sua comissão sobe para até 60%' : 'Acompanhe a arrancada do time';
   return `<button type="button" class="bf-hoje" onclick="setView('blackfriday')"><span class="bf-hoje-t"><b>BLACK <i>FRIDAY</i></b><small>${txt}</small></span><span class="bf-hoje-r"><em>${bfComecou() ? 'termina em' : 'começa em'}</em><strong>${d ? d + 'd ' : ''}${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}min</strong></span><span class="bf-hoje-s" aria-hidden="true">›</span></button>`;
 }
 let _bfTick = null;
 function pintarBF(){
-  const pode = bfPodeVer();
+  const pode = bfPodeVer(), spoiler = !pode && souAtivo() && bfVisivel() && !bfAcabou() && !!bfPapel(); // v453: antes de liberar, o time já vê o botão trancado (spoiler)
   document.querySelectorAll('.bf-nav').forEach(e => e.classList.toggle('hide', !pode));
   if ($('cBF')) { let nv = 0; try { if (bfGestao() && bfComecou()) nv = rkPessoas.filter(p => p.papel === 'sdr' && p.status === 'ativo').reduce((a, p) => a + bfSdr(p.uid).sr.length, 0); } catch(e) {} $('cBF').textContent = nv; $('cBF').classList.toggle('hide', !nv); }
-  const mb = $('mbBF'), bar = $('mobilebar'); if (mb) mb.classList.toggle('hide', !pode);
+  const mb = $('mbBF'), bar = $('mobilebar'); if (mb) { mb.classList.toggle('hide', !pode && !spoiler); mb.classList.toggle('bf-trava', spoiler); }
   const bz = $('mbBolsao'); let bzTem = false; try { bzTem = podeBzMenu(); } catch(e) {}
-  if (bz && pode && bzTem) bz.classList.remove('hide'); // v451: o Bolsão nunca some quando a Black Friday aparece ao lado
+  if (bz && (pode || spoiler) && bzTem) bz.classList.remove('hide'); // v451: o Bolsão nunca some quando a Black Friday aparece ao lado
   const bzVis = !!bz && !bz.classList.contains('hide');
-  if (bar) bar.classList.toggle('bf-duo', pode && bzVis);
+  if (bar) bar.classList.toggle('bf-duo', (pode || spoiler) && bzVis);
   if (pode && perfilOk && carregado.ranking && !document.getElementById('frAbre')) setTimeout(bfBoasVindas, 600);
   const fh = $('bfHojeFaixa'); if (fh) { const hh = view === 'hoje' ? htmlBfHojeFaixa() : ''; if (fh._h !== hh) { fh.innerHTML = hh; fh._h = hh; } }
   const el = $('bfCorpo'); if (!el || view !== 'blackfriday') { if (_bfTick) { clearInterval(_bfTick); _bfTick = null; } return; }
