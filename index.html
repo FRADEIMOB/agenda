@@ -2604,7 +2604,6 @@ html body button.av-d{display:grid!important;justify-items:start;align-content:s
 .mb-bf-c::after{content:'';position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(-45deg,#FFE600 0 5px,#000 5px 10px)}
 #mbBF{color:#000!important;font-weight:800!important;white-space:nowrap}
 [data-theme="dark"] #mbBF{color:#FFE600!important}
-.mobilebar.bf-duo #mbBolsao:active .mb-bz-c,.mobilebar.bf-duo #mbBF:active .mb-bf-c{filter:brightness(.8);transform:translateY(2px)}
 .mobilebar:not(.bf-duo) #mbBF:not(.hide){display:flex}
 #v-blackfriday{padding-bottom:30px}
 /* abertura Black Friday + Natal */
@@ -2703,6 +2702,17 @@ html.bf-semana #frAbre .fa-pn-tx b span,html.bf-semana .login-pn .lp-tx b span{c
 .bfx .mc.rb .v{color:#FF6A00}
 .bfx .mc.rb.dp{border:1.5px solid #FF6A00;background:#2a1200}
 /* v451: acabamento */
+/* cápsula: tudo posicionado em coordenadas fixas dentro da caixa (fica no prumo em qualquer celular) */
+.mobilebar.bf-duo .mb-duo{flex:0 0 156px!important;width:156px;position:relative;display:block!important;align-self:stretch}
+.mobilebar.bf-duo .mb-duo>button{position:absolute!important;top:-30px;bottom:0;width:78px;margin:0!important;padding:62px 0 0!important;display:block!important;text-align:center;font-size:11px!important;font-weight:800!important;line-height:1.15;white-space:nowrap;z-index:1;transform:none!important}
+.mobilebar.bf-duo #mbBolsao{left:0;padding-left:4px!important}
+.mobilebar.bf-duo #mbBF{left:78px;padding-right:4px!important}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c,.mobilebar.bf-duo #mbBF .mb-bf-c{position:absolute!important;top:4px;width:74px!important;height:54px!important;margin:0!important;box-shadow:none!important;animation:none!important;transform:none!important}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c{left:4px;border-radius:27px 0 0 27px!important}
+.mobilebar.bf-duo #mbBF .mb-bf-c{left:0;border-radius:0 27px 27px 0!important}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c{padding-left:16px!important}
+.mobilebar.bf-duo #mbBolsao .mb-bz-c b{top:50%!important;left:8px!important;right:auto!important;margin-top:-10px;box-shadow:0 0 0 2px #0b3a5a!important}
+.mobilebar.bf-duo #mbBolsao:active .mb-bz-c,.mobilebar.bf-duo #mbBF:active .mb-bf-c{filter:brightness(.85)}
 /* v451: semana da Black: app todo preto (some sozinho em 01/12) */
 html.bf-semana[data-theme="dark"]{--bg:#050505;--card:#121212;--card2:#0c0c0c;--text:#F3F3F3;--text2:#D2D2D2;--muted:#9B9B9B;--border:#262626;--side:#000;--side-text:#BEBEBE;--side-hover:rgba(255,230,0,.07);--ok-soft:#0f2219;--danger-soft:#2a1210;--accent-soft:rgba(255,122,0,.14);--shadow:0 1px 0 rgba(255,255,255,.03),0 10px 24px -12px rgba(0,0,0,.8)}
 html.bf-semana[data-theme="dark"] .topbar{background:rgba(5,5,5,.92)}
@@ -2732,15 +2742,7 @@ html.bf-semana[data-theme="dark"] .bfx .bf-plc .lin .br i{background:#E6E6E6}
 .bf-hoje:active{transform:scale(.99)}
 .mb-duo{display:flex;flex:1;min-width:0;justify-content:center}
 .mb-duo>button{flex:1;min-width:0}
-.mobilebar.bf-duo .mb-duo{flex:0 0 156px;display:grid;grid-template-columns:78px 78px;position:relative}
-.mobilebar.bf-duo .mb-duo::before{content:'';position:absolute;left:0;right:0;top:-30px;height:62px;border-radius:31px;background:var(--card);box-shadow:0 10px 24px -8px rgba(0,0,0,.35),0 0 0 1px var(--border);pointer-events:none}
-.mobilebar.bf-duo .mb-duo>button{width:78px;min-width:0;padding:4px 0!important;margin:0!important;position:relative;z-index:1;display:flex!important;flex-direction:column;align-items:center;gap:4px;font-size:11px!important;line-height:1.1}
-.mobilebar.bf-duo #mbBolsao{justify-self:end}.mobilebar.bf-duo #mbBF{justify-self:start}
-.mobilebar.bf-duo #mbBolsao .mb-bz-c,.mobilebar.bf-duo #mbBF .mb-bf-c{width:74px;height:54px;margin-top:-26px;box-shadow:none;animation:none}
-.mobilebar.bf-duo #mbBolsao .mb-bz-c{border-radius:27px 0 0 27px}
-.mobilebar.bf-duo #mbBF .mb-bf-c{border-radius:0 27px 27px 0}
-.mobilebar.bf-duo #mbBolsao{align-items:center;padding-left:4px!important}.mobilebar.bf-duo #mbBF{align-items:center;padding-right:4px!important}
-.mobilebar.bf-duo #mbBolsao>.mb-bz-c~*,.mobilebar.bf-duo .mb-duo>button{white-space:nowrap}
+.mobilebar.bf-duo .mb-duo::before{content:'';position:absolute;left:0;width:156px;top:-30px;height:62px;border-radius:31px;background:var(--card);box-shadow:0 10px 24px -8px rgba(0,0,0,.35),0 0 0 1px var(--border);pointer-events:none}
 /* v451: semana da Black (até 30/11): toques de preto e amarelo no app todo */
 html.bf-semana .btn-primary{background:#111!important;color:#FFE600!important;border-color:#111!important;box-shadow:0 6px 16px rgba(0,0,0,.22)!important}
 html.bf-semana[data-theme="dark"] .btn-primary{background:#FFE600!important;color:#111!important;border-color:#FFE600!important}
@@ -2760,7 +2762,6 @@ html.dark .nt-bfp-tx{color:#e6eef5}
 .manut-faixa.esc{display:none!important}
 .manut-faixa .mf-x{background:transparent!important;color:#fff!important;font-size:18px;line-height:1;padding:2px 4px!important}
 @media (max-width:900px){.manut-faixa{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 66px);font-size:12px;padding:5px 6px 5px 12px;gap:6px;border-radius:999px;white-space:nowrap}.manut-faixa button{padding:4px 9px}}
-.mobilebar.bf-duo #mbBolsao .mb-bz-c b{right:auto;left:4px}
 .mobilebar.bf-duo #mbBF .mb-bf-c::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:1px;background:rgba(255,255,255,.28)}
 .bf-boas{position:fixed;inset:0;z-index:2147481000;background:rgba(6,10,16,.62);display:flex;align-items:flex-end;justify-content:center;animation:bfIn .25s ease both}
 .bf-boas.sai{opacity:0;transition:opacity .25s}
@@ -8622,7 +8623,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 451;
+const APP_VERSAO = 452;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
