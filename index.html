@@ -3980,6 +3980,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
       <button data-view="visitas" onclick="setView('visitas')"><i data-ic="house"></i>Visitas<span class="count" id="cVisitas">0</span></button>
       <button data-view="bolsao" onclick="setView('bolsao')"><i data-ic="users"></i>Bolsão<span class="count hide" id="cBolsao">0</span></button>
       <button data-view="blackfriday" class="bf-nav hide" onclick="setView('blackfriday')"><i data-ic="star"></i><b style="font-weight:900;font-style:italic">BLACK FRIDAY</b><span class="count red hide" id="cBF">0</span></button>
+      <button data-view="salao" onclick="setView('salao')"><i data-ic="zap"></i>Desafio relâmpago</button>
       <button data-view="anjos" class="anjos-nav hide" onclick="setView('anjos')"><i data-ic="star"></i>Anjos<span class="count red hide" id="cAnjos">0</span></button>
       <button data-view="resumo" class="so-sdr hide" onclick="setView('resumo')"><i data-ic="nota"></i>Resumo do dia<span class="count red hide" id="cResumo">!</span></button>
       <div class="nav-title" style="margin-top:14px">Resultados</div>
@@ -4036,6 +4037,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
       <!-- HOJE -->
       <section class="view" id="v-hoje">
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" id="btAvisoHoje" onclick="novoAviso()">Publicar aviso</button></div>
+        <div id="dzHojeFaixa"></div>
         <div id="bfHojeFaixa"></div>
         <div class="hoje-topo">
           <div id="checkinHoje"></div>
@@ -4332,6 +4334,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
         </div>
       </section>
 
+      <section class="view" id="v-salao"><div id="salaoCorpo"></div></section>
       <section class="view" id="v-blackfriday">
         <div id="bfCorpo"></div>
       </section>
@@ -5929,6 +5932,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
       <button class="so-sdr hide" onclick="fechar('menuModal');setView('resumo')"><i data-ic="nota"></i>Resumo do dia</button>
       <button onclick="fechar('menuModal');setView('tarefas')"><i data-ic="list"></i>Tarefas</button>
       <button class="bf-nav hide" onclick="fechar('menuModal');setView('blackfriday')"><i data-ic="star"></i>Black Friday</button>
+      <button onclick="fechar('menuModal');setView('salao')"><i data-ic="zap"></i>Desafio relâmpago · TV do salão</button>
       <button class="anjos-nav hide" onclick="fechar('menuModal');setView('anjos')"><i data-ic="star"></i>Anjos</button>
       <button class="nao-sdr" onclick="fechar('menuModal');setView('cartas')"><i data-ic="card"></i>Cartas aprovadas</button>
       <button onclick="fechar('menuModal');setView('calendario')"><i data-ic="cal"></i>Agenda</button>
@@ -6313,7 +6317,7 @@ function toast(texto, acao, fn, chave){
 
 // ================= Navegação =================
 const VIEW_SALVA = (() => { try { return sessionStorage.getItem('fradeView') || ''; } catch(e) { return ''; } })();
-const TITULOS = {blackfriday:'Black Friday', anjos:'Anjos', sdrs:'SDR', reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
+const TITULOS = {salao:'Desafio relâmpago', blackfriday:'Black Friday', anjos:'Anjos', sdrs:'SDR', reservas:'Reservas', acomp:'Meus corretores', marketing:'Marketing', simulador:'Simulador Caixa', tvrank:'Rankings na TV', funil:'Funil de ligações', bolsao:'Bolsão', analises:'Correspondente', aulas:'Aulas', recepcao:'Recepção', sorteio:'Sorteio', comissoes:'Minhas comissões', financeiro:'Financeiro', whatsapp:'WhatsApp', ranking:'Ranking', empreendimentos:'Imóveis', apresentacao:'Apresentação', assistente:'Assistente', vendas:'Vendas', resumo:'Resumo do dia', desempenho:'Desempenho', painel:'Painel executivo', avaliacoes:'Avaliações', hoje:'Hoje', tarefas:'Tarefas', calendario:'Calendário', relatorios:'Relatórios', config:'Configurações', visitas:'Visitas', corretores:'Corretores', cartas:'Cartas aprovadas'};
 window.setView = v => { document.documentElement.classList.remove("fab-aberto");
   if (v === 'corretores' && !podeGerir() && !abaLiberada('corretores')) v = 'hoje';
   if (v === 'painel' && !souDirecao()) v = 'hoje';
@@ -8704,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 469;
+const APP_VERSAO = 472;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9641,14 +9645,16 @@ function pontosEntre(de, ate, inicioRk){
 /* v425: quem troca de equipe no meio do período leva os pontos dele, mas na soma das EQUIPES
    o que ele fez antes da troca continua com a equipe antiga (perfil.trocasEquipe: [{dia, de, para}]). */
 const _trocaCache = new Map();
-function eqNaData(uid, dia, eqAtual){ const p = uid && (perfisTodos || []).find(x => x.uid === uid); if (!p || !dia) return eqAtual;
+// v470: fora da gerência os perfis não carregam; as trocas de equipe vêm da lista pública do ranking (senão o placar das equipes muda de celular para celular)
+const pessoasTrocas = () => (perfisTodos && perfisTodos.length) ? perfisTodos : (rkPessoas || []);
+function eqNaData(uid, dia, eqAtual){ const p = uid && pessoasTrocas().find(x => x.uid === uid); if (!p || !dia) return eqAtual;
   const t = (p.trocasEquipe || []).filter(tr => tr && tr.dia && tr.de && dia < tr.dia).sort((a, b) => a.dia.localeCompare(b.dia))[0]; return t ? t.de : eqAtual; }
 function marcaPer(l, de, ate, ini){ if (l) { l._de = de; l._ate = ate; l._ini = ini || de; } return l; }
 function ptsEq(l, eqId, pos, eqF){
   const eq = eqF || (x => x.equipe), v = x => pos ? Math.max(0, x.pontos || 0) : (x.pontos || 0);
   let t = (l || []).filter(x => eq(x) === eqId).reduce((a, x) => a + v(x), 0);
   if (!l || !l._de) return t;
-  (perfisTodos || []).forEach(p => (p.trocasEquipe || []).forEach(tr => {
+  pessoasTrocas().forEach(p => (p.trocasEquipe || []).forEach(tr => {
     if (!tr || !tr.dia || !tr.de || tr.dia <= l._de || tr.dia > (l._ate || '9999-12-31')) return;
     const x = l.find(y => y.uid === p.uid); if (!x) return;
     const k = [p.uid, l._de, tr.dia, l._ini, rankingDocs.length, rankingAtiv.length, rankingCartas.length].join('|');
@@ -12617,9 +12623,10 @@ function sincPessoasRanking(){
     const ja = new Map(rkPessoas.map(x => [x.uid, x])), b = writeBatch(db); let n = 0;
     const CARGOS = ['corretor','coordenador','sdr','anjo','gerente'];
     perfisTodos.filter(p => CARGOS.includes(p.papel)).forEach(p => {
-      const d = { nome:p.nome || '', equipe:p.equipe || '', papel:p.papel || '', status:p.status || '', criadoEm:p.criadoEm || 0, bloqueadoEm:p.status === 'bloqueado' ? (p.bloqueadoEm || 0) : 0, membros:p.papel === 'anjo' ? (p.membros || []) : [] };
+      const d = { nome:p.nome || '', equipe:p.equipe || '', papel:p.papel || '', status:p.status || '', criadoEm:p.criadoEm || 0, bloqueadoEm:p.status === 'bloqueado' ? (p.bloqueadoEm || 0) : 0, membros:p.papel === 'anjo' ? (p.membros || []) : [],
+        foto:String(p.foto || '').length < 60000 ? String(p.foto || '') : '', liberadoEm:Number(p.liberadoEm) || 0, trocasEquipe:(p.trocasEquipe || []).filter(t => t && t.dia).map(t => ({ dia:String(t.dia), de:String(t.de || ''), para:String(t.para || '') })) }; // v470
       const v = ja.get(p.uid); ja.delete(p.uid);
-      if (v && (v._nomeRaw ?? v.nome) === d.nome && ['equipe','papel','status','criadoEm','bloqueadoEm'].every(k => (v[k] ?? (k === 'bloqueadoEm' ? 0 : '')) === d[k]) && JSON.stringify(v.membros || []) === JSON.stringify(d.membros)) return;
+      if (v && (v._nomeRaw ?? v.nome) === d.nome && ['equipe','papel','status','criadoEm','bloqueadoEm','liberadoEm'].every(k => (v[k] ?? (['bloqueadoEm','liberadoEm'].includes(k) ? 0 : '')) === d[k]) && JSON.stringify(v.membros || []) === JSON.stringify(d.membros) && JSON.stringify(v.trocasEquipe || []) === JSON.stringify(d.trocasEquipe) && (v.foto || '') === d.foto) return;
       b.set(doc(db,'ranking_pessoas', p.uid), d); n++; });
     ja.forEach((v, uid) => { b.delete(doc(db,'ranking_pessoas', uid)); n++; });
     if (n) { try { await b.commit(); } catch(e) { console.warn('ranking_pessoas', e.message); } }
@@ -13875,12 +13882,13 @@ function saldoCarteira(uid, c = bvCfg()){
   const cada = valorVisitaCart(c);
   const vendasA = vendasDoAnjo(uid), ganhoAnjo = vendasA.reduce((a, v) => a + v.valor, 0);
   const bfc = (() => { try { return bfCarteira(uid); } catch(e) { return { disp:0, pend:0 }; } })(); // v451: Black Friday
-  const ganho = (c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0)) + ganhoAnjo + bfc.disp;
+  const dzg = (() => { try { return dzGanhoDe(uid); } catch(e) { return 0; } })(); // v471: desafio relâmpago
+  const ganho = (c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0)) + ganhoAnjo + bfc.disp + dzg;
   const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0);
-  return { ganho, ganhoAnjo, vendasA, cada, vale, pendL, pend:pendL.length * cada + bfc.pend, bfDisp:bfc.disp, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
+  return { ganho, ganhoAnjo, vendasA, cada, vale, pendL, pend:pendL.length * cada + bfc.pend, bfDisp:bfc.disp, dzDisp:dzg, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
 }
 // v133: a carteira vale para todos os perfis (corretor, coordenador, SDR, anjo e gerência); só o correspondente fica de fora
-const participaCarteira = (c = bvCfg()) => souAtivo() && !souCorresp() && (c.ativo || (perfil?.papel === 'anjo' && avCfg().ativo && Number(avCfg().valor) > 0) || bfParticipa());
+const participaCarteira = (c = bvCfg()) => souAtivo() && !souCorresp() && (c.ativo || (perfil?.papel === 'anjo' && avCfg().ativo && Number(avCfg().valor) > 0) || bfParticipa() || (() => { try { return dzGanhoDe(uidAtual) > 0; } catch(e) { return false; } })());
 function htmlPoupanca(){
   const c = bvCfg(); if (view !== 'hoje' || !participaCarteira(c)) return '';
   const k = saldoCarteira(uidAtual, c);
@@ -14868,8 +14876,9 @@ function bfSdr(uid){
 function bfPlacarSdr(){
   const cont = {}; rankingDocs.filter(r => r.sdrUid && r.status === 'Realizada' && bfNaData(r.date) && r.bfq).forEach(r => { cont[r.sdrUid] = (cont[r.sdrUid] || 0) + 1; });
   if (bfPapel() === 'sdr') cont[uidAtual] = bfSdr(uidAtual).n;
-  const sdrs = rkPessoas.filter(p => p.papel === 'sdr' && p.status === 'ativo');
-  if (!sdrs.some(p => p.uid === uidAtual) && bfPapel() === 'sdr') sdrs.push({ uid:uidAtual, nome:perfil.nome });
+  // v472 (Allan, 27/11): a Ana Luiza não aparece no placar das SDRs
+  const sdrs = rkPessoas.filter(p => p.papel === 'sdr' && p.status === 'ativo' && !/^ana luiza/.test(norm(p.nome || '')));
+  if (!sdrs.some(p => p.uid === uidAtual) && bfPapel() === 'sdr' && !/^ana luiza/.test(norm(perfil?.nome || ''))) sdrs.push({ uid:uidAtual, nome:perfil.nome });
   return sdrs.map(p => ({ uid:p.uid, nome:primeiro(nomeBonito(p.nome || '')), n:cont[p.uid] || 0 })).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome));
 }
 const bfVendasPeriodo = () => (rankingVendas || []).filter(v => !v.caiu && bfNaData(v.dia)).sort((a, b) => (a.dia || '').localeCompare(b.dia || '') || String(a.id).localeCompare(String(b.id)));
@@ -15137,6 +15146,107 @@ function pintarBF(){
   if (!_bfTick) _bfTick = setInterval(() => { const r = $('bfRelo'); if (r && view === 'blackfriday') r.innerHTML = bfRelogio(); else { clearInterval(_bfTick); _bfTick = null; } }, 1000);
   setTimeout(bfCelebrar, 300);
 }
+
+// ---------- v471: DESAFIO RELÂMPAGO + TV DO SALÃO (Black Friday e desafio na mesma tela) ----------
+// O Allan escreve o desafio do jeito que quiser (texto livre) e o prêmio. Quando alguém bate, ele toca na foto e confirma: todo mundo vê a comemoração
+const dzTodos = () => (Array.isArray(appCfg.desafios) ? appCfg.desafios : []).filter(d => d && d.id);
+const dzHoje = () => dzTodos().filter(d => d.dia === hojeISO());
+const dzAtivo = () => dzTodos().filter(d => d.status === 'aovivo').slice(-1)[0] || null;
+const dzUltGanho = () => dzHoje().filter(d => d.status === 'ganho').sort((a, b) => (b.vencEm || 0) - (a.vencEm || 0))[0] || null;
+const dzGanhoDe = uid => dzTodos().filter(d => d.status === 'ganho' && d.vencUid === uid && d.carteira !== false).reduce((a, d) => a + (Number(d.premio) || 0), 0);
+window.dzGanhoDe = dzGanhoDe;
+const dzFotoDe = uid => ((perfisTodos || []).find(p => p.uid === uid) || {}).foto || ((rkPessoas || []).find(p => p.uid === uid) || {}).foto || '';
+const dzIni = n => String(n || '').trim().split(/\s+/).slice(0, 2).map(x => x[0] || '').join('').toUpperCase();
+const dzPart = () => (rkPessoas || []).filter(p => p.status === 'ativo' && ['corretor','anjo','coordenador'].includes(p.papel)).map(p => ({ uid:p.uid, nome:primeiro(nomeBonito(p.nome || '')), cheio:nomeBonito(p.nome || ''), foto:dzFotoDe(p.uid), eq:p.equipe || '' }));
+const dzCheck = () => { const s = new Set((typeof checkinsHoje !== 'undefined' ? checkinsHoje : []).map(c => c.uid)); return s; };
+const dzHM = t => t ? new Date(t).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : '';
+const dzDur = ms => { const s = Math.max(0, Math.floor(ms / 1000)), p2 = x => String(x).padStart(2, '0'); return [p2(Math.floor(s / 3600)), p2(Math.floor(s % 3600 / 60)), p2(s % 60)]; };
+async function dzGravar(lista){ if (!souDono()) { toast('Só o gestor do app lança os desafios.'); return false; }
+  try { await gravar(setDoc(doc(db,'config','app'), { desafios:lista.slice(-40) }, { merge:true })); return true; } catch(e) { toast('Erro: ' + (e.code || e.message)); return false; } }
+window.dzLancar = async () => {
+  const t = ($('dzTit')?.value || '').trim(), pr = lerValor($('dzPremio')?.value || '') || 0;
+  if (!t) { toast('Escreva o desafio'); return; }
+  const at = dzAtivo(), l = dzTodos().slice();
+  if (at) { const i = l.findIndex(x => x.id === at.id); l[i] = { ...at, titulo:t.slice(0, 160), premio:pr }; if (await dzGravar(l)) toast('Desafio atualizado'); return; }
+  l.push({ id:Date.now().toString(36), dia:hojeISO(), titulo:t.slice(0, 160), premio:pr, inicio:Date.now(), status:'aovivo', por:primeiro(perfil?.nome || '') });
+  if (await dzGravar(l)) { toast('⚡ Desafio no ar!'); try { Som.black(); } catch(e) {} }
+};
+window.dzVencedor = async uid => {
+  const at = dzAtivo(); if (!at || !souDono()) return; const p = dzPart().find(x => x.uid === uid); if (!p) return;
+  if (!confirm(`${p.nome} ganhou "${at.titulo}"?${at.premio ? `\n\nFRD ${at.premio} vão para a Carteira Frade dele.` : ''}`)) return;
+  const l = dzTodos().slice(), i = l.findIndex(x => x.id === at.id);
+  l[i] = { ...at, status:'ganho', vencUid:uid, vencNome:p.nome, vencEm:Date.now(), carteira:true };
+  if (await dzGravar(l)) toast(`🏆 ${p.nome} ganhou!`);
+};
+window.dzEncerrar = async () => { const at = dzAtivo(); if (!at || !souDono() || !confirm('Encerrar este desafio sem vencedor?')) return;
+  const l = dzTodos().slice(), i = l.findIndex(x => x.id === at.id); l[i] = { ...at, status:'encerrado', fimEm:Date.now() }; await dzGravar(l); };
+window.dzDesfazer = async id => { if (!souDono() || !confirm('Desfazer este vencedor? O prêmio sai da Carteira Frade e o desafio volta a valer.')) return;
+  const l = dzTodos().slice(), i = l.findIndex(x => x.id === id); if (i < 0) return; const { vencUid, vencNome, vencEm, carteira, ...resto } = l[i]; l[i] = { ...resto, status:'aovivo' }; await dzGravar(l); };
+// aviso + comemoração em todos os celulares (uma vez por desafio)
+function dzAvisos(){
+  let visto = {}; try { visto = JSON.parse(localStorage.getItem('dzVisto') || '{}') || {}; } catch(e) {}
+  const salva = () => { try { localStorage.setItem('dzVisto', JSON.stringify(visto)); } catch(e) {} };
+  const at = dzAtivo();
+  if (at && !visto['a' + at.id] && Date.now() - (at.inicio || 0) < 3 * 3600e3) { visto['a' + at.id] = 1; salva();
+    if (!document.documentElement.classList.contains('modo-tvr') && view !== 'salao') toast(`⚡ Desafio relâmpago no ar: ${at.titulo}${at.premio ? ' · R$ ' + at.premio : ''}`, 'Ver', () => setView('salao'));
+    try { Som.black(); } catch(e) {} }
+  const g = dzUltGanho();
+  if (g && !visto['g' + g.id] && Date.now() - (g.vencEm || 0) < 30 * 60e3) { visto['g' + g.id] = 1; salva(); dzFesta(g); }
+}
+function dzFesta(g){
+  const el = document.createElement('div'); el.className = 'dz-festa'; const f = dzFotoDe(g.vencUid);
+  el.innerHTML = `<div class="dz-fbox"><div class="dz-fita"></div><div class="dz-ft">TEMOS UM<span>VENCEDOR!</span></div><div class="dz-ff" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div class="dz-fn">${esc(g.vencNome || '')}</div><div class="dz-fq">${esc(g.titulo)}${g.premio ? `<b>+ R$ ${g.premio} na Carteira Frade</b>` : ''}</div></div>`
+    + Array.from({ length:36 }, (_, i) => `<i class="dz-c" style="left:${(i * 29) % 100}%;animation-delay:${(i % 9) * .18}s;background:${['#FFE600','#FF7A00','#19C37D','#fff'][i % 4]}"></i>`).join('');
+  el.onclick = () => el.remove(); document.body.appendChild(el); try { Som.campeao(); } catch(e) {}
+  setTimeout(() => el.remove(), document.documentElement.classList.contains('modo-tvr') || view === 'salao' ? 20000 : 9000);
+}
+function htmlDzCard(tv){
+  const at = dzAtivo(), g = dzUltGanho(), ck = dzCheck(), temCk = ck.size > 0, dono = souDono() && !tv;
+  const ps = dzPart().sort((a, b) => (ck.has(b.uid) - ck.has(a.uid)) || a.nome.localeCompare(b.nome));
+  const grade = `<div class="dz-grade">${ps.map(p => `<button type="button" class="dz-p ${temCk && ck.has(p.uid) ? 'on' : ''} ${g && g.vencUid === p.uid && !at ? 'ven' : ''}" ${dono && at ? `onclick="dzVencedor('${p.uid}')" title="Dar a vitória para ${esc(p.nome)}"` : 'tabindex="-1"'}><span class="dz-f" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : esc(dzIni(p.cheio))}</span><b>${esc(p.nome)}</b></button>`).join('')}</div>`;
+  let topo;
+  if (at) { const [h, m, s] = dzDur(Date.now() - (at.inicio || Date.now()));
+    topo = `<span class="dz-tag"><i></i>AO VIVO · valendo desde ${dzHM(at.inicio)}</span>${at.premio ? `<div class="dz-pr"><small>R$</small>${esc(String(at.premio))}</div>` : ''}<div class="dz-reg">${esc(at.titulo)}</div>
+      <div class="dz-relo"><div><b>${h}</b><small>h</small></div><div><b>${m}</b><small>min</small></div><div><b>${s}</b><small>s</small></div></div>${dono ? `<div class="dz-dica">Quando alguém bater, toque na foto dele para dar a vitória.</div>` : ''}`; }
+  else if (g) { const f = dzFotoDe(g.vencUid);
+    topo = `<div class="dz-ven"><div class="dz-ft">TEMOS UM<span>VENCEDOR!</span></div><div class="dz-ff" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div class="dz-fn">${esc(g.vencNome || '')}</div><div class="dz-fq">${esc(g.titulo)} · ${dzHM(g.vencEm)}${g.premio ? `<b>+ R$ ${g.premio} na Carteira Frade</b>` : ''}</div></div>`; }
+  else topo = `<div class="dz-vazio"><b>⚡ Fique ligado</b><span>A qualquer momento sai um desafio relâmpago valendo prêmio.</span></div>`;
+  const hist = dzHoje().filter(d => d.status === 'ganho').sort((a, b) => (b.vencEm || 0) - (a.vencEm || 0));
+  return `<div class="dz-card ${tv ? 'tv' : ''}"><div class="dz-fita"></div><div class="dz-cab">DESAFIO RELÂMPAGO</div>${topo}
+    ${at || !g ? `<div class="dz-h3">QUEM ESTÁ NO JOGO${temCk ? ` · ${ps.filter(p => ck.has(p.uid)).length} com check-in` : ''}</div>${grade}` : ''}
+    ${hist.length ? `<div class="dz-h3">DESAFIOS DE HOJE</div><div class="dz-hist">${hist.map(d => `<div><span>${dzHM(d.inicio)} · ${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ' · R$ ' + d.premio : ''}${souDono() && !tv ? ` <a href="#" onclick="event.preventDefault();dzDesfazer('${d.id}')">desfazer</a>` : ''}</b></div>`).join('')}</div>` : ''}</div>`;
+}
+function htmlDzGestao(){
+  if (!souDono()) return '';
+  const at = dzAtivo();
+  return `<div class="card dz-ger"><b>${at ? 'Desafio no ar (você pode editar)' : 'Lançar desafio relâmpago'}</b>
+    <div class="fg" style="margin-top:8px"><label>Desafio</label><textarea id="dzTit" rows="2" maxlength="160" placeholder="Ex.: quem marcar a primeira visita agora">${esc(at ? at.titulo : '')}</textarea></div>
+    <div class="fg"><label>Prêmio (R$, vai para a Carteira Frade)</label><input id="dzPremio" inputmode="decimal" placeholder="50" value="${at && at.premio ? esc(String(at.premio)) : ''}"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="dzLancar()">${at ? 'Salvar alteração' : '⚡ Lançar agora'}</button>${at ? `<button class="btn btn-ghost" onclick="dzEncerrar()">Encerrar sem vencedor</button>` : ''}<button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia (TV)</button></div></div>`;
+}
+function htmlSalaoBF(){
+  if (typeof bfComecou !== 'function' || !bfComecou() || Date.now() > BF_SOME) return '';
+  const co = bfCoordInfo(), eqs = [...new Set(co.map(p => p.equipe))].slice(0, 2), nm = e => (equipes[e] || {}).nome || e;
+  const duelo = eqs.length === 2 ? `<div class="sl-duelo">${eqs.map((e, i) => { const n = bfContaEq(e), o = bfContaEq(eqs[1 - i]); return `<div class="sl-eq ${n > o ? 'lid' : ''}"><small>${esc(nm(e))}</small><b>${n}</b><span>reservas</span></div>`; }).join('<div class="sl-x">×</div>')}</div>` : '';
+  const cor = bfRankCor().filter(x => x.n).slice(0, 6), sdr = bfPlacarSdr().filter(x => x.n).slice(0, 4);
+  const pct = n => n >= 2 ? 60 : n === 1 ? 55 : 50;
+  return `<div class="sl-bf"><div class="dz-fita"></div><div class="sl-bft">BLACK<span>FRIDAY</span></div><div id="bfRelo">${bfRelogio()}</div>${duelo}
+    <div class="sl-cols"><div><div class="dz-h3">CORRETORES · COMISSÃO</div>${cor.length ? cor.map((x, i) => `<div class="sl-l"><span>${i + 1}. ${esc(x.nome)}</span><b>${x.n} venda${x.n > 1 ? 's' : ''} · ${pct(x.n)}%</b></div>`).join('') : '<div class="sl-l"><span>Ninguém vendeu ainda</span></div>'}</div>
+    <div><div class="dz-h3">SDRs · VISITAS VALIDADAS</div>${sdr.length ? sdr.map((x, i) => `<div class="sl-l"><span>${i + 1}. ${esc(x.nome)}</span><b>${x.n}</b></div>`).join('') : '<div class="sl-l"><span>Nenhuma ainda</span></div>'}</div></div></div>`;
+}
+let _slT = 0;
+function pintarSalao(){
+  try { dzAvisos(); } catch(e) {}
+  const fx = $('dzHojeFaixa'), at = dzAtivo();
+  if (fx) fx.innerHTML = view === 'hoje' && at ? `<button type="button" class="dz-faixa" onclick="setView('salao')"><span class="dz-tag"><i></i>AO VIVO</span><b>⚡ ${esc(at.titulo)}</b>${at.premio ? `<em>R$ ${esc(String(at.premio))}</em>` : ''}</button>` : '';
+  const el = $('salaoCorpo'); if (!el || view !== 'salao') return;
+  const tv = document.documentElement.classList.contains('modo-tv');
+  const chave = (at ? at.id : '-') + '|' + (tv ? 1 : 0) + '|' + (souDono() ? 1 : 0);
+  if (el.dataset.k !== chave || !$('slVivo')) { el.dataset.k = chave; el.innerHTML = `<div class="sl ${tv ? 'tv' : ''}">${tv ? '' : htmlDzGestao()}<div id="slVivo"></div></div>`; }
+  $('slVivo').innerHTML = `<div class="sl-grid"><div>${htmlSalaoBF()}</div><div>${htmlDzCard(tv)}</div></div>`;
+  clearTimeout(_slT); _slT = setTimeout(() => { if (view === 'salao') pintarSalao(); }, 1000 - (Date.now() % 1000) + 20);
+}
+window.pintarSalao = pintarSalao;
 
 // v446: lembrete da gerência: dias dos anjos esperando validação (esta semana e a passada)
 function htmlLembreteValidar(){
@@ -16559,6 +16669,7 @@ function renderExtrato(){ renderPrefNotif();
   if ($('cAulas')) { const n = auPendentes().length; $('cAulas').textContent = n; $('cAulas').classList.toggle('hide', !n); }
   try { pintarAbaAnjos(); contarAnjosPend(); garantirTop3Fila(); } catch(e) {}
   try { pintarBF(); } catch(e) { console.warn('black friday', e); }
+  try { pintarSalao(); } catch(e) { console.warn('desafio', e); }
   if (view === 'sorteio' && $('sxPalco') && !sxGirando && !$('sxPalco').contains(document.activeElement) && !document.querySelector('.sx-cfg')?.contains(document.activeElement)) { sxPinta(); sxPintaHist(); }
   if ($('metaHoje')) { const h = view === 'hoje' ? htmlMetaHoje() : ''; if ($('metaHoje')._h !== h) { $('metaHoje').innerHTML = h; $('metaHoje')._h = h;
       if (h.includes('meta-card bateu')) { const k = 'metaFesta_' + mesAtual(); try { if (!localStorage.getItem(k)) { localStorage.setItem(k, '1'); setTimeout(() => festejar('🏆 Você bateu a meta do mês!'), 600); } } catch(e) {} } } }
@@ -16811,7 +16922,10 @@ function vendaFin(r){
   // v423: nota dividida = o corretor emite só a parte dele (com o % da empresa dele) e a imobiliária emite a dela (15,7%)
   const nfDiv = f.emissor ? /^dividida/i.test(f.emissor) : r.notaCnpj === 'parte';
   const nfCor = !nfDiv && (f.emissor === 'CNPJ do corretor' || (!f.emissor && /^s/i.test(r.notaCnpj || ''))), pctNFCor = f.pctImposto != null && f.pctImposto !== '' && (nfCor || nfDiv) ? Number(f.pctImposto) : (Number(lerDec(r.pctNFCor)) || null);
-  const cor = corretoresDaReserva(r.corretorTexto), pctCor = Number((!f.pctCorManual && r.tipoVenda && TIPOS_VENDA[r.tipoVenda] ? TIPOS_VENDA[r.tipoVenda].pct : null) ?? f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0;
+  const cor = corretoresDaReserva(r.corretorTexto), pctBase = Number((!f.pctCorManual && r.tipoVenda && TIPOS_VENDA[r.tipoVenda] ? TIPOS_VENDA[r.tipoVenda].pct : null) ?? f.pctCor ?? (prCor || finCfg.pctCorLiq || 60)) || 0;
+  // v471 (Allan, 27/11): na Black (25 a 30/11), venda de lead da imobiliária entra sozinha com 55% (1 venda) ou 60% (2+ vendas, em todas). Valor digitado à mão continua valendo
+  const pctBF = (() => { try { if (f.pctCorManual || r.caiu || !(String(r.dia || '') >= BF_INI && String(r.dia || '') <= BF_FIM)) return 0; const tipo = r.tipoVenda || (ehVendaIndicacao(r) ? 'indicacao' : 'imobiliaria'); if (tipo !== 'imobiliaria') return 0; const u = (cor.find(c => c.uid) || {}).uid; return u ? bfCor(u).pct : 0; } catch(e) { return 0; } })();
+  const pctCor = pctBF > pctBase ? pctBF : pctBase;
   const pctImobNF = Number(finCfg.pctImposto ?? 15.7) || 0, corGross = Math.round(totRec * pctCor) / 100, impCorDiv = Math.round(corGross * (pctNFCor || 0)) / 100, impImobDiv = Math.round((totRec - corGross) * pctImobNF) / 100;
   const pctNF = f.nota === 'sem' ? 0 : nfDiv ? (totRec > 0 ? Math.round((impCorDiv + impImobDiv) / totRec * 10000) / 100 : 0) : nfCor ? (pctNFCor || 0) : Number(f.pctImposto ?? finCfg.pctImposto ?? 15.7) || 0;
   const imposto = f.impostoV != null && f.impostoV !== '' && f.nota !== 'sem' ? Number(f.impostoV) : f.nota === 'sem' ? 0 : nfDiv ? Math.round((impCorDiv + impImobDiv) * 100) / 100 : Math.round(totRec * pctNF) / 100, liquido = Math.round((totRec - imposto) * 100) / 100;
@@ -19524,13 +19638,15 @@ window.editarReserva = id => {
   /* v418 */ v('rvEmail', r?.email); v('rvPis', r?.pis); v('rvUnid', r?.unidade); v('rvAval', r?.valorAvaliacao ? fmtValorInput(r.valorAvaliacao) : ''); v('rvSinal', r?.sinalValor ? fmtReaisIn(r.sinalValor) : ''); v('rvSinalQ', r?.sinalQuem || ''); v('rvSinalD', r?.sinalData || ''); v('rvSinalF', r?.sinalForma || ''); v('rvEntQ', r?.entradaQuem || ''); v('rvCond', r?.condicoes); v('rvPrazo', r?.prazoDias || ''); v('rvPctNF', r?.pctNFCor ? String(r.pctNFCor).replace('.', ',') : '');
   v('rvTipo', tipoVendaDe(r)); { const tv = TIPOS_VENDA[$('rvTipo').value]; v('rvTipoTxt', tv ? tv.nome + ' (' + tv.pct + '% do corretor)' : ''); } $('rvTipo').disabled = meuEdit; $('rvTipo').title = meuEdit ? 'Só a gerência altera' : ''; $('rvSdrBox')?.classList.toggle('hide', $('rvTipo').value !== 'sdr' && !(r?.sdrManual && r?.sdrUid)); setTimeout(rvConta, 0);
   if (!r && !opTudo()) v('rvCor', perfil.nome);
-  $('rvCorLista').innerHTML = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)).map(p => `<option value="${esc(p.nome)}">`).join('');
+  $('rvCorLista').innerHTML = rvPessoasCor().map(p => `<option value="${esc(p.nome)}">`).join('');
   $('rvCaiuBtn').classList.toggle('hide', !r || !!r.caiu || !opTudo());
   abrir('resvModal');
 };
 // v307: lista de corretores ativos para tocar e escolher a parceria (sem digitar)
+// v471: fora da gerência os perfis não carregam todos; a lista de parceiros vem também da lista pública do ranking (senão só aparecia "Sem parceria")
+const rvPessoasCor = () => { const m = new Map(); [...(perfisLista || []), ...((typeof pessoasRk === 'function' ? pessoasRk() : rkPessoas) || [])].forEach(p => { if (p && p.uid && !m.has(p.uid)) m.set(p.uid, p); }); return [...m.values()].filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)); };
 function pintarParc(atual){ const el = $('rvParc'); if (!el) return;
-  const nomes = perfisLista.filter(p => p.status === 'ativo' && ['corretor','coordenador','anjo','gerente'].includes(p.papel)).map(p => nomeBonito(p.nome)).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const nomes = [...new Set(rvPessoasCor().map(p => nomeBonito(p.nome)))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   const cur = String(atual || '').trim(), achado = cur ? (corretoresDaReserva(cur)[0] || {}) : {}, val = achado.uid ? nomeBonito(achado.nome) : cur;
   const ops = [...new Set([...(val && !nomes.includes(val) ? [val] : []), ...nomes])];
   el.innerHTML = `<option value="">Sem parceria</option>` + ops.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join(''); el.value = val || ''; }
@@ -19665,7 +19781,7 @@ function sincVendasRanking(){
 }
 function corretoresDaReserva(txt){
   const partes = String(txt || '').split(/\s*(?:\/|\+|,|\be\b)\s*/i).map(limpaNomeCor).filter(Boolean);
-  const ativos = perfisLista.filter(p => p.status === 'ativo');
+  const ativos = (typeof rvPessoasCor === 'function' ? (() => { const m = new Map(); [...(perfisLista || []), ...(rkPessoas || [])].forEach(p => { if (p && p.uid && !m.has(p.uid)) m.set(p.uid, p); }); return [...m.values()]; })() : perfisLista).filter(p => p.status === 'ativo'); // v471
   /* v329: nome parecido não pode cair em outra pessoa. "Ana" (Ana Luiza / Anna Karolliny), "Mateus" (Mateus / Matheus) e "Maria" ficam sem corretor
      até escolher o certo; "Luiz" não vira "Ana Luiza". Só liga quando sobra uma pessoa só. */
   const fon = s => nomeSimples(limpaNomeCor(s)).replace(/z/g, 's'), pals = s => fon(s).split(' ').filter(w => w.length > 1);
@@ -21682,6 +21798,63 @@ window.addEventListener('load', function(){
 });
 </script>
 <style id="bf451preto">
+/* v471: desafio relâmpago + TV do salão */
+.dz-card,.sl-bf{position:relative;overflow:hidden;border-radius:22px;background:#0f0f0f;border:1.5px solid #262626;color:#f3f3f3;padding:22px 18px 18px}
+.dz-fita{position:absolute;left:0;right:0;top:0;height:8px;background:repeating-linear-gradient(-45deg,#FFE600 0 10px,#000 10px 20px)}
+.dz-cab{font-size:12px;font-weight:800;letter-spacing:.14em;color:#FFE600;margin-bottom:8px}
+.dz-tag{display:inline-flex;gap:6px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.06em;color:#fff;background:#ff3b3b;padding:5px 10px;border-radius:99px}
+.dz-tag i{width:7px;height:7px;border-radius:50%;background:#fff;display:block;animation:dzPisca 1s infinite}
+@keyframes dzPisca{50%{opacity:.2}}
+.dz-pr{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:64px;line-height:.9;margin-top:10px;color:#FFE600}
+.dz-pr small{font-size:26px;color:#fff;margin-right:4px}
+.dz-reg{font-size:20px;font-weight:800;margin-top:6px;line-height:1.25;word-break:break-word}
+.dz-relo{display:flex;gap:8px;margin-top:12px}.dz-relo div{background:#080808;border:1px solid #2a2a2a;border-radius:12px;padding:6px 12px;text-align:center}
+.dz-relo b{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-size:28px;display:block;line-height:1}.dz-relo small{font-size:10px;color:#888}
+.dz-dica{font-size:12.5px;color:#aaa;margin-top:10px}
+.dz-h3{font-size:11.5px;color:#9a9a9a;font-weight:800;letter-spacing:.06em;margin:16px 0 8px}
+.dz-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:12px 6px}
+.dz-p{border:0;background:none;color:#ddd;font:inherit;font-size:11.5px;font-weight:700;text-align:center;padding:0;cursor:default}
+.dz-p[onclick]{cursor:pointer}
+.dz-p b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dz-f{width:66px;height:66px;border-radius:50%;margin:0 auto 5px;background:#222 center/cover;border:3px solid #2c2c2c;display:grid;place-items:center;font-weight:800;font-size:20px;color:#777;position:relative}
+.dz-p.on .dz-f{border-color:#19C37D}
+.dz-p.on .dz-f::after{content:'';position:absolute;right:1px;bottom:1px;width:12px;height:12px;border-radius:50%;background:#19C37D;border:2px solid #0f0f0f}
+.dz-p.ven .dz-f{border-color:#FFE600;box-shadow:0 0 18px rgba(255,230,0,.5)}
+.dz-ven{text-align:center}
+.dz-ft{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:40px;line-height:.95}.dz-ft span{display:block;color:#FFE600}
+.dz-ff{width:170px;height:170px;border-radius:50%;margin:14px auto 10px;background:#222 center/cover;border:6px solid #FFE600;box-shadow:0 0 40px rgba(255,230,0,.45);display:grid;place-items:center;font-size:54px;font-weight:900;color:#888}
+.dz-fn{font-size:26px;font-weight:800}.dz-fq{font-size:13.5px;color:#bbb;margin-top:6px;line-height:1.4}.dz-fq b{display:block;color:#FFE600;font-size:20px;margin-top:4px}
+.dz-vazio{padding:14px 0 4px}.dz-vazio b{display:block;font-size:22px}.dz-vazio span{color:#aaa;font-size:13.5px}
+.dz-hist{background:#080808;border:1px solid #222;border-radius:14px;padding:6px 12px;font-size:12.5px}
+.dz-hist div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid #1b1b1b}.dz-hist div:first-child{border:0}
+.dz-hist b{color:#FFE600;text-align:right}.dz-hist a{color:#888;font-weight:600;margin-left:6px}
+.dz-faixa{display:flex;align-items:center;gap:10px;width:100%;border:1.5px solid #FFE600;background:linear-gradient(90deg,#2a2400,#111);color:#fff;border-radius:16px;padding:10px 12px;margin:0 0 12px;font:inherit;text-align:left;cursor:pointer}
+.dz-faixa b{flex:1;font-size:14px;line-height:1.25}.dz-faixa em{font-style:normal;font-weight:900;color:#FFE600;font-size:16px;white-space:nowrap}
+.dz-ger{margin-bottom:14px}.dz-ger textarea{width:100%}
+.sl-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:900px){.sl-grid{grid-template-columns:1fr 1.1fr;align-items:start}}
+@media (max-width:899px){.sl-grid>div:last-child{order:-1}}
+@media (max-width:520px){.sl-cols{grid-template-columns:1fr;gap:4px}}
+.sl-bft{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:46px;line-height:.9}.sl-bft span{color:#FFE600;margin-left:8px}
+.sl-bf .relo{color:#aaa;font-size:12px;margin-top:8px}.sl-bf .relo .d{display:flex;gap:6px;margin-top:4px}.sl-bf .relo .d div{background:#080808;border:1px solid #2a2a2a;border-radius:10px;padding:4px 9px;text-align:center}.sl-bf .relo .d b{display:block;font-size:22px;color:#fff;font-family:'Saira Condensed',sans-serif}.sl-bf .relo .d small{font-size:9.5px;color:#888}
+.sl-duelo{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:14px}
+.sl-eq{background:#080808;border:1.5px solid #2a2a2a;border-radius:16px;padding:10px;text-align:center}.sl-eq.lid{border-color:#FFE600}
+.sl-eq small{display:block;font-size:11px;color:#aaa;font-weight:800;letter-spacing:.06em}.sl-eq b{font-family:'Saira Condensed',sans-serif;font-size:54px;font-style:italic;line-height:1}.sl-eq.lid b{color:#FFE600}.sl-eq span{font-size:11px;color:#888}
+.sl-x{font-weight:900;color:#FF7A00;font-size:22px;font-style:italic}
+.sl-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sl-l{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:7px 0;border-top:1px solid #1b1b1b}.sl-l b{color:#FFE600;white-space:nowrap}
+html.modo-tv #v-salao.on,html.modo-tv #v-salao.active{position:fixed;inset:0;z-index:60;background:#050505;padding:22px 26px;overflow:auto}
+html.modo-tv .sl{padding:0}
+html.modo-tv .sl .sl-grid{grid-template-columns:1fr 1.2fr}
+html.modo-tv .dz-pr{font-size:110px}html.modo-tv .dz-reg{font-size:34px}html.modo-tv .dz-f{width:92px;height:92px}html.modo-tv .dz-grade{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}html.modo-tv .dz-p{font-size:14px}
+html.modo-tv .dz-ff{width:260px;height:260px}html.modo-tv .dz-ft{font-size:64px}html.modo-tv .dz-fn{font-size:42px}html.modo-tv .sl-l{font-size:18px}html.modo-tv .sl-bft{font-size:72px}html.modo-tv .sl-eq b{font-size:84px}
+.dz-festa{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.86);display:grid;place-items:center;overflow:hidden;animation:dzEntra .35s ease}
+@keyframes dzEntra{from{opacity:0;transform:scale(1.05)}}
+.dz-fbox{position:relative;text-align:center;color:#fff;background:linear-gradient(160deg,#2a2400,#0d0d0d 60%);border:2px solid #FFE600;border-radius:26px;padding:30px 26px 24px;width:min(92vw,520px)}
+.dz-c{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:dzCai 3.2s linear infinite}
+@keyframes dzCai{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){.dz-c,.dz-tag i{animation:none}}
+
 /* v451: semana da Black: app todo preto (some sozinho em 01/12, quando a classe bf-semana sai) */
 html.bf-semana[data-theme="dark"],html.bf-semana[data-theme="dark"] body,html.bf-semana[data-theme="dark"] body:has(#app:not(.hide)){--bg:#050505;--card:#121212;--card2:#0c0c0c;--text:#F3F3F3;--text2:#D2D2D2;--muted:#9B9B9B;--border:#262626;--side:#000;--side-text:#BEBEBE;--side-hover:rgba(255,230,0,.07);--vidro:#121212;--vidro-forte:#141414;--vidro-borda:#262626;--vn-bg:#050505;--vn-ln:#262626;--vn-or:#FF7A00;--vn-or-b:#FF7A00;--vn-or-s:rgba(255,122,0,.14);--accent:#FF7A00;--accent-soft:rgba(255,122,0,.14)}
 html.bf-semana[data-theme="dark"] body{background:radial-gradient(800px 500px at 110% -10%,rgba(255,230,0,.06),transparent 60%),radial-gradient(700px 500px at -10% 110%,rgba(255,122,0,.05),transparent 60%),#050505!important;background-attachment:scroll!important} /* v469: o fundo 'fixed' fazia o menu de baixo pular no iPhone durante a rolagem */
