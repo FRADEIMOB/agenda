@@ -8708,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 480;
+const APP_VERSAO = 481;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -15248,7 +15248,7 @@ function htmlDzGestao(){
     <div class="dz2-chips">${[20,30,50,100].map(v => `<button type="button" onclick="$('dzPremio').value='${v}'">R$ ${v}</button>`).join('')}</div>
     <input id="dzPremio" inputmode="decimal" placeholder="50" value="${at && at.premio ? esc(String(at.premio)) : ''}">
     <div class="dz2-bts"><button class="dz2-bt" onclick="dzLancar()">${at ? 'Salvar alteração' : '⚡ 3. Lançar desafio'}</button><button class="dz2-bt sec" onclick="dzTv()">📺 Mostrar na TV</button>${at ? `<button class="dz2-bt sec" onclick="dzEncerrar()">Encerrar sem vencedor</button>` : ''}</div>
-    ${at ? `<div class="dz2-dica">${dzTipo(at) ? `O app dá a vitória sozinho para quem ${dzTipo(at) === 'visita' ? 'marcar a primeira visita' : 'fizer a primeira reserva'} depois de ${dzHM(at.inicio)} (com o seu app aberto). Se precisar, toque na foto da pessoa.` : 'Quando alguém bater, toque na foto da pessoa logo abaixo para dar a vitória.'}</div>` : ''}</div>`;
+    ${at ? `<div class="dz2-dica">${dzTipo(at) ? `O app dá a vitória sozinho para quem ${dzTipo(at) === 'visita' ? 'marcar a primeira visita' : dzTipo(at) === 'realizada' ? 'marcar e realizar a primeira visita' : 'fizer a primeira reserva'} depois de ${dzHM(at.inicio)} (com o seu app aberto). Se precisar, toque na foto da pessoa.` : 'Quando alguém bater, toque na foto da pessoa logo abaixo para dar a vitória.'}</div>` : ''}</div>`;
 }
 // v473: "Mostrar na TV" lança o que estiver escrito (se ainda não estiver no ar) e abre a tela cheia
 window.dzTv = async () => {
@@ -15287,13 +15287,15 @@ function htmlSalaoTV(){
     <div class="tv2-corpo ${bf ? '' : 'so'}"><div class="tv2-dz">${htmlDzCard(true)}</div>${bf || hist.length ? `<div class="tv2-lado">${bf ? htmlSalaoBF(true) : ''}${hist.length ? `<div class="dz2-h">Ganhadores de hoje</div><div class="dz2-hist">${hist.map(d => `<div><span><em>${dzHM(d.vencEm)}</em>${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ` · R$ ${d.premio}` : ''}${d.premio ? (d.pago ? ' <i class="dz2-pg ok">PIX pago ✓</i>' : ' <i class="dz2-pg">PIX hoje</i>') : ''}</b></div>`).join('')}</div>` : ''}</div>` : ''}</div></div>`;
 }
 // v477: o app dá a vitória sozinho nos desafios de "primeira visita marcada" e "primeira reserva" (roda no app do gestor, que vê todas as visitas e reservas)
-const dzTipo = d => { const t = norm(d.titulo || ''); return /visita/.test(t) ? 'visita' : /reserva|venda/.test(t) ? 'reserva' : ''; };
+const dzTipo = d => { const t = norm(String(d.titulo || '').replace(/[\u200B-\u200D\uFEFF]/g, '')); return /visita/.test(t) && /realiz/.test(t) ? 'realizada' : /visita/.test(t) ? 'visita' : /reserva|venda/.test(t) ? 'reserva' : ''; }; /* v481: 'marcar e realizar a visita' = a visita marcada depois do lançamento que for realizada primeiro, no mesmo dia */
 let _dzAutoOcup = false;
 async function dzAuto(){
   const at = dzAtivo(); if (!at || !souDono() || _dzAutoOcup) return; const tipo = dzTipo(at); if (!tipo) return;
   const part = new Set(dzPart().map(p => p.uid)), ini = Number(at.inicio) || 0; let cand = [];
   if (tipo === 'visita') cand = (visitasBrutas && visitasBrutas.length ? visitasBrutas : visitas).filter(v => Number(v.criadoEm) >= ini && v.status !== 'Cancelada')
     .map(v => ({ em:Number(v.criadoEm), uid:part.has(v.criadoPor) ? v.criadoPor : v.corretorUid }));
+  else if (tipo === 'realizada') cand = (visitasBrutas && visitasBrutas.length ? visitasBrutas : visitas).filter(v => Number(v.criadoEm) >= ini && v.status === 'Realizada' && v.date === (at.dia || hojeISO()))
+    .map(v => ({ em:Number(v.realizadaEm) || Number(v.atualizadoEm) || Date.now(), uid:v.corretorUid || v.criadoPor }));
   else cand = (reservasTodas || []).filter(r => Number(r.criadoEm) >= ini && !r.caiu && !r.arquivado).map(r => ({ em:Number(r.criadoEm), uid:(r.corretorUids || [])[0] || r.criadoPor }));
   const g = cand.filter(x => x.uid && part.has(x.uid)).sort((a, b) => a.em - b.em)[0]; if (!g) return;
   const p = dzPart().find(x => x.uid === g.uid); if (!p) return;
