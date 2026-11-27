@@ -8708,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 479;
+const APP_VERSAO = 480;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13889,8 +13889,7 @@ function saldoCarteira(uid, c = bvCfg()){
   const bfc = (() => { try { return bfCarteira(uid); } catch(e) { return { disp:0, pend:0 }; } })(); // v451: Black Friday
   const dzg = (() => { try { return dzGanhoDe(uid); } catch(e) { return 0; } })(); // v471: desafio relâmpago
   const ganho = (c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0)) + ganhoAnjo + bfc.disp + dzg;
-  const dzPg = (() => { try { return dzTodos().filter(d => d.status === 'ganho' && d.vencUid === uid && d.pago && d.carteira !== false).reduce((a, d) => a + (Number(d.premio) || 0), 0); } catch(e) { return 0; } })(); /* v478: prêmio do desafio pago por PIX sai do saldo */
-  const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0) + dzPg;
+  const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0); /* v480: o desconto vem do saque pago; o selo PIX pago do desafio é só aviso */
   return { ganho, ganhoAnjo, vendasA, cada, vale, pendL, pend:pendL.length * cada + bfc.pend, bfDisp:bfc.disp, dzDisp:dzg, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
 }
 // v133: a carteira vale para todos os perfis (corretor, coordenador, SDR, anjo e gerência); só o correspondente fica de fora
@@ -13966,7 +13965,7 @@ window.solicitarSaque = () => {
   const tipoPix = (PIX_TIPOS.find(t => t[0] === pix.tipo) || [, 'Chave'])[1], eq = eqNome(perfil.equipe || '').replace(/^[^\p{L}]+/u, '');
   const msg = `Olá, ${quem}! Tudo bem?\n\nAqui é *${nomeBonito(perfil.nome)}*${eq ? ' (' + eq + ')' : ''}. Pelo App Frade, estou fazendo uma *solicitação de saque* do meu saldo da Carteira Frade.\n\n`
     + `*Valor do saque:* ${frd(k.disponivel)} (R$ ${k.disponivel.toLocaleString('pt-BR', { minimumFractionDigits:2 })})\n`
-    + `*Origem:* ${[k.vendasA.length ? `${k.vendasA.length} venda${k.vendasA.length === 1 ? '' : 's'} dos corretores que acompanho (${frd(k.ganhoAnjo)})` : '', nVis ? `${nVis} visita${nVis === 1 ? '' : 's'} realizada${nVis === 1 ? '' : 's'} no Feirão Tenda` : ''].filter(Boolean).join(' e ')}\n`
+    + `*Origem:* ${[k.dzDisp ? `prêmio${dzTodos().filter(d => d.status === 'ganho' && d.vencUid === uidAtual).length > 1 ? 's' : ''} do Desafio relâmpago (R$ ${k.dzDisp})` : '', k.bfDisp ? `Black Friday (${frd(k.bfDisp)})` : '', k.vendasA.length ? `${k.vendasA.length} venda${k.vendasA.length === 1 ? '' : 's'} dos corretores que acompanho (${frd(k.ganhoAnjo)})` : '', nVis ? `${nVis} visita${nVis === 1 ? '' : 's'} realizada${nVis === 1 ? '' : 's'} no Feirão Tenda` : ''].filter(Boolean).join(' e ')}\n`
     + vis.map(v => `• ${dataBR(v.date).slice(0, 5)} · ${nomeBonito(v.cliente || 'Cliente')}`).join('\n') + (vis.length ? '\n' : '')
     + `\n*Dados para o PIX*\nChave (${tipoPix}): ${pix.chave}\nTitular: ${pix.titular || perfil.nome}\n\n`
     + `Pedido nº ${cod} · ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}.\nQuando o PIX for feito, é só me avisar por aqui. Obrigado!`;
@@ -13980,6 +13979,10 @@ window.marcarSaque = async (id, st) => {
   if (!souGerente()) return;
   try { await gravar(updateDoc(doc(db,'saques',id), { status:st, [st === 'pago' ? 'pagoEm' : 'recusadoEm']:Date.now(), porNome:perfil.nome })); toast(st === 'pago' ? 'Saque marcado como pago' : 'Saque recusado: o valor volta para a carteira'); }
   catch(e) { toast('Erro: ' + e.message); }
+  // v480: saque pago -> os prêmios do desafio dessa pessoa aparecem como "PIX pago" na tela
+  try { if (st === 'pago') { const sq = saques.find(x => x.id === id); const l = dzTodos().slice(); let mud = 0;
+    l.forEach((d, i) => { if (sq && d.status === 'ganho' && d.vencUid === sq.uid && !d.pago && (Number(d.vencEm) || 0) <= (Number(sq.em) || Date.now())) { l[i] = { ...d, pago:true, pagoEm:Date.now(), pagoPor:primeiro(perfil?.nome || '') }; mud++; } });
+    if (mud && souDono()) await dzGravar(l); } } catch(e) {}
 };
 window.bvModoVis = () => { const m = $('bvModo').value; $('bvPorVisita').classList.toggle('hide', m !== 'por_visita'); $('bvMeta').classList.toggle('hide', m !== 'meta'); $('bvFaixas').classList.toggle('hide', m !== 'faixas'); };
 function bvFaixasDesenha(){ $('bvFaixasL').innerHTML = (window._bvF || []).map((f, i) => `<div class="bv-fx"><span>a partir de</span><input type="number" min="1" value="${f.min || ''}" oninput="_bvF[${i}].min=Number(this.value)||0"><span>visitas →</span><input inputmode="decimal" placeholder="R$" value="${f.valor ? String(f.valor).replace('.', ',') : ''}" oninput="_bvF[${i}].valor=lerDec(this.value)"><button type="button" class="icon-btn del" onclick="_bvF.splice(${i},1);bvFaixasDesenha()" aria-label="Tirar faixa">🗑️</button></div>`).join(''); }
