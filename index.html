@@ -8703,7 +8703,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 466;
+const APP_VERSAO = 468;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -17815,7 +17815,7 @@ function calcSalario(rg, n){
   { const pas = rg.porAssinSdr === undefined || rg.porAssinSdr === '' || rg.porAssinSdr === null ? (n.ehSdr ? 200 : 0) : v('porAssinSdr'); // v258: SDR recebe R$ 200 por contrato assinado (padrão)
     if (pas && q('assinSdr')) partes.push([`${q('assinSdr')} contrato${q('assinSdr') === 1 ? '' : 's'} assinado${q('assinSdr') === 1 ? '' : 's'} de venda SDR × ${brl(pas)}${(n.assinSdrLista || []).length ? ' · ' + n.assinSdrLista.join(', ') : ''}`, pas * q('assinSdr')]); }
   if (v('porDoc') && q('docs')) partes.push([`${q('docs')} docs × ${brl(v('porDoc'))}`, v('porDoc') * q('docs')]); // v348: sem a condição da média (pedido do Allan)
-  if (v('porDiaMedia') && q('diasMedia')) partes.push([`${q('diasMedia')} dias na média (até ${v('diaMediaMax') || SDR_MEDIA_PADRAO} leads novos por doc/CPF, dias com ${SDR_MIN_LEADS}+ leads) × ${brl(v('porDiaMedia'))}${(n.diasMediaLista || []).length ? ' · dias ' + n.diasMediaLista.join(', ') : ''}`, v('porDiaMedia') * q('diasMedia')]);
+  if (v('porDiaMedia') && q('diasMedia')) partes.push([`${q('diasMedia')} dias na média (até ${v('diaMediaMax') || SDR_MEDIA_PADRAO} leads novos por doc/CPF, dias com ${SDR_MIN_LEADS}+ leads, ${SDR_MIN_NOVO}+ a partir de 24/11) × ${brl(v('porDiaMedia'))}${(n.diasMediaLista || []).length ? ' · dias ' + n.diasMediaLista.join(', ') : ''}`, v('porDiaMedia') * q('diasMedia')]);
   if (v('porVisita') && q('visitas')) partes.push([`${q('visitas')} visitas × ${brl(v('porVisita'))}`, v('porVisita') * q('visitas')]);
   if (v('porRecontato') && q('recontatos')) partes.push([`${q('recontatos')} recontatos × ${brl(v('porRecontato'))}`, v('porRecontato') * q('recontatos')]);
   if (v('porSemana') && q('semanas')) partes.push([`${q('semanas')} semanas sem roxo × ${brl(v('porSemana'))}`, v('porSemana') * q('semanas')]);
@@ -20388,9 +20388,9 @@ function mdValores(dias){
   const vivo = souGerente();
   if (!vivo) rankingAtiv.forEach(r => [['vm','mdvm'],['vr','mdvr'],['docs','mddoc']].forEach(([k, c]) => Object.entries(r[c] || {}).forEach(([d, n]) => { if (ds.has(d)) add(r.uid, k, Number(n) || 0); })));
   // ao vivo: a gerência vê tudo; os outros recalculam os próprios números (o resto vem do que a gerência sincroniza)
-  const so = vivo ? null : uidAtual;
-  if (!vivo && so) { const o = out.get(so); if (o) { o.vm = 0; o.vr = 0; o.docs = 0; } }
-  const ok = u => vivo || u === so;
+  // v467 (Allan, 27/11: "rankings diferentes em alguns telefones"): fora da gerência TODO MUNDO vem do mesmo número sincronizado,
+  // inclusive a própria pessoa. Antes cada celular recalculava só os próprios números (sem ver todas as fichas) e o ranking mudava de telefone para telefone
+  const ok = u => vivo;
   visitasBrutas.filter(v => !v.arquivado).forEach(v => {
     if (v.criadoEm && v.status !== 'Cancelada') { const d = iso(new Date(v.criadoEm)), u = donoCart(v) || v.corretorUid; if (ds.has(d) && ok(u)) add(u, 'vm'); }
     if (v.status === 'Realizada' && ds.has(v.date) && ok(v.corretorUid)) add(v.corretorUid, 'vr');
@@ -20519,7 +20519,7 @@ window.mdLetPausa = v => { _mdLetPausa = v; };
 // ---------- gerência: guarda os números de cada um para o ranking de todos (corretor não lê os dados dos outros) ----------
 let _mdSinc = 0;
 async function sincMetasDia(forcar){
-  if (!souGerente() || souCeo() || (!forcar && Date.now() - _mdSinc < 3 * 60e3) || !carregado.visitas) return;
+  if (!souGerente() || souCeo() || (!forcar && Date.now() - _mdSinc < 60e3) || !carregado.visitas) return; // v467: sincroniza a cada 1 min (era 3)
   _mdSinc = Date.now();
   try {
     // v271: as documentações valem para o ranking do mês inteiro. Antes só ontem e a semana eram guardados, e as docs
@@ -20899,9 +20899,12 @@ window.visitaDeSdr = visitaDeSdr;
 // média lead/doc do dia = leads NOVOS (CRM + Instagram) ÷ docs (N° DOC + N° CPF, novos e recuperados, CRM e Instagram).
 // Só conta o dia em que a SDR pegou pelo menos 10 leads novos. Dia "na média" = média até o limite (padrão 3).
 const SDR_MEDIA_PADRAO = 3, SDR_MIN_LEADS = 10;
+// v468 (Allan, 27/11): de 24/11 em diante o dia da SDR conta com 7 leads novos; os dias antes continuam com 10
+const SDR_MIN_DESDE = '2026-11-24', SDR_MIN_NOVO = 7;
+const sdrMinLeads = dia => String(dia || '') >= SDR_MIN_DESDE ? SDR_MIN_NOVO : SDR_MIN_LEADS;
 function diasNaMedia(dias, max){ const lim = Number(max) || SDR_MEDIA_PADRAO, por = {};
   (dias || []).forEach(d => { const o = por[d.dia] || (por[d.dia] = { dia:d.dia, leads:0, docs:0 }); o.leads += d.leads; o.docs += d.docs; });
-  return Object.values(por).filter(d => d.leads >= SDR_MIN_LEADS && d.docs > 0 && d.leads / d.docs <= lim).sort((a,b) => a.dia.localeCompare(b.dia)); }
+  return Object.values(por).filter(d => d.leads >= sdrMinLeads(d.dia) && d.docs > 0 && d.leads / d.docs <= lim).sort((a,b) => a.dia.localeCompare(b.dia)); }
 window.diasNaMedia = diasNaMedia;
 /* v346: aba "SDRs na média": dia a dia de cada SDR no mês. O dia conta quando ela pegou 10+ leads novos (CRM + Instagram)
    e a média leads novos ÷ docs (DOC + CPF, novos e recuperados) ficou em até 3. Os números vêm dos resumos do dia. */
@@ -20913,15 +20916,15 @@ function renderSdrsMedia(){
   const meses = []; for (let m = atual, i = 0; m >= MES_INICIO && i < 24; i++) { meses.push(m); const [a, b] = m.split('-').map(Number); m = iso(new Date(a, b - 2, 1)).slice(0, 7); }
   $('smMes').innerHTML = meses.map(m => `<option value="${m}" ${m === smMes ? 'selected' : ''}>${nomeMes(m)}</option>`).join('');
   const de = smMes + '-01', ate0 = fimDoMes(smMes), h = hojeISO(), ate = ate0 > h ? h : ate0, lim = SDR_MEDIA_PADRAO;
-  $('smSub').textContent = `${nomeMes(smMes)} · o dia conta com ${SDR_MIN_LEADS} ou mais leads novos e média de até ${lim} leads por doc (DOC + CPF, novos e recuperados)`;
+  $('smSub').textContent = `${nomeMes(smMes)} · o dia conta com ${SDR_MIN_LEADS} ou mais leads novos (${SDR_MIN_NOVO} ou mais a partir de 24/11) e média de até ${lim} leads por doc (DOC + CPF, novos e recuperados)`;
   const l = rankingSdr(de, ate).filter(x => x.dias.length);
   if (!l.length) { el.innerHTML = `<div class="card"><p class="muted" style="margin:0">Nenhum resumo de SDR em ${nomeMes(smMes)}.</p></div>`; return; }
   const fmt = n => n.toLocaleString('pt-BR', { maximumFractionDigits:2 });
   el.innerHTML = `<div class="sm-grade">${l.map(x => {
     const por = {}; x.dias.forEach(d => { const o = por[d.dia] || (por[d.dia] = { dia:d.dia, leads:0, docs:0 }); o.leads += d.leads; o.docs += d.docs; });
-    const dias = Object.values(por).sort((a, b) => a.dia.localeCompare(b.dia)), ok = d => d.leads >= SDR_MIN_LEADS && d.docs > 0 && d.leads / d.docs <= lim;
+    const dias = Object.values(por).sort((a, b) => a.dia.localeCompare(b.dia)), ok = d => d.leads >= sdrMinLeads(d.dia) && d.docs > 0 && d.leads / d.docs <= lim;
     const na = dias.filter(ok), docsNa = na.reduce((a, d) => a + d.docs, 0);
-    const motivo = d => ok(d) ? 'Na média' : d.leads < SDR_MIN_LEADS ? `Menos de ${SDR_MIN_LEADS} leads` : !d.docs ? 'Sem doc' : 'Média acima de ' + lim;
+    const motivo = d => ok(d) ? 'Na média' : d.leads < sdrMinLeads(d.dia) ? `Menos de ${sdrMinLeads(d.dia)} leads` : !d.docs ? 'Sem doc' : 'Média acima de ' + lim;
     return `<div class="card sm-card"><div class="sm-topo"><b>${esc(nomeBonito(x.nome))}</b><span class="muted">${dias.length} dia${dias.length === 1 ? '' : 's'} com resumo</span></div>
       <div class="sm-nums"><div><b>${na.length}</b><span>dias na média</span></div><div><b>${docsNa}</b><span>docs nesses dias</span></div><div><b>${x.leads}</b><span>leads novos no mês</span></div><div><b>${x.docs}</b><span>docs no mês</span></div></div>
       <div class="tbl-wrap"><table class="rank sm-tab"><thead><tr><th>Dia</th><th style="text-align:right">Leads novos</th><th style="text-align:right">Docs</th><th style="text-align:right">Média</th><th></th></tr></thead><tbody>${
@@ -20970,7 +20973,7 @@ function tabelaSdr(de, ate){
   const pos = posicoes(l);
   return `<div style="overflow-x:auto"><table class="rank rk-sdr"><thead><tr><th>#</th><th>SDR</th><th>Visitas</th><th class="hide-m">Realizadas</th><th>Pontos</th><th class="hide-m">Leads</th><th>Docs</th><th title="Dias com média de até 3 leads por doc">Dias na média</th><th class="hide-m">CPFs</th><th>Aprov.</th><th class="hide-m">Outro CCA</th></tr></thead><tbody>${
     l.map((x,i) => `<tr class="${x.uid===uidAtual?'me':''}"><td class="pos">${MEDALHA(pos[i])}</td><td><span class="nm">${esc(x.nome)}</span>${ehWa(x.uid) && souGerente() && !souCeo() ? `<button class="link" style="display:block;font-size:12px" onclick="vincularSdrWa('${esc(x.nome).replace(/'/g, '&#39;')}')">Vincular à SDR do app</button>` : ''}</td><td>${x.visitas}</td><td class="hide-m">${x.realizadas}</td><td class="tot pts">${x.pontos}</td><td class="hide-m">${x.leads}</td><td>${x.docs}</td><td>${x.diasMedia || 0}</td><td class="hide-m">${x.cpfs}</td><td>${x.aprov}</td><td class="hide-m">${x.outroCca}</td></tr>`).join('')}</tbody></table></div>
-    <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam. CPF conta como documentação (a coluna CPFs mostra quantos dos docs foram de CPF). Dias na média: dias com pelo menos ${SDR_MIN_LEADS} leads novos em que a média ficou em até ${SDR_MEDIA_PADRAO} (leads novos ÷ docs + CPFs do dia, novos e recuperados).</div></details>`;
+    <details class="info-tog"><summary>ⓘ De onde vêm esses números</summary><div class="hint" style="margin-top:6px">Visitas e pontos: as visitas que cada SDR marcou (valem os mesmos pontos das visitas). Leads, docs, CPFs e aprovações: do resumo do dia que elas mandam. CPF conta como documentação (a coluna CPFs mostra quantos dos docs foram de CPF). Dias na média: dias com pelo menos ${SDR_MIN_LEADS} leads novos (${SDR_MIN_NOVO} a partir de 24/11) em que a média ficou em até ${SDR_MEDIA_PADRAO} (leads novos ÷ docs + CPFs do dia, novos e recuperados).</div></details>`;
 }
 
 // ---------- resumo do dia das SDRs ----------
@@ -21532,8 +21535,8 @@ function renderResumoView(){
   const v = x => x === '' || x === undefined || x === null ? '–' : x, so = (o, k) => (Number(o?.crm?.[k]) || 0) + (Number(o?.insta?.[k]) || 0);
   const meus = sdrResumos.filter(x => x.sdrUid === uidAtual).sort((a,b) => b.dia.localeCompare(a.dia)).slice(0, 31);
   { const m0 = mesAtual() + '-01', eu = rankingSdr(m0, fimDoMes(mesAtual())).find(x => x.uid === uidAtual);
-    $('resAviso').innerHTML += `<div class="ci-resumo" style="margin:0 0 12px;font-size:14px">📊 <b>${nomeMes(mesAtual())}:</b> ${eu ? eu.docs : 0} docs · <b>${eu ? eu.diasMedia : 0} dia${(eu ? eu.diasMedia : 0) === 1 ? '' : 's'} na média</b> <span class="muted">(até ${SDR_MEDIA_PADRAO} leads novos por doc/CPF, nos dias com ${SDR_MIN_LEADS}+ leads)</span></div>`; }
-  const naMedia = r => { const d = so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf'), l = so(r.novos,'lead'); return l >= SDR_MIN_LEADS && d > 0 && l / d <= SDR_MEDIA_PADRAO; };
+    $('resAviso').innerHTML += `<div class="ci-resumo" style="margin:0 0 12px;font-size:14px">📊 <b>${nomeMes(mesAtual())}:</b> ${eu ? eu.docs : 0} docs · <b>${eu ? eu.diasMedia : 0} dia${(eu ? eu.diasMedia : 0) === 1 ? '' : 's'} na média</b> <span class="muted">(até ${SDR_MEDIA_PADRAO} leads novos por doc/CPF, nos dias com ${SDR_MIN_LEADS}+ leads, ${SDR_MIN_NOVO}+ a partir de 24/11)</span></div>`; }
+  const naMedia = r => { const d = so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf'), l = so(r.novos,'lead'); return l >= sdrMinLeads(r.dia) && d > 0 && l / d <= SDR_MEDIA_PADRAO; };
   $('resMeus').innerHTML = meus.length ? meus.map(r => `<div class="pt-row" style="cursor:pointer;flex-wrap:wrap;gap:4px 12px" onclick="document.getElementById('resData').value='${r.dia}';preencherResumoDoDia();window.scrollTo(0,0)"><span>📅 ${dataBR(r.dia)}${naMedia(r) ? ' <span style="color:var(--ok);font-weight:700">✓ na média</span>' : ''}</span><b style="font-weight:600;font-size:13px">${so(r.novos,'lead')} leads · ${so(r.novos,'doc') + so(r.recuperados,'doc') + so(r.novos,'cpf') + so(r.recuperados,'cpf')} docs (${so(r.novos,'cpf') + so(r.recuperados,'cpf')} de CPF) · ${v(r.aprovDia)} aprov.</b></div>`).join('')
     : '<div class="muted" style="font-size:13.5px">Nenhum resumo ainda.</div>';
 }
