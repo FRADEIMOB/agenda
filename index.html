@@ -8708,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 478;
+const APP_VERSAO = 479;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9484,9 +9484,10 @@ function pontosDoMesBase(m, val, corte){
   if (n('ausencia')) {
     const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO(); // v198: ausência segue só a data dela (as antigas continuam valendo)
     const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay()) && d.getDay() !== 6 && !feriados(d.getFullYear()).has(k)) uteis.push(k); } /* v322: feriado não conta ausência; v415: sábado também não (faltar no sábado não é ausência) */
-    /* v476: quem foi bloqueado no mês continua com as ausências de antes do bloqueio (a pontuação não muda ao bloquear) */
+    /* v476/v479: bloqueado da lista config/app.ausManter continua com as ausências de antes do bloqueio */
     const blqDia = p => p.status === 'bloqueado' && p.bloqueadoEm ? iso(new Date(p.bloqueadoEm)) : '';
-    const quem = RK().length ? RK().filter(p => (p.status === 'ativo' || (blqDia(p) && blqDia(p).slice(0, 7) >= m)) && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
+    const ausManter = new Set(Array.isArray(appCfg.ausManter) ? appCfg.ausManter : []); /* v479: só quem está nesta lista (Cassiana) leva as faltas de antes do bloqueio; os outros bloqueados seguem como sempre */
+    const quem = RK().length ? RK().filter(p => (p.status === 'ativo' || (ausManter.has(p.uid) && blqDia(p) && blqDia(p).slice(0, 7) >= m)) && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
       // v465 (Allan, 25/11): quem ficou só com as aulas não perde ponto até o app ser liberado; o dia da liberação também não conta
       const lib = Number(p.liberadoEm) || Number(((typeof perfisTodos !== 'undefined' && perfisTodos) || []).find(y => y.uid === p.uid)?.liberadoEm) || 0;
