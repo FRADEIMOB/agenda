@@ -8708,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 475;
+const APP_VERSAO = 478;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9484,7 +9484,9 @@ function pontosDoMesBase(m, val, corte){
   if (n('ausencia')) {
     const dias = ciCfg().dias || [1,2,3,4,5,6], desde = String(val.ausenciaDesde || '2026-10-07'), hj = hojeISO(); // v198: ausência segue só a data dela (as antigas continuam valendo)
     const uteis = []; for (let d = new Date(m + '-01T12:00:00'); iso(d).slice(0,7) === m; d.setDate(d.getDate() + 1)) { const k = iso(d); if (k >= desde && naFaixa(k) && k < hj && dias.includes(d.getDay()) && d.getDay() !== 6 && !feriados(d.getFullYear()).has(k)) uteis.push(k); } /* v322: feriado não conta ausência; v415: sábado também não (faltar no sábado não é ausência) */
-    const quem = RK().length ? RK().filter(p => p.status === 'ativo' && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
+    /* v476: quem foi bloqueado no mês continua com as ausências de antes do bloqueio (a pontuação não muda ao bloquear) */
+    const blqDia = p => p.status === 'bloqueado' && p.bloqueadoEm ? iso(new Date(p.bloqueadoEm)) : '';
+    const quem = RK().length ? RK().filter(p => (p.status === 'ativo' || (blqDia(p) && blqDia(p).slice(0, 7) >= m)) && ['corretor','coordenador','sdr','anjo'].includes(p.papel)) : [...g.values()].filter(x => x.uid).map(x => ({ uid:x.uid, nome:x.nome, equipe:x.equipe }));
     if (uteis.length) quem.forEach(p => {
       // v465 (Allan, 25/11): quem ficou só com as aulas não perde ponto até o app ser liberado; o dia da liberação também não conta
       const lib = Number(p.liberadoEm) || Number(((typeof perfisTodos !== 'undefined' && perfisTodos) || []).find(y => y.uid === p.uid)?.liberadoEm) || 0;
@@ -9492,7 +9494,7 @@ function pontosDoMesBase(m, val, corte){
       const x = pega({ corretorUid:p.uid, corretorNome:p.nome, equipe:p.equipe });
       const folga = d => (x._abo && x._abo.has(d)) || ['folga','ferias','atestado'].includes((typeof presencas !== 'undefined' && presencas[d]?.marcados?.[p.uid]?.status) || '');
       /* v415: novato não perde ponto no dia em que foi cadastrado (Ângelo, cadastrado 13/11) */
-      const ausD = uteis.filter(d => d > ini && !(x._pres && x._pres.has(d)) && !folga(d)), aus = ausD.length;
+      const bq = blqDia(p), ausD = uteis.filter(d => d > ini && (!bq || d < bq) && !(x._pres && x._pres.has(d)) && !folga(d)), aus = ausD.length;
       x._ausDias = ausD; x.ausencias = aus;
       // v199: ausência antes da data nova vale o valor antigo; da data em diante, o valor de "Ausência"
       const corteA = String(val.presencaDesde || ''), temAnt = val.ausenciaAntes !== undefined && val.ausenciaAntes !== '' && val.ausenciaAntes !== null;
@@ -13886,7 +13888,8 @@ function saldoCarteira(uid, c = bvCfg()){
   const bfc = (() => { try { return bfCarteira(uid); } catch(e) { return { disp:0, pend:0 }; } })(); // v451: Black Friday
   const dzg = (() => { try { return dzGanhoDe(uid); } catch(e) { return 0; } })(); // v471: desafio relâmpago
   const ganho = (c.soFeirao ? vale.length * cada : Object.values(porMes).reduce((a, n) => a + bonusDe(n, c), 0)) + ganhoAnjo + bfc.disp + dzg;
-  const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0);
+  const dzPg = (() => { try { return dzTodos().filter(d => d.status === 'ganho' && d.vencUid === uid && d.pago && d.carteira !== false).reduce((a, d) => a + (Number(d.premio) || 0), 0); } catch(e) { return 0; } })(); /* v478: prêmio do desafio pago por PIX sai do saldo */
+  const meusSaques = saques.filter(x => x.uid === uid && x.status !== 'recusado'), sacado = meusSaques.reduce((a, x) => a + (Number(x.valor) || 0), 0) + dzPg;
   return { ganho, ganhoAnjo, vendasA, cada, vale, pendL, pend:pendL.length * cada + bfc.pend, bfDisp:bfc.disp, dzDisp:dzg, sacado, disponivel:Math.max(0, Math.round((ganho - sacado) * 100) / 100), saques:meusSaques };
 }
 // v133: a carteira vale para todos os perfis (corretor, coordenador, SDR, anjo e gerência); só o correspondente fica de fora
@@ -15182,6 +15185,11 @@ window.dzVencedor = async uid => {
 };
 window.dzEncerrar = async () => { const at = dzAtivo(); if (!at || !souDono() || !confirm('Encerrar este desafio sem vencedor?')) return;
   const l = dzTodos().slice(), i = l.findIndex(x => x.id === at.id); l[i] = { ...at, status:'encerrado', fimEm:Date.now() }; await dzGravar(l); };
+// v478: o gestor marca o PIX do prêmio como pago; aparece "PIX pago" na tela e o valor sai do saldo da Carteira
+window.dzPago = async id => { if (!souDono()) return; const l = dzTodos().slice(), i = l.findIndex(x => x.id === id); if (i < 0) return; const d = l[i];
+  if (d.pago && !confirm('Desmarcar o pagamento deste prêmio?')) return;
+  l[i] = d.pago ? { ...d, pago:false, pagoEm:0 } : { ...d, pago:true, pagoEm:Date.now(), pagoPor:primeiro(perfil?.nome || '') };
+  if (await dzGravar(l)) toast(l[i].pago ? `PIX de ${d.vencNome} marcado como pago` : 'Pagamento desmarcado'); };
 window.dzDesfazer = async id => { if (!souDono() || !confirm('Desfazer este vencedor? O prêmio sai da Carteira Frade e o desafio volta a valer.')) return;
   const l = dzTodos().slice(), i = l.findIndex(x => x.id === id); if (i < 0) return; const { vencUid, vencNome, vencEm, carteira, ...resto } = l[i]; l[i] = { ...resto, status:'aovivo' }; await dzGravar(l); };
 // aviso + comemoração em todos os celulares (uma vez por desafio)
@@ -15217,10 +15225,10 @@ function htmlDzCard(tv){
     topo = `<div class="dz2-alvo">${at.premio ? `<div class="dz2-pr"><small>R$</small>${esc(String(at.premio))}</div>` : ''}<div class="dz2-tit">${esc(at.titulo)}</div>
       <div class="dz2-tempo"><span>no ar desde ${dzHM(at.inicio)}</span><b>${h !== '00' ? h + ':' : ''}${m}:${s}</b></div></div>${dono ? `<div class="dz2-dica">Quando alguém bater, toque na foto da pessoa para dar a vitória.</div>` : ''}`; }
   else if (g) { const f = dzFotoDe(g.vencUid);
-    topo = `<div class="dz2-ven"><div class="dz2-vf" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div><div class="dz2-vt">Temos um vencedor!</div><div class="dz2-vn">${esc(g.vencNome || '')}</div><div class="dz2-vq">${esc(g.titulo)} · ${dzHM(g.vencEm)}</div>${g.premio ? `<div class="dz2-vp">+ R$ ${g.premio} na Carteira Frade · PIX hoje</div>` : ''}</div></div>`; }
+    topo = `<div class="dz2-ven"><div class="dz2-vf" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div><div class="dz2-vt">Temos um vencedor!</div><div class="dz2-vn">${esc(g.vencNome || '')}</div><div class="dz2-vq">${esc(g.titulo)} · ${dzHM(g.vencEm)}</div>${g.premio ? `<div class="dz2-vp">+ R$ ${g.premio} na Carteira Frade · ${g.pago ? 'PIX pago ✓' : 'PIX hoje'}</div>` : ''}</div></div>`; }
   else topo = `<div class="dz2-vazio"><b>Fique ligado</b><span>A qualquer momento sai um desafio relâmpago valendo prêmio.</span>${tv && souDono() ? '<small>Nenhum desafio no ar. Aperte Esc, escreva o desafio e toque em “Lançar desafio”.</small>' : ''}</div>`;
   const hist = dzHoje().filter(d => d.status === 'ganho').sort((a, b) => (b.vencEm || 0) - (a.vencEm || 0));
-  const histHtml = hist.length ? `<div class="dz2-h">Ganhadores de hoje</div><div class="dz2-hist">${hist.map(d => `<div><span><em>${dzHM(d.inicio)}</em>${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ` · R$ ${d.premio}` : ''}${souDono() && !tv ? ` <a href="#" onclick="event.preventDefault();dzDesfazer('${d.id}')">desfazer</a>` : ''}</b></div>`).join('')}</div>` : '';
+  const histHtml = hist.length ? `<div class="dz2-h">Ganhadores de hoje</div><div class="dz2-hist">${hist.map(d => `<div><span><em>${dzHM(d.inicio)}</em>${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ` · R$ ${d.premio}` : ''}${d.premio ? (d.pago ? ' <i class="dz2-pg ok">PIX pago ✓</i>' : ' <i class="dz2-pg">PIX hoje</i>') : ''}${souDono() && !tv ? `<span class="dz2-hb">${d.premio ? `<button type="button" class="${d.pago ? '' : 'on'}" onclick="dzPago('${d.id}')">${d.pago ? 'Desmarcar pago' : 'Marcar como pago'}</button>` : ''}<a href="#" onclick="event.preventDefault();dzDesfazer('${d.id}')">desfazer</a></span>` : ''}</b></div>`).join('')}</div>` : '';
   const jogo = at || !g ? `<div class="dz2-h">No jogo agora<span>${temCk ? `${dentro.length} com check-in${tv && fora.length ? ` · ${fora.length} fora` : ''}` : `${ps.length} pessoas`}</span></div>${grade}` : '';
   return `<div class="dz2 ${tv ? 'tv' : ''}"><div class="dz2-cab"><span class="dz2-raio">⚡ Desafio relâmpago</span>${at ? '<span class="dz-tag"><i></i>AO VIVO</span>' : ''}</div>${topo}${jogo}${tv ? '' : histHtml}</div>`;
 }
@@ -15236,7 +15244,7 @@ function htmlDzGestao(){
     <div class="dz2-chips">${[20,30,50,100].map(v => `<button type="button" onclick="$('dzPremio').value='${v}'">R$ ${v}</button>`).join('')}</div>
     <input id="dzPremio" inputmode="decimal" placeholder="50" value="${at && at.premio ? esc(String(at.premio)) : ''}">
     <div class="dz2-bts"><button class="dz2-bt" onclick="dzLancar()">${at ? 'Salvar alteração' : '⚡ 3. Lançar desafio'}</button><button class="dz2-bt sec" onclick="dzTv()">📺 Mostrar na TV</button>${at ? `<button class="dz2-bt sec" onclick="dzEncerrar()">Encerrar sem vencedor</button>` : ''}</div>
-    ${at ? '<div class="dz2-dica">Quando alguém bater, toque na foto da pessoa logo abaixo para dar a vitória.</div>' : ''}</div>`;
+    ${at ? `<div class="dz2-dica">${dzTipo(at) ? `O app dá a vitória sozinho para quem ${dzTipo(at) === 'visita' ? 'marcar a primeira visita' : 'fizer a primeira reserva'} depois de ${dzHM(at.inicio)} (com o seu app aberto). Se precisar, toque na foto da pessoa.` : 'Quando alguém bater, toque na foto da pessoa logo abaixo para dar a vitória.'}</div>` : ''}</div>`;
 }
 // v473: "Mostrar na TV" lança o que estiver escrito (se ainda não estiver no ar) e abre a tela cheia
 window.dzTv = async () => {
@@ -15256,7 +15264,8 @@ function bfTempoTexto(){
 }
 function htmlSalaoBF(tv){
   if (typeof bfComecou !== 'function' || !bfComecou() || Date.now() > BF_SOME) return '';
-  const { eqs, cor, sdr } = bfSalaoDados(), pct = n => n >= 2 ? 60 : n === 1 ? 55 : 50, tot = eqs.reduce((a, e) => a + e.n, 0) || 1;
+  let { eqs, cor, sdr } = bfSalaoDados(); if (tv && window._tvHist) { cor = cor.slice(0, window._tvHist > 2 ? 3 : 4); sdr = sdr.slice(0, window._tvHist > 2 ? 2 : 3); } /* v478: na TV abre espaço para os ganhadores */
+  const pct = n => n >= 2 ? 60 : n === 1 ? 55 : 50, tot = eqs.reduce((a, e) => a + e.n, 0) || 1;
   const duelo = eqs.length === 2 ? `<div class="bf2-duelo">${eqs.map((e, i) => `<div class="bf2-eq ${e.n > eqs[1 - i].n ? 'lid' : ''}"><b>${e.n}</b><span>${esc(e.nome)}</span></div>`).join('<div class="bf2-x">×</div>')}</div>
     <div class="bf2-barra"><i style="width:${Math.round(eqs[0].n / tot * 100)}%"></i></div><div class="bf2-leg">reservas da Black por equipe</div>` : '';
   const foto = uid => { const f = dzFotoDe(uid); return `<i class="bf2-av" style="${f ? `background-image:url('${f}')` : ''}"></i>`; };
@@ -15268,13 +15277,31 @@ function htmlSalaoBF(tv){
 // v473: TV do salão: desafio na tela toda e a Black na coluna da direita
 function htmlSalaoTV(){
   const bf = typeof bfComecou === 'function' && bfComecou() && Date.now() <= BF_SOME;
-  const hist = dzHoje().filter(d => d.status === 'ganho').sort((a, b) => (b.vencEm || 0) - (a.vencEm || 0)).slice(0, 4);
+  const hist = dzHoje().filter(d => d.status === 'ganho').sort((a, b) => (b.vencEm || 0) - (a.vencEm || 0)).slice(0, 8);
+  window._tvHist = hist.length;
   return `<div class="tv2"><div class="tv2-cab"><div class="tv2-marca">Frade <span>Imóveis</span></div>${bf ? `<div class="tv2-bf">BLACK <span>FRIDAY</span><small>termina em</small><b>${bfTempoTexto()}</b></div>` : ''}</div>
-    <div class="tv2-corpo ${bf ? '' : 'so'}"><div class="tv2-dz">${htmlDzCard(true)}</div>${bf || hist.length ? `<div class="tv2-lado">${bf ? htmlSalaoBF(true) : ''}${hist.length ? `<div class="dz2-h">Ganhadores de hoje</div><div class="dz2-hist">${hist.map(d => `<div><span><em>${dzHM(d.vencEm)}</em>${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ` · R$ ${d.premio}` : ''}</b></div>`).join('')}</div>` : ''}</div>` : ''}</div></div>`;
+    <div class="tv2-corpo ${bf ? '' : 'so'}"><div class="tv2-dz">${htmlDzCard(true)}</div>${bf || hist.length ? `<div class="tv2-lado">${bf ? htmlSalaoBF(true) : ''}${hist.length ? `<div class="dz2-h">Ganhadores de hoje</div><div class="dz2-hist">${hist.map(d => `<div><span><em>${dzHM(d.vencEm)}</em>${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ` · R$ ${d.premio}` : ''}${d.premio ? (d.pago ? ' <i class="dz2-pg ok">PIX pago ✓</i>' : ' <i class="dz2-pg">PIX hoje</i>') : ''}</b></div>`).join('')}</div>` : ''}</div>` : ''}</div></div>`;
+}
+// v477: o app dá a vitória sozinho nos desafios de "primeira visita marcada" e "primeira reserva" (roda no app do gestor, que vê todas as visitas e reservas)
+const dzTipo = d => { const t = norm(d.titulo || ''); return /visita/.test(t) ? 'visita' : /reserva|venda/.test(t) ? 'reserva' : ''; };
+let _dzAutoOcup = false;
+async function dzAuto(){
+  const at = dzAtivo(); if (!at || !souDono() || _dzAutoOcup) return; const tipo = dzTipo(at); if (!tipo) return;
+  const part = new Set(dzPart().map(p => p.uid)), ini = Number(at.inicio) || 0; let cand = [];
+  if (tipo === 'visita') cand = (visitasBrutas && visitasBrutas.length ? visitasBrutas : visitas).filter(v => Number(v.criadoEm) >= ini && v.status !== 'Cancelada')
+    .map(v => ({ em:Number(v.criadoEm), uid:part.has(v.criadoPor) ? v.criadoPor : v.corretorUid }));
+  else cand = (reservasTodas || []).filter(r => Number(r.criadoEm) >= ini && !r.caiu && !r.arquivado).map(r => ({ em:Number(r.criadoEm), uid:(r.corretorUids || [])[0] || r.criadoPor }));
+  const g = cand.filter(x => x.uid && part.has(x.uid)).sort((a, b) => a.em - b.em)[0]; if (!g) return;
+  const p = dzPart().find(x => x.uid === g.uid); if (!p) return;
+  _dzAutoOcup = true;
+  try { const l = dzTodos().slice(), i = l.findIndex(x => x.id === at.id); if (i < 0) return;
+    l[i] = { ...at, status:'ganho', vencUid:p.uid, vencNome:p.nome, vencEm:g.em, carteira:true, auto:true };
+    if (await dzGravar(l)) toast(`🏆 ${p.nome} ganhou o desafio!`); }
+  finally { setTimeout(() => { _dzAutoOcup = false; }, 4000); }
 }
 let _slT = 0;
 function pintarSalao(){
-  try { dzAvisos(); } catch(e) {}
+  try { dzAvisos(); } catch(e) {} try { dzAuto(); } catch(e) {}
   const fx = $('dzHojeFaixa'), at = dzAtivo();
   if (fx) fx.innerHTML = view === 'hoje' && at ? `<button type="button" class="dz-faixa" onclick="setView('salao')"><span class="dz-tag"><i></i>AO VIVO</span><b>⚡ ${esc(at.titulo)}</b>${at.premio ? `<em>R$ ${esc(String(at.premio))}</em>` : ''}</button>` : '';
   const el = $('salaoCorpo'); if (!el || view !== 'salao') return;
@@ -21860,6 +21887,13 @@ html.modo-tv #v-salao.on,html.modo-tv #v-salao.active{padding:0!important;overfl
 .dz2-bts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .dz2-bt{flex:1 1 auto;border:0;border-radius:14px;padding:14px 16px;font:inherit;font-size:15px;font-weight:800;background:#FFE600;color:#000;cursor:pointer}
 .dz2-bt.sec{background:#1e1e1e;color:#fff;border:1px solid #333;font-weight:700}
+.dz2-pg{font-style:normal;font-size:11px;font-weight:800;border:1px solid #FFE600;color:#FFE600;border-radius:99px;padding:1px 7px;margin-left:4px;white-space:nowrap}
+.dz2-pg.ok{background:#19C37D;border-color:#19C37D;color:#04130b}
+.dz2-hist div{flex-wrap:wrap}.dz2-hb{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:6px}
+.dz2-hb button{border:1px solid #333;background:#1b1b1b;color:#ddd;font:inherit;font-size:12px;font-weight:700;border-radius:99px;padding:5px 10px;cursor:pointer}
+.dz2-hb button.on{background:#19C37D;border-color:#19C37D;color:#04130b}
+.dz2.tv .dz2-pg,.tv2-lado .dz2-pg{font-size:1.6vh;padding:.1vh .7vw}
+.tv2-lado .dz2-hist div{flex-wrap:nowrap}.tv2-lado .dz2-hist span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sl-grid{display:grid;grid-template-columns:1fr;gap:14px}
 @media (min-width:900px){.sl-grid{grid-template-columns:1.25fr 1fr;align-items:start}}
 .dz2,.bf2{position:relative;border-radius:22px;background:#111;border:1px solid #262626;color:#f3f3f3;padding:18px}
