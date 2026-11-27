@@ -8708,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 481;
+const APP_VERSAO = 482;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -14897,7 +14897,9 @@ function bfAnjo(uid){
   const propria = vp.some(v => (v.corretores || []).some(c => c.uid === uid));
   const vals = vendas.map((v, i) => i < 2 ? 200 : 300), total = vals.reduce((a, x) => a + x, 0);
   const porC = {}; [...mb].forEach(u => { porC[u] = 0; }); vendas.forEach(v => (v.corretores || []).forEach(c => { if (mb.has(c.uid)) porC[c.uid]++; }));
-  return { mb:[...mb], vendas, vals, total, propria, porC, liberado:propria ? total : 0, pend:!propria && !bfAcabou() ? total : 0 };
+  // v482 (Allan, 27/11): o valor entra na Black, mas o saque de cada venda só libera quando o cliente assinar com a Caixa (etapa Assinou da reserva)
+  const valAss = vendas.reduce((a, v, i) => a + (v.ass ? vals[i] : 0), 0), nAss = vendas.filter(v => v.ass).length;
+  return { mb:[...mb], vendas, vals, total, propria, porC, valAss, nAss, liberado:propria ? valAss : 0, pend:propria ? total - valAss : (!bfAcabou() ? total : 0) };
 }
 const bfEqDe = uid => (bfPessoa(uid) || {}).equipe || '';
 function bfCoordInfo(){ return rkPessoas.filter(p => p.papel === 'coordenador' && p.status === 'ativo' && p.equipe); }
@@ -14983,11 +14985,11 @@ function bfHtmlAnjo(){
   return `<div class="bf">${bfCab('MISSÃO DO ANJO', `<div class="miss">Cada venda dos seus corretores vale <b>FRD 200</b> para você. Da <b>3ª venda</b> em diante, <b>FRD 300</b>.</div>`)}
     <div class="saldo"><div><div class="l"><span>${lib ? 'Na sua Carteira Frade' : 'Acumulado na arrancada'}</span><span class="cad ${lib ? 'lib' : ''}">${lib ? '✓ liberado' : '🔒 bloqueado'}</span></div><div class="v"><small>FRD</small>${bfN(s.total)}</div></div>
     <div class="q"><b>${n}</b><span>vendas dos<br>seus corretores</span></div></div>
-    ${lib ? `<div class="cond si"><span class="ic">✅</span><div>Sua reserva foi feita · prêmios liberados<small>Cada nova venda dos seus corretores cai na hora.</small></div></div>`
+    ${lib ? `<div class="cond si"><span class="ic">✅</span><div>Sua reserva foi feita · prêmios garantidos<small>Pode sacar: FRD ${bfN(s.valAss)}${s.total - s.valAss > 0 ? ` · aguardando assinatura na Caixa: FRD ${bfN(s.total - s.valAss)}` : ''}</small></div></div>`
       : `<div class="cond no"><span class="ic">🔒</span><div>Faça 1 reserva sua para liberar<small>Sem uma reserva sua até 30/11, o valor não é liberado.</small></div></div>`}
     <div class="esc2">${[[200,'1ª e 2ª venda'],[300,'3ª venda em diante']].map((x, i) => `<div class="tag ${i < at ? 'ok' : ''} ${i === at ? 'at' : ''}"><div class="v">${x[0]}<small>FRD</small></div><div class="r">${x[1]}</div></div>`).join('')}</div>
     <div class="afs"><div class="afs-t">SEUS CORRETORES</div>${nomes.length ? nomes.map(x => `<div class="af"><span>${bfEsc(x.nome)}</span><span class="dots">${x.q > 3 ? `<em>${x.q}</em>` : [0,1,2].map(i => `<i class="${i < x.q ? 'on' : ''}"></i>`).join('')}</span></div>`).join('') : '<div class="af"><span style="color:#999">Nenhum corretor ligado a você.</span></div>'}</div>
-    <p class="bf-regra">Conta reserva registrada de 25 a 30/11 (mesmo sem assinatura). Se a reserva cair, sai do saldo. Sua reserva só destrava; o que vale é a venda dos seus corretores.</p>
+    <p class="bf-regra">Conta reserva registrada de 25 a 30/11. O valor entra na Black, mas o saque de cada venda só libera quando o cliente assinar com a Caixa. Se a reserva cair, sai do saldo. Sua reserva só destrava; o que vale é a venda dos seus corretores.</p>
   </div></div>`;
 }
 function bfHtmlCoord(){
