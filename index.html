@@ -8708,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 472;
+const APP_VERSAO = 474;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -12652,7 +12652,7 @@ async function sincPresencaRanking(){
     const ids = new Set([...Object.keys(quer), ...Object.keys(querAbo), ...rankingAtiv.filter(r => meses.includes(r.mes)).map(r => r.id)]);
     ids.forEach(id => {
       const ra = rankingAtiv.find(r => r.id === id) || {}, dif = (campo, q) => { const tem = new Set(Object.keys(ra[campo] || {})), o = {};
-        [...q].filter(d => !tem.has(d)).forEach(d => o[d] = true); [...tem].filter(d => !q.has(d)).forEach(d => o[d] = deleteField()); return o; };
+        [...q].filter(d => !tem.has(d)).forEach(d => o[d] = true); [...tem].filter(d => !q.has(d) && presencas[d] && meses.includes(d.slice(0, 7))).forEach(d => o[d] = deleteField()); return o; }; /* v473: só apaga dia cujo registro de presença está carregado (senão some folga abonada e o placar muda entre celulares) */
       const pres = dif('pres', quer[id] || new Set()), abo = dif('abo', querAbo[id] || new Set());
       if (!Object.keys(pres).length && !Object.keys(abo).length) return;
       const [m, uid] = [id.slice(0,7), id.slice(8)], p = perfisTodos.find(x => x.uid === uid) || {};
@@ -15195,44 +15195,80 @@ function dzAvisos(){
 }
 function dzFesta(g){
   const el = document.createElement('div'); el.className = 'dz-festa'; const f = dzFotoDe(g.vencUid);
-  el.innerHTML = `<div class="dz-fbox"><div class="dz-fita"></div><div class="dz-ft">TEMOS UM<span>VENCEDOR!</span></div><div class="dz-ff" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div class="dz-fn">${esc(g.vencNome || '')}</div><div class="dz-fq">${esc(g.titulo)}${g.premio ? `<b>+ R$ ${g.premio} na Carteira Frade</b>` : ''}</div></div>`
+  el.innerHTML = `<div class="dz-fbox"><div class="dz-fita"></div><div class="dz-ft">TEMOS UM<span>VENCEDOR!</span></div><div class="dz-ff" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div class="dz-fn">${esc(g.vencNome || '')}</div><div class="dz-fq">${esc(g.titulo)}${g.premio ? `<b>+ R$ ${g.premio} na Carteira Frade · PIX hoje</b>` : ''}</div></div>`
     + Array.from({ length:36 }, (_, i) => `<i class="dz-c" style="left:${(i * 29) % 100}%;animation-delay:${(i % 9) * .18}s;background:${['#FFE600','#FF7A00','#19C37D','#fff'][i % 4]}"></i>`).join('');
   el.onclick = () => el.remove(); document.body.appendChild(el); try { Som.campeao(); } catch(e) {}
   setTimeout(() => el.remove(), document.documentElement.classList.contains('modo-tvr') || view === 'salao' ? 20000 : 9000);
 }
+function dzPessoaHtml(p, cls, dono, at){
+  return `<button type="button" class="dz2-p ${cls}" ${dono && at ? `onclick="dzVencedor('${p.uid}')" title="Dar a vitória para ${esc(p.nome)}"` : 'tabindex="-1"'}><span class="dz2-f" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : esc(dzIni(p.cheio))}</span><b>${esc(p.nome)}</b></button>`;
+}
+// v473: desafio relâmpago redesenhado (bloco amarelo com prêmio + desafio, fotos de quem está no jogo)
 function htmlDzCard(tv){
   const at = dzAtivo(), g = dzUltGanho(), ck = dzCheck(), temCk = ck.size > 0, dono = souDono() && !tv;
   const ps = dzPart().sort((a, b) => (ck.has(b.uid) - ck.has(a.uid)) || a.nome.localeCompare(b.nome));
-  const grade = `<div class="dz-grade">${ps.map(p => `<button type="button" class="dz-p ${temCk && ck.has(p.uid) ? 'on' : ''} ${g && g.vencUid === p.uid && !at ? 'ven' : ''}" ${dono && at ? `onclick="dzVencedor('${p.uid}')" title="Dar a vitória para ${esc(p.nome)}"` : 'tabindex="-1"'}><span class="dz-f" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : esc(dzIni(p.cheio))}</span><b>${esc(p.nome)}</b></button>`).join('')}</div>`;
+  const dentro = temCk ? ps.filter(p => ck.has(p.uid)) : ps, fora = temCk ? ps.filter(p => !ck.has(p.uid)) : [];
+  const lista = tv ? dentro : ps, col = tv ? (lista.length <= 10 ? 5 : lista.length <= 18 ? 6 : lista.length <= 28 ? 7 : 8) : 0;
+  const grade = `<div class="dz2-grade" ${tv ? `style="--c:${col}"` : ''}>${lista.map(p => dzPessoaHtml(p, temCk && !ck.has(p.uid) ? 'fora' : '', dono, at)).join('')}</div>`;
   let topo;
   if (at) { const [h, m, s] = dzDur(Date.now() - (at.inicio || Date.now()));
-    topo = `<span class="dz-tag"><i></i>AO VIVO · valendo desde ${dzHM(at.inicio)}</span>${at.premio ? `<div class="dz-pr"><small>R$</small>${esc(String(at.premio))}</div>` : ''}<div class="dz-reg">${esc(at.titulo)}</div>
-      <div class="dz-relo"><div><b>${h}</b><small>h</small></div><div><b>${m}</b><small>min</small></div><div><b>${s}</b><small>s</small></div></div>${dono ? `<div class="dz-dica">Quando alguém bater, toque na foto dele para dar a vitória.</div>` : ''}`; }
+    topo = `<div class="dz2-alvo">${at.premio ? `<div class="dz2-pr"><small>R$</small>${esc(String(at.premio))}</div>` : ''}<div class="dz2-tit">${esc(at.titulo)}</div>
+      <div class="dz2-tempo"><span>no ar desde ${dzHM(at.inicio)}</span><b>${h !== '00' ? h + ':' : ''}${m}:${s}</b></div></div>${dono ? `<div class="dz2-dica">Quando alguém bater, toque na foto da pessoa para dar a vitória.</div>` : ''}`; }
   else if (g) { const f = dzFotoDe(g.vencUid);
-    topo = `<div class="dz-ven"><div class="dz-ft">TEMOS UM<span>VENCEDOR!</span></div><div class="dz-ff" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div class="dz-fn">${esc(g.vencNome || '')}</div><div class="dz-fq">${esc(g.titulo)} · ${dzHM(g.vencEm)}${g.premio ? `<b>+ R$ ${g.premio} na Carteira Frade</b>` : ''}</div></div>`; }
-  else topo = `<div class="dz-vazio"><b>⚡ Fique ligado</b><span>A qualquer momento sai um desafio relâmpago valendo prêmio.</span></div>`;
+    topo = `<div class="dz2-ven"><div class="dz2-vf" style="${f ? `background-image:url('${f}')` : ''}">${f ? '' : esc(dzIni(g.vencNome))}</div><div><div class="dz2-vt">Temos um vencedor!</div><div class="dz2-vn">${esc(g.vencNome || '')}</div><div class="dz2-vq">${esc(g.titulo)} · ${dzHM(g.vencEm)}</div>${g.premio ? `<div class="dz2-vp">+ R$ ${g.premio} na Carteira Frade · PIX hoje</div>` : ''}</div></div>`; }
+  else topo = `<div class="dz2-vazio"><b>Fique ligado</b><span>A qualquer momento sai um desafio relâmpago valendo prêmio.</span>${tv && souDono() ? '<small>Nenhum desafio no ar. Aperte Esc, escreva o desafio e toque em “Lançar desafio”.</small>' : ''}</div>`;
   const hist = dzHoje().filter(d => d.status === 'ganho').sort((a, b) => (b.vencEm || 0) - (a.vencEm || 0));
-  return `<div class="dz-card ${tv ? 'tv' : ''}"><div class="dz-fita"></div><div class="dz-cab">DESAFIO RELÂMPAGO</div>${topo}
-    ${at || !g ? `<div class="dz-h3">QUEM ESTÁ NO JOGO${temCk ? ` · ${ps.filter(p => ck.has(p.uid)).length} com check-in` : ''}</div>${grade}` : ''}
-    ${hist.length ? `<div class="dz-h3">DESAFIOS DE HOJE</div><div class="dz-hist">${hist.map(d => `<div><span>${dzHM(d.inicio)} · ${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ' · R$ ' + d.premio : ''}${souDono() && !tv ? ` <a href="#" onclick="event.preventDefault();dzDesfazer('${d.id}')">desfazer</a>` : ''}</b></div>`).join('')}</div>` : ''}</div>`;
+  const histHtml = hist.length ? `<div class="dz2-h">Ganhadores de hoje</div><div class="dz2-hist">${hist.map(d => `<div><span><em>${dzHM(d.inicio)}</em>${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ` · R$ ${d.premio}` : ''}${souDono() && !tv ? ` <a href="#" onclick="event.preventDefault();dzDesfazer('${d.id}')">desfazer</a>` : ''}</b></div>`).join('')}</div>` : '';
+  const jogo = at || !g ? `<div class="dz2-h">No jogo agora<span>${temCk ? `${dentro.length} com check-in${tv && fora.length ? ` · ${fora.length} fora` : ''}` : `${ps.length} pessoas`}</span></div>${grade}` : '';
+  return `<div class="dz2 ${tv ? 'tv' : ''}"><div class="dz2-cab"><span class="dz2-raio">⚡ Desafio relâmpago</span>${at ? '<span class="dz-tag"><i></i>AO VIVO</span>' : ''}</div>${topo}${jogo}${tv ? '' : histHtml}</div>`;
 }
+const DZ_ATALHOS = ['Quem marcar a primeira visita a partir de agora','Primeira documentação enviada','Primeira reserva do dia','Quem fizer mais ligações na próxima hora'];
 function htmlDzGestao(){
   if (!souDono()) return '';
   const at = dzAtivo();
-  return `<div class="card dz-ger"><b>${at ? 'Desafio no ar (você pode editar)' : 'Lançar desafio relâmpago'}</b>
-    <div class="fg" style="margin-top:8px"><label>Desafio</label><textarea id="dzTit" rows="2" maxlength="160" placeholder="Ex.: quem marcar a primeira visita agora">${esc(at ? at.titulo : '')}</textarea></div>
-    <div class="fg"><label>Prêmio (R$, vai para a Carteira Frade)</label><input id="dzPremio" inputmode="decimal" placeholder="50" value="${at && at.premio ? esc(String(at.premio)) : ''}"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="dzLancar()">${at ? 'Salvar alteração' : '⚡ Lançar agora'}</button>${at ? `<button class="btn btn-ghost" onclick="dzEncerrar()">Encerrar sem vencedor</button>` : ''}<button class="btn btn-ghost" onclick="telaCheiaPainel()">📺 Tela cheia (TV)</button></div></div>`;
+  return `<div class="dz2-form"><div class="dz2-fcab"><b>${at ? 'Desafio no ar' : 'Lançar um desafio'}</b><span>${at ? 'Você pode trocar o texto ou o prêmio, ou encerrar.' : 'Escreva, coloque o prêmio e lance. Aparece na hora no celular de todos e na TV.'}</span></div>
+    <label class="dz2-lb">1. Qual é o desafio?</label>
+    <div class="dz2-chips">${DZ_ATALHOS.map(t => `<button type="button" onclick="$('dzTit').value=this.textContent">${esc(t)}</button>`).join('')}</div>
+    <textarea id="dzTit" rows="2" maxlength="160" placeholder="Ou escreva o seu aqui">${esc(at ? at.titulo : '')}</textarea>
+    <label class="dz2-lb">2. Prêmio em R$ (cai na Carteira Frade e o PIX sai no mesmo dia)</label>
+    <div class="dz2-chips">${[20,30,50,100].map(v => `<button type="button" onclick="$('dzPremio').value='${v}'">R$ ${v}</button>`).join('')}</div>
+    <input id="dzPremio" inputmode="decimal" placeholder="50" value="${at && at.premio ? esc(String(at.premio)) : ''}">
+    <div class="dz2-bts"><button class="dz2-bt" onclick="dzLancar()">${at ? 'Salvar alteração' : '⚡ 3. Lançar desafio'}</button><button class="dz2-bt sec" onclick="dzTv()">📺 Mostrar na TV</button>${at ? `<button class="dz2-bt sec" onclick="dzEncerrar()">Encerrar sem vencedor</button>` : ''}</div>
+    ${at ? '<div class="dz2-dica">Quando alguém bater, toque na foto da pessoa logo abaixo para dar a vitória.</div>' : ''}</div>`;
 }
-function htmlSalaoBF(){
-  if (typeof bfComecou !== 'function' || !bfComecou() || Date.now() > BF_SOME) return '';
+// v473: "Mostrar na TV" lança o que estiver escrito (se ainda não estiver no ar) e abre a tela cheia
+window.dzTv = async () => {
+  const t = ($('dzTit')?.value || '').trim(), at = dzAtivo(), pr = lerValor($('dzPremio')?.value || '') || 0;
+  if (t && (!at || at.titulo !== t || Number(at.premio || 0) !== pr)) await dzLancar();
+  telaCheiaPainel(); const el = $('salaoCorpo'); if (el) el.dataset.k = ''; pintarSalao();
+};
+// v473: placar da Black para o salão (celular e coluna da TV)
+function bfSalaoDados(){
   const co = bfCoordInfo(), eqs = [...new Set(co.map(p => p.equipe))].slice(0, 2), nm = e => (equipes[e] || {}).nome || e;
-  const duelo = eqs.length === 2 ? `<div class="sl-duelo">${eqs.map((e, i) => { const n = bfContaEq(e), o = bfContaEq(eqs[1 - i]); return `<div class="sl-eq ${n > o ? 'lid' : ''}"><small>${esc(nm(e))}</small><b>${n}</b><span>reservas</span></div>`; }).join('<div class="sl-x">×</div>')}</div>` : '';
-  const cor = bfRankCor().filter(x => x.n).slice(0, 6), sdr = bfPlacarSdr().filter(x => x.n).slice(0, 4);
-  const pct = n => n >= 2 ? 60 : n === 1 ? 55 : 50;
-  return `<div class="sl-bf"><div class="dz-fita"></div><div class="sl-bft">BLACK<span>FRIDAY</span></div><div id="bfRelo">${bfRelogio()}</div>${duelo}
-    <div class="sl-cols"><div><div class="dz-h3">CORRETORES · COMISSÃO</div>${cor.length ? cor.map((x, i) => `<div class="sl-l"><span>${i + 1}. ${esc(x.nome)}</span><b>${x.n} venda${x.n > 1 ? 's' : ''} · ${pct(x.n)}%</b></div>`).join('') : '<div class="sl-l"><span>Ninguém vendeu ainda</span></div>'}</div>
-    <div><div class="dz-h3">SDRs · VISITAS VALIDADAS</div>${sdr.length ? sdr.map((x, i) => `<div class="sl-l"><span>${i + 1}. ${esc(x.nome)}</span><b>${x.n}</b></div>`).join('') : '<div class="sl-l"><span>Nenhuma ainda</span></div>'}</div></div></div>`;
+  return { eqs:eqs.map(e => ({ nome:nm(e), n:bfContaEq(e) })), cor:bfRankCor().filter(x => x.n).slice(0, 5), sdr:bfPlacarSdr().filter(x => x.n).slice(0, 4) };
+}
+function bfTempoTexto(){
+  const s = Math.max(0, Math.floor((BF_T1 - bfAgora()) / 1000)), p2 = x => String(x).padStart(2, '0');
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+  return `${d ? d + 'd ' : ''}${p2(h)}:${p2(m)}:${p2(s % 60)}`;
+}
+function htmlSalaoBF(tv){
+  if (typeof bfComecou !== 'function' || !bfComecou() || Date.now() > BF_SOME) return '';
+  const { eqs, cor, sdr } = bfSalaoDados(), pct = n => n >= 2 ? 60 : n === 1 ? 55 : 50, tot = eqs.reduce((a, e) => a + e.n, 0) || 1;
+  const duelo = eqs.length === 2 ? `<div class="bf2-duelo">${eqs.map((e, i) => `<div class="bf2-eq ${e.n > eqs[1 - i].n ? 'lid' : ''}"><b>${e.n}</b><span>${esc(e.nome)}</span></div>`).join('<div class="bf2-x">×</div>')}</div>
+    <div class="bf2-barra"><i style="width:${Math.round(eqs[0].n / tot * 100)}%"></i></div><div class="bf2-leg">reservas da Black por equipe</div>` : '';
+  const foto = uid => { const f = dzFotoDe(uid); return `<i class="bf2-av" style="${f ? `background-image:url('${f}')` : ''}"></i>`; };
+  const corH = cor.length ? cor.map((x, i) => `<div class="bf2-l"><em>${i + 1}</em>${foto(x.uid)}<span>${esc(primeiro(x.nome))}</span><small>${x.n} venda${x.n > 1 ? 's' : ''}</small><b class="p${pct(x.n)}">${pct(x.n)}%</b></div>`).join('') : '<div class="bf2-nada">Ninguém vendeu ainda</div>';
+  const sdrH = sdr.length ? sdr.map((x, i) => `<div class="bf2-l"><em>${i + 1}</em>${foto(x.uid)}<span>${esc(primeiro(x.nome))}</span><small>visitas</small><b>${x.n}</b></div>`).join('') : '<div class="bf2-nada">Nenhuma visita validada ainda</div>';
+  return `<div class="bf2 ${tv ? 'tv' : ''}">${tv ? '' : `<div class="bf2-cab"><div class="bf2-t">BLACK <span>FRIDAY</span></div><div class="bf2-rel">termina em <b>${bfTempoTexto()}</b></div></div>`}${duelo}
+    <div class="dz2-h">Corretores<span>comissão na Black</span></div>${corH}<div class="dz2-h">SDRs<span>visitas validadas</span></div>${sdrH}</div>`;
+}
+// v473: TV do salão: desafio na tela toda e a Black na coluna da direita
+function htmlSalaoTV(){
+  const bf = typeof bfComecou === 'function' && bfComecou() && Date.now() <= BF_SOME;
+  const hist = dzHoje().filter(d => d.status === 'ganho').sort((a, b) => (b.vencEm || 0) - (a.vencEm || 0)).slice(0, 4);
+  return `<div class="tv2"><div class="tv2-cab"><div class="tv2-marca">Frade <span>Imóveis</span></div>${bf ? `<div class="tv2-bf">BLACK <span>FRIDAY</span><small>termina em</small><b>${bfTempoTexto()}</b></div>` : ''}</div>
+    <div class="tv2-corpo ${bf ? '' : 'so'}"><div class="tv2-dz">${htmlDzCard(true)}</div>${bf || hist.length ? `<div class="tv2-lado">${bf ? htmlSalaoBF(true) : ''}${hist.length ? `<div class="dz2-h">Ganhadores de hoje</div><div class="dz2-hist">${hist.map(d => `<div><span><em>${dzHM(d.vencEm)}</em>${esc(d.titulo)}</span><b>${esc(d.vencNome || '')}${d.premio ? ` · R$ ${d.premio}` : ''}</b></div>`).join('')}</div>` : ''}</div>` : ''}</div></div>`;
 }
 let _slT = 0;
 function pintarSalao(){
@@ -15243,7 +15279,7 @@ function pintarSalao(){
   const tv = document.documentElement.classList.contains('modo-tv');
   const chave = (at ? at.id : '-') + '|' + (tv ? 1 : 0) + '|' + (souDono() ? 1 : 0);
   if (el.dataset.k !== chave || !$('slVivo')) { el.dataset.k = chave; el.innerHTML = `<div class="sl ${tv ? 'tv' : ''}">${tv ? '' : htmlDzGestao()}<div id="slVivo"></div></div>`; }
-  $('slVivo').innerHTML = `<div class="sl-grid"><div>${htmlSalaoBF()}</div><div>${htmlDzCard(tv)}</div></div>`;
+  $('slVivo').innerHTML = tv ? htmlSalaoTV() : `<div class="sl-grid"><div>${htmlDzCard(false)}</div><div>${htmlSalaoBF(false)}</div></div>`;
   clearTimeout(_slT); _slT = setTimeout(() => { if (view === 'salao') pintarSalao(); }, 1000 - (Date.now() % 1000) + 20);
 }
 window.pintarSalao = pintarSalao;
@@ -21799,55 +21835,109 @@ window.addEventListener('load', function(){
 </script>
 <style id="bf451preto">
 /* v471: desafio relâmpago + TV do salão */
-.dz-card,.sl-bf{position:relative;overflow:hidden;border-radius:22px;background:#0f0f0f;border:1.5px solid #262626;color:#f3f3f3;padding:22px 18px 18px}
 .dz-fita{position:absolute;left:0;right:0;top:0;height:8px;background:repeating-linear-gradient(-45deg,#FFE600 0 10px,#000 10px 20px)}
-.dz-cab{font-size:12px;font-weight:800;letter-spacing:.14em;color:#FFE600;margin-bottom:8px}
 .dz-tag{display:inline-flex;gap:6px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.06em;color:#fff;background:#ff3b3b;padding:5px 10px;border-radius:99px}
 .dz-tag i{width:7px;height:7px;border-radius:50%;background:#fff;display:block;animation:dzPisca 1s infinite}
 @keyframes dzPisca{50%{opacity:.2}}
-.dz-pr{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:64px;line-height:.9;margin-top:10px;color:#FFE600}
-.dz-pr small{font-size:26px;color:#fff;margin-right:4px}
-.dz-reg{font-size:20px;font-weight:800;margin-top:6px;line-height:1.25;word-break:break-word}
-.dz-relo{display:flex;gap:8px;margin-top:12px}.dz-relo div{background:#080808;border:1px solid #2a2a2a;border-radius:12px;padding:6px 12px;text-align:center}
-.dz-relo b{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-size:28px;display:block;line-height:1}.dz-relo small{font-size:10px;color:#888}
-.dz-dica{font-size:12.5px;color:#aaa;margin-top:10px}
-.dz-h3{font-size:11.5px;color:#9a9a9a;font-weight:800;letter-spacing:.06em;margin:16px 0 8px}
-.dz-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:12px 6px}
-.dz-p{border:0;background:none;color:#ddd;font:inherit;font-size:11.5px;font-weight:700;text-align:center;padding:0;cursor:default}
-.dz-p[onclick]{cursor:pointer}
-.dz-p b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dz-f{width:66px;height:66px;border-radius:50%;margin:0 auto 5px;background:#222 center/cover;border:3px solid #2c2c2c;display:grid;place-items:center;font-weight:800;font-size:20px;color:#777;position:relative}
-.dz-p.on .dz-f{border-color:#19C37D}
-.dz-p.on .dz-f::after{content:'';position:absolute;right:1px;bottom:1px;width:12px;height:12px;border-radius:50%;background:#19C37D;border:2px solid #0f0f0f}
-.dz-p.ven .dz-f{border-color:#FFE600;box-shadow:0 0 18px rgba(255,230,0,.5)}
-.dz-ven{text-align:center}
 .dz-ft{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:40px;line-height:.95}.dz-ft span{display:block;color:#FFE600}
 .dz-ff{width:170px;height:170px;border-radius:50%;margin:14px auto 10px;background:#222 center/cover;border:6px solid #FFE600;box-shadow:0 0 40px rgba(255,230,0,.45);display:grid;place-items:center;font-size:54px;font-weight:900;color:#888}
 .dz-fn{font-size:26px;font-weight:800}.dz-fq{font-size:13.5px;color:#bbb;margin-top:6px;line-height:1.4}.dz-fq b{display:block;color:#FFE600;font-size:20px;margin-top:4px}
-.dz-vazio{padding:14px 0 4px}.dz-vazio b{display:block;font-size:22px}.dz-vazio span{color:#aaa;font-size:13.5px}
-.dz-hist{background:#080808;border:1px solid #222;border-radius:14px;padding:6px 12px;font-size:12.5px}
-.dz-hist div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid #1b1b1b}.dz-hist div:first-child{border:0}
-.dz-hist b{color:#FFE600;text-align:right}.dz-hist a{color:#888;font-weight:600;margin-left:6px}
 .dz-faixa{display:flex;align-items:center;gap:10px;width:100%;border:1.5px solid #FFE600;background:linear-gradient(90deg,#2a2400,#111);color:#fff;border-radius:16px;padding:10px 12px;margin:0 0 12px;font:inherit;text-align:left;cursor:pointer}
 .dz-faixa b{flex:1;font-size:14px;line-height:1.25}.dz-faixa em{font-style:normal;font-weight:900;color:#FFE600;font-size:16px;white-space:nowrap}
 .dz-ger{margin-bottom:14px}.dz-ger textarea{width:100%}
-.sl-grid{display:grid;grid-template-columns:1fr;gap:14px}
-@media (min-width:900px){.sl-grid{grid-template-columns:1fr 1.1fr;align-items:start}}
-@media (max-width:899px){.sl-grid>div:last-child{order:-1}}
-@media (max-width:520px){.sl-cols{grid-template-columns:1fr;gap:4px}}
-.sl-bft{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:46px;line-height:.9}.sl-bft span{color:#FFE600;margin-left:8px}
-.sl-bf .relo{color:#aaa;font-size:12px;margin-top:8px}.sl-bf .relo .d{display:flex;gap:6px;margin-top:4px}.sl-bf .relo .d div{background:#080808;border:1px solid #2a2a2a;border-radius:10px;padding:4px 9px;text-align:center}.sl-bf .relo .d b{display:block;font-size:22px;color:#fff;font-family:'Saira Condensed',sans-serif}.sl-bf .relo .d small{font-size:9.5px;color:#888}
-.sl-duelo{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:14px}
-.sl-eq{background:#080808;border:1.5px solid #2a2a2a;border-radius:16px;padding:10px;text-align:center}.sl-eq.lid{border-color:#FFE600}
-.sl-eq small{display:block;font-size:11px;color:#aaa;font-weight:800;letter-spacing:.06em}.sl-eq b{font-family:'Saira Condensed',sans-serif;font-size:54px;font-style:italic;line-height:1}.sl-eq.lid b{color:#FFE600}.sl-eq span{font-size:11px;color:#888}
-.sl-x{font-weight:900;color:#FF7A00;font-size:22px;font-style:italic}
-.sl-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.sl-l{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:7px 0;border-top:1px solid #1b1b1b}.sl-l b{color:#FFE600;white-space:nowrap}
 html.modo-tv #v-salao.on,html.modo-tv #v-salao.active{position:fixed;inset:0;z-index:60;background:#050505;padding:22px 26px;overflow:auto}
-html.modo-tv .sl{padding:0}
-html.modo-tv .sl .sl-grid{grid-template-columns:1fr 1.2fr}
-html.modo-tv .dz-pr{font-size:110px}html.modo-tv .dz-reg{font-size:34px}html.modo-tv .dz-f{width:92px;height:92px}html.modo-tv .dz-grade{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}html.modo-tv .dz-p{font-size:14px}
-html.modo-tv .dz-ff{width:260px;height:260px}html.modo-tv .dz-ft{font-size:64px}html.modo-tv .dz-fn{font-size:42px}html.modo-tv .sl-l{font-size:18px}html.modo-tv .sl-bft{font-size:72px}html.modo-tv .sl-eq b{font-size:84px}
+html.modo-tv #v-salao.on,html.modo-tv #v-salao.active{padding:0!important;overflow:hidden}
+.dz2-form{background:#111;border:1px solid #262626;border-radius:22px;padding:18px;color:#f3f3f3;margin-bottom:14px}
+.dz2-fcab b{display:block;font-size:19px;font-weight:800}.dz2-fcab span{display:block;font-size:13px;color:#999;margin-top:3px}
+.dz2-lb{display:block;font-size:13.5px;font-weight:800;color:#fff;margin:16px 0 8px}
+.dz2-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.dz2-chips button{border:1px solid #333;background:#1b1b1b;color:#ddd;font:inherit;font-size:12.5px;font-weight:600;border-radius:99px;padding:7px 11px;cursor:pointer}
+.dz2-chips button:active{background:#FFE600;color:#000}
+.dz2-form textarea,.dz2-form input{width:100%;box-sizing:border-box;background:#0a0a0a;border:1.5px solid #333;border-radius:14px;color:#fff;font:inherit;font-size:16px;padding:12px 14px}
+.dz2-form textarea:focus,.dz2-form input:focus{outline:none;border-color:#FFE600}
+.dz2-bts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.dz2-bt{flex:1 1 auto;border:0;border-radius:14px;padding:14px 16px;font:inherit;font-size:15px;font-weight:800;background:#FFE600;color:#000;cursor:pointer}
+.dz2-bt.sec{background:#1e1e1e;color:#fff;border:1px solid #333;font-weight:700}
+.sl-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:900px){.sl-grid{grid-template-columns:1.25fr 1fr;align-items:start}}
+.dz2,.bf2{position:relative;border-radius:22px;background:#111;border:1px solid #262626;color:#f3f3f3;padding:18px}
+.dz2-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.dz2-raio{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:26px;line-height:1;color:#fff}
+.dz2-alvo{background:#FFE600;color:#0a0a0a;border-radius:18px;padding:16px 18px 14px}
+.dz2-pr{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:72px;line-height:.85;letter-spacing:-.01em}
+.dz2-pr small{font-size:30px;margin-right:4px}
+.dz2-tit{font-size:21px;font-weight:800;line-height:1.2;margin-top:8px;text-wrap:balance;word-break:break-word}
+.dz2-tempo{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;padding-top:10px;border-top:2px solid rgba(0,0,0,.15);font-size:13px;font-weight:700}
+.dz2-tempo b{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.dz2-dica{font-size:13px;color:#bbb;margin-top:10px}
+.dz2-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:15px;font-weight:800;color:#fff;margin:18px 0 10px}
+.dz2-h span{font-size:12.5px;font-weight:600;color:#8a8a8a}
+.dz2-grade{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 6px}
+.dz2-p{border:0;background:none;color:#e8e8e8;font:inherit;font-size:12px;font-weight:700;text-align:center;padding:0;cursor:default;min-width:0}
+.dz2-p[onclick]{cursor:pointer}.dz2-p[onclick]:active .dz2-f{transform:scale(.94)}
+.dz2-p b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:5px}
+.dz2-f{display:grid;place-items:center;width:100%;max-width:68px;aspect-ratio:1;margin:0 auto;border-radius:50%;background:#262626 center/cover;border:3px solid #FFE600;font-weight:800;font-size:19px;color:#9a9a9a;transition:transform .12s}
+.dz2-p.fora{color:#666}.dz2-p.fora .dz2-f{border-color:#2a2a2a;filter:grayscale(1);opacity:.45}
+.dz2-ven{display:flex;align-items:center;gap:16px;background:#FFE600;color:#0a0a0a;border-radius:18px;padding:16px}
+.dz2-vf{flex:none;width:104px;height:104px;border-radius:50%;background:#222 center/cover;border:4px solid #0a0a0a;display:grid;place-items:center;font-size:34px;font-weight:900;color:#888}
+.dz2-vt{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:22px;line-height:1}
+.dz2-vn{font-size:26px;font-weight:900;line-height:1.1;margin-top:4px}
+.dz2-vq{font-size:13px;font-weight:600;margin-top:4px;opacity:.75}
+.dz2-vp{display:inline-block;margin-top:8px;background:#0a0a0a;color:#FFE600;border-radius:99px;padding:5px 12px;font-size:13.5px;font-weight:800}
+.dz2-vazio{background:#1a1a1a;border:1.5px dashed #3a3a3a;border-radius:18px;padding:18px}
+.dz2-vazio b{display:block;font-size:22px;color:#FFE600}.dz2-vazio small{display:block;margin-top:10px;color:#777;font-size:13px}.dz2.tv .dz2-vazio small{font-size:2.2vh;margin-top:3vh}.dz2-vazio span{color:#aaa;font-size:14px}
+.dz2-hist{border-top:1px solid #222}
+.dz2-hist div{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid #222;font-size:13.5px}
+.dz2-hist em{font-style:normal;color:#8a8a8a;margin-right:8px;font-variant-numeric:tabular-nums}
+.dz2-hist b{color:#FFE600;text-align:right;white-space:nowrap}.dz2-hist a{color:#888;font-weight:600;margin-left:6px}
+.bf2-cab{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.bf2-t{font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:38px;line-height:.9}.bf2-t span{color:#FFE600}
+.bf2-rel{font-size:12.5px;color:#9a9a9a}.bf2-rel b{display:block;font-family:'Saira Condensed',sans-serif;font-size:24px;color:#fff;text-align:right;font-variant-numeric:tabular-nums}
+.bf2-duelo{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:16px}
+.bf2-eq{text-align:center}.bf2-eq b{display:block;font-family:'Saira Condensed',sans-serif;font-weight:900;font-style:italic;font-size:58px;line-height:.9;color:#777}
+.bf2-eq.lid b{color:#FFE600}.bf2-eq span{font-size:13px;font-weight:700;color:#ccc}
+.bf2-x{font-weight:900;font-style:italic;color:#555;font-size:20px}
+.bf2-barra{height:8px;border-radius:99px;background:#333;margin-top:12px;overflow:hidden}.bf2-barra i{display:block;height:100%;background:#FFE600;border-radius:99px}
+.bf2-leg{font-size:11.5px;color:#777;text-align:center;margin-top:6px}
+.bf2-l{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #1e1e1e;font-size:14.5px}
+.bf2-l em{font-style:normal;width:16px;color:#777;font-weight:800;font-variant-numeric:tabular-nums}
+.bf2-av{display:block;flex:none;width:30px;height:30px;border-radius:50%;background:#2a2a2a center/cover}
+.bf2-l span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+.bf2-l small{color:#888;font-size:12px;white-space:nowrap}
+.bf2-l b{min-width:44px;text-align:center;font-weight:900;color:#FFE600;font-variant-numeric:tabular-nums}
+.bf2-l b.p60{background:#FFE600;color:#0a0a0a;border-radius:99px;padding:2px 0}.bf2-l b.p55{border:1.5px solid #FFE600;border-radius:99px;padding:1px 0}
+.bf2-nada{color:#777;font-size:13.5px;padding:6px 0}
+/* TV do salão */
+.tv2{height:100vh;display:grid;grid-template-rows:auto 1fr;background:#070707;color:#fff;padding:2.2vh 2.2vw;gap:2.2vh;box-sizing:border-box}
+.tv2-cab{display:flex;justify-content:space-between;align-items:center;padding-bottom:1.6vh;border-bottom:.5vh solid;border-image:repeating-linear-gradient(-45deg,#FFE600 0 14px,#000 14px 28px) 1}
+.tv2-marca{font-size:3vh;font-weight:800}.tv2-marca span{color:#FF7A00}
+.tv2-bf{display:flex;align-items:baseline;gap:1.2vw;font-family:'Saira Condensed','Plus Jakarta Sans',sans-serif;font-weight:900;font-style:italic;font-size:4.6vh;line-height:1}
+.tv2-bf span{color:#FFE600}.tv2-bf small{font-family:'Plus Jakarta Sans',sans-serif;font-style:normal;font-weight:600;font-size:2vh;color:#999}
+.tv2-bf b{font-style:normal;font-variant-numeric:tabular-nums}
+.tv2-corpo{display:grid;grid-template-columns:1.75fr 1fr;gap:2.2vw;min-height:0}.tv2-corpo.so{grid-template-columns:1fr}
+.tv2-dz,.tv2-lado{min-height:0;overflow:hidden}
+.dz2.tv{background:none;border:0;padding:0;height:100%;display:flex;flex-direction:column}
+.dz2.tv .dz2-cab{margin-bottom:1.6vh}.dz2.tv .dz2-raio{font-size:5vh}.dz2.tv .dz-tag{font-size:1.9vh;padding:.7vh 1.2vw}
+.dz2.tv .dz2-alvo{display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr auto;column-gap:2.4vw;border-radius:2.6vh;padding:2.6vh 2.4vw}
+.dz2.tv .dz2-pr{grid-row:1/3;align-self:center;font-size:19vh}.dz2.tv .dz2-pr small{font-size:7vh}
+.dz2.tv .dz2-tit{font-size:5.4vh;align-self:center;margin:0;line-height:1.1}
+.dz2.tv .dz2-tempo{font-size:2.2vh;margin-top:1.6vh;padding-top:1.4vh}.dz2.tv .dz2-tempo b{font-size:5vh}
+.dz2.tv .dz2-h{font-size:2.6vh;margin:2.6vh 0 1.6vh}.dz2.tv .dz2-h span{font-size:2vh}
+.dz2.tv .dz2-grade{grid-template-columns:repeat(var(--c,6),1fr);gap:2vh 1vw;align-content:start}
+.dz2.tv .dz2-f{max-width:13vh;border-width:.55vh;font-size:4vh}.dz2.tv .dz2-p{font-size:2.1vh}
+.dz2.tv .dz2-ven{flex:1;flex-direction:column;justify-content:center;text-align:center;gap:2.4vh;border-radius:3vh}
+.dz2.tv .dz2-vf{width:38vh;height:38vh;border-width:1vh;font-size:12vh}
+.dz2.tv .dz2-vt{font-size:6vh}.dz2.tv .dz2-vn{font-size:9vh}.dz2.tv .dz2-vq{font-size:2.6vh}.dz2.tv .dz2-vp{font-size:3.2vh;padding:1vh 2vw;margin-top:1.6vh}
+.dz2.tv .dz2-vazio{flex:1;display:grid;place-content:center;text-align:center}.dz2.tv .dz2-vazio b{font-size:9vh}.dz2.tv .dz2-vazio span{font-size:3vh}
+.tv2-lado{background:#111;border:1px solid #232323;border-radius:2.6vh;padding:2.6vh 1.8vw}
+.bf2.tv{background:none;border:0;padding:0}
+.bf2.tv .bf2-duelo{margin-top:0}.bf2.tv .bf2-eq b{font-size:10vh}.bf2.tv .bf2-eq span{font-size:2.2vh}.bf2.tv .bf2-x{font-size:3.4vh}
+.bf2.tv .bf2-barra{height:1vh;margin-top:1.6vh}.bf2.tv .bf2-leg{font-size:1.7vh}
+.tv2-lado .dz2-h{font-size:2.5vh;margin:2vh 0 .6vh}.tv2-lado .dz2-h span{font-size:1.8vh}
+.bf2.tv .bf2-l{font-size:2.3vh;padding:.65vh 0;gap:.9vw}.bf2.tv .bf2-l em{width:2.4vh}.bf2.tv .bf2-av{width:4vh;height:4vh}
+.bf2.tv .bf2-l small{font-size:1.8vh}.bf2.tv .bf2-l b{min-width:6.4vh}.bf2.tv .bf2-nada{font-size:2.2vh}
+.tv2-lado .dz2-hist div{font-size:2vh;padding:1vh 0}
+html.modo-tv .dz-ff{width:260px;height:260px}html.modo-tv .dz-ft{font-size:64px}html.modo-tv .dz-fn{font-size:42px}
 .dz-festa{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.86);display:grid;place-items:center;overflow:hidden;animation:dzEntra .35s ease}
 @keyframes dzEntra{from{opacity:0;transform:scale(1.05)}}
 .dz-fbox{position:relative;text-align:center;color:#fff;background:linear-gradient(160deg,#2a2400,#0d0d0d 60%);border:2px solid #FFE600;border-radius:26px;padding:30px 26px 24px;width:min(92vw,520px)}
