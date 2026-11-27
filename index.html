@@ -2554,6 +2554,7 @@ html body button.av-d{display:grid!important;justify-items:start;align-content:s
 @supports (-webkit-touch-callout:none){
   html:root{overflow-x:visible!important}
   html:root body{overflow-x:clip!important}
+  html:root body,html:root body:has(#app:not(.hide)){background-attachment:scroll!important} /* v469: fundo fixo no iPhone faz o menu de baixo pular */
   html:root body .mobilebar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--card)!important;transform:translate3d(0,0,0)!important;-webkit-transform:translate3d(0,0,0)!important}
 }
 
@@ -8703,7 +8704,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 468;
+const APP_VERSAO = 469;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -21683,7 +21684,7 @@ window.addEventListener('load', function(){
 <style id="bf451preto">
 /* v451: semana da Black: app todo preto (some sozinho em 01/12, quando a classe bf-semana sai) */
 html.bf-semana[data-theme="dark"],html.bf-semana[data-theme="dark"] body,html.bf-semana[data-theme="dark"] body:has(#app:not(.hide)){--bg:#050505;--card:#121212;--card2:#0c0c0c;--text:#F3F3F3;--text2:#D2D2D2;--muted:#9B9B9B;--border:#262626;--side:#000;--side-text:#BEBEBE;--side-hover:rgba(255,230,0,.07);--vidro:#121212;--vidro-forte:#141414;--vidro-borda:#262626;--vn-bg:#050505;--vn-ln:#262626;--vn-or:#FF7A00;--vn-or-b:#FF7A00;--vn-or-s:rgba(255,122,0,.14);--accent:#FF7A00;--accent-soft:rgba(255,122,0,.14)}
-html.bf-semana[data-theme="dark"] body{background:radial-gradient(800px 500px at 110% -10%,rgba(255,230,0,.06),transparent 60%),radial-gradient(700px 500px at -10% 110%,rgba(255,122,0,.05),transparent 60%),#050505!important;background-attachment:fixed!important}
+html.bf-semana[data-theme="dark"] body{background:radial-gradient(800px 500px at 110% -10%,rgba(255,230,0,.06),transparent 60%),radial-gradient(700px 500px at -10% 110%,rgba(255,122,0,.05),transparent 60%),#050505!important;background-attachment:scroll!important} /* v469: o fundo 'fixed' fazia o menu de baixo pular no iPhone durante a rolagem */
 html.bf-semana[data-theme="dark"] body:has(#app:not(.hide)) .sidebar{background:#000!important;border-right:1px solid #1c1c1c!important}
 html.bf-semana[data-theme="dark"] .topbar{background:rgba(5,5,5,.94)!important}
 html.bf-semana[data-theme="dark"] .card,html.bf-semana[data-theme="dark"] .stat,html.bf-semana[data-theme="dark"] .pd-kpi{-webkit-backdrop-filter:none;backdrop-filter:none}
