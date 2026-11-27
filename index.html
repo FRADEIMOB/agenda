@@ -8708,7 +8708,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 474;
+const APP_VERSAO = 475;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9646,7 +9646,9 @@ function pontosEntre(de, ate, inicioRk){
    o que ele fez antes da troca continua com a equipe antiga (perfil.trocasEquipe: [{dia, de, para}]). */
 const _trocaCache = new Map();
 // v470: fora da gerência os perfis não carregam; as trocas de equipe vêm da lista pública do ranking (senão o placar das equipes muda de celular para celular)
-const pessoasTrocas = () => (perfisTodos && perfisTodos.length) ? perfisTodos : (rkPessoas || []);
+// v475: coordenador e SDR só carregam os perfis da própria equipe; a lista pública do ranking (completa, com as trocas) vem primeiro para todos
+const pessoasTrocas = () => { const rk = rkPessoas || [], pt = perfisTodos || []; if (!rk.length) return pt; if (!pt.length) return rk;
+  const vistos = new Set(rk.map(x => x.uid)); return [...rk.map(x => { const q = pt.find(y => y.uid === x.uid); return (x.trocasEquipe || []).length || !q ? x : { ...x, trocasEquipe:q.trocasEquipe || [] }; }), ...pt.filter(x => !vistos.has(x.uid))]; };
 function eqNaData(uid, dia, eqAtual){ const p = uid && pessoasTrocas().find(x => x.uid === uid); if (!p || !dia) return eqAtual;
   const t = (p.trocasEquipe || []).filter(tr => tr && tr.dia && tr.de && dia < tr.dia).sort((a, b) => a.dia.localeCompare(b.dia))[0]; return t ? t.de : eqAtual; }
 function marcaPer(l, de, ate, ini){ if (l) { l._de = de; l._ate = ate; l._ini = ini || de; } return l; }
