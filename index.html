@@ -2557,6 +2557,12 @@ html body button.av-d{display:grid!important;justify-items:start;align-content:s
   html:root body,html:root body:has(#app:not(.hide)){background-attachment:scroll!important} /* v469: fundo fixo no iPhone faz o menu de baixo pular */
   html:root body .mobilebar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--card)!important;transform:translate3d(0,0,0)!important;-webkit-transform:translate3d(0,0,0)!important}
 }
+/* v488: iPhone com iOS antigo (sem overflow:clip) caía no overflow:hidden do body, o body virava a área que rola e o menu de baixo andava junto.
+   Nesses aparelhos nem o html nem o body cortam nada; quem segura a largura é o #app. */
+@supports (-webkit-touch-callout:none) and (not (overflow:clip)){
+  html:root,html:root body,html:root body:has(#app:not(.hide)){overflow-x:visible!important;overflow-y:visible!important}
+  html:root body #app{overflow-x:hidden;max-width:100vw}
+}
 
 .emp-aviso{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--card));font-size:14px}
 
@@ -8725,7 +8731,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 487;
+const APP_VERSAO = 488;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -9428,13 +9434,15 @@ function pontosDoMesBase(m, val, corte){
     else x.pontos += n('vPendente');
   });
   const usaReservas = !!window._rvOk && rankingVendas.length > 0;
-  const ptVenda = ind => ind && n('vendaInd') ? n('vendaInd') : n('venda');
+  // v488 (Allan, 28/11): a partir de 27/11 toda venda vale 50 pontos (inclusive indicação); antes continua como estava
+  const VENDA50_DESDE = '2026-11-27';
+  const ptVenda = (ind, dia) => String(dia || '') >= VENDA50_DESDE ? 50 : (ind && n('vendaInd') ? n('vendaInd') : n('venda'));
   rankingCartas.filter(r => !r.semPontos).forEach(r => {
     const aprov = noMes(r.data), venda = r.status === 'Venda fechada' && noMes(r.vendaEm || r.data);
     if (!aprov && !venda) return;
     const x = pega(r);
     if (aprov) { x.cartas++; x.pontos += n('carta'); if (r.docsCompletos) { x.docs++; x.pontos += n('docs'); } }
-    if (venda && !usaReservas) { x.vendas++; if (r.indicacao) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!r.indicacao); }
+    if (venda && !usaReservas) { x.vendas++; if (r.indicacao) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!r.indicacao, r.vendaEm || r.data); if (String(r.vendaEm || r.data || '') >= VENDA50_DESDE) { x.vendas50 = (x.vendas50 || 0) + 1; if (r.indicacao) x.vendas50Ind = (x.vendas50Ind || 0) + 1; } }
   });
   // v179: vendas = reservas do mês (sem as que caíram). Em parceria, conta para cada corretor da reserva. Indicação vale os pontos de "Venda por indicação"
   // v237: venda que caiu sai na hora (a gerência e a ADM já veem pela reserva, antes mesmo de sincronizar)
@@ -9445,11 +9453,11 @@ function pontosDoMesBase(m, val, corte){
   /* v332: venda de mês anterior que caiu NÃO desconta mais pontos (Allan não quer ponto negativo por venda que caiu) */
   if (false && usaReservas) rankingVendas.filter(v => caiuV(v) && v.dia && v.dia.slice(0, 7) < m && noMes(caiuEmV(v))).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
     const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
-    const menos = ptVenda(!!v.ind) + (v.ass && v.ass.slice(0, 7) < m ? n('vendaAssinada') : 0);
+    const menos = ptVenda(!!v.ind, v.dia) + (v.ass && v.ass.slice(0, 7) < m ? n('vendaAssinada') : 0);
     x.vendasCaidas = (x.vendasCaidas || 0) + 1; x.ptsCaidas = (x.ptsCaidas || 0) + menos; x.pontos -= menos; }));
   if (usaReservas) rankingVendas.filter(v => !caiuV(v) && noMes(v.dia)).forEach(v => (v.corretores || []).filter(c => c.uid || c.nome).forEach(c => {
     const ps = RK().find(p => p.uid === c.uid) || {}, x = pega({ corretorUid:c.uid || '', corretorNome:ps.nome || c.nome || '', equipe:ps.equipe || c.equipe || '' });
-    x.vendas++; if (v.ind) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!v.ind); }));
+    x.vendas++; if (v.ind) x.vendasInd = (x.vendasInd || 0) + 1; x.pontos += ptVenda(!!v.ind, v.dia); if (String(v.dia || '') >= VENDA50_DESDE) { x.vendas50 = (x.vendas50 || 0) + 1; if (v.ind) x.vendas50Ind = (x.vendas50Ind || 0) + 1; } }));
   // v269: venda que veio da SDR (visita agendada por ela e realizada) dá pontos para a SDR
   const sdrDeV = v => v.sdr && v.sdr.uid && papelDe(v.sdr.uid) === 'sdr' ? v.sdr : null;
   if (usaReservas) rankingVendas.filter(v => !caiuV(v) && noMes(v.dia) && sdrDeV(v)).forEach(v => { const s = sdrDeV(v), ps = RK().find(p => p.uid === s.uid) || {};
@@ -9855,7 +9863,7 @@ function linhasPontos(x, P){
     ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? (() => { const vS = P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), q = (x.docsSdr || 0) + (x.docGeral || 0), pts = (x.docsSdrPts ?? (x.docsSdr || 0) * vS) + (x.docGeral || 0) * n('docGeral');
       return [['Documentações (do resumo do dia)', q, (x.docsSdr && x.docsSdrPts !== undefined ? x.docsSdrPts === x.docsSdr * n('docGeral') : vS === n('docGeral')) ? n('docGeral') : '', pts]]; })() : [['Documentações (geral)', x.docGeral, n('docGeral'), (x.docGeral || 0) * n('docGeral')]]),
     ['Cartas aprovadas', x.cartas, n('carta'), (x.cartas || 0) * n('carta')], ['Documentação completa', (x.docs || 0) - (x.docsSdr || 0), n('docs'), ((x.docs || 0) - (x.docsSdr || 0)) * n('docs')],
-    ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const ind = x.vendasInd || 0, lead = Math.max(0, (x.vendas || 0) - ind), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd]]; })(),
+    ...(x.uid && papelDe(x.uid) === 'sdr' && DOCS_NOVA_DESDE ? [] : [['Documentações do resumo (SDR)', x.docsSdr, P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'), (x.docsSdr || 0) * (P.docSdr !== undefined && P.docSdr !== '' ? n('docSdr') : n('docs'))]]), ...(() => { const v50 = x.vendas50 || 0, i50 = x.vendas50Ind || 0, ind = Math.max(0, (x.vendasInd || 0) - i50), lead = Math.max(0, (x.vendas || 0) - (x.vendasInd || 0) - (v50 - i50)), vInd = n('vendaInd') || n('venda'); return [['Vendas de lead', lead, n('venda'), lead * n('venda')], ['Vendas por indicação', ind, vInd, ind * vInd], ...(v50 ? [['Vendas a partir de 27/11', v50, 50, v50 * 50]] : [])]; })(),
     ['Prospectos', x.prospectos, n('prospecto'), (x.prospectos || 0) * n('prospecto')], ['Indicações', x.indicacoes, n('indicacao'), (x.indicacoes || 0) * n('indicacao')],
     ...((x.ausAntes || 0) ? [[`Ausências antes de ${dataBR(P.presencaDesde || '').slice(0, 5)}`, x.ausAntes, n('ausenciaAntes'), x.ausAntes * n('ausenciaAntes')]] : []),
     ['Ausências', (x.ausencias || 0) - (x.ausAntes || 0), n('ausencia'), ((x.ausencias || 0) - (x.ausAntes || 0)) * n('ausencia')], ['Funil não preenchido', x.semFunil, n('funil'), (x.semFunil || 0) * n('funil')],
