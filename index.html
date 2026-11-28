@@ -8725,7 +8725,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 485;
+const APP_VERSAO = 487;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13622,7 +13622,9 @@ const BZ_MIN_LIG = () => { const v = Number(appCfg.bolsaoMinLig); return isFinit
 const bzLigs = x => (x.historico || []).filter(h => h.txt === 'ligou');
 const bzMinhasLigs = x => bzLigs(x).filter(h => h.uid === uidAtual && (h.em || 0) >= (x.pegoEm || 0)).length;
 // v429: só trava por cliente pego HOJE. Antes um cliente antigo, de dias atrás, sem as 3 ligações travava o corretor para sempre (ele não conseguia pegar mais nenhum)
-const bzFaltaInsistir = x => x.status === 'pego' && x.pegoPor === uidAtual && !x.resultado && !x.carta && bzMinhasLigs(x) < BZ_MIN_LIG() && (x.pegoDia ? x.pegoDia === hojeISO() : Date.now() - (Number(x.pegoEm) || 0) < 24 * 3600e3);
+// v487: a trava das ligações vale só nas 2 primeiras horas depois de pegar (antes travava o dia todo e o corretor ficava sem pegar o próximo)
+const BZ_TRAVA_H = 2;
+const bzFaltaInsistir = x => x.status === 'pego' && x.pegoPor === uidAtual && !x.resultado && !x.carta && bzMinhasLigs(x) < BZ_MIN_LIG() && (x.pegoDia ? x.pegoDia === hojeISO() : true) && Date.now() - (Number(x.pegoEm) || 0) < BZ_TRAVA_H * 3600e3;
 async function bzRegistrarLigacao(tel){
   const t = chaveTel(tel); if (!t) return;
   const x = bolsao.find(b => b.status === 'pego' && b.pegoPor === uidAtual && chaveTel(b.telefone) === t); if (!x) return;
@@ -19969,6 +19971,10 @@ function numerosPeriodo(de, ate){
   return { leads:leadsLinhas.reduce((a,l) => a + (Number(l.leads) || 0), 0), leadsLinhas, docs:docsP.length, docsP, avs,
     cond:avs.filter(a => infoStatus(a.status).g === 'condicionado').length, aprov:cs.length,
     aprovPlan:avs.filter(a => infoStatus(a.status).g === 'aprovado').length, reprovPlan:avs.filter(a => infoStatus(a.status).g === 'reprovado').length,
+    /* v486: separa restrição de reprovado e conta os clientes diferentes (a tela Avaliações mostra cada cliente uma vez só) */
+    ...(() => { const rp = avs.filter(a => infoStatus(a.status).g === 'reprovado'), rest = rp.filter(a => /RESTRI/i.test(String(a.status || ''))).length;
+      const cli = new Set(rp.map(a => a.cpfNorm ? 'c' + a.cpfNorm : a.telNorm ? 't' + a.telNorm : 'n' + norm(a.nome || a.id))).size;
+      return { reprovRest:rest, reprovSo:rp.length - rest, reprovCli:cli }; })(),
     semCarta:avs.filter(a => infoStatus(a.status).g === 'aprovado' && !cartaDoCliente(a)).length,
     sdr:aprovSdr(de, ate), unif:aprovUnificadas(avaliacoesAprov.filter(a => noP(a.data)), cs), vendas:vendasUnificadas(de, ate).length, vendasL:vendasUnificadas(de, ate), valorVendido:vendasUnificadas(de, ate).reduce((a,v) => a + v.valor, 0), valor:cs.reduce((a,c) => a + (c.valor || 0), 0),
     visitas:vs.length, realizadas:vs.filter(r => r.status === 'Realizada').length, presMedia: presD.length ? Math.round(presTot / presD.length * 10) / 10 : null, vs, cs, vds };
@@ -20065,7 +20071,7 @@ function renderPainel(){
     ${kpi('🔷','Condicionados', A.cond, B.cond)}
     ${kpi('✅','Aprovações', A.unif.length, B.unif.length, `planilha + cartas do app, sem repetir cliente${A.semCarta ? ` · ${A.semCarta} ainda sem carta no app` : ''}`)}
     ${kpi('🎧','Aprovações das SDRs', A.sdr.dia, B.sdr.dia, `do resumo do WhatsApp${A.sdr.outro ? ` · ${A.sdr.outro} em outro CCA` : ''} · não soma no total`)}
-    ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, 'planilha de avaliações')}
+    ${kpi('❌','Reprovados / restrição', A.reprovPlan, B.reprovPlan, `<span class="pd-split"><span>Restrição <span class="n">${A.reprovRest}</span></span><span>Reprovado <span class="n">${A.reprovSo}</span></span></span>${A.reprovCli !== A.reprovPlan ? `${A.reprovCli} clientes diferentes (o mesmo cliente pode ter mais de uma ficha)` : 'planilha de avaliações'}`)}
     ${kpi('🎉','Vendas', A.vendas, B.vendas, `reservas + cartas vendidas${A.valorVendido ? ' · ' + brl(A.valorVendido) : ''}`)}
     ${kpi('🏠','Visitas realizadas', A.realizadas, B.realizadas, `${A.visitas} marcadas`)}
     <div class="pd-kpi"><span>Nota do atendimento</span><b>${(() => { const l = pesquisas.filter(p => p.respondida && typeof p.nota === 'number' && iso(new Date(p.respondidaEm || 0)) >= de && iso(new Date(p.respondidaEm || 0)) <= ate); return l.length ? mediaNotas(l).toLocaleString('pt-BR') : '–'; })()}</b><em>média das pesquisas após a visita</em></div>
@@ -21979,6 +21985,7 @@ html.modo-tv #v-salao.on,html.modo-tv #v-salao.active{padding:0!important;overfl
 .bz-sd-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.bz-sd-g b{display:block;font-size:24px;font-weight:800}.bz-sd-g small{font-size:11.5px;color:var(--muted,#999)}
 .bz-sd-i{font-size:12.5px;color:var(--muted,#aaa);margin-top:10px}.bz-sd-b{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.bz-sd-b .btn{flex:1 1 auto}
 @media (max-width:420px){.bz-sd-g{grid-template-columns:repeat(2,1fr)}}
+.pd-split{display:flex;flex-wrap:wrap;gap:6px;font-style:normal;margin:2px 0 6px}.pd-split>span{font-size:12.5px;font-weight:700;border:1px solid var(--border,#333);border-radius:99px;padding:3px 10px;color:var(--text,#eee);text-transform:none;letter-spacing:0}.pd-split .n{font-weight:800}
 .sl-grid{display:grid;grid-template-columns:1fr;gap:14px}
 @media (min-width:900px){.sl-grid{grid-template-columns:1.25fr 1fr;align-items:start}}
 .dz2,.bf2{position:relative;border-radius:22px;background:#111;border:1px solid #262626;color:#f3f3f3;padding:18px}
