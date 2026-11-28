@@ -2769,7 +2769,7 @@ html.bf-semana[data-theme="dark"] .bfx .bf-plc .lin .br i{background:#E6E6E6}
 .bf-hoje::after{content:'';position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(-45deg,#FFE600 0 8px,#000 8px 16px)}
 .bf-hoje-t b{display:block;font-family:var(--tit,'Saira Condensed',sans-serif);font-weight:800;font-style:italic;font-size:26px;line-height:.9}
 .bf-hoje-t b i{color:#FFE600}
-.bf-hoje-t small{display:block;font-size:12.5px;color:#cfcfcf;margin-top:4px}
+.bf-hoje-t small{display:block;font-size:12.5px;color:#cfcfcf;margin-top:4px}.bf-hoje-t small .fx{color:#FFE600;font-weight:800;font-style:normal}
 .bf-hoje-r{text-align:right}
 .bf-hoje-r em{display:block;font-style:normal;font-size:10.5px;color:#999;font-weight:700}
 .bf-hoje-r strong{display:block;font-family:var(--tit,'Saira Condensed',sans-serif);font-size:20px;font-weight:800;color:#FFE600;white-space:nowrap}
@@ -4039,6 +4039,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
         <div class="page-head"><div><h1 id="saudacao"></h1><div class="sub" id="hojeData"></div></div><button class="btn btn-ghost gest hide" id="btAvisoHoje" onclick="novoAviso()">Publicar aviso</button></div>
         <div id="dzHojeFaixa"></div>
         <div id="bfHojeFaixa"></div>
+        <div id="avisosHoje"></div>
         <div class="hoje-topo">
           <div id="checkinHoje"></div>
           <div id="poupHoje"></div>
@@ -4508,6 +4509,7 @@ function natalTema(v){ try { if (v) localStorage.setItem('natalTema', v); else l
             <div><b>📞 SDR</b>Marca visitas para os corretores da equipe dela e vê só as visitas que marcou. Não vê cartas nem avaliações. Manda o resumo do dia.</div>
           </div>
             </details></div>
+          <div id="permVer"></div>
           <div style="overflow-x:auto"><table class="perm" id="permLista"></table></div>
         </div>
         <div class="card" style="margin-bottom:20px">
@@ -5975,7 +5977,7 @@ window.__modOk = true;
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, CACHE_SIZE_UNLIMITED, getCountFromServer, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc, updateDoc, addDoc, increment, deleteField, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDocFromServer, getDocsFromCache, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, CACHE_SIZE_UNLIMITED, getCountFromServer, doc, onSnapshot, setDoc, getDoc, collection, query, where, writeBatch, getDocs, deleteDoc, updateDoc, addDoc, increment, deleteField, orderBy, limit, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6o_z10mWoncQVnCjTRkTAp5PPQVwnC5g",
@@ -7162,6 +7164,7 @@ function iniciarVisitas(user){
     if (!snap.exists() && snap.metadata.fromCache) return; // espera a nuvem confirmar
     perfil = snap.exists() ? { uid:user.uid, ...snap.data() } : null; if (perfil) perfil.nome = nomeBonito(perfil.nome); perfilOk = true;
     if (perfil && user.email && perfil.email !== user.email) setDoc(doc(db,'perfis',user.uid), { email:user.email }, { merge:true }).catch(() => {});
+    if (perfil && Number(perfil.appVer) !== APP_VERSAO) setDoc(doc(db,'perfis',user.uid), { appVer:APP_VERSAO, appVerEm:Date.now() }, { merge:true }).catch(() => {}); // v484: o gestor vê quem está com o app desatualizado
     configurarAcesso(); render(); pedirCadastro();
   }, e => { perfilOk = true; console.error(e); }));
   subsBase.push(onSnapshot(doc(db,'config','instalacao'), snap => {
@@ -7813,17 +7816,19 @@ function renderCorretores(){
       if (p.papel === 'gerente' && souDono() && !ehDono && p.uid !== uidAtual) return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
         <td><select onchange="mudarCargo('${p.uid}',this.value,this)"><option value="gerente" ${p.cargo!=='dono'?'selected':''}>⭐ Gerente</option><option value="dono" ${p.cargo==='dono'?'selected':''}>🏢 CEO</option>${Object.entries(PAPEIS).filter(([k]) => k !== 'gerente').map(([k,n]) => `<option value="papel:${k}">Mudar para ${n}</option>`).join('')}</select></td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
-        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td>${bx}</tr>`;
+        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🚪 Desligado</option></select></td>${bx}</tr>`;
       if (p.uid === uidAtual || ehDono || (p.papel === 'gerente' && !souDono())) return `<tr><td><b>${esc(p.nome)}${p.uid === uidAtual ? ' (você)' : ''}</b><span>${esc(p.email||'')}</span></td><td>${ehDono ? '👑 Gestor' : p.cargo === 'dono' ? '🏢 CEO' : '⭐ Gerente'}</td><td>${p.equipe ? esc(eqNome(p.equipe)) : '—'}${p.uid === uidAtual && souGerente() ? ` <select style="width:auto;margin-left:6px" onchange="mudarPermissao('${p.uid}','equipe',this.value,this)" ${souDono() ? '' : 'disabled'}>${opEqs(p.equipe)}</select>` : ''}</td><td>${p.status === 'bloqueado' ? '🔒 Bloqueado' : 'Liberado'}${p.papel === 'gerente' && !souDono() && !ehDono && p.uid !== uidAtual ? '<br><small class="muted">só o gestor altera gerentes</small>' : ''}</td><td></td></tr>`;
-      return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span></td>
+      return `<tr class="${p.status==='bloqueado'?'bloq':''}"><td><b>${esc(p.nome)}</b><span>${esc(p.email||'')}</span>${verBadge(p)}</td>
         <td><select onchange="mudarPermissao('${p.uid}','papel',this.value,this)">${opcoesPapel(p, souDono())}</select>${p.papel === 'anjo' ? `<button class="link" style="display:block;margin-top:4px" onclick="abrirEquipeAnjo('${p.uid}')">Equipe do anjo (${(p.membros || []).length})</button>` : ''}</td>
         <td><select onchange="mudarPermissao('${p.uid}','equipe',this.value,this)">${opEqs(p.equipe)}</select></td>
-        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🔒 Bloqueado</option></select></td>${bx}</tr>`;
+        <td><select onchange="mudarPermissao('${p.uid}','status',this.value,this)"><option value="ativo" ${p.status==='ativo'?'selected':''}>✅ Liberado</option><option value="bloqueado" ${p.status==='bloqueado'?'selected':''}>🚪 Desligado</option></select></td>${bx}</tr>`;
     };
     // v353: bloqueados saem da lista principal e ficam numa lista própria no fim (fechada; toque para abrir)
     const ativosP = todos.filter(p => p.status !== 'bloqueado'), bloqP = todos.filter(p => p.status === 'bloqueado'), abertoB = !!window._permBloqAberto;
     const GR = [['Gestão', p => ['gerente','coordenador','anjo'].includes(p.papel)], ['Corretores', p => p.papel === 'corretor'], ['SDRs', p => p.papel === 'sdr'], ['Administração, marketing e correspondente', p => !['gerente','coordenador','anjo','corretor','sdr'].includes(p.papel)]];
     const comQ = (p, h) => h.replace('<tr', `<tr data-q="${esc(norm((p.nome || '') + ' ' + (p.email || '')))}"`);
+    { const vel = todos.filter(p => p.status !== 'bloqueado' && p.uid !== uidAtual && (Number(p.appVer) || 0) < APP_VERSAO); const el = $('permVer');
+      if (el) el.innerHTML = vel.length ? `<div class="ver-res">⚠️ <b>${vel.length} pessoa${vel.length === 1 ? '' : 's'} com o app desatualizado</b><span>${vel.slice(0, 12).map(p => esc(primeiro(p.nome))).join(', ')}${vel.length > 12 ? '…' : ''}. Peça para fechar e abrir o app.</span></div>` : '<div class="ver-res ok">✓ Todo mundo está na versão ' + APP_VERSAO + ' do app</div>'; }
     $('permLista').innerHTML = '<thead><tr><th>Pessoa</th><th>Perfil</th><th>Equipe</th><th>Acesso</th><th></th></tr></thead>'
       + GR.map(([t, f]) => { const l = ativosP.filter(f); return l.length ? `<tbody><tr class="perm-gr"><td colspan="5">${t} <span>${l.length}</span></td></tr>${l.map(p => comQ(p, linhaPerm(p))).join('')}</tbody>` : ''; }).join('')
       + (bloqP.length ? `<tbody><tr class="perm-sep"><td colspan="5"><button class="link" style="font-weight:600" onclick="window._permBloqAberto=!window._permBloqAberto;render()">🔒 Bloqueados (${bloqP.length}) ${abertoB ? '▴ esconder' : '▾ ver lista'}</button></td></tr></tbody>` + (abertoB ? '<tbody class="perm-bloq">' + bloqP.map(p => comQ(p, linhaPerm(p))).join('') + '</tbody>' : '') : '');
@@ -7854,11 +7859,23 @@ window.mudarPermissao = async (uid, campo, valor, el) => {
   if (campo === 'papel' && !SEM_EQUIPE.includes(valor) && !p.equipe) { toast('Escolha também a equipe dessa pessoa'); }
   if (campo === 'papel' && valor === 'anjo') setTimeout(() => toast('Agora toque em "Equipe do anjo" para escolher quem ele acompanha.'), 1500);
   if (uid === uidAtual) { try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Equipe atualizada'); } catch(e) { toast('Erro: ' + e.message); } return; }
-  if (campo === 'status' && valor === 'bloqueado' && !confirm(`Bloquear o acesso de ${p.nome} às visitas?`)) { el.value = p.status; return; }
+  if (campo === 'status' && valor === 'bloqueado') { // v484: desligar da imobiliária num passo só
+    if (!confirm(`Desligar ${p.nome} da imobiliária?\n\n• Perde o acesso ao app na hora\n• Os pontos deste mês continuam como estão (o placar não muda)\n• Sai da equipe do anjo e da tela do desafio${p.papel === 'anjo' ? '\n• Os corretores que ele acompanha ficam sem anjo' : ''}`)) { el.value = p.status; return; }
+    try { const t = Date.now(), b = writeBatch(db);
+      b.set(doc(db,'perfis',uid), { status:'bloqueado', bloqueadoEm:t, ...(p.papel === 'anjo' ? { membros:[] } : {}) }, { merge:true });
+      b.set(doc(db,'ranking_pessoas',uid), { status:'bloqueado', bloqueadoEm:t, ...(p.papel === 'anjo' ? { membros:[] } : {}) }, { merge:true });
+      perfisTodos.filter(a => a.uid !== uid && (a.membros || []).includes(uid)).forEach(a => { b.set(doc(db,'perfis',a.uid), { membros:arrayRemove(uid) }, { merge:true }); b.set(doc(db,'ranking_pessoas',a.uid), { membros:arrayRemove(uid) }, { merge:true }); });
+      b.set(doc(db,'config','app'), { ausManter:arrayUnion(uid) }, { merge:true }); // as faltas de antes continuam contando: a pontuação fica como estava
+      await gravar(b.commit()); toast(`${primeiro(p.nome)} foi desligado(a) da imobiliária`); }
+    catch(e2) { toast('Erro ao desligar: ' + e2.message); el.value = p.status; }
+    return; }
   try { await setDoc(doc(db,'perfis',uid), dados, { merge:true }); toast('Permissão de ' + primeiro(p.nome) + ' atualizada');
     if (campo === 'equipe' && !souCeo()) { const m = mesAtual(); setDoc(doc(db,'ranking_ativ', m + '_' + uid), { mes:m, uid, nome:p.nome || '', equipe:valor || '', atualizadoEm:Date.now() }, { merge:true }).catch(e => console.warn('equipe ranking', e.message)); } }
   catch(e) { toast('Erro ao salvar: ' + e.message); el.value = p[campo]; }
 };
+// v484: versão do app de cada pessoa (some quando está em dia)
+const verBadge = p => { if (p.status === 'bloqueado') return ''; const v = Number(p.appVer) || 0; if (v >= APP_VERSAO) return '';
+  return `<em class="ver-velha" title="${v ? 'Último acesso com a versão ' + v : 'Ainda não abriu uma versão que informa a versão'}">${v ? '⚠️ app desatualizado (v' + v + ')' : '⚠️ versão desconhecida'}</em>`; };
 window.mudarCargo = async (uid, v, el) => {
   const p = perfisTodos.find(x => x.uid === uid); if (!p || !souDono()) return;
   if (v.startsWith('papel:')) { el.value = p.cargo === 'dono' ? 'dono' : 'gerente'; return mudarPermissao(uid, 'papel', v.slice(6), { value:v.slice(6) }); }
@@ -8708,7 +8725,7 @@ addEventListener('appinstalled', () => { mostrarInstalar(false); window.fecharIn
 if (!jaInstalado && (ehIOS || /android/i.test(navigator.userAgent))) mostrarInstalar(true);
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 // versão do app: aparece em Configurações e avisa quando sai uma versão nova
-const APP_VERSAO = 482;
+const APP_VERSAO = 485;
 (() => {
   const el = document.getElementById('verApp'); if (el) el.textContent = 'Versão do app: v' + APP_VERSAO;
   let avisado = false;
@@ -13466,7 +13483,7 @@ function renderBolsao(){
     $('bzLista').innerHTML = seq + `<div class="bz-lim">${c.ativo ? `Soltando <b>${c.qtd}</b> a cada <b>${c.intervalo} min</b>, até <b>${c.max}</b> livres no bolsão. Com ${c.max} livres, pausa e volta quando os corretores pegarem.` : 'O disparo está <b>desligado</b>: nada sai da fila.'} Só a gerência vê esta aba.</div>` + (l.length ? `<div class="tbl-wrap"><table class="rank"><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Criativo</th><th class="hide-m">Chegou</th>${md === 'manual' && dono ? '<th></th>' : ''}</tr></thead><tbody>${l.slice(0, 300).map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.nome || '')}</td><td>${esc(x.telefone || '')}</td><td>${esc(x.criativo || '')}</td><td class="hide-m">${x.criadoEm ? new Date(x.criadoEm).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : ''}</td>${md === 'manual' && dono ? `<td><div class="bz-mv"><button class="icon-btn" title="Mandar para o começo" aria-label="Mandar para o começo" onclick="bzMover('${x.id}','topo')" ${i ? '' : 'disabled'}>⤒</button><button class="icon-btn" title="Subir" aria-label="Subir" onclick="bzMover('${x.id}',-1)" ${i ? '' : 'disabled'}>↑</button><button class="icon-btn" title="Descer" aria-label="Descer" onclick="bzMover('${x.id}',1)" ${i < l.length - 1 ? '' : 'disabled'}>↓</button></div></td>` : ''}</tr>`).join('')}</tbody></table></div>` : '<div class="muted">Fila vazia.</div>');
   } else if (bzAba === 'livres') {
     const l = appCfg.bolsaoOrdem ? bzOrdenar(bzLivres()) : bzLivres().sort((a, b) => (b.criadoEm || 0) - (a.criadoEm || 0)), meus = bzMeus().length, podePegar = ['corretor','coordenador','sdr','anjo'].includes(perfil.papel) || (souGerente() && !souCeo());
-    $('bzLista').innerHTML = htmlCartaTrava() + (souGerente() && !souCeo() ? htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${x.carta ? ' carta' : ''}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}>${x.carta ? '<i class="bz-estrelas" aria-hidden="true"><b></b><b></b><b></b><b></b></i>' : ''}<div class="an-c1">${x.carta ? '<span class="bz-selo-carta"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>CARTA APROVADA</span>' : `<span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span>`}</div>
+    $('bzLista').innerHTML = htmlCartaTrava() + (souGerente() && !souCeo() ? htmlBzSaude() + htmlBzSeq() : '') + (souGerente() && !souCeo() && l.length ? `<div class="bz-lim" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${l.length} disponíve${l.length === 1 ? 'l' : 'is'} sem dono.</span><button class="btn btn-ghost" onclick="voltarParaFila()">Voltar todos para a fila</button></div>` : '') + (podePegar && meus ? `<div class="bz-lim">Você está atendendo <b>${meus}</b> cliente${meus === 1 ? '' : 's'} do bolsão.</div>` : '') + (l.length ? `<div class="an-grade">${l.map(x => `<div class="bz-card ${x.origem}${x.carta ? ' carta' : ''}${podePegar && meus < BZ_LIMITE() ? ' bz-toca' : ''}" ${podePegar && meus < BZ_LIMITE() ? `onclick="if(!event.target.closest('button'))pegarBolsao('${x.id}')" role="button"` : ''}>${x.carta ? '<i class="bz-estrelas" aria-hidden="true"><b></b><b></b><b></b><b></b></i>' : ''}<div class="an-c1">${x.carta ? '<span class="bz-selo-carta"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>CARTA APROVADA</span>' : `<span class="an-st">${x.origem === 'perdido' ? '♻️ Cliente perdido' : '📞 Lead sem dono'}</span>`}</div>
       <b class="an-cli">${esc(bzNome(x))}</b>${x.carta ? '<div class="bz-carta-regra">🔒 O CPF só libera depois de uma ligação <b>produtiva</b> com o cliente (2 min ou mais + ficha da conversa)</div>' : ''}<div class="an-c2">${x.empreendimento ? `<span>🏠 ${esc(x.empreendimento)}</span>` : ''}${x.zapConversaId ? '<span>WhatsApp da Frade</span>' : ''}</div>
       ${podePegar ? `<button class="btn btn-primary" onclick="pegarBolsao('${x.id}')" ${meus >= BZ_LIMITE() ? 'disabled' : ''}>${x.zapConversaId ? 'Pegar e conversar' : 'Pegar e ligar'}</button>` : ''}</div>`).join('')}</div>` : `<div class="an-vazio"><span>🎣</span><b>Bolsão vazio</b><p>Quando a gerência colocar leads ou clientes perdidos aqui, você recebe um aviso.</p></div>`);
     // v430: carta aprovada que acabou de aparecer: confete na tela de quem está olhando (uma vez por carta neste aparelho)
@@ -13768,6 +13785,23 @@ window.dispararBolsao = async () => {
   toast(`Disparando ${c.qtd} a cada ${c.intervalo} min. Deixe esta tela aberta, ou o Carteiro continua sozinho.`);
 };
 // v101: a gerência devolve para a fila os leads já soltos que ninguém pegou (para disparar de novo)
+// v485: saúde do bolsão (só gestão): quanto está solto, na fila, pego hoje e quantos "não atendeu" estão parados
+const bzNaoAtende = () => bolsao.filter(x => x.resultado === 'nao_atende' && ['pego','encerrado'].includes(x.status) && (Number(x.voltas) || 0) < BZ_VOLTA_MAX);
+function htmlBzSaude(){
+  const liv = bolsao.filter(x => x.status === 'livre').length, fila = bolsao.filter(x => x.status === 'fila').length, h = hojeISO();
+  const peg = bolsao.filter(x => x.status === 'pego' && (x.pegoDia ? x.pegoDia === h : iso(new Date(Number(x.pegoEm) || 0)) === h)).length, na = bzNaoAtende().length, d = appCfg.bolsaoDisparo || {};
+  return `<div class="bz-saude"><div class="bz-sd-g">${[[liv,'soltos agora'],[fila,'na fila'],[peg,'pegos hoje'],[na,'"não atendeu" parados']].map(([n, t]) => `<div><b>${n}</b><small>${t}</small></div>`).join('')}</div>
+    <div class="bz-sd-i">${d.ativo ? `Disparo ligado: ${d.qtd || 0} a cada ${d.intervalo || 0} min, até ${d.max || 0} soltos.` : 'Disparo desligado.'}${liv > 60 ? ' <b>Muitos soltos:</b> use "Voltar todos para a fila" logo abaixo para criar disputa.' : ''}</div>
+    <div class="bz-sd-b">${na ? `<button class="btn btn-primary" onclick="bzVoltarNaoAtende()">Devolver os ${na} "não atendeu" para a fila</button>` : ''}</div></div>`;
+}
+window.bzVoltarNaoAtende = async () => {
+  const l = bzNaoAtende(); if (!l.length || !souGerente()) return;
+  if (!confirm(`Devolver ${l.length} contato${l.length > 1 ? 's' : ''} marcado${l.length > 1 ? 's' : ''} como "não atendeu" para a fila do bolsão? Eles saem de novo pelo disparo, para outro corretor tentar.`)) return;
+  const agora = Date.now();
+  try { for (let i = 0; i < l.length; i += 400) { const b = writeBatch(db); l.slice(i, i + 400).forEach((x, j) => b.update(doc(db,'bolsao', x.id), { status:'fila', ordem:agora + i + j, liberadoGerencia:true, pegoPor:'', pegoNome:'', pegoEm:0, resultado:'', voltouEm:agora, voltas:(Number(x.voltas) || 0) + 1, tentativas:(x.tentativas || 1) + 1, historico:bzHist(x, 'gerência devolveu o "não atendeu" para a fila') })); await gravar(b.commit()); }
+    toast(`${l.length} contato${l.length > 1 ? 's' : ''} de volta na fila`); }
+  catch(e) { toast('Erro: ' + e.message); }
+};
 window.voltarParaFila = async () => {
   const l = bzLivres(); if (!l.length) return;
   if (!confirm(`Voltar ${l.length} lead${l.length > 1 ? 's' : ''} disponíve${l.length > 1 ? 'is' : 'l'} para a fila? Eles somem da tela dos corretores e saem de novo no próximo disparo, antes dos outros da fila.`)) return;
@@ -15135,8 +15169,36 @@ function htmlBfHojeFaixa(){
     const sg = Math.max(0, Math.floor(((bfComecou() ? BF_T1 : BF_T0) - bfAgora()) / 1000)), d = Math.floor(sg / 86400), h = Math.floor(sg % 86400 / 3600), m = Math.floor(sg % 3600 / 60);
     return `<div class="bf-hoje bf-hoje-trava"><span class="bf-hoje-t"><b>BLACK <i>FRIDAY</i></b><small>${souDono() ? 'Escondida do time. Libere quando quiser.' : '🔒 Em breve. Fique de olho!'}</small></span><span class="bf-hoje-r"><em>${bfComecou() ? 'termina em' : 'começa em'}</em><strong>${d ? d + 'd ' : ''}${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}min</strong></span>${souDono() ? `<button type="button" class="bf-lib" onclick="bfLiberar(true)">Liberar</button>` : '<span class="bf-hoje-s" aria-hidden="true">🔒</span>'}</div>`; }
   const alvo = bfComecou() ? BF_T1 : BF_T0, sg = Math.max(0, Math.floor((alvo - bfAgora()) / 1000)), d = Math.floor(sg / 86400), h = Math.floor(sg % 86400 / 3600), m = Math.floor(sg % 3600 / 60);
-  const p = bfPapel(), txt = !bfComecou() ? 'Começa amanhã à 0h' : p === 'sdr' ? 'Cada visita realizada vale até FRD 50' : p === 'anjo' ? 'Venda dos seus corretores vale até FRD 300' : p === 'coord' ? 'Duelo Tenda × Tropa de Elite' : p === 'cor' ? 'Sua comissão sobe para até 60%' : 'Acompanhe a arrancada do time';
+  // v483: a faixa do Hoje mostra o quanto falta para cada um
+  const falta = (() => { try { const pp = bfPapel();
+    if (pp === 'cor') { const n = bfCor(uidAtual).n; return n >= 2 ? '✓ Você está em 60% em todas as vendas da Black' : n === 1 ? 'Você está em 55% · <span class="fx">mais 1 venda</span> e todas vão para 60%' : '<span class="fx">Feche 1 venda</span> e ela já vale 55%'; }
+    if (pp === 'sdr') { const x = bfSdr(uidAtual); return x.n >= 5 ? `✓ Liberado · próxima visita vale <span class="fx">FRD ${bfValSdr(x.n + 1)}</span>` : `<span class="fx">${5 - x.n === 1 ? 'Falta 1 visita' : 'Faltam ' + (5 - x.n) + ' visitas'}</span> para liberar seus prêmios`; }
+    if (pp === 'anjo') { const x = bfAnjo(uidAtual); return !x.propria ? `<span class="fx">Faça 1 reserva sua</span> para liberar FRD ${bfN(x.total)}` : `✓ FRD ${bfN(x.total)} na Black · <span class="fx">FRD ${bfN(x.valAss)}</span> já pode sacar`; }
+    if (pp === 'coord') { const x = bfCoord(uidAtual), nx = BF_MC.find(m => x.a < m.n); return nx ? `<span class="fx">Faltam ${nx.n - x.a} venda${nx.n - x.a === 1 ? '' : 's'}</span> da equipe para +FRD ${nx.v}` : '✓ Todas as metas da equipe batidas'; }
+  } catch(e) {} return ''; })();
+  const p = bfPapel(), txt = falta ? falta : !bfComecou() ? 'Começa amanhã à 0h' : p === 'sdr' ? 'Cada visita realizada vale até FRD 50' : p === 'anjo' ? 'Venda dos seus corretores vale até FRD 300' : p === 'coord' ? 'Duelo Tenda × Tropa de Elite' : p === 'cor' ? 'Sua comissão sobe para até 60%' : 'Acompanhe a arrancada do time';
   return `<button type="button" class="bf-hoje" onclick="setView('blackfriday')"><span class="bf-hoje-t"><b>BLACK <i>FRIDAY</i></b><small>${txt}</small></span><span class="bf-hoje-r"><em>${bfComecou() ? 'termina em' : 'começa em'}</em><strong>${d ? d + 'd ' : ''}${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}min</strong></span><span class="bf-hoje-s" aria-hidden="true">›</span></button>`;
+}
+// v485: avisos no Hoje — visita realizada sem o retorno do cliente e reserva parada há 7 dias ou mais
+const RES_PARADA_DIAS = 7;
+function resParadas(){
+  const meu = r => opTudo() || corretoresDaReserva(r.corretorTexto).some(c => c.uid === uidAtual);
+  return (reservasTodas || []).filter(r => !r.arquivado && !r.caiu && !['ASSINOU','CAIU RESERVA'].includes(etapaDe(r)) && meu(r))
+    .map(r => ({ r, d:diasDesde(r.etapaEm || r.criadoEm) })).filter(x => x.d !== null && x.d >= RES_PARADA_DIAS).sort((a, b) => b.d - a.d);
+}
+function htmlAvisosHoje(){
+  if (!souAtivo()) return '';
+  let h = '';
+  // visitas realizadas que a SDR ainda não consegue validar (falta o retorno do cliente)
+  const semQ = visitas.filter(v => !v.arquivado && v.status === 'Realizada' && v.corretorUid === uidAtual && typeof bfPrecisaQualif === 'function' && bfPrecisaQualif(v))
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  if (semQ.length) { const v = semQ[0];
+    h += `<button type="button" class="av-hoje" onclick="abrirBfQ('${v.id}','status')"><span class="av-ic">📝</span><span class="av-t"><b>${semQ.length === 1 ? '1 visita realizada sem o retorno do cliente' : semQ.length + ' visitas realizadas sem o retorno do cliente'}</b><small>A SDR só valida depois que você conta como foi. Toque para responder${v.cliente ? ' a de ' + esc(primeiro(nomeBonito(v.cliente))) : ''}.</small></span><span class="av-s">›</span></button>`; }
+  // reservas paradas
+  const rp = resParadas();
+  if (rp.length && (opTudo() || abaLiberada('reservas') || rp.length)) { const x = rp[0];
+    h += `<button type="button" class="av-hoje lar" onclick="${opTudo() || abaLiberada('reservas') ? "setView('reservas')" : "setView('hoje')"}"><span class="av-ic">⏳</span><span class="av-t"><b>${rp.length === 1 ? '1 reserva parada' : rp.length + ' reservas paradas'} há ${RES_PARADA_DIAS} dias ou mais</b><small>${esc(primeiro(nomeBonito(x.r.cliente || '')) || 'Cliente')}: ${x.d} dias em "${esc((s => s.charAt(0) + s.slice(1).toLowerCase())(etapaDe(x.r) || 'sem etapa'))}". Dê o próximo passo para chegar na assinatura.</small></span><span class="av-s">›</span></button>`; }
+  return h;
 }
 let _bfTick = null;
 function pintarBF(){
@@ -15149,6 +15211,7 @@ function pintarBF(){
   const bzVis = !!bz && !bz.classList.contains('hide');
   if (bar) bar.classList.toggle('bf-duo', (pode || spoiler) && bzVis);
   if (pode && perfilOk && carregado.ranking && !document.getElementById('frAbre')) setTimeout(bfBoasVindas, 600);
+  { const ah = $('avisosHoje'); if (ah) { let hh = ''; try { hh = view === 'hoje' ? htmlAvisosHoje() : ''; } catch(e) {} if (ah._h !== hh) { ah.innerHTML = hh; ah._h = hh; } } }
   const fh = $('bfHojeFaixa'); if (fh) { const hh = view === 'hoje' ? htmlBfHojeFaixa() : ''; if (fh._h !== hh) { fh.innerHTML = hh; fh._h = hh; } }
   const el = $('bfCorpo'); if (!el || view !== 'blackfriday') { if (_bfTick) { clearInterval(_bfTick); _bfTick = null; } return; }
   if (el.contains(document.activeElement) && document.activeElement.matches?.('summary,button')) {}
@@ -15471,8 +15534,11 @@ window.abrirCamera = async () => {
         const m = txt.match(/#ci-([A-Za-z0-9]{8,40})/); if (m) { fecharCamera(); fazerCheckin(m[1]); return; } } catch(e) {}
       _ciLoop = setTimeout(ler, 250); };
     ler();
-  } catch(e) { $('ciCamTxt').innerHTML = 'Não deu para abrir a câmera. Libere a câmera para o app nas configurações do celular, ou aponte a <b>câmera do celular</b> para o código: ele abre o app e faz o check-in.'; }
+  } catch(e) { $('ciCamTxt').innerHTML = 'Não deu para abrir a câmera deste celular. Sem problema: faça o check-in pela localização logo abaixo.' + ciBtGps(); }
+  // v484: se em 20 s a câmera não ler o código, oferece o check-in pela localização
+  clearTimeout(window._ciAjT); window._ciAjT = setTimeout(() => { if (_ciStream && $('ciCamModal')?.classList.contains('open') && !$('ciCamTxt').querySelector('.ci-gpsbt')) $('ciCamTxt').insertAdjacentHTML('beforeend', '<br>Não está lendo o código?' + ciBtGps()); }, 20000);
 };
+const ciBtGps = () => `<button type="button" class="btn btn-primary btn-block ci-gpsbt" style="margin-top:12px" onclick="fecharCamera();chegueiEscritorio()">📍 Fazer check-in pela localização</button>`;
 window.fecharCamera = () => { clearTimeout(_ciLoop); if (_ciStream) { _ciStream.getTracks().forEach(t => t.stop()); _ciStream = null; } fechar('ciCamModal'); };
 async function fazerCheckin(token){
   if (meuCheckin) { if (precisaTarde(meuCheckin)) return checkinTarde('qr'); if (ciFora(meuCheckin) || meuCheckin.saida) return voltarEscritorio('qr'); toast('Você já marcou a presença hoje ✓'); return; }
@@ -21902,6 +21968,17 @@ html.modo-tv #v-salao.on,html.modo-tv #v-salao.active{padding:0!important;overfl
 .dz2-hb button.on{background:#19C37D;border-color:#19C37D;color:#04130b}
 .dz2.tv .dz2-pg,.tv2-lado .dz2-pg{font-size:1.6vh;padding:.1vh .7vw}
 .tv2-lado .dz2-hist div{flex-wrap:nowrap}.tv2-lado .dz2-hist span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ver-velha{display:block;font-style:normal;font-size:11.5px;font-weight:700;color:#e6a23c;margin-top:3px}
+.ver-res{background:rgba(230,162,60,.12);border:1px solid rgba(230,162,60,.4);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:13.5px}.ver-res b{display:block}.ver-res span{color:var(--muted,#999)}
+.ver-res.ok{background:rgba(25,195,125,.1);border-color:rgba(25,195,125,.35)}
+.av-hoje{display:flex;align-items:center;gap:12px;width:100%;margin:0 0 12px;padding:13px 14px;border-radius:16px;border:1px solid rgba(255,230,0,.35);background:rgba(255,230,0,.07);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.av-hoje.lar{border-color:rgba(226,98,43,.45);background:rgba(226,98,43,.08)}
+.av-ic{font-size:22px;flex:none}.av-t{flex:1;min-width:0}.av-t b{display:block;font-size:14.5px}.av-t small{display:block;font-size:12.5px;color:var(--muted,#aaa);margin-top:2px;line-height:1.35}.av-s{font-size:22px;color:var(--muted,#888)}
+#avisosHoje:empty{display:none}
+.bz-saude{border:1px solid var(--line,#2a2a2a);border-radius:16px;padding:14px;margin:0 0 14px;background:var(--card,#141414)}
+.bz-sd-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.bz-sd-g b{display:block;font-size:24px;font-weight:800}.bz-sd-g small{font-size:11.5px;color:var(--muted,#999)}
+.bz-sd-i{font-size:12.5px;color:var(--muted,#aaa);margin-top:10px}.bz-sd-b{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.bz-sd-b .btn{flex:1 1 auto}
+@media (max-width:420px){.bz-sd-g{grid-template-columns:repeat(2,1fr)}}
 .sl-grid{display:grid;grid-template-columns:1fr;gap:14px}
 @media (min-width:900px){.sl-grid{grid-template-columns:1.25fr 1fr;align-items:start}}
 .dz2,.bf2{position:relative;border-radius:22px;background:#111;border:1px solid #262626;color:#f3f3f3;padding:18px}
